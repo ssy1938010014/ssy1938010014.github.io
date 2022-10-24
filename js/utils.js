@@ -233,6 +233,7 @@ NexT.utils = {
     const navItems = document.querySelectorAll('.post-toc li');
     const sections = [...navItems].map(element => {
       var link = element.querySelector('a.nav-link');
+      var target =document.getElementById(decodeURI(link.getAttribute('href')).replace('#', ''));
       // TOC item animation navigate.
       link.addEventListener('click', event => {
         event.preventDefault();
@@ -246,6 +247,7 @@ NexT.utils = {
         });
       });
       return document.getElementById(link.getAttribute('href').replace('#', ''));
+      return target;
     });
 
     var tocElement = document.querySelector('.post-toc-wrap');
