@@ -33,4 +33,24 @@
 <p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
 ]]></content>
   </entry>
+  <entry>
+    <title>电力电子笔记</title>
+    <url>/2022/10/24/%E7%94%B5%E5%8A%9B%E7%94%B5%E5%AD%90/</url>
+    <content><![CDATA[<br>
+
+
+
+<div class="pdfobject-container" data-target="./电力电子/Power_electronics.pdf" data-height="500px"></div> 
+
+
+<br>
+
+]]></content>
+      <categories>
+        <category>知识共享</category>
+      </categories>
+      <tags>
+        <tag>笔记</tag>
+      </tags>
+  </entry>
 </search>
