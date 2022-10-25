@@ -1,6 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Hello World</title>
+    <url>/2022/10/23/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<span id="more"></span>
+
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>小沈同学的本科学习笔记</title>
+    <url>/2022/10/24/%E6%9C%AC%E7%A7%91%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<ul>
+<li><a href="https://maiimg.com/dec/a90991742709@pdf">点击此处获取 数字集成电路设计笔记</a></li>
+<li><a href="https://maiimg.com/dec/a98598744206@pdf">点击此处获取 模拟集成电路分析与设计笔记</a></li>
+<li><a href="https://maiimg.com/dec/a94779689222@pdf">点击此处获取 信号与系统笔记</a></li>
+<li><a href="https://maiimg.com/dec/a93405366625@pdf">点击此处获取 常微分笔记</a></li>
+<li><a href="https://maiimg.com/dec/a98876697093@pdf">点击此处获取 单片机原理笔记</a></li>
+<li><a href="https://maiimg.com/dec/a92482261038@pdf">点击此处获取 电力电子笔记</a></li>
+<li><a href="https://maiimg.com/dec/a94485666137@pdf">点击此处获取 电子学2笔记</a></li>
+<li><a href="https://maiimg.com/dec/a93437690158@pdf">点击此处获取 概率论笔记</a></li>
+<li><a href="https://maiimg.com/dec/a89559702311@pdf">点击此处获取 离散时间信号笔记</a></li>
+<li><a href="https://maiimg.com/dec/a93447374661@pdf">点击此处获取 逻辑设计笔记</a></li>
+<li><a href="https://maiimg.com/dec/a94852670052@pdf">点击此处获取 数据结构笔记</a></li>
+<li><a href="https://maiimg.com/dec/a95788708750@pdf">点击此处获取 自动控制原理笔记</a></li>
+<li><a href="https://maiimg.com/dec/a89660723835@pdf">点击此处获取 电磁场原理笔记</a></li>
+</ul>
+<span id="more"></span>
+
+
+
+<hr>
+<ul>
+<li><h2 id="整理不易，请取之有道，转载务必注明出处！"><a href="#整理不易，请取之有道，转载务必注明出处！" class="headerlink" title="整理不易，请取之有道，转载务必注明出处！"></a>整理不易，请取之有道，转载务必注明出处！</h2></li>
+<li><h2 id="文件较大，加载可能比较费时，请耐心等待！"><a href="#文件较大，加载可能比较费时，请耐心等待！" class="headerlink" title="文件较大，加载可能比较费时，请耐心等待！"></a>文件较大，加载可能比较费时，请耐心等待！</h2></li>
+<li><h2 id="若多次刷新后点击链接仍不能查看，请通过关于处的邮箱联系我！"><a href="#若多次刷新后点击链接仍不能查看，请通过关于处的邮箱联系我！" class="headerlink" title="若多次刷新后点击链接仍不能查看，请通过关于处的邮箱联系我！"></a>若多次刷新后点击链接仍不能查看，请通过关于处的邮箱联系我！</h2></li>
+</ul>
+]]></content>
+      <categories>
+        <category>知识共享</category>
+      </categories>
+      <tags>
+        <tag>笔记</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>保研分享</title>
     <url>/2022/10/23/%E4%BF%9D%E7%A0%94%E5%88%86%E4%BA%AB/</url>
     <content><![CDATA[<p>今年，小沈同学顺利保研到了厦门大学，18岁时的梦想终于在21岁实现了！那就让小沈来谈谈这算不上经验之谈的保研经历吧！（小沈总共拿到了厦门大学、东南大学、天津大学、中南大学、南方科技大学、深圳大学6所大学的offer）</p>
@@ -171,61 +227,5 @@
         <tag>分享</tag>
         <tag>保研</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>小沈同学的本科学习笔记</title>
-    <url>/2022/10/24/%E6%9C%AC%E7%A7%91%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
-    <content><![CDATA[<ul>
-<li><a href="https://maiimg.com/dec/a90991742709@pdf">点击此处获取 数字集成电路设计笔记</a></li>
-<li><a href="https://maiimg.com/dec/a98598744206@pdf">点击此处获取 模拟集成电路分析与设计笔记</a></li>
-<li><a href="https://maiimg.com/dec/a94779689222@pdf">点击此处获取 信号与系统笔记</a></li>
-<li><a href="https://maiimg.com/dec/a93405366625@pdf">点击此处获取 常微分笔记</a></li>
-<li><a href="https://maiimg.com/dec/a98876697093@pdf">点击此处获取 单片机原理笔记</a></li>
-<li><a href="https://maiimg.com/dec/a92482261038@pdf">点击此处获取 电力电子笔记</a></li>
-<li><a href="https://maiimg.com/dec/a94485666137@pdf">点击此处获取 电子学2笔记</a></li>
-<li><a href="https://maiimg.com/dec/a93437690158@pdf">点击此处获取 概率论笔记</a></li>
-<li><a href="https://maiimg.com/dec/a89559702311@pdf">点击此处获取 离散时间信号笔记</a></li>
-<li><a href="https://maiimg.com/dec/a93447374661@pdf">点击此处获取 逻辑设计笔记</a></li>
-<li><a href="https://maiimg.com/dec/a94852670052@pdf">点击此处获取 数据结构笔记</a></li>
-<li><a href="https://maiimg.com/dec/a95788708750@pdf">点击此处获取 自动控制原理笔记</a></li>
-<li><a href="https://maiimg.com/dec/a89660723835@pdf">点击此处获取 电磁场原理笔记</a></li>
-</ul>
-<span id="more"></span>
-
-
-
-<hr>
-<ul>
-<li><h2 id="整理不易，请取之有道，转载务必注明出处！"><a href="#整理不易，请取之有道，转载务必注明出处！" class="headerlink" title="整理不易，请取之有道，转载务必注明出处！"></a>整理不易，请取之有道，转载务必注明出处！</h2></li>
-<li><h2 id="文件较大，加载可能比较费时，请耐心等待！"><a href="#文件较大，加载可能比较费时，请耐心等待！" class="headerlink" title="文件较大，加载可能比较费时，请耐心等待！"></a>文件较大，加载可能比较费时，请耐心等待！</h2></li>
-<li><h2 id="若多次刷新后点击链接仍不能查看，请通过关于处的邮箱联系我！"><a href="#若多次刷新后点击链接仍不能查看，请通过关于处的邮箱联系我！" class="headerlink" title="若多次刷新后点击链接仍不能查看，请通过关于处的邮箱联系我！"></a>若多次刷新后点击链接仍不能查看，请通过关于处的邮箱联系我！</h2></li>
-</ul>
-]]></content>
-      <categories>
-        <category>知识共享</category>
-      </categories>
-      <tags>
-        <tag>笔记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/2022/10/23/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<span id="more"></span>
-
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
   </entry>
 </search>
