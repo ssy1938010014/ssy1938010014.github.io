@@ -153,13 +153,13 @@
 </tbody></table>
 </li>
 <li><p>注意重要的系统填报时间节点：<strong>9.28日凌晨（00：00）</strong>开始填报志愿，<strong>9.28日12点</strong>各学校开始陆续发放复试通知，通常学校会规定需在半个小时内（不同学校不一样，注意确认的时间就行）接受复试通知，否则认定为自动放弃。在确认复试通知后，耐心等待，学校将发放拟录取通知，而点击确认拟录取通知后，那这次保研的录取工作就正式结束了！（具体示例如下）</p>
-<img src="/2022/10/23/%E4%BF%9D%E7%A0%94%E5%88%86%E4%BA%AB/image-20221025093326693.png" alt="image-20221025093326693" style="zoom:50%;">
+<img src="/2022/10/23/%E4%BF%9D%E7%A0%94%E5%88%86%E4%BA%AB/image-20221025093326693.png" alt="image-20221025093326693" style="zoom: 33%;">
 
-<img src="/2022/10/23/%E4%BF%9D%E7%A0%94%E5%88%86%E4%BA%AB/image-20221025093340803.png" alt="image-20221025093340803" style="zoom:50%;">
+<img src="/2022/10/23/%E4%BF%9D%E7%A0%94%E5%88%86%E4%BA%AB/image-20221025093340803.png" alt="image-20221025093340803" style="zoom: 33%;">
 
-<img src="/2022/10/23/%E4%BF%9D%E7%A0%94%E5%88%86%E4%BA%AB/image-20221025093403972.png" alt="image-20221025093403972" style="zoom:50%;">
+<img src="/2022/10/23/%E4%BF%9D%E7%A0%94%E5%88%86%E4%BA%AB/image-20221025093403972.png" alt="image-20221025093403972" style="zoom: 33%;">
 
-<img src="/2022/10/23/%E4%BF%9D%E7%A0%94%E5%88%86%E4%BA%AB/image-20221025093420227.png" alt="image-20221025093420227" style="zoom: 50%;">
+<img src="/2022/10/23/%E4%BF%9D%E7%A0%94%E5%88%86%E4%BA%AB/image-20221025093420227.png" alt="image-20221025093420227" style="zoom: 33%;">
 </li>
 <li><p>最后但最重要的是，<strong>不到9.28号填报系统结束那一刻就一定不要放弃</strong>！保研的二八定律，百分之二十的人拿着百分之八十的offer，故很多同学在9.28号之前拿的可能是替补（也就是那些拿到offer的人不去就会有机会录取），但没关系，如果是梦校的替补，一定要等！每年保研鸽子都满天飞，同学A鸽了学校1，导致同学B有机会上学校1，所以B鸽了学校2，导致同学C有机会上学校3，以此类推。而且据我的观察，替补大概率都能替补上（当然，这里可能说得比较绝对，但想表达的是想去就要敢等，以东南微电子为例，今年获得替补的同学有两百多人，录取当天复试通知发到了替补的最后一名）。所以，别放弃，一切皆有可能（我参加厦大夏令营认识的一个朋友，一度觉得快要没书读了，但最终在9.27号接到了上海交大的offer）</p>
 </li>
@@ -351,8 +351,7 @@
 
 <img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221026224557362.png" alt="image-20221026224557362" style="zoom: 67%;">
 
-
-
+<hr>
 <h1 id="序列类型及操作"><a href="#序列类型及操作" class="headerlink" title="序列类型及操作"></a>序列类型及操作</h1><ul>
 <li>序列是<strong>具有先后关系</strong>的一组元素</li>
 <li>序列是一维元素向量，元素类型可以不同</li>
@@ -534,7 +533,7 @@
 </ul>
 <h2 id="3-Turtle角度坐标体系及其角度改变"><a href="#3-Turtle角度坐标体系及其角度改变" class="headerlink" title="3.Turtle角度坐标体系及其角度改变"></a>3.Turtle角度坐标体系及其角度改变</h2><ul>
 <li><p><strong>绝对角度</strong>：<code>turtle.seth(angle)</code></p>
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/image-20221026130556081.png" alt="image-20221026130556081" style="zoom: 33%;">
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/image-20221026130556081.png" alt="image-20221026130556081" style="zoom: 50%;">
 </li>
 <li><p><strong>海龟角度</strong>：</p>
 <ul>
@@ -584,7 +583,7 @@
 <li><p>其中tpl是格式化模板字符串，用来定义输出效果，ts是计算机内部时间类型变量</p>
 </li>
 <li><p>格式化字符串：</p>
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/image-20221026135931077.png" alt="image-20221026135931077" style="zoom:50%;">
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/image-20221026135931077.png" alt="image-20221026135931077" style="zoom: 33%;">
 
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line">t=time.gmtime()</span><br><span class="line">s=time.strftime(<span class="string">&quot;%Y-%m-%d %H:%M:%S&quot;</span>,t)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;运行结果：&quot;</span>,s)</span><br></pre></td></tr></table></figure>
 
@@ -618,7 +617,8 @@
 </ul>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> random <span class="keyword">as</span> r</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;运行结果如下：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(r.random())</span><br><span class="line"><span class="built_in">print</span>(r.randint(<span class="number">1</span>,<span class="number">10</span>))</span><br><span class="line"><span class="built_in">print</span>(r.randrange(<span class="number">10</span>,<span class="number">100</span>,<span class="number">10</span>))</span><br><span class="line"><span class="built_in">print</span>(r.getrandbits(<span class="number">16</span>))</span><br><span class="line"><span class="built_in">print</span>(r.uniform(<span class="number">1</span>,<span class="number">10</span>))</span><br><span class="line"><span class="built_in">print</span>(r.choice([<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">0</span>,<span class="number">2</span>]))</span><br><span class="line">s=[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>]</span><br><span class="line">r.shuffle(s)</span><br><span class="line"><span class="built_in">print</span>(s)</span><br></pre></td></tr></table></figure>
 
-<p><img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/image-20221026144825189.png" alt="image-20221026144825189"></p>
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/image-20221026144825189.png" alt="image-20221026144825189" style="zoom: 67%;">
+
 <h2 id="3-简单示例：蒙特卡罗方法计算圆周率"><a href="#3-简单示例：蒙特卡罗方法计算圆周率" class="headerlink" title="3.简单示例：蒙特卡罗方法计算圆周率"></a>3.简单示例：蒙特卡罗方法计算圆周率</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> random <span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> perf_counter</span><br><span class="line">DARTS = <span class="number">1000</span>*<span class="number">1000</span></span><br><span class="line">hits = <span class="number">0.0</span></span><br><span class="line">start = perf_counter()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, DARTS+<span class="number">1</span>):</span><br><span class="line">    x, y = random(), random()</span><br><span class="line">    dist = <span class="built_in">pow</span>(x ** <span class="number">2</span> + y ** <span class="number">2</span>, <span class="number">0.5</span>)</span><br><span class="line">    <span class="keyword">if</span> dist &lt;= <span class="number">1.0</span>:</span><br><span class="line">        hits = hits + <span class="number">1</span></span><br><span class="line">pi = <span class="number">4</span> * (hits/DARTS)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;圆周率值是: &#123;&#125;&quot;</span>.<span class="built_in">format</span>(pi))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;运行时间是: &#123;:.5f&#125;s&quot;</span>.<span class="built_in">format</span>(perf_counter() - start))</span><br></pre></td></tr></table></figure>
 
 
@@ -641,7 +641,8 @@
 </ul>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> jieba</span><br><span class="line">s=<span class="string">&quot;努力是成功的别名&quot;</span></span><br><span class="line">w=<span class="string">&quot;蟒蛇语言&quot;</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;运行结果如下：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(jieba.lcut(s))</span><br><span class="line"><span class="built_in">print</span>(jieba.lcut(s,cut_all=<span class="literal">True</span>))</span><br><span class="line"><span class="built_in">print</span>(jieba.lcut_for_search(s))</span><br><span class="line">jieba.add_word(w)</span><br></pre></td></tr></table></figure>
 
-<p><img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/image-20221026152522008.png" alt="image-20221026152522008"></p>
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/image-20221026152522008.png" alt="image-20221026152522008" style="zoom:67%;">
+
 <hr>
 <h1 id="worldcloud库"><a href="#worldcloud库" class="headerlink" title="worldcloud库"></a>worldcloud库</h1><p>worldcloud库是一个生成词云的第三方库。wordcloud.WordCloud()代表一个文本对应的词云，可以根据文本中词云出现的频率等参数绘制词云，词云的绘制形状、尺寸和颜色都可以设定。</p>
 <h2 id="1-常规使用方法"><a href="#1-常规使用方法" class="headerlink" title="1.常规使用方法"></a>1.常规使用方法</h2><ul>
