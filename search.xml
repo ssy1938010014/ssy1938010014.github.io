@@ -259,7 +259,7 @@
 <li>集合元素之间<strong>无序</strong>，每个元素<strong>唯一，不存在相同元素</strong></li>
 <li>集合元素<strong>不可更改</strong>，不能是可变数据类型</li>
 </ul>
-<h2 id="1-集合类型的定义"><a href="#1-集合类型的定义" class="headerlink" title="1.集合类型的定义"></a>1.集合类型的定义</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#使用&#123;&#125;建立集合</span></span><br><span class="line">A=&#123;<span class="string">&quot;python&quot;</span>,<span class="number">123</span>,(<span class="string">&quot;python&quot;</span>,<span class="number">123</span>)&#125;</span><br><span class="line"><span class="comment">#使用set()建立集合</span></span><br><span class="line">B=<span class="built_in">set</span>(<span class="string">&quot;pypy123&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;输出结果如下：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(A)</span><br><span class="line"><span class="built_in">print</span>(B)</span><br><span class="line"><span class="built_in">print</span>(&#123;<span class="string">&quot;python&quot;</span>,<span class="string">&quot;123&quot;</span>,<span class="string">&quot;123&quot;</span>,<span class="string">&quot;python&quot;</span>&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="1-集合的创建"><a href="#1-集合的创建" class="headerlink" title="1.集合的创建"></a>1.集合的创建</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#使用&#123;&#125;建立集合</span></span><br><span class="line">A=&#123;<span class="string">&quot;python&quot;</span>,<span class="number">123</span>,(<span class="string">&quot;python&quot;</span>,<span class="number">123</span>)&#125;</span><br><span class="line"><span class="comment">#使用set()建立集合</span></span><br><span class="line">B=<span class="built_in">set</span>(<span class="string">&quot;pypy123&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;输出结果如下：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(A)</span><br><span class="line"><span class="built_in">print</span>(B)</span><br><span class="line"><span class="built_in">print</span>(&#123;<span class="string">&quot;python&quot;</span>,<span class="string">&quot;123&quot;</span>,<span class="string">&quot;123&quot;</span>,<span class="string">&quot;python&quot;</span>&#125;)</span><br></pre></td></tr></table></figure>
 
 <img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221026222311648.png" alt="image-20221026222311648" style="zoom:67%;">
 
@@ -365,7 +365,7 @@
 </ul>
 <h2 id="1-序列处理操作符与函数"><a href="#1-序列处理操作符与函数" class="headerlink" title="1.序列处理操作符与函数"></a>1.序列处理操作符与函数</h2><p><strong>其同样适用于字符串类型、元组类型、列表类型</strong></p>
 <ul>
-<li><p>6个操作符</p>
+<li><p><strong>6个操作符</strong></p>
 <table>
 <thead>
 <tr>
@@ -399,7 +399,7 @@
 </tr>
 </tbody></table>
 </li>
-<li><p>5个函数</p>
+<li><p><strong>5个函数</strong></p>
 <table>
 <thead>
 <tr>
@@ -490,11 +490,287 @@
 <td>删除列表ls中第i到j以k为步长的元素</td>
 </tr>
 </tbody></table>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">ls=[<span class="number">9</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>]</span><br><span class="line"><span class="keyword">del</span> ls[<span class="number">0</span>:<span class="number">2</span>:<span class="number">1</span>]</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;输出结果如下：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(ls)</span><br><span class="line"><span class="built_in">print</span>(ls.insert(<span class="number">3</span>,<span class="string">&quot;s&quot;</span>))</span><br><span class="line"><span class="built_in">print</span>(ls.reverse())</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">ls=[<span class="number">9</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>]</span><br><span class="line"><span class="keyword">del</span> ls[<span class="number">0</span>:<span class="number">2</span>:<span class="number">1</span>]</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;输出结果如下：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(ls)</span><br><span class="line">ls.insert(<span class="number">3</span>,<span class="string">&quot;s&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(ls)</span><br><span class="line">ls.reverse()</span><br><span class="line"><span class="built_in">print</span>(ls)</span><br></pre></td></tr></table></figure>
 
 <img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221026233245494.png" alt="image-20221026233245494" style="zoom:67%;"></li>
 </ul>
-<h2 id="4-字符串类型及操作"><a href="#4-字符串类型及操作" class="headerlink" title="4.字符串类型及操作"></a>4.字符串类型及操作</h2>]]></content>
+<h2 id="4-字符串类型及操作"><a href="#4-字符串类型及操作" class="headerlink" title="4.字符串类型及操作"></a>4.字符串类型及操作</h2><ul>
+<li><p><strong>字符串的序号</strong>：</p>
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221027124853404.png" alt="image-20221027124853404" style="zoom: 25%;">
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">s=<span class="string">&quot;python is a romantic language&quot;</span></span><br><span class="line"><span class="comment">#字符反转</span></span><br><span class="line"><span class="built_in">print</span>(s[::-<span class="number">1</span>])</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221027130050044.png" alt="image-20221027130050044" style="zoom: 80%;">
+</li>
+<li><p><strong>字符串处理函数</strong></p>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>str(x)</td>
+<td>任意类型所以对应的字符串形式</td>
+</tr>
+<tr>
+<td>hex(x) 或 oct(x)</td>
+<td>整数x的十六进制或八进制小写形式字符串</td>
+</tr>
+<tr>
+<td>chr(u)</td>
+<td>u为Unicode编码，返回其对应的字符</td>
+</tr>
+<tr>
+<td>ord(x)</td>
+<td>x为字符，返回其对应的Unicode编码</td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#打印十二星座对应的字符</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">12</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="built_in">chr</span>(<span class="number">9800</span>+i),end=<span class="string">&quot; &quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221027091451848.png" alt="image-20221027091451848" style="zoom:80%;">
+</li>
+<li><p><strong>字符串处理方法</strong></p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>str.lower() 或 str.upper()</td>
+<td>返回字符串的副本，全部字符小写&#x2F;大写</td>
+</tr>
+<tr>
+<td><code>str.split(sep=None)</code></td>
+<td>返回一个列表，有str根据sep被分隔的部分组成</td>
+</tr>
+<tr>
+<td>str.replace(old,new)</td>
+<td>返回字符串str副本，所有old子串被替换成new</td>
+</tr>
+<tr>
+<td>str.center(width[,fillchar])</td>
+<td>字符串str根据宽度width居中，fillchar可选</td>
+</tr>
+<tr>
+<td>str.strip(chars)</td>
+<td>从str中去掉在其左侧和右侧chars中列出的字符</td>
+</tr>
+<tr>
+<td><code>str.join(iter)</code></td>
+<td>在iter变量除最后元素外每个元素后增加一个str，<strong>此方法也适用于列表，返回的是字符串类型</strong></td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">s=<span class="string">&quot;helloworld&quot;</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;输出结果如下：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(s.upper())</span><br><span class="line"><span class="built_in">print</span>(s) <span class="comment">#返回了大写的副本，原来的字符串s并没有被改变</span></span><br><span class="line">s_new=<span class="string">&quot;,&quot;</span>.join(s)</span><br><span class="line"><span class="built_in">print</span>(s_new)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">type</span>(s_new))<span class="comment">#说明使用str.join(iter)返回的类型是一个字符串</span></span><br><span class="line"><span class="built_in">print</span>(s_new.split(<span class="string">&quot;,&quot;</span>))</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">type</span>(s_new.split(<span class="string">&quot;,&quot;</span>)))<span class="comment">#说明使用str.join(iter)返回的类型是列表</span></span><br><span class="line"><span class="built_in">print</span>(s.center(<span class="number">20</span>,<span class="string">&quot;=&quot;</span>))</span><br></pre></td></tr></table></figure>
+
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221027100523337.png" alt="image-20221027100523337" style="zoom:67%;">
+</li>
+<li><p><strong>字符串类型的格式化</strong></p>
+<table>
+<thead>
+<tr>
+<th>:</th>
+<th>&lt;填充&gt;</th>
+<th>&lt;对齐&gt;</th>
+<th>&lt;宽度&gt;</th>
+<th>&lt;,&gt;</th>
+<th>&lt;. 精度&gt;</th>
+<th>&lt;类型&gt;</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>引导符号</td>
+<td>用于填充的单个字符</td>
+<td><code>&lt;</code>: 左对齐；<code>&lt;</code>: 右对齐；<code>^</code>: 居中对齐</td>
+<td>设定输出位宽</td>
+<td>数字的千位分隔符</td>
+<td>浮点数小数精度 或 字符串最大输出长度</td>
+<td>整数类型：<code>b,c,d,o,x,X</code>；浮点数类型：<code>e,E,f,%</code></td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="string">&quot;小明的数学成绩是&#123;1:=^20.2f&#125;，英语成绩是&#123;0:*&gt;20.2f&#125;，语文成绩是&#123;2:#&lt;20.2f&#125;&quot;</span>.<span class="built_in">format</span>(<span class="number">98.773</span>,<span class="number">97.273</span>,<span class="number">96.094</span>))</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221027102813322.png" alt="image-20221027102813322"></p>
+</li>
+</ul>
+<hr>
+<h1 id="字典类型及操作"><a href="#字典类型及操作" class="headerlink" title="字典类型及操作"></a>字典类型及操作</h1><ul>
+<li>字典类型是“映射”的体现</li>
+<li>键值对：键是数据索引的扩展</li>
+<li>字典是键值对的集合，<strong>键值对之间无序</strong></li>
+<li>采用大括号<code>&#123;&#125;</code>和<code>dict</code>创建，键值对用冒号<code>:</code>表示</li>
+</ul>
+<h2 id="1-字典的创建"><a href="#1-字典的创建" class="headerlink" title="1.字典的创建"></a>1.字典的创建</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#用&#123;&#125;创建</span></span><br><span class="line">d=&#123;<span class="string">&quot;中国&quot;</span>:<span class="string">&quot;北京&quot;</span>,<span class="string">&quot;美国&quot;</span>:<span class="string">&quot;华盛顿&quot;</span>,<span class="string">&quot;法国&quot;</span>:<span class="string">&quot;巴黎&quot;</span>&#125;</span><br><span class="line"><span class="built_in">print</span>(d)</span><br><span class="line"><span class="comment">#用dict创建</span></span><br><span class="line">lis = [(<span class="string">&#x27;name&#x27;</span>, <span class="string">&#x27;Jack&#x27;</span>), (<span class="string">&#x27;age&#x27;</span>, <span class="number">18</span>), (<span class="string">&#x27;height&#x27;</span>, <span class="number">180</span>)]</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">dict</span>(lis))</span><br><span class="line"><span class="comment">#创建空字典</span></span><br><span class="line">de=&#123;&#125;</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">type</span>(de))</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221027110024611.png" alt="image-20221027110024611" style="zoom:67%;">
+
+<h2 id="2-字典处理函数及方法"><a href="#2-字典处理函数及方法" class="headerlink" title="2.字典处理函数及方法"></a>2.字典处理函数及方法</h2><table>
+<thead>
+<tr>
+<th>函数或方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>del d[k]</td>
+<td>删除字典d中键k对应的数据值</td>
+</tr>
+<tr>
+<td>k in d</td>
+<td>判断键k是否在字典d中，如果在返回True，否则False</td>
+</tr>
+<tr>
+<td>d.keys()</td>
+<td>返回字典d中所有的键信息</td>
+</tr>
+<tr>
+<td>d.values()</td>
+<td>返回字典d中所有的值信息</td>
+</tr>
+<tr>
+<td>d.items()</td>
+<td>返回字典d中所有键值对信息</td>
+</tr>
+<tr>
+<td>d.get(k,default)</td>
+<td>键k存在，则返回相应值，不在则返回default值</td>
+</tr>
+<tr>
+<td>d.pop(k,default)</td>
+<td>键k存在，则取出相应值，不在则返回default值</td>
+</tr>
+<tr>
+<td>d.popitem()</td>
+<td>随机从字典d中取出一个键值对，以元组的形式返回</td>
+</tr>
+<tr>
+<td>d.clear()</td>
+<td>删除所有键值对</td>
+</tr>
+<tr>
+<td>len(d)</td>
+<td>返回字典d中元素的个数</td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#定义一个空字典d</span></span><br><span class="line">d=&#123;&#125;</span><br><span class="line"><span class="comment">#向d新增2个键值对元素</span></span><br><span class="line">d[<span class="string">&quot;a&quot;</span>]=<span class="number">1</span></span><br><span class="line">d[<span class="string">&quot;b&quot;</span>]=<span class="number">2</span></span><br><span class="line"><span class="built_in">print</span>(d)</span><br><span class="line"><span class="comment">#修改第2个元素</span></span><br><span class="line">d[<span class="string">&quot;b&quot;</span>]=<span class="number">3</span></span><br><span class="line"><span class="built_in">print</span>(d)</span><br><span class="line"><span class="comment">#判断”c&quot;是否是d的键值</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;c&quot;</span> <span class="keyword">in</span> d)</span><br><span class="line"><span class="comment">#计算d的长度</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">len</span>(d))</span><br><span class="line"><span class="comment">#随机从字典d中取出一个键值对，并以元组形式返回</span></span><br><span class="line"><span class="built_in">print</span>(d.popitem())</span><br><span class="line"><span class="built_in">print</span>(d)</span><br><span class="line"><span class="comment">#通过键返回相应值，但字典d并没有被改变</span></span><br><span class="line"><span class="built_in">print</span>(d.get(<span class="string">&quot;a&quot;</span>))</span><br><span class="line"><span class="built_in">print</span>(d)</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221027111632810.png" alt="image-20221027111632810" style="zoom: 67%;">]]></content>
+      <categories>
+        <category>学习积累</category>
+      </categories>
+      <tags>
+        <tag>浪漫的Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python基础之文件的读写</title>
+    <url>/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%BB%E5%86%99/</url>
+    <content><![CDATA[<p>数据处理可谓是Python最擅长的工作之一。那对于我们需要处理的大量数据，手动输入代码中是极其不科学的，故我们需要学会对文件进行读写操作，下面跟着小沈一起来探索吧！</p>
+<span id="more"></span>
+
+<h1 id="文件的打开"><a href="#文件的打开" class="headerlink" title="文件的打开"></a>文件的打开</h1><ul>
+<li><p><code>&lt;变量名&gt; = open(&lt;文件名&gt;,&lt;打开模式&gt;)</code></p>
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%BB%E5%86%99/image-20221027123041800.png" alt="image-20221027123041800" style="zoom: 50%;">
+</li>
+<li><p><strong>打开模式</strong></p>
+<table>
+<thead>
+<tr>
+<th>文件的打开模式</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>‘r’</td>
+<td>只读模式，默认值，如果文件不存在，返回FileNotFoundError</td>
+</tr>
+<tr>
+<td>‘w’</td>
+<td>覆盖写模式，文件不存在则创建，存在则完全覆盖</td>
+</tr>
+<tr>
+<td>‘x’</td>
+<td>创建写模式，文件不存咋则创建，存在则返回FileExistsError</td>
+</tr>
+<tr>
+<td>‘a’</td>
+<td>追加写模式，文件不存在则创建，存在则在文件最后追加内容</td>
+</tr>
+<tr>
+<td>‘b’</td>
+<td>二进制文本模式</td>
+</tr>
+<tr>
+<td>‘t’</td>
+<td>文本文件模式，默认值</td>
+</tr>
+<tr>
+<td>‘+’</td>
+<td>与r&#x2F;w&#x2F;x&#x2F;a一同使用，在原功能基础上增加同时读写功能</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<hr>
+<h1 id="文件内容的获取"><a href="#文件内容的获取" class="headerlink" title="文件内容的获取"></a>文件内容的获取</h1><table>
+<thead>
+<tr>
+<th>操作方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>f.read(size=-1)</code></td>
+<td>读入全部内容，如果给出参数，读入前size长度</td>
+</tr>
+<tr>
+<td><code>f.readline(size=-1)</code></td>
+<td>读入一行内容，如果给出参数，读入该行前size长度</td>
+</tr>
+<tr>
+<td><code>f.readlines(hint=-1)</code></td>
+<td>读入文件所有行，以每行为元素形成列表，如果给出参数，读入前hint行</td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#逐行遍历文件</span></span><br><span class="line"><span class="comment">#方法一：</span></span><br><span class="line">fname=<span class="built_in">input</span>(<span class="string">&quot;请输入要打开的文件名称：&quot;</span>)</span><br><span class="line">fo=<span class="built_in">open</span>(fname,<span class="string">&quot;r&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> fo.readlines():</span><br><span class="line">    <span class="built_in">print</span>(line)</span><br><span class="line">fo.close()</span><br><span class="line"></span><br><span class="line"><span class="comment">#方法二</span></span><br><span class="line">fname=<span class="built_in">input</span>(<span class="string">&quot;请输入要打开的文件名称：&quot;</span>)</span><br><span class="line">fo=<span class="built_in">open</span>(fname,<span class="string">&quot;r&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> fo:</span><br><span class="line">    <span class="built_in">print</span>(line)</span><br><span class="line">fo.close()</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="数据的文件写入"><a href="#数据的文件写入" class="headerlink" title="数据的文件写入"></a>数据的文件写入</h1><table>
+<thead>
+<tr>
+<th>操作方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>f.write(s)</td>
+<td>向文件写入一个字符串或字节流</td>
+</tr>
+<tr>
+<td>f.writelines(lines)</td>
+<td>将一个元素全为字符串的列表写入文件</td>
+</tr>
+<tr>
+<td><code>f.seek(offset)</code></td>
+<td>改变当前文件操作指针的位置，offset&#x3D;0(代表回到文件开头)，offset&#x3D;1（代表当前位置），offset&#x3D;2（代表回到文件结尾）</td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">fo = <span class="built_in">open</span>(<span class="string">&quot;output.txt&quot;</span>,<span class="string">&quot;w+&quot;</span>)</span><br><span class="line">ls=[<span class="string">&quot;努力是成功的别名&quot;</span>,<span class="string">&quot;每一次成长&quot;</span>,<span class="string">&quot;都是一次经历&quot;</span>]</span><br><span class="line">fo.writelines(ls)</span><br><span class="line"><span class="comment">#fo.writelines(&#x27;\n&#x27;.join(ls)) 可以加上这一句实现分行写入</span></span><br><span class="line">fo.seek(<span class="number">0</span>)<span class="comment">#必须要改变文件操作指针的位置，不然写完元素之后指针到了文章最后，会导致写下来读不出内容</span></span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> fo:</span><br><span class="line">    <span class="built_in">print</span>(line) <span class="comment">#由结果可以注意到实际上writelines不是一行行写入的，是连着写入的</span></span><br><span class="line">fo.close()</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%BB%E5%86%99/image-20221027140238501.png" alt="image-20221027140238501" style="zoom:67%;">
+
+<hr>
+<h1 id="文件的关闭"><a href="#文件的关闭" class="headerlink" title="文件的关闭"></a>文件的关闭</h1><ul>
+<li><code>&lt;变量名&gt;.close()</code>#使用完文件后一定要记得关闭文件</li>
+</ul>
+]]></content>
       <categories>
         <category>学习积累</category>
       </categories>
