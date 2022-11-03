@@ -1,533 +1,181 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Python基础之文件的读写</title>
-    <url>/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%BB%E5%86%99/</url>
-    <content><![CDATA[<p>数据处理可谓是Python最擅长的工作之一。那对于我们需要处理的大量数据，手动输入代码中是极其不科学的，故我们需要学会对文件进行读写操作，下面跟着小沈一起来探索吧！</p>
+    <title>保研分享</title>
+    <url>/2022/10/23/%E4%BF%9D%E7%A0%94%E5%88%86%E4%BA%AB/</url>
+    <content><![CDATA[<p>今年，小沈同学顺利保研到了厦门大学，18岁时的梦想终于在21岁实现了！那就让小沈来谈谈这算不上经验之谈的保研经历吧！（小沈总共拿到了厦门大学、东南大学、天津大学、中南大学、南方科技大学、深圳大学6所大学的offer）</p>
 <span id="more"></span>
 
-<h1 id="文件的打开"><a href="#文件的打开" class="headerlink" title="文件的打开"></a>文件的打开</h1><ul>
-<li><p><code>&lt;变量名&gt; = open(&lt;文件名&gt;,&lt;打开模式&gt;)</code></p>
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%BB%E5%86%99/image-20221027123041800.png" alt="image-20221027123041800" style="zoom: 50%;">
-</li>
-<li><p><strong>打开模式</strong></p>
+<h1 id="前期准备"><a href="#前期准备" class="headerlink" title="前期准备"></a>前期准备</h1><ul>
+<li>保研前期的准备包括信息收集、资料准备、联系导师三个阶段</li>
+</ul>
+<h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><ul>
+<li>首先，关注常见的保研公众号，如<strong>保研岛</strong>、保研喵等。但保研公众号大多有信息延迟，故建议经常浏览最想去的几个梦校的官方网站，以便能及时获取梦校信息。这里建议以txt或者excel的形式整理搜集到的信息，示例如下：</li>
+</ul>
 <table>
 <thead>
 <tr>
-<th>文件的打开模式</th>
-<th>描述</th>
+<th>学校（学院）</th>
+<th>夏令营&#x2F;预推免 截止时间</th>
+<th>学院官网招生信息页</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>‘r’</td>
-<td>只读模式，默认值，如果文件不存在，返回FileNotFoundError</td>
-</tr>
-<tr>
-<td>‘w’</td>
-<td>覆盖写模式，文件不存在则创建，存在则完全覆盖</td>
-</tr>
-<tr>
-<td>‘x’</td>
-<td>创建写模式，文件不存咋则创建，存在则返回FileExistsError</td>
-</tr>
-<tr>
-<td>‘a’</td>
-<td>追加写模式，文件不存在则创建，存在则在文件最后追加内容</td>
-</tr>
-<tr>
-<td>‘b’</td>
-<td>二进制文本模式</td>
-</tr>
-<tr>
-<td>‘t’</td>
-<td>文本文件模式，默认值</td>
-</tr>
-<tr>
-<td>‘+’</td>
-<td>与r&#x2F;w&#x2F;x&#x2F;a一同使用，在原功能基础上增加同时读写功能</td>
+<td>厦门大学（电子科学与技术学院）</td>
+<td>5月25日-6月15日</td>
+<td><a href="https://ese.xmu.edu.cn/info/1083/10259.htm">厦门大学电子科学与技术学院2022年全国优秀大学生暑期夏令营招生指南-厦门大学电子科学与技术学院（国家示范性微电子学院） (xmu.edu.cn)</a></td>
 </tr>
 </tbody></table>
-</li>
-</ul>
-<hr>
-<h1 id="文件内容的获取"><a href="#文件内容的获取" class="headerlink" title="文件内容的获取"></a>文件内容的获取</h1><table>
-<thead>
-<tr>
-<th>操作方法</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>f.read(size=-1)</code></td>
-<td>读入全部内容，如果给出参数，读入前size长度</td>
-</tr>
-<tr>
-<td><code>f.readline(size=-1)</code></td>
-<td>读入一行内容，如果给出参数，读入该行前size长度</td>
-</tr>
-<tr>
-<td><code>f.readlines(hint=-1)</code></td>
-<td>读入文件所有行，以每行为元素形成列表，如果给出参数，读入前hint行</td>
-</tr>
-</tbody></table>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#逐行遍历文件</span></span><br><span class="line"><span class="comment">#方法一：</span></span><br><span class="line">fname=<span class="built_in">input</span>(<span class="string">&quot;请输入要打开的文件名称：&quot;</span>)</span><br><span class="line">fo=<span class="built_in">open</span>(fname,<span class="string">&quot;r&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> fo.readlines():</span><br><span class="line">    <span class="built_in">print</span>(line)</span><br><span class="line">fo.close()</span><br><span class="line"></span><br><span class="line"><span class="comment">#方法二</span></span><br><span class="line">fname=<span class="built_in">input</span>(<span class="string">&quot;请输入要打开的文件名称：&quot;</span>)</span><br><span class="line">fo=<span class="built_in">open</span>(fname,<span class="string">&quot;r&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> fo:</span><br><span class="line">    <span class="built_in">print</span>(line)</span><br><span class="line">fo.close()</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h1 id="数据的文件写入"><a href="#数据的文件写入" class="headerlink" title="数据的文件写入"></a>数据的文件写入</h1><table>
-<thead>
-<tr>
-<th>操作方法</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>f.write(s)</td>
-<td>向文件写入一个字符串或字节流</td>
-</tr>
-<tr>
-<td>f.writelines(lines)</td>
-<td>将一个元素全为字符串的列表写入文件</td>
-</tr>
-<tr>
-<td><code>f.seek(offset)</code></td>
-<td>改变当前文件操作指针的位置，offset&#x3D;0(代表回到文件开头)，offset&#x3D;1（代表当前位置），offset&#x3D;2（代表回到文件结尾）</td>
-</tr>
-</tbody></table>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">fo = <span class="built_in">open</span>(<span class="string">&quot;output.txt&quot;</span>,<span class="string">&quot;w+&quot;</span>)</span><br><span class="line">ls=[<span class="string">&quot;努力是成功的别名&quot;</span>,<span class="string">&quot;每一次成长&quot;</span>,<span class="string">&quot;都是一次经历&quot;</span>]</span><br><span class="line">fo.writelines(ls)</span><br><span class="line"><span class="comment">#fo.writelines(&#x27;\n&#x27;.join(ls)) 可以加上这一句实现分行写入</span></span><br><span class="line">fo.seek(<span class="number">0</span>)<span class="comment">#必须要改变文件操作指针的位置，不然写完元素之后指针到了文章最后，会导致写下来读不出内容</span></span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> fo:</span><br><span class="line">    <span class="built_in">print</span>(line) <span class="comment">#由结果可以注意到实际上writelines不是一行行写入的，是连着写入的</span></span><br><span class="line">fo.close()</span><br></pre></td></tr></table></figure>
-
-<p>结果如下：</p>
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%BB%E5%86%99/image-20221027140238501.png" alt="image-20221027140238501" style="zoom:67%;">
-
-<hr>
-<h1 id="文件的关闭"><a href="#文件的关闭" class="headerlink" title="文件的关闭"></a>文件的关闭</h1><ul>
-<li><code>&lt;变量名&gt;.close()</code>#使用完文件后一定要记得关闭文件</li>
-</ul>
-]]></content>
-      <categories>
-        <category>学习积累</category>
-      </categories>
-      <tags>
-        <tag>浪漫的Python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Python基础之数据类型</title>
-    <url>/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/</url>
-    <content><![CDATA[<p>数据类型是Python基本语法中非常重要的一部分，本文对集合、序列、字典这三大类数据类型做了部分总结。</p>
-<span id="more"></span>
-
-<h1 id="集合类型及操作"><a href="#集合类型及操作" class="headerlink" title="集合类型及操作"></a>集合类型及操作</h1><ul>
-<li>集合是多个元素的无序组合</li>
-<li>集合元素之间<strong>无序</strong>，每个元素<strong>唯一，不存在相同元素</strong></li>
-<li>集合元素<strong>不可更改</strong>，不能是可变数据类型</li>
-</ul>
-<h2 id="1-集合的创建"><a href="#1-集合的创建" class="headerlink" title="1.集合的创建"></a>1.集合的创建</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#使用&#123;&#125;建立集合</span></span><br><span class="line">A=&#123;<span class="string">&quot;python&quot;</span>,<span class="number">123</span>,(<span class="string">&quot;python&quot;</span>,<span class="number">123</span>)&#125;</span><br><span class="line"><span class="comment">#使用set()建立集合</span></span><br><span class="line">B=<span class="built_in">set</span>(<span class="string">&quot;pypy123&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;输出结果如下：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(A)</span><br><span class="line"><span class="built_in">print</span>(B)</span><br><span class="line"><span class="built_in">print</span>(&#123;<span class="string">&quot;python&quot;</span>,<span class="string">&quot;123&quot;</span>,<span class="string">&quot;123&quot;</span>,<span class="string">&quot;python&quot;</span>&#125;)</span><br></pre></td></tr></table></figure>
-
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221026222311648.png" alt="image-20221026222311648" style="zoom:67%;">
-
-<h2 id="2-集合操作符"><a href="#2-集合操作符" class="headerlink" title="2.集合操作符"></a>2.集合操作符</h2><table>
-<thead>
-<tr>
-<th>操作符及应用</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>S|T</td>
-<td>并，返回一个新集合，包括在集合S和T中的所有元素</td>
-</tr>
-<tr>
-<td>S-T</td>
-<td>差，返回一个新集合，包括在集合S但不在T中的元素</td>
-</tr>
-<tr>
-<td>S&amp;T</td>
-<td>交，返回一个新集合，包括同时在集合S和T中的元素</td>
-</tr>
-<tr>
-<td>S^T</td>
-<td>补，返回一个新集合，包括集合S和T中的非相同元素</td>
-</tr>
-<tr>
-<td>S&lt;&#x3D;T 或 S&lt;T</td>
-<td>返回True&#x2F;False，判断S和T的子集关系</td>
-</tr>
-<tr>
-<td>S&gt;&#x3D;T 或S&gt;T</td>
-<td>返回True&#x2F;False，判断S和T的包含关系</td>
-</tr>
-</tbody></table>
-<h2 id="3-集合处理方法"><a href="#3-集合处理方法" class="headerlink" title="3.集合处理方法"></a>3.集合处理方法</h2><table>
-<thead>
-<tr>
-<th>操作函数或方法</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>S.add(x)</td>
-<td>如何x不在集合S中，将x增加到S</td>
-</tr>
-<tr>
-<td>S.discard(x)</td>
-<td>移除S中元素x，如果x不在集合S中，不报错</td>
-</tr>
-<tr>
-<td>S.remove(x)</td>
-<td>移除S中元素x，如果x不在集合S中，产生KeyError异常</td>
-</tr>
-<tr>
-<td>S.clear()</td>
-<td>移除S中所有元素</td>
-</tr>
-<tr>
-<td>S.pop()</td>
-<td>随机返回S的一个元素，更新S，若S为空产生keyError异常</td>
-</tr>
-<tr>
-<td>S.copy()</td>
-<td>返回集合S的一个副本</td>
-</tr>
-<tr>
-<td>len(S)</td>
-<td>返回集合S的元素个数</td>
-</tr>
-<tr>
-<td>x in S</td>
-<td>判断S中元素x，x在集合S中，返回True，否则返回False</td>
-</tr>
-<tr>
-<td>x not in S</td>
-<td>判断S中元素x，x不在集合S中，返回True，否则返回False</td>
-</tr>
-<tr>
-<td>set(x)</td>
-<td>将其他类型变量x转变为集合类型</td>
-</tr>
-</tbody></table>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">S=&#123;<span class="string">&quot;s&quot;</span>,<span class="string">&quot;f&quot;</span>,<span class="string">&quot;e&quot;</span>,<span class="string">&quot;h&quot;</span>,<span class="string">&quot;g&quot;</span>&#125;</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;输出结果如下：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">len</span>(S))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;s&quot;</span> <span class="keyword">in</span> S)</span><br><span class="line"><span class="built_in">print</span>(S.pop())</span><br><span class="line"><span class="built_in">print</span>(S)<span class="comment">#S中的元素&quot;h&quot;已经被取出</span></span><br><span class="line">S.remove(<span class="string">&#x27;s&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(S)</span><br></pre></td></tr></table></figure>
-
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221026224237804.png" alt="image-20221026224237804" style="zoom:67%;">
-
-<h2 id="4-集合类型应用场景：数据去重"><a href="#4-集合类型应用场景：数据去重" class="headerlink" title="4.集合类型应用场景：数据去重"></a>4.集合类型应用场景：数据去重</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">ls=[<span class="string">&quot;p&quot;</span>,<span class="string">&quot;p&quot;</span>,<span class="string">&quot;y&quot;</span>,<span class="string">&quot;y&quot;</span>,<span class="number">123</span>]</span><br><span class="line"><span class="comment">#利用了集合无重复元素的特点</span></span><br><span class="line">s=<span class="built_in">set</span>(ls)</span><br><span class="line"><span class="comment">#将结合转化为列表</span></span><br><span class="line">lt=<span class="built_in">list</span>(s)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;输出结果如下：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(s)</span><br><span class="line"><span class="built_in">print</span>(lt)</span><br></pre></td></tr></table></figure>
-
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221026224557362.png" alt="image-20221026224557362" style="zoom: 67%;">
-
-<hr>
-<h1 id="序列类型及操作"><a href="#序列类型及操作" class="headerlink" title="序列类型及操作"></a>序列类型及操作</h1><ul>
-<li>序列是<strong>具有先后关系</strong>的一组元素</li>
-<li>序列是一维元素向量，元素类型可以不同</li>
-<li>元素间由序号引导，通过下标访问序列的特定元素</li>
-<li>序列是一个基类类型，主要发展为以下三类：<ul>
-<li>字符串类型</li>
-<li>元组类型</li>
-<li>列表类型</li>
-</ul>
-</li>
-</ul>
-<h2 id="1-序列处理操作符与函数"><a href="#1-序列处理操作符与函数" class="headerlink" title="1.序列处理操作符与函数"></a>1.序列处理操作符与函数</h2><p><strong>其同样适用于字符串类型、元组类型、列表类型</strong></p>
 <ul>
-<li><p><strong>6个操作符</strong></p>
-<table>
-<thead>
-<tr>
-<th>操作符及应用</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>x in s</td>
-<td>如果x是序列s的元素，返回True，否则返回False</td>
-</tr>
-<tr>
-<td>x not in s</td>
-<td>如果x是序列s的元素，返回False，否则返回True</td>
-</tr>
-<tr>
-<td>s + t</td>
-<td>连接两个序列s和t</td>
-</tr>
-<tr>
-<td>s*n</td>
-<td>序列s复制n次</td>
-</tr>
-<tr>
-<td>s[i]</td>
-<td>索引，返回s中的第i元素，i是序列的序号</td>
-</tr>
-<tr>
-<td>s[i:j] 或 s[i:j:k]</td>
-<td>切片，返回序列s中第i到j以K为步长的元素子序列</td>
-</tr>
-</tbody></table>
+<li><p>其次，注意重要的时间节点。<strong>夏令营</strong>最早的可能会在5月低截止，大多数六月低截止，少数七八月低截止。<strong>预推免</strong>有一部分院校开放得早，可能七八月就开了报名系统，大多数集中在九月初开放。（由于小沈了解得有限，此时间节点仅针对电子专业）</p>
 </li>
-<li><p><strong>5个函数</strong></p>
-<table>
-<thead>
-<tr>
-<th>函数</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>len(s)</td>
-<td>返回序列s的长度，即元素个数</td>
-</tr>
-<tr>
-<td>min(s)</td>
-<td>返回序列s的最小元素，s中元素需要可比较</td>
-</tr>
-<tr>
-<td>max(s)</td>
-<td>返回序列s的最大元素，s中元素需要可比较</td>
-</tr>
-<tr>
-<td>s.index(x) 或 s.index(x,i,j)</td>
-<td>返回序列从i开始到j位置中第一次出现元素x的位置</td>
-</tr>
-<tr>
-<td>s.count(x)</td>
-<td>返回序列s中出现x的总次数</td>
-</tr>
-</tbody></table>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">s=[<span class="number">1</span>,<span class="number">9</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">2</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>]</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;输出结果如下：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(s[<span class="number">0</span>:<span class="number">4</span>])</span><br><span class="line"><span class="built_in">print</span>(s.index(<span class="number">9</span>,<span class="number">2</span>,<span class="number">8</span>))</span><br></pre></td></tr></table></figure>
-
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221026230659752.png" alt="image-20221026230659752" style="zoom:67%;"></li>
+<li><p>我相信大多数将要保研的同学可能都会疑惑夏令营与预推免的区别，以我面试经历了解的看来，主要有如下区别：</p>
+</li>
 </ul>
-<h2 id="2-元组类型及操作"><a href="#2-元组类型及操作" class="headerlink" title="2.元组类型及操作"></a>2.元组类型及操作</h2><ul>
-<li><p>元组是序列类型的一种扩展</p>
-</li>
-<li><p>元组是一种序列类型，一旦创建就<strong>不能被修改</strong></p>
-</li>
-<li><p>使用小括号<code>()</code>或<code>tuple</code>创建，元素间用逗号<code>,</code>分割</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">s=<span class="string">&quot;helloworld&quot;</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;输出结果如下：&quot;</span>)</span><br><span class="line"><span class="comment">#使用tuple创建</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">tuple</span>(s))</span><br><span class="line"><span class="comment">#使用()创建</span></span><br><span class="line"><span class="built_in">print</span>((<span class="string">&#x27;s&#x27;</span>,<span class="string">&#x27;s&#x27;</span>,<span class="string">&#x27;y&#x27;</span>))</span><br></pre></td></tr></table></figure>
-
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221026231303489.png" alt="image-20221026231303489" style="zoom: 67%;"></li>
+<table>
+<thead>
+<tr>
+<th>区别</th>
+<th>夏令营</th>
+<th>预推免</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>形式</td>
+<td>讲座+活动+面试（疫情原因，往往是线上讲座和面试）</td>
+<td>面试（有些学校夏令营和预推免一起招生，也只有面试）</td>
+</tr>
+<tr>
+<td>过初审难度</td>
+<td>985、211的同学优势明显、双非可能只要第一或第二名</td>
+<td>往年确实是进入预推免的门槛较低，但今年保研形式严峻</td>
+</tr>
+<tr>
+<td>拿offer难度</td>
+<td>看运气</td>
+<td>看运气</td>
+</tr>
+</tbody></table>
+<ul>
+<li>通过上述比较，结合今年的保研形式，我的结论是：通常情况下过初审时夏令营确实难于预推免，但双非的同学不要怕，只管往前冲，大胆的投就完事了，往往有运气的成分在的话就会幸运的进了。而且在我看来，双非的同学过211是基本没有问题的，再有一些竞赛的加持的话，中等的985也是不在话下的。所以夏令营一定要敢投，最好能拿到保底的offer，这样在预推免的时候就不会那么慌张了。尤其，今年保研名额普遍增多了（这样对双非保研的同学非常不利，因为多了许多985211的保研对手），预推免的竞争变得异常激烈，可能夏令营能投进去的简历，在预推免都投不进去了。所以今年大家都调侃说：“以为夏令营是保底，预推免时发现那是天花板”。最后，关于二者的难度问题，可能每个保研人都有自己的看法，但在我看来，运气和缘分占了很大一部分比例，有时是面试题刚好对你胃口了，有时是面试老师的温柔和蔼让你放松了发挥好了等等，但实力和自信一定是第一位的，所以各位加油！</li>
 </ul>
-<h2 id="3-列表类型及操作"><a href="#3-列表类型及操作" class="headerlink" title="3.列表类型及操作"></a>3.列表类型及操作</h2><ul>
-<li><p>列表是序列类型的一种扩展，创建后<strong>可以随意被修改</strong></p>
-</li>
-<li><p>使用方括号<code>[]</code>或l<code>ist</code>创建，元素间用逗号<code>,</code>分隔</p>
-</li>
-<li><p>列表中各元素类型可以不同，无长度限制</p>
-</li>
-<li><p>列表类型的操作函数</p>
+<h2 id="资料准备"><a href="#资料准备" class="headerlink" title="资料准备"></a>资料准备</h2><ul>
+<li><p>保研前期需要准备的材料主要是个人简历、个人陈述、自我介绍PPT、成绩单与成绩排名证明、推荐信（建议在6月份之间完成）</p>
 <table>
 <thead>
 <tr>
-<th>函数</th>
-<th>描述</th>
+<th>资料准备</th>
+<th>浅薄之见</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>ls.append(x)</td>
-<td>在列表ls最后增加一个元素</td>
+<td>个人简历</td>
+<td>可以在网上找简历模板，建议选简洁大方的，着重介绍科研与竞赛部分，可以提一提性格（浅提）</td>
 </tr>
 <tr>
-<td>ls.clear()</td>
-<td>删除列表ls中所有的元素</td>
+<td>个人陈述</td>
+<td>相当于自荐信，建议先写一个1500字的版本，之后再根据学校要求修改其字数</td>
 </tr>
 <tr>
-<td>ls.copy()</td>
-<td>生成一个新列表，赋值ls中所有元素</td>
+<td>自我介绍PPT</td>
+<td>建议模板简洁大方，包括个人基本信息、主要竞赛（科研）、未来规划</td>
 </tr>
 <tr>
-<td>ls.insert(i,x)</td>
-<td>在列表ls的第i位置增加元素x</td>
+<td>成绩单与排名证明</td>
+<td>成绩单与成绩排名证明上最好都盖上学校与学院教务处的章</td>
 </tr>
 <tr>
-<td>ls.pop(i)</td>
-<td>将列表ls中第i位置元素取出并删除该元素</td>
-</tr>
-<tr>
-<td>ls.remove(x)</td>
-<td>将列表ls中出现的第一个元素x删除</td>
-</tr>
-<tr>
-<td>ls.reverse()</td>
-<td>将列表中ls的元素反转</td>
-</tr>
-<tr>
-<td>del ls[i:j:k]</td>
-<td>删除列表ls中第i到j以k为步长的元素</td>
+<td>推荐信</td>
+<td>准备两份，建议一份找竞赛或科研导师，一份找任课老师</td>
 </tr>
 </tbody></table>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">ls=[<span class="number">9</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>]</span><br><span class="line"><span class="keyword">del</span> ls[<span class="number">0</span>:<span class="number">2</span>:<span class="number">1</span>]</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;输出结果如下：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(ls)</span><br><span class="line">ls.insert(<span class="number">3</span>,<span class="string">&quot;s&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(ls)</span><br><span class="line">ls.reverse()</span><br><span class="line"><span class="built_in">print</span>(ls)</span><br></pre></td></tr></table></figure>
-
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221026233245494.png" alt="image-20221026233245494" style="zoom:67%;"></li>
+</li>
 </ul>
-<h2 id="4-字符串类型及操作"><a href="#4-字符串类型及操作" class="headerlink" title="4.字符串类型及操作"></a>4.字符串类型及操作</h2><ul>
-<li><p><strong>字符串的序号</strong>：</p>
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221027124853404.png" alt="image-20221027124853404" style="zoom: 25%;">
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">s=<span class="string">&quot;python is a romantic language&quot;</span></span><br><span class="line"><span class="comment">#字符反转</span></span><br><span class="line"><span class="built_in">print</span>(s[::-<span class="number">1</span>])</span><br></pre></td></tr></table></figure>
-
-<p>结果如下：</p>
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221027130050044.png" alt="image-20221027130050044" style="zoom: 80%;">
+<h2 id="联系导师"><a href="#联系导师" class="headerlink" title="联系导师"></a>联系导师</h2><ul>
+<li>邮件正文简单有重点的介绍自己的情况（有诚意的话先去看看导师的论文再联系）</li>
+<li>个人简历与成绩单放附件</li>
+<li>对于自己很想去的学校，一定要提前联系导师！（尤其是对于导师权力比较大的学校）</li>
+<li>不要害怕被拒绝，不要因为老师的不理睬而感到气馁！（立马换一个老师联系就行，不要因此丧失了信心）</li>
+</ul>
+<hr>
+<h1 id="面试环节"><a href="#面试环节" class="headerlink" title="面试环节"></a>面试环节</h1><ul>
+<li><p>多数学校的面试主要包括英语考察、专业课问答（或抽题）、竞赛与科研问答、自由问答四个环节</p>
+<ul>
+<li><p><strong>英语</strong>：自我介绍 or 问答 （仅根据小沈的面试经验，听说别的专业有文献翻译）<a href="https://maiimg.com/dec/a98813351750@pdf">点击此处获取 小沈同学整理的英文面试常见问题</a></p>
 </li>
-<li><p><strong>字符串处理函数</strong></p>
-<table>
-<thead>
-<tr>
-<th>函数</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>str(x)</td>
-<td>任意类型所以对应的字符串形式</td>
-</tr>
-<tr>
-<td>hex(x) 或 oct(x)</td>
-<td>整数x的十六进制或八进制小写形式字符串</td>
-</tr>
-<tr>
-<td>chr(u)</td>
-<td>u为Unicode编码，返回其对应的字符</td>
-</tr>
-<tr>
-<td>ord(x)</td>
-<td>x为字符，返回其对应的Unicode编码</td>
-</tr>
-</tbody></table>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#打印十二星座对应的字符</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">12</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="built_in">chr</span>(<span class="number">9800</span>+i),end=<span class="string">&quot; &quot;</span>)</span><br></pre></td></tr></table></figure>
-
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221027091451848.png" alt="image-20221027091451848" style="zoom:80%;">
+<li><p><strong>专业课</strong>：以下为重点复习科目（因为小沈基本报的都是集成电路设计方向，故可能更适用于想学此方向的同学）<a href="https://maiimg.com/dec/a89254355740@pdf">点击此处获取 小沈同学整理的专业课面试常见问题</a> [我整理的答案不一定完全正确，仅供参考，建议自行补充]</p>
+<ul>
+<li><p>数字集成电路</p>
 </li>
-<li><p><strong>字符串处理方法</strong></p>
-<table>
-<thead>
-<tr>
-<th>方法</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>str.lower() 或 str.upper()</td>
-<td>返回字符串的副本，全部字符小写&#x2F;大写</td>
-</tr>
-<tr>
-<td><code>str.split(sep=None)</code></td>
-<td>返回一个列表，有str根据sep被分隔的部分组成</td>
-</tr>
-<tr>
-<td>str.replace(old,new)</td>
-<td>返回字符串str副本，所有old子串被替换成new</td>
-</tr>
-<tr>
-<td>str.center(width[,fillchar])</td>
-<td>字符串str根据宽度width居中，fillchar可选</td>
-</tr>
-<tr>
-<td>str.strip(chars)</td>
-<td>从str中去掉在其左侧和右侧chars中列出的字符</td>
-</tr>
-<tr>
-<td><code>str.join(iter)</code></td>
-<td>在iter变量除最后元素外每个元素后增加一个str，<strong>此方法也适用于列表，返回的是字符串类型</strong></td>
-</tr>
-</tbody></table>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">s=<span class="string">&quot;helloworld&quot;</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;输出结果如下：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(s.upper())</span><br><span class="line"><span class="built_in">print</span>(s) <span class="comment">#返回了大写的副本，原来的字符串s并没有被改变</span></span><br><span class="line">s_new=<span class="string">&quot;,&quot;</span>.join(s)</span><br><span class="line"><span class="built_in">print</span>(s_new)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">type</span>(s_new))<span class="comment">#说明使用str.join(iter)返回的类型是一个字符串</span></span><br><span class="line"><span class="built_in">print</span>(s_new.split(<span class="string">&quot;,&quot;</span>))</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">type</span>(s_new.split(<span class="string">&quot;,&quot;</span>)))<span class="comment">#说明使用str.join(iter)返回的类型是列表</span></span><br><span class="line"><span class="built_in">print</span>(s.center(<span class="number">20</span>,<span class="string">&quot;=&quot;</span>))</span><br></pre></td></tr></table></figure>
-
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221027100523337.png" alt="image-20221027100523337" style="zoom:67%;">
+<li><p>模拟集成电路</p>
 </li>
-<li><p><strong>字符串类型的格式化</strong></p>
-<table>
-<thead>
-<tr>
-<th>:</th>
-<th>&lt;填充&gt;</th>
-<th>&lt;对齐&gt;</th>
-<th>&lt;宽度&gt;</th>
-<th>&lt;,&gt;</th>
-<th>&lt;. 精度&gt;</th>
-<th>&lt;类型&gt;</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>引导符号</td>
-<td>用于填充的单个字符</td>
-<td><code>&lt;</code>: 左对齐；<code>&lt;</code>: 右对齐；<code>^</code>: 居中对齐</td>
-<td>设定输出位宽</td>
-<td>数字的千位分隔符</td>
-<td>浮点数小数精度 或 字符串最大输出长度</td>
-<td>整数类型：<code>b,c,d,o,x,X</code>；浮点数类型：<code>e,E,f,%</code></td>
-</tr>
-</tbody></table>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="string">&quot;小明的数学成绩是&#123;1:=^20.2f&#125;，英语成绩是&#123;0:*&gt;20.2f&#125;，语文成绩是&#123;2:#&lt;20.2f&#125;&quot;</span>.<span class="built_in">format</span>(<span class="number">98.773</span>,<span class="number">97.273</span>,<span class="number">96.094</span>))</span><br></pre></td></tr></table></figure>
-
-<p><img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221027102813322.png" alt="image-20221027102813322"></p>
+<li><p>信号与系统</p>
+</li>
+<li><p>数模电</p>
+</li>
+<li><p>半导体物理</p>
+</li>
+</ul>
+</li>
+<li><p><strong>竞赛与科研</strong>：以下是两点小建议</p>
+<ul>
+<li><p>科研起到的是锦上添花的作用，尤其对于部分工科来说发文章就更难，故如果确定写到简历上就一定要搞明白！</p>
+</li>
+<li><p>老师并不太在意奖项的数量，更在意的是你是否在含金量高的比赛中都担任了重要的角色，并且学到了更多的技能。据小沈总结，能完完整整说清楚两个比赛就足够了</p>
+</li>
+</ul>
+</li>
+<li><p><strong>自由问答</strong>：此环节什么都有可能问到，可能是老师即兴出一个问题，问你如何解决；亦或许简单问问为什么选择他们学校or为什么想学此方向or<strong>提前了解过哪位导师</strong>（个人认为这个问题是预推免高频非专业问题）等等</p>
+</li>
+</ul>
+</li>
+<li><p>再来谈谈<strong>面试心态</strong>：双非的同学一定要有<strong>自信</strong>，你要相信只要付出努力学习了，那对课程的掌握程度不会比985211的同学差。小沈曾经也一度怀疑自己，我到底拿什么跟985211的学生比，为什么老师要选我不去选他们？我有个朋友是这么回答我的：985211的同学确实在某些方面要更优秀，但他们又不是天才！所以啊，既然不是天才，那就没什么好怕的了。高考结束是人生的一个新起点，那保研又是另外一个起点，现在你们都站在同一个起点上，而这次的结果只取决于大学三年的努力。而且夏令营和预推免并不限制你报多少学校，大胆去报就行（必须敢报，因为你都对自己不自信的话，老师凭什么要选你），最差的结果也只是不通过从而当作积累经验。相信我，勤勤恳恳三年拿到的保研资格，最后都会有完美的结果！</p>
 </li>
 </ul>
 <hr>
-<h1 id="字典类型及操作"><a href="#字典类型及操作" class="headerlink" title="字典类型及操作"></a>字典类型及操作</h1><ul>
-<li>字典类型是“映射”的体现</li>
-<li>键值对：键是数据索引的扩展</li>
-<li>字典是键值对的集合，<strong>键值对之间无序</strong></li>
-<li>采用大括号<code>&#123;&#125;</code>和<code>dict</code>创建，键值对用冒号<code>:</code>表示</li>
-</ul>
-<h2 id="1-字典的创建"><a href="#1-字典的创建" class="headerlink" title="1.字典的创建"></a>1.字典的创建</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#用&#123;&#125;创建</span></span><br><span class="line">d=&#123;<span class="string">&quot;中国&quot;</span>:<span class="string">&quot;北京&quot;</span>,<span class="string">&quot;美国&quot;</span>:<span class="string">&quot;华盛顿&quot;</span>,<span class="string">&quot;法国&quot;</span>:<span class="string">&quot;巴黎&quot;</span>&#125;</span><br><span class="line"><span class="built_in">print</span>(d)</span><br><span class="line"><span class="comment">#用dict创建</span></span><br><span class="line">lis = [(<span class="string">&#x27;name&#x27;</span>, <span class="string">&#x27;Jack&#x27;</span>), (<span class="string">&#x27;age&#x27;</span>, <span class="number">18</span>), (<span class="string">&#x27;height&#x27;</span>, <span class="number">180</span>)]</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">dict</span>(lis))</span><br><span class="line"><span class="comment">#创建空字典</span></span><br><span class="line">de=&#123;&#125;</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">type</span>(de))</span><br></pre></td></tr></table></figure>
-
-<p>结果如下：</p>
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221027110024611.png" alt="image-20221027110024611" style="zoom:67%;">
-
-<h2 id="2-字典处理函数及方法"><a href="#2-字典处理函数及方法" class="headerlink" title="2.字典处理函数及方法"></a>2.字典处理函数及方法</h2><table>
+<h1 id="系统填报"><a href="#系统填报" class="headerlink" title="系统填报"></a>系统填报</h1><ul>
+<li><p>系统填报主要分为两个阶段：注册与志愿填报</p>
+<table>
 <thead>
 <tr>
-<th>函数或方法</th>
-<th>描述</th>
+<th>时间</th>
+<th>相关操作</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>del d[k]</td>
-<td>删除字典d中键k对应的数据值</td>
+<td>9.23~9.27</td>
+<td>获得推免资格的同学需登录教育部<a href="https://yz.chsi.com.cn/tm/">推荐免试攻读研究生_中国研究生招生信息网 (chsi.com.cn)</a>注册并完善个人信息。不同学校录入保研名额的时间不同，但基本都会在25号左右录入完（只有学校录入完才能注册）</td>
 </tr>
 <tr>
-<td>k in d</td>
-<td>判断键k是否在字典d中，如果在返回True，否则False</td>
-</tr>
-<tr>
-<td>d.keys()</td>
-<td>返回字典d中所有的键信息</td>
-</tr>
-<tr>
-<td>d.values()</td>
-<td>返回字典d中所有的值信息</td>
-</tr>
-<tr>
-<td>d.items()</td>
-<td>返回字典d中所有键值对信息</td>
-</tr>
-<tr>
-<td>d.get(k,default)</td>
-<td>键k存在，则返回相应值，不在则返回default值</td>
-</tr>
-<tr>
-<td>d.pop(k,default)</td>
-<td>键k存在，则取出相应值，不在则返回default值</td>
-</tr>
-<tr>
-<td>d.popitem()</td>
-<td>随机从字典d中取出一个键值对，以元组的形式返回</td>
-</tr>
-<tr>
-<td>d.clear()</td>
-<td>删除所有键值对</td>
-</tr>
-<tr>
-<td>len(d)</td>
-<td>返回字典d中元素的个数</td>
+<td>9.28~10.20</td>
+<td>获得推免资格的同学通过教育部<a href="https://yz.chsi.com.cn/tm/">推荐免试攻读研究生_中国研究生招生信息网 (chsi.com.cn)</a>完成报名及志愿填报工作（总共能填三个平行志愿，建议先填最稳的offer），接受并确认招生单位的复试及拟录取通知（对于9.28前拿到学校offer的同学，这一步就是走一个流程）</td>
 </tr>
 </tbody></table>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#定义一个空字典d</span></span><br><span class="line">d=&#123;&#125;</span><br><span class="line"><span class="comment">#向d新增2个键值对元素</span></span><br><span class="line">d[<span class="string">&quot;a&quot;</span>]=<span class="number">1</span></span><br><span class="line">d[<span class="string">&quot;b&quot;</span>]=<span class="number">2</span></span><br><span class="line"><span class="built_in">print</span>(d)</span><br><span class="line"><span class="comment">#修改第2个元素</span></span><br><span class="line">d[<span class="string">&quot;b&quot;</span>]=<span class="number">3</span></span><br><span class="line"><span class="built_in">print</span>(d)</span><br><span class="line"><span class="comment">#判断”c&quot;是否是d的键值</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;c&quot;</span> <span class="keyword">in</span> d)</span><br><span class="line"><span class="comment">#计算d的长度</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">len</span>(d))</span><br><span class="line"><span class="comment">#随机从字典d中取出一个键值对，并以元组形式返回</span></span><br><span class="line"><span class="built_in">print</span>(d.popitem())</span><br><span class="line"><span class="built_in">print</span>(d)</span><br><span class="line"><span class="comment">#通过键返回相应值，但字典d并没有被改变</span></span><br><span class="line"><span class="built_in">print</span>(d.get(<span class="string">&quot;a&quot;</span>))</span><br><span class="line"><span class="built_in">print</span>(d)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>注意重要的系统填报时间节点：<strong>9.28日凌晨（00：00）</strong>开始填报志愿，<strong>9.28日12点</strong>各学校开始陆续发放复试通知，通常学校会规定需在半个小时内（不同学校不一样，注意确认的时间就行）接受复试通知，否则认定为自动放弃。在确认复试通知后，耐心等待，学校将发放拟录取通知，而点击确认拟录取通知后，那这次保研的录取工作就正式结束了！（具体示例如下）</p>
+<img src="/2022/10/23/%E4%BF%9D%E7%A0%94%E5%88%86%E4%BA%AB/image-20221025093326693.png" alt="image-20221025093326693" style="zoom: 33%;">
 
-<p>结果如下：</p>
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221027111632810.png" alt="image-20221027111632810" style="zoom: 67%;">]]></content>
+<img src="/2022/10/23/%E4%BF%9D%E7%A0%94%E5%88%86%E4%BA%AB/image-20221025093340803.png" alt="image-20221025093340803" style="zoom: 33%;">
+
+<img src="/2022/10/23/%E4%BF%9D%E7%A0%94%E5%88%86%E4%BA%AB/image-20221025093403972.png" alt="image-20221025093403972" style="zoom: 33%;">
+
+<img src="/2022/10/23/%E4%BF%9D%E7%A0%94%E5%88%86%E4%BA%AB/image-20221025093420227.png" alt="image-20221025093420227" style="zoom: 33%;">
+</li>
+<li><p>最后但最重要的是，<strong>不到9.28号填报系统结束那一刻就一定不要放弃</strong>！保研的二八定律，百分之二十的人拿着百分之八十的offer，故很多同学在9.28号之前拿的可能是替补（也就是那些拿到offer的人不去就会有机会录取），但没关系，如果是梦校的替补，一定要等！每年保研鸽子都满天飞，同学A鸽了学校1，导致同学B有机会上学校1，所以B鸽了学校2，导致同学C有机会上学校3，以此类推。而且据我的观察，替补大概率都能替补上（当然，这里可能说得比较绝对，但想表达的是想去就要敢等，以东南微电子为例，今年获得替补的同学有两百多人，录取当天复试通知发到了替补的最后一名）。所以，别放弃，一切皆有可能（我参加厦大夏令营认识的一个朋友，一度觉得快要没书读了，但最终在9.27号接到了上海交大的offer）</p>
+</li>
+</ul>
+<hr>
+<h1 id="保研心得"><a href="#保研心得" class="headerlink" title="保研心得"></a>保研心得</h1><ul>
+<li><strong>选择相对冷门的学院</strong>：保研时热门专业的竞争会异常激烈，以集成电路设计为例，今年卷到离谱，计算机专业、自动化、材料等专业的同学都来卷了。再加之今年保研名额的增多，想去热们专业读研真是难上加难。所以小沈建议大家可以报名一些相对冷门学院中与自己专业相关的专业，例如前沿交叉学院、航天航空学院（有些学校此学院下面设有集成电路设计专业[我知道的浙大就有]）等等。</li>
+<li><strong>不要比较</strong>：保研后一定会有同学朋友或者长辈来问你，保到什么学校了？哪个城市？专业好吗？等等，小沈在这里想说的是这些比较没有任何的意义，因为每个人在意的东西不一样，有人更care城市、有人更care学校title、有人更care学校的科研实力、也有像小沈一样更care18岁时的梦想的。或许有人不理解我想学微电子却没选东南大学，但我有我自己的考虑，我想圆18岁的梦，想去沿海城市，想离家更近，也更喜欢厦大的导师。所以，根据自己的偏爱，做出自己认为对的选择，并且相信它，并为之付出足够的努力，最终都会有美好的人生，毕竟彼方尚有荣光在！</li>
+</ul>
+<h1 id="选择大于努力-相信大于选择-祝大家都能如愿以偿！"><a href="#选择大于努力-相信大于选择-祝大家都能如愿以偿！" class="headerlink" title="选择大于努力 相信大于选择 祝大家都能如愿以偿！"></a>选择大于努力 相信大于选择 祝大家都能如愿以偿！</h1>]]></content>
       <categories>
-        <category>学习积累</category>
+        <category>经验之谈</category>
       </categories>
       <tags>
-        <tag>浪漫的Python</tag>
+        <tag>分享</tag>
+        <tag>保研</tag>
       </tags>
   </entry>
   <entry>
@@ -552,427 +200,52 @@
       </tags>
   </entry>
   <entry>
-    <title>Python基础之标准库与第三方库</title>
-    <url>/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/</url>
-    <content><![CDATA[<p>这里记录着小沈学习在Python过程中遇到的6个重要又有趣的Python标准库与第三方库，分别是turle库、time库、random库、PyInstaller库、jieba库、wordcloud库。</p>
+    <title>小沈同学的本科学习笔记</title>
+    <url>/2022/10/24/%E6%9C%AC%E7%A7%91%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<ul>
+<li><p><a href="https://maiimg.com/dec/a90991742709@pdf">点击此处获取 数字集成电路设计笔记</a></p>
+</li>
+<li><p><a href="https://maiimg.com/dec/a98598744206@pdf">点击此处获取 模拟集成电路分析与设计笔记</a></p>
+</li>
+<li><p><a href="https://maiimg.com/dec/a94779689222@pdf">点击此处获取 信号与系统笔记</a></p>
+</li>
+<li><p><a href="https://maiimg.com/dec/a89787007590@pdf">点击此处获取 结构化数字设计笔记</a></p>
+</li>
+<li><p><a href="https://maiimg.com/dec/a93405366625@pdf">点击此处获取 常微分笔记</a></p>
+</li>
+<li><p><a href="https://maiimg.com/dec/a98876697093@pdf">点击此处获取 单片机原理笔记</a></p>
+</li>
+<li><p><a href="https://maiimg.com/dec/a92482261038@pdf">点击此处获取 电力电子笔记</a></p>
+</li>
+<li><p><a href="https://maiimg.com/dec/a94485666137@pdf">点击此处获取 电子学2笔记</a></p>
+</li>
+<li><p><a href="https://maiimg.com/dec/a93437690158@pdf">点击此处获取 概率论笔记</a></p>
+</li>
+<li><p><a href="https://maiimg.com/dec/a89559702311@pdf">点击此处获取 离散时间信号笔记</a></p>
+</li>
+<li><p><a href="https://maiimg.com/dec/a93447374661@pdf">点击此处获取 逻辑设计笔记</a></p>
+</li>
+<li><p><a href="https://maiimg.com/dec/a94852670052@pdf">点击此处获取 数据结构笔记</a></p>
+</li>
+<li><p><a href="https://maiimg.com/dec/a95788708750@pdf">点击此处获取 自动控制原理笔记</a></p>
+</li>
+<li><p><a href="https://maiimg.com/dec/a89660723835@pdf">点击此处获取 电磁场原理笔记</a></p>
+</li>
+</ul>
 <span id="more"></span>
 
-<h1 id="Turtle库"><a href="#Turtle库" class="headerlink" title="Turtle库"></a>Turtle库</h1><p>turtle库是Python语言的标准库之一，是入门级的图形绘制函数库。</p>
-<h2 id="1-Turtle的绘图窗体"><a href="#1-Turtle的绘图窗体" class="headerlink" title="1.Turtle的绘图窗体"></a>1.Turtle的绘图窗体</h2><ul>
-<li><p><code>turtle.setup(width,height,startx,starty)</code></p>
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/image-20221026233551447.png" alt="image-20221026233551447" style="zoom:50%;"></li>
-</ul>
-<h2 id="2-Turtle空间坐标体系及其绘制"><a href="#2-Turtle空间坐标体系及其绘制" class="headerlink" title="2.Turtle空间坐标体系及其绘制"></a>2.Turtle空间坐标体系及其绘制</h2><ul>
-<li><strong>绝对坐标</strong>：<code>turtle. goto(x,y)</code></li>
-</ul>
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/image-20221026125555079.png" alt="image-20221026125555079" style="zoom: 33%;">
-
-<ul>
-<li><p><strong>相对坐标</strong>：</p>
-<ul>
-<li><p><code>turtle.circle(r,angle)</code>#画圆</p>
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/image-20221026125850598.png" alt="image-20221026125850598" style="zoom:50%;">
-</li>
-<li><p><code>turtle.bk(d)</code>#后退</p>
-</li>
-<li><p><code>turtle.fd(d)</code>#前进</p>
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/image-20221026130100140.png" alt="image-20221026130100140" style="zoom:50%;"></li>
-</ul>
-</li>
-</ul>
-<h2 id="3-Turtle角度坐标体系及其角度改变"><a href="#3-Turtle角度坐标体系及其角度改变" class="headerlink" title="3.Turtle角度坐标体系及其角度改变"></a>3.Turtle角度坐标体系及其角度改变</h2><ul>
-<li><p><strong>绝对角度</strong>：<code>turtle.seth(angle)</code></p>
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/image-20221026130556081.png" alt="image-20221026130556081" style="zoom: 50%;">
-</li>
-<li><p><strong>海龟角度</strong>：</p>
-<ul>
-<li><p><code>turtle.left(angle)</code></p>
-</li>
-<li><p><code>turtle.right(angle)</code></p>
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/image-20221026130839885.png" alt="image-20221026130839885" style="zoom:50%;"></li>
-</ul>
-</li>
-</ul>
-<h2 id="4-Turtle的RGB色彩模式"><a href="#4-Turtle的RGB色彩模式" class="headerlink" title="4.Turtle的RGB色彩模式"></a>4.Turtle的RGB色彩模式</h2><ul>
-<li><p><code>turtle.colormode(mode)</code></p>
-</li>
-<li><p>默认采用小数值，可切换为整数值:</p>
-<ul>
-<li>mode&#x3D;1.0：RGB小数值模式</li>
-<li>mode&#x3D;255：RGB整数值模式</li>
-</ul>
-</li>
-<li><p>常用RGB色彩：</p>
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/image-20221026131931664.png" alt="image-20221026131931664" style="zoom:50%;"></li>
-</ul>
-<h2 id="5-画笔控制函数"><a href="#5-画笔控制函数" class="headerlink" title="5.画笔控制函数"></a>5.画笔控制函数</h2><ul>
-<li><code>turtle.penup()</code>#将画笔抬起</li>
-<li><code>turtle.pendown()</code>#将画笔落下</li>
-<li><code>turtle.pensize(width)</code></li>
-<li><code>turtle.pencolor(color)</code></li>
-</ul>
-<h2 id="6-简单示例：爱心绘制"><a href="#6-简单示例：爱心绘制" class="headerlink" title="6.简单示例：爱心绘制"></a>6.简单示例：爱心绘制</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> turtle <span class="keyword">as</span> t</span><br><span class="line"><span class="comment">#绘制准备：画布与画笔设置</span></span><br><span class="line">t.setup(<span class="number">600</span>,<span class="number">600</span>,<span class="number">200</span>,<span class="number">200</span>)</span><br><span class="line">t.penup()</span><br><span class="line">t.left(<span class="number">90</span>)</span><br><span class="line">t.fd(<span class="number">50</span>)</span><br><span class="line">t.pendown()<span class="comment">#以上代码相当于设置绘制的起始位置</span></span><br><span class="line">t.pensize(<span class="number">10</span>)</span><br><span class="line">t.pencolor(<span class="string">&quot;pink&quot;</span>)</span><br><span class="line"><span class="comment">#正式开始绘制</span></span><br><span class="line">t.left(<span class="number">30</span>)</span><br><span class="line">t.fd(<span class="number">30</span>)</span><br><span class="line">t.circle(<span class="number">90</span>,<span class="number">200</span>)</span><br><span class="line">t.fd(<span class="number">200</span>)</span><br><span class="line">t.left(<span class="number">80</span>)</span><br><span class="line">t.fd(<span class="number">200</span>)</span><br><span class="line">t.circle(<span class="number">90</span>,<span class="number">200</span>)</span><br><span class="line">t.fd(<span class="number">30</span>)</span><br><span class="line"><span class="comment">#绘制结束</span></span><br><span class="line">t.done()</span><br></pre></td></tr></table></figure>
-
 <hr>
-<h1 id="Time库"><a href="#Time库" class="headerlink" title="Time库"></a>Time库</h1><p>time库是Python中处理时间的标准库，能够获取系统时间并格式化输出功能，并提供系统级精确计时功能，用于程序性能分析。</p>
-<h2 id="1-时间获取"><a href="#1-时间获取" class="headerlink" title="1.时间获取"></a>1.时间获取</h2><ul>
-<li><p><code>time()</code></p>
-</li>
-<li><p><code>ctime()</code></p>
-</li>
-<li><p><code>gmtime()</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> time </span><br><span class="line"><span class="comment">#获取当前时间戳，即计算机内部时间值，浮点数</span></span><br><span class="line">t1=time.time()</span><br><span class="line"><span class="comment">#获取当前时间并以易读的方式表示，返回字符串</span></span><br><span class="line">t2=time.ctime()</span><br><span class="line"><span class="comment">#获取当时间时间，表示为计算机可处理的时间格式</span></span><br><span class="line">t3=time.gmtime()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;运行结果:&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(t1)</span><br><span class="line"><span class="built_in">print</span>(t2)</span><br><span class="line"><span class="built_in">print</span>(t3)</span><br></pre></td></tr></table></figure>
-
-<p><img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/image-20221026135304443.png" alt="image-20221026135304443"></p>
-</li>
-</ul>
-<h2 id="2-时间格式化"><a href="#2-时间格式化" class="headerlink" title="2.时间格式化"></a>2.时间格式化</h2><ul>
-<li><p><code>strftime(tpl,ts)</code></p>
-</li>
-<li><p>其中tpl是格式化模板字符串，用来定义输出效果，ts是计算机内部时间类型变量</p>
-</li>
-<li><p>格式化字符串：</p>
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/image-20221026135931077.png" alt="image-20221026135931077" style="zoom: 33%;">
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line">t=time.gmtime()</span><br><span class="line">s=time.strftime(<span class="string">&quot;%Y-%m-%d %H:%M:%S&quot;</span>,t)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;运行结果：&quot;</span>,s)</span><br></pre></td></tr></table></figure>
-
-<p><img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/image-20221026140545309.png" alt="image-20221026140545309"></p>
-</li>
-</ul>
-<h2 id="3-程序计时"><a href="#3-程序计时" class="headerlink" title="3.程序计时"></a>3.程序计时</h2><ul>
-<li><p><code>perf_counter()</code>#返回一个CPU级别的精确时间计算值，单位为秒</p>
-</li>
-<li><p><code>sleep(s)</code>#s是休眠时间，单位是秒，可以是浮点数</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line">start=time.perf_counter()</span><br><span class="line">time.sleep(<span class="number">10</span>)</span><br><span class="line">end=time.perf_counter()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;运行结果：&quot;</span>,end-start)</span><br></pre></td></tr></table></figure>
-
-<p><img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/image-20221026141351592.png" alt="image-20221026141351592"></p>
-</li>
-</ul>
-<h2 id="4-简单示例：文本进度条"><a href="#4-简单示例：文本进度条" class="headerlink" title="4.简单示例：文本进度条"></a>4.简单示例：文本进度条</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line">scale = <span class="number">50</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;执行开始&quot;</span>.center(scale//<span class="number">2</span>, <span class="string">&quot;-&quot;</span>))</span><br><span class="line">start = time.perf_counter()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(scale+<span class="number">1</span>):</span><br><span class="line">    a = <span class="string">&#x27;*&#x27;</span> * i</span><br><span class="line">    b = <span class="string">&#x27;.&#x27;</span> * (scale - i)</span><br><span class="line">    c = (i/scale)*<span class="number">100</span></span><br><span class="line">    dur = time.perf_counter() - start、</span><br><span class="line">    <span class="comment">#\r表示将光标的位置回退到本行的开头位置</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;\r&#123;:^3.0f&#125;%[&#123;&#125;-&gt;&#123;&#125;]&#123;:.2f&#125;s&quot;</span>.<span class="built_in">format</span>(c,a,b,dur),end=<span class="string">&#x27;&#x27;</span>)</span><br><span class="line">    time.sleep(<span class="number">0.1</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n&quot;</span>+<span class="string">&quot;执行结束&quot;</span>.center(scale//<span class="number">2</span>,<span class="string">&#x27;-&#x27;</span>))</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h1 id="Random库"><a href="#Random库" class="headerlink" title="Random库"></a>Random库</h1><p>Random库Python中用于生成随机数的标准库。</p>
-<h2 id="1-基本随机函数"><a href="#1-基本随机函数" class="headerlink" title="1.基本随机函数"></a>1.基本随机函数</h2><ul>
-<li><code>seed()</code>#设置随机种子，初始化给定的随机数种子，默认为当前系统时间</li>
-<li><code>random()</code>#生成一个[0.0,1.0)之间的随机小数</li>
-</ul>
-<h2 id="2-扩展随机数函数"><a href="#2-扩展随机数函数" class="headerlink" title="2.扩展随机数函数"></a>2.扩展随机数函数</h2><ul>
-<li><code>randint(a,b)</code>#生成一个[a,b]之间的整数</li>
-<li><code>randrange(m,n[,k])</code>#生成一个[m,n)之间以k为步长的随机整数</li>
-<li><code>getrandbits(k)</code>#生成一个k比特长的随机整数</li>
-<li><code>uniform(a,b)</code>#生成一个[a,b]之间的随机小数</li>
-<li><code>choice(seq)</code>#从序列seq中随机选择一个元素</li>
-<li><code>shuffle(seq)</code>#将序列seq中元素随机排列，返回打乱后的序列</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> random <span class="keyword">as</span> r</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;运行结果如下：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(r.random())</span><br><span class="line"><span class="built_in">print</span>(r.randint(<span class="number">1</span>,<span class="number">10</span>))</span><br><span class="line"><span class="built_in">print</span>(r.randrange(<span class="number">10</span>,<span class="number">100</span>,<span class="number">10</span>))</span><br><span class="line"><span class="built_in">print</span>(r.getrandbits(<span class="number">16</span>))</span><br><span class="line"><span class="built_in">print</span>(r.uniform(<span class="number">1</span>,<span class="number">10</span>))</span><br><span class="line"><span class="built_in">print</span>(r.choice([<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">0</span>,<span class="number">2</span>]))</span><br><span class="line">s=[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>]</span><br><span class="line">r.shuffle(s)</span><br><span class="line"><span class="built_in">print</span>(s)</span><br></pre></td></tr></table></figure>
-
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/image-20221026144825189.png" alt="image-20221026144825189" style="zoom: 67%;">
-
-<h2 id="3-简单示例：蒙特卡罗方法计算圆周率"><a href="#3-简单示例：蒙特卡罗方法计算圆周率" class="headerlink" title="3.简单示例：蒙特卡罗方法计算圆周率"></a>3.简单示例：蒙特卡罗方法计算圆周率</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> random <span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> perf_counter</span><br><span class="line">DARTS = <span class="number">1000</span>*<span class="number">1000</span></span><br><span class="line">hits = <span class="number">0.0</span></span><br><span class="line">start = perf_counter()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, DARTS+<span class="number">1</span>):</span><br><span class="line">    x, y = random(), random()</span><br><span class="line">    dist = <span class="built_in">pow</span>(x ** <span class="number">2</span> + y ** <span class="number">2</span>, <span class="number">0.5</span>)</span><br><span class="line">    <span class="keyword">if</span> dist &lt;= <span class="number">1.0</span>:</span><br><span class="line">        hits = hits + <span class="number">1</span></span><br><span class="line">pi = <span class="number">4</span> * (hits/DARTS)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;圆周率值是: &#123;&#125;&quot;</span>.<span class="built_in">format</span>(pi))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;运行时间是: &#123;:.5f&#125;s&quot;</span>.<span class="built_in">format</span>(perf_counter() - start))</span><br></pre></td></tr></table></figure>
-
-
-<hr>
-<h1 id="PyInstaller库"><a href="#PyInstaller库" class="headerlink" title="PyInstaller库"></a>PyInstaller库</h1><p>PyInstaller库是第三方库，故使用前需额外安装，其官网为：<a href="https://pyinstaller.org/en/stable/">PyInstaller Manual — PyInstaller 5.6.1 documentation</a>。其功能是将.py源代码转换成无需源代码的可执行文件。</p>
 <ul>
-<li><p><strong>简单使用</strong>：<code>(cmd命令行) pyinstaller -F &lt;文件名.py&gt;</code></p>
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/image-20221026150414312.png" alt="image-20221026150414312" style="zoom: 33%;">
-</li>
-<li><p><strong>PyInstaller库常用参数</strong>：</p>
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/image-20221026150423289.png" alt="image-20221026150423289" style="zoom: 33%;"></li>
+<li><h2 id="整理不易，请取之有道，转载务必注明出处！"><a href="#整理不易，请取之有道，转载务必注明出处！" class="headerlink" title="整理不易，请取之有道，转载务必注明出处！"></a>整理不易，请取之有道，转载务必注明出处！</h2></li>
+<li><h2 id="文件较大，加载可能比较费时，请耐心等待！"><a href="#文件较大，加载可能比较费时，请耐心等待！" class="headerlink" title="文件较大，加载可能比较费时，请耐心等待！"></a>文件较大，加载可能比较费时，请耐心等待！</h2></li>
+<li><h2 id="若多次刷新后点击链接仍不能查看，请通过关于处的邮箱联系我！"><a href="#若多次刷新后点击链接仍不能查看，请通过关于处的邮箱联系我！" class="headerlink" title="若多次刷新后点击链接仍不能查看，请通过关于处的邮箱联系我！"></a>若多次刷新后点击链接仍不能查看，请通过关于处的邮箱联系我！</h2></li>
 </ul>
-<hr>
-<h1 id="jieba库"><a href="#jieba库" class="headerlink" title="jieba库"></a>jieba库</h1><p>jieba是优秀的中文分词第三方库，需要额外安装。jieba利用一个中文词库，确定中文字符之间的关联概率，中文字符间概率大的组成词组，形成分词结果。</p>
-<ul>
-<li><code>jieba.lcuts(s)</code>#精确模式，返回一个列表类型的分词结果</li>
-<li><code>jieba.lcuts(s,cut_all=True)</code>#全模式，返回一个列表类型的分词结果，存在冗余</li>
-<li><code>jieba.lcut_for_search(s)</code>#搜索引擎模式，返回一个列表类型的分析结果，存在冗余</li>
-<li><code>jieba.add_word(w)</code>#向分词词典增加新词w</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> jieba</span><br><span class="line">s=<span class="string">&quot;努力是成功的别名&quot;</span></span><br><span class="line">w=<span class="string">&quot;蟒蛇语言&quot;</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;运行结果如下：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(jieba.lcut(s))</span><br><span class="line"><span class="built_in">print</span>(jieba.lcut(s,cut_all=<span class="literal">True</span>))</span><br><span class="line"><span class="built_in">print</span>(jieba.lcut_for_search(s))</span><br><span class="line">jieba.add_word(w)</span><br></pre></td></tr></table></figure>
-
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/image-20221026152522008.png" alt="image-20221026152522008" style="zoom:67%;">
-
-<hr>
-<h1 id="worldcloud库"><a href="#worldcloud库" class="headerlink" title="worldcloud库"></a>worldcloud库</h1><p>worldcloud库是一个生成词云的第三方库。wordcloud.WordCloud()代表一个文本对应的词云，可以根据文本中词云出现的频率等参数绘制词云，词云的绘制形状、尺寸和颜色都可以设定。</p>
-<h2 id="1-常规使用方法"><a href="#1-常规使用方法" class="headerlink" title="1.常规使用方法"></a>1.常规使用方法</h2><ul>
-<li><p><strong>步骤1：配置对象参数</strong></p>
-<table>
-<thead>
-<tr>
-<th>参数</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>width</td>
-<td>指定词云对象生成图片的宽度，默认400像素</td>
-</tr>
-<tr>
-<td>height</td>
-<td>指定词云对象生成图片的高度，默认200像素</td>
-</tr>
-<tr>
-<td>min_font_size</td>
-<td>指定词云中字体的最小字号，默认4号</td>
-</tr>
-<tr>
-<td>max_font_size</td>
-<td>指定词云中字体的最大字号，根据高度自动调节</td>
-</tr>
-<tr>
-<td>font_step</td>
-<td>指定词云中字体字号的步进间隔，默认为1</td>
-</tr>
-<tr>
-<td>font_path</td>
-<td>指定字体文件的路径，默认None</td>
-</tr>
-<tr>
-<td>max_words</td>
-<td>指定词云显示的最大单词数量，默认200</td>
-</tr>
-<tr>
-<td>stop_words</td>
-<td>指定词云的排除词列表，即不显示的单词列表</td>
-</tr>
-<tr>
-<td>mask</td>
-<td>指定词云形状，默认为长方形，若更改需要引用imread()函数</td>
-</tr>
-<tr>
-<td>background_color</td>
-<td>指定词云图片的背景颜色，默认为黑色</td>
-</tr>
-</tbody></table>
-</li>
-<li><p><strong>步骤2：加载词云文本</strong></p>
-<ul>
-<li><code>w.generate(txt)</code>#向WordCloud对象w中加载文本txt</li>
-</ul>
-</li>
-<li><p><strong>步骤3：输出词云文件</strong></p>
-<ul>
-<li><code>w.to_file(filename)</code>#将词云输出为图像文件，.png或.jpg格式</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> wordcloud</span><br><span class="line"><span class="comment">#配置对象参数</span></span><br><span class="line">w=wordcloud.WordCloud(width=<span class="number">500</span>,height=<span class="number">300</span>,font_path=<span class="string">&quot;msyh.ttc&quot;</span>,min_font_size=<span class="number">2</span>,max_words=<span class="number">20</span>)</span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">#mask的使用示例：</span></span><br><span class="line"><span class="string">from scipy.misc import imread</span></span><br><span class="line"><span class="string">mk=imread(&quot;pic.png&quot;)</span></span><br><span class="line"><span class="string">w=wordcloud.WordCloud(mask=mk)</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="comment">#加载词云文本</span></span><br><span class="line">w.generate(<span class="string">&quot;The wordcloud by Python,hello world&quot;</span>)</span><br><span class="line"><span class="comment">#输出词云文本</span></span><br><span class="line">w.to_file(<span class="string">&quot;pywordcloud.png&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-<p>结果如下：</p>
-</li>
-</ul>
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/pywordcloud-1666772052113-2.png" alt="pywordcloud" style="zoom:67%;">
-
-<h2 id="2-简单示例：生成中文词云"><a href="#2-简单示例：生成中文词云" class="headerlink" title="2.简单示例：生成中文词云"></a>2.简单示例：生成中文词云</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#导入库</span></span><br><span class="line"><span class="keyword">import</span> jieba</span><br><span class="line"><span class="keyword">import</span> wordcloud</span><br><span class="line"></span><br><span class="line"><span class="comment">#从文件中读取中文单词并转化为每个单词后面都有一个空格的字符串</span></span><br><span class="line">f = <span class="built_in">open</span>(<span class="string">&quot;励志.txt&quot;</span>, <span class="string">&quot;r&quot;</span>, encoding=<span class="string">&quot;utf-8&quot;</span>)</span><br><span class="line">t = f.read()</span><br><span class="line">f.close()</span><br><span class="line">ls = jieba.lcut(t)</span><br><span class="line">txt = <span class="string">&quot; &quot;</span>.join(ls)</span><br><span class="line"></span><br><span class="line"><span class="comment">#配置词云对象参数</span></span><br><span class="line">w = wordcloud.WordCloud(width = <span class="number">1000</span>,height = <span class="number">700</span>,background_color = <span class="string">&quot;white&quot;</span>,font_path = <span class="string">&quot;msyh.ttc&quot;</span>)</span><br><span class="line"><span class="comment">#加载词云文本</span></span><br><span class="line">w.generate(txt)</span><br><span class="line"><span class="comment">#输出词云文件按</span></span><br><span class="line">w.to_file(<span class="string">&quot;encourage.png&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-<p>结果如下：</p>
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/grwordcloud.png" alt="grwordcloud" style="zoom: 67%;">
 ]]></content>
       <categories>
-        <category>学习积累</category>
+        <category>知识共享</category>
       </categories>
       <tags>
-        <tag>浪漫的Python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>TensorFlow实践之数字图像处理基础</title>
-    <url>/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/</url>
-    <content><![CDATA[<p>计算机视觉是人工智能的大门，其已成为人工智能应用方向的领头羊。故掌握数字图像处理的基础十分必要。本文主要介绍了导入Pillow库中的Image对图像进行简单处理的方法。</p>
-<span id="more"></span>
-
-<h1 id="图像的打开与保存"><a href="#图像的打开与保存" class="headerlink" title="图像的打开与保存"></a>图像的打开与保存</h1><ul>
-<li><p><strong>导入模块</strong>：<code>from PIL import Image</code></p>
-</li>
-<li><p><strong>打开图像</strong>：<code>Image.open()</code>#返回图像对象</p>
-</li>
-<li><p><strong>保存图像</strong>：<code>Image.save(文件路径)</code>#<strong>改变文件名后缀，就可以转换图像格式</strong></p>
-</li>
-<li><p><strong>图像对象的主要属性</strong>：</p>
-<table>
-<thead>
-<tr>
-<th>属性</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>图像对象.format</td>
-<td>图像格式</td>
-</tr>
-<tr>
-<td>图像对象.size</td>
-<td>图像尺寸</td>
-</tr>
-<tr>
-<td>图像对象.mode</td>
-<td>色彩模式</td>
-</tr>
-</tbody></table>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line"><span class="comment">#打开图像</span></span><br><span class="line">img=Image.<span class="built_in">open</span>(<span class="string">&quot;lena.tiff&quot;</span>)</span><br><span class="line"><span class="comment">#保存图像</span></span><br><span class="line">img.save(<span class="string">&quot;test.tiff&quot;</span>)</span><br><span class="line">img.save(<span class="string">&quot;lena.jpg&quot;</span>)</span><br><span class="line">img.save(<span class="string">&quot;lena.bmp&quot;</span>)</span><br><span class="line"><span class="comment">#查看图像对象的主要属性</span></span><br><span class="line">img1=Image.<span class="built_in">open</span>(<span class="string">&quot;lena.jpg&quot;</span>)</span><br><span class="line">img2=Image.<span class="built_in">open</span>(<span class="string">&quot;lena.bmp&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;The format:&quot;</span>,img2.<span class="built_in">format</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;The size:&quot;</span>,img2.size)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;The mode:&quot;</span>,img2.mode)</span><br></pre></td></tr></table></figure>
-
-<p>结果如下：</p>
-<img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/image-20221028221253149.png" alt="image-20221028221253149" style="zoom: 67%;"></li>
-</ul>
-<hr>
-<h1 id="显示图像"><a href="#显示图像" class="headerlink" title="显示图像"></a>显示图像</h1><ul>
-<li><p><code>plt.imshow(image对象/Numpy数组)</code>#对图像进行处理并显示其格式</p>
-</li>
-<li><p><code>plt.show()</code>#将处理后的图像显示</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#显示图像</span></span><br><span class="line"><span class="comment">#设置画布尺寸</span></span><br><span class="line">plt.figure(figsize=(<span class="number">15</span>,<span class="number">5</span>))</span><br><span class="line"><span class="comment">#设置子图</span></span><br><span class="line">plt.subplot(<span class="number">131</span>)</span><br><span class="line"><span class="comment">#plt.axis(&quot;off&quot;)#关闭坐标轴</span></span><br><span class="line">plt.imshow(img)</span><br><span class="line">plt.title(img.<span class="built_in">format</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">132</span>)</span><br><span class="line"><span class="comment">#plt.axis(&quot;off&quot;)</span></span><br><span class="line">plt.imshow(img1)</span><br><span class="line">plt.title(img1.<span class="built_in">format</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">133</span>)</span><br><span class="line"><span class="comment">#plt.axis(&quot;off&quot;)</span></span><br><span class="line">plt.imshow(img2)</span><br><span class="line">plt.title(img2.<span class="built_in">format</span>)</span><br><span class="line"><span class="comment">#将处理后的图像显示</span></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-
-<p>结果如下：</p>
-<p><img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/image-20221028221709477.png" alt="image-20221028221709477"></p>
-</li>
-</ul>
-<hr>
-<h1 id="转换图像的色彩模式"><a href="#转换图像的色彩模式" class="headerlink" title="转换图像的色彩模式"></a>转换图像的色彩模式</h1><ul>
-<li><p><code>图像对象.convert(色彩模式)</code></p>
-<table>
-<thead>
-<tr>
-<th>取值</th>
-<th>色彩模式</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>1</td>
-<td>二值图像（仍是8位数据，0x00与0xFF）</td>
-</tr>
-<tr>
-<td>L</td>
-<td>灰度图像</td>
-</tr>
-<tr>
-<td>P</td>
-<td>8位彩色图像</td>
-</tr>
-<tr>
-<td>RGB</td>
-<td>24位彩色图像</td>
-</tr>
-<tr>
-<td>RGBA</td>
-<td>32位彩色图像</td>
-</tr>
-<tr>
-<td>CMYK</td>
-<td>CMYK彩色图像</td>
-</tr>
-<tr>
-<td>YCbCr</td>
-<td>YCbCr彩色图像</td>
-</tr>
-<tr>
-<td>I</td>
-<td>32位整数灰度图像</td>
-</tr>
-<tr>
-<td>F</td>
-<td>32位浮点灰度图像</td>
-</tr>
-</tbody></table>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#转换图像的色彩模式</span></span><br><span class="line">img_convert=img.convert(<span class="string">&quot;L&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;The convert mode:&quot;</span>,img_convert.mode)<span class="comment">#img_convert是一个新的图像对象</span></span><br><span class="line">img_convert.save(<span class="string">&quot;img_Gray.bmp&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-<p>结果如下：</p>
-<img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/image-20221028222519861.png" alt="image-20221028222519861" style="zoom:67%;">
-
-<p><img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/image-20221028222455045.png" alt="image-20221028222455045"></p>
-</li>
-</ul>
-<hr>
-<h1 id="颜色通道的分离与合并"><a href="#颜色通道的分离与合并" class="headerlink" title="颜色通道的分离与合并"></a>颜色通道的分离与合并</h1><ul>
-<li><p><strong>分离</strong>：<code>图像对象.split()</code></p>
-</li>
-<li><p><strong>合并</strong>：<code>Image.merge(色彩模式，图像列表)</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#颜色通道的分离与合并</span></span><br><span class="line"><span class="comment">#1.分离</span></span><br><span class="line">img_r,img_g,img_b=img.split()</span><br><span class="line"></span><br><span class="line"><span class="comment">#显示分离后的效果</span></span><br><span class="line">plt.figure(figsize=(<span class="number">10</span>,<span class="number">10</span>))</span><br><span class="line">plt.subplot(<span class="number">221</span>)</span><br><span class="line">plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">plt.imshow(img_r,cmap=<span class="string">&quot;gray&quot;</span>)</span><br><span class="line">plt.title(<span class="string">&quot;R&quot;</span>,fontsize=<span class="number">20</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">222</span>)</span><br><span class="line">plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">plt.imshow(img_g,cmap=<span class="string">&quot;gray&quot;</span>)</span><br><span class="line">plt.title(<span class="string">&quot;G&quot;</span>,fontsize=<span class="number">20</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">223</span>)</span><br><span class="line">plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">plt.imshow(img_b,cmap=<span class="string">&quot;gray&quot;</span>)</span><br><span class="line">plt.title(<span class="string">&quot;B&quot;</span>,fontsize=<span class="number">20</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#2.合并</span></span><br><span class="line">img_rgb=Image.merge(<span class="string">&quot;RGB&quot;</span>,[img_r,img_g,img_b])</span><br><span class="line">plt.subplot(<span class="number">224</span>)</span><br><span class="line">plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">plt.imshow(img_rgb)</span><br><span class="line">plt.title(<span class="string">&quot;RGB&quot;</span>,fontsize=<span class="number">20</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#显示处理后的图像</span></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-
-<p>结果如下：</p>
-<img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/image-20221028222912075.png" alt="image-20221028222912075" style="zoom: 50%;"></li>
-</ul>
-<hr>
-<h1 id="将图像数据转化为数组"><a href="#将图像数据转化为数组" class="headerlink" title="将图像数据转化为数组"></a>将图像数据转化为数组</h1><ul>
-<li><p><code>np.array(图像对象)</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#将图像数据转化为数组</span></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">img_array=np.array(img)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;The shape:&quot;</span>,img_array.shape)</span><br></pre></td></tr></table></figure>
-
-<p>结果如下：</p>
-<img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/image-20221028223116921.png" alt="image-20221028223116921" style="zoom: 80%;"></li>
-</ul>
-<hr>
-<h1 id="图像的缩放、旋转和裁剪"><a href="#图像的缩放、旋转和裁剪" class="headerlink" title="图像的缩放、旋转和裁剪"></a>图像的缩放、旋转和裁剪</h1><ul>
-<li><p><strong>缩放</strong>：</p>
-<ul>
-<li><code>图像对象.resize((width,height))</code></li>
-<li><code>图像对象.thumbnail((width,height))</code><strong>#其返回值是None，也就是直接对图像对象进行了缩放</strong></li>
-</ul>
-</li>
-<li><p><strong>旋转、镜像</strong>：</p>
-<ul>
-<li><p><code>图像对象.transpose(旋转方式)</code></p>
-</li>
-<li><p>旋转方式：</p>
-<table>
-<thead>
-<tr>
-<th>操作</th>
-<th>对应旋转方式</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Image.Transpose.FLIP_LEFT_RIGHT</td>
-<td>水平翻转</td>
-</tr>
-<tr>
-<td>Image.Transpose.FLIP_TOP_BOTTOM</td>
-<td>上下翻转</td>
-</tr>
-<tr>
-<td>Image.Transpose.ROTATE_90</td>
-<td>逆时针旋转90</td>
-</tr>
-<tr>
-<td>Image.Transpose.ROTATE_180</td>
-<td>逆时针旋转180</td>
-</tr>
-<tr>
-<td>Image.Transpose.ROTATE_270</td>
-<td>逆时针旋转270</td>
-</tr>
-<tr>
-<td>Image.Transpose.TRANSPOSE</td>
-<td>将图像进行转置</td>
-</tr>
-<tr>
-<td>Image.Transpose.TRANSVERSE</td>
-<td>将图像进行转置，再水平翻转</td>
-</tr>
-</tbody></table>
-</li>
-</ul>
-</li>
-<li><p><strong>裁剪</strong>：在图像上指定的位置裁剪出一个矩形区域</p>
-<ul>
-<li><code>图像对象.crop((x0,y0,x1,y1))</code></li>
-<li><strong>x0,x0对应左上角坐标；x1,y1对应右下角坐标</strong></li>
-</ul>
-</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#对图像进行缩放和旋转和裁剪</span></span><br><span class="line"><span class="comment">#1.缩放图像</span></span><br><span class="line">img_resize=img.resize((<span class="number">64</span>,<span class="number">64</span>))</span><br><span class="line"><span class="comment">#2.旋转图像</span></span><br><span class="line">img_transpose=img.transpose(Image.Transpose.ROTATE_90)</span><br><span class="line"><span class="comment">#3.裁剪图像</span></span><br><span class="line">img_crop=img.crop((<span class="number">100</span>,<span class="number">100</span>,<span class="number">400</span>,<span class="number">400</span>))</span><br><span class="line"><span class="comment">#显示图像</span></span><br><span class="line">plt.figure(figsize=(<span class="number">10</span>,<span class="number">10</span>))</span><br><span class="line">plt.subplot(<span class="number">221</span>)</span><br><span class="line">plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">plt.imshow(img)</span><br><span class="line">plt.title(<span class="string">&quot;img&quot;</span>,fontsize=<span class="number">20</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">222</span>)</span><br><span class="line">plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">plt.imshow(img_resize)</span><br><span class="line">plt.title(<span class="string">&quot;img_resize&quot;</span>,fontsize=<span class="number">20</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">223</span>)</span><br><span class="line">plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">plt.imshow(img_transpose)</span><br><span class="line">plt.title(<span class="string">&quot;img_transpose&quot;</span>,fontsize=<span class="number">20</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">224</span>)</span><br><span class="line">plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">plt.imshow(img_crop)</span><br><span class="line">plt.title(<span class="string">&quot;img_crop&quot;</span>,fontsize=<span class="number">20</span>)</span><br><span class="line"></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-
-<p>结果如下：</p>
-<img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/image-20221028224240134.png" alt="image-20221028224240134" style="zoom: 50%;">
-
-<hr>
-<h1 id="实例分析：手写数字数据集MNIST"><a href="#实例分析：手写数字数据集MNIST" class="headerlink" title="实例分析：手写数字数据集MNIST"></a>实例分析：手写数字数据集MNIST</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="comment">#下载MNIST数据集</span></span><br><span class="line">mnist=tf.keras.datasets.mnist</span><br><span class="line">(train_x,train_y),(test_x,test_y)=mnist.load_data(path=<span class="string">&quot;D:\App_Data_File\Anaconda_data\jupyter\image\mnist.npz&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#随机显示四幅手写图</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):</span><br><span class="line">    num=np.random.randint(<span class="number">1</span>,<span class="number">50000</span>)</span><br><span class="line">    plt.subplot(<span class="number">1</span>,<span class="number">4</span>,i+<span class="number">1</span>)</span><br><span class="line">    plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">    plt.imshow(train_x[num],cmap=<span class="string">&quot;gray&quot;</span>)</span><br><span class="line">    plt.title(train_y[num])</span><br><span class="line"></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-
-<p>结果如下：</p>
-<img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/image-20221028224752246.png" alt="image-20221028224752246" style="zoom:67%;">
-
-]]></content>
-      <categories>
-        <category>学习积累</category>
-      </categories>
-      <tags>
-        <tag>深度学习</tag>
-        <tag>TensorFlow</tag>
+        <tag>笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -1483,75 +756,6 @@ tf.Tensor(
       </tags>
   </entry>
   <entry>
-    <title>Hello World</title>
-    <url>/2022/10/23/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<span id="more"></span>
-
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
-  </entry>
-  <entry>
-    <title>小沈同学的本科学习笔记</title>
-    <url>/2022/10/24/%E6%9C%AC%E7%A7%91%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
-    <content><![CDATA[<ul>
-<li><p><a href="https://maiimg.com/dec/a90991742709@pdf">点击此处获取 数字集成电路设计笔记</a></p>
-</li>
-<li><p><a href="https://maiimg.com/dec/a98598744206@pdf">点击此处获取 模拟集成电路分析与设计笔记</a></p>
-</li>
-<li><p><a href="https://maiimg.com/dec/a94779689222@pdf">点击此处获取 信号与系统笔记</a></p>
-</li>
-<li><p><a href="https://maiimg.com/dec/a89787007590@pdf">点击此处获取 结构化数字设计笔记</a></p>
-</li>
-<li><p><a href="https://maiimg.com/dec/a93405366625@pdf">点击此处获取 常微分笔记</a></p>
-</li>
-<li><p><a href="https://maiimg.com/dec/a98876697093@pdf">点击此处获取 单片机原理笔记</a></p>
-</li>
-<li><p><a href="https://maiimg.com/dec/a92482261038@pdf">点击此处获取 电力电子笔记</a></p>
-</li>
-<li><p><a href="https://maiimg.com/dec/a94485666137@pdf">点击此处获取 电子学2笔记</a></p>
-</li>
-<li><p><a href="https://maiimg.com/dec/a93437690158@pdf">点击此处获取 概率论笔记</a></p>
-</li>
-<li><p><a href="https://maiimg.com/dec/a89559702311@pdf">点击此处获取 离散时间信号笔记</a></p>
-</li>
-<li><p><a href="https://maiimg.com/dec/a93447374661@pdf">点击此处获取 逻辑设计笔记</a></p>
-</li>
-<li><p><a href="https://maiimg.com/dec/a94852670052@pdf">点击此处获取 数据结构笔记</a></p>
-</li>
-<li><p><a href="https://maiimg.com/dec/a95788708750@pdf">点击此处获取 自动控制原理笔记</a></p>
-</li>
-<li><p><a href="https://maiimg.com/dec/a89660723835@pdf">点击此处获取 电磁场原理笔记</a></p>
-</li>
-</ul>
-<span id="more"></span>
-
-<hr>
-<ul>
-<li><h2 id="整理不易，请取之有道，转载务必注明出处！"><a href="#整理不易，请取之有道，转载务必注明出处！" class="headerlink" title="整理不易，请取之有道，转载务必注明出处！"></a>整理不易，请取之有道，转载务必注明出处！</h2></li>
-<li><h2 id="文件较大，加载可能比较费时，请耐心等待！"><a href="#文件较大，加载可能比较费时，请耐心等待！" class="headerlink" title="文件较大，加载可能比较费时，请耐心等待！"></a>文件较大，加载可能比较费时，请耐心等待！</h2></li>
-<li><h2 id="若多次刷新后点击链接仍不能查看，请通过关于处的邮箱联系我！"><a href="#若多次刷新后点击链接仍不能查看，请通过关于处的邮箱联系我！" class="headerlink" title="若多次刷新后点击链接仍不能查看，请通过关于处的邮箱联系我！"></a>若多次刷新后点击链接仍不能查看，请通过关于处的邮箱联系我！</h2></li>
-</ul>
-]]></content>
-      <categories>
-        <category>知识共享</category>
-      </categories>
-      <tags>
-        <tag>笔记</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>TensorFlow实践之线性回归问题</title>
     <url>/2022/11/01/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%E9%97%AE%E9%A2%98/</url>
     <content><![CDATA[<p>本节主要介绍了如何通过解析法与梯度下降法求解线性回归问题。</p>
@@ -1902,6 +1106,208 @@ i:2000,	Train Loss:17.118926,	Test Loss:19.456854
       </categories>
       <tags>
         <tag>-TensorFlow -深度学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>TensorFlow实践之数字图像处理基础</title>
+    <url>/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<p>计算机视觉是人工智能的大门，其已成为人工智能应用方向的领头羊。故掌握数字图像处理的基础十分必要。本文主要介绍了导入Pillow库中的Image对图像进行简单处理的方法。</p>
+<span id="more"></span>
+
+<h1 id="图像的打开与保存"><a href="#图像的打开与保存" class="headerlink" title="图像的打开与保存"></a>图像的打开与保存</h1><ul>
+<li><p><strong>导入模块</strong>：<code>from PIL import Image</code></p>
+</li>
+<li><p><strong>打开图像</strong>：<code>Image.open()</code>#返回图像对象</p>
+</li>
+<li><p><strong>保存图像</strong>：<code>Image.save(文件路径)</code>#<strong>改变文件名后缀，就可以转换图像格式</strong></p>
+</li>
+<li><p><strong>图像对象的主要属性</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>图像对象.format</td>
+<td>图像格式</td>
+</tr>
+<tr>
+<td>图像对象.size</td>
+<td>图像尺寸</td>
+</tr>
+<tr>
+<td>图像对象.mode</td>
+<td>色彩模式</td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line"><span class="comment">#打开图像</span></span><br><span class="line">img=Image.<span class="built_in">open</span>(<span class="string">&quot;lena.tiff&quot;</span>)</span><br><span class="line"><span class="comment">#保存图像</span></span><br><span class="line">img.save(<span class="string">&quot;test.tiff&quot;</span>)</span><br><span class="line">img.save(<span class="string">&quot;lena.jpg&quot;</span>)</span><br><span class="line">img.save(<span class="string">&quot;lena.bmp&quot;</span>)</span><br><span class="line"><span class="comment">#查看图像对象的主要属性</span></span><br><span class="line">img1=Image.<span class="built_in">open</span>(<span class="string">&quot;lena.jpg&quot;</span>)</span><br><span class="line">img2=Image.<span class="built_in">open</span>(<span class="string">&quot;lena.bmp&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;The format:&quot;</span>,img2.<span class="built_in">format</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;The size:&quot;</span>,img2.size)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;The mode:&quot;</span>,img2.mode)</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+<img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/image-20221028221253149.png" alt="image-20221028221253149" style="zoom: 67%;"></li>
+</ul>
+<hr>
+<h1 id="显示图像"><a href="#显示图像" class="headerlink" title="显示图像"></a>显示图像</h1><ul>
+<li><p><code>plt.imshow(image对象/Numpy数组)</code>#对图像进行处理并显示其格式</p>
+</li>
+<li><p><code>plt.show()</code>#将处理后的图像显示</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#显示图像</span></span><br><span class="line"><span class="comment">#设置画布尺寸</span></span><br><span class="line">plt.figure(figsize=(<span class="number">15</span>,<span class="number">5</span>))</span><br><span class="line"><span class="comment">#设置子图</span></span><br><span class="line">plt.subplot(<span class="number">131</span>)</span><br><span class="line"><span class="comment">#plt.axis(&quot;off&quot;)#关闭坐标轴</span></span><br><span class="line">plt.imshow(img)</span><br><span class="line">plt.title(img.<span class="built_in">format</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">132</span>)</span><br><span class="line"><span class="comment">#plt.axis(&quot;off&quot;)</span></span><br><span class="line">plt.imshow(img1)</span><br><span class="line">plt.title(img1.<span class="built_in">format</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">133</span>)</span><br><span class="line"><span class="comment">#plt.axis(&quot;off&quot;)</span></span><br><span class="line">plt.imshow(img2)</span><br><span class="line">plt.title(img2.<span class="built_in">format</span>)</span><br><span class="line"><span class="comment">#将处理后的图像显示</span></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+<p><img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/image-20221028221709477.png" alt="image-20221028221709477"></p>
+</li>
+</ul>
+<hr>
+<h1 id="转换图像的色彩模式"><a href="#转换图像的色彩模式" class="headerlink" title="转换图像的色彩模式"></a>转换图像的色彩模式</h1><ul>
+<li><p><code>图像对象.convert(色彩模式)</code></p>
+<table>
+<thead>
+<tr>
+<th>取值</th>
+<th>色彩模式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>二值图像（仍是8位数据，0x00与0xFF）</td>
+</tr>
+<tr>
+<td>L</td>
+<td>灰度图像</td>
+</tr>
+<tr>
+<td>P</td>
+<td>8位彩色图像</td>
+</tr>
+<tr>
+<td>RGB</td>
+<td>24位彩色图像</td>
+</tr>
+<tr>
+<td>RGBA</td>
+<td>32位彩色图像</td>
+</tr>
+<tr>
+<td>CMYK</td>
+<td>CMYK彩色图像</td>
+</tr>
+<tr>
+<td>YCbCr</td>
+<td>YCbCr彩色图像</td>
+</tr>
+<tr>
+<td>I</td>
+<td>32位整数灰度图像</td>
+</tr>
+<tr>
+<td>F</td>
+<td>32位浮点灰度图像</td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#转换图像的色彩模式</span></span><br><span class="line">img_convert=img.convert(<span class="string">&quot;L&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;The convert mode:&quot;</span>,img_convert.mode)<span class="comment">#img_convert是一个新的图像对象</span></span><br><span class="line">img_convert.save(<span class="string">&quot;img_Gray.bmp&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+<img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/image-20221028222519861.png" alt="image-20221028222519861" style="zoom:67%;">
+
+<p><img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/image-20221028222455045.png" alt="image-20221028222455045"></p>
+</li>
+</ul>
+<hr>
+<h1 id="颜色通道的分离与合并"><a href="#颜色通道的分离与合并" class="headerlink" title="颜色通道的分离与合并"></a>颜色通道的分离与合并</h1><ul>
+<li><p><strong>分离</strong>：<code>图像对象.split()</code></p>
+</li>
+<li><p><strong>合并</strong>：<code>Image.merge(色彩模式，图像列表)</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#颜色通道的分离与合并</span></span><br><span class="line"><span class="comment">#1.分离</span></span><br><span class="line">img_r,img_g,img_b=img.split()</span><br><span class="line"></span><br><span class="line"><span class="comment">#显示分离后的效果</span></span><br><span class="line">plt.figure(figsize=(<span class="number">10</span>,<span class="number">10</span>))</span><br><span class="line">plt.subplot(<span class="number">221</span>)</span><br><span class="line">plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">plt.imshow(img_r,cmap=<span class="string">&quot;gray&quot;</span>)</span><br><span class="line">plt.title(<span class="string">&quot;R&quot;</span>,fontsize=<span class="number">20</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">222</span>)</span><br><span class="line">plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">plt.imshow(img_g,cmap=<span class="string">&quot;gray&quot;</span>)</span><br><span class="line">plt.title(<span class="string">&quot;G&quot;</span>,fontsize=<span class="number">20</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">223</span>)</span><br><span class="line">plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">plt.imshow(img_b,cmap=<span class="string">&quot;gray&quot;</span>)</span><br><span class="line">plt.title(<span class="string">&quot;B&quot;</span>,fontsize=<span class="number">20</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#2.合并</span></span><br><span class="line">img_rgb=Image.merge(<span class="string">&quot;RGB&quot;</span>,[img_r,img_g,img_b])</span><br><span class="line">plt.subplot(<span class="number">224</span>)</span><br><span class="line">plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">plt.imshow(img_rgb)</span><br><span class="line">plt.title(<span class="string">&quot;RGB&quot;</span>,fontsize=<span class="number">20</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#显示处理后的图像</span></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+<img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/image-20221028222912075.png" alt="image-20221028222912075" style="zoom: 50%;"></li>
+</ul>
+<hr>
+<h1 id="将图像数据转化为数组"><a href="#将图像数据转化为数组" class="headerlink" title="将图像数据转化为数组"></a>将图像数据转化为数组</h1><ul>
+<li><p><code>np.array(图像对象)</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#将图像数据转化为数组</span></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">img_array=np.array(img)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;The shape:&quot;</span>,img_array.shape)</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+<img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/image-20221028223116921.png" alt="image-20221028223116921" style="zoom: 80%;"></li>
+</ul>
+<hr>
+<h1 id="图像的缩放、旋转和裁剪"><a href="#图像的缩放、旋转和裁剪" class="headerlink" title="图像的缩放、旋转和裁剪"></a>图像的缩放、旋转和裁剪</h1><ul>
+<li><p><strong>缩放</strong>：</p>
+<ul>
+<li><code>图像对象.resize((width,height))</code></li>
+<li><code>图像对象.thumbnail((width,height))</code><strong>#其返回值是None，也就是直接对图像对象进行了缩放</strong></li>
+</ul>
+</li>
+<li><p><strong>旋转、镜像</strong>：</p>
+<ul>
+<li><p><code>图像对象.transpose(旋转方式)</code></p>
+</li>
+<li><p>旋转方式：</p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>对应旋转方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Image.Transpose.FLIP_LEFT_RIGHT</td>
+<td>水平翻转</td>
+</tr>
+<tr>
+<td>Image.Transpose.FLIP_TOP_BOTTOM</td>
+<td>上下翻转</td>
+</tr>
+<tr>
+<td>Image.Transpose.ROTATE_90</td>
+<td>逆时针旋转90</td>
+</tr>
+<tr>
+<td>Image.Transpose.ROTATE_180</td>
+<td>逆时针旋转180</td>
+</tr>
+<tr>
+<td>Image.Transpose.ROTATE_270</td>
+<td>逆时针旋转270</td>
+</tr>
+<tr>
+<td>Image.Transpose.TRANSPOSE</td>
+<td>将图像进行转置</td>
+</tr>
+<tr>
+<td>Image.Transpose.TRANSVERSE</td>
+<td>将图像进行转置，再水平翻转</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+<li><p><strong>裁剪</strong>：在图像上指定的位置裁剪出一个矩形区域</p>
+<ul>
+<li><code>图像对象.crop((x0,y0,x1,y1))</code></li>
+<li><strong>x0,x0对应左上角坐标；x1,y1对应右下角坐标</strong></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#对图像进行缩放和旋转和裁剪</span></span><br><span class="line"><span class="comment">#1.缩放图像</span></span><br><span class="line">img_resize=img.resize((<span class="number">64</span>,<span class="number">64</span>))</span><br><span class="line"><span class="comment">#2.旋转图像</span></span><br><span class="line">img_transpose=img.transpose(Image.Transpose.ROTATE_90)</span><br><span class="line"><span class="comment">#3.裁剪图像</span></span><br><span class="line">img_crop=img.crop((<span class="number">100</span>,<span class="number">100</span>,<span class="number">400</span>,<span class="number">400</span>))</span><br><span class="line"><span class="comment">#显示图像</span></span><br><span class="line">plt.figure(figsize=(<span class="number">10</span>,<span class="number">10</span>))</span><br><span class="line">plt.subplot(<span class="number">221</span>)</span><br><span class="line">plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">plt.imshow(img)</span><br><span class="line">plt.title(<span class="string">&quot;img&quot;</span>,fontsize=<span class="number">20</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">222</span>)</span><br><span class="line">plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">plt.imshow(img_resize)</span><br><span class="line">plt.title(<span class="string">&quot;img_resize&quot;</span>,fontsize=<span class="number">20</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">223</span>)</span><br><span class="line">plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">plt.imshow(img_transpose)</span><br><span class="line">plt.title(<span class="string">&quot;img_transpose&quot;</span>,fontsize=<span class="number">20</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">224</span>)</span><br><span class="line">plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">plt.imshow(img_crop)</span><br><span class="line">plt.title(<span class="string">&quot;img_crop&quot;</span>,fontsize=<span class="number">20</span>)</span><br><span class="line"></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+<img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/image-20221028224240134.png" alt="image-20221028224240134" style="zoom: 50%;">
+
+<hr>
+<h1 id="实例分析：手写数字数据集MNIST"><a href="#实例分析：手写数字数据集MNIST" class="headerlink" title="实例分析：手写数字数据集MNIST"></a>实例分析：手写数字数据集MNIST</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="comment">#下载MNIST数据集</span></span><br><span class="line">mnist=tf.keras.datasets.mnist</span><br><span class="line">(train_x,train_y),(test_x,test_y)=mnist.load_data(path=<span class="string">&quot;D:\App_Data_File\Anaconda_data\jupyter\image\mnist.npz&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#随机显示四幅手写图</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):</span><br><span class="line">    num=np.random.randint(<span class="number">1</span>,<span class="number">50000</span>)</span><br><span class="line">    plt.subplot(<span class="number">1</span>,<span class="number">4</span>,i+<span class="number">1</span>)</span><br><span class="line">    plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">    plt.imshow(train_x[num],cmap=<span class="string">&quot;gray&quot;</span>)</span><br><span class="line">    plt.title(train_y[num])</span><br><span class="line"></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+<img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/image-20221028224752246.png" alt="image-20221028224752246" style="zoom:67%;">
+
+]]></content>
+      <categories>
+        <category>学习积累</category>
+      </categories>
+      <tags>
+        <tag>TensorFlow</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -2473,186 +1879,822 @@ i:2000,	Train Loss:17.118926,	Test Loss:19.456854
         <category>学习积累</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>TensorFlow</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
-    <title>保研分享</title>
-    <url>/2022/10/23/%E4%BF%9D%E7%A0%94%E5%88%86%E4%BA%AB/</url>
-    <content><![CDATA[<p>今年，小沈同学顺利保研到了厦门大学，18岁时的梦想终于在21岁实现了！那就让小沈来谈谈这算不上经验之谈的保研经历吧！（小沈总共拿到了厦门大学、东南大学、天津大学、中南大学、南方科技大学、深圳大学6所大学的offer）</p>
+    <title>VLSI基础之易错易忘知识点</title>
+    <url>/2022/10/28/VLSI%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/</url>
+    <content><![CDATA[<p>小沈同学在回顾VLSI这门课程中，发现了许多容易遗忘的知识点以及之前一直没弄明白的知识点。下面是一些记录……</p>
 <span id="more"></span>
 
-<h1 id="前期准备"><a href="#前期准备" class="headerlink" title="前期准备"></a>前期准备</h1><ul>
-<li>保研前期的准备包括信息收集、资料准备、联系导师三个阶段</li>
+<h1 id="MOS场效应晶体管"><a href="#MOS场效应晶体管" class="headerlink" title="MOS场效应晶体管"></a>MOS场效应晶体管</h1><h2 id="1-MOS管的工作原理"><a href="#1-MOS管的工作原理" class="headerlink" title="1.MOS管的工作原理"></a>1.MOS管的工作原理</h2><p><img src="/2022/10/28/VLSI%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/image-20221103221528739.png" alt="image-20221103221528739"></p>
+<h2 id="2-阈值电压"><a href="#2-阈值电压" class="headerlink" title="2.阈值电压"></a>2.阈值电压</h2><ul>
+<li>Φ<del>ms</del>：与材料的功函数差有关</li>
+<li>Φ<del>F</del>：费米电势，与温度和材料有关</li>
+<li>Q<del>B</del>：与衬底的掺杂浓度以及偏置条件有关</li>
+<li>C<del>ox</del>：氧化层的厚度以及介电常数有关</li>
 </ul>
-<h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><ul>
-<li>首先，关注常见的保研公众号，如<strong>保研岛</strong>、保研喵等。但保研公众号大多有信息延迟，故建议经常浏览最想去的几个梦校的官方网站，以便能及时获取梦校信息。这里建议以txt或者excel的形式整理搜集到的信息，示例如下：</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>学校（学院）</th>
-<th>夏令营&#x2F;预推免 截止时间</th>
-<th>学院官网招生信息页</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>厦门大学（电子科学与技术学院）</td>
-<td>5月25日-6月15日</td>
-<td><a href="https://ese.xmu.edu.cn/info/1083/10259.htm">厦门大学电子科学与技术学院2022年全国优秀大学生暑期夏令营招生指南-厦门大学电子科学与技术学院（国家示范性微电子学院） (xmu.edu.cn)</a></td>
-</tr>
-</tbody></table>
-<ul>
-<li><p>其次，注意重要的时间节点。<strong>夏令营</strong>最早的可能会在5月低截止，大多数六月低截止，少数七八月低截止。<strong>预推免</strong>有一部分院校开放得早，可能七八月就开了报名系统，大多数集中在九月初开放。（由于小沈了解得有限，此时间节点仅针对电子专业）</p>
-</li>
-<li><p>我相信大多数将要保研的同学可能都会疑惑夏令营与预推免的区别，以我面试经历了解的看来，主要有如下区别：</p>
-</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>区别</th>
-<th>夏令营</th>
-<th>预推免</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>形式</td>
-<td>讲座+活动+面试（疫情原因，往往是线上讲座和面试）</td>
-<td>面试（有些学校夏令营和预推免一起招生，也只有面试）</td>
-</tr>
-<tr>
-<td>过初审难度</td>
-<td>985、211的同学优势明显、双非可能只要第一或第二名</td>
-<td>往年确实是进入预推免的门槛较低，但今年保研形式严峻</td>
-</tr>
-<tr>
-<td>拿offer难度</td>
-<td>看运气</td>
-<td>看运气</td>
-</tr>
-</tbody></table>
-<ul>
-<li>通过上述比较，结合今年的保研形式，我的结论是：通常情况下过初审时夏令营确实难于预推免，但双非的同学不要怕，只管往前冲，大胆的投就完事了，往往有运气的成分在的话就会幸运的进了。而且在我看来，双非的同学过211是基本没有问题的，再有一些竞赛的加持的话，中等的985也是不在话下的。所以夏令营一定要敢投，最好能拿到保底的offer，这样在预推免的时候就不会那么慌张了。尤其，今年保研名额普遍增多了（这样对双非保研的同学非常不利，因为多了许多985211的保研对手），预推免的竞争变得异常激烈，可能夏令营能投进去的简历，在预推免都投不进去了。所以今年大家都调侃说：“以为夏令营是保底，预推免时发现那是天花板”。最后，关于二者的难度问题，可能每个保研人都有自己的看法，但在我看来，运气和缘分占了很大一部分比例，有时是面试题刚好对你胃口了，有时是面试老师的温柔和蔼让你放松了发挥好了等等，但实力和自信一定是第一位的，所以各位加油！</li>
-</ul>
-<h2 id="资料准备"><a href="#资料准备" class="headerlink" title="资料准备"></a>资料准备</h2><ul>
-<li><p>保研前期需要准备的材料主要是个人简历、个人陈述、自我介绍PPT、成绩单与成绩排名证明、推荐信（建议在6月份之间完成）</p>
-<table>
-<thead>
-<tr>
-<th>资料准备</th>
-<th>浅薄之见</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>个人简历</td>
-<td>可以在网上找简历模板，建议选简洁大方的，着重介绍科研与竞赛部分，可以提一提性格（浅提）</td>
-</tr>
-<tr>
-<td>个人陈述</td>
-<td>相当于自荐信，建议先写一个1500字的版本，之后再根据学校要求修改其字数</td>
-</tr>
-<tr>
-<td>自我介绍PPT</td>
-<td>建议模板简洁大方，包括个人基本信息、主要竞赛（科研）、未来规划</td>
-</tr>
-<tr>
-<td>成绩单与排名证明</td>
-<td>成绩单与成绩排名证明上最好都盖上学校与学院教务处的章</td>
-</tr>
-<tr>
-<td>推荐信</td>
-<td>准备两份，建议一份找竞赛或科研导师，一份找任课老师</td>
-</tr>
-</tbody></table>
-</li>
-</ul>
-<h2 id="联系导师"><a href="#联系导师" class="headerlink" title="联系导师"></a>联系导师</h2><ul>
-<li>邮件正文简单有重点的介绍自己的情况（有诚意的话先去看看导师的论文再联系）</li>
-<li>个人简历与成绩单放附件</li>
-<li>对于自己很想去的学校，一定要提前联系导师！（尤其是对于导师权力比较大的学校）</li>
-<li>不要害怕被拒绝，不要因为老师的不理睬而感到气馁！（立马换一个老师联系就行，不要因此丧失了信心）</li>
-</ul>
-<hr>
-<h1 id="面试环节"><a href="#面试环节" class="headerlink" title="面试环节"></a>面试环节</h1><ul>
-<li><p>多数学校的面试主要包括英语考察、专业课问答（或抽题）、竞赛与科研问答、自由问答四个环节</p>
-<ul>
-<li><p><strong>英语</strong>：自我介绍 or 问答 （仅根据小沈的面试经验，听说别的专业有文献翻译）<a href="https://maiimg.com/dec/a98813351750@pdf">点击此处获取 小沈同学整理的英文面试常见问题</a></p>
-</li>
-<li><p><strong>专业课</strong>：以下为重点复习科目（因为小沈基本报的都是集成电路设计方向，故可能更适用于想学此方向的同学）<a href="https://maiimg.com/dec/a89254355740@pdf">点击此处获取 小沈同学整理的专业课面试常见问题</a> [我整理的答案不一定完全正确，仅供参考，建议自行补充]</p>
-<ul>
-<li><p>数字集成电路</p>
-</li>
-<li><p>模拟集成电路</p>
-</li>
-<li><p>信号与系统</p>
-</li>
-<li><p>数模电</p>
-</li>
-<li><p>半导体物理</p>
-</li>
-</ul>
-</li>
-<li><p><strong>竞赛与科研</strong>：以下是两点小建议</p>
-<ul>
-<li><p>科研起到的是锦上添花的作用，尤其对于部分工科来说发文章就更难，故如果确定写到简历上就一定要搞明白！</p>
-</li>
-<li><p>老师并不太在意奖项的数量，更在意的是你是否在含金量高的比赛中都担任了重要的角色，并且学到了更多的技能。据小沈总结，能完完整整说清楚两个比赛就足够了</p>
-</li>
-</ul>
-</li>
-<li><p><strong>自由问答</strong>：此环节什么都有可能问到，可能是老师即兴出一个问题，问你如何解决；亦或许简单问问为什么选择他们学校or为什么想学此方向or<strong>提前了解过哪位导师</strong>（个人认为这个问题是预推免高频非专业问题）等等</p>
-</li>
-</ul>
-</li>
-<li><p>再来谈谈<strong>面试心态</strong>：双非的同学一定要有<strong>自信</strong>，你要相信只要付出努力学习了，那对课程的掌握程度不会比985211的同学差。小沈曾经也一度怀疑自己，我到底拿什么跟985211的学生比，为什么老师要选我不去选他们？我有个朋友是这么回答我的：985211的同学确实在某些方面要更优秀，但他们又不是天才！所以啊，既然不是天才，那就没什么好怕的了。高考结束是人生的一个新起点，那保研又是另外一个起点，现在你们都站在同一个起点上，而这次的结果只取决于大学三年的努力。而且夏令营和预推免并不限制你报多少学校，大胆去报就行（必须敢报，因为你都对自己不自信的话，老师凭什么要选你），最差的结果也只是不通过从而当作积累经验。相信我，勤勤恳恳三年拿到的保研资格，最后都会有完美的结果！</p>
-</li>
-</ul>
-<hr>
-<h1 id="系统填报"><a href="#系统填报" class="headerlink" title="系统填报"></a>系统填报</h1><ul>
-<li><p>系统填报主要分为两个阶段：注册与志愿填报</p>
-<table>
-<thead>
-<tr>
-<th>时间</th>
-<th>相关操作</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>9.23~9.27</td>
-<td>获得推免资格的同学需登录教育部<a href="https://yz.chsi.com.cn/tm/">推荐免试攻读研究生_中国研究生招生信息网 (chsi.com.cn)</a>注册并完善个人信息。不同学校录入保研名额的时间不同，但基本都会在25号左右录入完（只有学校录入完才能注册）</td>
-</tr>
-<tr>
-<td>9.28~10.20</td>
-<td>获得推免资格的同学通过教育部<a href="https://yz.chsi.com.cn/tm/">推荐免试攻读研究生_中国研究生招生信息网 (chsi.com.cn)</a>完成报名及志愿填报工作（总共能填三个平行志愿，建议先填最稳的offer），接受并确认招生单位的复试及拟录取通知（对于9.28前拿到学校offer的同学，这一步就是走一个流程）</td>
-</tr>
-</tbody></table>
-</li>
-<li><p>注意重要的系统填报时间节点：<strong>9.28日凌晨（00：00）</strong>开始填报志愿，<strong>9.28日12点</strong>各学校开始陆续发放复试通知，通常学校会规定需在半个小时内（不同学校不一样，注意确认的时间就行）接受复试通知，否则认定为自动放弃。在确认复试通知后，耐心等待，学校将发放拟录取通知，而点击确认拟录取通知后，那这次保研的录取工作就正式结束了！（具体示例如下）</p>
-<img src="/2022/10/23/%E4%BF%9D%E7%A0%94%E5%88%86%E4%BA%AB/image-20221025093326693.png" alt="image-20221025093326693" style="zoom: 33%;">
+<img src="/2022/10/28/VLSI%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/image-20221103221921462.png" alt="image-20221103221921462" style="zoom: 25%;">
 
-<img src="/2022/10/23/%E4%BF%9D%E7%A0%94%E5%88%86%E4%BA%AB/image-20221025093340803.png" alt="image-20221025093340803" style="zoom: 33%;">
+<h2 id="3-MOS管的基本电流方程"><a href="#3-MOS管的基本电流方程" class="headerlink" title="3.MOS管的基本电流方程"></a>3.MOS管的基本电流方程</h2><img src="/2022/10/28/VLSI%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/image-20221103222319446.png" alt="image-20221103222319446" style="zoom: 50%;">
 
-<img src="/2022/10/23/%E4%BF%9D%E7%A0%94%E5%88%86%E4%BA%AB/image-20221025093403972.png" alt="image-20221025093403972" style="zoom: 33%;">
+<h2 id="4-沟道长度调制效应产生原因"><a href="#4-沟道长度调制效应产生原因" class="headerlink" title="4.沟道长度调制效应产生原因"></a>4.沟道长度调制效应产生原因</h2><img src="/2022/10/28/VLSI%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/image-20221103222543370.png" alt="image-20221103222543370" style="zoom: 50%;">
 
-<img src="/2022/10/23/%E4%BF%9D%E7%A0%94%E5%88%86%E4%BA%AB/image-20221025093420227.png" alt="image-20221025093420227" style="zoom: 33%;">
+<h2 id="5-MOS管的电容"><a href="#5-MOS管的电容" class="headerlink" title="5.MOS管的电容"></a>5.MOS管的电容</h2><h3 id="栅电容：覆盖电容-沟道电容"><a href="#栅电容：覆盖电容-沟道电容" class="headerlink" title="栅电容：覆盖电容+沟道电容"></a>栅电容：覆盖电容+沟道电容</h3><ul>
+<li><p>覆盖电容：C<del>GSO</del>、C<del>GDO</del></p>
+<img src="/2022/10/28/VLSI%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/image-20221103222956743.png" alt="image-20221103222956743" style="zoom: 50%;">
 </li>
-<li><p>最后但最重要的是，<strong>不到9.28号填报系统结束那一刻就一定不要放弃</strong>！保研的二八定律，百分之二十的人拿着百分之八十的offer，故很多同学在9.28号之前拿的可能是替补（也就是那些拿到offer的人不去就会有机会录取），但没关系，如果是梦校的替补，一定要等！每年保研鸽子都满天飞，同学A鸽了学校1，导致同学B有机会上学校1，所以B鸽了学校2，导致同学C有机会上学校3，以此类推。而且据我的观察，替补大概率都能替补上（当然，这里可能说得比较绝对，但想表达的是想去就要敢等，以东南微电子为例，今年获得替补的同学有两百多人，录取当天复试通知发到了替补的最后一名）。所以，别放弃，一切皆有可能（我参加厦大夏令营认识的一个朋友，一度觉得快要没书读了，但最终在9.27号接到了上海交大的offer）</p>
+<li><p>沟道电容：C<del>GC</del>&#x3D;C<del>GCD</del>+C<del>GCS</del>+C<del>GCB</del></p>
+<img src="/2022/10/28/VLSI%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/image-20221103223105683.png" alt="image-20221103223105683" style="zoom:50%;"></li>
+</ul>
+<h3 id="结电容：底板pn结电容-侧壁pn结电容"><a href="#结电容：底板pn结电容-侧壁pn结电容" class="headerlink" title="结电容：底板pn结电容+侧壁pn结电容"></a>结电容：底板pn结电容+侧壁pn结电容</h3><ul>
+<li><p>底板pn结形成的电容：C<del>bottom</del></p>
+<img src="/2022/10/28/VLSI%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/image-20221103223643127.png" alt="image-20221103223643127" style="zoom: 50%;">
 </li>
+<li><p>侧壁pn结形成的电容：C<del>sw</del></p>
+<img src="/2022/10/28/VLSI%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/image-20221103223733404.png" alt="image-20221103223733404" style="zoom: 50%;"></li>
 </ul>
-<hr>
-<h1 id="保研心得"><a href="#保研心得" class="headerlink" title="保研心得"></a>保研心得</h1><ul>
-<li><strong>选择相对冷门的学院</strong>：保研时热门专业的竞争会异常激烈，以集成电路设计为例，今年卷到离谱，计算机专业、自动化、材料等专业的同学都来卷了。再加之今年保研名额的增多，想去热们专业读研真是难上加难。所以小沈建议大家可以报名一些相对冷门学院中与自己专业相关的专业，例如前沿交叉学院、航天航空学院（有些学校此学院下面设有集成电路设计专业[我知道的浙大就有]）等等。</li>
-<li><strong>不要比较</strong>：保研后一定会有同学朋友或者长辈来问你，保到什么学校了？哪个城市？专业好吗？等等，小沈在这里想说的是这些比较没有任何的意义，因为每个人在意的东西不一样，有人更care城市、有人更care学校title、有人更care学校的科研实力、也有像小沈一样更care18岁时的梦想的。或许有人不理解我想学微电子却没选东南大学，但我有我自己的考虑，我想圆18岁的梦，想去沿海城市，想离家更近，也更喜欢厦大的导师。所以，根据自己的偏爱，做出自己认为对的选择，并且相信它，并为之付出足够的努力，最终都会有美好的人生，毕竟彼方尚有荣光在！</li>
-</ul>
-<h1 id="选择大于努力-相信大于选择-祝大家都能如愿以偿！"><a href="#选择大于努力-相信大于选择-祝大家都能如愿以偿！" class="headerlink" title="选择大于努力 相信大于选择 祝大家都能如愿以偿！"></a>选择大于努力 相信大于选择 祝大家都能如愿以偿！</h1>]]></content>
+]]></content>
       <categories>
-        <category>经验之谈</category>
+        <category>学习积累</category>
       </categories>
       <tags>
-        <tag>分享</tag>
-        <tag>保研</tag>
+        <tag>VLSI</tag>
+        <tag>易错易忘知识点</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>Python基础之数据类型</title>
+    <url>/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/</url>
+    <content><![CDATA[<p>数据类型是Python基本语法中非常重要的一部分，本文对集合、序列、字典这三大类数据类型做了部分总结。</p>
+<span id="more"></span>
+
+<h1 id="集合类型及操作"><a href="#集合类型及操作" class="headerlink" title="集合类型及操作"></a>集合类型及操作</h1><ul>
+<li>集合是多个元素的无序组合</li>
+<li>集合元素之间<strong>无序</strong>，每个元素<strong>唯一，不存在相同元素</strong></li>
+<li>集合元素<strong>不可更改</strong>，不能是可变数据类型</li>
+</ul>
+<h2 id="1-集合的创建"><a href="#1-集合的创建" class="headerlink" title="1.集合的创建"></a>1.集合的创建</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#使用&#123;&#125;建立集合</span></span><br><span class="line">A=&#123;<span class="string">&quot;python&quot;</span>,<span class="number">123</span>,(<span class="string">&quot;python&quot;</span>,<span class="number">123</span>)&#125;</span><br><span class="line"><span class="comment">#使用set()建立集合</span></span><br><span class="line">B=<span class="built_in">set</span>(<span class="string">&quot;pypy123&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;输出结果如下：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(A)</span><br><span class="line"><span class="built_in">print</span>(B)</span><br><span class="line"><span class="built_in">print</span>(&#123;<span class="string">&quot;python&quot;</span>,<span class="string">&quot;123&quot;</span>,<span class="string">&quot;123&quot;</span>,<span class="string">&quot;python&quot;</span>&#125;)</span><br></pre></td></tr></table></figure>
+
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221026222311648.png" alt="image-20221026222311648" style="zoom:67%;">
+
+<h2 id="2-集合操作符"><a href="#2-集合操作符" class="headerlink" title="2.集合操作符"></a>2.集合操作符</h2><table>
+<thead>
+<tr>
+<th>操作符及应用</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S|T</td>
+<td>并，返回一个新集合，包括在集合S和T中的所有元素</td>
+</tr>
+<tr>
+<td>S-T</td>
+<td>差，返回一个新集合，包括在集合S但不在T中的元素</td>
+</tr>
+<tr>
+<td>S&amp;T</td>
+<td>交，返回一个新集合，包括同时在集合S和T中的元素</td>
+</tr>
+<tr>
+<td>S^T</td>
+<td>补，返回一个新集合，包括集合S和T中的非相同元素</td>
+</tr>
+<tr>
+<td>S&lt;&#x3D;T 或 S&lt;T</td>
+<td>返回True&#x2F;False，判断S和T的子集关系</td>
+</tr>
+<tr>
+<td>S&gt;&#x3D;T 或S&gt;T</td>
+<td>返回True&#x2F;False，判断S和T的包含关系</td>
+</tr>
+</tbody></table>
+<h2 id="3-集合处理方法"><a href="#3-集合处理方法" class="headerlink" title="3.集合处理方法"></a>3.集合处理方法</h2><table>
+<thead>
+<tr>
+<th>操作函数或方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S.add(x)</td>
+<td>如何x不在集合S中，将x增加到S</td>
+</tr>
+<tr>
+<td>S.discard(x)</td>
+<td>移除S中元素x，如果x不在集合S中，不报错</td>
+</tr>
+<tr>
+<td>S.remove(x)</td>
+<td>移除S中元素x，如果x不在集合S中，产生KeyError异常</td>
+</tr>
+<tr>
+<td>S.clear()</td>
+<td>移除S中所有元素</td>
+</tr>
+<tr>
+<td>S.pop()</td>
+<td>随机返回S的一个元素，更新S，若S为空产生keyError异常</td>
+</tr>
+<tr>
+<td>S.copy()</td>
+<td>返回集合S的一个副本</td>
+</tr>
+<tr>
+<td>len(S)</td>
+<td>返回集合S的元素个数</td>
+</tr>
+<tr>
+<td>x in S</td>
+<td>判断S中元素x，x在集合S中，返回True，否则返回False</td>
+</tr>
+<tr>
+<td>x not in S</td>
+<td>判断S中元素x，x不在集合S中，返回True，否则返回False</td>
+</tr>
+<tr>
+<td>set(x)</td>
+<td>将其他类型变量x转变为集合类型</td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">S=&#123;<span class="string">&quot;s&quot;</span>,<span class="string">&quot;f&quot;</span>,<span class="string">&quot;e&quot;</span>,<span class="string">&quot;h&quot;</span>,<span class="string">&quot;g&quot;</span>&#125;</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;输出结果如下：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">len</span>(S))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;s&quot;</span> <span class="keyword">in</span> S)</span><br><span class="line"><span class="built_in">print</span>(S.pop())</span><br><span class="line"><span class="built_in">print</span>(S)<span class="comment">#S中的元素&quot;h&quot;已经被取出</span></span><br><span class="line">S.remove(<span class="string">&#x27;s&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(S)</span><br></pre></td></tr></table></figure>
+
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221026224237804.png" alt="image-20221026224237804" style="zoom:67%;">
+
+<h2 id="4-集合类型应用场景：数据去重"><a href="#4-集合类型应用场景：数据去重" class="headerlink" title="4.集合类型应用场景：数据去重"></a>4.集合类型应用场景：数据去重</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">ls=[<span class="string">&quot;p&quot;</span>,<span class="string">&quot;p&quot;</span>,<span class="string">&quot;y&quot;</span>,<span class="string">&quot;y&quot;</span>,<span class="number">123</span>]</span><br><span class="line"><span class="comment">#利用了集合无重复元素的特点</span></span><br><span class="line">s=<span class="built_in">set</span>(ls)</span><br><span class="line"><span class="comment">#将结合转化为列表</span></span><br><span class="line">lt=<span class="built_in">list</span>(s)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;输出结果如下：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(s)</span><br><span class="line"><span class="built_in">print</span>(lt)</span><br></pre></td></tr></table></figure>
+
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221026224557362.png" alt="image-20221026224557362" style="zoom: 67%;">
+
+<hr>
+<h1 id="序列类型及操作"><a href="#序列类型及操作" class="headerlink" title="序列类型及操作"></a>序列类型及操作</h1><ul>
+<li>序列是<strong>具有先后关系</strong>的一组元素</li>
+<li>序列是一维元素向量，元素类型可以不同</li>
+<li>元素间由序号引导，通过下标访问序列的特定元素</li>
+<li>序列是一个基类类型，主要发展为以下三类：<ul>
+<li>字符串类型</li>
+<li>元组类型</li>
+<li>列表类型</li>
+</ul>
+</li>
+</ul>
+<h2 id="1-序列处理操作符与函数"><a href="#1-序列处理操作符与函数" class="headerlink" title="1.序列处理操作符与函数"></a>1.序列处理操作符与函数</h2><p><strong>其同样适用于字符串类型、元组类型、列表类型</strong></p>
+<ul>
+<li><p><strong>6个操作符</strong></p>
+<table>
+<thead>
+<tr>
+<th>操作符及应用</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>x in s</td>
+<td>如果x是序列s的元素，返回True，否则返回False</td>
+</tr>
+<tr>
+<td>x not in s</td>
+<td>如果x是序列s的元素，返回False，否则返回True</td>
+</tr>
+<tr>
+<td>s + t</td>
+<td>连接两个序列s和t</td>
+</tr>
+<tr>
+<td>s*n</td>
+<td>序列s复制n次</td>
+</tr>
+<tr>
+<td>s[i]</td>
+<td>索引，返回s中的第i元素，i是序列的序号</td>
+</tr>
+<tr>
+<td>s[i:j] 或 s[i:j:k]</td>
+<td>切片，返回序列s中第i到j以K为步长的元素子序列</td>
+</tr>
+</tbody></table>
+</li>
+<li><p><strong>5个函数</strong></p>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>len(s)</td>
+<td>返回序列s的长度，即元素个数</td>
+</tr>
+<tr>
+<td>min(s)</td>
+<td>返回序列s的最小元素，s中元素需要可比较</td>
+</tr>
+<tr>
+<td>max(s)</td>
+<td>返回序列s的最大元素，s中元素需要可比较</td>
+</tr>
+<tr>
+<td>s.index(x) 或 s.index(x,i,j)</td>
+<td>返回序列从i开始到j位置中第一次出现元素x的位置</td>
+</tr>
+<tr>
+<td>s.count(x)</td>
+<td>返回序列s中出现x的总次数</td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">s=[<span class="number">1</span>,<span class="number">9</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">2</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>]</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;输出结果如下：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(s[<span class="number">0</span>:<span class="number">4</span>])</span><br><span class="line"><span class="built_in">print</span>(s.index(<span class="number">9</span>,<span class="number">2</span>,<span class="number">8</span>))</span><br></pre></td></tr></table></figure>
+
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221026230659752.png" alt="image-20221026230659752" style="zoom:67%;"></li>
+</ul>
+<h2 id="2-元组类型及操作"><a href="#2-元组类型及操作" class="headerlink" title="2.元组类型及操作"></a>2.元组类型及操作</h2><ul>
+<li><p>元组是序列类型的一种扩展</p>
+</li>
+<li><p>元组是一种序列类型，一旦创建就<strong>不能被修改</strong></p>
+</li>
+<li><p>使用小括号<code>()</code>或<code>tuple</code>创建，元素间用逗号<code>,</code>分割</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">s=<span class="string">&quot;helloworld&quot;</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;输出结果如下：&quot;</span>)</span><br><span class="line"><span class="comment">#使用tuple创建</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">tuple</span>(s))</span><br><span class="line"><span class="comment">#使用()创建</span></span><br><span class="line"><span class="built_in">print</span>((<span class="string">&#x27;s&#x27;</span>,<span class="string">&#x27;s&#x27;</span>,<span class="string">&#x27;y&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221026231303489.png" alt="image-20221026231303489" style="zoom: 67%;"></li>
+</ul>
+<h2 id="3-列表类型及操作"><a href="#3-列表类型及操作" class="headerlink" title="3.列表类型及操作"></a>3.列表类型及操作</h2><ul>
+<li><p>列表是序列类型的一种扩展，创建后<strong>可以随意被修改</strong></p>
+</li>
+<li><p>使用方括号<code>[]</code>或l<code>ist</code>创建，元素间用逗号<code>,</code>分隔</p>
+</li>
+<li><p>列表中各元素类型可以不同，无长度限制</p>
+</li>
+<li><p>列表类型的操作函数</p>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ls.append(x)</td>
+<td>在列表ls最后增加一个元素</td>
+</tr>
+<tr>
+<td>ls.clear()</td>
+<td>删除列表ls中所有的元素</td>
+</tr>
+<tr>
+<td>ls.copy()</td>
+<td>生成一个新列表，赋值ls中所有元素</td>
+</tr>
+<tr>
+<td>ls.insert(i,x)</td>
+<td>在列表ls的第i位置增加元素x</td>
+</tr>
+<tr>
+<td>ls.pop(i)</td>
+<td>将列表ls中第i位置元素取出并删除该元素</td>
+</tr>
+<tr>
+<td>ls.remove(x)</td>
+<td>将列表ls中出现的第一个元素x删除</td>
+</tr>
+<tr>
+<td>ls.reverse()</td>
+<td>将列表中ls的元素反转</td>
+</tr>
+<tr>
+<td>del ls[i:j:k]</td>
+<td>删除列表ls中第i到j以k为步长的元素</td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">ls=[<span class="number">9</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>]</span><br><span class="line"><span class="keyword">del</span> ls[<span class="number">0</span>:<span class="number">2</span>:<span class="number">1</span>]</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;输出结果如下：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(ls)</span><br><span class="line">ls.insert(<span class="number">3</span>,<span class="string">&quot;s&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(ls)</span><br><span class="line">ls.reverse()</span><br><span class="line"><span class="built_in">print</span>(ls)</span><br></pre></td></tr></table></figure>
+
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221026233245494.png" alt="image-20221026233245494" style="zoom:67%;"></li>
+</ul>
+<h2 id="4-字符串类型及操作"><a href="#4-字符串类型及操作" class="headerlink" title="4.字符串类型及操作"></a>4.字符串类型及操作</h2><ul>
+<li><p><strong>字符串的序号</strong>：</p>
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221027124853404.png" alt="image-20221027124853404" style="zoom: 25%;">
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">s=<span class="string">&quot;python is a romantic language&quot;</span></span><br><span class="line"><span class="comment">#字符反转</span></span><br><span class="line"><span class="built_in">print</span>(s[::-<span class="number">1</span>])</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221027130050044.png" alt="image-20221027130050044" style="zoom: 80%;">
+</li>
+<li><p><strong>字符串处理函数</strong></p>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>str(x)</td>
+<td>任意类型所以对应的字符串形式</td>
+</tr>
+<tr>
+<td>hex(x) 或 oct(x)</td>
+<td>整数x的十六进制或八进制小写形式字符串</td>
+</tr>
+<tr>
+<td>chr(u)</td>
+<td>u为Unicode编码，返回其对应的字符</td>
+</tr>
+<tr>
+<td>ord(x)</td>
+<td>x为字符，返回其对应的Unicode编码</td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#打印十二星座对应的字符</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">12</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="built_in">chr</span>(<span class="number">9800</span>+i),end=<span class="string">&quot; &quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221027091451848.png" alt="image-20221027091451848" style="zoom:80%;">
+</li>
+<li><p><strong>字符串处理方法</strong></p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>str.lower() 或 str.upper()</td>
+<td>返回字符串的副本，全部字符小写&#x2F;大写</td>
+</tr>
+<tr>
+<td><code>str.split(sep=None)</code></td>
+<td>返回一个列表，有str根据sep被分隔的部分组成</td>
+</tr>
+<tr>
+<td>str.replace(old,new)</td>
+<td>返回字符串str副本，所有old子串被替换成new</td>
+</tr>
+<tr>
+<td>str.center(width[,fillchar])</td>
+<td>字符串str根据宽度width居中，fillchar可选</td>
+</tr>
+<tr>
+<td>str.strip(chars)</td>
+<td>从str中去掉在其左侧和右侧chars中列出的字符</td>
+</tr>
+<tr>
+<td><code>str.join(iter)</code></td>
+<td>在iter变量除最后元素外每个元素后增加一个str，<strong>此方法也适用于列表，返回的是字符串类型</strong></td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">s=<span class="string">&quot;helloworld&quot;</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;输出结果如下：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(s.upper())</span><br><span class="line"><span class="built_in">print</span>(s) <span class="comment">#返回了大写的副本，原来的字符串s并没有被改变</span></span><br><span class="line">s_new=<span class="string">&quot;,&quot;</span>.join(s)</span><br><span class="line"><span class="built_in">print</span>(s_new)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">type</span>(s_new))<span class="comment">#说明使用str.join(iter)返回的类型是一个字符串</span></span><br><span class="line"><span class="built_in">print</span>(s_new.split(<span class="string">&quot;,&quot;</span>))</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">type</span>(s_new.split(<span class="string">&quot;,&quot;</span>)))<span class="comment">#说明使用str.join(iter)返回的类型是列表</span></span><br><span class="line"><span class="built_in">print</span>(s.center(<span class="number">20</span>,<span class="string">&quot;=&quot;</span>))</span><br></pre></td></tr></table></figure>
+
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221027100523337.png" alt="image-20221027100523337" style="zoom:67%;">
+</li>
+<li><p><strong>字符串类型的格式化</strong></p>
+<table>
+<thead>
+<tr>
+<th>:</th>
+<th>&lt;填充&gt;</th>
+<th>&lt;对齐&gt;</th>
+<th>&lt;宽度&gt;</th>
+<th>&lt;,&gt;</th>
+<th>&lt;. 精度&gt;</th>
+<th>&lt;类型&gt;</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>引导符号</td>
+<td>用于填充的单个字符</td>
+<td><code>&lt;</code>: 左对齐；<code>&lt;</code>: 右对齐；<code>^</code>: 居中对齐</td>
+<td>设定输出位宽</td>
+<td>数字的千位分隔符</td>
+<td>浮点数小数精度 或 字符串最大输出长度</td>
+<td>整数类型：<code>b,c,d,o,x,X</code>；浮点数类型：<code>e,E,f,%</code></td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="string">&quot;小明的数学成绩是&#123;1:=^20.2f&#125;，英语成绩是&#123;0:*&gt;20.2f&#125;，语文成绩是&#123;2:#&lt;20.2f&#125;&quot;</span>.<span class="built_in">format</span>(<span class="number">98.773</span>,<span class="number">97.273</span>,<span class="number">96.094</span>))</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221027102813322.png" alt="image-20221027102813322"></p>
+</li>
+</ul>
+<hr>
+<h1 id="字典类型及操作"><a href="#字典类型及操作" class="headerlink" title="字典类型及操作"></a>字典类型及操作</h1><ul>
+<li>字典类型是“映射”的体现</li>
+<li>键值对：键是数据索引的扩展</li>
+<li>字典是键值对的集合，<strong>键值对之间无序</strong></li>
+<li>采用大括号<code>&#123;&#125;</code>和<code>dict</code>创建，键值对用冒号<code>:</code>表示</li>
+</ul>
+<h2 id="1-字典的创建"><a href="#1-字典的创建" class="headerlink" title="1.字典的创建"></a>1.字典的创建</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#用&#123;&#125;创建</span></span><br><span class="line">d=&#123;<span class="string">&quot;中国&quot;</span>:<span class="string">&quot;北京&quot;</span>,<span class="string">&quot;美国&quot;</span>:<span class="string">&quot;华盛顿&quot;</span>,<span class="string">&quot;法国&quot;</span>:<span class="string">&quot;巴黎&quot;</span>&#125;</span><br><span class="line"><span class="built_in">print</span>(d)</span><br><span class="line"><span class="comment">#用dict创建</span></span><br><span class="line">lis = [(<span class="string">&#x27;name&#x27;</span>, <span class="string">&#x27;Jack&#x27;</span>), (<span class="string">&#x27;age&#x27;</span>, <span class="number">18</span>), (<span class="string">&#x27;height&#x27;</span>, <span class="number">180</span>)]</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">dict</span>(lis))</span><br><span class="line"><span class="comment">#创建空字典</span></span><br><span class="line">de=&#123;&#125;</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">type</span>(de))</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221027110024611.png" alt="image-20221027110024611" style="zoom:67%;">
+
+<h2 id="2-字典处理函数及方法"><a href="#2-字典处理函数及方法" class="headerlink" title="2.字典处理函数及方法"></a>2.字典处理函数及方法</h2><table>
+<thead>
+<tr>
+<th>函数或方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>del d[k]</td>
+<td>删除字典d中键k对应的数据值</td>
+</tr>
+<tr>
+<td>k in d</td>
+<td>判断键k是否在字典d中，如果在返回True，否则False</td>
+</tr>
+<tr>
+<td>d.keys()</td>
+<td>返回字典d中所有的键信息</td>
+</tr>
+<tr>
+<td>d.values()</td>
+<td>返回字典d中所有的值信息</td>
+</tr>
+<tr>
+<td>d.items()</td>
+<td>返回字典d中所有键值对信息</td>
+</tr>
+<tr>
+<td>d.get(k,default)</td>
+<td>键k存在，则返回相应值，不在则返回default值</td>
+</tr>
+<tr>
+<td>d.pop(k,default)</td>
+<td>键k存在，则取出相应值，不在则返回default值</td>
+</tr>
+<tr>
+<td>d.popitem()</td>
+<td>随机从字典d中取出一个键值对，以元组的形式返回</td>
+</tr>
+<tr>
+<td>d.clear()</td>
+<td>删除所有键值对</td>
+</tr>
+<tr>
+<td>len(d)</td>
+<td>返回字典d中元素的个数</td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#定义一个空字典d</span></span><br><span class="line">d=&#123;&#125;</span><br><span class="line"><span class="comment">#向d新增2个键值对元素</span></span><br><span class="line">d[<span class="string">&quot;a&quot;</span>]=<span class="number">1</span></span><br><span class="line">d[<span class="string">&quot;b&quot;</span>]=<span class="number">2</span></span><br><span class="line"><span class="built_in">print</span>(d)</span><br><span class="line"><span class="comment">#修改第2个元素</span></span><br><span class="line">d[<span class="string">&quot;b&quot;</span>]=<span class="number">3</span></span><br><span class="line"><span class="built_in">print</span>(d)</span><br><span class="line"><span class="comment">#判断”c&quot;是否是d的键值</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;c&quot;</span> <span class="keyword">in</span> d)</span><br><span class="line"><span class="comment">#计算d的长度</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">len</span>(d))</span><br><span class="line"><span class="comment">#随机从字典d中取出一个键值对，并以元组形式返回</span></span><br><span class="line"><span class="built_in">print</span>(d.popitem())</span><br><span class="line"><span class="built_in">print</span>(d)</span><br><span class="line"><span class="comment">#通过键返回相应值，但字典d并没有被改变</span></span><br><span class="line"><span class="built_in">print</span>(d.get(<span class="string">&quot;a&quot;</span>))</span><br><span class="line"><span class="built_in">print</span>(d)</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221027111632810.png" alt="image-20221027111632810" style="zoom: 67%;">]]></content>
+      <categories>
+        <category>学习积累</category>
+      </categories>
+      <tags>
+        <tag>浪漫的Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python基础之文件的读写</title>
+    <url>/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%BB%E5%86%99/</url>
+    <content><![CDATA[<p>数据处理可谓是Python最擅长的工作之一。那对于我们需要处理的大量数据，手动输入代码中是极其不科学的，故我们需要学会对文件进行读写操作，下面跟着小沈一起来探索吧！</p>
+<span id="more"></span>
+
+<h1 id="文件的打开"><a href="#文件的打开" class="headerlink" title="文件的打开"></a>文件的打开</h1><ul>
+<li><p><code>&lt;变量名&gt; = open(&lt;文件名&gt;,&lt;打开模式&gt;)</code></p>
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%BB%E5%86%99/image-20221027123041800.png" alt="image-20221027123041800" style="zoom: 50%;">
+</li>
+<li><p><strong>打开模式</strong></p>
+<table>
+<thead>
+<tr>
+<th>文件的打开模式</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>‘r’</td>
+<td>只读模式，默认值，如果文件不存在，返回FileNotFoundError</td>
+</tr>
+<tr>
+<td>‘w’</td>
+<td>覆盖写模式，文件不存在则创建，存在则完全覆盖</td>
+</tr>
+<tr>
+<td>‘x’</td>
+<td>创建写模式，文件不存咋则创建，存在则返回FileExistsError</td>
+</tr>
+<tr>
+<td>‘a’</td>
+<td>追加写模式，文件不存在则创建，存在则在文件最后追加内容</td>
+</tr>
+<tr>
+<td>‘b’</td>
+<td>二进制文本模式</td>
+</tr>
+<tr>
+<td>‘t’</td>
+<td>文本文件模式，默认值</td>
+</tr>
+<tr>
+<td>‘+’</td>
+<td>与r&#x2F;w&#x2F;x&#x2F;a一同使用，在原功能基础上增加同时读写功能</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<hr>
+<h1 id="文件内容的获取"><a href="#文件内容的获取" class="headerlink" title="文件内容的获取"></a>文件内容的获取</h1><table>
+<thead>
+<tr>
+<th>操作方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>f.read(size=-1)</code></td>
+<td>读入全部内容，如果给出参数，读入前size长度</td>
+</tr>
+<tr>
+<td><code>f.readline(size=-1)</code></td>
+<td>读入一行内容，如果给出参数，读入该行前size长度</td>
+</tr>
+<tr>
+<td><code>f.readlines(hint=-1)</code></td>
+<td>读入文件所有行，以每行为元素形成列表，如果给出参数，读入前hint行</td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#逐行遍历文件</span></span><br><span class="line"><span class="comment">#方法一：</span></span><br><span class="line">fname=<span class="built_in">input</span>(<span class="string">&quot;请输入要打开的文件名称：&quot;</span>)</span><br><span class="line">fo=<span class="built_in">open</span>(fname,<span class="string">&quot;r&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> fo.readlines():</span><br><span class="line">    <span class="built_in">print</span>(line)</span><br><span class="line">fo.close()</span><br><span class="line"></span><br><span class="line"><span class="comment">#方法二</span></span><br><span class="line">fname=<span class="built_in">input</span>(<span class="string">&quot;请输入要打开的文件名称：&quot;</span>)</span><br><span class="line">fo=<span class="built_in">open</span>(fname,<span class="string">&quot;r&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> fo:</span><br><span class="line">    <span class="built_in">print</span>(line)</span><br><span class="line">fo.close()</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="数据的文件写入"><a href="#数据的文件写入" class="headerlink" title="数据的文件写入"></a>数据的文件写入</h1><table>
+<thead>
+<tr>
+<th>操作方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>f.write(s)</td>
+<td>向文件写入一个字符串或字节流</td>
+</tr>
+<tr>
+<td>f.writelines(lines)</td>
+<td>将一个元素全为字符串的列表写入文件</td>
+</tr>
+<tr>
+<td><code>f.seek(offset)</code></td>
+<td>改变当前文件操作指针的位置，offset&#x3D;0(代表回到文件开头)，offset&#x3D;1（代表当前位置），offset&#x3D;2（代表回到文件结尾）</td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">fo = <span class="built_in">open</span>(<span class="string">&quot;output.txt&quot;</span>,<span class="string">&quot;w+&quot;</span>)</span><br><span class="line">ls=[<span class="string">&quot;努力是成功的别名&quot;</span>,<span class="string">&quot;每一次成长&quot;</span>,<span class="string">&quot;都是一次经历&quot;</span>]</span><br><span class="line">fo.writelines(ls)</span><br><span class="line"><span class="comment">#fo.writelines(&#x27;\n&#x27;.join(ls)) 可以加上这一句实现分行写入</span></span><br><span class="line">fo.seek(<span class="number">0</span>)<span class="comment">#必须要改变文件操作指针的位置，不然写完元素之后指针到了文章最后，会导致写下来读不出内容</span></span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> fo:</span><br><span class="line">    <span class="built_in">print</span>(line) <span class="comment">#由结果可以注意到实际上writelines不是一行行写入的，是连着写入的</span></span><br><span class="line">fo.close()</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%BB%E5%86%99/image-20221027140238501.png" alt="image-20221027140238501" style="zoom:67%;">
+
+<hr>
+<h1 id="文件的关闭"><a href="#文件的关闭" class="headerlink" title="文件的关闭"></a>文件的关闭</h1><ul>
+<li><code>&lt;变量名&gt;.close()</code>#使用完文件后一定要记得关闭文件</li>
+</ul>
+]]></content>
+      <categories>
+        <category>学习积累</category>
+      </categories>
+      <tags>
+        <tag>浪漫的Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python基础之标准库与第三方库</title>
+    <url>/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/</url>
+    <content><![CDATA[<p>这里记录着小沈学习在Python过程中遇到的6个重要又有趣的Python标准库与第三方库，分别是turle库、time库、random库、PyInstaller库、jieba库、wordcloud库。</p>
+<span id="more"></span>
+
+<h1 id="Turtle库"><a href="#Turtle库" class="headerlink" title="Turtle库"></a>Turtle库</h1><p>turtle库是Python语言的标准库之一，是入门级的图形绘制函数库。</p>
+<h2 id="1-Turtle的绘图窗体"><a href="#1-Turtle的绘图窗体" class="headerlink" title="1.Turtle的绘图窗体"></a>1.Turtle的绘图窗体</h2><ul>
+<li><p><code>turtle.setup(width,height,startx,starty)</code></p>
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/image-20221026233551447.png" alt="image-20221026233551447" style="zoom:50%;"></li>
+</ul>
+<h2 id="2-Turtle空间坐标体系及其绘制"><a href="#2-Turtle空间坐标体系及其绘制" class="headerlink" title="2.Turtle空间坐标体系及其绘制"></a>2.Turtle空间坐标体系及其绘制</h2><ul>
+<li><strong>绝对坐标</strong>：<code>turtle. goto(x,y)</code></li>
+</ul>
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/image-20221026125555079.png" alt="image-20221026125555079" style="zoom: 33%;">
+
+<ul>
+<li><p><strong>相对坐标</strong>：</p>
+<ul>
+<li><p><code>turtle.circle(r,angle)</code>#画圆</p>
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/image-20221026125850598.png" alt="image-20221026125850598" style="zoom:50%;">
+</li>
+<li><p><code>turtle.bk(d)</code>#后退</p>
+</li>
+<li><p><code>turtle.fd(d)</code>#前进</p>
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/image-20221026130100140.png" alt="image-20221026130100140" style="zoom:50%;"></li>
+</ul>
+</li>
+</ul>
+<h2 id="3-Turtle角度坐标体系及其角度改变"><a href="#3-Turtle角度坐标体系及其角度改变" class="headerlink" title="3.Turtle角度坐标体系及其角度改变"></a>3.Turtle角度坐标体系及其角度改变</h2><ul>
+<li><p><strong>绝对角度</strong>：<code>turtle.seth(angle)</code></p>
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/image-20221026130556081.png" alt="image-20221026130556081" style="zoom: 50%;">
+</li>
+<li><p><strong>海龟角度</strong>：</p>
+<ul>
+<li><p><code>turtle.left(angle)</code></p>
+</li>
+<li><p><code>turtle.right(angle)</code></p>
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/image-20221026130839885.png" alt="image-20221026130839885" style="zoom:50%;"></li>
+</ul>
+</li>
+</ul>
+<h2 id="4-Turtle的RGB色彩模式"><a href="#4-Turtle的RGB色彩模式" class="headerlink" title="4.Turtle的RGB色彩模式"></a>4.Turtle的RGB色彩模式</h2><ul>
+<li><p><code>turtle.colormode(mode)</code></p>
+</li>
+<li><p>默认采用小数值，可切换为整数值:</p>
+<ul>
+<li>mode&#x3D;1.0：RGB小数值模式</li>
+<li>mode&#x3D;255：RGB整数值模式</li>
+</ul>
+</li>
+<li><p>常用RGB色彩：</p>
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/image-20221026131931664.png" alt="image-20221026131931664" style="zoom:50%;"></li>
+</ul>
+<h2 id="5-画笔控制函数"><a href="#5-画笔控制函数" class="headerlink" title="5.画笔控制函数"></a>5.画笔控制函数</h2><ul>
+<li><code>turtle.penup()</code>#将画笔抬起</li>
+<li><code>turtle.pendown()</code>#将画笔落下</li>
+<li><code>turtle.pensize(width)</code></li>
+<li><code>turtle.pencolor(color)</code></li>
+</ul>
+<h2 id="6-简单示例：爱心绘制"><a href="#6-简单示例：爱心绘制" class="headerlink" title="6.简单示例：爱心绘制"></a>6.简单示例：爱心绘制</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> turtle <span class="keyword">as</span> t</span><br><span class="line"><span class="comment">#绘制准备：画布与画笔设置</span></span><br><span class="line">t.setup(<span class="number">600</span>,<span class="number">600</span>,<span class="number">200</span>,<span class="number">200</span>)</span><br><span class="line">t.penup()</span><br><span class="line">t.left(<span class="number">90</span>)</span><br><span class="line">t.fd(<span class="number">50</span>)</span><br><span class="line">t.pendown()<span class="comment">#以上代码相当于设置绘制的起始位置</span></span><br><span class="line">t.pensize(<span class="number">10</span>)</span><br><span class="line">t.pencolor(<span class="string">&quot;pink&quot;</span>)</span><br><span class="line"><span class="comment">#正式开始绘制</span></span><br><span class="line">t.left(<span class="number">30</span>)</span><br><span class="line">t.fd(<span class="number">30</span>)</span><br><span class="line">t.circle(<span class="number">90</span>,<span class="number">200</span>)</span><br><span class="line">t.fd(<span class="number">200</span>)</span><br><span class="line">t.left(<span class="number">80</span>)</span><br><span class="line">t.fd(<span class="number">200</span>)</span><br><span class="line">t.circle(<span class="number">90</span>,<span class="number">200</span>)</span><br><span class="line">t.fd(<span class="number">30</span>)</span><br><span class="line"><span class="comment">#绘制结束</span></span><br><span class="line">t.done()</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="Time库"><a href="#Time库" class="headerlink" title="Time库"></a>Time库</h1><p>time库是Python中处理时间的标准库，能够获取系统时间并格式化输出功能，并提供系统级精确计时功能，用于程序性能分析。</p>
+<h2 id="1-时间获取"><a href="#1-时间获取" class="headerlink" title="1.时间获取"></a>1.时间获取</h2><ul>
+<li><p><code>time()</code></p>
+</li>
+<li><p><code>ctime()</code></p>
+</li>
+<li><p><code>gmtime()</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> time </span><br><span class="line"><span class="comment">#获取当前时间戳，即计算机内部时间值，浮点数</span></span><br><span class="line">t1=time.time()</span><br><span class="line"><span class="comment">#获取当前时间并以易读的方式表示，返回字符串</span></span><br><span class="line">t2=time.ctime()</span><br><span class="line"><span class="comment">#获取当时间时间，表示为计算机可处理的时间格式</span></span><br><span class="line">t3=time.gmtime()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;运行结果:&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(t1)</span><br><span class="line"><span class="built_in">print</span>(t2)</span><br><span class="line"><span class="built_in">print</span>(t3)</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/image-20221026135304443.png" alt="image-20221026135304443"></p>
+</li>
+</ul>
+<h2 id="2-时间格式化"><a href="#2-时间格式化" class="headerlink" title="2.时间格式化"></a>2.时间格式化</h2><ul>
+<li><p><code>strftime(tpl,ts)</code></p>
+</li>
+<li><p>其中tpl是格式化模板字符串，用来定义输出效果，ts是计算机内部时间类型变量</p>
+</li>
+<li><p>格式化字符串：</p>
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/image-20221026135931077.png" alt="image-20221026135931077" style="zoom: 33%;">
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line">t=time.gmtime()</span><br><span class="line">s=time.strftime(<span class="string">&quot;%Y-%m-%d %H:%M:%S&quot;</span>,t)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;运行结果：&quot;</span>,s)</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/image-20221026140545309.png" alt="image-20221026140545309"></p>
+</li>
+</ul>
+<h2 id="3-程序计时"><a href="#3-程序计时" class="headerlink" title="3.程序计时"></a>3.程序计时</h2><ul>
+<li><p><code>perf_counter()</code>#返回一个CPU级别的精确时间计算值，单位为秒</p>
+</li>
+<li><p><code>sleep(s)</code>#s是休眠时间，单位是秒，可以是浮点数</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line">start=time.perf_counter()</span><br><span class="line">time.sleep(<span class="number">10</span>)</span><br><span class="line">end=time.perf_counter()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;运行结果：&quot;</span>,end-start)</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/image-20221026141351592.png" alt="image-20221026141351592"></p>
+</li>
+</ul>
+<h2 id="4-简单示例：文本进度条"><a href="#4-简单示例：文本进度条" class="headerlink" title="4.简单示例：文本进度条"></a>4.简单示例：文本进度条</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line">scale = <span class="number">50</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;执行开始&quot;</span>.center(scale//<span class="number">2</span>, <span class="string">&quot;-&quot;</span>))</span><br><span class="line">start = time.perf_counter()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(scale+<span class="number">1</span>):</span><br><span class="line">    a = <span class="string">&#x27;*&#x27;</span> * i</span><br><span class="line">    b = <span class="string">&#x27;.&#x27;</span> * (scale - i)</span><br><span class="line">    c = (i/scale)*<span class="number">100</span></span><br><span class="line">    dur = time.perf_counter() - start、</span><br><span class="line">    <span class="comment">#\r表示将光标的位置回退到本行的开头位置</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;\r&#123;:^3.0f&#125;%[&#123;&#125;-&gt;&#123;&#125;]&#123;:.2f&#125;s&quot;</span>.<span class="built_in">format</span>(c,a,b,dur),end=<span class="string">&#x27;&#x27;</span>)</span><br><span class="line">    time.sleep(<span class="number">0.1</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n&quot;</span>+<span class="string">&quot;执行结束&quot;</span>.center(scale//<span class="number">2</span>,<span class="string">&#x27;-&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="Random库"><a href="#Random库" class="headerlink" title="Random库"></a>Random库</h1><p>Random库Python中用于生成随机数的标准库。</p>
+<h2 id="1-基本随机函数"><a href="#1-基本随机函数" class="headerlink" title="1.基本随机函数"></a>1.基本随机函数</h2><ul>
+<li><code>seed()</code>#设置随机种子，初始化给定的随机数种子，默认为当前系统时间</li>
+<li><code>random()</code>#生成一个[0.0,1.0)之间的随机小数</li>
+</ul>
+<h2 id="2-扩展随机数函数"><a href="#2-扩展随机数函数" class="headerlink" title="2.扩展随机数函数"></a>2.扩展随机数函数</h2><ul>
+<li><code>randint(a,b)</code>#生成一个[a,b]之间的整数</li>
+<li><code>randrange(m,n[,k])</code>#生成一个[m,n)之间以k为步长的随机整数</li>
+<li><code>getrandbits(k)</code>#生成一个k比特长的随机整数</li>
+<li><code>uniform(a,b)</code>#生成一个[a,b]之间的随机小数</li>
+<li><code>choice(seq)</code>#从序列seq中随机选择一个元素</li>
+<li><code>shuffle(seq)</code>#将序列seq中元素随机排列，返回打乱后的序列</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> random <span class="keyword">as</span> r</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;运行结果如下：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(r.random())</span><br><span class="line"><span class="built_in">print</span>(r.randint(<span class="number">1</span>,<span class="number">10</span>))</span><br><span class="line"><span class="built_in">print</span>(r.randrange(<span class="number">10</span>,<span class="number">100</span>,<span class="number">10</span>))</span><br><span class="line"><span class="built_in">print</span>(r.getrandbits(<span class="number">16</span>))</span><br><span class="line"><span class="built_in">print</span>(r.uniform(<span class="number">1</span>,<span class="number">10</span>))</span><br><span class="line"><span class="built_in">print</span>(r.choice([<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">0</span>,<span class="number">2</span>]))</span><br><span class="line">s=[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>]</span><br><span class="line">r.shuffle(s)</span><br><span class="line"><span class="built_in">print</span>(s)</span><br></pre></td></tr></table></figure>
+
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/image-20221026144825189.png" alt="image-20221026144825189" style="zoom: 67%;">
+
+<h2 id="3-简单示例：蒙特卡罗方法计算圆周率"><a href="#3-简单示例：蒙特卡罗方法计算圆周率" class="headerlink" title="3.简单示例：蒙特卡罗方法计算圆周率"></a>3.简单示例：蒙特卡罗方法计算圆周率</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> random <span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> perf_counter</span><br><span class="line">DARTS = <span class="number">1000</span>*<span class="number">1000</span></span><br><span class="line">hits = <span class="number">0.0</span></span><br><span class="line">start = perf_counter()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, DARTS+<span class="number">1</span>):</span><br><span class="line">    x, y = random(), random()</span><br><span class="line">    dist = <span class="built_in">pow</span>(x ** <span class="number">2</span> + y ** <span class="number">2</span>, <span class="number">0.5</span>)</span><br><span class="line">    <span class="keyword">if</span> dist &lt;= <span class="number">1.0</span>:</span><br><span class="line">        hits = hits + <span class="number">1</span></span><br><span class="line">pi = <span class="number">4</span> * (hits/DARTS)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;圆周率值是: &#123;&#125;&quot;</span>.<span class="built_in">format</span>(pi))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;运行时间是: &#123;:.5f&#125;s&quot;</span>.<span class="built_in">format</span>(perf_counter() - start))</span><br></pre></td></tr></table></figure>
+
+
+<hr>
+<h1 id="PyInstaller库"><a href="#PyInstaller库" class="headerlink" title="PyInstaller库"></a>PyInstaller库</h1><p>PyInstaller库是第三方库，故使用前需额外安装，其官网为：<a href="https://pyinstaller.org/en/stable/">PyInstaller Manual — PyInstaller 5.6.1 documentation</a>。其功能是将.py源代码转换成无需源代码的可执行文件。</p>
+<ul>
+<li><p><strong>简单使用</strong>：<code>(cmd命令行) pyinstaller -F &lt;文件名.py&gt;</code></p>
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/image-20221026150414312.png" alt="image-20221026150414312" style="zoom: 33%;">
+</li>
+<li><p><strong>PyInstaller库常用参数</strong>：</p>
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/image-20221026150423289.png" alt="image-20221026150423289" style="zoom: 33%;"></li>
+</ul>
+<hr>
+<h1 id="jieba库"><a href="#jieba库" class="headerlink" title="jieba库"></a>jieba库</h1><p>jieba是优秀的中文分词第三方库，需要额外安装。jieba利用一个中文词库，确定中文字符之间的关联概率，中文字符间概率大的组成词组，形成分词结果。</p>
+<ul>
+<li><code>jieba.lcuts(s)</code>#精确模式，返回一个列表类型的分词结果</li>
+<li><code>jieba.lcuts(s,cut_all=True)</code>#全模式，返回一个列表类型的分词结果，存在冗余</li>
+<li><code>jieba.lcut_for_search(s)</code>#搜索引擎模式，返回一个列表类型的分析结果，存在冗余</li>
+<li><code>jieba.add_word(w)</code>#向分词词典增加新词w</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> jieba</span><br><span class="line">s=<span class="string">&quot;努力是成功的别名&quot;</span></span><br><span class="line">w=<span class="string">&quot;蟒蛇语言&quot;</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;运行结果如下：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(jieba.lcut(s))</span><br><span class="line"><span class="built_in">print</span>(jieba.lcut(s,cut_all=<span class="literal">True</span>))</span><br><span class="line"><span class="built_in">print</span>(jieba.lcut_for_search(s))</span><br><span class="line">jieba.add_word(w)</span><br></pre></td></tr></table></figure>
+
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/image-20221026152522008.png" alt="image-20221026152522008" style="zoom:67%;">
+
+<hr>
+<h1 id="worldcloud库"><a href="#worldcloud库" class="headerlink" title="worldcloud库"></a>worldcloud库</h1><p>worldcloud库是一个生成词云的第三方库。wordcloud.WordCloud()代表一个文本对应的词云，可以根据文本中词云出现的频率等参数绘制词云，词云的绘制形状、尺寸和颜色都可以设定。</p>
+<h2 id="1-常规使用方法"><a href="#1-常规使用方法" class="headerlink" title="1.常规使用方法"></a>1.常规使用方法</h2><ul>
+<li><p><strong>步骤1：配置对象参数</strong></p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>width</td>
+<td>指定词云对象生成图片的宽度，默认400像素</td>
+</tr>
+<tr>
+<td>height</td>
+<td>指定词云对象生成图片的高度，默认200像素</td>
+</tr>
+<tr>
+<td>min_font_size</td>
+<td>指定词云中字体的最小字号，默认4号</td>
+</tr>
+<tr>
+<td>max_font_size</td>
+<td>指定词云中字体的最大字号，根据高度自动调节</td>
+</tr>
+<tr>
+<td>font_step</td>
+<td>指定词云中字体字号的步进间隔，默认为1</td>
+</tr>
+<tr>
+<td>font_path</td>
+<td>指定字体文件的路径，默认None</td>
+</tr>
+<tr>
+<td>max_words</td>
+<td>指定词云显示的最大单词数量，默认200</td>
+</tr>
+<tr>
+<td>stop_words</td>
+<td>指定词云的排除词列表，即不显示的单词列表</td>
+</tr>
+<tr>
+<td>mask</td>
+<td>指定词云形状，默认为长方形，若更改需要引用imread()函数</td>
+</tr>
+<tr>
+<td>background_color</td>
+<td>指定词云图片的背景颜色，默认为黑色</td>
+</tr>
+</tbody></table>
+</li>
+<li><p><strong>步骤2：加载词云文本</strong></p>
+<ul>
+<li><code>w.generate(txt)</code>#向WordCloud对象w中加载文本txt</li>
+</ul>
+</li>
+<li><p><strong>步骤3：输出词云文件</strong></p>
+<ul>
+<li><code>w.to_file(filename)</code>#将词云输出为图像文件，.png或.jpg格式</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> wordcloud</span><br><span class="line"><span class="comment">#配置对象参数</span></span><br><span class="line">w=wordcloud.WordCloud(width=<span class="number">500</span>,height=<span class="number">300</span>,font_path=<span class="string">&quot;msyh.ttc&quot;</span>,min_font_size=<span class="number">2</span>,max_words=<span class="number">20</span>)</span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">#mask的使用示例：</span></span><br><span class="line"><span class="string">from scipy.misc import imread</span></span><br><span class="line"><span class="string">mk=imread(&quot;pic.png&quot;)</span></span><br><span class="line"><span class="string">w=wordcloud.WordCloud(mask=mk)</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="comment">#加载词云文本</span></span><br><span class="line">w.generate(<span class="string">&quot;The wordcloud by Python,hello world&quot;</span>)</span><br><span class="line"><span class="comment">#输出词云文本</span></span><br><span class="line">w.to_file(<span class="string">&quot;pywordcloud.png&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+</li>
+</ul>
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/pywordcloud-1666772052113-2.png" alt="pywordcloud" style="zoom:67%;">
+
+<h2 id="2-简单示例：生成中文词云"><a href="#2-简单示例：生成中文词云" class="headerlink" title="2.简单示例：生成中文词云"></a>2.简单示例：生成中文词云</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#导入库</span></span><br><span class="line"><span class="keyword">import</span> jieba</span><br><span class="line"><span class="keyword">import</span> wordcloud</span><br><span class="line"></span><br><span class="line"><span class="comment">#从文件中读取中文单词并转化为每个单词后面都有一个空格的字符串</span></span><br><span class="line">f = <span class="built_in">open</span>(<span class="string">&quot;励志.txt&quot;</span>, <span class="string">&quot;r&quot;</span>, encoding=<span class="string">&quot;utf-8&quot;</span>)</span><br><span class="line">t = f.read()</span><br><span class="line">f.close()</span><br><span class="line">ls = jieba.lcut(t)</span><br><span class="line">txt = <span class="string">&quot; &quot;</span>.join(ls)</span><br><span class="line"></span><br><span class="line"><span class="comment">#配置词云对象参数</span></span><br><span class="line">w = wordcloud.WordCloud(width = <span class="number">1000</span>,height = <span class="number">700</span>,background_color = <span class="string">&quot;white&quot;</span>,font_path = <span class="string">&quot;msyh.ttc&quot;</span>)</span><br><span class="line"><span class="comment">#加载词云文本</span></span><br><span class="line">w.generate(txt)</span><br><span class="line"><span class="comment">#输出词云文件按</span></span><br><span class="line">w.to_file(<span class="string">&quot;encourage.png&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/grwordcloud.png" alt="grwordcloud" style="zoom: 67%;">
+]]></content>
+      <categories>
+        <category>学习积累</category>
+      </categories>
+      <tags>
+        <tag>浪漫的Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2022/10/23/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<span id="more"></span>
+
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
   </entry>
 </search>

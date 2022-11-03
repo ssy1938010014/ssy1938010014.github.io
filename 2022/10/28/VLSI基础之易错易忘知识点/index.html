@@ -22,17 +22,30 @@
     var CONFIG = {"hostname":"xn--ssy-lq6e63gg6fuu2d.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="满怀希望 就会所向披靡">
-<meta property="og:type" content="website">
-<meta property="og:title" content="ssy的小天地">
-<meta property="og:url" content="http://ssy的小天地.com/archives/index.html">
+  <meta name="description" content="小沈同学在回顾VLSI这门课程中，发现了许多容易遗忘的知识点以及之前一直没弄明白的知识点。下面是一些记录……">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VLSI基础之易错易忘知识点">
+<meta property="og:url" content="http://ssy的小天地.com/2022/10/28/VLSI%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/index.html">
 <meta property="og:site_name" content="ssy的小天地">
-<meta property="og:description" content="满怀希望 就会所向披靡">
+<meta property="og:description" content="小沈同学在回顾VLSI这门课程中，发现了许多容易遗忘的知识点以及之前一直没弄明白的知识点。下面是一些记录……">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/VLSI%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/image-20221103221528739.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/VLSI%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/image-20221103221921462.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/VLSI%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/image-20221103222319446.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/VLSI%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/image-20221103222543370.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/VLSI%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/image-20221103222956743.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/VLSI%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/image-20221103223105683.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/VLSI%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/image-20221103223643127.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/VLSI%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/image-20221103223733404.png">
+<meta property="article:published_time" content="2022-10-28T12:07:12.000Z">
+<meta property="article:modified_time" content="2022-11-03T14:39:37.412Z">
 <meta property="article:author" content="ssy">
+<meta property="article:tag" content="VLSI">
+<meta property="article:tag" content="易错易忘知识点">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/VLSI%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/image-20221103221528739.png">
 
-<link rel="canonical" href="http://ssy的小天地.com/archives/">
+<link rel="canonical" href="http://ssy的小天地.com/2022/10/28/VLSI%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/">
 
 
 <script id="page-configurations">
@@ -40,12 +53,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>归档 | ssy的小天地</title>
+  <title>VLSI基础之易错易忘知识点 | ssy的小天地</title>
   
 
 
@@ -190,234 +203,171 @@
         <div class="content-wrap">
           
 
-          <div class="content archive">
+          <div class="content post posts-expand">
             
 
+    
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <span class="collection-header">嗯..! 目前共计 12 篇日志。 继续努力。</span>
-      </div>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ssy的小天地.com/2022/10/28/VLSI%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ssy.png">
+      <meta itemprop="name" content="ssy">
+      <meta itemprop="description" content="满怀希望 就会所向披靡">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ssy的小天地">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          VLSI基础之易错易忘知识点
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+
+
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-10-28 20:07:12" itemprop="dateCreated datePublished" datetime="2022-10-28T20:07:12+08:00">2022-10-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-11-03 22:39:37" itemprop="dateModified" datetime="2022-11-03T22:39:37+08:00">2022-11-03</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%A7%AF%E7%B4%AF/" itemprop="url" rel="index"><span itemprop="name">学习积累</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <span class="collection-header">2022</span>
-    </div>
+        <p>小沈同学在回顾VLSI这门课程中，发现了许多容易遗忘的知识点以及之前一直没弄明白的知识点。下面是一些记录……</p>
+<span id="more"></span>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+<h1 id="MOS场效应晶体管"><a href="#MOS场效应晶体管" class="headerlink" title="MOS场效应晶体管"></a>MOS场效应晶体管</h1><h2 id="1-MOS管的工作原理"><a href="#1-MOS管的工作原理" class="headerlink" title="1.MOS管的工作原理"></a>1.MOS管的工作原理</h2><p><img src="/2022/10/28/VLSI%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/image-20221103221528739.png" alt="image-20221103221528739"></p>
+<h2 id="2-阈值电压"><a href="#2-阈值电压" class="headerlink" title="2.阈值电压"></a>2.阈值电压</h2><ul>
+<li>Φ<del>ms</del>：与材料的功函数差有关</li>
+<li>Φ<del>F</del>：费米电势，与温度和材料有关</li>
+<li>Q<del>B</del>：与衬底的掺杂浓度以及偏置条件有关</li>
+<li>C<del>ox</del>：氧化层的厚度以及介电常数有关</li>
+</ul>
+<img src="/2022/10/28/VLSI%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/image-20221103221921462.png" alt="image-20221103221921462" style="zoom: 25%;">
 
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2022-11-01T20:07:12+08:00"
-              content="2022-11-01">
-          11-01
-        </time>
-      </div>
+<h2 id="3-MOS管的基本电流方程"><a href="#3-MOS管的基本电流方程" class="headerlink" title="3.MOS管的基本电流方程"></a>3.MOS管的基本电流方程</h2><img src="/2022/10/28/VLSI%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/image-20221103222319446.png" alt="image-20221103222319446" style="zoom: 50%;">
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2022/11/01/TensorFlow%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%A0%E9%87%8F%E7%9B%B8%E5%85%B3/" itemprop="url">
-            <span itemprop="name">TensorFlow基础之张量相关</span>
-          </a>
-      </div>
+<h2 id="4-沟道长度调制效应产生原因"><a href="#4-沟道长度调制效应产生原因" class="headerlink" title="4.沟道长度调制效应产生原因"></a>4.沟道长度调制效应产生原因</h2><img src="/2022/10/28/VLSI%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/image-20221103222543370.png" alt="image-20221103222543370" style="zoom: 50%;">
 
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2022-11-01T20:07:12+08:00"
-              content="2022-11-01">
-          11-01
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2022/11/01/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%E9%97%AE%E9%A2%98/" itemprop="url">
-            <span itemprop="name">TensorFlow实践之线性回归问题</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2022-10-28T20:07:12+08:00"
-              content="2022-10-28">
-          10-28
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/" itemprop="url">
-            <span itemprop="name">TensorFlow实践之数字图像处理基础</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2022-10-28T20:07:12+08:00"
-              content="2022-10-28">
-          10-28
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/" itemprop="url">
-            <span itemprop="name">TensorFlow实践之NumPy与Matplotlib库</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2022-10-28T20:07:12+08:00"
-              content="2022-10-28">
-          10-28
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2022/10/28/VLSI%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/" itemprop="url">
-            <span itemprop="name">VLSI基础之易错易忘知识点</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2022-10-24T20:07:12+08:00"
-              content="2022-10-24">
-          10-24
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" itemprop="url">
-            <span itemprop="name">Python基础之数据类型</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2022-10-24T20:07:12+08:00"
-              content="2022-10-24">
-          10-24
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%BB%E5%86%99/" itemprop="url">
-            <span itemprop="name">Python基础之文件的读写</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2022-10-24T20:07:12+08:00"
-              content="2022-10-24">
-          10-24
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2022/10/24/Tape%E6%8F%90%E9%97%AE%E7%AE%B1/" itemprop="url">
-            <span itemprop="name">小沈同学的Tape提问箱</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2022-10-24T20:07:12+08:00"
-              content="2022-10-24">
-          10-24
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/" itemprop="url">
-            <span itemprop="name">Python基础之标准库与第三方库</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2022-10-24T20:07:12+08:00"
-              content="2022-10-24">
-          10-24
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2022/10/24/%E6%9C%AC%E7%A7%91%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url">
-            <span itemprop="name">小沈同学的本科学习笔记</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
+<h2 id="5-MOS管的电容"><a href="#5-MOS管的电容" class="headerlink" title="5.MOS管的电容"></a>5.MOS管的电容</h2><h3 id="栅电容：覆盖电容-沟道电容"><a href="#栅电容：覆盖电容-沟道电容" class="headerlink" title="栅电容：覆盖电容+沟道电容"></a>栅电容：覆盖电容+沟道电容</h3><ul>
+<li><p>覆盖电容：C<del>GSO</del>、C<del>GDO</del></p>
+<img src="/2022/10/28/VLSI%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/image-20221103222956743.png" alt="image-20221103222956743" style="zoom: 50%;">
+</li>
+<li><p>沟道电容：C<del>GC</del>&#x3D;C<del>GCD</del>+C<del>GCS</del>+C<del>GCB</del></p>
+<img src="/2022/10/28/VLSI%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/image-20221103223105683.png" alt="image-20221103223105683" style="zoom:50%;"></li>
+</ul>
+<h3 id="结电容：底板pn结电容-侧壁pn结电容"><a href="#结电容：底板pn结电容-侧壁pn结电容" class="headerlink" title="结电容：底板pn结电容+侧壁pn结电容"></a>结电容：底板pn结电容+侧壁pn结电容</h3><ul>
+<li><p>底板pn结形成的电容：C<del>bottom</del></p>
+<img src="/2022/10/28/VLSI%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/image-20221103223643127.png" alt="image-20221103223643127" style="zoom: 50%;">
+</li>
+<li><p>侧壁pn结形成的电容：C<del>sw</del></p>
+<img src="/2022/10/28/VLSI%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/image-20221103223733404.png" alt="image-20221103223733404" style="zoom: 50%;"></li>
+</ul>
 
     </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>欢迎来到ssy的世界</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/WeChaPay.jpg" alt="ssy 微信支付">
+        <p>微信支付</p>
+      </div>
+
   </div>
-  
-  
-  
+</div>
 
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>ssy
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://ssy的小天地.com/2022/10/28/VLSI%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/" title="VLSI基础之易错易忘知识点">http://ssy的小天地.com/2022/10/28/VLSI基础之易错易忘知识点/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/VLSI/" rel="tag"># VLSI</a>
+              <a href="/tags/%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/" rel="tag"># 易错易忘知识点</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" rel="prev" title="Python基础之数据类型">
+      <i class="fa fa-chevron-left"></i> Python基础之数据类型
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/" rel="next" title="TensorFlow实践之NumPy与Matplotlib库">
+      TensorFlow实践之NumPy与Matplotlib库 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
   
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><a class="extend next" rel="next" href="/archives/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
-  </nav>
+  
+  
 
 
 
@@ -469,6 +419,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MOS%E5%9C%BA%E6%95%88%E5%BA%94%E6%99%B6%E4%BD%93%E7%AE%A1"><span class="nav-number">1.</span> <span class="nav-text">MOS场效应晶体管</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-MOS%E7%AE%A1%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-number">1.1.</span> <span class="nav-text">1.MOS管的工作原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E9%98%88%E5%80%BC%E7%94%B5%E5%8E%8B"><span class="nav-number">1.2.</span> <span class="nav-text">2.阈值电压</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-MOS%E7%AE%A1%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%B5%E6%B5%81%E6%96%B9%E7%A8%8B"><span class="nav-number">1.3.</span> <span class="nav-text">3.MOS管的基本电流方程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E6%B2%9F%E9%81%93%E9%95%BF%E5%BA%A6%E8%B0%83%E5%88%B6%E6%95%88%E5%BA%94%E4%BA%A7%E7%94%9F%E5%8E%9F%E5%9B%A0"><span class="nav-number">1.4.</span> <span class="nav-text">4.沟道长度调制效应产生原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-MOS%E7%AE%A1%E7%9A%84%E7%94%B5%E5%AE%B9"><span class="nav-number">1.5.</span> <span class="nav-text">5.MOS管的电容</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%85%E7%94%B5%E5%AE%B9%EF%BC%9A%E8%A6%86%E7%9B%96%E7%94%B5%E5%AE%B9-%E6%B2%9F%E9%81%93%E7%94%B5%E5%AE%B9"><span class="nav-number">1.5.1.</span> <span class="nav-text">栅电容：覆盖电容+沟道电容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E7%94%B5%E5%AE%B9%EF%BC%9A%E5%BA%95%E6%9D%BFpn%E7%BB%93%E7%94%B5%E5%AE%B9-%E4%BE%A7%E5%A3%81pn%E7%BB%93%E7%94%B5%E5%AE%B9"><span class="nav-number">1.5.2.</span> <span class="nav-text">结电容：底板pn结电容+侧壁pn结电容</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
