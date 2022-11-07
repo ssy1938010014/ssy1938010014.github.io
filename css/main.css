@@ -1227,7 +1227,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #81ff16;
+  background: #2f2e62;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -2786,6 +2786,12 @@ body {
   color: #62ee58;
   border-bottom: none;
   border-bottom: 1px solid #62ee58;
+}
+.post-toc .nav .nav-child {
+  display: block;
+}
+.post-toc ol {
+  font-size: 13px;
 }
 code {
   padding: 2px 4px;
