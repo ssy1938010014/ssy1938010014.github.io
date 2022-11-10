@@ -38,8 +38,13 @@
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/04/C++%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221106182623534.png">
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/04/C++%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221106184428062.png">
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/04/C++%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221106185926389.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/04/C++%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221108181917206.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/04/C++%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221108194822412.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/04/C++%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221109205139096.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/04/C++%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221109211059425.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/04/C++%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221109235315552.png">
 <meta property="article:published_time" content="2022-11-04T12:07:12.000Z">
-<meta property="article:modified_time" content="2022-11-06T16:02:17.490Z">
+<meta property="article:modified_time" content="2022-11-09T16:15:24.247Z">
 <meta property="article:author" content="ssy">
 <meta property="article:tag" content="C++">
 <meta name="twitter:card" content="summary">
@@ -243,7 +248,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-11-07 00:02:17" itemprop="dateModified" datetime="2022-11-07T00:02:17+08:00">2022-11-07</time>
+                <time title="修改时间：2022-11-10 00:15:24" itemprop="dateModified" datetime="2022-11-10T00:15:24+08:00">2022-11-10</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -325,7 +330,7 @@
 </li>
 <li><p>float至少32位，double至少48位，且不少于float、long double至少和double一样多</p>
 </li>
-<li><p>float的精度比double低，<strong>尽量用double类型表示浮点数</strong></p>
+<li><p>float的精度（6~7位，其中6位一定是准的）比double低，<strong>尽量用double类型表示浮点数</strong></p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;   </span><br><span class="line">    <span class="comment">//浮点数的精度问题</span></span><br><span class="line">    cout.<span class="built_in">setf</span>(ios_base::fixed,ios_base::floatfield);<span class="comment">//强制cout显示小数点后6位</span></span><br><span class="line">    </span><br><span class="line">    <span class="type">float</span> tub=<span class="number">10.0</span>/<span class="number">3.0</span>;</span><br><span class="line">    <span class="type">const</span> <span class="type">float</span> million=<span class="number">1.0E6</span>;</span><br><span class="line"></span><br><span class="line">    cout&lt;&lt;<span class="string">&quot;tub= &quot;</span>&lt;&lt;tub&lt;&lt;endl;</span><br><span class="line">    cout&lt;&lt;<span class="string">&quot;A million tubs= &quot;</span>&lt;&lt;million*tub&lt;&lt;endl;</span><br><span class="line">    cout&lt;&lt;<span class="string">&quot;Ten million tubs= &quot;</span>&lt;&lt;<span class="number">10</span>*million*tub&lt;&lt;endl;</span><br><span class="line"></span><br><span class="line">    <span class="type">double</span> mints=<span class="number">10.0</span>/<span class="number">3.0</span>;</span><br><span class="line"></span><br><span class="line">    cout&lt;&lt;<span class="string">&quot;tub= &quot;</span>&lt;&lt;mints&lt;&lt;endl;</span><br><span class="line">    cout&lt;&lt;<span class="string">&quot;A million mints= &quot;</span>&lt;&lt;million*mints&lt;&lt;endl;</span><br><span class="line">    cout&lt;&lt;<span class="string">&quot;Ten million mints= &quot;</span>&lt;&lt;<span class="number">10</span>*million*mints&lt;&lt;endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>结果如下：</p>
@@ -341,6 +346,98 @@
 <p>结果如下：</p>
 <p><img src="/2022/11/04/C++%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221106185926389.png" alt="image-20221106185926389"></p>
 </li>
+</ul>
+<hr>
+<h1 id="强制类型转换"><a href="#强制类型转换" class="headerlink" title="强制类型转换"></a>强制类型转换</h1><ul>
+<li><code>(typeName) value</code></li>
+<li><code>typeName (value)</code></li>
+</ul>
+<hr>
+<h1 id="实例1：对输入的整数，求其对应的天数小时分钟秒数"><a href="#实例1：对输入的整数，求其对应的天数小时分钟秒数" class="headerlink" title="实例1：对输入的整数，求其对应的天数小时分钟秒数"></a>实例1：对输入的整数，求其对应的天数小时分钟秒数</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="comment">//问题：输出一个整数，计算其对应多少天多少小时多少分钟多少秒</span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> Day_to_hour=<span class="number">24</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> Hour_to_minute=<span class="number">60</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> Minute_to_second=<span class="number">60</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">long</span> <span class="type">long</span> seconds=<span class="number">31600000</span>;</span><br><span class="line">    cout&lt;&lt;<span class="string">&quot;Please enter the number of seconds: &quot;</span>;</span><br><span class="line">    cin&gt;&gt;seconds;</span><br><span class="line">    cout&lt;&lt;seconds;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> days,hours,minutes;</span><br><span class="line">    days=seconds/(Day_to_hour*Hour_to_minute*Minute_to_second);</span><br><span class="line">    seconds=seconds%(Day_to_hour*Hour_to_minute*Minute_to_second);</span><br><span class="line">    hours=seconds/(Hour_to_minute*Minute_to_second);</span><br><span class="line">    seconds=seconds%(Hour_to_minute*Minute_to_second);</span><br><span class="line">    minutes=seconds/Minute_to_second;</span><br><span class="line">    seconds=seconds%Minute_to_second;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    cout&lt;&lt;<span class="string">&quot; seconds= &quot;</span>&lt;&lt;days&lt;&lt;<span class="string">&quot;days, &quot;</span>&lt;&lt;hours&lt;&lt;<span class="string">&quot; hours, &quot;</span>&lt;&lt;minutes&lt;&lt;<span class="string">&quot; minutes, &quot;</span>&lt;&lt;seconds&lt;&lt;<span class="string">&quot; seconds&quot;</span>&lt;&lt;endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+<p><img src="/2022/11/04/C++%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221108181917206.png" alt="image-20221108181917206"></p>
+<hr>
+<h1 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h1><ul>
+<li>数组中每个元素必须是相同的数据类型</li>
+<li>计算机在内存中依次存储数组的各个元素</li>
+</ul>
+<h2 id="1-数组的声明"><a href="#1-数组的声明" class="headerlink" title="1.数组的声明"></a>1.数组的声明</h2><ul>
+<li>typeName arrayName[arraySize];</li>
+<li>arraySize必须是整数常量或const值或常量表达式</li>
+</ul>
+<h2 id="2-数组的初始化"><a href="#2-数组的初始化" class="headerlink" title="2.数组的初始化"></a>2.数组的初始化</h2><ul>
+<li><code>int cards[4]=&#123;3,6,8,10&#125;</code></li>
+<li>如果只对数组的一部分进行初始化，则编译器将把其他元素设置为0</li>
+<li><code>short things[]=&#123;1,5,3,8&#125;</code>&#x2F;&#x2F;编译器将使things数组包含4个元素</li>
+<li><code>unsigned int couts[10]=&#123;&#125;</code>&#x2F;&#x2F;若不在大括号内包含任何东西，编译器将把所有元素都设置为零</li>
+</ul>
+<hr>
+<h1 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h1><h2 id="1-字符串的创建"><a href="#1-字符串的创建" class="headerlink" title="1.字符串的创建"></a>1.字符串的创建</h2><ul>
+<li><p>C-风格字符串：以‘\0作为字符数组的结尾</p>
+<ul>
+<li><code>char dog[8]=&#123;&#39;f&#39;, &#39;a&#39;, &#39;t&#39;, &#39;e&#39;, &#39;s&#39;, &#39;s&#39;, &#39;a&#39;, &#39;\0&#39;&#125;</code></li>
+<li><code>char fish[]=&quot;Bubbles&quot;</code></li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">const</span> <span class="type">int</span> size =<span class="number">15</span>;</span><br><span class="line">    <span class="type">char</span> name1[size];</span><br><span class="line">    <span class="type">char</span> name2[size]=<span class="string">&quot;C++owBoy&quot;</span>;</span><br><span class="line"></span><br><span class="line">    cout&lt;&lt;<span class="string">&quot;Howdy! I am &quot;</span>&lt;&lt;name2&lt;&lt;<span class="string">&quot;. What your name?&quot;</span>&lt;&lt;endl;</span><br><span class="line">    cin&gt;&gt;name1;</span><br><span class="line">    <span class="comment">//strlen()只计算字符串的长度，不包括空字符</span></span><br><span class="line">    cout&lt;&lt;<span class="string">&quot;Your name has &quot;</span>&lt;&lt;<span class="built_in">strlen</span>(name1)&lt;&lt;<span class="string">&quot; letters&quot;</span>&lt;&lt;endl;</span><br><span class="line">    <span class="comment">//sizeof()计算的是字符串数组所占据的字节数，共有15个char类型，每个char占一个byte</span></span><br><span class="line">    cout&lt;&lt;<span class="string">&quot;Your name take up &quot;</span>&lt;&lt;<span class="built_in">sizeof</span>(name1)&lt;&lt;<span class="string">&quot; bytes&quot;</span>&lt;&lt;endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+<p><img src="/2022/11/04/C++%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221108194822412.png" alt="image-20221108194822412"></p>
+</li>
+<li><p>使用string类创建字符串</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">string name=<span class="string">&quot;ssyttmsl&quot;</span>;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="2-字符串的输入"><a href="#2-字符串的输入" class="headerlink" title="2.字符串的输入"></a>2.字符串的输入</h2><ul>
+<li><p><code>cin.getline(variable,size)</code></p>
+<ul>
+<li><p>读取一行输入，直到到达换行符，然后将换行符丢弃</p>
+</li>
+<li><p>相比于直接cin，可以读取空格，否则cin遇到空格则会停止读取</p>
+</li>
+<li><p>其中的第二个参数为size，最多存放size-1个字符</p>
+</li>
+<li><p><strong>对于string类型的字符串</strong>，输入为<code>getline(cin,str)</code></p>
+</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">/*使用getline()读取一行数据*/</span></span><br><span class="line">    <span class="type">const</span> <span class="type">int</span> size =<span class="number">15</span>;</span><br><span class="line">    <span class="type">char</span> name1[size];</span><br><span class="line">    <span class="type">char</span> name2[size]=<span class="string">&quot;C++owBoy&quot;</span>;</span><br><span class="line"></span><br><span class="line">    cout&lt;&lt;<span class="string">&quot;Howdy! I am &quot;</span>&lt;&lt;name2&lt;&lt;<span class="string">&quot;. What your name?&quot;</span>&lt;&lt;endl;</span><br><span class="line">    cin.<span class="built_in">getline</span>(name1,size);</span><br><span class="line">    <span class="comment">//strlen()只计算字符串的长度，不包括空字符</span></span><br><span class="line">    cout&lt;&lt;<span class="string">&quot;Your name has &quot;</span>&lt;&lt;<span class="built_in">strlen</span>(name1)&lt;&lt;<span class="string">&quot; letters&quot;</span>&lt;&lt;endl;</span><br><span class="line">    <span class="comment">//sizeof()计算的是字符串数组所占据的字节数，共有15个char类型，每个char占一个byte</span></span><br><span class="line">    cout&lt;&lt;<span class="string">&quot;Your name take up &quot;</span>&lt;&lt;<span class="built_in">sizeof</span>(name1)&lt;&lt;<span class="string">&quot; bytes&quot;</span>&lt;&lt;endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+<p><img src="/2022/11/04/C++%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221109205139096.png" alt="image-20221109205139096"></p>
+</li>
+<li><p><code>cin.get(variable,size)</code></p>
+<ul>
+<li>读取一行输入，将换行符保留在输入序列中</li>
+<li>直接使用cin也会读取换行符</li>
+<li>使用不带任何参数的<code>cin.get()</code>，可读取下一行的字符(即使是换行符)</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">/*使用get()读取一行数据*/</span></span><br><span class="line">    <span class="type">const</span> <span class="type">int</span> size =<span class="number">15</span>;</span><br><span class="line">    <span class="type">char</span> name[size];</span><br><span class="line">    <span class="type">char</span> play[size];</span><br><span class="line">    cout&lt;&lt;<span class="string">&quot;Please enter your name:&quot;</span>;</span><br><span class="line">    cin.<span class="built_in">get</span>(name,size);</span><br><span class="line">    cout&lt;&lt;<span class="string">&quot;Please enter the sport you love:&quot;</span>;</span><br><span class="line">    cin.<span class="built_in">get</span>();<span class="comment">//读取换行符</span></span><br><span class="line">    cin.<span class="built_in">get</span>(play,size);</span><br><span class="line">    cout&lt;&lt;name&lt;&lt;<span class="string">&quot; loves &quot;</span>&lt;&lt;play&lt;&lt;endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+<p><img src="/2022/11/04/C++%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221109211059425.png" alt="image-20221109211059425"></p>
+</li>
+</ul>
+<h2 id="3-字符串的赋值、拼接和附加"><a href="#3-字符串的赋值、拼接和附加" class="headerlink" title="3.字符串的赋值、拼接和附加"></a>3.字符串的赋值、拼接和附加</h2><ul>
+<li><p>对于<strong>string类</strong>型的字符串：</p>
+<ul>
+<li><strong>赋值</strong>：一个string对象可以赋给另一个string对象，但char数组却不行</li>
+<li><strong>拼接</strong>：使用运算符<code>+</code>将两个string对象合并起来</li>
+<li><strong>附加</strong>：使用运算符+&#x3D;将字符串附加到string对象的末尾</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">/*string的赋值、拼接、附加*/</span></span><br><span class="line">    string str1=<span class="string">&quot;ssy&quot;</span>;</span><br><span class="line">    string str2;</span><br><span class="line">    <span class="comment">//赋值</span></span><br><span class="line">    str2=str1;</span><br><span class="line">    cout&lt;&lt;<span class="string">&quot;The str2 is:&quot;</span>&lt;&lt;str2&lt;&lt;<span class="string">&quot;,which is equal to str1:&quot;</span>&lt;&lt;str1&lt;&lt;endl;</span><br><span class="line">    <span class="comment">//拼接</span></span><br><span class="line">    str2=<span class="string">&quot; tql&quot;</span>;</span><br><span class="line">    cout&lt;&lt;<span class="string">&quot;The str1+str2 is:&quot;</span>&lt;&lt;str1+str2&lt;&lt;endl;</span><br><span class="line">    <span class="comment">//附加</span></span><br><span class="line">    str1+=<span class="string">&quot; is a excellent person.&quot;</span>;</span><br><span class="line">    cout&lt;&lt;str1&lt;&lt;endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+<p><img src="/2022/11/04/C++%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221109235315552.png" alt="image-20221109235315552"></p>
+</li>
+<li><p>对于<strong>C风格</strong>的字符串</p>
+<ul>
+<li>赋值：<code>strcpy(charr1,charr2)</code>&#x2F;&#x2F;将字符串数组charr2赋给charr1</li>
+<li>附加：<code>strcat(charr1,charr2)</code>&#x2F;&#x2F;将字符串数组charr2添加到charr1的末尾</li>
+</ul>
+</li>
+</ul>
+<h2 id="4-计算字符串的大小"><a href="#4-计算字符串的大小" class="headerlink" title="4.计算字符串的大小"></a>4.计算字符串的大小</h2><ul>
+<li>对于<strong>C风格</strong>的字符串，使用<code>strlen()</code></li>
+<li>对于<strong>string类</strong>型的字符串，使用<code>str.size()</code></li>
 </ul>
 
     </div>
@@ -457,7 +554,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B4%E5%9E%8B"><span class="nav-number">1.</span> <span class="nav-text">整型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%9B%E5%88%B6%E7%9A%84%E8%A1%A8%E7%A4%BA%E4%B8%8E%E6%98%BE%E7%A4%BA"><span class="nav-number">2.</span> <span class="nav-text">进制的表示与显示</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BD%AC%E4%B9%89%E5%AD%97%E7%AC%A6"><span class="nav-number">3.</span> <span class="nav-text">转义字符</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B5%AE%E7%82%B9%E6%95%B0"><span class="nav-number">4.</span> <span class="nav-text">浮点数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%B9%A6%E5%86%99%E6%B5%AE%E7%82%B9%E6%95%B0"><span class="nav-number">4.1.</span> <span class="nav-text">1.书写浮点数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%B5%AE%E7%82%B9%E6%95%B0%E7%9A%84%E6%9C%89%E6%95%88%E4%BD%8D%E6%95%B0"><span class="nav-number">4.2.</span> <span class="nav-text">2.浮点数的有效位数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%B5%AE%E7%82%B9%E6%95%B0%E7%9A%84%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">4.3.</span> <span class="nav-text">3.浮点数的优缺点</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B4%E5%9E%8B"><span class="nav-number">1.</span> <span class="nav-text">整型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%9B%E5%88%B6%E7%9A%84%E8%A1%A8%E7%A4%BA%E4%B8%8E%E6%98%BE%E7%A4%BA"><span class="nav-number">2.</span> <span class="nav-text">进制的表示与显示</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BD%AC%E4%B9%89%E5%AD%97%E7%AC%A6"><span class="nav-number">3.</span> <span class="nav-text">转义字符</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B5%AE%E7%82%B9%E6%95%B0"><span class="nav-number">4.</span> <span class="nav-text">浮点数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%B9%A6%E5%86%99%E6%B5%AE%E7%82%B9%E6%95%B0"><span class="nav-number">4.1.</span> <span class="nav-text">1.书写浮点数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%B5%AE%E7%82%B9%E6%95%B0%E7%9A%84%E6%9C%89%E6%95%88%E4%BD%8D%E6%95%B0"><span class="nav-number">4.2.</span> <span class="nav-text">2.浮点数的有效位数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%B5%AE%E7%82%B9%E6%95%B0%E7%9A%84%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">4.3.</span> <span class="nav-text">3.浮点数的优缺点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%BA%E5%88%B6%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="nav-number">5.</span> <span class="nav-text">强制类型转换</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B1%EF%BC%9A%E5%AF%B9%E8%BE%93%E5%85%A5%E7%9A%84%E6%95%B4%E6%95%B0%EF%BC%8C%E6%B1%82%E5%85%B6%E5%AF%B9%E5%BA%94%E7%9A%84%E5%A4%A9%E6%95%B0%E5%B0%8F%E6%97%B6%E5%88%86%E9%92%9F%E7%A7%92%E6%95%B0"><span class="nav-number">6.</span> <span class="nav-text">实例1：对输入的整数，求其对应的天数小时分钟秒数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E7%BB%84"><span class="nav-number">7.</span> <span class="nav-text">数组</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%95%B0%E7%BB%84%E7%9A%84%E5%A3%B0%E6%98%8E"><span class="nav-number">7.1.</span> <span class="nav-text">1.数组的声明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%95%B0%E7%BB%84%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">7.2.</span> <span class="nav-text">2.数组的初始化</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">8.</span> <span class="nav-text">字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="nav-number">8.1.</span> <span class="nav-text">1.字符串的创建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E8%BE%93%E5%85%A5"><span class="nav-number">8.2.</span> <span class="nav-text">2.字符串的输入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E8%B5%8B%E5%80%BC%E3%80%81%E6%8B%BC%E6%8E%A5%E5%92%8C%E9%99%84%E5%8A%A0"><span class="nav-number">8.3.</span> <span class="nav-text">3.字符串的赋值、拼接和附加</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E8%AE%A1%E7%AE%97%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%A4%A7%E5%B0%8F"><span class="nav-number">8.4.</span> <span class="nav-text">4.计算字符串的大小</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -473,7 +570,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-count">19</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -486,7 +583,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -705,6 +802,8 @@ document.querySelectorAll('.pdfobject-container').forEach(element => {
 
 
     <div id="pjax">
+  
+
   
 
   
