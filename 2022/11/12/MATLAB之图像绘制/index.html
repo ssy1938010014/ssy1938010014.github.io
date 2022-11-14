@@ -59,7 +59,7 @@
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112174752702.png">
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112181451498.png">
 <meta property="article:published_time" content="2022-11-11T16:07:12.000Z">
-<meta property="article:modified_time" content="2022-11-12T10:25:55.634Z">
+<meta property="article:modified_time" content="2022-11-14T08:20:22.294Z">
 <meta property="article:author" content="ssy">
 <meta property="article:tag" content="MATLAB">
 <meta name="twitter:card" content="summary">
@@ -260,10 +260,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2022-11-12 00:07:12 / 修改时间：18:25:55" itemprop="dateCreated datePublished" datetime="2022-11-12T00:07:12+08:00">2022-11-12</time>
+              <time title="创建时间：2022-11-12 00:07:12" itemprop="dateCreated datePublished" datetime="2022-11-12T00:07:12+08:00">2022-11-12</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-11-14 16:20:22" itemprop="dateModified" datetime="2022-11-14T16:20:22+08:00">2022-11-14</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -389,8 +395,7 @@
 </ul>
 <p><img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112160425248.png" alt="image-20221112160425248"></p>
 <h2 id="3-统计图"><a href="#3-统计图" class="headerlink" title="3.统计图"></a>3.统计图</h2><ul>
-<li><p><strong>条形图</strong></p>
-<ul>
+<li><h3 id="条形图"><a href="#条形图" class="headerlink" title="条形图"></a><strong>条形图</strong></h3><ul>
 <li><code>bar(x,y,style)</code> %绘制垂直条形图</li>
 <li><code>barh(x,y,style)</code> %绘制水平条形图</li>
 <li>x为存储横坐标，y存储数据，y的行数必须与向量x的长度相同</li>
@@ -398,30 +403,26 @@
 </ul>
 <p><img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112161456011.png" alt="image-20221112161456011"></p>
 </li>
-<li><p><strong>直方图</strong></p>
-<ul>
+<li><h3 id="直方图"><a href="#直方图" class="headerlink" title="直方图"></a><strong>直方图</strong></h3><ul>
 <li><code>histogram(y,x)</code></li>
 </ul>
 <p><img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112162131529.png" alt="image-20221112162131529"></p>
 <p><img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112162515866.png" alt="image-20221112162515866"></p>
 </li>
-<li><p><strong>扇形图</strong></p>
-<ul>
+<li><h3 id="扇形图"><a href="#扇形图" class="headerlink" title="扇形图"></a><strong>扇形图</strong></h3><ul>
 <li><code>pie(x,explode)</code></li>
 <li>其中x为统计的数据</li>
 <li>explode将扇区从饼图偏移一定位置，其由与 x对应的零值和非零值组成的向量或矩阵。pie 函数仅将对应于 explode 中的非零元素的扇区偏移一定的位置。</li>
 </ul>
 <img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112162955255.png" alt="image-20221112162955255" style="zoom:50%;">
 </li>
-<li><p><strong>散点图</strong></p>
-<ul>
+<li><h3 id="散点图"><a href="#散点图" class="headerlink" title="散点图"></a><strong>散点图</strong></h3><ul>
 <li><code>scatter(x,y,选项，&#39;filled&#39;)</code></li>
 <li>filled指定填充数据点标记，其省略时数据点是空心的</li>
 </ul>
 <p><img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112163815738.png" alt="image-20221112163815738"></p>
 </li>
-<li><p><strong>矢量图</strong></p>
-<ul>
+<li><h3 id="矢量图"><a href="#矢量图" class="headerlink" title="矢量图"></a><strong>矢量图</strong></h3><ul>
 <li><code>quiver(x,y,u,v)</code></li>
 <li>其中(x,y)指定矢量起点，(u,v)指定矢量终点</li>
 </ul>
@@ -588,7 +589,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E7%BB%B4%E6%9B%B2%E7%BA%BF"><span class="nav-number">1.</span> <span class="nav-text">二维曲线</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-plot-x-y"><span class="nav-number">1.1.</span> <span class="nav-text">1.plot(x,y)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-fplot-f-lims-%E9%80%89%E9%A1%B9"><span class="nav-number">1.2.</span> <span class="nav-text">2.fplot(f,lims,选项)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%98%E5%88%B6%E5%9B%BE%E5%BD%A2%E7%9A%84%E8%BE%85%E5%8A%A9%E6%93%8D%E4%BD%9C"><span class="nav-number">2.</span> <span class="nav-text">绘制图形的辅助操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%9B%BE%E5%BD%A2%E6%A0%87%E6%B3%A8"><span class="nav-number">2.1.</span> <span class="nav-text">1. 图形标注</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%9D%90%E6%A0%87%E6%8E%A7%E5%88%B6"><span class="nav-number">2.2.</span> <span class="nav-text">2.坐标控制</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%9D%90%E6%A0%87%E7%B3%BB%E4%B8%8B%E7%9A%84%E4%BA%8C%E7%BB%B4%E6%9B%B2%E9%9D%A2%E5%9B%BE"><span class="nav-number">3.</span> <span class="nav-text">其他坐标系下的二维曲面图</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%AF%B9%E6%95%B0%E5%9D%90%E6%A0%87%E5%9B%BE"><span class="nav-number">3.1.</span> <span class="nav-text">1.对数坐标图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%9E%81%E5%9D%90%E6%A0%87%E5%9B%BE"><span class="nav-number">3.2.</span> <span class="nav-text">2.极坐标图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E7%BB%9F%E8%AE%A1%E5%9B%BE"><span class="nav-number">3.3.</span> <span class="nav-text">3.统计图</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E7%BB%B4%E6%9B%B2%E7%BA%BF"><span class="nav-number">4.</span> <span class="nav-text">三维曲线</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-plot3-x-y-z"><span class="nav-number">4.1.</span> <span class="nav-text">1.plot3(x,y,z)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-fplot3-funx-funy-funz-tlims"><span class="nav-number">4.2.</span> <span class="nav-text">2.fplot3(funx,funy,funz,tlims)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E7%BB%B4%E6%9B%B2%E9%9D%A2"><span class="nav-number">5.</span> <span class="nav-text">三维曲面</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%B9%B3%E9%9D%A2%E7%BD%91%E6%A0%BC%E6%95%B0%E6%8D%AE%E7%9A%84%E7%94%9F%E6%88%90"><span class="nav-number">5.1.</span> <span class="nav-text">1.平面网格数据的生成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E7%BB%98%E5%88%B6%E4%B8%89%E7%BB%B4%E6%9B%B2%E9%9D%A2%E7%9A%84%E5%87%BD%E6%95%B0"><span class="nav-number">5.2.</span> <span class="nav-text">2.绘制三维曲面的函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E8%89%B2%E5%BD%A9%E5%A4%84%E7%90%86"><span class="nav-number">5.3.</span> <span class="nav-text">3.色彩处理</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E7%BB%B4%E6%9B%B2%E7%BA%BF"><span class="nav-number">1.</span> <span class="nav-text">二维曲线</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-plot-x-y"><span class="nav-number">1.1.</span> <span class="nav-text">1.plot(x,y)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-fplot-f-lims-%E9%80%89%E9%A1%B9"><span class="nav-number">1.2.</span> <span class="nav-text">2.fplot(f,lims,选项)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%98%E5%88%B6%E5%9B%BE%E5%BD%A2%E7%9A%84%E8%BE%85%E5%8A%A9%E6%93%8D%E4%BD%9C"><span class="nav-number">2.</span> <span class="nav-text">绘制图形的辅助操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%9B%BE%E5%BD%A2%E6%A0%87%E6%B3%A8"><span class="nav-number">2.1.</span> <span class="nav-text">1. 图形标注</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%9D%90%E6%A0%87%E6%8E%A7%E5%88%B6"><span class="nav-number">2.2.</span> <span class="nav-text">2.坐标控制</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%9D%90%E6%A0%87%E7%B3%BB%E4%B8%8B%E7%9A%84%E4%BA%8C%E7%BB%B4%E6%9B%B2%E9%9D%A2%E5%9B%BE"><span class="nav-number">3.</span> <span class="nav-text">其他坐标系下的二维曲面图</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%AF%B9%E6%95%B0%E5%9D%90%E6%A0%87%E5%9B%BE"><span class="nav-number">3.1.</span> <span class="nav-text">1.对数坐标图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%9E%81%E5%9D%90%E6%A0%87%E5%9B%BE"><span class="nav-number">3.2.</span> <span class="nav-text">2.极坐标图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E7%BB%9F%E8%AE%A1%E5%9B%BE"><span class="nav-number">3.3.</span> <span class="nav-text">3.统计图</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9D%A1%E5%BD%A2%E5%9B%BE"><span class="nav-number">3.3.1.</span> <span class="nav-text">条形图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%B4%E6%96%B9%E5%9B%BE"><span class="nav-number">3.3.2.</span> <span class="nav-text">直方图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%87%E5%BD%A2%E5%9B%BE"><span class="nav-number">3.3.3.</span> <span class="nav-text">扇形图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%A3%E7%82%B9%E5%9B%BE"><span class="nav-number">3.3.4.</span> <span class="nav-text">散点图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A2%E9%87%8F%E5%9B%BE"><span class="nav-number">3.3.5.</span> <span class="nav-text">矢量图</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E7%BB%B4%E6%9B%B2%E7%BA%BF"><span class="nav-number">4.</span> <span class="nav-text">三维曲线</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-plot3-x-y-z"><span class="nav-number">4.1.</span> <span class="nav-text">1.plot3(x,y,z)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-fplot3-funx-funy-funz-tlims"><span class="nav-number">4.2.</span> <span class="nav-text">2.fplot3(funx,funy,funz,tlims)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E7%BB%B4%E6%9B%B2%E9%9D%A2"><span class="nav-number">5.</span> <span class="nav-text">三维曲面</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%B9%B3%E9%9D%A2%E7%BD%91%E6%A0%BC%E6%95%B0%E6%8D%AE%E7%9A%84%E7%94%9F%E6%88%90"><span class="nav-number">5.1.</span> <span class="nav-text">1.平面网格数据的生成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E7%BB%98%E5%88%B6%E4%B8%89%E7%BB%B4%E6%9B%B2%E9%9D%A2%E7%9A%84%E5%87%BD%E6%95%B0"><span class="nav-number">5.2.</span> <span class="nav-text">2.绘制三维曲面的函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E8%89%B2%E5%BD%A9%E5%A4%84%E7%90%86"><span class="nav-number">5.3.</span> <span class="nav-text">3.色彩处理</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -604,7 +605,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-count">26</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
