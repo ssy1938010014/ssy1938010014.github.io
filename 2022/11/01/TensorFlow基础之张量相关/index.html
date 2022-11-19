@@ -33,7 +33,7 @@
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/01/TensorFlow%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%A0%E9%87%8F%E7%9B%B8%E5%85%B3/image-20221101160646689.png">
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/01/TensorFlow%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BC%A0%E9%87%8F%E7%9B%B8%E5%85%B3/image-20221101160721869.png">
 <meta property="article:published_time" content="2022-11-01T12:07:12.000Z">
-<meta property="article:modified_time" content="2022-11-02T17:04:31.059Z">
+<meta property="article:modified_time" content="2022-11-16T08:46:32.464Z">
 <meta property="article:author" content="ssy">
 <meta property="article:tag" content="TensorFlow">
 <meta name="twitter:card" content="summary">
@@ -242,7 +242,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-11-03 01:04:31" itemprop="dateModified" datetime="2022-11-03T01:04:31+08:00">2022-11-03</time>
+                <time title="修改时间：2022-11-16 16:46:32" itemprop="dateModified" datetime="2022-11-16T16:46:32+08:00">2022-11-16</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -447,7 +447,7 @@ tf.Tensor(
 </ul>
 </li>
 <li>设置随机种子：<code>tf.random.set_seed()</code>#seed相同，产生的张量相同</li>
-<li>均匀分布：<code>tf.random.uniform(shape,mean,stddev,dtype)</code>#maxval为开区间</li>
+<li>均匀分布：<code>tf.random.uniform(shape,minval,maxval,dtype)</code>#maxval为开区间</li>
 <li>随机打乱：<code>tf.random.shuffle()</code>#只打乱第一个维度的数据</li>
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#创建随机数张量</span></span><br><span class="line"><span class="comment">#1.正态分布</span></span><br><span class="line"><span class="built_in">print</span>(tf.random.normal([<span class="number">6</span>,<span class="number">6</span>]))</span><br><span class="line"><span class="built_in">print</span>(tf.random.truncated_normal([<span class="number">6</span>,<span class="number">6</span>]))<span class="comment">#截断正态分布：不可能出现区间[-2,2]以外的点</span></span><br><span class="line"><span class="built_in">print</span>(<span class="number">105</span>*<span class="string">&quot;-&quot;</span>)</span><br><span class="line"><span class="comment">#2.均匀分布</span></span><br><span class="line"><span class="built_in">print</span>(tf.random.uniform([<span class="number">3</span>,<span class="number">3</span>],<span class="number">0</span>,<span class="number">10</span>,dtype=tf.int32))</span><br><span class="line"><span class="built_in">print</span>(<span class="number">40</span>*<span class="string">&quot;-&quot;</span>)</span><br><span class="line"><span class="comment">#3.随机打乱</span></span><br><span class="line"><span class="built_in">print</span>(tf.random.shuffle([[<span class="number">1</span>,<span class="number">2</span>],[<span class="number">3</span>,<span class="number">4</span>],[<span class="number">5</span>,<span class="number">6</span>]]))</span><br><span class="line"><span class="built_in">print</span>(<span class="number">40</span>*<span class="string">&quot;-&quot;</span>)</span><br></pre></td></tr></table></figure>
@@ -684,7 +684,7 @@ tf.Tensor(
 </tr>
 <tr>
 <td>tf.exp(x)</td>
-<td>计算e的x次方<strong>（要求x为浮点数）</strong></td>
+<td>计算e的x次方<strong>（要求x为浮点数，且必须是float64）</strong></td>
 </tr>
 <tr>
 <td>tf.math.log(x)</td>
@@ -899,7 +899,7 @@ tf.Tensor(
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-count">35</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -912,7 +912,7 @@ tf.Tensor(
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">17</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
