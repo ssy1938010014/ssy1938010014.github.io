@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1/themes/blue/pace-theme-minimal.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"xn--ssy-lq6e63gg6fuu2d.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本节主要介绍了衰落信道的多径效应与多普勒效应，以及相干带宽与相干时间。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VLSI DSP之衰落信道">
+<meta property="og:url" content="http://ssy的小天地.com/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/index.html">
+<meta property="og:site_name" content="ssy的小天地">
+<meta property="og:description" content="本节主要介绍了衰落信道的多径效应与多普勒效应，以及相干带宽与相干时间。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/image-20221201202614344.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/image-20221201204327892.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/image-20221201204945516.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/image-20221201205434545.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/image-20221201221409445.png">
+<meta property="article:published_time" content="2022-12-01T02:07:12.000Z">
+<meta property="article:modified_time" content="2022-12-01T14:27:52.296Z">
+<meta property="article:author" content="ssy">
+<meta property="article:tag" content="VLSI">
+<meta property="article:tag" content="DSP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/image-20221201202614344.png">
+
+<link rel="canonical" href="http://ssy的小天地.com/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>VLSI DSP之衰落信道 | ssy的小天地</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+    <a target="_blank" rel="noopener" href="https://github.com/ssy1938010014" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ssy的小天地</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">愿汝如是 千金不换</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-works">
+
+    <a href="/works/" rel="section"><i class="fa fa-fw fa-sitemap"></i>文章</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ssy的小天地.com/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ssy.png">
+      <meta itemprop="name" content="ssy">
+      <meta itemprop="description" content="满怀希望 就会所向披靡">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ssy的小天地">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          VLSI DSP之衰落信道
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+
+
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-12-01 10:07:12 / 修改时间：22:27:52" itemprop="dateCreated datePublished" datetime="2022-12-01T10:07:12+08:00">2022-12-01</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%A7%AF%E7%B4%AF/" itemprop="url" rel="index"><span itemprop="name">学习积累</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本节主要介绍了衰落信道的多径效应与多普勒效应，以及相干带宽与相干时间。</p>
+<span id="more"></span>
+
+<h1 id="无线信道的多径效应"><a href="#无线信道的多径效应" class="headerlink" title="无线信道的多径效应"></a>无线信道的多径效应</h1><h2 id="1-多径效应的基本概念与产生原因"><a href="#1-多径效应的基本概念与产生原因" class="headerlink" title="1.多径效应的基本概念与产生原因"></a>1.多径效应的基本概念与产生原因</h2><ul>
+<li><p><strong>信道的衰落</strong>：无线通信中信道特征的变化，引起接收机接收到的信号强度随时间而变化的现象</p>
+</li>
+<li><p><strong>多径衰落</strong>：无线通信接收机接收到的多个子径信号所合成的信号，在不同的时间、地点上会时大时小的现象</p>
+<img src="/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/image-20221201202614344.png" alt="image-20221201202614344" style="zoom:50%;">
+</li>
+<li><p><strong>多径衰落的原因</strong>：</p>
+<ul>
+<li><p>发射的电波经历了不同路径，导致传播时间和相位均不相同</p>
+</li>
+<li><p>合成的接收信号幅度在较短时间内急剧变化，产生了衰落</p>
+</li>
+</ul>
+</li>
+<li><p><strong>多径衰落引起了码间串扰</strong></p>
+</li>
+</ul>
+<h2 id="2-时延扩展"><a href="#2-时延扩展" class="headerlink" title="2.时延扩展"></a>2.时延扩展</h2><ul>
+<li><p><strong>时延扩展</strong>：时延扩展是对多径信道的统计描述</p>
+</li>
+<li><p><strong>平均附加时延</strong>：<br>$$<br>\bar{\tau}&#x3D;\frac{\sum_k{P(\tau_k)}\cdot\tau_k}{\sum_{k}P(\tau_k)}<br>$$</p>
+<p>$$<br>其中:\tau_k是接收到的第k个时延信号的延迟时间;P(\tau_k)是接收到的第k个时延信号的功率<br>$$</p>
+<img src="/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/image-20221201204327892.png" alt="image-20221201204327892" style="zoom:50%;">
+</li>
+<li><p><strong>时延扩展的描述方法</strong>：平均附加时延扩展标准差<br>$$<br>\sigma_\tau&#x3D;\tau_{RMS}&#x3D;\sqrt{\bar{\tau^2}-(\bar{\tau})^2}<br>$$</p>
+</li>
+<li><p><strong>时延扩展小好，其意味着多径信号延迟相当</strong></p>
+</li>
+</ul>
+<h2 id="3-相干带宽"><a href="#3-相干带宽" class="headerlink" title="3.相干带宽"></a>3.相干带宽</h2><ul>
+<li><p><strong>相干带宽</strong>：接收信号在频带内任两个频率分量的信号，相关系数不小于0.5</p>
+</li>
+<li><p><strong>在相干带宽范围内，两个频率分量有很强的相关性</strong><br>$$<br>B_c≈\frac{1}{5\sigma_\tau}<br>$$</p>
+</li>
+</ul>
+<img src="/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/image-20221201204945516.png" alt="image-20221201204945516" style="zoom: 33%;">
+
+<h2 id="4-平衰落与频率选择性衰落"><a href="#4-平衰落与频率选择性衰落" class="headerlink" title="4.平衰落与频率选择性衰落"></a>4.平衰落与频率选择性衰落</h2><ul>
+<li><strong>平衰落</strong>：<ul>
+<li>在相干带宽内，信号的所有频率分量经历相同的衰落</li>
+<li>码间串扰小</li>
+<li>条件：信号带宽&lt;相干带宽</li>
+</ul>
+</li>
+<li><strong>频率选择性衰落</strong>：<ul>
+<li>在相干带宽外，信号的不同频率分量经历不同的衰落</li>
+<li>码间串扰大</li>
+<li>条件：信号带宽&lt;相干带宽</li>
+</ul>
+</li>
+</ul>
+<img src="/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/image-20221201205434545.png" alt="image-20221201205434545" style="zoom:50%;">
+
+<ul>
+<li><strong>对抗频率选择性衰落的方法</strong>：<ul>
+<li>均衡器</li>
+<li>OFDM技术（正交频分复用）</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="无线信道的多普勒效应"><a href="#无线信道的多普勒效应" class="headerlink" title="无线信道的多普勒效应"></a>无线信道的多普勒效应</h1><h2 id="1-多普勒频率"><a href="#1-多普勒频率" class="headerlink" title="1.多普勒频率"></a>1.多普勒频率</h2><ul>
+<li><p><strong>多普勒频率</strong>：<br>$$<br>f_d&#x3D;\frac{v}{c}f_tcos\theta<br>$$</p>
+</li>
+<li><p><strong>接收信号频率</strong>：<br>$$<br>f_r&#x3D;f_t(1-\frac vccos\theta)<br>$$</p>
+</li>
+<li><p><strong>移动速度增大，多普勒频移变大，导致误码率上升</strong></p>
+</li>
+</ul>
+<h2 id="2-相干时间"><a href="#2-相干时间" class="headerlink" title="2.相干时间"></a>2.相干时间</h2><ul>
+<li><strong>无线信道的相干时间</strong>：在此时间间隔内任两个时刻对接收信号的复包络采样，各频率分量信号的相关系数不小于0.5</li>
+<li><strong>在相干时间间隔内，接收的信号的幅值有很强的相关性</strong></li>
+</ul>
+<p>$$<br>T_c≈\frac{0.5}{f_d}<br>$$</p>
+<ul>
+<li><p><strong>相干时间度量了信道的时变特性</strong></p>
+<ul>
+<li>相干时间$T_c$大意味着信道变化慢</li>
+<li>相干时间$T_c$小意味着信道变化快</li>
+</ul>
+</li>
+<li><p><strong>信号幅值的相干性</strong></p>
+<ul>
+<li>在相干时间的时间间隔内，接收信号幅值有很强的相关性</li>
+<li>在相干时间的时间间隔外，接收信号幅值得相关性不明显</li>
+</ul>
+<img src="/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/image-20221201221409445.png" alt="image-20221201221409445" style="zoom: 50%;"></li>
+</ul>
+<h2 id="3-快衰落与慢衰落"><a href="#3-快衰落与慢衰落" class="headerlink" title="3.快衰落与慢衰落"></a>3.快衰落与慢衰落</h2><ul>
+<li><p><strong>快衰落</strong>：相干时间$T_c$小于码元周期$T_s$，该信道即为快衰落<br>$$<br>T_c&lt;T_s<br>$$</p>
+<ul>
+<li><strong>衰落特性将在码元周期内改变多次，误码率提升</strong></li>
+</ul>
+</li>
+<li><p><strong>慢衰落</strong>：相干时间$T_c$大于码元周期$T_s$，该信道即为慢衰落<br>$$<br>T_c&gt;T_s<br>$$</p>
+<ul>
+<li><strong>慢衰落信道误码率性能降低的主要原因是信噪比的损失</strong></li>
+</ul>
+</li>
+<li><p><strong>无线信道快衰落的解决办法</strong></p>
+<ul>
+<li>导频：是在数据帧中加入一段接收端的发射端均已知的数据，估计无线信道特征，用来频偏校正</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>欢迎来到ssy的世界</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/WeChaPay.jpg" alt="ssy 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>ssy
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://ssy的小天地.com/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/" title="VLSI DSP之衰落信道">http://ssy的小天地.com/2022/12/01/VLSI DSP之衰落信道/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/VLSI/" rel="tag"># VLSI</a>
+              <a href="/tags/DSP/" rel="tag"># DSP</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/11/28/VLSI%20DSP%E4%B9%8B%E8%84%89%E5%8A%A8%E9%98%B5%E5%88%97/" rel="prev" title="VLSI DSP之脉动阵列">
+      <i class="fa fa-chevron-left"></i> VLSI DSP之脉动阵列
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%97%A0%E7%BA%BF%E4%BF%A1%E9%81%93%E7%9A%84%E5%A4%9A%E5%BE%84%E6%95%88%E5%BA%94"><span class="nav-number">1.</span> <span class="nav-text">无线信道的多径效应</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%A4%9A%E5%BE%84%E6%95%88%E5%BA%94%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E4%B8%8E%E4%BA%A7%E7%94%9F%E5%8E%9F%E5%9B%A0"><span class="nav-number">1.1.</span> <span class="nav-text">1.多径效应的基本概念与产生原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%97%B6%E5%BB%B6%E6%89%A9%E5%B1%95"><span class="nav-number">1.2.</span> <span class="nav-text">2.时延扩展</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E7%9B%B8%E5%B9%B2%E5%B8%A6%E5%AE%BD"><span class="nav-number">1.3.</span> <span class="nav-text">3.相干带宽</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%B9%B3%E8%A1%B0%E8%90%BD%E4%B8%8E%E9%A2%91%E7%8E%87%E9%80%89%E6%8B%A9%E6%80%A7%E8%A1%B0%E8%90%BD"><span class="nav-number">1.4.</span> <span class="nav-text">4.平衰落与频率选择性衰落</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%97%A0%E7%BA%BF%E4%BF%A1%E9%81%93%E7%9A%84%E5%A4%9A%E6%99%AE%E5%8B%92%E6%95%88%E5%BA%94"><span class="nav-number">2.</span> <span class="nav-text">无线信道的多普勒效应</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%A4%9A%E6%99%AE%E5%8B%92%E9%A2%91%E7%8E%87"><span class="nav-number">2.1.</span> <span class="nav-text">1.多普勒频率</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E7%9B%B8%E5%B9%B2%E6%97%B6%E9%97%B4"><span class="nav-number">2.2.</span> <span class="nav-text">2.相干时间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%BF%AB%E8%A1%B0%E8%90%BD%E4%B8%8E%E6%85%A2%E8%A1%B0%E8%90%BD"><span class="nav-number">2.3.</span> <span class="nav-text">3.快衰落与慢衰落</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ssy"
+      src="/images/ssy.png">
+  <p class="site-author-name" itemprop="name">ssy</p>
+  <div class="site-description" itemprop="description">满怀希望 就会所向披靡</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ssy1938010014" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ssy1938010014" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://m.weibo.cn/u/5469432500?uid=5469432500&t=0&luicode=10000011&lfid=100103type=1&q=JIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" title="Weibo → https:&#x2F;&#x2F;m.weibo.cn&#x2F;u&#x2F;5469432500?uid&#x3D;5469432500&amp;t&#x3D;0&amp;luicode&#x3D;10000011&amp;lfid&#x3D;100103type%3D1%26q%3DJIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://ssy1938010014.github.io/" title="http:&#x2F;&#x2F;ssy1938010014.github.io" rel="noopener" target="_blank">ssy的小天地</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://y006.github.io/" title="http:&#x2F;&#x2F;y006.github.io" rel="noopener" target="_blank">邱院士的Blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://bengoooo.github.io/" title="http:&#x2F;&#x2F;BENgoooo.github.io" rel="noopener" target="_blank">赵总的Blog</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=1469041281&auto=1&height=66"></iframe>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ssy</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-ribbon@1/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+<script data-pjax>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  let url = element.dataset.target;
+  let pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  let pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  let fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+
+
+    <div id="pjax">
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+    </div>
+</body>
+</html>
