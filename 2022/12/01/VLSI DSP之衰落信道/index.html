@@ -292,11 +292,11 @@
 <h2 id="2-时延扩展"><a href="#2-时延扩展" class="headerlink" title="2.时延扩展"></a>2.时延扩展</h2><ul>
 <li><p><strong>时延扩展</strong>：时延扩展是对多径信道的统计描述</p>
 </li>
-<li><p><strong>平均附加时延</strong>：<br>$$<br>\bar{\tau}&#x3D;\frac{\sum_k{P(\tau_k)}\cdot\tau_k}{\sum_{k}P(\tau_k)}<br>$$</p>
+<li><p><strong>平均附加时延</strong>：<br>$$<br>\bar{\tau}=\frac{\sum_k{P(\tau_k)}\cdot\tau_k}{\sum_{k}P(\tau_k)}<br>$$</p>
 <p>$$<br>其中:\tau_k是接收到的第k个时延信号的延迟时间;P(\tau_k)是接收到的第k个时延信号的功率<br>$$</p>
 <img src="/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/image-20221201204327892.png" alt="image-20221201204327892" style="zoom:50%;">
 </li>
-<li><p><strong>时延扩展的描述方法</strong>：平均附加时延扩展标准差<br>$$<br>\sigma_\tau&#x3D;\tau_{RMS}&#x3D;\sqrt{\bar{\tau^2}-(\bar{\tau})^2}<br>$$</p>
+<li><p><strong>时延扩展的描述方法</strong>：平均附加时延扩展标准差<br>$$<br>\sigma_\tau=\tau_{RMS}=\sqrt{\bar{\tau^2}-(\bar{\tau})^2}<br>$$</p>
 </li>
 <li><p><strong>时延扩展小好，其意味着多径信号延迟相当</strong></p>
 </li>
@@ -334,9 +334,9 @@
 </ul>
 <hr>
 <h1 id="无线信道的多普勒效应"><a href="#无线信道的多普勒效应" class="headerlink" title="无线信道的多普勒效应"></a>无线信道的多普勒效应</h1><h2 id="1-多普勒频率"><a href="#1-多普勒频率" class="headerlink" title="1.多普勒频率"></a>1.多普勒频率</h2><ul>
-<li><p><strong>多普勒频率</strong>：<br>$$<br>f_d&#x3D;\frac{v}{c}f_tcos\theta<br>$$</p>
+<li><p><strong>多普勒频率</strong>：<br>$$<br>f_d=\frac{v}{c}f_tcos\theta<br>$$</p>
 </li>
-<li><p><strong>接收信号频率</strong>：<br>$$<br>f_r&#x3D;f_t(1-\frac vccos\theta)<br>$$</p>
+<li><p><strong>接收信号频率</strong>：<br>$$<br>f_r=f_t(1-\frac vccos\theta)<br>$$</p>
 </li>
 <li><p><strong>移动速度增大，多普勒频移变大，导致误码率上升</strong></p>
 </li>
@@ -358,7 +358,9 @@
 <li>在相干时间的时间间隔内，接收信号幅值有很强的相关性</li>
 <li>在相干时间的时间间隔外，接收信号幅值得相关性不明显</li>
 </ul>
-<img src="/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/image-20221201221409445.png" alt="image-20221201221409445" style="zoom: 50%;"></li>
+<img src="/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/image-20221201221409445.png" alt="image-20221201221409445" style="zoom: 50%;">
+
+</li>
 </ul>
 <h2 id="3-快衰落与慢衰落"><a href="#3-快衰落与慢衰落" class="headerlink" title="3.快衰落与慢衰落"></a>3.快衰落与慢衰落</h2><ul>
 <li><p><strong>快衰落</strong>：相干时间$T_c$小于码元周期$T_s$，该信道即为快衰落<br>$$<br>T_c&lt;T_s<br>$$</p>
@@ -431,7 +433,10 @@
     <a href="/2022/11/28/VLSI%20DSP%E4%B9%8B%E8%84%89%E5%8A%A8%E9%98%B5%E5%88%97/" rel="prev" title="VLSI DSP之脉动阵列">
       <i class="fa fa-chevron-left"></i> VLSI DSP之脉动阵列
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2022/12/02/VLSI%20DSP%E4%B9%8B%E5%B8%A6%E9%80%9A%E8%B0%83%E5%88%B6%E4%B8%8E%E8%A7%A3%E8%B0%83/" rel="next" title="VLSI DSP之带通调制与解调">
+      VLSI DSP之带通调制与解调 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -506,7 +511,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-count">49</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -747,6 +752,7 @@ document.querySelectorAll('.pdfobject-container').forEach(element => {
   if (typeof MathJax === 'undefined') {
     window.MathJax = {
       loader: {
+          load: ['[tex]/mhchem'],
         source: {
           '[tex]/amsCd': '[tex]/amscd',
           '[tex]/AMScd': '[tex]/amscd'
@@ -754,6 +760,7 @@ document.querySelectorAll('.pdfobject-container').forEach(element => {
       },
       tex: {
         inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
         tags: 'ams'
       },
       options: {

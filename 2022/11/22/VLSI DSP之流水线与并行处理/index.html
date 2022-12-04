@@ -276,15 +276,15 @@
 <span id="more"></span>
 
 <h1 id="并行处理技术"><a href="#并行处理技术" class="headerlink" title="并行处理技术"></a>并行处理技术</h1><ul>
-<li><p>以三抽头的滤波器为例：$y(n)&#x3D;b_0x(n)+b_1x(n-1)+b_2x(n-2)$</p>
+<li><p>以三抽头的滤波器为例：$y(n)=b_0x(n)+b_1x(n-1)+b_2x(n-2)$</p>
 <img src="/2022/11/22/VLSI%20DSP%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E4%B8%8E%E5%B9%B6%E8%A1%8C%E5%A4%84%E7%90%86/image-20221122112136499.png" alt="image-20221122112136499" style="zoom:50%;">
 
 <ul>
-<li>在下一个时钟周期计算$y(n+1)&#x3D;b_0x(n+1)+b_1x(n)+b_2x(n-1)$</li>
+<li>在下一个时钟周期计算$y(n+1)=b_0x(n+1)+b_1x(n)+b_2x(n-1)$</li>
 </ul>
 </li>
-<li><p>三抽头滤波器的两级并行：用$2k$代替上面两式中的$n$<br>$$<br>y(2k)&#x3D;b_0x(2k)+b_1x(2k-1)+b_2x(2k-2)<br>$$</p>
-<p>$$<br>y(2k+1)&#x3D;b_0x(2k+1)+b_1x(2k)+b_2x(2k-1)<br>$$</p>
+<li><p>三抽头滤波器的两级并行：用$2k$代替上面两式中的$n$<br>$$<br>y(2k)=b_0x(2k)+b_1x(2k-1)+b_2x(2k-2)<br>$$</p>
+<p>$$<br>y(2k+1)=b_0x(2k+1)+b_1x(2k)+b_2x(2k-1)<br>$$</p>
 <img src="/2022/11/22/VLSI%20DSP%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E4%B8%8E%E5%B9%B6%E8%A1%8C%E5%A4%84%E7%90%86/image-20221122113600626.png" alt="image-20221122113600626" style="zoom: 50%;">
 </li>
 <li><p>三抽头滤波器的三级并行：</p>
@@ -294,7 +294,7 @@
 <ul>
 <li>并行处理系统的关键路径保持不变</li>
 <li>L级并行处理的一个时钟周期处理L个样点，则迭代（或采样）周期缩小为$\frac1L$</li>
-<li>L级并行系统的时钟周期：$T_{clk}&#x3D;LT_{sample}$</li>
+<li>L级并行系统的时钟周期：$T_{clk}=LT_{sample}$</li>
 <li>时钟频率不变</li>
 </ul>
 </li>
@@ -341,26 +341,26 @@
 </li>
 <li><p>$P_n$：为新电路功耗</p>
 </li>
-<li><p>由于“理想”M级流水线的插入，使得$C_{n-charge}&#x3D;\frac{C_{o-charge}}M$</p>
+<li><p>由于“理想”M级流水线的插入，使得$C_{n-charge}=\frac{C_{o-charge}}M$</p>
 </li>
-<li><p>传输延时公式中的充放电电容变小，而我们又不需要改变传输延时$T_{pd}$（$f&#x3D;\frac1{max(T_{pd})}$）那么肯定能带来工作电压的减小，新旧电路传播延时相等<br>$$<br>T_{pd}&#x3D;\frac{C_{o-charge}V_0}{k( V_0-V_t)^2}<br>$$</p>
-<p>$$<br>T_{pd}’&#x3D;\frac{\frac{C_{o-charge}}{M}\beta V_0}{k(\beta V_0-V_t)^2}<br>$$</p>
+<li><p>传输延时公式中的充放电电容变小，而我们又不需要改变传输延时$T_{pd}$（$f=\frac1{max(T_{pd})}$）那么肯定能带来工作电压的减小，新旧电路传播延时相等<br>$$<br>T_{pd}=\frac{C_{o-charge}V_0}{k( V_0-V_t)^2}<br>$$</p>
+<p>$$<br>T_{pd}’=\frac{\frac{C_{o-charge}}{M}\beta V_0}{k(\beta V_0-V_t)^2}<br>$$</p>
 </li>
-<li><p>有$T_{pd}&#x3D;T_{pd}’$，则：<br>$$<br>\beta (V_0-V_t)^2&#x3D;M(\beta V_0-V_t)^2<br>$$</p>
+<li><p>有$T_{pd}=T_{pd}’$，则：<br>$$<br>\beta (V_0-V_t)^2=M(\beta V_0-V_t)^2<br>$$</p>
 </li>
-<li><p>通过上式可以求出$\beta$，进而改变工作电压从而降低电路功耗，此时的电路功耗为（总电容不变，时钟频率也不变）：<br>$$<br>P_n&#x3D;C_{total}(\beta V_0)^2f&#x3D;\beta^2C_{total}V_0^2f&#x3D;\beta^2P_0<br>$$</p>
+<li><p>通过上式可以求出$\beta$，进而改变工作电压从而降低电路功耗，此时的电路功耗为（总电容不变，时钟频率也不变）：<br>$$<br>P_n=C_{total}(\beta V_0)^2f=\beta^2C_{total}V_0^2f=\beta^2P_0<br>$$</p>
 </li>
 </ul>
 <hr>
 <h1 id="并行处理技术降低功耗"><a href="#并行处理技术降低功耗" class="headerlink" title="并行处理技术降低功耗"></a>并行处理技术降低功耗</h1><img src="/2022/11/22/VLSI%20DSP%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E4%B8%8E%E5%B9%B6%E8%A1%8C%E5%A4%84%E7%90%86/image-20221122152129260.png" alt="image-20221122152129260" style="zoom: 50%;">
 
 <ul>
-<li><p>为保持原来的采样速率不变，L级并行处理系统的时钟周期增加为$LT_{seq}$，则电源电压可以降低到$\beta V_0$<br>$$<br>原时钟周期:T_{seq}&#x3D;\frac{C_{charge}V_0}{k(V_0-V_t)^2}<br>$$</p>
-<p>$$<br>新时钟周期:T_{seq}’&#x3D;\frac{C_{charge}\beta V_0}{k(\beta V_0-V_t)^2}<br>$$</p>
+<li><p>为保持原来的采样速率不变，L级并行处理系统的时钟周期增加为$LT_{seq}$，则电源电压可以降低到$\beta V_0$<br>$$<br>原时钟周期:T_{seq}=\frac{C_{charge}V_0}{k(V_0-V_t)^2}<br>$$</p>
+<p>$$<br>新时钟周期:T_{seq}’=\frac{C_{charge}\beta V_0}{k(\beta V_0-V_t)^2}<br>$$</p>
 </li>
-<li><p>有：$T_{seq}’&#x3D;NT_{seq}$，则：<br>$$<br>N(\beta V_0-V_t)^2&#x3D;\beta(V_0-V_t)^2<br>$$</p>
+<li><p>有：$T_{seq}’=NT_{seq}$，则：<br>$$<br>N(\beta V_0-V_t)^2=\beta(V_0-V_t)^2<br>$$</p>
 </li>
-<li><p>则新的电路功耗为（总电容变为原来的N倍，时钟频率变为原来的1&#x2F;N）：<br>$$<br>P_n&#x3D;NC_{total}(\beta V_0)^2\frac fN&#x3D;C_{total}(\beta V_0)^2f&#x3D;\beta^2P_0<br>$$</p>
+<li><p>则新的电路功耗为（总电容变为原来的N倍，时钟频率变为原来的1/N）：<br>$$<br>P_n=NC_{total}(\beta V_0)^2\frac fN=C_{total}(\beta V_0)^2f=\beta^2P_0<br>$$</p>
 </li>
 <li><p><strong>可以看到，</strong>$M$<strong>级流水线和</strong>$L$<strong>级并行处理的采用在不改变原始时序电路性能的情况下有相同的功耗降低能力</strong></p>
 </li>
@@ -497,7 +497,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-count">49</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -738,6 +738,7 @@ document.querySelectorAll('.pdfobject-container').forEach(element => {
   if (typeof MathJax === 'undefined') {
     window.MathJax = {
       loader: {
+          load: ['[tex]/mhchem'],
         source: {
           '[tex]/amsCd': '[tex]/amscd',
           '[tex]/AMScd': '[tex]/amscd'
@@ -745,6 +746,7 @@ document.querySelectorAll('.pdfobject-container').forEach(element => {
       },
       tex: {
         inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
         tags: 'ams'
       },
       options: {

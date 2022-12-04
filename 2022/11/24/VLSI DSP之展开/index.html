@@ -36,7 +36,6 @@
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/24/VLSI%20DSP%E4%B9%8B%E5%B1%95%E5%BC%80/image-20221124161717499.png">
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/24/VLSI%20DSP%E4%B9%8B%E5%B1%95%E5%BC%80/image-20221124165812147.png">
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/24/VLSI%20DSP%E4%B9%8B%E5%B1%95%E5%BC%80/image-20221124165945249.png">
-<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/24/VLSI%20DSP%E4%B9%8B%E5%B1%95%E5%BC%80/image-20221124172334012.png">
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/24/VLSI%20DSP%E4%B9%8B%E5%B1%95%E5%BC%80/image-20221124172952295.png">
 <meta property="article:published_time" content="2022-11-24T07:07:12.000Z">
 <meta property="article:modified_time" content="2022-11-24T09:39:27.594Z">
@@ -286,12 +285,12 @@
 <ul>
 <li>$\lfloor x \rfloor$：表示对x向下取整，即取小于或等于x的最大整数</li>
 <li>$\lceil x \rceil$：表示对x向上取整，即取大于或等于x的最大整数</li>
-<li>$a % b$：表示a除以b的余数，其中a和b是整数</li>
+<li>$a \% b$：表示a除以b的余数，其中a和b是整数</li>
 </ul>
 </li>
 <li><p>J阶展开DFG的节点与边：</p>
 <ul>
-<li>节点U：有J个具有相同功能的节点$U_i(i&#x3D;0,1,\cdots,j-1)$</li>
+<li>节点U：有J个具有相同功能的节点$U_i(i=0,1,\cdots,j-1)$</li>
 <li>边：有J条相应的边</li>
 <li>即：J阶展开后的DFG总是包含了相当于原始DFG的J倍数量的节点和边</li>
 </ul>
@@ -300,14 +299,17 @@
 <ul>
 <li><p>对原始DFG中的每个节点U，画J个节点$U_0,U1,\cdots,U_{J-1}$</p>
 </li>
-<li><p>对原始DFG中的每个延时为w的边$U\rightarrow V$，画延时为：<br>$$<br>W_{new}&#x3D;\lfloor \frac{(i+w)}{J} \rfloor的J个边U_i\rightarrow V_{(i+w)%J}(i&#x3D;0,1,\cdots,J-1)<br>$$</p>
+<li><p>对原始DFG中的每个延时为w的边$U\rightarrow V$，画延时为：<br>$$<br>W_{new}=\lfloor \frac{(i+w)}{J} \rfloor的J个边U_i\rightarrow V_{(i+w)\%J}(i=0,1,\cdots,J-1)<br>$$</p>
 </li>
 </ul>
 </li>
 </ul>
 </li>
 <li><p>例：3阶展开</p>
-<img src="/2022/11/24/VLSI%20DSP%E4%B9%8B%E5%B1%95%E5%BC%80/image-20221124162001562.png" alt="image-20221124162001562" style="zoom: 33%;"></li>
+<img src="/2022/11/24/VLSI%20DSP%E4%B9%8B%E5%B1%95%E5%BC%80/image-20221124162001562.png" alt="image-20221124162001562" style="zoom: 33%;">
+
+
+</li>
 </ul>
 <img src="/2022/11/24/VLSI%20DSP%E4%B9%8B%E5%B1%95%E5%BC%80/image-20221124160629482.png" alt="image-20221124160629482" style="zoom: 33%;">
 
@@ -342,23 +344,24 @@
 <ul>
 <li><p>情况1：原始DFG中存在节点的计算时间$T_U&gt;T_{\infty}$</p>
 <ul>
-<li>此时：<br>$$<br>J&#x3D;\lceil \frac{T_U}{T_\infty}\rceil<br>$$</li>
+<li>此时：<br>$$<br>J=\lceil \frac{T_U}{T_\infty}\rceil<br>$$</li>
 </ul>
-<img src="/2022/11/24/VLSI%20DSP%E4%B9%8B%E5%B1%95%E5%BC%80/image-20221124172334012.png" alt="image-20221124172334012" style="zoom: 33%;">
 </li>
+</ul>
+</li>
+</ul>
+<pre><code>&lt;img src=&quot;VLSI%20DSP%E4%B9%8B%E5%B1%95%E5%BC%80/image-20221124172334012.png&quot; alt=&quot;image-20221124172334012&quot; style=&quot;zoom: 33%;&quot; /&gt;</code></pre><ul>
 <li><p>情况2：迭代边界$T_{\infty}$不是整数</p>
 <ul>
-<li>此时：<br>$$<br>J&#x3D;\frac{w_l}{gcd(T_l,w_l)},T_l为环路的执行时间，w_l为环路的延时<br>$$</li>
+<li>此时：<br>$$<br>J=\frac{w_l}{gcd(T_l,w_l)},T_l为环路的执行时间，w_l为环路的延时<br>$$</li>
 </ul>
 <img src="/2022/11/24/VLSI%20DSP%E4%B9%8B%E5%B1%95%E5%BC%80/image-20221124172952295.png" alt="image-20221124172952295" style="zoom:33%;">
 </li>
 <li><p>情况3：最长的节点计算时间大于迭代边界$T_{\infty}$，同时$T_{\infty}$也不是整数（情况1、2的混合）</p>
 <ul>
-<li><p>此时：<br>$$<br>J\times T_{\infty}&#x3D;整数<br>$$</p>
+<li><p>此时：<br>$$<br>J\times T_{\infty}=整数<br>$$</p>
 <p>$$<br>J\times T_{\infty}\ge T_u<br>$$</p>
 <p>通过满足上述不等式求得最小的$J$</p>
-</li>
-</ul>
 </li>
 </ul>
 </li>
@@ -495,7 +498,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-count">49</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -736,6 +739,7 @@ document.querySelectorAll('.pdfobject-container').forEach(element => {
   if (typeof MathJax === 'undefined') {
     window.MathJax = {
       loader: {
+          load: ['[tex]/mhchem'],
         source: {
           '[tex]/amsCd': '[tex]/amscd',
           '[tex]/AMScd': '[tex]/amscd'
@@ -743,6 +747,7 @@ document.querySelectorAll('.pdfobject-container').forEach(element => {
       },
       tex: {
         inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
         tags: 'ams'
       },
       options: {

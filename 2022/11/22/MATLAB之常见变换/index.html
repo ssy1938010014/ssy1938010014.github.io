@@ -323,7 +323,9 @@
 <li><p><code>subs(f,old,new)</code></p>
 </li>
 <li><p>双线性变换映射</p>
-<img src="/2022/11/22/MATLAB%E4%B9%8B%E5%B8%B8%E8%A7%81%E5%8F%98%E6%8D%A2/image-20221122203518642.png" alt="image-20221122203518642" style="zoom:50%;"></li>
+<img src="/2022/11/22/MATLAB%E4%B9%8B%E5%B8%B8%E8%A7%81%E5%8F%98%E6%8D%A2/image-20221122203518642.png" alt="image-20221122203518642" style="zoom:50%;">
+
+</li>
 </ul>
 <hr>
 <h1 id="部分分式展开"><a href="#部分分式展开" class="headerlink" title="部分分式展开"></a>部分分式展开</h1><ul>
@@ -463,7 +465,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-count">49</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -704,6 +706,7 @@ document.querySelectorAll('.pdfobject-container').forEach(element => {
   if (typeof MathJax === 'undefined') {
     window.MathJax = {
       loader: {
+          load: ['[tex]/mhchem'],
         source: {
           '[tex]/amsCd': '[tex]/amscd',
           '[tex]/AMScd': '[tex]/amscd'
@@ -711,6 +714,7 @@ document.querySelectorAll('.pdfobject-container').forEach(element => {
       },
       tex: {
         inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
         tags: 'ams'
       },
       options: {

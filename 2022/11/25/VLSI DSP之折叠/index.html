@@ -307,9 +307,11 @@
 <li>折叠集中包含N个元素，表示N个运算，其中的一些可能是空运算</li>
 <li>折叠集中处于第$j(0,1,\cdots,N-1)$个位置的运算，其在第$j$个时间段执行</li>
 </ul>
-<img src="/2022/11/25/VLSI%20DSP%E4%B9%8B%E6%8A%98%E5%8F%A0/image-20221125153228205.png" alt="image-20221125153228205" style="zoom: 33%;"></li>
+<img src="/2022/11/25/VLSI%20DSP%E4%B9%8B%E6%8A%98%E5%8F%A0/image-20221125153228205.png" alt="image-20221125153228205" style="zoom: 33%;">
+
+</li>
 </ul>
-<h2 id="2-折叠方程"><a href="#2-折叠方程" class="headerlink" title="2.折叠方程"></a>2.折叠方程</h2><p>$$<br>D_F(U\rightarrow V)&#x3D;Nw(e)-P_u+v-u<br>$$</p>
+<h2 id="2-折叠方程"><a href="#2-折叠方程" class="headerlink" title="2.折叠方程"></a>2.折叠方程</h2><p>$$<br>D_F(U\rightarrow V)=Nw(e)-P_u+v-u<br>$$</p>
 <ul>
 <li>$D_F(U\rightarrow V)$表示有向边$U\rightarrow V$的折叠延时</li>
 <li>$N$为折叠因子</li>
@@ -325,29 +327,31 @@
 </li>
 <li><p>根据折叠延时画出折叠结构</p>
 </li>
-<li><p>以Biquad滤波器为例：以N&#x3D;4为折叠因子进行折叠</p>
+<li><p>以Biquad滤波器为例：以N=4为折叠因子进行折叠</p>
 <ul>
 <li><p>指定两个折叠集：加法折叠集（设置流水线为1），乘法折叠集（设置流水线为2）</p>
 <ul>
-<li>$S1&#x3D;{4,2,3,1}$：加法运算由同一个硬件加法器执行</li>
-<li>$S2&#x3D;{5,8,6,7}$：乘法运算由同一个硬件乘法器执行</li>
+<li>$S1=\{4,2,3,1\}$：加法运算由同一个硬件加法器执行</li>
+<li>$S2=\{5,8,6,7\}$：乘法运算由同一个硬件乘法器执行</li>
 </ul>
 <img src="/2022/11/25/VLSI%20DSP%E4%B9%8B%E6%8A%98%E5%8F%A0/image-20221125161428708.png" alt="image-20221125161428708" style="zoom:50%;">
 </li>
-<li><p>根据折叠方程计算所有边的折叠延时<br>$$<br>D_F(1\rightarrow 2)&#x3D;4\times 1-1+1-3&#x3D;1<br>$$</p>
-<p>$$<br>D_F(1\rightarrow 5)&#x3D;4\times 1-1+0-3&#x3D;0<br>$$</p>
-<p>$$<br>D_F(1\rightarrow 6)&#x3D;4\times 1-1+2-3&#x3D;2<br>$$</p>
-<p>$$<br>D_F(1\rightarrow 7)&#x3D;4\times1 -1+3-3&#x3D;3<br>$$</p>
-<p>$$<br>D_F(1\rightarrow 8)&#x3D;4\times 2-1+1-3&#x3D;5<br>$$</p>
-<p>$$<br>D_F(3\rightarrow 1)&#x3D;4\times 0-1+3-2&#x3D;0<br>$$</p>
-<p>$$<br>D_F(4\rightarrow 2)&#x3D;4\times 0-1+1-0&#x3D;0<br>$$</p>
-<p>$$<br>D_F(5\rightarrow 3)&#x3D;4\times 0-2+2-0&#x3D;0<br>$$</p>
-<p>$$<br>D_F(6\rightarrow 4)&#x3D;4\times 1-2+0-2&#x3D;0<br>$$</p>
-<p>$$<br>D_F(7\rightarrow 3)&#x3D;4\times 1-2+2-3&#x3D;1<br>$$</p>
-<p>$$<br>D_F(8\rightarrow 4)&#x3D;4\times 1-2+0-1&#x3D;1<br>$$</p>
+<li><p>根据折叠方程计算所有边的折叠延时<br>$$<br>D_F(1\rightarrow 2)=4\times 1-1+1-3=1<br>$$</p>
+<p>$$<br>D_F(1\rightarrow 5)=4\times 1-1+0-3=0<br>$$</p>
+<p>$$<br>D_F(1\rightarrow 6)=4\times 1-1+2-3=2<br>$$</p>
+<p>$$<br>D_F(1\rightarrow 7)=4\times1 -1+3-3=3<br>$$</p>
+<p>$$<br>D_F(1\rightarrow 8)=4\times 2-1+1-3=5<br>$$</p>
+<p>$$<br>D_F(3\rightarrow 1)=4\times 0-1+3-2=0<br>$$</p>
+<p>$$<br>D_F(4\rightarrow 2)=4\times 0-1+1-0=0<br>$$</p>
+<p>$$<br>D_F(5\rightarrow 3)=4\times 0-2+2-0=0<br>$$</p>
+<p>$$<br>D_F(6\rightarrow 4)=4\times 1-2+0-2=0<br>$$</p>
+<p>$$<br>D_F(7\rightarrow 3)=4\times 1-2+2-3=1<br>$$</p>
+<p>$$<br>D_F(8\rightarrow 4)=4\times 1-2+0-1=1<br>$$</p>
 </li>
 <li><p>画折叠结构：先画出基本的运算单元，然后一个节点一个节点的看其输入边的折叠延时{}中表示调用时间</p>
-<img src="/2022/11/25/VLSI%20DSP%E4%B9%8B%E6%8A%98%E5%8F%A0/image-20221125162417873.png" alt="image-20221125162417873" style="zoom:50%;"></li>
+<img src="/2022/11/25/VLSI%20DSP%E4%B9%8B%E6%8A%98%E5%8F%A0/image-20221125162417873.png" alt="image-20221125162417873" style="zoom:50%;">
+
+</li>
 </ul>
 </li>
 </ul>
@@ -367,16 +371,18 @@
 </li>
 <li><p>可以仅考虑首次迭代计算出最大激活变量数：</p>
 <ul>
-<li>因为此时迭代周期N&#x3D;6，则从第6个时钟周期开始对原有激活数依次加上迭代的激活数直到与上一次数据无重合</li>
+<li>因为此时迭代周期N=6，则从第6个时钟周期开始对原有激活数依次加上迭代的激活数直到与上一次数据无重合</li>
 </ul>
-<img src="/2022/11/25/VLSI%20DSP%E4%B9%8B%E6%8A%98%E5%8F%A0/image-20221125164641750.png" alt="image-20221125164641750" style="zoom:33%;"></li>
+<img src="/2022/11/25/VLSI%20DSP%E4%B9%8B%E6%8A%98%E5%8F%A0/image-20221125164641750.png" alt="image-20221125164641750" style="zoom:33%;">
+
+</li>
 </ul>
 <h2 id="3-寿命表"><a href="#3-寿命表" class="headerlink" title="3.寿命表"></a>3.寿命表</h2><ul>
 <li>$T_{input}$：输入时间</li>
 <li>$T_{zlout}$：0延时输出时间</li>
-<li>$T_{diff}&#x3D;T_{zlout}-T_{input}$</li>
-<li>$T_{lat}&#x3D;T_{diff}最大负值的绝对值$</li>
-<li>$T_{output}&#x3D;T_{zlout}+T_{lat}$：输出时间</li>
+<li>$T_{diff}=T_{zlout}-T_{input}$</li>
+<li>$T_{lat}=T_{diff}最大负值的绝对值$</li>
+<li>$T_{output}=T_{zlout}+T_{lat}$：输出时间</li>
 <li>寿命：$T_{input}\sim T_{output}$</li>
 </ul>
 <p><img src="/2022/11/25/VLSI%20DSP%E4%B9%8B%E6%8A%98%E5%8F%A0/image-20221125165548613.png" alt="image-20221125165548613"></p>
@@ -414,8 +420,8 @@
 <h2 id="2-写出折叠方程"><a href="#2-写出折叠方程" class="headerlink" title="2.写出折叠方程"></a>2.写出折叠方程</h2><img src="/2022/11/25/VLSI%20DSP%E4%B9%8B%E6%8A%98%E5%8F%A0/image-20221125175059168.png" alt="image-20221125175059168" style="zoom:50%;">
 
 <h2 id="3-用折叠方程构造寿命表"><a href="#3-用折叠方程构造寿命表" class="headerlink" title="3.用折叠方程构造寿命表"></a>3.用折叠方程构造寿命表</h2><ul>
-<li>$T_{output}&#x3D;T_{input}+max{D_F(U\rightarrow V)}$</li>
-<li>$T_{input}&#x3D;u+P_u(流水线级数)$</li>
+<li>$T_{output}=T_{input}+max\{D_F(U\rightarrow V)\}$</li>
+<li>$T_{input}=u+P_u(流水线级数)$</li>
 <li>寿命：$T_{input}\sim T_{output}$</li>
 </ul>
 <img src="/2022/11/25/VLSI%20DSP%E4%B9%8B%E6%8A%98%E5%8F%A0/image-20221125175419249.png" alt="image-20221125175419249" style="zoom:50%;">
@@ -560,7 +566,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-count">49</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -801,6 +807,7 @@ document.querySelectorAll('.pdfobject-container').forEach(element => {
   if (typeof MathJax === 'undefined') {
     window.MathJax = {
       loader: {
+          load: ['[tex]/mhchem'],
         source: {
           '[tex]/amsCd': '[tex]/amscd',
           '[tex]/AMScd': '[tex]/amscd'
@@ -808,6 +815,7 @@ document.querySelectorAll('.pdfobject-container').forEach(element => {
       },
       tex: {
         inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
         tags: 'ams'
       },
       options: {

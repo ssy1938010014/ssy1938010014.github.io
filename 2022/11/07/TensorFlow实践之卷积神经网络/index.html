@@ -314,7 +314,9 @@
 <li>使用卷积核计算后的结果会比原图稍微小一点，因为对于图像边界上的点，无法进行卷积运算<br>  <img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107121617059.png" alt="image-20221107121617059" style="zoom: 25%;">            <img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107121658899.png" alt="image-20221107121658899" style="zoom:25%;"></li>
 <li>可以通过填充外层使得卷积后图像大小和原图一样<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107121827880.png" alt="image-20221107121827880" style="zoom: 50%;"></li>
 <li>步长(stride)：卷积核一次移动的像素数</li>
-<li>步长等于卷积核的边长，相当于将图像缩小了n倍<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107121906994.png" alt="image-20221107121906994" style="zoom: 50%;"></li>
+<li>步长等于卷积核的边长，相当于将图像缩小了n倍<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107121906994.png" alt="image-20221107121906994" style="zoom: 50%;">
+
+</li>
 </ul>
 <h2 id="2-卷积核的作用效果"><a href="#2-卷积核的作用效果" class="headerlink" title="2.卷积核的作用效果"></a>2.卷积核的作用效果</h2><ul>
 <li><p><strong>卷积核的尺寸，决定了周围像素的范围，卷积核的数值，表明了其权值，采用不同的卷积核，能够产生不同的效果</strong></p>
@@ -332,11 +334,14 @@
 </li>
 <li><p><strong>高斯模糊</strong>：根据高斯分布的取值来确定权值</p>
 <ul>
-<li>为了尽可能保留图像中的边缘信息，给不同位置的像素点赋予不同的权值，离中心点越近的像素，权值越大，远离中心点的像素，权值也逐渐减小<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107122501280.png" alt="image-20221107122501280" style="zoom:50%;"></li>
+<li>为了尽可能保留图像中的边缘信息，给不同位置的像素点赋予不同的权值，离中心点越近的像素，权值越大，远离中心点的像素，权值也逐渐减小<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107122501280.png" alt="image-20221107122501280" style="zoom:50%;">
+</li>
 </ul>
 </li>
 <li><p>均值模糊与高斯模糊的对比：高斯模糊能够更好的保留图像的边缘和轮廓</p>
-<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107123237685.png" alt="image-20221107123237685" style="zoom: 50%;"></li>
+<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107123237685.png" alt="image-20221107123237685" style="zoom: 50%;">
+
+</li>
 </ul>
 <h2 id="3-边缘检测"><a href="#3-边缘检测" class="headerlink" title="3.边缘检测"></a>3.边缘检测</h2><ul>
 <li>计算当前点和周围点颜色值或灰度值的差别</li>
@@ -344,7 +349,9 @@
 <li><strong>Roberts算子</strong>：能够比较好的检测45°角方向的边缘</li>
 <li><strong>Sobel算子</strong>：在Prewitt算子的基础上增加的权重的概念，认为上下左右直线方向的距离大于斜线方向的距离</li>
 <li><strong>Laplacian算子</strong>：判断中心像素的灰度与邻域内其他像素灰度的关系</li>
-<li><strong>Log算子</strong>：综合考虑了噪声的抑制和边缘检测,其抗干扰能力强，边界定位精度高，边缘连续性好，而且能有效提取对比度弱的边界<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107123553479.png" alt="image-20221107123553479" style="zoom:33%;"></li>
+<li><strong>Log算子</strong>：综合考虑了噪声的抑制和边缘检测,其抗干扰能力强，边界定位精度高，边缘连续性好，而且能有效提取对比度弱的边界<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107123553479.png" alt="image-20221107123553479" style="zoom:33%;">
+
+</li>
 </ul>
 <hr>
 <h1 id="卷积神经网络"><a href="#卷积神经网络" class="headerlink" title="卷积神经网络"></a>卷积神经网络</h1><h2 id="1-基本概念"><a href="#1-基本概念" class="headerlink" title="1.基本概念"></a>1.基本概念</h2><ul>
@@ -364,7 +371,7 @@
 </ul>
 </li>
 <li>池化层：特征映射层<ul>
-<li><strong>下采样：使用n×n的池化模板，且步长为n，将其尺寸减小到1&#x2F;n</strong></li>
+<li><strong>下采样：使用n×n的池化模板，且步长为n，将其尺寸减小到1/n</strong></li>
 <li>在减小数据的处理量的同时，保留有用的信息<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107124037477.png" alt="image-20221107124037477" style="zoom:33%;"></li>
 </ul>
 </li>
@@ -378,8 +385,8 @@
 <li>filters表示卷积核的数量</li>
 <li>kernel_size表示卷积核大小</li>
 <li>padding表示扩充图像的方式<ul>
-<li>padding&#x3D;”same”：以0扩充</li>
-<li>padding&#x3D;”valid”：不扩充图像边界</li>
+<li>padding=”same”：以0扩充</li>
+<li>padding=”valid”：不扩充图像边界</li>
 </ul>
 </li>
 <li>activation用来设置激活函数</li>
@@ -429,25 +436,25 @@ Epoch 4/5
 750/750 [==============================] - 25s 34ms/step - loss: 0.0332 - sparse_categorical_accuracy: 0.9892 - val_loss: 0.0412 - val_sparse_categorical_accuracy: 0.9892
 Epoch 5/5
 750/750 [==============================] - 25s 33ms/step - loss: 0.0246 - sparse_categorical_accuracy: 0.9920 - val_loss: 0.0450 - val_sparse_categorical_accuracy: 0.9855
-313/313 - 2s - loss: 0.0345 - sparse_categorical_accuracy: 0.9884
-</code></pre>
-<p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_14_1.png" alt="output_14_1"></p>
+313/313 - 2s - loss: 0.0345 - sparse_categorical_accuracy: 0.9884</code></pre><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_14_1.png" alt="output_14_1"></p>
 <p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_14_2.png" alt="output_14_2"></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#保存训练的模型参数</span></span><br><span class="line">model.save_weights(<span class="string">&quot;mnist_save_weights_CNN.h5&quot;</span>)</span><br></pre></td></tr></table></figure>
 
 <hr>
 <h1 id="卷积神经网络的优化"><a href="#卷积神经网络的优化" class="headerlink" title="卷积神经网络的优化"></a>卷积神经网络的优化</h1><h2 id="1-Dropout-：减少过拟合"><a href="#1-Dropout-：减少过拟合" class="headerlink" title="1.Dropout()：减少过拟合"></a>1.Dropout()：减少过拟合</h2><ul>
 <li>随机让神经网络的某些隐含层节点停止工作，也就是让他们的权值为0</li>
-<li><strong>tf.layers.Dropout(inputs,rate,seed&#x3D;None,training&#x3D;False,name&#x3D;None)</strong></li>
+<li><strong>tf.layers.Dropout(inputs,rate,seed=None,training=False,name=None)</strong></li>
 <li>inputs为输入的张量</li>
 <li>rate指定神经元每一次随机被丢弃的比例</li>
 <li>seed丢弃固定位置的神经元</li>
-<li>trainning&#x3D;True处于训练阶段时，才会进行dropout操作</li>
+<li>trainning=True处于训练阶段时，才会进行dropout操作</li>
 <li>name表示dropout层的名称</li>
 </ul>
 <h2 id="2-级联卷积核"><a href="#2-级联卷积核" class="headerlink" title="2.级联卷积核"></a>2.级联卷积核</h2><ul>
 <li>使用两个3×3的卷积核级联与使用一个5×5的卷积核得到的感受野是一样的，但参数个数却少了<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107124918062.png" alt="image-20221107124918062" style="zoom:33%;"></li>
-<li>多通道的级联卷积核 <img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107124939129.png" alt="image-20221107124939129" style="zoom:33%;"></li>
+<li>多通道的级联卷积核<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107124939129.png" alt="image-20221107124939129" style="zoom:33%;">
+
+</li>
 </ul>
 <hr>
 <h1 id="实例：卷积神经网络识别cifar10图片"><a href="#实例：卷积神经网络识别cifar10图片" class="headerlink" title="实例：卷积神经网络识别cifar10图片"></a>实例：卷积神经网络识别cifar10图片</h1><h2 id="1-设计卷积神经网络的结构"><a href="#1-设计卷积神经网络的结构" class="headerlink" title="1.设计卷积神经网络的结构"></a>1.设计卷积神经网络的结构</h2><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107125056907.png" alt="image-20221107125056907"></p>
@@ -507,9 +514,7 @@ Epoch 9/10
 625/625 [==============================] - 76s 121ms/step - loss: 0.8886 - sparse_categorical_accuracy: 0.6809 - val_loss: 0.8450 - val_sparse_categorical_accuracy: 0.6965
 Epoch 10/10
 625/625 [==============================] - 76s 121ms/step - loss: 0.8632 - sparse_categorical_accuracy: 0.6917 - val_loss: 0.8446 - val_sparse_categorical_accuracy: 0.7016
-313/313 - 7s - loss: 0.8541 - sparse_categorical_accuracy: 0.7033
-</code></pre>
-<p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_22_1.png" alt="output_22_1"></p>
+313/313 - 7s - loss: 0.8541 - sparse_categorical_accuracy: 0.7033</code></pre><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_22_1.png" alt="output_22_1"></p>
 <p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_22_2.png" alt="output_22_2"></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#保存所有模型与数据</span></span><br><span class="line">model.save(<span class="string">&quot;cifar10_save_all.h5&quot;</span>)</span><br></pre></td></tr></table></figure>
 
@@ -565,12 +570,12 @@ Epoch 10/10
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2022/11/04/C++%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" rel="prev" title="C++之数据类型">
-      <i class="fa fa-chevron-left"></i> C++之数据类型
+    <a href="/2022/11/07/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/" rel="prev" title="深度学习基础之特征工程">
+      <i class="fa fa-chevron-left"></i> 深度学习基础之特征工程
     </a></div>
       <div class="post-nav-item">
-    <a href="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%88%86%E7%B1%BB%E9%97%AE%E9%A2%98/" rel="next" title="TensorFlow实践之分类问题">
-      TensorFlow实践之分类问题 <i class="fa fa-chevron-right"></i>
+    <a href="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%85%B8%E5%9E%8B%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="next" title="TensorFlow实践之典型的卷积神经网路">
+      TensorFlow实践之典型的卷积神经网路 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -646,7 +651,7 @@ Epoch 10/10
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-count">49</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

@@ -312,7 +312,9 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line"><span class="comment">#打开图像</span></span><br><span class="line">img=Image.<span class="built_in">open</span>(<span class="string">&quot;lena.tiff&quot;</span>)</span><br><span class="line"><span class="comment">#保存图像</span></span><br><span class="line">img.save(<span class="string">&quot;test.tiff&quot;</span>)</span><br><span class="line">img.save(<span class="string">&quot;lena.jpg&quot;</span>)</span><br><span class="line">img.save(<span class="string">&quot;lena.bmp&quot;</span>)</span><br><span class="line"><span class="comment">#查看图像对象的主要属性</span></span><br><span class="line">img1=Image.<span class="built_in">open</span>(<span class="string">&quot;lena.jpg&quot;</span>)</span><br><span class="line">img2=Image.<span class="built_in">open</span>(<span class="string">&quot;lena.bmp&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;The format:&quot;</span>,img2.<span class="built_in">format</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;The size:&quot;</span>,img2.size)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;The mode:&quot;</span>,img2.mode)</span><br></pre></td></tr></table></figure>
 
 <p>结果如下：</p>
-<img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/image-20221028221253149.png" alt="image-20221028221253149" style="zoom: 67%;"></li>
+<img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/image-20221028221253149.png" alt="image-20221028221253149" style="zoom: 67%;">
+
+</li>
 </ul>
 <hr>
 <h1 id="显示图像"><a href="#显示图像" class="headerlink" title="显示图像"></a>显示图像</h1><ul>
@@ -388,7 +390,9 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#颜色通道的分离与合并</span></span><br><span class="line"><span class="comment">#1.分离</span></span><br><span class="line">img_r,img_g,img_b=img.split()</span><br><span class="line"></span><br><span class="line"><span class="comment">#显示分离后的效果</span></span><br><span class="line">plt.figure(figsize=(<span class="number">10</span>,<span class="number">10</span>))</span><br><span class="line">plt.subplot(<span class="number">221</span>)</span><br><span class="line">plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">plt.imshow(img_r,cmap=<span class="string">&quot;gray&quot;</span>)</span><br><span class="line">plt.title(<span class="string">&quot;R&quot;</span>,fontsize=<span class="number">20</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">222</span>)</span><br><span class="line">plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">plt.imshow(img_g,cmap=<span class="string">&quot;gray&quot;</span>)</span><br><span class="line">plt.title(<span class="string">&quot;G&quot;</span>,fontsize=<span class="number">20</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">223</span>)</span><br><span class="line">plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">plt.imshow(img_b,cmap=<span class="string">&quot;gray&quot;</span>)</span><br><span class="line">plt.title(<span class="string">&quot;B&quot;</span>,fontsize=<span class="number">20</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#2.合并</span></span><br><span class="line">img_rgb=Image.merge(<span class="string">&quot;RGB&quot;</span>,[img_r,img_g,img_b])</span><br><span class="line">plt.subplot(<span class="number">224</span>)</span><br><span class="line">plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">plt.imshow(img_rgb)</span><br><span class="line">plt.title(<span class="string">&quot;RGB&quot;</span>,fontsize=<span class="number">20</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#显示处理后的图像</span></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
 
 <p>结果如下：</p>
-<img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/image-20221028222912075.png" alt="image-20221028222912075" style="zoom: 50%;"></li>
+<img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/image-20221028222912075.png" alt="image-20221028222912075" style="zoom: 50%;">
+
+</li>
 </ul>
 <hr>
 <h1 id="将图像数据转化为数组"><a href="#将图像数据转化为数组" class="headerlink" title="将图像数据转化为数组"></a>将图像数据转化为数组</h1><ul>
@@ -396,7 +400,9 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#将图像数据转化为数组</span></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">img_array=np.array(img)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;The shape:&quot;</span>,img_array.shape)</span><br></pre></td></tr></table></figure>
 
 <p>结果如下：</p>
-<img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/image-20221028223116921.png" alt="image-20221028223116921" style="zoom: 80%;"></li>
+<img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/image-20221028223116921.png" alt="image-20221028223116921" style="zoom: 80%;">
+
+</li>
 </ul>
 <hr>
 <h1 id="图像的缩放、旋转和裁剪"><a href="#图像的缩放、旋转和裁剪" class="headerlink" title="图像的缩放、旋转和裁剪"></a>图像的缩放、旋转和裁剪</h1><ul>
@@ -600,7 +606,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-count">49</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

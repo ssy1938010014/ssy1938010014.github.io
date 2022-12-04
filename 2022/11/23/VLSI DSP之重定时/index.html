@@ -292,10 +292,10 @@ $$
 左图:w(n)=ay(n-1)+by(n-2)
 $$
 
-<p>$$<br>y(n)&#x3D;x(n)+w(n-1)&#x3D;x(n)+ay(n-2)+by(n-3)<br>$$</p>
-<p>$$<br>右图:w_1(n)&#x3D;ay(n-1)<br>$$</p>
-<p>$$<br>w_2(n)&#x3D;by(n-2)<br>$$</p>
-<p>$$<br>y(n)&#x3D;x(n)+w_1(n-1)+w_2(n-1)&#x3D;x(n)+ay(n-2)+by(n-3)<br>$$</p>
+<p>$$<br>y(n)=x(n)+w(n-1)=x(n)+ay(n-2)+by(n-3)<br>$$</p>
+<p>$$<br>右图:w_1(n)=ay(n-1)<br>$$</p>
+<p>$$<br>w_2(n)=by(n-2)<br>$$</p>
+<p>$$<br>y(n)=x(n)+w_1(n-1)+w_2(n-1)=x(n)+ay(n-2)+by(n-3)<br>$$</p>
 </li>
 </ul>
 <hr>
@@ -305,17 +305,17 @@ $$
 <img src="/2022/11/23/VLSI%20DSP%E4%B9%8B%E9%87%8D%E5%AE%9A%E6%97%B6/image-20221123203257658.png" alt="image-20221123203257658" style="zoom:50%;">
 
 <ul>
-<li><p>重定时前：关键路径为$T_M+T_A&#x3D;3ut$，延时单元为4</p>
+<li><p>重定时前：关键路径为$T_M+T_A=3ut$，延时单元为4</p>
 </li>
-<li><p>重定时后：关键路径为$T_M+2T_A&#x3D;4ut$，延时单元为5</p>
+<li><p>重定时后：关键路径为$T_M+2T_A=4ut$，延时单元为5</p>
 </li>
 </ul>
 <h2 id="2-节点重定时"><a href="#2-节点重定时" class="headerlink" title="2.节点重定时"></a>2.节点重定时</h2><img src="/2022/11/23/VLSI%20DSP%E4%B9%8B%E9%87%8D%E5%AE%9A%E6%97%B6/image-20221123203944106.png" alt="image-20221123203944106" style="zoom:50%;">
 
 <ul>
-<li><p>重定时前：关键路径为$T_M+T_A&#x3D;3ut$，延时单元为4</p>
+<li><p>重定时前：关键路径为$T_M+T_A=3ut$，延时单元为4</p>
 </li>
-<li><p>重定时后：关键路径为$T_M&#x3D;2ut$，延时单元为5</p>
+<li><p>重定时后：关键路径为$T_M=2ut$，延时单元为5</p>
 </li>
 </ul>
 <h2 id="3-重定时的数学求解"><a href="#3-重定时的数学求解" class="headerlink" title="3.重定时的数学求解"></a>3.重定时的数学求解</h2><ul>
@@ -327,11 +327,11 @@ $$
 </ul>
 <img src="/2022/11/23/VLSI%20DSP%E4%B9%8B%E9%87%8D%E5%AE%9A%E6%97%B6/image-20221123204514343.png" alt="image-20221123204514343" style="zoom:50%;">
 </li>
-<li><p>重定时值$r(v)$：<br>$$<br>r(v)&#x3D;0 \Rightarrow 不操作<br>$$</p>
+<li><p>重定时值$r(v)$：<br>$$<br>r(v)=0 \Rightarrow 不操作<br>$$</p>
 <p>$$<br>r(v)&gt;0 \Rightarrow 节点的每条输入边增加r(v)延时，同时节点的每条输出边减少r(v)延时<br>$$</p>
 <p>$$<br>r(v)&lt;0 \Rightarrow 节点的每条输入边减少r(v)延时，同时节点的每条输出边增加r(v)延时<br>$$</p>
 </li>
-<li><p><strong>重定时方程：用来确定节点u到u—-&gt;v重定时后的权重</strong><br>$$<br>w_r(e)&#x3D;w(e)+r(v)-r(u),w_r(e)\ge0<br>$$</p>
+<li><p><strong>重定时方程：用来确定节点u到u—-&gt;v重定时后的权重</strong><br>$$<br>w_r(e)=w(e)+r(v)-r(u),w_r(e)\ge0<br>$$</p>
 <img src="/2022/11/23/VLSI%20DSP%E4%B9%8B%E9%87%8D%E5%AE%9A%E6%97%B6/image-20221123205429536.png" alt="image-20221123205429536" style="zoom:50%;">
 
 <ul>
@@ -347,11 +347,12 @@ $$
 </li>
 </ul>
 <h2 id="4-K倍降速与割集重定时"><a href="#4-K倍降速与割集重定时" class="headerlink" title="4.K倍降速与割集重定时"></a>4.K倍降速与割集重定时</h2><ul>
-<li>首先用K个延时取代DFG中的每个延时，以产生DFG的K倍减速系统，然后对K倍减速的DFG进行割集重定时</li>
-</ul>
-  <img src="/2022/11/23/VLSI%20DSP%E4%B9%8B%E9%87%8D%E5%AE%9A%E6%97%B6/image-20221123213823901.png" alt="image-20221123213823901" style="zoom:50%;">
+<li><p>首先用K个延时取代DFG中的每个延时，以产生DFG的K倍减速系统，然后对K倍减速的DFG进行割集重定时</p>
+<img src="/2022/11/23/VLSI%20DSP%E4%B9%8B%E9%87%8D%E5%AE%9A%E6%97%B6/image-20221123213823901.png" alt="image-20221123213823901" style="zoom:50%;">
 
-  <img src="/2022/11/23/VLSI%20DSP%E4%B9%8B%E9%87%8D%E5%AE%9A%E6%97%B6/image-20221123213844651.png" alt="image-20221123213844651" style="zoom:50%;">
+<img src="/2022/11/23/VLSI%20DSP%E4%B9%8B%E9%87%8D%E5%AE%9A%E6%97%B6/image-20221123213844651.png" alt="image-20221123213844651" style="zoom:50%;"></li>
+</ul>
+
     </div>
 
     
@@ -483,7 +484,7 @@ $$
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-count">49</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -724,6 +725,7 @@ document.querySelectorAll('.pdfobject-container').forEach(element => {
   if (typeof MathJax === 'undefined') {
     window.MathJax = {
       loader: {
+          load: ['[tex]/mhchem'],
         source: {
           '[tex]/amsCd': '[tex]/amscd',
           '[tex]/AMScd': '[tex]/amscd'
@@ -731,6 +733,7 @@ document.querySelectorAll('.pdfobject-container').forEach(element => {
       },
       tex: {
         inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
         tags: 'ams'
       },
       options: {

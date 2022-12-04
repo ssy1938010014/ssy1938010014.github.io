@@ -318,12 +318,12 @@
 <td>补，返回一个新集合，包括集合S和T中的非相同元素</td>
 </tr>
 <tr>
-<td>S&lt;&#x3D;T 或 S&lt;T</td>
-<td>返回True&#x2F;False，判断S和T的子集关系</td>
+<td>S&lt;=T 或 S&lt;T</td>
+<td>返回True/False，判断S和T的子集关系</td>
 </tr>
 <tr>
-<td>S&gt;&#x3D;T 或S&gt;T</td>
-<td>返回True&#x2F;False，判断S和T的包含关系</td>
+<td>S&gt;=T 或S&gt;T</td>
+<td>返回True/False，判断S和T的包含关系</td>
 </tr>
 </tbody></table>
 <h2 id="3-集合处理方法"><a href="#3-集合处理方法" class="headerlink" title="3.集合处理方法"></a>3.集合处理方法</h2><table>
@@ -461,7 +461,9 @@
 </tbody></table>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">s=[<span class="number">1</span>,<span class="number">9</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">2</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>]</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;输出结果如下：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(s[<span class="number">0</span>:<span class="number">4</span>])</span><br><span class="line"><span class="built_in">print</span>(s.index(<span class="number">9</span>,<span class="number">2</span>,<span class="number">8</span>))</span><br></pre></td></tr></table></figure>
 
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221026230659752.png" alt="image-20221026230659752" style="zoom:67%;"></li>
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221026230659752.png" alt="image-20221026230659752" style="zoom:67%;">
+
+</li>
 </ul>
 <h2 id="2-元组类型及操作"><a href="#2-元组类型及操作" class="headerlink" title="2.元组类型及操作"></a>2.元组类型及操作</h2><ul>
 <li><p>元组是序列类型的一种扩展</p>
@@ -471,7 +473,9 @@
 <li><p>使用小括号<code>()</code>或<code>tuple</code>创建，元素间用逗号<code>,</code>分割</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">s=<span class="string">&quot;helloworld&quot;</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;输出结果如下：&quot;</span>)</span><br><span class="line"><span class="comment">#使用tuple创建</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">tuple</span>(s))</span><br><span class="line"><span class="comment">#使用()创建</span></span><br><span class="line"><span class="built_in">print</span>((<span class="string">&#x27;s&#x27;</span>,<span class="string">&#x27;s&#x27;</span>,<span class="string">&#x27;y&#x27;</span>))</span><br></pre></td></tr></table></figure>
 
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221026231303489.png" alt="image-20221026231303489" style="zoom: 67%;"></li>
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221026231303489.png" alt="image-20221026231303489" style="zoom: 67%;">
+
+</li>
 </ul>
 <h2 id="3-列表类型及操作"><a href="#3-列表类型及操作" class="headerlink" title="3.列表类型及操作"></a>3.列表类型及操作</h2><ul>
 <li><p>列表是序列类型的一种扩展，创建后<strong>可以随意被修改</strong></p>
@@ -523,7 +527,9 @@
 </tbody></table>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ls=[<span class="number">9</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>]</span><br><span class="line"><span class="keyword">del</span> ls[<span class="number">0</span>:<span class="number">2</span>:<span class="number">1</span>]</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;输出结果如下：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(ls)</span><br><span class="line">ls.insert(<span class="number">3</span>,<span class="string">&quot;s&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(ls)</span><br><span class="line">ls.reverse()</span><br><span class="line"><span class="built_in">print</span>(ls)</span><br></pre></td></tr></table></figure>
 
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221026233245494.png" alt="image-20221026233245494" style="zoom:67%;"></li>
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221026233245494.png" alt="image-20221026233245494" style="zoom:67%;">
+
+</li>
 </ul>
 <h2 id="4-字符串类型及操作"><a href="#4-字符串类型及操作" class="headerlink" title="4.字符串类型及操作"></a>4.字符串类型及操作</h2><ul>
 <li><p><strong>字符串的序号</strong>：</p>
@@ -573,7 +579,7 @@
 </thead>
 <tbody><tr>
 <td>str.lower() 或 str.upper()</td>
-<td>返回字符串的副本，全部字符小写&#x2F;大写</td>
+<td>返回字符串的副本，全部字符小写/大写</td>
 </tr>
 <tr>
 <td><code>str.split(sep=None)</code></td>
@@ -741,8 +747,8 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%BB%E5%86%99/" rel="prev" title="Python基础之文件的读写">
-      <i class="fa fa-chevron-left"></i> Python基础之文件的读写
+    <a href="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/" rel="prev" title="Python基础之标准库与第三方库">
+      <i class="fa fa-chevron-left"></i> Python基础之标准库与第三方库
     </a></div>
       <div class="post-nav-item">
     <a href="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/" rel="next" title="TensorFlow实践之数字图像处理基础">
@@ -822,7 +828,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-count">49</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

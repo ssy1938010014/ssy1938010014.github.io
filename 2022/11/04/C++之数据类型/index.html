@@ -324,7 +324,9 @@
 <p><img src="/2022/11/04/C++%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221106155936150.png" alt="image-20221106155936150"></p>
 </li>
 <li><p>溢出问题：</p>
-<img src="/2022/11/04/C++%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221104200504476.png" alt="image-20221104200504476" style="zoom: 33%;"></li>
+<img src="/2022/11/04/C++%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221104200504476.png" alt="image-20221104200504476" style="zoom: 33%;">
+
+</li>
 </ul>
 <hr>
 <h1 id="进制的表示与显示"><a href="#进制的表示与显示" class="headerlink" title="进制的表示与显示"></a>进制的表示与显示</h1><ul>
@@ -343,8 +345,10 @@
 <li><p>使用常用的标准小数点表示</p>
 <img src="/2022/11/04/C++%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221106182523410.png" alt="image-20221106182523410" style="zoom:80%;">
 </li>
-<li><p>使用E&#x2F;e表示法</p>
-<img src="/2022/11/04/C++%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221106182623534.png" alt="image-20221106182623534" style="zoom:80%;"></li>
+<li><p>使用E/e表示法</p>
+<img src="/2022/11/04/C++%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221106182623534.png" alt="image-20221106182623534" style="zoom:80%;">
+
+</li>
 </ul>
 <h2 id="2-浮点数的有效位数"><a href="#2-浮点数的有效位数" class="headerlink" title="2.浮点数的有效位数"></a>2.浮点数的有效位数</h2><ul>
 <li><p>C++有3种浮点类型：float、double、long double</p>
@@ -390,8 +394,8 @@
 <h2 id="2-数组的初始化"><a href="#2-数组的初始化" class="headerlink" title="2.数组的初始化"></a>2.数组的初始化</h2><ul>
 <li><code>int cards[4]=&#123;3,6,8,10&#125;</code></li>
 <li>如果只对数组的一部分进行初始化，则编译器将把其他元素设置为0</li>
-<li><code>short things[]=&#123;1,5,3,8&#125;</code>&#x2F;&#x2F;编译器将使things数组包含4个元素</li>
-<li><code>unsigned int couts[10]=&#123;&#125;</code>&#x2F;&#x2F;若不在大括号内包含任何东西，编译器将把所有元素都设置为零</li>
+<li><code>short things[]=&#123;1,5,3,8&#125;</code>//编译器将使things数组包含4个元素</li>
+<li><code>unsigned int couts[10]=&#123;&#125;</code>//若不在大括号内包含任何东西，编译器将把所有元素都设置为零</li>
 </ul>
 <hr>
 <h1 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h1><h2 id="1-字符串的创建"><a href="#1-字符串的创建" class="headerlink" title="1.字符串的创建"></a>1.字符串的创建</h2><ul>
@@ -406,7 +410,10 @@
 <p><img src="/2022/11/04/C++%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221108194822412.png" alt="image-20221108194822412"></p>
 </li>
 <li><p>使用string类创建字符串</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">string name=<span class="string">&quot;ssyttmsl&quot;</span>;</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">string name=<span class="string">&quot;ssyttmsl&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+
+</li>
 </ul>
 <h2 id="2-字符串的输入"><a href="#2-字符串的输入" class="headerlink" title="2.字符串的输入"></a>2.字符串的输入</h2><ul>
 <li><p><code>cin.getline(variable,size)</code></p>
@@ -451,8 +458,8 @@
 </li>
 <li><p>对于<strong>C风格</strong>的字符串</p>
 <ul>
-<li>赋值：<code>strcpy(charr1,charr2)</code>&#x2F;&#x2F;将字符串数组charr2赋给charr1</li>
-<li>附加：<code>strcat(charr1,charr2)</code>&#x2F;&#x2F;将字符串数组charr2添加到charr1的末尾</li>
+<li>赋值：<code>strcpy(charr1,charr2)</code>//将字符串数组charr2赋给charr1</li>
+<li>附加：<code>strcat(charr1,charr2)</code>//将字符串数组charr2添加到charr1的末尾</li>
 </ul>
 </li>
 </ul>
@@ -612,8 +619,8 @@
       <i class="fa fa-chevron-left"></i> VLSI基础之易错易忘知识点
     </a></div>
       <div class="post-nav-item">
-    <a href="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="next" title="TensorFlow实践之卷积神经网路">
-      TensorFlow实践之卷积神经网路 <i class="fa fa-chevron-right"></i>
+    <a href="/2022/11/07/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/" rel="next" title="深度学习基础之特征工程">
+      深度学习基础之特征工程 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -689,7 +696,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-count">49</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

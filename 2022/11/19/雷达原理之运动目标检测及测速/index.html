@@ -295,21 +295,21 @@
 <h3 id="1-1-连续波雷达"><a href="#1-1-连续波雷达" class="headerlink" title="1.1 连续波雷达"></a>1.1 连续波雷达</h3><ul>
 <li><p><strong>对于连续波雷达而言，收发天线是无法共用的</strong></p>
 </li>
-<li><p><strong>发射信号</strong>：$S_t(t)&#x3D;Acos(w_0t+\phi)$</p>
+<li><p><strong>发射信号</strong>：$S_t(t)=Acos(w_0t+\phi)$</p>
 </li>
-<li><p><strong>回波信号</strong>：$S_r(t)&#x3D;kAcos(w_0(t-\frac{2(R_0-v_rt)}{C}+\phi)$</p>
+<li><p><strong>回波信号</strong>：$S_r(t)=kAcos(w_0(t-\frac{2(R_0-v_rt)}{C}+\phi)$</p>
 </li>
-<li><p>由于接收信号的频率为：$f_r&#x3D;f_d+\frac{2v_t}{\lambda}$，带入$S_r(t)$，得到：<br>$$<br>S_r(t)&#x3D;kAcos(2\pi f_0t+2\pi f_dt+\phi-\phi_0)<br>$$</p>
-<p>$$<br>其中,\phi_0&#x3D;\frac{4\pi R_0}{\lambda}<br>$$</p>
+<li><p>由于接收信号的频率为：$f_r=f_d+\frac{2v_t}{\lambda}$，带入$S_r(t)$，得到：<br>$$<br>S_r(t)=kAcos(2\pi f_0t+2\pi f_dt+\phi-\phi_0)<br>$$</p>
+<p>$$<br>其中,\phi_0=\frac{4\pi R_0}{\lambda}<br>$$</p>
 </li>
 </ul>
 <h3 id="1-2-脉冲雷达"><a href="#1-2-脉冲雷达" class="headerlink" title="1.2 脉冲雷达"></a>1.2 脉冲雷达</h3><ul>
-<li><p><strong>发射信号</strong>：<br>$$<br>S_t(t)&#x3D;\sum_{n}Arect(t-nT_r,\tau)cos(w_0t+\phi)<br>$$</p>
+<li><p><strong>发射信号</strong>：<br>$$<br>S_t(t)=\sum_{n}Arect(t-nT_r,\tau)cos(w_0t+\phi)<br>$$</p>
 <img src="/2022/11/19/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E8%BF%90%E5%8A%A8%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E5%8F%8A%E6%B5%8B%E9%80%9F/image-20221118213120922.png" alt="image-20221118213120922" style="zoom:50%;">
 
 <img src="/2022/11/19/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E8%BF%90%E5%8A%A8%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E5%8F%8A%E6%B5%8B%E9%80%9F/image-20221118213223236.png" alt="image-20221118213223236" style="zoom:50%;">
 </li>
-<li><p><strong>回波信号</strong>：<br>$$<br>S_r(t)&#x3D;\sum_nkArect(t-t_r-nT_r,\tau)cos(2\pi f_0t+2\pi f_dt+\phi-\phi_0)<br>$$</p>
+<li><p><strong>回波信号</strong>：<br>$$<br>S_r(t)=\sum_nkArect(t-t_r-nT_r,\tau)cos(2\pi f_0t+2\pi f_dt+\phi-\phi_0)<br>$$</p>
 </li>
 </ul>
 <h2 id="2-多普勒信息的提取"><a href="#2-多普勒信息的提取" class="headerlink" title="2.多普勒信息的提取"></a>2.多普勒信息的提取</h2><h3 id="2-1-连续波雷达"><a href="#2-1-连续波雷达" class="headerlink" title="2.1 连续波雷达"></a>2.1 连续波雷达</h3><ul>
@@ -319,13 +319,13 @@
 </li>
 </ul>
 <h3 id="2-2-脉冲雷达"><a href="#2-2-脉冲雷达" class="headerlink" title="2.2 脉冲雷达"></a>2.2 脉冲雷达</h3><ul>
-<li><p>$\because$雷达接收信号为：$S_r(t)&#x3D;\sum_nkArect(t-t_r-nT_r,\tau)cos(2\pi f_0t+2\pi f_dt+\phi-\phi_0)$</p>
+<li><p>$\because$雷达接收信号为：$S_r(t)=\sum_nkArect(t-t_r-nT_r,\tau)cos(2\pi f_0t+2\pi f_dt+\phi-\phi_0)$</p>
 </li>
-<li><p>将脉冲雷达接收信号与连续波信号$S_t(t)&#x3D;Acos(w_0t+\phi)$进行混频，得到：<br>$$<br>u_r\sum_nrect(t-t_r-nT_r,\tau)cos(w_dt-\phi_0)<br>$$</p>
+<li><p>将脉冲雷达接收信号与连续波信号$S_t(t)=Acos(w_0t+\phi)$进行混频，得到：<br>$$<br>u_r\sum_nrect(t-t_r-nT_r,\tau)cos(w_dt-\phi_0)<br>$$</p>
 </li>
-<li><p>则对于固定目标，$w_d&#x3D;0$，输出结果为等幅脉冲序列</p>
+<li><p>则对于固定目标，$w_d=0$，输出结果为等幅脉冲序列</p>
 </li>
-<li><p>对于运动目标，$w_d\neq0$，$f_d$相对于$f_r&#x3D;\frac1{T_r}$比较小，则整个表达式可以看作式连续波充当了周期脉冲的包络，也就是回波脉冲的包括调制频率即多普勒频率</p>
+<li><p>对于运动目标，$w_d\neq0$，$f_d$相对于$f_r=\frac1{T_r}$比较小，则整个表达式可以看作式连续波充当了周期脉冲的包络，也就是回波脉冲的包括调制频率即多普勒频率</p>
 </li>
 </ul>
 <img src="/2022/11/19/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E8%BF%90%E5%8A%A8%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E5%8F%8A%E6%B5%8B%E9%80%9F/image-20221118215325448.png" alt="image-20221118215325448" style="zoom: 50%;">
@@ -339,12 +339,12 @@
 <h3 id="3-1-盲速"><a href="#3-1-盲速" class="headerlink" title="3.1 盲速"></a>3.1 盲速</h3><img src="/2022/11/19/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E8%BF%90%E5%8A%A8%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E5%8F%8A%E6%B5%8B%E9%80%9F/image-20221118220940245.png" alt="image-20221118220940245" style="zoom:50%;">
 
 <ul>
-<li>当$f_d&#x3D;kf_r,k&#x3D;\pm1,\pm2,\cdots$时，就会出现盲速</li>
-<li>当$k&#x3D;1$，即$f_d&#x3D;f_r&#x3D;\frac{2v_r}{\lambda} \Rightarrow 第一盲速v_r&#x3D;\frac{f_d\lambda}{2}$</li>
+<li>当$f_d=kf_r,k=\pm1,\pm2,\cdots$时，就会出现盲速</li>
+<li>当$k=1$，即$f_d=f_r=\frac{2v_r}{\lambda} \Rightarrow 第一盲速v_r=\frac{f_d\lambda}{2}$</li>
 <li>当存在盲速时，就需要采取相应的方法消除盲速。所说的消除盲速，并不是指完全将盲速消除，而是增大第一盲速，只要目标速度小于第一盲速，就不会出现盲速</li>
 </ul>
 <h3 id="3-2-频闪"><a href="#3-2-频闪" class="headerlink" title="3.2 频闪"></a>3.2 频闪</h3><ul>
-<li><p>当$f_{d1}&#x3D;nf_r±f_{d2}$时，就会出现频闪现象，直观来讲就是脉冲包络存在多种拟合方式</p>
+<li><p>当$f_{d1}=nf_r±f_{d2}$时，就会出现频闪现象，直观来讲就是脉冲包络存在多种拟合方式</p>
 <img src="/2022/11/19/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E8%BF%90%E5%8A%A8%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E5%8F%8A%E6%B5%8B%E9%80%9F/image-20221118221553372.png" alt="image-20221118221553372" style="zoom:50%;">
 </li>
 <li><p>避免频闪需要满足的条件：<br>$$<br>|f_d|&lt;\frac12f_r<br>$$</p>
@@ -373,33 +373,34 @@
 <li><p>一次相消器：</p>
 <img src="/2022/11/19/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E8%BF%90%E5%8A%A8%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E5%8F%8A%E6%B5%8B%E9%80%9F/image-20221118225220159.png" alt="image-20221118225220159" style="zoom:50%;">
 </li>
-<li><p>对于固定目标的回波，脉冲多普勒雷达经过相位检波之后的输出为一串等幅脉冲，脉冲间隔为$T_r$。如果脉冲序列足够长，将其迟延$T_r$之后得到的脉冲序列，和原来的脉冲序列将会重合到一起，将两个相减输出$Δu&#x3D;0$</p>
+<li><p>对于固定目标的回波，脉冲多普勒雷达经过相位检波之后的输出为一串等幅脉冲，脉冲间隔为$T_r$。如果脉冲序列足够长，将其迟延$T_r$之后得到的脉冲序列，和原来的脉冲序列将会重合到一起，将两个相减输出$Δu=0$</p>
 </li>
 <li><p>对于运动目标，除开盲速的情况，输出$Δu≠0$</p>
 </li>
-<li><p>有：$u_o&#x3D;u_i-u_ie^{-jwT_r}$</p>
+<li><p>有：$u_o=u_i-u_ie^{-jwT_r}$</p>
 </li>
-<li><p>其传递响应函数为：<br>$$<br>H(jw)&#x3D;\frac{u_o}{u_i}&#x3D;1-e^{-jwT_r}&#x3D;1-cos(wT_r)+jsin(wT_r)&#x3D;2sin(\pi fT_r)e^{j(\pi&#x2F;2-\pi fT_r)}<br>$$</p>
+<li><p>其传递响应函数为：<br>$$<br>H(jw)=\frac{u_o}{u_i}=1-e^{-jwT_r}=1-cos(wT_r)+jsin(wT_r)=2sin(\pi fT_r)e^{j(\pi/2-\pi fT_r)}<br>$$</p>
 <ul>
-<li>其幅频特性为：<br>$$<br>|H(jw)|&#x3D;|2sin(\pi fT_r)|<br>$$<img src="/2022/11/19/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E8%BF%90%E5%8A%A8%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E5%8F%8A%E6%B5%8B%E9%80%9F/image-20221118225745213.png" alt="image-20221118225745213" style="zoom:50%;"></li>
+<li>其幅频特性为：<br>$$<br>|H(jw)|=|2sin(\pi fT_r)|<br>$$<img src="/2022/11/19/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E8%BF%90%E5%8A%A8%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E5%8F%8A%E6%B5%8B%E9%80%9F/image-20221118225745213.png" alt="image-20221118225745213" style="zoom:50%;">
+</li>
 </ul>
 </li>
-<li><p>从幅频特性角度来看，$|H(jω)|$就是一个滤波器，相当于将$f_d&#x3D;0$的固定目标，及以盲速运动的目标就全部过滤掉了</p>
+<li><p>从幅频特性角度来看，$|H(jω)|$就是一个滤波器，相当于将$f_d=0$的固定目标，及以盲速运动的目标就全部过滤掉了</p>
 </li>
 </ul>
 <hr>
 <h1 id="盲速、盲相的影响及其解决途径"><a href="#盲速、盲相的影响及其解决途径" class="headerlink" title="盲速、盲相的影响及其解决途径"></a>盲速、盲相的影响及其解决途径</h1><h2 id="1-盲速"><a href="#1-盲速" class="headerlink" title="1.盲速"></a>1.盲速</h2><ul>
 <li><p>盲速是指目标实际上有运动速度，但对于雷达来说经过相检之后的输出和固定目标相检之后的输出都是等幅的脉冲串，导致无法区分</p>
 </li>
-<li><p>当目标的多普勒频率满足：$f_d&#x3D;nf_r,n&#x3D;\pm1,\pm2,\cdots$时就会产生盲速</p>
+<li><p>当目标的多普勒频率满足：$f_d=nf_r,n=\pm1,\pm2,\cdots$时就会产生盲速</p>
 </li>
-<li><p>第一盲速$v_r&#x3D;\frac{\lambda f_r}2$</p>
+<li><p>第一盲速$v_r=\frac{\lambda f_r}2$</p>
 </li>
 <li><p>要想不出现盲速，并不是要彻底消除盲速问题，是要想办法将第一盲速的值扩大</p>
 </li>
 <li><p>从公式可知，只要增大$f_r$就可以增大$v_r$，但是，$f_r$增大，$T_r$就减小，就与无模糊距离矛盾了，即增大$f_r$虽然使第一盲速增大了，但是最大无模糊距离就减小了</p>
 </li>
-<li><p>可以采用<strong>重频参差</strong>的方法扩大第一盲速，对于两重频，有：<br>$$<br>f_d&#x3D;n\times(f_{r1}与f_{r2}的最小公倍数)<br>$$</p>
+<li><p>可以采用<strong>重频参差</strong>的方法扩大第一盲速，对于两重频，有：<br>$$<br>f_d=n\times(f_{r1}与f_{r2}的最小公倍数)<br>$$</p>
 </li>
 </ul>
 <h2 id="2-盲相"><a href="#2-盲相" class="headerlink" title="2.盲相"></a>2.盲相</h2><img src="/2022/11/19/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E8%BF%90%E5%8A%A8%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E5%8F%8A%E6%B5%8B%E9%80%9F/image-20221119121743435.png" alt="image-20221119121743435" style="zoom:50%;">
@@ -413,36 +414,38 @@
 <ul>
 <li><p>不通过相位检波器，直接将中频输出结果进行对消</p>
 </li>
-<li><p>中频输出$u_{r1}$：<br>$$<br>u_{r1}&#x3D;u_rcos[(w_i+w_d)t+\phi’]<br>$$</p>
+<li><p>中频输出$u_{r1}$：<br>$$<br>u_{r1}=u_rcos[(w_i+w_d)t+\phi’]<br>$$</p>
 <ul>
 <li>$w_i$为中频角频率，只写出了连续波信号部分，实际上这里应该是以连续波为包络的一个个脉冲串</li>
 </ul>
 </li>
-<li><p>将$u_{r1}$延迟$T_r$后得到：<br>$$<br>u_{r2}&#x3D;u_rcos[(w_i+w_d)(t-T_r)+\phi_0’]<br>$$</p>
+<li><p>将$u_{r1}$延迟$T_r$后得到：<br>$$<br>u_{r2}=u_rcos[(w_i+w_d)(t-T_r)+\phi_0’]<br>$$</p>
 </li>
-<li><p>将$u_{r1}$和$u_{r2}$进行对消之后得到：<br>$$<br>\Delta u&#x3D; u_{r1}-u_{r2}&#x3D;-2u_rsin(\pi f_iT_r+\pi f_dT_r)sin((w_i+w_d)t+\phi)<br>$$</p>
+<li><p>将$u_{r1}$和$u_{r2}$进行对消之后得到：<br>$$<br>\Delta u= u_{r1}-u_{r2}=-2u_rsin(\pi f_iT_r+\pi f_dT_r)sin((w_i+w_d)t+\phi)<br>$$</p>
 </li>
-<li><p>对消的目的就是将固定目标回波相除，即在$f_d&#x3D;0$时，使对消器输出$\Delta u&#x3D;0$</p>
+<li><p>对消的目的就是将固定目标回波相除，即在$f_d=0$时，使对消器输出$\Delta u=0$</p>
 </li>
-<li><p>对于固定目标而言$f_d&#x3D;0$，想要在中频进行对消（即消除固定目标回波），$f_i$就不能随便选，需要满足如下条件：<br>$$<br>f_i&#x3D;nf_r<br>$$</p>
+<li><p>对于固定目标而言$f_d=0$，想要在中频进行对消（即消除固定目标回波），$f_i$就不能随便选，需要满足如下条件：<br>$$<br>f_i=nf_r<br>$$</p>
 </li>
 </ul>
 </li>
 <li><p>此外，还可以通过零中频的方式解决盲相，其思路是： $I，Q$双通道处理，正交双通道由两路相同的支路组成，差别只是其基准的相参电压相位差 90°，这两路分别称为同相支路（ I 支路）和正交支路（ Q 支路）。</p>
-<img src="/2022/11/19/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E8%BF%90%E5%8A%A8%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E5%8F%8A%E6%B5%8B%E9%80%9F/image-20221119132351768.png" alt="image-20221119132351768" style="zoom:50%;"></li>
+<img src="/2022/11/19/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E8%BF%90%E5%8A%A8%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E5%8F%8A%E6%B5%8B%E9%80%9F/image-20221119132351768.png" alt="image-20221119132351768" style="zoom:50%;">
+
+</li>
 </ul>
 <hr>
 <h1 id="回波和杂波的频谱及动目标显示器"><a href="#回波和杂波的频谱及动目标显示器" class="headerlink" title="回波和杂波的频谱及动目标显示器"></a>回波和杂波的频谱及动目标显示器</h1><ul>
 <li>运动目标检测的任务就是根据运动目标回波和杂波在频谱结构上的差别，从频率上将它们区分，以达到抑制固定杂波而显示运动目标回波的目的</li>
 </ul>
 <h2 id="1-雷达回波信号的频谱"><a href="#1-雷达回波信号的频谱" class="headerlink" title="1.雷达回波信号的频谱"></a>1.雷达回波信号的频谱</h2><ul>
-<li><p>雷达回波：<br>$$<br>u_r(t)&#x3D;ku_t(t-t_r)<br>$$</p>
+<li><p>雷达回波：<br>$$<br>u_r(t)=ku_t(t-t_r)<br>$$</p>
 </li>
-<li><p>回波频谱：<br>$$<br>U_r(f)&#x3D;kU_t(f)e^{-jwt_r}<br>$$</p>
+<li><p>回波频谱：<br>$$<br>U_r(f)=kU_t(f)e^{-jwt_r}<br>$$</p>
 </li>
 <li><p>接收信号的幅频特性和发射信号的幅频特性基本相同，只是优于回波多了一个$k$导致其幅频特性的高低有差别。如果目标运动，接收信号和发射信号的载频就相差一个多普勒频率$f_d$。所以，只要将发射信号的频谱分析清楚就能得到接收信号的频谱</p>
 </li>
-<li><p>雷达发射相参脉冲串，其脉冲宽度为$τ$，脉冲重复频率为$f_r$。当天线不扫描而对准目标时，所得脉冲为无限脉冲串。此时，雷达发射信号为：<br>$$<br>u(t)&#x3D;E\sum_{-\infty}^{\infty}rect(t-nT_r,\tau)cos(w_0t+\phi_0)<br>$$<br>其中：</p>
+<li><p>雷达发射相参脉冲串，其脉冲宽度为$τ$，脉冲重复频率为$f_r$。当天线不扫描而对准目标时，所得脉冲为无限脉冲串。此时，雷达发射信号为：<br>$$<br>u(t)=E\sum_{-\infty}^{\infty}rect(t-nT_r,\tau)cos(w_0t+\phi_0)<br>$$<br>其中：</p>
 <img src="/2022/11/19/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E8%BF%90%E5%8A%A8%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E5%8F%8A%E6%B5%8B%E9%80%9F/image-20221119140455218.png" alt="image-20221119140455218" style="zoom:50%;">
 
 <img src="/2022/11/19/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E8%BF%90%E5%8A%A8%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E5%8F%8A%E6%B5%8B%E9%80%9F/image-20221119140536598.png" alt="image-20221119140536598" style="zoom:50%;">
@@ -456,22 +459,24 @@
 <li><p>最后，将$rect$项乘以$cos$项，相当于将上述频谱往左右搬移，得到：</p>
 <img src="/2022/11/19/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E8%BF%90%E5%8A%A8%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E5%8F%8A%E6%B5%8B%E9%80%9F/image-20221119141109877.png" alt="image-20221119141109877" style="zoom:50%;">
 </li>
-<li><p>雷达工作时，天线总是以各种方式进行扫描。这时收到的回波脉冲为有限数，且其振幅受天线方向图调制。雷达实际的接收信号可表示为：<br>$$<br>u_m(t)&#x3D;m(t)u_r(t)<br>$$</p>
+<li><p>雷达工作时，天线总是以各种方式进行扫描。这时收到的回波脉冲为有限数，且其振幅受天线方向图调制。雷达实际的接收信号可表示为：<br>$$<br>u_m(t)=m(t)u_r(t)<br>$$</p>
 <ul>
 <li><p>其中，$m(t)$为天线的扫描函数，实际就是一个高斯函数，图形如下所示。注意，天线方向图是角度$θ$的函数，扫描的过程就是$θ$随$t$线性变化的过程</p>
-<img src="/2022/11/19/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E8%BF%90%E5%8A%A8%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E5%8F%8A%E6%B5%8B%E9%80%9F/image-20221119141418160.png" alt="image-20221119141418160" style="zoom:50%;"></li>
+<img src="/2022/11/19/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E8%BF%90%E5%8A%A8%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E5%8F%8A%E6%B5%8B%E9%80%9F/image-20221119141418160.png" alt="image-20221119141418160" style="zoom:50%;">
+</li>
 </ul>
 </li>
-<li><p>则回波信号$u_m(t)$的频谱：<br>$$<br>U_m(f)&#x3D;M(f)\ast U_r(f)<br>$$</p>
+<li><p>则回波信号$u_m(t)$的频谱：<br>$$<br>U_m(f)=M(f)\ast U_r(f)<br>$$</p>
 <ul>
 <li><p>其中：$\ast$表示卷积</p>
 </li>
-<li><p>天线的扫描函数$m(t)$的频谱为：$M(f)&#x3D;e^{-\frac{f^2}{2\sigma^2}}$</p>
+<li><p>天线的扫描函数$m(t)$的频谱为：$M(f)=e^{-\frac{f^2}{2\sigma^2}}$</p>
 <ul>
-<li><p>$\sigma&#x3D;\frac{0.256f_r}{n}$</p>
+<li><p>$\sigma=\frac{0.256f_r}{n}$</p>
 </li>
 <li><p>$n$表示在天线扫描期间接收到的回波脉冲个数</p>
-<img src="/2022/11/19/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E8%BF%90%E5%8A%A8%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E5%8F%8A%E6%B5%8B%E9%80%9F/image-20221119142211969.png" alt="image-20221119142211969" style="zoom:50%;"></li>
+<img src="/2022/11/19/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E8%BF%90%E5%8A%A8%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E5%8F%8A%E6%B5%8B%E9%80%9F/image-20221119142211969.png" alt="image-20221119142211969" style="zoom:50%;">
+</li>
 </ul>
 </li>
 </ul>
@@ -491,7 +496,7 @@
 <li><p>实际在处理的时候，通过得到$e^{jω_0t}$这样的信号从而消除虚线部分，可以利用$I,Q$双路处理。一路$cos(ω_0t)$表示信号的实部，另外一路$sin(ω_0t)$表示信号的虚部，就可以得到$e^{jω_0t}$。再进行相干检波出来的结果，就只有$nf_r+f_d$</p>
 </li>
 </ul>
-<h2 id="2-杂波的频谱"><a href="#2-杂波的频谱" class="headerlink" title="2.杂波的频谱"></a>2.杂波的频谱</h2><p>$$<br>G(f)&#x3D;G_0e^{-\frac{f^2}{2\sigma}}<br>$$</p>
+<h2 id="2-杂波的频谱"><a href="#2-杂波的频谱" class="headerlink" title="2.杂波的频谱"></a>2.杂波的频谱</h2><p>$$<br>G(f)=G_0e^{-\frac{f^2}{2\sigma}}<br>$$</p>
 <h2 id="3-动目标显示滤波器"><a href="#3-动目标显示滤波器" class="headerlink" title="3.动目标显示滤波器"></a>3.动目标显示滤波器</h2><ul>
 <li><p>动目标显示滤波器利用运动目标回波和杂波在频谱上的区别，可有效地抑制杂波而提取信号</p>
 <img src="/2022/11/19/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E8%BF%90%E5%8A%A8%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E5%8F%8A%E6%B5%8B%E9%80%9F/image-20221119145106810.png" alt="image-20221119145106810" style="zoom:50%;">
@@ -508,7 +513,7 @@
 <h2 id="1-动目标检测的特点"><a href="#1-动目标检测的特点" class="headerlink" title="1.动目标检测的特点"></a>1.动目标检测的特点</h2><ul>
 <li><p>动态范围更大</p>
 </li>
-<li><p>改善因子提高<br>$$<br>I&#x3D;\frac{s_0&#x2F;c_0}{s_i&#x2F;c_i}<br>$$</p>
+<li><p>改善因子提高<br>$$<br>I=\frac{s_0/c_0}{s_i/c_i}<br>$$</p>
 <ul>
 <li>需要和噪声系数的定义区别开，噪声系数的定义是输入的信噪比与输出的信噪比的比值</li>
 <li>改善因子的定义是，输出信杂比与输入信杂比的比值</li>
@@ -537,8 +542,8 @@
 </li>
 <li><p>其输入就是相位检波之后的输出信号</p>
 </li>
-<li><p>横向滤波器的总输出:<br>$$<br>X(k)&#x3D;\sum_{n&#x3D;0}^{N-1}X(n)e^{-j2\pi n\frac kN}<br>$$</p>
-<p>$$<br>其中,k&#x3D;0,1,\cdots ,N-1(N为X(n)中的脉冲个数)<br>$$</p>
+<li><p>横向滤波器的总输出:<br>$$<br>X(k)=\sum_{n=0}^{N-1}X(n)e^{-j2\pi n\frac kN}<br>$$</p>
+<p>$$<br>其中,k=0,1,\cdots ,N-1(N为X(n)中的脉冲个数)<br>$$</p>
 </li>
 <li><p>每一个值实际上对应的是一个频率，$0$对应的频率是$\frac0Nf_r$，$1$对应的频率是$\frac1Nf_r$，$2$对应的频率是$\frac2Nf_r$以此类推。</p>
 </li>
@@ -680,7 +685,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-count">49</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -921,6 +926,7 @@ document.querySelectorAll('.pdfobject-container').forEach(element => {
   if (typeof MathJax === 'undefined') {
     window.MathJax = {
       loader: {
+          load: ['[tex]/mhchem'],
         source: {
           '[tex]/amsCd': '[tex]/amscd',
           '[tex]/AMScd': '[tex]/amscd'
@@ -928,6 +934,7 @@ document.querySelectorAll('.pdfobject-container').forEach(element => {
       },
       tex: {
         inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
         tags: 'ams'
       },
       options: {

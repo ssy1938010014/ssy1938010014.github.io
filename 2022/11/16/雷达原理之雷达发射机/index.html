@@ -288,17 +288,21 @@
 <h1 id="频率调制"><a href="#频率调制" class="headerlink" title="频率调制"></a>频率调制</h1><h2 id="1-线性调频（LFM）"><a href="#1-线性调频（LFM）" class="headerlink" title="1.线性调频（LFM）"></a>1.线性调频（LFM）</h2><ul>
 <li><p>在信号脉宽内，频率随时间线性增加或减少</p>
 </li>
-<li><p>线性调频信号：$S_t(t)&#x3D;Acos(2\pi f_0t+\pi\mu t^2+\phi)$</p>
+<li><p>线性调频信号：$S_t(t)=Acos(2\pi f_0t+\pi\mu t^2+\phi)$</p>
 </li>
 <li><p>时域波形：</p>
 <img src="/2022/11/16/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA/image-20221116122426205.png" alt="image-20221116122426205" style="zoom: 50%;">
 </li>
 <li><p>频域波形：</p>
-<img src="/2022/11/16/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA/image-20221116122512747.png" alt="image-20221116122512747" style="zoom:50%;"></li>
+<img src="/2022/11/16/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA/image-20221116122512747.png" alt="image-20221116122512747" style="zoom:50%;">
+
+</li>
 </ul>
 <h2 id="2-频率捷变"><a href="#2-频率捷变" class="headerlink" title="2.频率捷变"></a>2.频率捷变</h2><ul>
 <li><p>每一个脉冲的频率不同，是一种有效的抗干扰手段</p>
-<img src="/2022/11/16/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA/image-20221116122709279.png" alt="image-20221116122709279" style="zoom:50%;"></li>
+<img src="/2022/11/16/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA/image-20221116122709279.png" alt="image-20221116122709279" style="zoom:50%;">
+
+</li>
 </ul>
 <hr>
 <h1 id="相位调制"><a href="#相位调制" class="headerlink" title="相位调制"></a>相位调制</h1><h2 id="1-随机相位"><a href="#1-随机相位" class="headerlink" title="1.随机相位"></a>1.随机相位</h2><ul>
@@ -316,7 +320,9 @@
 <li><p>因为脉冲调制器直接控制振荡器的工作，每个射频脉冲的起始射频相位是由振荡器的噪声决定的，相继脉冲的射频相位是随机的，不能根据一个周期内的确定时刻，确定下一周期内相同位置的幅度信息，这样的信号<strong>相位是不相参的。</strong></p>
 </li>
 <li><p>其组成如下：</p>
-<img src="/2022/11/16/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA/image-20221116123217773.png" alt="image-20221116123217773" style="zoom: 33%;"></li>
+<img src="/2022/11/16/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA/image-20221116123217773.png" alt="image-20221116123217773" style="zoom: 33%;">
+
+</li>
 </ul>
 <hr>
 <h1 id="主振放大式发射机"><a href="#主振放大式发射机" class="headerlink" title="主振放大式发射机"></a>主振放大式发射机</h1><ul>
@@ -325,7 +331,9 @@
 <li><p>发射机的发射信号$f_0$，稳定本振电压$f_L$，相参振荡电压$f_c$，定时器触发脉冲$f_r$，均是由基准信号F产生的，他们之间具有相位相参性</p>
 </li>
 <li><p>其组成如下：</p>
-<img src="/2022/11/16/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA/image-20221116124123261.png" alt="image-20221116124123261" style="zoom:50%;"></li>
+<img src="/2022/11/16/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA/image-20221116124123261.png" alt="image-20221116124123261" style="zoom:50%;">
+
+</li>
 </ul>
 <hr>
 <h1 id="雷达发射机的主要质量指标"><a href="#雷达发射机的主要质量指标" class="headerlink" title="雷达发射机的主要质量指标"></a>雷达发射机的主要质量指标</h1><h2 id="1-工作频率"><a href="#1-工作频率" class="headerlink" title="1.工作频率"></a>1.工作频率</h2><ul>
@@ -338,8 +346,8 @@
 <li>平均功率$P_{av}$：$T_r$内的输出平均功率</li>
 <li>峰值功率$P_t$：$\tau$内的输出平均功率</li>
 </ul>
-<p>$$<br>P_{av}&#x3D;P_t\times\frac{\tau}{T_r}&#x3D;P_tD<br>\其中，D为工作比<br>$$</p>
-<h2 id="3-总效率"><a href="#3-总效率" class="headerlink" title="3.总效率"></a>3.总效率</h2><p>$$<br>\eta&#x3D;\frac{P_{av}}{P_s}<br>\其中，P_s发射机发射的总功率<br>$$</p>
+<p>$$<br>P_{av}=P_t\times\frac{\tau}{T_r}=P_tD<br>\\其中，D为工作比<br>$$</p>
+<h2 id="3-总效率"><a href="#3-总效率" class="headerlink" title="3.总效率"></a>3.总效率</h2><p>$$<br>\eta=\frac{P_{av}}{P_s}<br>\\其中，P_s发射机发射的总功率<br>$$</p>
 <hr>
 <h1 id="脉冲调制器"><a href="#脉冲调制器" class="headerlink" title="脉冲调制器"></a>脉冲调制器</h1><ul>
 <li><p>脉冲调制器的任务是给发射机的射频各级提供合适的视频调制脉冲</p>
@@ -487,7 +495,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-count">49</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -728,6 +736,7 @@ document.querySelectorAll('.pdfobject-container').forEach(element => {
   if (typeof MathJax === 'undefined') {
     window.MathJax = {
       loader: {
+          load: ['[tex]/mhchem'],
         source: {
           '[tex]/amsCd': '[tex]/amscd',
           '[tex]/AMScd': '[tex]/amscd'
@@ -735,6 +744,7 @@ document.querySelectorAll('.pdfobject-container').forEach(element => {
       },
       tex: {
         inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
         tags: 'ams'
       },
       options: {

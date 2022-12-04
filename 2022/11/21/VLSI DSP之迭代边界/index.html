@@ -301,7 +301,7 @@
 <img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121110000319.png" alt="image-20221121110000319" style="zoom: 67%;">
 
 <ul>
-<li><p>将其推广到N阶FIR，则：<br>$$<br>T_{critical}&#x3D;T_M+(N-1)T_A<br>$$</p>
+<li><p>将其推广到N阶FIR，则：<br>$$<br>T_{critical}=T_M+(N-1)T_A<br>$$</p>
 <p>$$<br>其中,N为抽头系数<br>$$</p>
 </li>
 </ul>
@@ -341,13 +341,17 @@
 </ul>
 </li>
 <li><p>同步DFG表示：</p>
-<img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121150732638.png" alt="image-20221121150732638" style="zoom:33%;"></li>
+<img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121150732638.png" alt="image-20221121150732638" style="zoom:33%;">
+
+</li>
 </ul>
 <img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121150657618.png" alt="image-20221121150657618" style="zoom: 33%;">
 
 <h2 id="4-依赖图（Dependence-Graph）"><a href="#4-依赖图（Dependence-Graph）" class="headerlink" title="4.依赖图（Dependence Graph）"></a>4.依赖图（Dependence Graph）</h2><ul>
 <li><p>依赖图是一种有向图，表示算法计算间的依赖关系（脉动阵列常用）</p>
-<img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121151219068.png" alt="image-20221121151219068" style="zoom: 50%;"></li>
+<img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121151219068.png" alt="image-20221121151219068" style="zoom: 50%;">
+
+</li>
 </ul>
 <hr>
 <h1 id="迭代边界"><a href="#迭代边界" class="headerlink" title="迭代边界"></a>迭代边界</h1><h2 id="1-基本概念"><a href="#1-基本概念" class="headerlink" title="1.基本概念"></a>1.基本概念</h2><ul>
@@ -357,12 +361,12 @@
 </li>
 <li><p><strong>时钟周期</strong>$T_{clock}$：系统按拍工作的周期，由关键路径$T_c$决定</p>
 </li>
-<li><p><strong>系统时钟频率</strong>$f$：$f&#x3D;\frac1{T_{clock}}$</p>
+<li><p><strong>系统时钟频率</strong>$f$：$f=\frac1{T_{clock}}$</p>
 </li>
 <li><p><strong>环路</strong>：开始与结束于同一节点的有向路径</p>
 <img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121153445674.png" alt="image-20221121153445674" style="zoom:50%;">
 </li>
-<li><p><strong>环路边界</strong>：第L个环路的环路边界为：<br>$$<br>T_{LoopBond}&#x3D;\frac{T_L}{W_L}<br>$$</p>
+<li><p><strong>环路边界</strong>：第L个环路的环路边界为：<br>$$<br>T_{LoopBond}=\frac{T_L}{W_L}<br>$$</p>
 </li>
 </ul>
 <p>$$<br>其中,T_L是环路运行时间,W_L是环路中延迟数<br>$$</p>
@@ -372,7 +376,9 @@
 <li><p><strong>关键环路</strong>：具有最大环路边界的环路</p>
 </li>
 <li><p><strong>迭代边界</strong>：关键环路对应的环路边界值$T_{\infty}$</p>
-<img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121154307985.png" alt="image-20221121154307985" style="zoom:50%;"></li>
+<img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121154307985.png" alt="image-20221121154307985" style="zoom:50%;">
+
+</li>
 </ul>
 <h2 id="2-迭代边界的特点"><a href="#2-迭代边界的特点" class="headerlink" title="2.迭代边界的特点"></a>2.迭代边界的特点</h2><ul>
 <li>环路必须有延迟元件</li>
@@ -382,26 +388,28 @@
 <li>即使DSP系统无限提高计算能力，迭代周期$\ge$迭代边界</li>
 </ul>
 <h2 id="3-最长路径矩阵（LPM）求迭代边界"><a href="#3-最长路径矩阵（LPM）求迭代边界" class="headerlink" title="3.最长路径矩阵（LPM）求迭代边界"></a>3.最长路径矩阵（LPM）求迭代边界</h2><ul>
-<li><p>建立一系列矩阵$L^{(m)},m&#x3D;1,2,\cdots,d$，取每个矩阵对角线的非-1元素除以寄存器数目，最终求它们的最大值即为迭代边界</p>
+<li><p>建立一系列矩阵$L^{(m)},m=1,2,\cdots,d$，取每个矩阵对角线的非-1元素除以寄存器数目，最终求它们的最大值即为迭代边界</p>
 </li>
 <li><p>$L^{(m)}$中的m表示此矩阵都是包含m-1个延迟的，d为寄存器数</p>
 </li>
 <li><p>矩阵中元素下标$(i,j)$表示从寄存器$i$到寄存器$j$的包含$m-1$个延迟的最大运算时间</p>
 </li>
-<li><p>如果这样的路径不存在，那么$L_{i,j}^{(m)}&#x3D;-1$</p>
+<li><p>如果这样的路径不存在，那么$L_{i,j}^{(m)}=-1$</p>
 </li>
 <li><p>具体求解步骤：</p>
 <ul>
 <li><p>先计算$L^{(1)}$：</p>
 <img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121162232884.png" alt="image-20221121162232884" style="zoom: 67%;">
 </li>
-<li><p>通过如下公式求得其他延时下的矩阵：<br>$$<br>L_{i,j}^{(m+1)}&#x3D;max(-1,L_{i,k}^{(1)}+L_{k,j}^{(m)})<br>$$</p>
+<li><p>通过如下公式求得其他延时下的矩阵：<br>$$<br>L_{i,j}^{(m+1)}=max(-1,L_{i,k}^{(1)}+L_{k,j}^{(m)})<br>$$</p>
 <img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121162903924.png" alt="image-20221121162903924" style="zoom: 67%;">
 
 <p><img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121162957174.png" alt="image-20221121162957174"></p>
 </li>
 <li><p>则最终迭代边界为：</p>
-<img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121163042631.png" alt="image-20221121163042631" style="zoom:50%;"></li>
+<img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121163042631.png" alt="image-20221121163042631" style="zoom:50%;">
+
+</li>
 </ul>
 </li>
 </ul>
@@ -559,7 +567,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-count">49</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -800,6 +808,7 @@ document.querySelectorAll('.pdfobject-container').forEach(element => {
   if (typeof MathJax === 'undefined') {
     window.MathJax = {
       loader: {
+          load: ['[tex]/mhchem'],
         source: {
           '[tex]/amsCd': '[tex]/amscd',
           '[tex]/AMScd': '[tex]/amscd'
@@ -807,6 +816,7 @@ document.querySelectorAll('.pdfobject-container').forEach(element => {
       },
       tex: {
         inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
         tags: 'ams'
       },
       options: {

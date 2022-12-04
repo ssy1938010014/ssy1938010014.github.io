@@ -320,9 +320,7 @@ Epoch 4/5
 750/750 [==============================] - 21s 28ms/step - loss: 0.0919 - accuracy: 0.9717 - val_loss: 0.0836 - val_accuracy: 0.9755
 Epoch 5/5
 750/750 [==============================] - 21s 28ms/step - loss: 0.0759 - accuracy: 0.9766 - val_loss: 0.0788 - val_accuracy: 0.9761
-313/313 - 3s - loss: 0.0719 - accuracy: 0.9774
-</code></pre>
-<p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%85%B8%E5%9E%8B%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_4_1.png" alt="output_4_1"></p>
+313/313 - 3s - loss: 0.0719 - accuracy: 0.9774</code></pre><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%85%B8%E5%9E%8B%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_4_1.png" alt="output_4_1"></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#保存训练的模型参数</span></span><br><span class="line">model.save_weights(<span class="string">&quot;mnist_save_weights_LeNet.h5&quot;</span>)</span><br></pre></td></tr></table></figure>
 
 <hr>
@@ -352,7 +350,10 @@ Epoch 5/5
 <li>增加网络的泛化能力和表达能力</li>
 </ul>
 </li>
-<li>先训练级别A的简单网络，再复用A网络的权重初始化复杂模型<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%85%B8%E5%9E%8B%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107140620259.png" alt="image-20221107140620259" style="zoom: 33%;"></li>
+<li>先训练级别A的简单网络，再复用A网络的权重初始化复杂模型<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%85%B8%E5%9E%8B%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107140620259.png" alt="image-20221107140620259" style="zoom: 33%;">
+
+
+</li>
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#VGG16模型的建立</span></span><br><span class="line">model=tf.keras.Sequential()</span><br><span class="line"><span class="comment">#添加卷积层1-2、池化层</span></span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">64</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu,input_shape=(<span class="number">224</span>,<span class="number">244</span>,<span class="number">3</span>)))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">64</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line"><span class="comment">#添加卷积层3-4、池化层</span></span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">128</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">128</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line"><span class="comment">#添加卷积层5-7、池化层</span></span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">256</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">256</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">256</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line"><span class="comment">#添加卷积层8-10、池化层</span></span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">512</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">512</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">512</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line"><span class="comment">#添加卷积层11-13、池化层</span></span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">512</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">512</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">512</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line"><span class="comment">#添加Flatten层，将数据拉直</span></span><br><span class="line">model.add(tf.keras.layers.Flatten())</span><br><span class="line"><span class="comment">#全连接层1，Dropout层</span></span><br><span class="line">model.add(tf.keras.layers.Dense(<span class="number">4096</span>,activation=<span class="string">&quot;relu&quot;</span>))</span><br><span class="line">model.add(tf.keras.layers.Dropout(<span class="number">0.5</span>))</span><br><span class="line"><span class="comment">#全连接层2，Dropout层</span></span><br><span class="line">model.add(tf.keras.layers.Dense(<span class="number">4096</span>,activation=<span class="string">&quot;relu&quot;</span>))</span><br><span class="line">model.add(tf.keras.layers.Dropout(<span class="number">0.5</span>))</span><br><span class="line"><span class="comment">#全连接层3（输出层）</span></span><br><span class="line">model.add(tf.keras.layers.Dense(<span class="number">1000</span>,activation=<span class="string">&quot;softmax&quot;</span>))</span><br><span class="line">model.summary()</span><br></pre></td></tr></table></figure>
 <p>结果如下：</p>
@@ -411,13 +412,11 @@ dense_32 (Dense)             (None, 1000)              4097000
 Total params: 138,357,544
 Trainable params: 138,357,544
 Non-trainable params: 0
-_________________________________________________________________
-</code></pre>
-<hr>
+_________________________________________________________________</code></pre><hr>
 <h1 id="GoogLeNet神经网络"><a href="#GoogLeNet神经网络" class="headerlink" title="GoogLeNet神经网络"></a>GoogLeNet神经网络</h1><h2 id="1-Inception-Module的初代"><a href="#1-Inception-Module的初代" class="headerlink" title="1.Inception Module的初代"></a>1.Inception Module的初代</h2><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%85%B8%E5%9E%8B%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107140740258.png" alt="image-20221107140740258" style="zoom:50%;">
 
 <h2 id="2-1×1卷积核"><a href="#2-1×1卷积核" class="headerlink" title="2.1×1卷积核"></a>2.1×1卷积核</h2><ul>
-<li><p><strong>能够降维&#x2F;升维，跨通道信息交流</strong></p>
+<li><p><strong>能够降维/升维，跨通道信息交流</strong></p>
 <img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%85%B8%E5%9E%8B%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107140820217.png" alt="image-20221107140820217" style="zoom:50%;">
 </li>
 <li><p>个人对1×1，7与1×1×7，1的理解：前者表示有七个1×1的卷积核，其中每个卷积核都与图像去卷一卷，那么每个卷积核都会输出一个特征图，则一个会输出七个特征图；后者表示一个卷积核，这个卷积核的大小是1×1×7，可以理解为有七个通道，每个通道里都有1×1的一个小卷积核（也就是这7个所谓的小卷积核从不同维度共同组成一个整体的大卷积核，实际上还是只有一个卷积核），这7个小卷积核与前一层中7个对应通道的图像分别卷积，将其结果相加后，最终还是只会得到一个特征图。</p>
@@ -475,12 +474,12 @@ _________________________________________________________________
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="prev" title="TensorFlow实践之人工神经网路">
-      <i class="fa fa-chevron-left"></i> TensorFlow实践之人工神经网路
+    <a href="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="prev" title="TensorFlow实践之卷积神经网路">
+      <i class="fa fa-chevron-left"></i> TensorFlow实践之卷积神经网路
     </a></div>
       <div class="post-nav-item">
-    <a href="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" rel="next" title="MATLAB之基础知识">
-      MATLAB之基础知识 <i class="fa fa-chevron-right"></i>
+    <a href="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="next" title="TensorFlow实践之人工神经网路">
+      TensorFlow实践之人工神经网路 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -556,7 +555,7 @@ _________________________________________________________________
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-count">49</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

@@ -294,29 +294,30 @@
 <span id="more"></span>
 
 <h1 id="雷达方程"><a href="#雷达方程" class="headerlink" title="雷达方程"></a>雷达方程</h1><h2 id="1-基本雷达方程"><a href="#1-基本雷达方程" class="headerlink" title="1.基本雷达方程"></a>1.基本雷达方程</h2><ul>
-<li><p><strong>理想无损耗</strong>、<strong>自由空间传播</strong>的<strong>单基地</strong>雷达方程，且假设信号从天线方向图最大增益处发射、接收<br>$$<br>P_r&#x3D;\frac{P_tG_t}{4\pi R^2}\times\sigma\times\frac{A_r}{4\pi R^2}<br>$$</p>
+<li><p><strong>理想无损耗</strong>、<strong>自由空间传播</strong>的<strong>单基地</strong>雷达方程，且假设信号从天线方向图最大增益处发射、接收<br>$$<br>P_r=\frac{P_tG_t}{4\pi R^2}\times\sigma\times\frac{A_r}{4\pi R^2}<br>$$</p>
 </li>
-<li><p>收发不同天线：<br>$$<br>R_{max}&#x3D;[\frac{P_tG_tG_r\lambda^2\sigma}{(4\pi)^3S_{simin}}]^{1&#x2F;4}<br>$$</p>
+<li><p>收发不同天线：<br>$$<br>R_{max}=[\frac{P_tG_tG_r\lambda^2\sigma}{(4\pi)^3S_{simin}}]^{1/4}<br>$$</p>
 </li>
-<li><p>收发天线共用：<br>$$<br>R_{max}&#x3D;[\frac{P_tG_r^2\lambda^2\sigma}{(4\pi)^3S_{simin}}]^{1&#x2F;4}<br>$$</p>
+<li><p>收发天线共用：<br>$$<br>R_{max}=[\frac{P_tG_r^2\lambda^2\sigma}{(4\pi)^3S_{simin}}]^{1/4}<br>$$</p>
 </li>
 </ul>
 <h2 id="2-目标的雷达截面积"><a href="#2-目标的雷达截面积" class="headerlink" title="2.目标的雷达截面积"></a>2.目标的雷达截面积</h2><ul>
-<li><p><strong>定义</strong>：<br>$$<br>\sigma&#x3D;\frac{P_2}{S_1}<br>$$</p>
+<li><p><strong>定义</strong>：<br>$$<br>\sigma=\frac{P_2}{S_1}<br>$$</p>
 <ul>
 <li><p>其中，$P_2$为散射总功率，$S_1$为入射功率密度</p>
 </li>
-<li><p>$P_2&#x3D;4\pi\times返回接收机每单位立体角内的回波功率$</p>
-<img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117123419319.png" alt="image-20221117123419319" style="zoom: 33%;"></li>
+<li><p>$P_2=4\pi\times返回接收机每单位立体角内的回波功率$</p>
+<img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117123419319.png" alt="image-20221117123419319" style="zoom: 33%;">
+</li>
 </ul>
 </li>
 <li><p><strong>测量</strong>：</p>
 <ul>
-<li><p>标准截面积$\sigma_0$满足：<br>$$<br>P_{ro}&#x3D;k\frac{\sigma_0}{R_0^4}<br>$$</p>
+<li><p>标准截面积$\sigma_0$满足：<br>$$<br>P_{ro}=k\frac{\sigma_0}{R_0^4}<br>$$</p>
 </li>
-<li><p>若未知目标处于R处，测$P_r$：<br>$$<br>P_r&#x3D;k\frac{\sigma}{R_0^4}<br>$$</p>
+<li><p>若未知目标处于R处，测$P_r$：<br>$$<br>P_r=k\frac{\sigma}{R_0^4}<br>$$</p>
 </li>
-<li><p>将上式两式相比，可以得到$\sigma$：<br>$$<br>\sigma&#x3D;\frac{P_r}{P_{r0}}\cdot\frac{R^4}{R_0^4}\cdot\sigma_0<br>$$</p>
+<li><p>将上式两式相比，可以得到$\sigma$：<br>$$<br>\sigma=\frac{P_r}{P_{r0}}\cdot\frac{R^4}{R_0^4}\cdot\sigma_0<br>$$</p>
 </li>
 </ul>
 </li>
@@ -325,9 +326,9 @@
 <h1 id="最小可检测信号"><a href="#最小可检测信号" class="headerlink" title="最小可检测信号"></a>最小可检测信号</h1><h2 id="1-最小可检测信号与信噪比"><a href="#1-最小可检测信号与信噪比" class="headerlink" title="1.最小可检测信号与信噪比"></a>1.最小可检测信号与信噪比</h2><ul>
 <li><p>如果只有信号而没有噪声，任何微弱信号在理论上都可以经过任意放大之后被检测到，因此，雷达检测能力实际上取决于信号噪声比</p>
 </li>
-<li><p>$S_{imin}&#x3D;kT_0BFM$，其中M又称为检测因子$D_0$​。<strong>定义为接收机匹配滤波器输出端（检波器输入端）测量的信号噪声功率比</strong><br>$$<br>M&#x3D;(\frac{S}{N})_{omin}<br>$$</p>
+<li><p>$S_{imin}=kT_0BFM$，其中M又称为检测因子$D_0$​。<strong>定义为接收机匹配滤波器输出端（检波器输入端）测量的信号噪声功率比</strong><br>$$<br>M=(\frac{S}{N})_{omin}<br>$$</p>
 </li>
-<li><p>将$S_{imin}$带入雷达方程，得到：<br>$$<br>R_{max}&#x3D;[\frac{P_tG_tG_r\lambda^2\sigma}{(4\pi)^3kT_0BFD_0}]^{1&#x2F;4}<br>$$</p>
+<li><p>将$S_{imin}$带入雷达方程，得到：<br>$$<br>R_{max}=[\frac{P_tG_tG_r\lambda^2\sigma}{(4\pi)^3kT_0BFD_0}]^{1/4}<br>$$</p>
 </li>
 </ul>
 <h2 id="2-门限检测"><a href="#2-门限检测" class="headerlink" title="2.门限检测"></a>2.门限检测</h2><ul>
@@ -341,52 +342,54 @@
 <ul>
 <li>无目标时：<ul>
 <li>$V\ge V_T$：判断为有目标，此时称为虚警，则有虚警概率$P_{fa}$</li>
-<li>$V&lt;V_T$：判断为无目标，此时称为正确不发现，则有正确不发现概率$P_{an}&#x3D;1-P_a$</li>
+<li>$V&lt;V_T$：判断为无目标，此时称为正确不发现，则有正确不发现概率$P_{an}=1-P_a$</li>
 </ul>
 </li>
 <li>有目标时：<ul>
 <li>$V\ge V_T$：判断为有目标，此时称为正确发现，则有发现概率$P_{d}$</li>
-<li>$V&lt;V_T$：判断为无目标，此时称为漏报，则有漏报概率$P_{la}&#x3D;1-P_d$</li>
+<li>$V&lt;V_T$：判断为无目标，此时称为漏报，则有漏报概率$P_{la}=1-P_d$</li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
 <h2 id="3-检测性能与信噪比"><a href="#3-检测性能与信噪比" class="headerlink" title="3.检测性能与信噪比"></a>3.检测性能与信噪比</h2><h3 id="3-1-虚警概率"><a href="#3-1-虚警概率" class="headerlink" title="3.1 虚警概率"></a>3.1 虚警概率</h3><ul>
-<li><p>$P_{fa}&#x3D;\int_{V_T}^\infty w(x|无目标)dx$，其中高斯噪声的包络服从瑞利分布$w(x|无目标)&#x3D;\frac{x}{\sigma^2}e^{-\frac{x^2}{2\sigma^2}}$</p>
+<li><p>$P_{fa}=\int_{V_T}^\infty w(x|无目标)dx$，其中高斯噪声的包络服从瑞利分布$w(x|无目标)=\frac{x}{\sigma^2}e^{-\frac{x^2}{2\sigma^2}}$</p>
 </li>
-<li><p>则$P_{fa}&#x3D;e^{-\frac{V_T^2}{2\sigma}}$，$\sigma$为噪声的均方根值，</p>
+<li><p>则$P_{fa}=e^{-\frac{V_T^2}{2\sigma}}$，$\sigma$为噪声的均方根值，</p>
 </li>
 <li><p>虚警时间与虚警概率的关系</p>
 <img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117132424244.png" alt="image-20221117132424244" style="zoom:50%;">
 </li>
-<li><p>虚警数：$n_f&#x3D;\frac{1}{P_{fa}}$，出现一次虚警所需要的次数</p>
+<li><p>虚警数：$n_f=\frac{1}{P_{fa}}$，出现一次虚警所需要的次数</p>
 </li>
 </ul>
 <h3 id="3-2-发现概率"><a href="#3-2-发现概率" class="headerlink" title="3.2 发现概率"></a>3.2 发现概率</h3><ul>
-<li><p>$P_{fa}&#x3D;\int_{V_T}^\infty w(x|有目标)dx$</p>
+<li><p>$P_{fa}=\int_{V_T}^\infty w(x|有目标)dx$</p>
 </li>
 <li><p>此时有目标，$w(x|有目标)$服从广义瑞利分布，通过查表查找</p>
-<img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117133259094.png" alt="image-20221117133259094" style="zoom: 33%;"></li>
+<img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117133259094.png" alt="image-20221117133259094" style="zoom: 33%;">
+
+</li>
 </ul>
 <hr>
 <h1 id="脉冲积累对作用距离的改善"><a href="#脉冲积累对作用距离的改善" class="headerlink" title="脉冲积累对作用距离的改善"></a>脉冲积累对作用距离的改善</h1><h2 id="1-相参积累"><a href="#1-相参积累" class="headerlink" title="1.相参积累"></a>1.相参积累</h2><ul>
 <li><p>假设$ω$为天线扫描角速度。$\frac{θ_{0.5}}{ω}$ 为扫过3dB带宽所需时间，在此时间接收机都能接收到回波信号。</p>
 </li>
-<li><p>则能接收到的脉冲积累个数为：<br>$$<br>w&#x3D;\frac{\theta_{0.5}}{w}f_r<br>$$</p>
+<li><p>则能接收到的脉冲积累个数为：<br>$$<br>w=\frac{\theta_{0.5}}{w}f_r<br>$$</p>
 </li>
 <li><p>单个脉冲回波信号：其功率为$A^2$，噪声功率为$\sigma^2$<br>$$<br>Acos(2\pi f_0+\phi_0)<br>$$</p>
 </li>
 <li><p>M个脉冲相参积累（$\phi$相同）后：其功率为$M^2A^2$，噪声功率为M$\sigma^2$<br>$$<br>MAcos(2\pi f_0t+\phi_0)<br>$$</p>
 </li>
-<li><p>故相参后信号噪声比为：<br>$$<br>\frac{M^2A^2}{M\sigma^2}&#x3D;M\frac{A^2}{\sigma^2}<br>$$</p>
+<li><p>故相参后信号噪声比为：<br>$$<br>\frac{M^2A^2}{M\sigma^2}=M\frac{A^2}{\sigma^2}<br>$$</p>
 </li>
 <li><p><strong>则相参积累后，信噪比扩大了M倍</strong></p>
 </li>
-<li><p><strong>定义$D_0(M)$：M个脉冲积累之后，每一个脉冲所需的信噪比</strong><br>$$<br>D_0(M)&#x3D;\frac{D_0(1)}{M}<br>$$</p>
+<li><p><strong>定义$D_0(M)$：M个脉冲积累之后，每一个脉冲所需的信噪比</strong><br>$$<br>D_0(M)=\frac{D_0(1)}{M}<br>$$</p>
 <img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117135803233.png" alt="image-20221117135803233" style="zoom: 33%;">
 </li>
-<li><p><strong>相参积累后，最大作用距离变为</strong>：<br>$$<br>R_{max}’&#x3D;R_{max}\sqrt[4]M<br>$$</p>
+<li><p><strong>相参积累后，最大作用距离变为</strong>：<br>$$<br>R_{max}’=R_{max}\sqrt[4]M<br>$$</p>
 </li>
 </ul>
 <h2 id="2-非相参积累"><a href="#2-非相参积累" class="headerlink" title="2.非相参积累"></a>2.非相参积累</h2><ul>
@@ -399,7 +402,7 @@
 <h1 id="目标截面积及其起伏特性"><a href="#目标截面积及其起伏特性" class="headerlink" title="目标截面积及其起伏特性"></a>目标截面积及其起伏特性</h1><h2 id="1-点目标"><a href="#1-点目标" class="headerlink" title="1.点目标"></a>1.点目标</h2><h3 id="1-1-距离分辨率"><a href="#1-1-距离分辨率" class="headerlink" title="1.1 距离分辨率"></a>1.1 距离分辨率</h3><ul>
 <li>距离分辨率用于描述雷达分别探测出相邻目标的能力</li>
 <li>如果两个目标的间距至少为$\frac{C\tau}{2}$，那么当脉冲后沿撞上第一个目标时，这个脉冲的前沿才开始从第二个目标返回将产生两个分开的返回脉冲。当两个目标的间距小于$\frac{C\tau}{2}$时，返回的脉冲将包括两个目标的回波（即未分辨的回波)。</li>
-<li>则$距离分辨率&#x3D;\frac{C\tau}{2}$</li>
+<li>则$距离分辨率=\frac{C\tau}{2}$</li>
 </ul>
 <h3 id="1-2-角度分辨率"><a href="#1-2-角度分辨率" class="headerlink" title="1.2 角度分辨率"></a>1.2 角度分辨率</h3><ul>
 <li>角度分辨率是由天线的波束宽度决定的</li>
@@ -459,7 +462,9 @@
 <img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117145636457.png" alt="image-20221117145636457" style="zoom: 50%;">
 </li>
 <li><p>相对于入射方向对称的物体</p>
-<img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117145706008.png" alt="image-20221117145706008" style="zoom:50%;"></li>
+<img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117145706008.png" alt="image-20221117145706008" style="zoom:50%;">
+
+</li>
 </ul>
 </li>
 </ul>
@@ -470,7 +475,9 @@
 
 <ul>
 <li><p>相对于入射方向对称的物体</p>
-<img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117150113658.png" alt="image-20221117150113658" style="zoom:50%;"></li>
+<img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117150113658.png" alt="image-20221117150113658" style="zoom:50%;">
+
+</li>
 </ul>
 <h2 id="5-目标起伏对检测性能的影响"><a href="#5-目标起伏对检测性能的影响" class="headerlink" title="5.目标起伏对检测性能的影响"></a>5.目标起伏对检测性能的影响</h2><ul>
 <li><p>目标雷达截面积的大小对雷达检测性能有直接的关系，在工程计算中常把截面积视为常量。实际上，处于运动状态的目标，视角一直在变化，截面积随之产生起伏。</p>
@@ -484,7 +491,9 @@
 <li><p>脉冲间：指的是同一个扫描周期内的M个回波间不具有相关性，说明目标本身起伏特性的变化很快</p>
 </li>
 <li><p><strong>由于目标起伏引起检测困难，$D_0$增加</strong></p>
-<img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117152651762.png" alt="image-20221117152651762" style="zoom:33%;"></li>
+<img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117152651762.png" alt="image-20221117152651762" style="zoom:33%;">
+
+</li>
 </ul>
 </li>
 </ul>
@@ -493,43 +502,43 @@
 <li>实际工作的雷达系统总是有各种损耗的，这些损耗将降低雷达的实际作用距离，因此在雷达方程中应该引入损耗这一修正量</li>
 <li>用L表示损耗而加在雷达方程的分母中，L是大于1的值。损耗L包括许多比较容易确定的值，诸如波导传输损耗、接收机失配损耗、天线波束形状损耗等，损耗 L 中还包括一些不易估计的值，例如操纵员损耗、设备工作不完善损耗等，这些因素要根据经验和实验测定来估计</li>
 </ul>
-<p>$$<br>R_{max}&#x3D;[\frac{P_tG_tG_r\lambda^2\sigma}{(4\pi)^3kT_0BFD_0L}]^{1&#x2F;4}<br>$$</p>
+<p>$$<br>R_{max}=[\frac{P_tG_tG_r\lambda^2\sigma}{(4\pi)^3kT_0BFD_0L}]^{1/4}<br>$$</p>
 <hr>
 <h1 id="雷达的直视距离"><a href="#雷达的直视距离" class="headerlink" title="雷达的直视距离"></a>雷达的直视距离</h1><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117153958936.png" alt="image-20221117153958936" style="zoom: 33%;">
 
 <ul>
-<li>$d_0(km)&#x3D;4.1\times(\sqrt h_1(m)+\sqrt h_2(m))$</li>
+<li>$d_0(km)=4.1\times(\sqrt h_1(m)+\sqrt h_2(m))$</li>
 </ul>
 <hr>
 <h1 id="雷达方程的几种形式"><a href="#雷达方程的几种形式" class="headerlink" title="雷达方程的几种形式"></a>雷达方程的几种形式</h1><h2 id="1-二次雷达方程"><a href="#1-二次雷达方程" class="headerlink" title="1.二次雷达方程"></a>1.二次雷达方程</h2><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117155108154.png" alt="image-20221117155108154" style="zoom: 33%;">
 
 <ul>
-<li><p>雷达发射信号，应答器接收<br>$$<br>P_r’&#x3D;\frac{P_tG_t}{4\pi R_1^2}A_r’&#x3D;\frac{P_tG_t\lambda^2G_r’}{(4\pi)^2R_1^2}<br>$$<br>则：<br>$$<br>R_{1max}&#x3D;[\frac{P_tG_tG_r’\lambda^2}{(4\pi)^2S_{imin}’}]^{1&#x2F;2}<br>$$</p>
+<li><p>雷达发射信号，应答器接收<br>$$<br>P_r’=\frac{P_tG_t}{4\pi R_1^2}A_r’=\frac{P_tG_t\lambda^2G_r’}{(4\pi)^2R_1^2}<br>$$<br>则：<br>$$<br>R_{1max}=[\frac{P_tG_tG_r’\lambda^2}{(4\pi)^2S_{imin}’}]^{1/2}<br>$$</p>
 </li>
-<li><p>应答器发射信号，雷达接收<br>$$<br>R_{2max}&#x3D;[\frac{P_t’G_t’G_r\lambda^2}{(4\pi)^2S_{imin}}]^{1&#x2F;2}<br>$$</p>
+<li><p>应答器发射信号，雷达接收<br>$$<br>R_{2max}=[\frac{P_t’G_t’G_r\lambda^2}{(4\pi)^2S_{imin}}]^{1/2}<br>$$</p>
 </li>
-<li><p>则$R_{max}$：<br>$$<br>R_{max}&#x3D;\lbrace R_{1max},R_{2max}\rbrace<br>$$</p>
+<li><p>则$R_{max}$：<br>$$<br>R_{max}=\lbrace R_{1max},R_{2max}\rbrace<br>$$</p>
 </li>
 </ul>
 <h2 id="2-双基地雷达方程"><a href="#2-双基地雷达方程" class="headerlink" title="2.双基地雷达方程"></a>2.双基地雷达方程</h2><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117160249854.png" alt="image-20221117160249854" style="zoom: 50%;">
 
 <ul>
-<li>根据基本雷达方程有：<br>$$<br>P_r&#x3D;\frac{P_tG_t}{4\pi R_t^2}\cdot\sigma\cdot\frac{A_r}{4\pi R_r^2}&#x3D;\frac{P_tG_tG_r\lambda^2\sigma}{(4\pi)^3R_t^2R_r^2}<br>$$</li>
+<li>根据基本雷达方程有：<br>$$<br>P_r=\frac{P_tG_t}{4\pi R_t^2}\cdot\sigma\cdot\frac{A_r}{4\pi R_r^2}=\frac{P_tG_tG_r\lambda^2\sigma}{(4\pi)^3R_t^2R_r^2}<br>$$</li>
 </ul>
-<p>$$<br>则:R_{max}&#x3D;R_tR_r&#x3D;[\frac{P_tG_tG_r\lambda^2\sigma}{(4\pi)^3S_{imin}}]^{1&#x2F;2}<br>$$</p>
+<p>$$<br>则:R_{max}=R_tR_r=[\frac{P_tG_tG_r\lambda^2\sigma}{(4\pi)^3S_{imin}}]^{1/2}<br>$$</p>
 <ul>
 <li><p>限制条件：<br>$$<br>R_t+Rr\ge R_b<br>$$</p>
 <p>$$<br>|R_t-R_r|\le R_b<br>$$</p>
 </li>
 </ul>
-<h2 id="3-用信号能量表示的雷达方程"><a href="#3-用信号能量表示的雷达方程" class="headerlink" title="3.用信号能量表示的雷达方程"></a>3.用信号能量表示的雷达方程</h2><p>$$<br>R_{max}&#x3D;[\frac{EG_t^2\lambda^2\sigma}{(4\pi)^3kT_0FD_0C_B}]^{1&#x2F;4}<br>$$</p>
-<p>$$<br>其中，C_B是失配损失，E&#x3D;P_t\tau<br>$$</p>
+<h2 id="3-用信号能量表示的雷达方程"><a href="#3-用信号能量表示的雷达方程" class="headerlink" title="3.用信号能量表示的雷达方程"></a>3.用信号能量表示的雷达方程</h2><p>$$<br>R_{max}=[\frac{EG_t^2\lambda^2\sigma}{(4\pi)^3kT_0FD_0C_B}]^{1/4}<br>$$</p>
+<p>$$<br>其中，C_B是失配损失，E=P_t\tau<br>$$</p>
 <h2 id="4-干扰情况下的雷达方程"><a href="#4-干扰情况下的雷达方程" class="headerlink" title="4.干扰情况下的雷达方程"></a>4.干扰情况下的雷达方程</h2><h3 id="4-1-有源干扰（干扰机）"><a href="#4-1-有源干扰（干扰机）" class="headerlink" title="4.1 有源干扰（干扰机）"></a>4.1 有源干扰（干扰机）</h3><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117161856482.png" alt="image-20221117161856482" style="zoom:50%;">
 
 <ul>
-<li><p>雷达要想检测到目标，必须满足：<strong>信号功率&#x2F;（噪声功率+干扰功率）&gt; 某个门限</strong>，即$\frac{P_{rs}}{P_{rj}}\ge A$（忽略噪声功率）</p>
+<li><p>雷达要想检测到目标，必须满足：<strong>信号功率/（噪声功率+干扰功率）&gt; 某个门限</strong>，即$\frac{P_{rs}}{P_{rj}}\ge A$（忽略噪声功率）</p>
 </li>
-<li><p>雷达接收到的目标回波信号功率$P_{rs}$：<br>$$<br>P_{rs}&#x3D;\frac{P_tG_tG_r\lambda^2\sigma}{(4\pi)^3R^4L}<br>$$</p>
+<li><p>雷达接收到的目标回波信号功率$P_{rs}$：<br>$$<br>P_{rs}=\frac{P_tG_tG_r\lambda^2\sigma}{(4\pi)^3R^4L}<br>$$</p>
 </li>
 <li><p>雷达接收到的干扰信号功率$P_{rj}$：</p>
 <img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117163047100.png" alt="image-20221117163047100" style="zoom:33%;">
@@ -537,14 +546,14 @@ $$
 P_{rj}=\frac{P_jG_jA_r'}{4\pi R_j^2}\times\frac{\Delta f_r}{\Delta f_j}
 $$
 
-<p>$$<br>其中:G_r’&#x3D;\frac{4\pi A_r’}{\lambda^2}&#x3D;G_rF(\theta)<br>$$</p>
+<p>$$<br>其中:G_r’=\frac{4\pi A_r’}{\lambda^2}=G_rF(\theta)<br>$$</p>
 </li>
-<li><p>当$\frac{P_{rs}}{P_{rj}}&#x3D;A$时，作用距离最大，有：<br>$$<br>R_{max}&#x3D;[\frac{P_tG_tG_r\sigma R_j^2\Delta f_j}{4\pi P_jG_jG_r’\Delta f_rAL}]^{1&#x2F;4}<br>$$</p>
+<li><p>当$\frac{P_{rs}}{P_{rj}}=A$时，作用距离最大，有：<br>$$<br>R_{max}=[\frac{P_tG_tG_r\sigma R_j^2\Delta f_j}{4\pi P_jG_jG_r’\Delta f_rAL}]^{1/4}<br>$$</p>
 </li>
 <li><p><strong>自卫干扰：将干扰机放到目标上</strong></p>
 <ul>
-<li>$R_j&#x3D;R,G_r’&#x3D;G_r$</li>
-<li>$R_{max}&#x3D;[\frac{P_tG_t\sigma\Delta f_j}{4\pi P_jG_j\Delta f_rAL}]^{1&#x2F;4}$</li>
+<li>$R_j=R,G_r’=G_r$</li>
+<li>$R_{max}=[\frac{P_tG_t\sigma\Delta f_j}{4\pi P_jG_j\Delta f_rAL}]^{1/4}$</li>
 </ul>
 </li>
 </ul>
@@ -685,7 +694,7 @@ $$
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-count">49</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -926,6 +935,7 @@ document.querySelectorAll('.pdfobject-container').forEach(element => {
   if (typeof MathJax === 'undefined') {
     window.MathJax = {
       loader: {
+          load: ['[tex]/mhchem'],
         source: {
           '[tex]/amsCd': '[tex]/amscd',
           '[tex]/AMScd': '[tex]/amscd'
@@ -933,6 +943,7 @@ document.querySelectorAll('.pdfobject-container').forEach(element => {
       },
       tex: {
         inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
         tags: 'ams'
       },
       options: {

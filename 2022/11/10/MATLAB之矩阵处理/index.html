@@ -311,7 +311,7 @@
 <h1 id="用于专门学科的特殊矩阵"><a href="#用于专门学科的特殊矩阵" class="headerlink" title="用于专门学科的特殊矩阵"></a>用于专门学科的特殊矩阵</h1><h2 id="1-魔方矩阵（Magic-Square）："><a href="#1-魔方矩阵（Magic-Square）：" class="headerlink" title="1.魔方矩阵（Magic Square）："></a>1.魔方矩阵（Magic Square）：</h2><ul>
 <li><code>magic(n)</code>产生一个特定的魔方阵</li>
 <li>n阶魔方阵由1，2，3，……n2共n2个整数组成，且每行、每列以及主、副对角线上各n各元素之和都相等</li>
-<li>n节魔方阵每行每列元素的和为(1+2+3+……+n2)&#x2F;n&#x3D;(n+n3)&#x2F;2</li>
+<li>n节魔方阵每行每列元素的和为(1+2+3+……+n2)/n=(n+n3)/2</li>
 </ul>
 <img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110113057250.png" alt="image-20221110113057250" style="zoom:50%;">
 
@@ -334,7 +334,9 @@
 
 <ul>
 <li><p>例：将A的各列元素分别乘以对角阵的对角线元素</p>
-<img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110124600894.png" alt="image-20221110124600894" style="zoom:50%;"></li>
+<img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110124600894.png" alt="image-20221110124600894" style="zoom:50%;">
+
+</li>
 </ul>
 <h2 id="2-三角阵：下三角矩阵（triu）和上三角矩阵（tril）"><a href="#2-三角阵：下三角矩阵（triu）和上三角矩阵（tril）" class="headerlink" title="2.三角阵：下三角矩阵（triu）和上三角矩阵（tril）"></a>2.<strong>三角阵</strong>：下三角矩阵（triu）和上三角矩阵（tril）</h2><ul>
 <li><code>triu(A)</code>：提取矩阵A的主对角线及以上的元素</li>
@@ -366,7 +368,11 @@
 <li><p><code>inv(A)</code></p>
 </li>
 <li><p>可以通过矩阵求逆的方法求解线性方程组</p>
-<img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110125422429.png" alt="image-20221110125422429" style="zoom:50%;"></li>
+<img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110125422429.png" alt="image-20221110125422429" style="zoom:50%;">
+
+
+
+</li>
 </ul>
 <hr>
 <h1 id="矩阵行列式求解"><a href="#矩阵行列式求解" class="headerlink" title="矩阵行列式求解"></a>矩阵行列式求解</h1><ul>
@@ -376,7 +382,7 @@
 
 <hr>
 <h1 id="矩阵的特征值与特征向量"><a href="#矩阵的特征值与特征向量" class="headerlink" title="矩阵的特征值与特征向量"></a>矩阵的特征值与特征向量</h1><ul>
-<li>设A时n阶方阵，如果存在常数$\lambda$和n维非零列向量x，使得等式Ax&#x3D;$\lambda$x成立，则称$\lambda$为A的特征值，x是对应特征值$\lambda$的特征向量</li>
+<li>设A时n阶方阵，如果存在常数$\lambda$和n维非零列向量x，使得等式Ax=$\lambda$x成立，则称$\lambda$为A的特征值，x是对应特征值$\lambda$的特征向量</li>
 <li><code>E=eig(A)</code>：求矩阵A的全部特征值，构成向量E</li>
 <li><code>[X,D]=eig(A)</code>：求矩阵A的全部特征值，构成对角阵D，并产生矩阵X，X各列是相应的特性向量</li>
 </ul>
@@ -393,7 +399,9 @@
 <li><p><code>sparse(m,n)</code>：生成一个m×n的所有元素都是零的稀疏矩阵</p>
 </li>
 <li><p><code>sparse(i,j,S)</code>：i,j是存储元素的下标，S表示要存储的非零元素</p>
-<img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110145955079.png" alt="image-20221110145955079" style="zoom:50%;"></li>
+<img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110145955079.png" alt="image-20221110145955079" style="zoom:50%;">
+
+</li>
 </ul>
 <h2 id="2-带状稀疏矩阵的产生"><a href="#2-带状稀疏矩阵的产生" class="headerlink" title="2.带状稀疏矩阵的产生"></a>2.带状稀疏矩阵的产生</h2><ul>
 <li><p>其是指所有非零元素集中在对角线上的矩阵</p>
@@ -405,7 +413,12 @@
 <img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110153444565.png" alt="image-20221110153444565" style="zoom:50%;">
 </li>
 <li><p><code>speye(m,n)</code>：返回m×n的稀疏存储的单位矩阵</p>
-<img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110153724671.png" alt="image-20221110153724671" style="zoom:50%;"></li>
+<img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110153724671.png" alt="image-20221110153724671" style="zoom:50%;">
+
+
+
+
+</li>
 </ul>
 
     </div>
@@ -538,7 +551,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-count">49</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -779,6 +792,7 @@ document.querySelectorAll('.pdfobject-container').forEach(element => {
   if (typeof MathJax === 'undefined') {
     window.MathJax = {
       loader: {
+          load: ['[tex]/mhchem'],
         source: {
           '[tex]/amsCd': '[tex]/amscd',
           '[tex]/AMScd': '[tex]/amscd'
@@ -786,6 +800,7 @@ document.querySelectorAll('.pdfobject-container').forEach(element => {
       },
       tex: {
         inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
         tags: 'ams'
       },
       options: {
