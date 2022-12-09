@@ -274,6 +274,7 @@
       
         <p>本节主要介绍了VLSI DSP中重定时的基本概念及其使用方法，包括割重定时与K倍降速。</p>
 <span id="more"></span>
+
 <h1 id="重定时的基本概念"><a href="#重定时的基本概念" class="headerlink" title="重定时的基本概念"></a>重定时的基本概念</h1><ul>
 <li><p><strong>重定时（Retiming）</strong>：是一种变换技术，在不改变系统的输入输出特性的前提下，改变电路延迟元件的配置</p>
 </li>
@@ -286,26 +287,31 @@
 </ul>
 </li>
 <li><p>重定时后电路功能不变：</p>
-<p><img src="/2022/11/23/VLSI%20DSP%E4%B9%8B%E9%87%8D%E5%AE%9A%E6%97%B6/image-20221123193816893.png" alt="image-20221123193816893" style="zoom:50%;"></p>
-<script type="math/tex; mode=display">
-左图:w(n)=ay(n-1)+by(n-2)</script><script type="math/tex; mode=display">
-y(n)=x(n)+w(n-1)=x(n)+ay(n-2)+by(n-3)</script><script type="math/tex; mode=display">
-右图:w_1(n)=ay(n-1)</script><script type="math/tex; mode=display">
-w_2(n)=by(n-2)</script><script type="math/tex; mode=display">
-y(n)=x(n)+w_1(n-1)+w_2(n-1)=x(n)+ay(n-2)+by(n-3)</script></li>
+<img src="/2022/11/23/VLSI%20DSP%E4%B9%8B%E9%87%8D%E5%AE%9A%E6%97%B6/image-20221123193816893.png" alt="image-20221123193816893" style="zoom:50%;">
+$$
+左图:w(n)=ay(n-1)+by(n-2)
+$$
+
+<p>$$<br>y(n)=x(n)+w(n-1)=x(n)+ay(n-2)+by(n-3)<br>$$</p>
+<p>$$<br>右图:w_1(n)=ay(n-1)<br>$$</p>
+<p>$$<br>w_2(n)=by(n-2)<br>$$</p>
+<p>$$<br>y(n)=x(n)+w_1(n-1)+w_2(n-1)=x(n)+ay(n-2)+by(n-3)<br>$$</p>
+</li>
 </ul>
 <hr>
 <h1 id="重定时求解方法"><a href="#重定时求解方法" class="headerlink" title="重定时求解方法"></a>重定时求解方法</h1><h2 id="1-割集重定时"><a href="#1-割集重定时" class="headerlink" title="1.割集重定时"></a>1.割集重定时</h2><ul>
 <li><strong>若在一个方向的边上增加延时，则在另外方向的边上减少同样的延时</strong></li>
 </ul>
-<p><img src="/2022/11/23/VLSI%20DSP%E4%B9%8B%E9%87%8D%E5%AE%9A%E6%97%B6/image-20221123203257658.png" alt="image-20221123203257658" style="zoom:50%;"></p>
+<img src="/2022/11/23/VLSI%20DSP%E4%B9%8B%E9%87%8D%E5%AE%9A%E6%97%B6/image-20221123203257658.png" alt="image-20221123203257658" style="zoom:50%;">
+
 <ul>
 <li><p>重定时前：关键路径为$T_M+T_A=3ut$，延时单元为4</p>
 </li>
 <li><p>重定时后：关键路径为$T_M+2T_A=4ut$，延时单元为5</p>
 </li>
 </ul>
-<h2 id="2-节点重定时"><a href="#2-节点重定时" class="headerlink" title="2.节点重定时"></a>2.节点重定时</h2><p><img src="/2022/11/23/VLSI%20DSP%E4%B9%8B%E9%87%8D%E5%AE%9A%E6%97%B6/image-20221123203944106.png" alt="image-20221123203944106" style="zoom:50%;"></p>
+<h2 id="2-节点重定时"><a href="#2-节点重定时" class="headerlink" title="2.节点重定时"></a>2.节点重定时</h2><img src="/2022/11/23/VLSI%20DSP%E4%B9%8B%E9%87%8D%E5%AE%9A%E6%97%B6/image-20221123203944106.png" alt="image-20221123203944106" style="zoom:50%;">
+
 <ul>
 <li><p>重定时前：关键路径为$T_M+T_A=3ut$，延时单元为4</p>
 </li>
@@ -319,22 +325,22 @@ y(n)=x(n)+w_1(n-1)+w_2(n-1)=x(n)+ay(n-2)+by(n-3)</script></li>
 <li>有向边：表示节点间通信关系</li>
 <li>权重：表示有向边的寄存器数</li>
 </ul>
-<p><img src="/2022/11/23/VLSI%20DSP%E4%B9%8B%E9%87%8D%E5%AE%9A%E6%97%B6/image-20221123204514343.png" alt="image-20221123204514343" style="zoom:50%;"></p>
+<img src="/2022/11/23/VLSI%20DSP%E4%B9%8B%E9%87%8D%E5%AE%9A%E6%97%B6/image-20221123204514343.png" alt="image-20221123204514343" style="zoom:50%;">
 </li>
-<li><p>重定时值$r(v)$：</p>
-<script type="math/tex; mode=display">
-r(v)=0 \Rightarrow 不操作</script><script type="math/tex; mode=display">
-r(v)>0 \Rightarrow 节点的每条输入边增加r(v)延时，同时节点的每条输出边减少r(v)延时</script><script type="math/tex; mode=display">
-r(v)<0 \Rightarrow 节点的每条输入边减少r(v)延时，同时节点的每条输出边增加r(v)延时</script></li>
-<li><p><strong>重定时方程：用来确定节点u到u——&gt;v重定时后的权重</strong></p>
-<script type="math/tex; mode=display">
-w_r(e)=w(e)+r(v)-r(u),w_r(e)\ge0</script><p><img src="/2022/11/23/VLSI%20DSP%E4%B9%8B%E9%87%8D%E5%AE%9A%E6%97%B6/image-20221123205429536.png" alt="image-20221123205429536" style="zoom:50%;"></p>
+<li><p>重定时值$r(v)$：<br>$$<br>r(v)=0 \Rightarrow 不操作<br>$$</p>
+<p>$$<br>r(v)&gt;0 \Rightarrow 节点的每条输入边增加r(v)延时，同时节点的每条输出边减少r(v)延时<br>$$</p>
+<p>$$<br>r(v)&lt;0 \Rightarrow 节点的每条输入边减少r(v)延时，同时节点的每条输出边增加r(v)延时<br>$$</p>
+</li>
+<li><p><strong>重定时方程：用来确定节点u到u—-&gt;v重定时后的权重</strong><br>$$<br>w_r(e)=w(e)+r(v)-r(u),w_r(e)\ge0<br>$$</p>
+<img src="/2022/11/23/VLSI%20DSP%E4%B9%8B%E9%87%8D%E5%AE%9A%E6%97%B6/image-20221123205429536.png" alt="image-20221123205429536" style="zoom:50%;">
+
 <ul>
 <li>$w(e)$为原始权重</li>
 <li>$r(v)$为目的节点的重定时值</li>
 <li>$r(u)$为原始节点的重定时值</li>
 </ul>
-<p><img src="/2022/11/23/VLSI%20DSP%E4%B9%8B%E9%87%8D%E5%AE%9A%E6%97%B6/image-20221123211240138.png" alt="image-20221123211240138" style="zoom: 33%;"></p>
+<img src="/2022/11/23/VLSI%20DSP%E4%B9%8B%E9%87%8D%E5%AE%9A%E6%97%B6/image-20221123211240138.png" alt="image-20221123211240138" style="zoom: 33%;">
+
 <ul>
 <li>对于重定时的求解，需结合$w_r(e)\ge 0$以及设定多个目标，比如系统时钟周期和寄存器个数等，在此不等式方程组的约束条件下，搜索出使得规定目标最小化的解</li>
 </ul>
@@ -342,9 +348,9 @@ w_r(e)=w(e)+r(v)-r(u),w_r(e)\ge0</script><p><img src="/2022/11/23/VLSI%20DSP%E4%
 </ul>
 <h2 id="4-K倍降速与割集重定时"><a href="#4-K倍降速与割集重定时" class="headerlink" title="4.K倍降速与割集重定时"></a>4.K倍降速与割集重定时</h2><ul>
 <li><p>首先用K个延时取代DFG中的每个延时，以产生DFG的K倍减速系统，然后对K倍减速的DFG进行割集重定时</p>
-<p><img src="/2022/11/23/VLSI%20DSP%E4%B9%8B%E9%87%8D%E5%AE%9A%E6%97%B6/image-20221123213823901.png" alt="image-20221123213823901" style="zoom:50%;"></p>
-<p><img src="/2022/11/23/VLSI%20DSP%E4%B9%8B%E9%87%8D%E5%AE%9A%E6%97%B6/image-20221123213844651.png" alt="image-20221123213844651" style="zoom:50%;"></p>
-</li>
+<img src="/2022/11/23/VLSI%20DSP%E4%B9%8B%E9%87%8D%E5%AE%9A%E6%97%B6/image-20221123213823901.png" alt="image-20221123213823901" style="zoom:50%;">
+
+<img src="/2022/11/23/VLSI%20DSP%E4%B9%8B%E9%87%8D%E5%AE%9A%E6%97%B6/image-20221123213844651.png" alt="image-20221123213844651" style="zoom:50%;"></li>
 </ul>
 
     </div>
