@@ -300,23 +300,20 @@
       
         <p>本节主要介绍了MATLAB中基本的绘图方法，包括二维图形与三维图形的绘制。</p>
 <span id="more"></span>
-
 <h1 id="二维曲线"><a href="#二维曲线" class="headerlink" title="二维曲线"></a>二维曲线</h1><h2 id="1-plot-x-y"><a href="#1-plot-x-y" class="headerlink" title="1.plot(x,y)"></a>1.<code>plot(x,y)</code></h2><ul>
 <li><p>当x是向量，y是矩阵时，如果矩阵y的列数等于x的长度，则以向量x为横坐标，以y的每个行向量为纵坐标绘制曲线，曲线的条数等于y的行数</p>
-<img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112142210160.png" alt="image-20221112142210160" style="zoom:33%;">
+<p><img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112142210160.png" alt="image-20221112142210160" style="zoom:33%;"></p>
 </li>
 <li><p>当x、y是同形矩阵时，以x、y对应列元素为横、纵坐标分别绘制曲线，曲线条数等于矩阵的列数</p>
-<img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112142014031.png" alt="image-20221112142014031" style="zoom: 33%;">
+<p><img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112142014031.png" alt="image-20221112142014031" style="zoom: 33%;"></p>
 </li>
 <li><p>含多个输入参数的plot函数</p>
-<img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112142643652.png" alt="image-20221112142643652" style="zoom: 33%;">
+<p><img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112142643652.png" alt="image-20221112142643652" style="zoom: 33%;"></p>
 </li>
 <li><p><code>plot(x,y,选项)</code> %选型用于指定曲线的<strong>颜色、线型、数据点标记</strong></p>
-<img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112142928903.png" alt="image-20221112142928903" style="zoom: 33%;">
-
+<p><img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112142928903.png" alt="image-20221112142928903" style="zoom: 33%;"></p>
 <p>例：</p>
-<img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112143153993.png" alt="image-20221112143153993" style="zoom:33%;">
-
+<p><img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112143153993.png" alt="image-20221112143153993" style="zoom:33%;"></p>
 </li>
 </ul>
 <h2 id="2-fplot-f-lims-选项"><a href="#2-fplot-f-lims-选项" class="headerlink" title="2.fplot(f,lims,选项)"></a>2.<code>fplot(f,lims,选项)</code></h2><ul>
@@ -324,10 +321,8 @@
 <li>lims为x轴的取值范围，用二元向量[xmin,xmax]描述，默认值为[-5,5]</li>
 <li>此绘制函数会使得自变量的采样间隔设置更加合理</li>
 </ul>
-<img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112144322203.png" alt="image-20221112144322203" style="zoom:50%;">
-
-<img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112144738596.png" alt="image-20221112144738596" style="zoom:50%;">
-
+<p><img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112144322203.png" alt="image-20221112144322203" style="zoom:50%;"></p>
+<p><img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112144738596.png" alt="image-20221112144738596" style="zoom:50%;"></p>
 <hr>
 <h1 id="绘制图形的辅助操作"><a href="#绘制图形的辅助操作" class="headerlink" title="绘制图形的辅助操作"></a>绘制图形的辅助操作</h1><h2 id="1-图形标注"><a href="#1-图形标注" class="headerlink" title="1. 图形标注"></a>1. 图形标注</h2><ul>
 <li><p><code>title(图形标题，属性名，属性值)</code></p>
@@ -336,10 +331,10 @@
 <li>‘Fontsize’属性：用于设置标题文字的字号</li>
 <li>对于需要换行的图形标题，使用字符串、逗号、大括号的形式</li>
 </ul>
-<img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112150916513.png" alt="image-20221112150916513" style="zoom:50%;">
+<p><img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112150916513.png" alt="image-20221112150916513" style="zoom:50%;"></p>
 </li>
 <li><p><code>xlabel(x轴说明)与ylabel(y轴说明)</code></p>
-<img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112151343614.png" alt="image-20221112151343614" style="zoom:50%;">
+<p><img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112151343614.png" alt="image-20221112151343614" style="zoom:50%;"></p>
 </li>
 <li><p><code>text(x,y,说明)</code>与<code>gtext(说明)</code> %添加文字说明</p>
 <ul>
@@ -348,10 +343,7 @@
 </ul>
 </li>
 <li><p><code>legend(图例1,图例2,……)</code></p>
-<img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112152220170.png" alt="image-20221112152220170" style="zoom:50%;">
-
-
-
+<p><img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112152220170.png" alt="image-20221112152220170" style="zoom:50%;"></p>
 </li>
 </ul>
 <h2 id="2-坐标控制"><a href="#2-坐标控制" class="headerlink" title="2.坐标控制"></a>2.坐标控制</h2><ul>
@@ -367,7 +359,6 @@
 </li>
 <li><p><code>axis on</code>：显示坐标轴</p>
 <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">figure</span>(<span class="number">3</span>)<span class="comment">%测试axis的使用</span></span><br><span class="line">x = [<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>];</span><br><span class="line">y = [<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>];</span><br><span class="line"><span class="built_in">plot</span>(x,y,LineWidth=<span class="number">3</span>)</span><br><span class="line">axis([<span class="number">-0.1</span>, <span class="number">1.1</span>, <span class="number">-0.1</span>, <span class="number">1.1</span>])</span><br><span class="line">axis equal</span><br><span class="line"></span><br><span class="line"><span class="built_in">figure</span>(<span class="number">4</span>)<span class="comment">%测试axis的使用</span></span><br><span class="line">x = [<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>];</span><br><span class="line">y = [<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>];</span><br><span class="line"><span class="built_in">plot</span>(x,y,LineWidth=<span class="number">3</span>)</span><br><span class="line">axis([<span class="number">-0.1</span>, <span class="number">1.1</span>, <span class="number">-0.1</span>, <span class="number">1.1</span>])</span><br><span class="line">axis square</span><br></pre></td></tr></table></figure>
-
 <p>结果如下：</p>
 <p><img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112153251248.png" alt="image-20221112153251248"></p>
 </li>
@@ -384,15 +375,12 @@
 <li>hold on</li>
 <li>hold off</li>
 </ul>
-<img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112153851222.png" alt="image-20221112153851222" style="zoom:50%;">
+<p><img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112153851222.png" alt="image-20221112153851222" style="zoom:50%;"></p>
 </li>
 <li><p>图形窗口的分割：<code>subplot(m,n,p)</code></p>
 </li>
 <li><p>添加总标题：<code>sgtitle(&#39;总标题&#39;)</code></p>
-<img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112154137465.png" alt="image-20221112154137465" style="zoom:50%;">
-
-
-
+<p><img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112154137465.png" alt="image-20221112154137465" style="zoom:50%;"></p>
 </li>
 </ul>
 <h1 id="其他坐标系下的二维曲面图"><a href="#其他坐标系下的二维曲面图" class="headerlink" title="其他坐标系下的二维曲面图"></a>其他坐标系下的二维曲面图</h1><h2 id="1-对数坐标图"><a href="#1-对数坐标图" class="headerlink" title="1.对数坐标图"></a>1.对数坐标图</h2><ul>
@@ -400,8 +388,7 @@
 <li><code>semilogy(x1,y1,选型1,x2,y2,选项2,……)</code></li>
 <li><code>loglog(x1,y1,选型1,x2,y2,选项2,……)</code></li>
 </ul>
-<img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112155957937.png" alt="image-20221112155957937" style="zoom:50%;">
-
+<p><img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112155957937.png" alt="image-20221112155957937" style="zoom:50%;"></p>
 <h2 id="2-极坐标图"><a href="#2-极坐标图" class="headerlink" title="2.极坐标图"></a>2.极坐标图</h2><ul>
 <li><code>polarplot(theta,rho,选项)</code> %theta为极角，rho为极经</li>
 </ul>
@@ -426,7 +413,7 @@
 <li>其中x为统计的数据</li>
 <li>explode将扇区从饼图偏移一定位置，其由与 x对应的零值和非零值组成的向量或矩阵。pie 函数仅将对应于 explode 中的非零元素的扇区偏移一定的位置。</li>
 </ul>
-<img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112162955255.png" alt="image-20221112162955255" style="zoom:50%;">
+<p><img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112162955255.png" alt="image-20221112162955255" style="zoom:50%;"></p>
 </li>
 <li><h3 id="散点图"><a href="#散点图" class="headerlink" title="散点图"></a><strong>散点图</strong></h3><ul>
 <li><code>scatter(x,y,选项，&#39;filled&#39;)</code></li>
@@ -438,22 +425,18 @@
 <li><code>quiver(x,y,u,v)</code></li>
 <li>其中(x,y)指定矢量起点，(u,v)指定矢量终点</li>
 </ul>
-<img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112164930503.png" alt="image-20221112164930503" style="zoom:50%;">
-
+<p><img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112164930503.png" alt="image-20221112164930503" style="zoom:50%;"></p>
 </li>
 </ul>
 <hr>
 <h1 id="三维曲线"><a href="#三维曲线" class="headerlink" title="三维曲线"></a>三维曲线</h1><h2 id="1-plot3-x-y-z"><a href="#1-plot3-x-y-z" class="headerlink" title="1.plot3(x,y,z)"></a>1.<code>plot3(x,y,z)</code></h2><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%在空间不同位置绘制5条正弦曲线。</span></span><br><span class="line"><span class="built_in">figure</span>(<span class="number">1</span>)</span><br><span class="line">subplot(<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span>)</span><br><span class="line">t=<span class="number">0</span>:<span class="number">0.01</span>:<span class="number">2</span>*<span class="built_in">pi</span>;</span><br><span class="line">t=t&#x27;;</span><br><span class="line">x=[t, t, t, t, t];</span><br><span class="line">y=[<span class="built_in">sin</span>(t), <span class="built_in">sin</span>(t)+<span class="number">1</span>, <span class="built_in">sin</span>(t)+<span class="number">2</span>, <span class="built_in">sin</span>(t)+<span class="number">3</span>, <span class="built_in">sin</span>(t)+<span class="number">4</span>];</span><br><span class="line">z=x;</span><br><span class="line"><span class="built_in">plot3</span>(x,y,z,LineWidth=<span class="number">2</span>)</span><br><span class="line"><span class="comment">%这个例子也可以采用以下代码实现。</span></span><br><span class="line">subplot(<span class="number">1</span>,<span class="number">2</span>,<span class="number">2</span>)</span><br><span class="line">t=<span class="number">0</span>:<span class="number">0.01</span>:<span class="number">2</span>*<span class="built_in">pi</span>;</span><br><span class="line">x=t;</span><br><span class="line">y=[<span class="built_in">sin</span>(t); <span class="built_in">sin</span>(t)+<span class="number">1</span>; <span class="built_in">sin</span>(t)+<span class="number">2</span>; <span class="built_in">sin</span>(t)+<span class="number">3</span>; <span class="built_in">sin</span>(t)+<span class="number">4</span>];</span><br><span class="line">z=x;</span><br><span class="line"><span class="built_in">plot3</span>(x,y,z,LineWidth=<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
-
 <p>结果如下：</p>
 <p><img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112170835553.png" alt="image-20221112170835553"></p>
 <ul>
 <li><p>含多组输入参数的plot3函数</p>
 <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%含多组输入的plot3函数</span></span><br><span class="line"><span class="built_in">figure</span>(<span class="number">2</span>)</span><br><span class="line">t1=<span class="number">0</span>:<span class="number">0.01</span>:<span class="number">1.5</span>*<span class="built_in">pi</span>;</span><br><span class="line">t2=<span class="number">0</span>:<span class="number">0.01</span>:<span class="number">2</span>*<span class="built_in">pi</span>;</span><br><span class="line">t3=<span class="number">0</span>:<span class="number">0.01</span>:<span class="number">3</span>*<span class="built_in">pi</span>;</span><br><span class="line"><span class="built_in">plot3</span>(t1,<span class="built_in">sin</span>(t1),t1,<span class="string">&#x27;r&#x27;</span>, t2,<span class="built_in">sin</span>(t2)+<span class="number">1</span>,t2,<span class="string">&#x27;b&#x27;</span>,t3,<span class="built_in">sin</span>(t3)+<span class="number">2</span>,t3,<span class="string">&#x27;LineWidth&#x27;</span>,<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
-
 <p>结果如下：</p>
-<img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112171510412.png" alt="image-20221112171510412" style="zoom:50%;">
-
+<p><img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112171510412.png" alt="image-20221112171510412" style="zoom:50%;"></p>
 </li>
 </ul>
 <h2 id="2-fplot3-funx-funy-funz-tlims"><a href="#2-fplot3-funx-funy-funz-tlims" class="headerlink" title="2.fplot3(funx,funy,funz,tlims)"></a>2.<code>fplot3(funx,funy,funz,tlims)</code></h2><ul>
@@ -461,19 +444,14 @@
 <li>tlims为参数函数自变量的取值范围，用二元向量[tmin,tmax]描述</li>
 </ul>
 <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%绘制墨西哥帽顶曲线</span></span><br><span class="line"><span class="built_in">figure</span>(<span class="number">3</span>)</span><br><span class="line">xt = @(t) <span class="built_in">exp</span>(-t/<span class="number">10</span>).*<span class="built_in">sin</span>(<span class="number">5</span>*t);</span><br><span class="line">yt = @(t) <span class="built_in">exp</span>(-t/<span class="number">10</span>).*<span class="built_in">cos</span>(<span class="number">5</span>*t);</span><br><span class="line">zt = @(t) t;</span><br><span class="line">fplot3(xt, yt, zt, [<span class="number">-12</span>, <span class="number">12</span>], <span class="string">&#x27;r-.&#x27;</span>,<span class="string">&#x27;LineWidth&#x27;</span>,<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
-
 <p>结果如下：</p>
-<img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112171957475.png" alt="image-20221112171957475" style="zoom:50%;">
-
+<p><img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112171957475.png" alt="image-20221112171957475" style="zoom:50%;"></p>
 <hr>
 <h1 id="三维曲面"><a href="#三维曲面" class="headerlink" title="三维曲面"></a>三维曲面</h1><h2 id="1-平面网格数据的生成"><a href="#1-平面网格数据的生成" class="headerlink" title="1.平面网格数据的生成"></a>1.平面网格数据的生成</h2><ul>
 <li><p><code>[X,Y]=meshgrid(x,y)</code></p>
-<img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112173452121.png" alt="image-20221112173452121" style="zoom:50%;">
-
-<img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112173746105.png" alt="image-20221112173746105" style="zoom:50%;">
-
-<img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112173804182.png" alt="image-20221112173804182" style="zoom: 50%;">
-
+<p><img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112173452121.png" alt="image-20221112173452121" style="zoom:50%;"></p>
+<p><img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112173746105.png" alt="image-20221112173746105" style="zoom:50%;"></p>
+<p><img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112173804182.png" alt="image-20221112173804182" style="zoom: 50%;"></p>
 </li>
 </ul>
 <h2 id="2-绘制三维曲面的函数"><a href="#2-绘制三维曲面的函数" class="headerlink" title="2.绘制三维曲面的函数"></a>2.绘制三维曲面的函数</h2><ul>
@@ -482,7 +460,6 @@
 <li>其中，x、y是网格坐标矩阵，z是网格点上的高度矩阵，c用于指定在不同高度下的曲面颜色。c省略时，颜色的设定正比于图形高度</li>
 </ul>
 <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%绘制三维曲面图</span></span><br><span class="line"><span class="built_in">figure</span>(<span class="number">5</span>)</span><br><span class="line">t = <span class="number">-2</span>:<span class="number">0.2</span>:<span class="number">2</span>; </span><br><span class="line">[X, Y] = <span class="built_in">meshgrid</span>(t);</span><br><span class="line">Z = X .* <span class="built_in">exp</span>(-X.^<span class="number">2</span> - Y.^<span class="number">2</span>);</span><br><span class="line">subplot(<span class="number">1</span>,<span class="number">3</span>,<span class="number">1</span>)</span><br><span class="line">mesh(X,Y,Z); </span><br><span class="line">subplot(<span class="number">1</span>,<span class="number">3</span>,<span class="number">2</span>)</span><br><span class="line">surf(X,Y,Z); </span><br><span class="line">subplot(<span class="number">1</span>,<span class="number">3</span>,<span class="number">3</span>)</span><br><span class="line"><span class="built_in">plot3</span>(X,Y,Z); </span><br><span class="line">grid on</span><br></pre></td></tr></table></figure>
-
 <p>结果如下：</p>
 <p><img src="/2022/11/12/MATLAB%E4%B9%8B%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/image-20221112174752702.png" alt="image-20221112174752702"></p>
 <h2 id="3-色彩处理"><a href="#3-色彩处理" class="headerlink" title="3.色彩处理"></a>3.色彩处理</h2><ul>
