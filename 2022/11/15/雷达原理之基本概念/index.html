@@ -284,7 +284,6 @@
       
         <p>本节主要介绍了雷达原理中的基本概念，包括雷达的基本组成，目标参数的测量、雷达方程等。</p>
 <span id="more"></span>
-
 <h1 id="雷达的基本组成"><a href="#雷达的基本组成" class="headerlink" title="雷达的基本组成"></a>雷达的基本组成</h1><h2 id="1-天线"><a href="#1-天线" class="headerlink" title="1.天线"></a>1.天线</h2><ul>
 <li>发射信号并接收回波</li>
 </ul>
@@ -299,12 +298,10 @@
 <li>$f_0$表示信号频率，即单位周期内波的个数，有$f_0=\frac{1}{T}$</li>
 <li>$f_0$与波长$\lambda$的关系：$\lambda f_0=C（光速）$</li>
 </ul>
-<img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115111416164.png" alt="image-20221115111416164" style="zoom: 33%;">
-
+<p><img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115111416164.png" alt="image-20221115111416164" style="zoom: 33%;"></p>
 </li>
 </ul>
-<h3 id="2-2-脉冲信号"><a href="#2-2-脉冲信号" class="headerlink" title="2.2 脉冲信号"></a>2.2 脉冲信号</h3><img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115111529539.png" alt="image-20221115111529539" style="zoom: 33%;">
-
+<h3 id="2-2-脉冲信号"><a href="#2-2-脉冲信号" class="headerlink" title="2.2 脉冲信号"></a>2.2 脉冲信号</h3><p><img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115111529539.png" alt="image-20221115111529539" style="zoom: 33%;"></p>
 <ul>
 <li>$\tau$是脉冲宽度</li>
 <li>$T_r$是脉冲重复周期，则脉冲重复频率$f_r=\frac{1}{T_r}$</li>
@@ -317,21 +314,18 @@
 <h3 id="3-1-射频信号"><a href="#3-1-射频信号" class="headerlink" title="3.1 射频信号"></a>3.1 射频信号</h3><ul>
 <li>$t_r$为时延差</li>
 </ul>
-<img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115112439681.png" alt="image-20221115112439681" style="zoom: 33%;">
-
+<p><img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115112439681.png" alt="image-20221115112439681" style="zoom: 33%;"></p>
 <h3 id="3-2-中频信号"><a href="#3-2-中频信号" class="headerlink" title="3.2 中频信号"></a>3.2 中频信号</h3><ul>
 <li>接收机收到的是射频信号，频率本来就比较高，如果直接在射频上进行采样，根据奈奎斯特采样定理，采样频率需要大于信号频率的两倍，才能将采样后的信号无失真的还原回去。直接在射频上进行采样，成本就会很高，所以就需要对射频信号进行混频处理，变到中频，这样对采样率的要求就降低了</li>
 </ul>
-<img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115112905427.png" alt="image-20221115112905427" style="zoom: 33%;">
-
+<p><img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115112905427.png" alt="image-20221115112905427" style="zoom: 33%;"></p>
 <ul>
 <li>从图中可知，中频信号，频率虽然变低了，但是包络还是原来的包络</li>
 </ul>
 <h3 id="3-3-视频信号"><a href="#3-3-视频信号" class="headerlink" title="3.3 视频信号"></a>3.3 视频信号</h3><ul>
 <li>中频信号经过包络检波就能得到视频信号</li>
 </ul>
-<img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115113038131.png" alt="image-20221115113038131" style="zoom: 33%;">
-
+<p><img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115113038131.png" alt="image-20221115113038131" style="zoom: 33%;"></p>
 <h2 id="4-信号处理机"><a href="#4-信号处理机" class="headerlink" title="4.信号处理机"></a>4.信号处理机</h2><ul>
 <li>提取目标的各种信息</li>
 </ul>
@@ -346,8 +340,7 @@
 <h1 id="目标距离测量"><a href="#目标距离测量" class="headerlink" title="目标距离测量"></a>目标距离测量</h1><ul>
 <li>$2R=Ct_r\Rightarrow R=\frac{Ct_r}{2}$ </li>
 </ul>
-<img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115112757492.png" alt="image-20221115112757492" style="zoom:50%;">
-
+<p><img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115112757492.png" alt="image-20221115112757492" style="zoom:50%;"></p>
 <hr>
 <h1 id="目标速度测量"><a href="#目标速度测量" class="headerlink" title="目标速度测量"></a>目标速度测量</h1><ul>
 <li>测速原理：利用多普勒效应</li>
@@ -375,7 +368,7 @@
 <li><p>径向速度：$V_r=Vcos\theta$</p>
 </li>
 <li><p>则当雷达发射信号到达目标时的距离为：$R=R_0-V_rt$</p>
-<img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115115632640.png" alt="image-20221115115632640" style="zoom:25%;">
+<p><img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115115632640.png" alt="image-20221115115632640" style="zoom:25%;"></p>
 </li>
 <li><p>则回波信号为：$S_r(t)=kS_t(t-t_r)=kAcos(2\pi f_0(t-\frac{2(R_0-V_rt)}{C})+\phi)$</p>
 </li>
@@ -389,8 +382,7 @@
 <hr>
 <h1 id="目标角度测量"><a href="#目标角度测量" class="headerlink" title="目标角度测量"></a>目标角度测量</h1><ul>
 <li><p>需测量方位角与俯仰角</p>
-<img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115120758904.png" alt="image-20221115120758904" style="zoom: 33%;">
-
+<p><img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115120758904.png" alt="image-20221115120758904" style="zoom: 33%;"></p>
 </li>
 </ul>
 <h2 id="1-角度测量需要满足的条件"><a href="#1-角度测量需要满足的条件" class="headerlink" title="1.角度测量需要满足的条件"></a>1.角度测量需要满足的条件</h2><ul>
@@ -407,8 +399,7 @@
 <li><p>指有方向性天线相对于无方向性天线，在某个方向上功率增加的倍数</p>
 </li>
 <li><p>对于无方向性天性，到各个方向径长相等，在平面上就是一个以天线为圆心的圆。各个方向的增益都是1</p>
-<img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115121354695.png" alt="image-20221115121354695" style="zoom:33%;">
-
+<p><img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115121354695.png" alt="image-20221115121354695" style="zoom:33%;"></p>
 <ul>
 <li><p>$P_t$：发射机功率</p>
 </li>
@@ -421,11 +412,10 @@
 <li><p>天线方向图实际在360°方向都有值，与最大增益方向夹角越大，增益越小（只在主瓣范围内有效）</p>
 </li>
 <li><p>主瓣获得的功率增益，是以牺牲副瓣增益得到的</p>
-<img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115121835869.png" alt="image-20221115121835869" style="zoom:33%;">
+<p><img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115121835869.png" alt="image-20221115121835869" style="zoom:33%;"></p>
 </li>
 <li><p>直角坐标系下的天线方向图</p>
-<img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115121932764.png" alt="image-20221115121932764" style="zoom:33%;">
-
+<p><img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115121932764.png" alt="image-20221115121932764" style="zoom:33%;"></p>
 </li>
 </ul>
 <h2 id="4-波束宽度"><a href="#4-波束宽度" class="headerlink" title="4.波束宽度"></a>4.波束宽度</h2><ul>
@@ -433,17 +423,21 @@
 </li>
 <li><p>定义为主瓣功率下降到波束中央 1/2 功率处的宽度</p>
 </li>
-<li><p>波束宽度用$\theta_{3dB}$或者$\theta_{0.5}$表示<br>$$<br>\begin{cases}<br>\begin{aligned}<br>20log_{10}^\frac{\sqrt 2}{2} &amp;= -3dB\<br>10log_{10}^\frac{1}{2} &amp;= -3dB<br>\end{aligned}<br>\end{cases}<br>$$</p>
-<img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115123347246.png" alt="image-20221115123347246" style="zoom: 33%;">
-
+<li><p>波束宽度用$\theta_{3dB}$或者$\theta_{0.5}$表示</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+\begin{aligned}
+20log_{10}^\frac{\sqrt 2}{2} &= -3dB\\
+10log_{10}^\frac{1}{2} &= -3dB
+\end{aligned}
+\end{cases}</script><p><img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115123347246.png" alt="image-20221115123347246" style="zoom: 33%;"></p>
 </li>
 </ul>
 <hr>
 <h1 id="基本雷达方程"><a href="#基本雷达方程" class="headerlink" title="基本雷达方程"></a>基本雷达方程</h1><ul>
 <li>雷达基本方程，也叫做最大作用距离方程</li>
 </ul>
-<h2 id="1-基本思路"><a href="#1-基本思路" class="headerlink" title="1.基本思路"></a>1.基本思路</h2>  <img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221116111811248.png" alt="image-20221116111811248" style="zoom:50%;">
-
+<h2 id="1-基本思路"><a href="#1-基本思路" class="headerlink" title="1.基本思路"></a>1.基本思路</h2><p>  <img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221116111811248.png" alt="image-20221116111811248" style="zoom:50%;"></p>
 <ul>
 <li><p>$P_t$：雷达发射机发射信号的功率</p>
 </li>
@@ -461,60 +455,31 @@
 </li>
 </ul>
 <h2 id="2-方程公式推导"><a href="#2-方程公式推导" class="headerlink" title="2.方程公式推导"></a>2.方程公式推导</h2><ul>
-<li><p>到达目标的入射功率密度为:<br>$$<br>\frac{P_tG_t}{4\pi R^2}<br>$$</p>
-</li>
-<li><p>目标反射回来的功率为：<br>$$<br>\frac{P_tG_t\sigma}{4\pi R^2}<br>$$</p>
-</li>
-<li><p>假设接收天线的有效面积为$A_r$：<br>$$<br>\frac{P_tG_t\sigma}{4\pi R^2}\times\frac{A_r}{4\pi R^2}<br>$$</p>
-</li>
-<li><p>由于$A_r$与$G_r$的关系为：<br>$$<br>G_r=\frac{4\pi A_r}{\lambda^2}<br>$$</p>
-</li>
-<li><p>故最终接收到的功率为：<br>$$<br>P_r=\frac{P_tG_tG_r\lambda^2\sigma}{(4\pi)^3R^4}<br>$$</p>
-</li>
-<li><p>而当$P_r$=$S_{simin}$时，R就取得最大值：<br>$$<br>R_{max}=[\frac{P_tG_tG_r\lambda^2\sigma}{(4\pi)^3S_{simin}}]^{1/4}<br>$$</p>
-</li>
+<li><p>到达目标的入射功率密度为:</p>
+<script type="math/tex; mode=display">
+\frac{P_tG_t}{4\pi R^2}</script></li>
+<li><p>目标反射回来的功率为：</p>
+<script type="math/tex; mode=display">
+\frac{P_tG_t\sigma}{4\pi R^2}</script></li>
+<li><p>假设接收天线的有效面积为$A_r$：</p>
+<script type="math/tex; mode=display">
+\frac{P_tG_t\sigma}{4\pi R^2}\times\frac{A_r}{4\pi R^2}</script></li>
+<li><p>由于$A_r$与$G_r$的关系为：</p>
+<script type="math/tex; mode=display">
+G_r=\frac{4\pi A_r}{\lambda^2}</script></li>
+<li><p>故最终接收到的功率为：</p>
+<script type="math/tex; mode=display">
+P_r=\frac{P_tG_tG_r\lambda^2\sigma}{(4\pi)^3R^4}</script></li>
+<li><p>而当$P_r$=$S_{simin}$时，R就取得最大值：</p>
+<script type="math/tex; mode=display">
+R_{max}=[\frac{P_tG_tG_r\lambda^2\sigma}{(4\pi)^3S_{simin}}]^{1/4}</script></li>
 </ul>
 <hr>
 <h1 id="雷达的工作频率"><a href="#雷达的工作频率" class="headerlink" title="雷达的工作频率"></a>雷达的工作频率</h1><ul>
 <li><p>常用的工作频率：220MHz~35GHz</p>
 </li>
 <li><p>又分为若干个波段：</p>
-<table>
-<thead>
-<tr>
-<th>波段名称</th>
-<th>频率</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>L</td>
-<td>1000~2000MHz</td>
-</tr>
-<tr>
-<td>S</td>
-<td>2000~4000MHz</td>
-</tr>
-<tr>
-<td>C</td>
-<td>4000~8000MHz</td>
-</tr>
-<tr>
-<td>X</td>
-<td>8000~12000MHz</td>
-</tr>
-<tr>
-<td>K$\mu$</td>
-<td>1.2~18GHz</td>
-</tr>
-<tr>
-<td>K</td>
-<td>18~27GHZ</td>
-</tr>
-<tr>
-<td>K$\alpha$</td>
-<td>27~40GHz</td>
-</tr>
-</tbody></table>
+<p>| 波段名称  | 频率          |<br>| ————- | ——————- |<br>| L         | 1000~2000MHz  |<br>| S         | 2000~4000MHz  |<br>| C         | 4000~8000MHz  |<br>| X         | 8000~12000MHz |<br>| K$\mu$    | 1.2~18GHz     |<br>| K         | 18~27GHZ      |<br>| K$\alpha$ | 27~40GHz      |</p>
 </li>
 </ul>
 <hr>
@@ -522,6 +487,7 @@
 <li>1000yd=3000ft=0.914km≈0.6mile</li>
 <li>1海里=1.853km</li>
 </ul>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -534,7 +500,8 @@
 <th>$p$</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>$10^3$</td>
 <td>$10^6$</td>
 <td>$10^9$</td>
@@ -543,7 +510,9 @@
 <td>$10^{-9}$</td>
 <td>$10^{-12}$</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <hr>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
 <li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/149757466">一，雷达原理-基础知识1 - 知乎 (zhihu.com)</a></li>
@@ -680,7 +649,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">62</span>
+          <span class="site-state-item-count">63</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
