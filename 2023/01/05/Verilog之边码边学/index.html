@@ -275,6 +275,7 @@
       
         <p>本文主要利用Vivado工具，在码代码并仿真的过程中学习Verilog的知识点</p>
 <span id="more"></span>
+
 <h1 id="分频计数器设计"><a href="#分频计数器设计" class="headerlink" title="分频计数器设计"></a>分频计数器设计</h1><ul>
 <li><p>将输入时钟100MHZ分频形成1MHZ</p>
 </li>
@@ -282,12 +283,14 @@
 <ul>
 <li><p>最大计数值CNT_MAX为$\frac{输入时钟频率}{分频得到的频率}$，计数时从0计数到CNT_MAX-1</p>
 <figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//产生0~100的时钟计数器</span></span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> clk) <span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">if</span>(!rst_n)</span><br><span class="line">        cnt_clk&lt;=<span class="number">8&#x27;d0</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(cnt_clk&lt;(`CNT_MAX-<span class="number">1</span>))<span class="comment">//从0计到99(cnt_clk为99时，其会消耗一个时钟周期回到0)，故总共消耗100个时钟周期</span></span><br><span class="line">        cnt_clk&lt;=cnt_clk+<span class="number">1&#x27;b1</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        cnt_clk&lt;=<span class="number">8&#x27;d0</span>;  </span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>上面代码看上去是不是像从0计数到98，但是当cnt_clk等于99时，也会进入这段代码，只是之后cnt_clk的值变为了0，故实际上这段代码是从0计数到99</li>
 </ul>
 </li>
 <li><p>产生分频时钟，计数为0-49时为高电平，计数为50-99时为低电平</p>
 <figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//产生1MHZ的时钟</span></span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> clk) <span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">if</span>(!rst_n)</span><br><span class="line">        clk_1mhz&lt;=<span class="number">1&#x27;b0</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(cnt_clk&lt;`CNT_MAX_div2)<span class="comment">//从0计到49，总共花费50个时钟周期</span></span><br><span class="line">        clk_1mhz&lt;=<span class="number">1&#x27;b1</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        clk_1mhz&lt;=<span class="number">1&#x27;b0</span>;</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>上述分频时钟的产生实际上会比计数器的产生延时一个系统时钟周期，因为计数器cnt_clk在时钟上升沿变化时，不会被立马捕捉到，只有在再下一个时钟周期时，才能捕捉到变化后的值</li>
 </ul>
@@ -331,7 +334,7 @@
 </ul>
 <hr>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
-<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Ve411x75W/?spm_id_from=333.337.search-card.all.click&amp;vd_source=221b76534ba13cfad544149d75ce9b6c">特权同学《Verilog边码边学》基于Xilinx FPGA的Verilog编码、仿真与调试基础教程_哔哩哔哩_bilibili</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Ve411x75W/?spm_id_from=333.337.search-card.all.click&vd_source=221b76534ba13cfad544149d75ce9b6c">特权同学《Verilog边码边学》基于Xilinx FPGA的Verilog编码、仿真与调试基础教程_哔哩哔哩_bilibili</a></li>
 </ul>
 
     </div>
@@ -383,10 +386,13 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2023/01/05/Verilog%E4%B9%8B%E7%94%B1%E6%B5%85%E5%85%A5%E6%B7%B1%E5%AD%A6%E4%B9%A0/" rel="prev" title="Verilog之由浅入深学习">
-      <i class="fa fa-chevron-left"></i> Verilog之由浅入深学习
+    <a href="/2023/01/01/%E6%97%A5%E5%B8%B8%E5%88%86%E4%BA%AB2023/" rel="prev" title="小沈同学的日常分享2023">
+      <i class="fa fa-chevron-left"></i> 小沈同学的日常分享2023
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2023/01/05/Verilog%E4%B9%8B%E7%94%B1%E6%B5%85%E5%85%A5%E6%B7%B1%E5%AD%A6%E4%B9%A0/" rel="next" title="Verilog之由浅入深学习">
+      Verilog之由浅入深学习 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -461,7 +467,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">65</span>
+          <span class="site-state-item-count">66</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
