@@ -254,30 +254,21 @@
 <li><p>小沈同学的近期日常，欢迎点哥来长沙，也开心见到了老朋友们</p>
 <img src="/2023/01/01/%E6%97%A5%E5%B8%B8%E5%88%86%E4%BA%AB2023/image-20230114232507900.png" alt="image-20230114232507900" style="zoom: 25%;">
 
-<img src="/2023/01/01/%E6%97%A5%E5%B8%B8%E5%88%86%E4%BA%AB2023/image-20230114232448060.png" alt="image-20230114232448060" style="zoom: 50%;">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<img src="/2023/01/01/%E6%97%A5%E5%B8%B8%E5%88%86%E4%BA%AB2023/image-20230114232448060.png" alt="image-20230114232448060" style="zoom: 33%;">
 
 </li>
 </ul>
+<hr>
+<h3 id="2023-02-02记录"><a href="#2023-02-02记录" class="headerlink" title="2023.02.02记录"></a>2023.02.02记录</h3><ul>
+<li><p>最近有点玩得太嗨了，必须开始学习了，不然毕设都完不成了呜呜呜</p>
+</li>
+<li><p>还是分享一下游玩的照片嘻嘻</p>
+<img src="/2023/01/01/%E6%97%A5%E5%B8%B8%E5%88%86%E4%BA%AB2023/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20230202160736.jpg" alt="微信图片_20230202160736" style="zoom:67%;">
+</li>
+<li><p>特别感谢小王同学在郴州的热情款待，她害羞就不放图片啦哈哈</p>
+</li>
+</ul>
+<hr>
 ]]></content>
       <categories>
         <category>生活碎片</category>
@@ -662,7 +653,6 @@
 
 <h2 id="4-仿真结果-3"><a href="#4-仿真结果-3" class="headerlink" title="4.仿真结果"></a>4.仿真结果</h2><p><img src="/2023/01/05/Verilog%E4%B9%8B%E7%94%B1%E6%B5%85%E5%85%A5%E6%B7%B1%E5%AD%A6%E4%B9%A0/image-20230109205926993.png" alt="image-20230109205926993"></p>
 <hr>
-<p># </p>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
 <li><a href="https://space.bilibili.com/505270558">学习使我快乐100的个人空间_哔哩哔哩_bilibili</a></li>
 </ul>
@@ -738,7 +728,7 @@
 
 <img src="/2023/01/05/Verilog%E4%B9%8B%E8%BE%B9%E7%A0%81%E8%BE%B9%E5%AD%A6/image-20230108235240084.png" alt="image-20230108235240084" style="zoom:50%;">
 </li>
-<li><p>利用define、ifdef、endif语句方便仿真测试</p>
+<li><p><strong>利用define、ifdef、endif语句方便仿真测试</strong></p>
 <figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="meta">`<span class="keyword">define</span> SIMULATION</span><span class="comment">//在真实情况下运行时，将此行注释掉就行</span></span><br><span class="line"><span class="meta">`<span class="keyword">ifdef</span> SIMULATION</span></span><br><span class="line"><span class="comment">//仿真情况下用较小的计数值代替，不然仿真时间过长</span></span><br><span class="line"><span class="keyword">localparam</span> TIMER_CNT_1s = <span class="number">30&#x27;d1_000</span>-<span class="number">1&#x27;b1</span>;<span class="comment">//1s计数的最大值</span></span><br><span class="line"><span class="keyword">localparam</span> TIMER_CNT_10ms=<span class="number">30&#x27;d1_0</span>-<span class="number">1&#x27;b1</span>;<span class="comment">//10ms计数的最大值 </span></span><br><span class="line"><span class="meta">`<span class="keyword">else</span></span></span><br><span class="line"><span class="keyword">localparam</span> TIMER_CNT_1S = <span class="number">30&#x27;d100_000_000</span>-<span class="number">1&#x27;b1</span>;	<span class="comment">//1s计数的最大值	</span></span><br><span class="line"><span class="keyword">localparam</span> TIMER_CNT_10MS = <span class="number">30&#x27;d1_000_000</span>-<span class="number">1&#x27;b1</span>;	<span class="comment">//10ms计数的最大值</span></span><br><span class="line"><span class="meta">`<span class="keyword">endif</span> </span></span><br></pre></td></tr></table></figure>
 
 </li>
@@ -818,7 +808,81 @@
 <p><img src="/2023/01/05/Verilog%E4%B9%8B%E8%BE%B9%E7%A0%81%E8%BE%B9%E5%AD%A6/image-20230109194540797.png" alt="image-20230109194540797"></p>
 <p><img src="/2023/01/05/Verilog%E4%B9%8B%E8%BE%B9%E7%A0%81%E8%BE%B9%E5%AD%A6/image-20230109194734655.png" alt="image-20230109194734655"></p>
 <hr>
-<h1 id="4位格雷码计数器"><a href="#4位格雷码计数器" class="headerlink" title="4位格雷码计数器"></a>4位格雷码计数器</h1><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<h1 id="4位格雷码计数器"><a href="#4位格雷码计数器" class="headerlink" title="4位格雷码计数器"></a>4位格雷码计数器</h1><h2 id="1-关键点-7"><a href="#1-关键点-7" class="headerlink" title="1.关键点"></a>1.关键点</h2><ul>
+<li>系统显示任务<code>$display</code>和<code>$write</code><ul>
+<li><code>$display</code>在一次输出后自动换行，而<code>$write</code>则不会</li>
+<li>默认情况下，输出显示的数值所占字符个数由输出信号的数值类型和位宽决定。</li>
+<li>用十进制显示时，高位的0会默认以空格填充，而用其他进制显示时，高位的0会显示出来。</li>
+<li>在“%”和格式字符之间可以添加数字0，可以隐藏前置的0或空格，使得第一个非0数字顶格显示</li>
+</ul>
+</li>
+<li>监视任务<code>$monitor</code><ul>
+<li>当监视的信号发射变化时，会打印当前的值，通常与时间戳<code>$time</code>配合使用</li>
+<li><code>$monitoroff</code>关闭监视</li>
+<li><code>$monitoron</code>打开监视</li>
+</ul>
+</li>
+<li>在always语句块中使用case语句描述组合逻辑，再使用assign将r_gray赋值给o_gray</li>
+</ul>
+<h2 id="2-源代码-7"><a href="#2-源代码-7" class="headerlink" title="2.源代码"></a>2.源代码</h2><figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="meta">`<span class="keyword">timescale</span> 1ns / 1ps</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">module</span> gray_counter_design(</span><br><span class="line">    i_clk,<span class="comment">//50MHz的输入时钟</span></span><br><span class="line">    i_rst_n,</span><br><span class="line">    o_gray</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">input</span> <span class="keyword">wire</span> i_clk;</span><br><span class="line">    <span class="keyword">input</span> <span class="keyword">wire</span> i_rst_n;</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">wire</span> [<span class="number">3</span>:<span class="number">0</span>] o_gray;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">localparam</span> TIMER_1S_MAX_CNT = <span class="number">32&#x27;d1_000_000_000</span>/<span class="number">20</span>;</span><br><span class="line">    <span class="comment">//////////////////////////////////////</span></span><br><span class="line">    <span class="comment">//1s计数模块</span></span><br><span class="line">    <span class="keyword">reg</span> [<span class="number">31</span>:<span class="number">0</span>] cnt_1s;</span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> i_clk) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>(!i_rst_n)</span><br><span class="line">            cnt_1s&lt;=<span class="number">32&#x27;b0</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(cnt_1s&lt;(TIMER_1S_MAX_CNT-<span class="number">1</span>))</span><br><span class="line">            cnt_1s&lt;=cnt_1s+<span class="number">32&#x27;b1</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            cnt_1s&lt;=<span class="number">32&#x27;b0</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">////////////////////////////////////</span></span><br><span class="line">    <span class="comment">//计数器递增模块</span></span><br><span class="line">    <span class="keyword">reg</span> [<span class="number">3</span>:<span class="number">0</span>] counter;</span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> i_clk) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>(!i_rst_n)</span><br><span class="line">            counter&lt;=<span class="number">4&#x27;b0</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(cnt_1s==(TIMER_1S_MAX_CNT-<span class="number">1</span>))</span><br><span class="line">            counter&lt;=counter+<span class="number">4&#x27;b1</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            counter&lt;=counter;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/////////////////////////////////////</span></span><br><span class="line">    <span class="comment">//将counter变成格雷码的形式</span></span><br><span class="line">    <span class="keyword">reg</span> [<span class="number">3</span>:<span class="number">0</span>] r_gray;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> i_clk) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>(!i_rst_n) </span><br><span class="line">            r_gray&lt;=<span class="number">4&#x27;b0</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">            <span class="keyword">case</span>(counter)</span><br><span class="line">                <span class="number">4&#x27;b0000</span>:r_gray&lt;=<span class="number">4&#x27;b0000</span>;</span><br><span class="line">                <span class="number">4&#x27;b0001</span>:r_gray&lt;=<span class="number">4&#x27;b0001</span>;</span><br><span class="line">                <span class="number">4&#x27;b0010</span>:r_gray&lt;=<span class="number">4&#x27;b0011</span>;</span><br><span class="line">                <span class="number">4&#x27;b0011</span>:r_gray&lt;=<span class="number">4&#x27;b0010</span>;</span><br><span class="line">                <span class="number">4&#x27;b0100</span>:r_gray&lt;=<span class="number">4&#x27;b0110</span>;</span><br><span class="line">                <span class="number">4&#x27;b0101</span>:r_gray&lt;=<span class="number">4&#x27;b0111</span>;</span><br><span class="line">                <span class="number">4&#x27;b0110</span>:r_gray&lt;=<span class="number">4&#x27;b0101</span>;</span><br><span class="line">                <span class="number">4&#x27;b0111</span>:r_gray&lt;=<span class="number">4&#x27;b0100</span>;</span><br><span class="line">                <span class="number">4&#x27;b1000</span>:r_gray&lt;=<span class="number">4&#x27;b1100</span>;</span><br><span class="line">                <span class="number">4&#x27;b1001</span>:r_gray&lt;=<span class="number">4&#x27;b1101</span>;</span><br><span class="line">                <span class="number">4&#x27;b1010</span>:r_gray&lt;=<span class="number">4&#x27;b1111</span>;</span><br><span class="line">                <span class="number">4&#x27;b1011</span>:r_gray&lt;=<span class="number">4&#x27;b1110</span>;</span><br><span class="line">                <span class="number">4&#x27;b1100</span>:r_gray&lt;=<span class="number">4&#x27;b1010</span>;</span><br><span class="line">                <span class="number">4&#x27;b1101</span>:r_gray&lt;=<span class="number">4&#x27;b1011</span>;</span><br><span class="line">                <span class="number">4&#x27;b1110</span>:r_gray&lt;=<span class="number">4&#x27;b1001</span>;</span><br><span class="line">                <span class="number">4&#x27;b1111</span>:r_gray&lt;=<span class="number">4&#x27;b1000</span>;</span><br><span class="line">                <span class="keyword">default</span>:;</span><br><span class="line">            <span class="keyword">endcase</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">assign</span> o_gray=r_gray;</span><br><span class="line">    </span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="3-Testbench-7"><a href="#3-Testbench-7" class="headerlink" title="3.Testbench"></a>3.Testbench</h2><figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="meta">`<span class="keyword">timescale</span> 1ns / 1ps</span></span><br><span class="line"></span><br><span class="line"><span class="meta">`<span class="keyword">define</span> CLK_PERIOD 20</span></span><br><span class="line"><span class="keyword">module</span> gray_counter_tb;</span><br><span class="line">    <span class="keyword">reg</span> i_clk;</span><br><span class="line">    <span class="keyword">reg</span> i_rst_n;</span><br><span class="line">    <span class="keyword">wire</span> [<span class="number">3</span>:<span class="number">0</span>] o_gray;</span><br><span class="line"></span><br><span class="line">    gray_counter_design gray_counter_design_U1(</span><br><span class="line">        <span class="variable">.i_clk</span>(i_clk),</span><br><span class="line">        <span class="variable">.i_rst_n</span>(i_rst_n),</span><br><span class="line">        <span class="variable">.o_gray</span>(o_gray)</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="comment">//时钟信号的产生</span></span><br><span class="line">    <span class="keyword">initial</span> i_clk=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">always</span> <span class="variable">#(`CLK_PERIOD/2)</span> i_clk=~i_clk;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//复位信号的产生</span></span><br><span class="line">    <span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">        i_rst_n=<span class="number">0</span>;</span><br><span class="line">        #<span class="number">1000</span> i_rst_n=<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//输入激励的产生</span></span><br><span class="line">    <span class="keyword">integer</span> i;</span><br><span class="line">    <span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">        @(<span class="keyword">posedge</span> i_rst_n);<span class="comment">//等待复位完成</span></span><br><span class="line"></span><br><span class="line">        <span class="built_in">$monitor</span>(<span class="string">&quot;o_gray is %b at %0dns&quot;</span>,o_gray,<span class="built_in">$time</span>);</span><br><span class="line"></span><br><span class="line">        <span class="built_in">$stop</span>;</span><br><span class="line">    <span class="keyword">end</span> </span><br><span class="line">    </span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="4-仿真结果-7"><a href="#4-仿真结果-7" class="headerlink" title="4.仿真结果"></a>4.仿真结果</h2><p><img src="/2023/01/05/Verilog%E4%B9%8B%E8%BE%B9%E7%A0%81%E8%BE%B9%E5%AD%A6/image-20230203164007128.png" alt="image-20230203164007128"></p>
+<hr>
+<h1 id="基于查找表的8位格雷码转换"><a href="#基于查找表的8位格雷码转换" class="headerlink" title="基于查找表的8位格雷码转换"></a>基于查找表的8位格雷码转换</h1><h2 id="1-关键点-8"><a href="#1-关键点-8" class="headerlink" title="1.关键点"></a>1.关键点</h2><ul>
+<li><p>查找表</p>
+<ul>
+<li>查找表简单说就是一个预先存储好结果的数据表</li>
+<li>通过访问这张预先存储好结果的数据表，可以快速的获取不同输入的输出结果</li>
+</ul>
+</li>
+<li><p>ROM初始化COE文件制作</p>
+<p><img src="/2023/01/05/Verilog%E4%B9%8B%E8%BE%B9%E7%A0%81%E8%BE%B9%E5%AD%A6/image-20230203165642299.png" alt="image-20230203165642299"></p>
+<img src="/2023/01/05/Verilog%E4%B9%8B%E8%BE%B9%E7%A0%81%E8%BE%B9%E5%AD%A6/image-20230203165922892.png" alt="image-20230203165922892" style="zoom: 50%;">
+
+<img src="/2023/01/05/Verilog%E4%B9%8B%E8%BE%B9%E7%A0%81%E8%BE%B9%E5%AD%A6/image-20230203170228814.png" alt="image-20230203170228814" style="zoom: 50%;">
+
+<img src="/2023/01/05/Verilog%E4%B9%8B%E8%BE%B9%E7%A0%81%E8%BE%B9%E5%AD%A6/image-20230203170655478.png" alt="image-20230203170655478" style="zoom: 50%;">
+
+<img src="/2023/01/05/Verilog%E4%B9%8B%E8%BE%B9%E7%A0%81%E8%BE%B9%E5%AD%A6/image-20230203170929138.png" alt="image-20230203170929138" style="zoom: 50%;">
+
+<img src="/2023/01/05/Verilog%E4%B9%8B%E8%BE%B9%E7%A0%81%E8%BE%B9%E5%AD%A6/image-20230203171454609.png" alt="image-20230203171454609" style="zoom:50%;">
+
+<img src="/2023/01/05/Verilog%E4%B9%8B%E8%BE%B9%E7%A0%81%E8%BE%B9%E5%AD%A6/image-20230203171705965.png" alt="image-20230203171705965" style="zoom: 67%;">
+
+<img src="/2023/01/05/Verilog%E4%B9%8B%E8%BE%B9%E7%A0%81%E8%BE%B9%E5%AD%A6/image-20230203172000521.png" alt="image-20230203172000521" style="zoom:50%;">
+</li>
+<li><p><strong>打拍操作</strong>：其类似脉冲边沿检测</p>
+<p><img src="/2023/01/05/Verilog%E4%B9%8B%E8%BE%B9%E7%A0%81%E8%BE%B9%E5%AD%A6/image-20230203174713842.png" alt="image-20230203174713842"></p>
+</li>
+</ul>
+<h2 id="2-源代码-8"><a href="#2-源代码-8" class="headerlink" title="2.源代码"></a>2.源代码</h2><figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="meta">`<span class="keyword">timescale</span> 1ns / 1ps</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">module</span> gray8b_based_LUT_design(</span><br><span class="line">    i_clk,</span><br><span class="line">    i_rst_n,</span><br><span class="line">    i_en,</span><br><span class="line">    i_data,</span><br><span class="line">    o_vld,</span><br><span class="line">    o_gray</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">input</span> <span class="keyword">wire</span> i_clk;</span><br><span class="line">    <span class="keyword">input</span> <span class="keyword">wire</span> i_en;</span><br><span class="line">    <span class="keyword">input</span> <span class="keyword">wire</span> [<span class="number">7</span>:<span class="number">0</span>] i_data;</span><br><span class="line">    <span class="keyword">input</span> <span class="keyword">wire</span> i_rst_n;</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">wire</span> o_vld;</span><br><span class="line">    <span class="keyword">output</span> [<span class="number">7</span>:<span class="number">0</span>] o_gray;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//打两拍操作</span></span><br><span class="line">    <span class="keyword">reg</span> [<span class="number">1</span>:<span class="number">0</span>] r_vld;</span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> i_clk) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>(!i_rst_n)</span><br><span class="line">            r_vld&lt;=<span class="number">2&#x27;b00</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            r_vld&lt;=&#123;r_vld[<span class="number">0</span>],i_en&#125;;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">assign</span> o_vld=r_vld[<span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">    blk_mem_gen_0 blk_mem_gen_0_U (</span><br><span class="line">        <span class="variable">.clka</span>(i_clk),    <span class="comment">// input wire clka</span></span><br><span class="line">        <span class="variable">.addra</span>(i_data),  <span class="comment">// input wire [7 : 0] addra</span></span><br><span class="line">        <span class="variable">.douta</span>(o_gray)  <span class="comment">// output wire [7 : 0] douta</span></span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="3-Testbench-8"><a href="#3-Testbench-8" class="headerlink" title="3.Testbench"></a>3.Testbench</h2><figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="meta">`<span class="keyword">timescale</span> 1ns / 1ps</span></span><br><span class="line"></span><br><span class="line"><span class="meta">`<span class="keyword">define</span> CLK_PERIOD 20</span></span><br><span class="line"><span class="keyword">module</span> grab8b_based_LUT_tb;</span><br><span class="line">    <span class="keyword">reg</span> i_clk;</span><br><span class="line">    <span class="keyword">reg</span> i_en;</span><br><span class="line">    <span class="keyword">reg</span> [<span class="number">7</span>:<span class="number">0</span>] i_data;</span><br><span class="line">    <span class="keyword">reg</span> i_rst_n;</span><br><span class="line">    <span class="keyword">wire</span> o_vld;</span><br><span class="line">    <span class="keyword">wire</span> [<span class="number">7</span>:<span class="number">0</span>] o_gray;</span><br><span class="line"></span><br><span class="line">    gray8b_based_LUT_design gray8b_based_LUT_design_U1(</span><br><span class="line">        <span class="variable">.i_clk</span>(i_clk),</span><br><span class="line">        <span class="variable">.i_rst_n</span>(i_rst_n),</span><br><span class="line">        <span class="variable">.i_en</span>(i_en),</span><br><span class="line">        <span class="variable">.i_data</span>(i_data),</span><br><span class="line">        <span class="variable">.o_vld</span>(o_vld),</span><br><span class="line">        <span class="variable">.o_gray</span>(o_gray)</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="comment">//时钟信号的产生</span></span><br><span class="line">    <span class="keyword">initial</span> i_clk&lt;=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">always</span> <span class="variable">#(`CLK_PERIOD/2)</span> i_clk&lt;=~i_clk;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//复位信号的产生</span></span><br><span class="line">    <span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">        i_rst_n&lt;=<span class="number">0</span>;</span><br><span class="line">        #<span class="number">1000</span> i_rst_n&lt;=<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//输入激励的产生</span></span><br><span class="line">    <span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">        i_en&lt;=<span class="number">1&#x27;b0</span>;</span><br><span class="line">        i_data&lt;=<span class="number">8&#x27;b0</span>;</span><br><span class="line">        @(<span class="keyword">posedge</span> i_rst_n);<span class="comment">//等待复位完成</span></span><br><span class="line">        @(<span class="keyword">posedge</span> i_clk);</span><br><span class="line"></span><br><span class="line">        i_en&lt;=<span class="number">1&#x27;b1</span>;</span><br><span class="line">        i_data&lt;=<span class="number">8&#x27;b0</span>;</span><br><span class="line">        @(<span class="keyword">posedge</span> i_clk);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">repeat</span>(<span class="number">255</span>) <span class="keyword">begin</span></span><br><span class="line">            i_data&lt;=i_data+<span class="number">8&#x27;b1</span>;</span><br><span class="line">            @(<span class="keyword">posedge</span> i_clk);</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        i_en&lt;=<span class="number">1&#x27;b0</span>;</span><br><span class="line">        i_data&lt;=<span class="number">8&#x27;b0</span>;</span><br><span class="line"></span><br><span class="line">        #<span class="number">1000</span>;</span><br><span class="line">        <span class="built_in">$stop</span>;</span><br><span class="line">    <span class="keyword">end</span> </span><br><span class="line"></span><br><span class="line">    <span class="comment">//使用always对输出数据进行监控</span></span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> i_clk) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>(o_vld) </span><br><span class="line">            <span class="built_in">$display</span>(<span class="string">&quot;o_gray is:%b at time %d&quot;</span>,o_gray,<span class="built_in">$time</span>);</span><br><span class="line">        <span class="keyword">else</span> ;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="4-仿真结果-8"><a href="#4-仿真结果-8" class="headerlink" title="4.仿真结果"></a>4.仿真结果</h2><p><img src="/2023/01/05/Verilog%E4%B9%8B%E8%BE%B9%E7%A0%81%E8%BE%B9%E5%AD%A6/image-20230203175346897.png" alt="image-20230203175346897"></p>
+<p><img src="/2023/01/05/Verilog%E4%B9%8B%E8%BE%B9%E7%A0%81%E8%BE%B9%E5%AD%A6/image-20230203180812501.png" alt="image-20230203180812501"></p>
+<hr>
+<h1 id="格雷码转换的快速算法"><a href="#格雷码转换的快速算法" class="headerlink" title="格雷码转换的快速算法"></a>格雷码转换的快速算法</h1><h2 id="1-关键点-9"><a href="#1-关键点-9" class="headerlink" title="1.关键点"></a>1.关键点</h2><ul>
+<li><p>二进制码的最高位直接赋值给格雷码的最高位</p>
+</li>
+<li><p>对于次高位到最低位，使用二进制码相邻位异或的方式获取：</p>
+<ul>
+<li>若二进制码字的第i位和i+1位相同，则第i位的格雷码为0</li>
+<li>若二进制码字的第i为和i+1位不同，则第i位的格雷码位1</li>
+</ul>
+</li>
+<li><p>用generate语法实现异或处理</p>
+</li>
+</ul>
+<h2 id="2-源代码-9"><a href="#2-源代码-9" class="headerlink" title="2.源代码"></a>2.源代码</h2><figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="keyword">module</span> grayCode_quickMethod_design #(</span><br><span class="line">    <span class="keyword">parameter</span> MSB = <span class="number">3</span></span><br><span class="line">    )</span><br><span class="line">    (</span><br><span class="line">        i_clk,</span><br><span class="line">        i_rst_n,</span><br><span class="line">        i_en,</span><br><span class="line">        i_data,</span><br><span class="line">        o_vld,</span><br><span class="line">        o_gray</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">input</span> <span class="keyword">wire</span> i_clk;</span><br><span class="line">    <span class="keyword">input</span> <span class="keyword">wire</span> i_rst_n;</span><br><span class="line">    <span class="keyword">input</span> <span class="keyword">wire</span> i_en;</span><br><span class="line">    <span class="keyword">input</span> <span class="keyword">wire</span> [MSB:<span class="number">0</span>] i_data;</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">reg</span> o_vld;</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">reg</span> [MSB:<span class="number">0</span>] o_gray;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> i_clk) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>(!i_rst_n)</span><br><span class="line">            o_vld&lt;=<span class="number">1&#x27;b0</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            o_vld&lt;=i_en;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> i_clk) <span class="keyword">begin</span></span><br><span class="line">        o_gray[MSB]&lt;=i_data[MSB];</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">genvar</span> i;</span><br><span class="line">    <span class="keyword">generate</span></span><br><span class="line">        <span class="keyword">for</span>(i=MSB-<span class="number">1</span>;i&gt;=<span class="number">0</span>;i=i-<span class="number">1</span>) <span class="keyword">begin</span></span><br><span class="line">            <span class="keyword">always</span> @(<span class="keyword">posedge</span> i_clk) <span class="keyword">begin</span></span><br><span class="line">                o_gray[i]&lt;=i_data[i]^i_data[i+<span class="number">1</span>];</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">endgenerate</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="3-Testbench-9"><a href="#3-Testbench-9" class="headerlink" title="3.Testbench"></a>3.Testbench</h2><figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="meta">`<span class="keyword">timescale</span> 1ns / 1ps</span></span><br><span class="line"></span><br><span class="line"><span class="meta">`<span class="keyword">define</span> CLK_PERIOD 20</span></span><br><span class="line"><span class="keyword">module</span> grayCode_quickMethod_tb;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">parameter</span> GRAY_MSB=<span class="number">7</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">reg</span> i_clk;</span><br><span class="line">    <span class="keyword">reg</span> i_rst_n;</span><br><span class="line">    <span class="keyword">reg</span> i_en;</span><br><span class="line">    <span class="keyword">reg</span> [GRAY_MSB:<span class="number">0</span>] i_data;</span><br><span class="line">    <span class="keyword">wire</span> o_vld;</span><br><span class="line">    <span class="keyword">wire</span> [GRAY_MSB:<span class="number">0</span>] o_gray;</span><br><span class="line"></span><br><span class="line">    grayCode_quickMethod_design #(</span><br><span class="line">        <span class="variable">.MSB</span>(GRAY_MSB)</span><br><span class="line">        )</span><br><span class="line">        grayCode_quickMethod_design_U1(</span><br><span class="line">        <span class="variable">.i_clk</span>(i_clk),</span><br><span class="line">        <span class="variable">.i_rst_n</span>(i_rst_n),</span><br><span class="line">        <span class="variable">.i_en</span>(i_en),</span><br><span class="line">        <span class="variable">.i_data</span>(i_data),</span><br><span class="line">        <span class="variable">.o_vld</span>(o_vld),</span><br><span class="line">        <span class="variable">.o_gray</span>(o_gray)</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">    <span class="comment">//时钟信号的产生</span></span><br><span class="line">    <span class="keyword">initial</span> i_clk&lt;=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">always</span> <span class="variable">#(`CLK_PERIOD/2)</span> i_clk&lt;=~i_clk;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//复位信号的产生</span></span><br><span class="line">    <span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">        i_rst_n&lt;=<span class="number">0</span>;</span><br><span class="line">        #<span class="number">1000</span> i_rst_n&lt;=<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//输入激励的产生</span></span><br><span class="line">    <span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">        i_en&lt;=<span class="number">1&#x27;b0</span>;</span><br><span class="line">        i_data&lt;=<span class="number">0</span>;</span><br><span class="line">        <span class="built_in">$display</span>(<span class="string">&quot;The value of GRAY_MSB is %0d&quot;</span>,GRAY_MSB);</span><br><span class="line">        @(<span class="keyword">posedge</span> i_rst_n);<span class="comment">//等待复位完成</span></span><br><span class="line"></span><br><span class="line">        @(<span class="keyword">posedge</span> i_clk);</span><br><span class="line">        i_en&lt;=<span class="number">1&#x27;b1</span>;</span><br><span class="line">        i_data&lt;=<span class="number">0</span>;</span><br><span class="line">        @(<span class="keyword">posedge</span> i_clk);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">repeat</span>(<span class="number">2</span>**(GRAY_MSB+<span class="number">1</span>)-<span class="number">1</span>) <span class="keyword">begin</span></span><br><span class="line">            i_data&lt;=i_data+<span class="number">1</span>;</span><br><span class="line">            @(<span class="keyword">posedge</span> i_clk);</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">        @(<span class="keyword">posedge</span> i_clk);</span><br><span class="line">            i_en&lt;=<span class="number">1&#x27;b0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">$stop</span>;</span><br><span class="line">    <span class="keyword">end</span> </span><br><span class="line"></span><br><span class="line">    <span class="comment">//使用always对输出数据进行监控</span></span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> i_clk) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>(o_vld)</span><br><span class="line">            <span class="built_in">$display</span>(<span class="string">&quot;o_gray is:%b&quot;</span>,o_gray);</span><br><span class="line">        <span class="keyword">else</span> ;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="4-仿真结果-9"><a href="#4-仿真结果-9" class="headerlink" title="4.仿真结果"></a>4.仿真结果</h2><p><img src="/2023/01/05/Verilog%E4%B9%8B%E8%BE%B9%E7%A0%81%E8%BE%B9%E5%AD%A6/image-20230203194948495.png" alt="image-20230203194948495"></p>
+<hr>
+<h1 id="Testbench中文本文件写入操作"><a href="#Testbench中文本文件写入操作" class="headerlink" title="Testbench中文本文件写入操作"></a>Testbench中文本文件写入操作</h1><h2 id="1-关键点-10"><a href="#1-关键点-10" class="headerlink" title="1.关键点"></a>1.关键点</h2><h2 id="2-源代码-10"><a href="#2-源代码-10" class="headerlink" title="2.源代码"></a>2.源代码</h2><h2 id="3-Testbench-10"><a href="#3-Testbench-10" class="headerlink" title="3.Testbench"></a>3.Testbench</h2><h2 id="4-仿真结果-10"><a href="#4-仿真结果-10" class="headerlink" title="4.仿真结果"></a>4.仿真结果</h2><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
 <li><a href="https://www.bilibili.com/video/BV1Ve411x75W/?spm_id_from=333.337.search-card.all.click&vd_source=221b76534ba13cfad544149d75ce9b6c">特权同学《Verilog边码边学》基于Xilinx FPGA的Verilog编码、仿真与调试基础教程_哔哩哔哩_bilibili</a></li>
 </ul>
 ]]></content>
@@ -3356,7 +3420,7 @@ $$
 </ul>
 </li>
 <li><p>速度分辨率$v_{res}$的推导：</p>
-<p>$$<br>\Delta w=\frac{4\pi\Delta T_c}{\lambda}<br>$$</p>
+<p>$$<br>\Delta w=\frac{4\pi \Delta v T_c}{\lambda}<br>$$</p>
 <p>$$<br>\Delta w&gt;\frac{2\pi}{N}<br>$$</p>
 <p>$$<br>\Delta v&gt;\frac{\lambda}{2NT_c}<br>$$</p>
 <p>$$<br>则速度分辨率为:V_{res}=\frac\lambda{2T_f}<br>$$</p>
@@ -10208,6 +10272,116 @@ i:2000,    Train Loss:17.118926,    Test Loss:19.456854</code></pre><p><img src=
       </tags>
   </entry>
   <entry>
+    <title>Python基础之文件的读写</title>
+    <url>/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%BB%E5%86%99/</url>
+    <content><![CDATA[<p>数据处理可谓是Python最擅长的工作之一。那对于我们需要处理的大量数据，手动输入代码中是极其不科学的，故我们需要学会对文件进行读写操作，下面跟着小沈一起来探索吧！</p>
+<span id="more"></span>
+
+<h1 id="文件的打开"><a href="#文件的打开" class="headerlink" title="文件的打开"></a>文件的打开</h1><ul>
+<li><p><code>&lt;变量名&gt; = open(&lt;文件名&gt;,&lt;打开模式&gt;)</code></p>
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%BB%E5%86%99/image-20221027123041800.png" alt="image-20221027123041800" style="zoom: 50%;">
+</li>
+<li><p><strong>打开模式</strong></p>
+<table>
+<thead>
+<tr>
+<th>文件的打开模式</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>‘r’</td>
+<td>只读模式，默认值，如果文件不存在，返回FileNotFoundError</td>
+</tr>
+<tr>
+<td>‘w’</td>
+<td>覆盖写模式，文件不存在则创建，存在则完全覆盖</td>
+</tr>
+<tr>
+<td>‘x’</td>
+<td>创建写模式，文件不存咋则创建，存在则返回FileExistsError</td>
+</tr>
+<tr>
+<td>‘a’</td>
+<td>追加写模式，文件不存在则创建，存在则在文件最后追加内容</td>
+</tr>
+<tr>
+<td>‘b’</td>
+<td>二进制文本模式</td>
+</tr>
+<tr>
+<td>‘t’</td>
+<td>文本文件模式，默认值</td>
+</tr>
+<tr>
+<td>‘+’</td>
+<td>与r/w/x/a一同使用，在原功能基础上增加同时读写功能</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<hr>
+<h1 id="文件内容的获取"><a href="#文件内容的获取" class="headerlink" title="文件内容的获取"></a>文件内容的获取</h1><table>
+<thead>
+<tr>
+<th>操作方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>f.read(size=-1)</code></td>
+<td>读入全部内容，如果给出参数，读入前size长度</td>
+</tr>
+<tr>
+<td><code>f.readline(size=-1)</code></td>
+<td>读入一行内容，如果给出参数，读入该行前size长度</td>
+</tr>
+<tr>
+<td><code>f.readlines(hint=-1)</code></td>
+<td>读入文件所有行，以每行为元素形成列表，如果给出参数，读入前hint行</td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#逐行遍历文件</span></span><br><span class="line"><span class="comment">#方法一：</span></span><br><span class="line">fname=<span class="built_in">input</span>(<span class="string">&quot;请输入要打开的文件名称：&quot;</span>)</span><br><span class="line">fo=<span class="built_in">open</span>(fname,<span class="string">&quot;r&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> fo.readlines():</span><br><span class="line">    <span class="built_in">print</span>(line)</span><br><span class="line">fo.close()</span><br><span class="line"></span><br><span class="line"><span class="comment">#方法二</span></span><br><span class="line">fname=<span class="built_in">input</span>(<span class="string">&quot;请输入要打开的文件名称：&quot;</span>)</span><br><span class="line">fo=<span class="built_in">open</span>(fname,<span class="string">&quot;r&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> fo:</span><br><span class="line">    <span class="built_in">print</span>(line)</span><br><span class="line">fo.close()</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="数据的文件写入"><a href="#数据的文件写入" class="headerlink" title="数据的文件写入"></a>数据的文件写入</h1><table>
+<thead>
+<tr>
+<th>操作方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>f.write(s)</td>
+<td>向文件写入一个字符串或字节流</td>
+</tr>
+<tr>
+<td>f.writelines(lines)</td>
+<td>将一个元素全为字符串的列表写入文件</td>
+</tr>
+<tr>
+<td><code>f.seek(offset)</code></td>
+<td>改变当前文件操作指针的位置，offset=0(代表回到文件开头)，offset=1（代表当前位置），offset=2（代表回到文件结尾）</td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">fo = <span class="built_in">open</span>(<span class="string">&quot;output.txt&quot;</span>,<span class="string">&quot;w+&quot;</span>)</span><br><span class="line">ls=[<span class="string">&quot;努力是成功的别名&quot;</span>,<span class="string">&quot;每一次成长&quot;</span>,<span class="string">&quot;都是一次经历&quot;</span>]</span><br><span class="line">fo.writelines(ls)</span><br><span class="line"><span class="comment">#fo.writelines(&#x27;\n&#x27;.join(ls)) 可以加上这一句实现分行写入</span></span><br><span class="line">fo.seek(<span class="number">0</span>)<span class="comment">#必须要改变文件操作指针的位置，不然写完元素之后指针到了文章最后，会导致写下来读不出内容</span></span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> fo:</span><br><span class="line">    <span class="built_in">print</span>(line) <span class="comment">#由结果可以注意到实际上writelines不是一行行写入的，是连着写入的</span></span><br><span class="line">fo.close()</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%BB%E5%86%99/image-20221027140238501.png" alt="image-20221027140238501" style="zoom:67%;">
+
+<hr>
+<h1 id="文件的关闭"><a href="#文件的关闭" class="headerlink" title="文件的关闭"></a>文件的关闭</h1><ul>
+<li><code>&lt;变量名&gt;.close()</code>#使用完文件后一定要记得关闭文件</li>
+</ul>
+]]></content>
+      <categories>
+        <category>学习积累</category>
+      </categories>
+      <tags>
+        <tag>浪漫的Python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Python基础之数据类型</title>
     <url>/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/</url>
     <content><![CDATA[<p>数据类型是Python基本语法中非常重要的一部分，本文对集合、序列、字典这三大类数据类型做了部分总结。</p>
@@ -10626,116 +10800,6 @@ i:2000,    Train Loss:17.118926,    Test Loss:19.456854</code></pre><p><img src=
 
 <p>结果如下：</p>
 <img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221027111632810.png" alt="image-20221027111632810" style="zoom: 67%;">]]></content>
-      <categories>
-        <category>学习积累</category>
-      </categories>
-      <tags>
-        <tag>浪漫的Python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Python基础之文件的读写</title>
-    <url>/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%BB%E5%86%99/</url>
-    <content><![CDATA[<p>数据处理可谓是Python最擅长的工作之一。那对于我们需要处理的大量数据，手动输入代码中是极其不科学的，故我们需要学会对文件进行读写操作，下面跟着小沈一起来探索吧！</p>
-<span id="more"></span>
-
-<h1 id="文件的打开"><a href="#文件的打开" class="headerlink" title="文件的打开"></a>文件的打开</h1><ul>
-<li><p><code>&lt;变量名&gt; = open(&lt;文件名&gt;,&lt;打开模式&gt;)</code></p>
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%BB%E5%86%99/image-20221027123041800.png" alt="image-20221027123041800" style="zoom: 50%;">
-</li>
-<li><p><strong>打开模式</strong></p>
-<table>
-<thead>
-<tr>
-<th>文件的打开模式</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>‘r’</td>
-<td>只读模式，默认值，如果文件不存在，返回FileNotFoundError</td>
-</tr>
-<tr>
-<td>‘w’</td>
-<td>覆盖写模式，文件不存在则创建，存在则完全覆盖</td>
-</tr>
-<tr>
-<td>‘x’</td>
-<td>创建写模式，文件不存咋则创建，存在则返回FileExistsError</td>
-</tr>
-<tr>
-<td>‘a’</td>
-<td>追加写模式，文件不存在则创建，存在则在文件最后追加内容</td>
-</tr>
-<tr>
-<td>‘b’</td>
-<td>二进制文本模式</td>
-</tr>
-<tr>
-<td>‘t’</td>
-<td>文本文件模式，默认值</td>
-</tr>
-<tr>
-<td>‘+’</td>
-<td>与r/w/x/a一同使用，在原功能基础上增加同时读写功能</td>
-</tr>
-</tbody></table>
-</li>
-</ul>
-<hr>
-<h1 id="文件内容的获取"><a href="#文件内容的获取" class="headerlink" title="文件内容的获取"></a>文件内容的获取</h1><table>
-<thead>
-<tr>
-<th>操作方法</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>f.read(size=-1)</code></td>
-<td>读入全部内容，如果给出参数，读入前size长度</td>
-</tr>
-<tr>
-<td><code>f.readline(size=-1)</code></td>
-<td>读入一行内容，如果给出参数，读入该行前size长度</td>
-</tr>
-<tr>
-<td><code>f.readlines(hint=-1)</code></td>
-<td>读入文件所有行，以每行为元素形成列表，如果给出参数，读入前hint行</td>
-</tr>
-</tbody></table>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#逐行遍历文件</span></span><br><span class="line"><span class="comment">#方法一：</span></span><br><span class="line">fname=<span class="built_in">input</span>(<span class="string">&quot;请输入要打开的文件名称：&quot;</span>)</span><br><span class="line">fo=<span class="built_in">open</span>(fname,<span class="string">&quot;r&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> fo.readlines():</span><br><span class="line">    <span class="built_in">print</span>(line)</span><br><span class="line">fo.close()</span><br><span class="line"></span><br><span class="line"><span class="comment">#方法二</span></span><br><span class="line">fname=<span class="built_in">input</span>(<span class="string">&quot;请输入要打开的文件名称：&quot;</span>)</span><br><span class="line">fo=<span class="built_in">open</span>(fname,<span class="string">&quot;r&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> fo:</span><br><span class="line">    <span class="built_in">print</span>(line)</span><br><span class="line">fo.close()</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h1 id="数据的文件写入"><a href="#数据的文件写入" class="headerlink" title="数据的文件写入"></a>数据的文件写入</h1><table>
-<thead>
-<tr>
-<th>操作方法</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>f.write(s)</td>
-<td>向文件写入一个字符串或字节流</td>
-</tr>
-<tr>
-<td>f.writelines(lines)</td>
-<td>将一个元素全为字符串的列表写入文件</td>
-</tr>
-<tr>
-<td><code>f.seek(offset)</code></td>
-<td>改变当前文件操作指针的位置，offset=0(代表回到文件开头)，offset=1（代表当前位置），offset=2（代表回到文件结尾）</td>
-</tr>
-</tbody></table>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">fo = <span class="built_in">open</span>(<span class="string">&quot;output.txt&quot;</span>,<span class="string">&quot;w+&quot;</span>)</span><br><span class="line">ls=[<span class="string">&quot;努力是成功的别名&quot;</span>,<span class="string">&quot;每一次成长&quot;</span>,<span class="string">&quot;都是一次经历&quot;</span>]</span><br><span class="line">fo.writelines(ls)</span><br><span class="line"><span class="comment">#fo.writelines(&#x27;\n&#x27;.join(ls)) 可以加上这一句实现分行写入</span></span><br><span class="line">fo.seek(<span class="number">0</span>)<span class="comment">#必须要改变文件操作指针的位置，不然写完元素之后指针到了文章最后，会导致写下来读不出内容</span></span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> fo:</span><br><span class="line">    <span class="built_in">print</span>(line) <span class="comment">#由结果可以注意到实际上writelines不是一行行写入的，是连着写入的</span></span><br><span class="line">fo.close()</span><br></pre></td></tr></table></figure>
-
-<p>结果如下：</p>
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%BB%E5%86%99/image-20221027140238501.png" alt="image-20221027140238501" style="zoom:67%;">
-
-<hr>
-<h1 id="文件的关闭"><a href="#文件的关闭" class="headerlink" title="文件的关闭"></a>文件的关闭</h1><ul>
-<li><code>&lt;变量名&gt;.close()</code>#使用完文件后一定要记得关闭文件</li>
-</ul>
-]]></content>
       <categories>
         <category>学习积累</category>
       </categories>
