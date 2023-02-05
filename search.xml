@@ -269,6 +269,20 @@
 </li>
 </ul>
 <hr>
+<h3 id="2023-02-05分享"><a href="#2023-02-05分享" class="headerlink" title="2023.02.05分享"></a>2023.02.05分享</h3><ul>
+<li><p>最近在看同哥的《一个人就一个人》，分享一些个看到的有意思的话：</p>
+<ul>
+<li>“我愿意为你做很多事，多年后也想得起来，就是我们的美好“</li>
+<li>”虽然一个人很好，但如果多一个好朋友，可以让你看到更大的世界，就像陈默于我一样“，那我想说就像张总于我一样</li>
+</ul>
+</li>
+<li><p>抓住节日的尾巴，今天去看楠姐啦！一起回忆了初中我干过的那些傻事，那时候可真是一个容易发脾气闹情绪的叛逆小孩啊，一晃初中毕业都六七年啦，曾经那个觉得自己“无法无天”的小朋友也长大了，早已没有之前那样的锋芒毕露啦！如果是现在的我遇到当初那些事，也许还会生气但确实已经过了冲动不理智的年纪了吧哈哈，不过我还是有点想念当初那个自尊心强、受了委屈就要和全世界为敌的自己，也很羡慕当时无理取闹却被包容爱护的自己！时间过得可真快，每次回去很多东西都变了（比如楠姐升职啦，林总去长梅啦），但很多东西又没变（比如楠姐对我的爱哈哈），不过其实这些都不重要，真正重要的都已经变成了习惯，就像今天我冒着大雨又来到了这一样！</p>
+<img src="/2023/01/01/%E6%97%A5%E5%B8%B8%E5%88%86%E4%BA%AB2023/image-20230206010253849.png" alt="image-20230206010253849" style="zoom: 33%;">
+</li>
+<li><p>下午干妈还带我去买衣服鞋子啦！晚上还放了小烟花，这个元宵很圆满很快乐！希望我可以带着假期汲取的能力勇敢向前，晚安！</p>
+</li>
+</ul>
+<hr>
 ]]></content>
       <categories>
         <category>生活碎片</category>
@@ -476,7 +490,18 @@
     <title>C++之类与对象</title>
     <url>/2023/02/02/C++%E4%B9%8B%E7%B1%BB%E4%B8%8E%E5%AF%B9%E8%B1%A1/</url>
     <content><![CDATA[<p>C++之类与对象……</p>
-<span id="more"></span>]]></content>
+<span id="more"></span>
+
+<h1 id="C-中的类"><a href="#C-中的类" class="headerlink" title="C++中的类"></a>C++中的类</h1><h2 id="1-组成"><a href="#1-组成" class="headerlink" title="1.组成"></a>1.组成</h2><ul>
+<li>类声明：以数据成员的方式描述数据部分，以成员函数（被称为方法）的方式描述公有接口</li>
+<li>类方法定义：描述如何实现类成员函数</li>
+</ul>
+<h2 id="2-公有与私有"><a href="#2-公有与私有" class="headerlink" title="2.公有与私有"></a>2.公有与私有</h2><ul>
+<li>数据成员通常放在私有部分，组成类接口的成员函数放在共有部分</li>
+<li>使用类对象的程序都可以直接访问公有部分，但只能通过公有成员函数来访问对象的私有成员</li>
+<li>类声明中不加关键字默认为private</li>
+</ul>
+]]></content>
       <categories>
         <category>学习积累</category>
       </categories>
@@ -949,7 +974,23 @@
 
 <h2 id="4-仿真结果-12"><a href="#4-仿真结果-12" class="headerlink" title="4.仿真结果"></a>4.仿真结果</h2><p><img src="/2023/01/05/Verilog%E4%B9%8B%E8%BE%B9%E7%A0%81%E8%BE%B9%E5%AD%A6/image-20230204234624012.png" alt="image-20230204234624012"></p>
 <hr>
-<h1 id="可配置的PWM设计"><a href="#可配置的PWM设计" class="headerlink" title="可配置的PWM设计"></a>可配置的PWM设计</h1><h2 id="1-关键点-13"><a href="#1-关键点-13" class="headerlink" title="1.关键点"></a>1.关键点</h2><h2 id="2-源代码-13"><a href="#2-源代码-13" class="headerlink" title="2.源代码"></a>2.源代码</h2><h2 id="3-Testbench-13"><a href="#3-Testbench-13" class="headerlink" title="3.Testbench"></a>3.Testbench</h2><h2 id="4-仿真结果-13"><a href="#4-仿真结果-13" class="headerlink" title="4.仿真结果"></a>4.仿真结果</h2><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<h1 id="可配置的PWM设计"><a href="#可配置的PWM设计" class="headerlink" title="可配置的PWM设计"></a>可配置的PWM设计</h1><ul>
+<li>PWM波的产生，有通过i_times控制产生PWM波重复的次数</li>
+</ul>
+<h2 id="1-关键点-13"><a href="#1-关键点-13" class="headerlink" title="1.关键点"></a>1.关键点</h2><p>时序分析：</p>
+<ul>
+<li>首先需要需要i_en信号的上升沿与计数结束的标志信号w_end_en置1，从而生成控制计数器工作的使能信号r_cnt_en</li>
+<li>在使能信号r_cnt_en的控制下进行PWM的周期计数，当周期计数达到其值时，次数计数加1，从而实现PWM波的次数计数</li>
+</ul>
+<p><img src="/2023/01/05/Verilog%E4%B9%8B%E8%BE%B9%E7%A0%81%E8%BE%B9%E5%AD%A6/image-20230205235810859.png" alt="image-20230205235810859"></p>
+<p><img src="/2023/01/05/Verilog%E4%B9%8B%E8%BE%B9%E7%A0%81%E8%BE%B9%E5%AD%A6/image-20230206000138514.png" alt="image-20230206000138514"></p>
+<h2 id="2-源代码-13"><a href="#2-源代码-13" class="headerlink" title="2.源代码"></a>2.源代码</h2><figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="keyword">module</span> PWM_design(</span><br><span class="line">	<span class="keyword">input</span> i_clk,	<span class="comment">//50MHz（20ns）时钟</span></span><br><span class="line">	<span class="keyword">input</span> i_rst_n,	<span class="comment">//复位</span></span><br><span class="line">	<span class="keyword">input</span> i_en,	<span class="comment">//使能</span></span><br><span class="line">	<span class="keyword">input</span>[<span class="number">31</span>:<span class="number">0</span>] i_periord,	<span class="comment">//PWM的周期</span></span><br><span class="line">	<span class="keyword">input</span>[<span class="number">31</span>:<span class="number">0</span>] i_high,	<span class="comment">//高电平时间</span></span><br><span class="line">	<span class="keyword">input</span>[<span class="number">15</span>:<span class="number">0</span>] i_times,	<span class="comment">//次数</span></span><br><span class="line">	<span class="keyword">output</span> <span class="keyword">reg</span> o_pwm	<span class="comment">//PWM信号</span></span><br><span class="line">    );</span><br><span class="line">	</span><br><span class="line">    <span class="keyword">reg</span>[<span class="number">1</span>:<span class="number">0</span>] r_en;</span><br><span class="line">    <span class="keyword">wire</span> w_pos_en;</span><br><span class="line">    <span class="keyword">wire</span> w_end_en;</span><br><span class="line">    <span class="keyword">reg</span> r_cnt_en;	<span class="comment">//内部各个计数器工作的使能信号</span></span><br><span class="line">    <span class="keyword">reg</span>[<span class="number">31</span>:<span class="number">0</span>] r_pcnt;	<span class="comment">//周期计数器</span></span><br><span class="line">    <span class="keyword">reg</span>[<span class="number">15</span>:<span class="number">0</span>] r_tcnt;	<span class="comment">//周期次数的计数器</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/////////////////////////////////////</span></span><br><span class="line">    <span class="comment">//产生i_en的上升沿标志信号</span></span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> i_clk) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>(!i_rst_n)</span><br><span class="line">            r_en &lt;= <span class="number">2&#x27;b00</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">    	    r_en &lt;= &#123;r_en[<span class="number">0</span>],i_en&#125;;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">assign</span> w_pos_en = ~r_en[<span class="number">1</span>] &amp; r_en[<span class="number">0</span>];	</span><br><span class="line"></span><br><span class="line">    <span class="comment">/////////////////////////////////////</span></span><br><span class="line">    <span class="comment">//产生内部PWM结束信号</span></span><br><span class="line">    <span class="keyword">assign</span> w_end_en = (r_pcnt == (i_periord-<span class="number">1</span>)) &amp;&amp; (r_tcnt == (i_times-<span class="number">1</span>));</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/////////////////////////////////////</span></span><br><span class="line">    <span class="comment">//产生内部各个计数器工作的是能信号</span></span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> i_clk) <span class="keyword">begin</span></span><br><span class="line">    	<span class="keyword">if</span>(!i_rst_n) </span><br><span class="line">            r_cnt_en &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">    	<span class="keyword">else</span> <span class="keyword">if</span>(w_pos_en) </span><br><span class="line">            r_cnt_en &lt;= <span class="number">1&#x27;b1</span>;</span><br><span class="line">    	<span class="keyword">else</span> <span class="keyword">if</span>(w_end_en) </span><br><span class="line">            r_cnt_en &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">    	<span class="keyword">else</span> </span><br><span class="line">            r_cnt_en &lt;= r_cnt_en;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">/////////////////////////////////////</span></span><br><span class="line">    <span class="comment">//周期计数</span></span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> i_clk) <span class="keyword">begin</span></span><br><span class="line">    	<span class="keyword">if</span>(!r_cnt_en) </span><br><span class="line">            r_pcnt &lt;= <span class="number">&#x27;b0</span>;</span><br><span class="line">    	<span class="keyword">else</span> <span class="keyword">if</span>(r_pcnt &lt; (i_periord-<span class="number">1</span>)) </span><br><span class="line">            r_pcnt &lt;= r_pcnt+<span class="number">1</span>;</span><br><span class="line">    	<span class="keyword">else</span> </span><br><span class="line">            r_pcnt &lt;= <span class="number">&#x27;b0</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/////////////////////////////////////</span></span><br><span class="line">    <span class="comment">//周期次数计数	</span></span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> i_clk) <span class="keyword">begin</span></span><br><span class="line">    	<span class="keyword">if</span>(!r_cnt_en) </span><br><span class="line">            r_tcnt &lt;= <span class="number">&#x27;b0</span>;</span><br><span class="line">    	<span class="keyword">else</span> <span class="keyword">if</span>(r_pcnt == (i_periord-<span class="number">1</span>)) </span><br><span class="line">            r_tcnt &lt;= r_tcnt+<span class="number">1</span>;</span><br><span class="line">    	<span class="keyword">else</span> </span><br><span class="line">            r_tcnt &lt;= r_tcnt;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/////////////////////////////////////</span></span><br><span class="line">    <span class="comment">//输出PWM波形</span></span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> i_clk) <span class="keyword">begin</span></span><br><span class="line">    	<span class="keyword">if</span>(!i_rst_n) </span><br><span class="line">            o_pwm &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">    	<span class="keyword">else</span> <span class="keyword">if</span>((r_pcnt &gt; <span class="number">32&#x27;d0</span>) &amp;&amp; (r_pcnt &lt;= i_high)) </span><br><span class="line">            o_pwm &lt;= <span class="number">1&#x27;b1</span>;</span><br><span class="line">    	<span class="keyword">else</span> </span><br><span class="line">            o_pwm &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="3-Testbench-13"><a href="#3-Testbench-13" class="headerlink" title="3.Testbench"></a>3.Testbench</h2><figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="keyword">module</span> PWM_tb;</span><br><span class="line"></span><br><span class="line">    <span class="comment">////////////////////////////////////////////////////////////</span></span><br><span class="line">    <span class="comment">//参数定义</span></span><br><span class="line">    <span class="meta">`<span class="keyword">define</span> CLK_PERIORD		20		</span><span class="comment">//时钟周期设置为20ns（50MHz）	</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">////////////////////////////////////////////////////////////</span></span><br><span class="line">    <span class="comment">//接口申明</span></span><br><span class="line">    <span class="keyword">reg</span> clk;</span><br><span class="line">    <span class="keyword">reg</span> rst_n;</span><br><span class="line">    <span class="keyword">reg</span> i_en;	<span class="comment">//使能</span></span><br><span class="line">    <span class="keyword">reg</span>[<span class="number">31</span>:<span class="number">0</span>] i_periord;	<span class="comment">//周期，单位：40ns</span></span><br><span class="line">    <span class="keyword">reg</span>[<span class="number">31</span>:<span class="number">0</span>] i_high;	<span class="comment">//高电平时间，单位：40ns</span></span><br><span class="line">    <span class="keyword">reg</span>[<span class="number">15</span>:<span class="number">0</span>] i_times;	<span class="comment">//次数</span></span><br><span class="line">    <span class="keyword">wire</span> o_pwm;		<span class="comment">//PWM信号</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">////////////////////////////////////////////////////////////	</span></span><br><span class="line">    <span class="comment">//对被测试的设计进行例化</span></span><br><span class="line">    PWM_design PWM_design_U1(</span><br><span class="line">    	<span class="variable">.i_clk</span>(clk),</span><br><span class="line">    	<span class="variable">.i_rst_n</span>(rst_n),</span><br><span class="line">    	<span class="variable">.i_en</span>(i_en),</span><br><span class="line">    	<span class="variable">.i_periord</span>(i_periord),</span><br><span class="line">    	<span class="variable">.i_high</span>(i_high),</span><br><span class="line">    	<span class="variable">.i_times</span>(i_times),</span><br><span class="line">    	<span class="variable">.o_pwm</span>(o_pwm)</span><br><span class="line">        );	</span><br><span class="line">    </span><br><span class="line">    <span class="comment">////////////////////////////////////////////////////////////</span></span><br><span class="line">    <span class="comment">//复位和时钟产生</span></span><br><span class="line">    <span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">    	clk &lt;= <span class="number">0</span>;</span><br><span class="line">    	rst_n &lt;= <span class="number">0</span>;</span><br><span class="line">    	#<span class="number">1000</span>;</span><br><span class="line">    	rst_n &lt;= <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">always</span> <span class="variable">#(`CLK_PERIORD/2)</span> clk = ~clk;	</span><br><span class="line"></span><br><span class="line">    <span class="comment">////////////////////////////////////////////////////////////</span></span><br><span class="line">    <span class="comment">//测试激励产生</span></span><br><span class="line">    <span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">    	i_en		&lt;= <span class="number">1&#x27;b0</span>;	<span class="comment">//使能</span></span><br><span class="line">    	i_periord	&lt;= <span class="number">32&#x27;d0</span>;	<span class="comment">//周期，单位：40ns</span></span><br><span class="line">    	i_high		&lt;= <span class="number">32&#x27;d0</span>;	<span class="comment">//高电平时间，单位：40ns</span></span><br><span class="line">    	i_times		&lt;= <span class="number">32&#x27;d0</span>;	<span class="comment">//次数</span></span><br><span class="line"></span><br><span class="line">    	@(<span class="keyword">posedge</span> rst_n);	<span class="comment">//等待复位完成</span></span><br><span class="line">    	#<span class="number">1000</span>;</span><br><span class="line">    	@(<span class="keyword">posedge</span> clk);</span><br><span class="line">    </span><br><span class="line">    	task_pwm_setting(<span class="number">2500</span>,<span class="number">250</span>,<span class="number">3</span>);</span><br><span class="line">    </span><br><span class="line">    	#<span class="number">100_000</span>;</span><br><span class="line">    </span><br><span class="line">    	task_pwm_setting(<span class="number">1000</span>,<span class="number">500</span>,<span class="number">5</span>);</span><br><span class="line"></span><br><span class="line">    	#<span class="number">10_000</span>;</span><br><span class="line">    	<span class="built_in">$stop</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">task</span> task_pwm_setting;</span><br><span class="line">    	<span class="keyword">input</span>[<span class="number">31</span>:<span class="number">0</span>] pwm_periord;</span><br><span class="line">    	<span class="keyword">input</span>[<span class="number">31</span>:<span class="number">0</span>] pwm_high;</span><br><span class="line">    	<span class="keyword">input</span>[<span class="number">15</span>:<span class="number">0</span>] pwm_times;</span><br><span class="line">    	<span class="keyword">begin</span></span><br><span class="line">    		@(<span class="keyword">posedge</span> clk);</span><br><span class="line">    		i_en &lt;= <span class="number">1&#x27;b1</span>;</span><br><span class="line">    </span><br><span class="line">    		i_periord &lt;= pwm_periord;</span><br><span class="line">    		i_high &lt;= pwm_high;</span><br><span class="line">    		i_times &lt;= pwm_times;</span><br><span class="line">    		<span class="variable">#(pwm_periord*pwm_times*`CLK_PERIORD)</span>;</span><br><span class="line">    		@(<span class="keyword">posedge</span> clk);</span><br><span class="line">    		i_en &lt;= <span class="number">1&#x27;b0</span>;				</span><br><span class="line">    	<span class="keyword">end</span></span><br><span class="line">    <span class="keyword">endtask</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="4-仿真结果-13"><a href="#4-仿真结果-13" class="headerlink" title="4.仿真结果"></a>4.仿真结果</h2><p><img src="/2023/01/05/Verilog%E4%B9%8B%E8%BE%B9%E7%A0%81%E8%BE%B9%E5%AD%A6/image-20230206000713569.png" alt="image-20230206000713569"></p>
+<hr>
+<h1 id="超声波测距设计"><a href="#超声波测距设计" class="headerlink" title="超声波测距设计"></a>超声波测距设计</h1><h2 id="1-关键点-14"><a href="#1-关键点-14" class="headerlink" title="1.关键点"></a>1.关键点</h2><h2 id="2-源代码-14"><a href="#2-源代码-14" class="headerlink" title="2.源代码"></a>2.源代码</h2><h2 id="3-Testbench-14"><a href="#3-Testbench-14" class="headerlink" title="3.Testbench"></a>3.Testbench</h2><h2 id="4-仿真结果-14"><a href="#4-仿真结果-14" class="headerlink" title="4.仿真结果"></a>4.仿真结果</h2><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
 <li><a href="https://www.bilibili.com/video/BV1Ve411x75W/?spm_id_from=333.337.search-card.all.click&vd_source=221b76534ba13cfad544149d75ce9b6c">特权同学《Verilog边码边学》基于Xilinx FPGA的Verilog编码、仿真与调试基础教程_哔哩哔哩_bilibili</a></li>
 </ul>
 ]]></content>
@@ -10339,116 +10380,6 @@ i:2000,    Train Loss:17.118926,    Test Loss:19.456854</code></pre><p><img src=
       </tags>
   </entry>
   <entry>
-    <title>Python基础之文件的读写</title>
-    <url>/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%BB%E5%86%99/</url>
-    <content><![CDATA[<p>数据处理可谓是Python最擅长的工作之一。那对于我们需要处理的大量数据，手动输入代码中是极其不科学的，故我们需要学会对文件进行读写操作，下面跟着小沈一起来探索吧！</p>
-<span id="more"></span>
-
-<h1 id="文件的打开"><a href="#文件的打开" class="headerlink" title="文件的打开"></a>文件的打开</h1><ul>
-<li><p><code>&lt;变量名&gt; = open(&lt;文件名&gt;,&lt;打开模式&gt;)</code></p>
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%BB%E5%86%99/image-20221027123041800.png" alt="image-20221027123041800" style="zoom: 50%;">
-</li>
-<li><p><strong>打开模式</strong></p>
-<table>
-<thead>
-<tr>
-<th>文件的打开模式</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>‘r’</td>
-<td>只读模式，默认值，如果文件不存在，返回FileNotFoundError</td>
-</tr>
-<tr>
-<td>‘w’</td>
-<td>覆盖写模式，文件不存在则创建，存在则完全覆盖</td>
-</tr>
-<tr>
-<td>‘x’</td>
-<td>创建写模式，文件不存咋则创建，存在则返回FileExistsError</td>
-</tr>
-<tr>
-<td>‘a’</td>
-<td>追加写模式，文件不存在则创建，存在则在文件最后追加内容</td>
-</tr>
-<tr>
-<td>‘b’</td>
-<td>二进制文本模式</td>
-</tr>
-<tr>
-<td>‘t’</td>
-<td>文本文件模式，默认值</td>
-</tr>
-<tr>
-<td>‘+’</td>
-<td>与r/w/x/a一同使用，在原功能基础上增加同时读写功能</td>
-</tr>
-</tbody></table>
-</li>
-</ul>
-<hr>
-<h1 id="文件内容的获取"><a href="#文件内容的获取" class="headerlink" title="文件内容的获取"></a>文件内容的获取</h1><table>
-<thead>
-<tr>
-<th>操作方法</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>f.read(size=-1)</code></td>
-<td>读入全部内容，如果给出参数，读入前size长度</td>
-</tr>
-<tr>
-<td><code>f.readline(size=-1)</code></td>
-<td>读入一行内容，如果给出参数，读入该行前size长度</td>
-</tr>
-<tr>
-<td><code>f.readlines(hint=-1)</code></td>
-<td>读入文件所有行，以每行为元素形成列表，如果给出参数，读入前hint行</td>
-</tr>
-</tbody></table>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#逐行遍历文件</span></span><br><span class="line"><span class="comment">#方法一：</span></span><br><span class="line">fname=<span class="built_in">input</span>(<span class="string">&quot;请输入要打开的文件名称：&quot;</span>)</span><br><span class="line">fo=<span class="built_in">open</span>(fname,<span class="string">&quot;r&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> fo.readlines():</span><br><span class="line">    <span class="built_in">print</span>(line)</span><br><span class="line">fo.close()</span><br><span class="line"></span><br><span class="line"><span class="comment">#方法二</span></span><br><span class="line">fname=<span class="built_in">input</span>(<span class="string">&quot;请输入要打开的文件名称：&quot;</span>)</span><br><span class="line">fo=<span class="built_in">open</span>(fname,<span class="string">&quot;r&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> fo:</span><br><span class="line">    <span class="built_in">print</span>(line)</span><br><span class="line">fo.close()</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h1 id="数据的文件写入"><a href="#数据的文件写入" class="headerlink" title="数据的文件写入"></a>数据的文件写入</h1><table>
-<thead>
-<tr>
-<th>操作方法</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>f.write(s)</td>
-<td>向文件写入一个字符串或字节流</td>
-</tr>
-<tr>
-<td>f.writelines(lines)</td>
-<td>将一个元素全为字符串的列表写入文件</td>
-</tr>
-<tr>
-<td><code>f.seek(offset)</code></td>
-<td>改变当前文件操作指针的位置，offset=0(代表回到文件开头)，offset=1（代表当前位置），offset=2（代表回到文件结尾）</td>
-</tr>
-</tbody></table>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">fo = <span class="built_in">open</span>(<span class="string">&quot;output.txt&quot;</span>,<span class="string">&quot;w+&quot;</span>)</span><br><span class="line">ls=[<span class="string">&quot;努力是成功的别名&quot;</span>,<span class="string">&quot;每一次成长&quot;</span>,<span class="string">&quot;都是一次经历&quot;</span>]</span><br><span class="line">fo.writelines(ls)</span><br><span class="line"><span class="comment">#fo.writelines(&#x27;\n&#x27;.join(ls)) 可以加上这一句实现分行写入</span></span><br><span class="line">fo.seek(<span class="number">0</span>)<span class="comment">#必须要改变文件操作指针的位置，不然写完元素之后指针到了文章最后，会导致写下来读不出内容</span></span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> fo:</span><br><span class="line">    <span class="built_in">print</span>(line) <span class="comment">#由结果可以注意到实际上writelines不是一行行写入的，是连着写入的</span></span><br><span class="line">fo.close()</span><br></pre></td></tr></table></figure>
-
-<p>结果如下：</p>
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%BB%E5%86%99/image-20221027140238501.png" alt="image-20221027140238501" style="zoom:67%;">
-
-<hr>
-<h1 id="文件的关闭"><a href="#文件的关闭" class="headerlink" title="文件的关闭"></a>文件的关闭</h1><ul>
-<li><code>&lt;变量名&gt;.close()</code>#使用完文件后一定要记得关闭文件</li>
-</ul>
-]]></content>
-      <categories>
-        <category>学习积累</category>
-      </categories>
-      <tags>
-        <tag>浪漫的Python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Python基础之数据类型</title>
     <url>/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/</url>
     <content><![CDATA[<p>数据类型是Python基本语法中非常重要的一部分，本文对集合、序列、字典这三大类数据类型做了部分总结。</p>
@@ -10867,6 +10798,116 @@ i:2000,    Train Loss:17.118926,    Test Loss:19.456854</code></pre><p><img src=
 
 <p>结果如下：</p>
 <img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221027111632810.png" alt="image-20221027111632810" style="zoom: 67%;">]]></content>
+      <categories>
+        <category>学习积累</category>
+      </categories>
+      <tags>
+        <tag>浪漫的Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python基础之文件的读写</title>
+    <url>/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%BB%E5%86%99/</url>
+    <content><![CDATA[<p>数据处理可谓是Python最擅长的工作之一。那对于我们需要处理的大量数据，手动输入代码中是极其不科学的，故我们需要学会对文件进行读写操作，下面跟着小沈一起来探索吧！</p>
+<span id="more"></span>
+
+<h1 id="文件的打开"><a href="#文件的打开" class="headerlink" title="文件的打开"></a>文件的打开</h1><ul>
+<li><p><code>&lt;变量名&gt; = open(&lt;文件名&gt;,&lt;打开模式&gt;)</code></p>
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%BB%E5%86%99/image-20221027123041800.png" alt="image-20221027123041800" style="zoom: 50%;">
+</li>
+<li><p><strong>打开模式</strong></p>
+<table>
+<thead>
+<tr>
+<th>文件的打开模式</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>‘r’</td>
+<td>只读模式，默认值，如果文件不存在，返回FileNotFoundError</td>
+</tr>
+<tr>
+<td>‘w’</td>
+<td>覆盖写模式，文件不存在则创建，存在则完全覆盖</td>
+</tr>
+<tr>
+<td>‘x’</td>
+<td>创建写模式，文件不存咋则创建，存在则返回FileExistsError</td>
+</tr>
+<tr>
+<td>‘a’</td>
+<td>追加写模式，文件不存在则创建，存在则在文件最后追加内容</td>
+</tr>
+<tr>
+<td>‘b’</td>
+<td>二进制文本模式</td>
+</tr>
+<tr>
+<td>‘t’</td>
+<td>文本文件模式，默认值</td>
+</tr>
+<tr>
+<td>‘+’</td>
+<td>与r/w/x/a一同使用，在原功能基础上增加同时读写功能</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<hr>
+<h1 id="文件内容的获取"><a href="#文件内容的获取" class="headerlink" title="文件内容的获取"></a>文件内容的获取</h1><table>
+<thead>
+<tr>
+<th>操作方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>f.read(size=-1)</code></td>
+<td>读入全部内容，如果给出参数，读入前size长度</td>
+</tr>
+<tr>
+<td><code>f.readline(size=-1)</code></td>
+<td>读入一行内容，如果给出参数，读入该行前size长度</td>
+</tr>
+<tr>
+<td><code>f.readlines(hint=-1)</code></td>
+<td>读入文件所有行，以每行为元素形成列表，如果给出参数，读入前hint行</td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#逐行遍历文件</span></span><br><span class="line"><span class="comment">#方法一：</span></span><br><span class="line">fname=<span class="built_in">input</span>(<span class="string">&quot;请输入要打开的文件名称：&quot;</span>)</span><br><span class="line">fo=<span class="built_in">open</span>(fname,<span class="string">&quot;r&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> fo.readlines():</span><br><span class="line">    <span class="built_in">print</span>(line)</span><br><span class="line">fo.close()</span><br><span class="line"></span><br><span class="line"><span class="comment">#方法二</span></span><br><span class="line">fname=<span class="built_in">input</span>(<span class="string">&quot;请输入要打开的文件名称：&quot;</span>)</span><br><span class="line">fo=<span class="built_in">open</span>(fname,<span class="string">&quot;r&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> fo:</span><br><span class="line">    <span class="built_in">print</span>(line)</span><br><span class="line">fo.close()</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="数据的文件写入"><a href="#数据的文件写入" class="headerlink" title="数据的文件写入"></a>数据的文件写入</h1><table>
+<thead>
+<tr>
+<th>操作方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>f.write(s)</td>
+<td>向文件写入一个字符串或字节流</td>
+</tr>
+<tr>
+<td>f.writelines(lines)</td>
+<td>将一个元素全为字符串的列表写入文件</td>
+</tr>
+<tr>
+<td><code>f.seek(offset)</code></td>
+<td>改变当前文件操作指针的位置，offset=0(代表回到文件开头)，offset=1（代表当前位置），offset=2（代表回到文件结尾）</td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">fo = <span class="built_in">open</span>(<span class="string">&quot;output.txt&quot;</span>,<span class="string">&quot;w+&quot;</span>)</span><br><span class="line">ls=[<span class="string">&quot;努力是成功的别名&quot;</span>,<span class="string">&quot;每一次成长&quot;</span>,<span class="string">&quot;都是一次经历&quot;</span>]</span><br><span class="line">fo.writelines(ls)</span><br><span class="line"><span class="comment">#fo.writelines(&#x27;\n&#x27;.join(ls)) 可以加上这一句实现分行写入</span></span><br><span class="line">fo.seek(<span class="number">0</span>)<span class="comment">#必须要改变文件操作指针的位置，不然写完元素之后指针到了文章最后，会导致写下来读不出内容</span></span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> fo:</span><br><span class="line">    <span class="built_in">print</span>(line) <span class="comment">#由结果可以注意到实际上writelines不是一行行写入的，是连着写入的</span></span><br><span class="line">fo.close()</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%BB%E5%86%99/image-20221027140238501.png" alt="image-20221027140238501" style="zoom:67%;">
+
+<hr>
+<h1 id="文件的关闭"><a href="#文件的关闭" class="headerlink" title="文件的关闭"></a>文件的关闭</h1><ul>
+<li><code>&lt;变量名&gt;.close()</code>#使用完文件后一定要记得关闭文件</li>
+</ul>
+]]></content>
       <categories>
         <category>学习积累</category>
       </categories>
