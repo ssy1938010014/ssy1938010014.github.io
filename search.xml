@@ -490,7 +490,26 @@
     <title>C++之使用类</title>
     <url>/2023/02/08/C++%E4%B9%8B%E4%BD%BF%E7%94%A8%E7%B1%BB/</url>
     <content><![CDATA[<p>C++之使用类……</p>
-<span id="more"></span>]]></content>
+<span id="more"></span>
+
+<h1 id="运算符重载"><a href="#运算符重载" class="headerlink" title="运算符重载"></a>运算符重载</h1><ul>
+<li><p>mytime1.h</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> __MYTIME1_H__</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> __MYTIME1_H__</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Time</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">private</span>:</span><br><span class="line">		<span class="type">int</span> hours;</span><br><span class="line">		<span class="type">int</span> minutes;</span><br><span class="line">	<span class="keyword">public</span>:</span><br><span class="line">		<span class="built_in">Time</span>();</span><br><span class="line">		<span class="built_in">Time</span>(<span class="type">int</span> h, <span class="type">int</span> m = <span class="number">0</span>);</span><br><span class="line">		<span class="function"><span class="type">void</span> <span class="title">AddMin</span><span class="params">(<span class="type">int</span> m)</span></span>;</span><br><span class="line">		<span class="function"><span class="type">void</span> <span class="title">AddHr</span><span class="params">(<span class="type">int</span> h)</span></span>;</span><br><span class="line">		<span class="function"><span class="type">void</span> <span class="title">Reset</span><span class="params">(<span class="type">int</span> h = <span class="number">0</span>, <span class="type">int</span> m = <span class="number">0</span>)</span></span>;</span><br><span class="line">		<span class="comment">//运算符重载的声明</span></span><br><span class="line">		Time <span class="keyword">operator</span>+(<span class="type">const</span> Time &amp;t) <span class="type">const</span>;</span><br><span class="line">		<span class="function"><span class="type">void</span> <span class="title">Show</span><span class="params">()</span> <span class="type">const</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>mytime1.cpp</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;mytime1.h&quot;</span></span></span><br><span class="line"></span><br><span class="line">Time::<span class="built_in">Time</span>()</span><br><span class="line">&#123;</span><br><span class="line">	hours = minutes = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Time::<span class="built_in">Time</span>(<span class="type">int</span> h, <span class="type">int</span> m)</span><br><span class="line">&#123;</span><br><span class="line">	hours = h;</span><br><span class="line">	minutes = m;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Time::AddMin</span><span class="params">(<span class="type">int</span> m)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	minutes += m;</span><br><span class="line">	hours += minutes / <span class="number">60</span>;</span><br><span class="line">	minutes %= <span class="number">60</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Time::AddHr</span><span class="params">(<span class="type">int</span> h)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	hours += h;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Time::Reset</span><span class="params">(<span class="type">int</span> h, <span class="type">int</span> m)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	hours = h;</span><br><span class="line">	minutes = m;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Time Time::<span class="keyword">operator</span>+(<span class="type">const</span> Time &amp;t) <span class="type">const</span></span><br><span class="line">&#123;</span><br><span class="line">	Time sum;</span><br><span class="line"></span><br><span class="line">	sum.minutes = minutes + t.minutes;</span><br><span class="line">	sum.hours = hours + t.hours + sum.minutes / <span class="number">60</span>;</span><br><span class="line">	sum.minutes %= <span class="number">60</span>;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> sum;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Time::Show</span><span class="params">()</span> <span class="type">const</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	cout &lt;&lt; hours &lt;&lt; <span class="string">&quot; hours,  &quot;</span> &lt;&lt; minutes &lt;&lt; <span class="string">&quot; minutes.&quot;</span> &lt;&lt; endl;</span><br><span class="line">	cout&lt;&lt;<span class="string">&quot;---------------------------------&quot;</span>&lt;&lt;endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>usetime1.cpp</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;mytime1.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="function">Time <span class="title">coding</span><span class="params">(<span class="number">2</span>, <span class="number">40</span>)</span></span>;</span><br><span class="line">	<span class="function">Time <span class="title">fixing</span><span class="params">(<span class="number">5</span>, <span class="number">55</span>)</span></span>;</span><br><span class="line">	Time total;</span><br><span class="line">	Time Planning;</span><br><span class="line"></span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;coding time = &quot;</span>;</span><br><span class="line">	coding.<span class="built_in">Show</span>();</span><br><span class="line"></span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;fixing time = &quot;</span>;</span><br><span class="line">	fixing.<span class="built_in">Show</span>();</span><br><span class="line"></span><br><span class="line">	<span class="comment">//不用运算符重载的方式</span></span><br><span class="line">	<span class="comment">//total = coding.Sum(fixing);</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">//运算符重载的常见使用方式</span></span><br><span class="line">	total = coding + fixing;</span><br><span class="line">	total.<span class="built_in">Show</span>();</span><br><span class="line"></span><br><span class="line">	<span class="comment">//运算符重载的另一种使用形式</span></span><br><span class="line">	Planning = coding.<span class="keyword">operator</span>+(fixing);</span><br><span class="line">	Planning.<span class="built_in">Show</span>();</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>结果如下：</p>
+<p><img src="/2023/02/08/C++%E4%B9%8B%E4%BD%BF%E7%94%A8%E7%B1%BB/image-20230210132912766.png" alt="image-20230210132912766"></p>
+</li>
+<li><p>对于<code>Time operator+(const Time &amp;t) const;</code>函数，其<strong>返回值不能是引用类型Time &amp;</strong>，因为返回类型如果是Time &amp;，则引用的将是sum对象，但由于sum对象是局部变量，在函数结束时将被删除，因此引用将指向一个不存在的对象</p>
+</li>
+</ul>
+<hr>
+]]></content>
       <categories>
         <category>学习积累</category>
       </categories>
@@ -825,7 +844,40 @@
 
 <h2 id="4-仿真结果-3"><a href="#4-仿真结果-3" class="headerlink" title="4.仿真结果"></a>4.仿真结果</h2><p><img src="/2023/01/05/Verilog%E4%B9%8B%E7%94%B1%E6%B5%85%E5%85%A5%E6%B7%B1%E5%AD%A6%E4%B9%A0/image-20230109205926993.png" alt="image-20230109205926993"></p>
 <hr>
-<h1 id="UART的loopback实例"><a href="#UART的loopback实例" class="headerlink" title="UART的loopback实例"></a>UART的loopback实例</h1><h2 id="1-思路-4"><a href="#1-思路-4" class="headerlink" title="1.思路"></a>1.思路</h2><h2 id="2-源代码-4"><a href="#2-源代码-4" class="headerlink" title="2.源代码"></a>2.源代码</h2><h2 id="3-Testbench-4"><a href="#3-Testbench-4" class="headerlink" title="3.Testbench"></a>3.Testbench</h2><h2 id="4-仿真结果-4"><a href="#4-仿真结果-4" class="headerlink" title="4.仿真结果"></a>4.仿真结果</h2><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<h1 id="UART的loopback实例"><a href="#UART的loopback实例" class="headerlink" title="UART的loopback实例"></a>UART的loopback实例</h1><ul>
+<li>接收PC端发送的UART数据，原数据返回给PC端，即loopback功能</li>
+</ul>
+<h2 id="1-源代码"><a href="#1-源代码" class="headerlink" title="1.源代码"></a>1.源代码</h2><ul>
+<li>uart_design.v</li>
+</ul>
+<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="comment">//接收PC端发送的UART数据，原数据返回给PC端，即loopback功能</span></span><br><span class="line"><span class="keyword">module</span> uart_design(</span><br><span class="line">	<span class="keyword">input</span> sys_clk_i,	<span class="comment">//外部输入50MHz时钟信号</span></span><br><span class="line">	<span class="keyword">input</span> ext_rst_n,	<span class="comment">//外部输入复位信号，低电平有效			</span></span><br><span class="line">	<span class="keyword">input</span> uart_rx,		<span class="comment">// UART接收数据信号</span></span><br><span class="line">	<span class="keyword">output</span> uart_tx		<span class="comment">// UART发送数据信号</span></span><br><span class="line">	);</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//-------------------------------------</span></span><br><span class="line">	<span class="comment">//PLL例化</span></span><br><span class="line">	<span class="keyword">wire</span> clk_12m5;	<span class="comment">//PLL输出12.5MHz时钟</span></span><br><span class="line">	<span class="keyword">wire</span> clk_25m;	<span class="comment">//PLL输出25MHz时钟</span></span><br><span class="line">	<span class="keyword">wire</span> clk_50m;	<span class="comment">//PLL输出50MHz时钟</span></span><br><span class="line">	<span class="keyword">wire</span> clk_100m;	<span class="comment">//PLL输出100MHz时钟</span></span><br><span class="line">	<span class="keyword">wire</span> sys_rst_n;	<span class="comment">//PLL输出的locked信号，作为FPGA内部的复位信号，低电平复位，高电平正常工作</span></span><br><span class="line"></span><br><span class="line">	  clk_wiz_0 	u1_clk_wiz_0</span><br><span class="line">	   (</span><br><span class="line">	   <span class="comment">// Clock in ports</span></span><br><span class="line">	    <span class="variable">.clk_in1</span>(sys_clk_i),      <span class="comment">// input clk_in1</span></span><br><span class="line">	    <span class="comment">// Clock out ports</span></span><br><span class="line">	    <span class="variable">.clk_out1</span>(clk_12m5),     <span class="comment">// output clk_out1</span></span><br><span class="line">	    <span class="variable">.clk_out2</span>(clk_25m),     <span class="comment">// output clk_out2</span></span><br><span class="line">	    <span class="variable">.clk_out3</span>(clk_50m),     <span class="comment">// output clk_out3</span></span><br><span class="line">	    <span class="variable">.clk_out4</span>(clk_100m),     <span class="comment">// output clk_out4</span></span><br><span class="line">	    <span class="comment">// Status and control signals</span></span><br><span class="line">	    <span class="variable">.reset</span>(!ext_rst_n), <span class="comment">// input reset</span></span><br><span class="line">	    <span class="variable">.locked</span>(sys_rst_n));      <span class="comment">// output locked</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="comment">//-------------------------------------</span></span><br><span class="line">	<span class="comment">//下面的四个模块中，speed_rx和speed_tx是两个完全独立的硬件模块，可称之为逻辑复制</span></span><br><span class="line">	<span class="comment">//（不是资源共享，和软件中的同一个子程序调用不能混为一谈）</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">wire</span> bps_start1,bps_start2;	<span class="comment">//接收到数据后，波特率时钟启动信号置位</span></span><br><span class="line">	<span class="keyword">wire</span> clk_bps1,clk_bps2;		<span class="comment">// clk_bps_r高电平为接收数据位的中间采样点,同时也作为发送数据的数据改变点 </span></span><br><span class="line">	<span class="keyword">wire</span>[<span class="number">7</span>:<span class="number">0</span>] rx_data;	<span class="comment">//接收数据寄存器，保存直至下一个数据来到</span></span><br><span class="line">	<span class="keyword">wire</span> rx_int;		<span class="comment">//接收数据中断信号,接收到数据期间始终为高电平</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//UART接收信号波特率设置</span></span><br><span class="line">	speed_setting	u2_speed_rx(	</span><br><span class="line">							<span class="variable">.clk</span>(clk_25m),	<span class="comment">//波特率选择模块</span></span><br><span class="line">							<span class="variable">.rst_n</span>(sys_rst_n),</span><br><span class="line">							<span class="variable">.bps_start</span>(bps_start1),</span><br><span class="line">							<span class="variable">.clk_bps</span>(clk_bps1)</span><br><span class="line">							);</span><br><span class="line">	<span class="comment">//UART接收数据处理</span></span><br><span class="line">	my_uart_rx		u3_my_uart_rx(		</span><br><span class="line">							<span class="variable">.clk</span>(clk_25m),	<span class="comment">//接收数据模块</span></span><br><span class="line">							<span class="variable">.rst_n</span>(sys_rst_n),</span><br><span class="line">							<span class="variable">.uart_rx</span>(uart_rx),</span><br><span class="line">							<span class="variable">.rx_data</span>(rx_data),</span><br><span class="line">							<span class="variable">.rx_int</span>(rx_int),</span><br><span class="line">							<span class="variable">.clk_bps</span>(clk_bps1),</span><br><span class="line">							<span class="variable">.bps_start</span>(bps_start1)</span><br><span class="line">							);</span><br><span class="line"></span><br><span class="line">	<span class="comment">//-------------------------------------</span></span><br><span class="line">	<span class="comment">//UART发送信号波特率设置													</span></span><br><span class="line">	speed_setting	u4_speed_tx(	</span><br><span class="line">							<span class="variable">.clk</span>(clk_25m),	<span class="comment">//波特率选择模块</span></span><br><span class="line">							<span class="variable">.rst_n</span>(sys_rst_n),</span><br><span class="line">							<span class="variable">.bps_start</span>(bps_start2),</span><br><span class="line">							<span class="variable">.clk_bps</span>(clk_bps2)</span><br><span class="line">							);</span><br><span class="line">	<span class="comment">//UART发送数据处理</span></span><br><span class="line">	my_uart_tx		u5_my_uart_tx(		</span><br><span class="line">							<span class="variable">.clk</span>(clk_25m),	<span class="comment">//发送数据模块</span></span><br><span class="line">							<span class="variable">.rst_n</span>(sys_rst_n),</span><br><span class="line">							<span class="variable">.rx_data</span>(rx_data),</span><br><span class="line">							<span class="variable">.rx_int</span>(rx_int),</span><br><span class="line">							<span class="variable">.uart_tx</span>(uart_tx),</span><br><span class="line">							<span class="variable">.clk_bps</span>(clk_bps2),</span><br><span class="line">							<span class="variable">.bps_start</span>(bps_start2)</span><br><span class="line">							);</span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span>		</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>my_uart_tx.v</li>
+</ul>
+<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="keyword">module</span> my_uart_tx(</span><br><span class="line">	clk,</span><br><span class="line">	rst_n,</span><br><span class="line">	rx_data,</span><br><span class="line">	rx_int,</span><br><span class="line">	uart_tx,</span><br><span class="line">	clk_bps,</span><br><span class="line">	bps_start</span><br><span class="line">	);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">input</span> clk;			<span class="comment">// 25MHz主时钟</span></span><br><span class="line">	<span class="keyword">input</span> rst_n;		<span class="comment">//低电平复位信号</span></span><br><span class="line">	<span class="keyword">input</span> clk_bps;		<span class="comment">// clk_bps_r高电平为接收数据位的中间采样点,同时也作为发送数据的数据改变点</span></span><br><span class="line">	<span class="keyword">input</span>[<span class="number">7</span>:<span class="number">0</span>] rx_data;	<span class="comment">//接收数据寄存器</span></span><br><span class="line">	<span class="keyword">input</span> rx_int;		<span class="comment">//接收数据中断信号,接收到数据期间始终为高电平,在该模块中利用它的下降沿来启动串口发送数据</span></span><br><span class="line">	<span class="keyword">output</span> uart_tx;	<span class="comment">// RS232发送数据信号</span></span><br><span class="line">	<span class="keyword">output</span> bps_start;	<span class="comment">//接收或者要发送数据，波特率时钟启动信号置位</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//---------------------------------------------------------</span></span><br><span class="line">	<span class="keyword">reg</span> rx_int0,rx_int1,rx_int2;	<span class="comment">//rx_int信号寄存器，捕捉下降沿滤波用</span></span><br><span class="line">	<span class="keyword">wire</span> neg_rx_int;	<span class="comment">// rx_int下降沿标志位</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">always</span> @ (<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">negedge</span> rst_n) </span><br><span class="line">		<span class="keyword">if</span>(!rst_n) <span class="keyword">begin</span></span><br><span class="line">			rx_int0 &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">			rx_int1 &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">			rx_int2 &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">			rx_int0 &lt;= rx_int;</span><br><span class="line">			rx_int1 &lt;= rx_int0;</span><br><span class="line">			rx_int2 &lt;= rx_int1;</span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">assign</span> neg_rx_int =  ~rx_int1 &amp; rx_int2;	<span class="comment">//捕捉到下降沿后，neg_rx_int拉高保持一个主时钟周期</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//---------------------------------------------------------</span></span><br><span class="line">	<span class="keyword">reg</span>[<span class="number">7</span>:<span class="number">0</span>] tx_data;	<span class="comment">//待发送数据的寄存器</span></span><br><span class="line">	<span class="keyword">reg</span> bps_start_r;</span><br><span class="line">	<span class="keyword">reg</span> tx_en;	<span class="comment">//发送数据使能信号，高有效</span></span><br><span class="line">	<span class="keyword">reg</span>[<span class="number">3</span>:<span class="number">0</span>] num;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">always</span> @ (<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">negedge</span> rst_n) </span><br><span class="line">		<span class="keyword">if</span>(!rst_n) <span class="keyword">begin</span></span><br><span class="line">			bps_start_r &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">			tx_en &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">			tx_data &lt;= <span class="number">8&#x27;d0</span>;</span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span>(neg_rx_int) <span class="keyword">begin</span>	<span class="comment">//接收数据完毕，准备把接收到的数据发回去</span></span><br><span class="line">			bps_start_r &lt;= <span class="number">1&#x27;b1</span>;</span><br><span class="line">			tx_data &lt;= rx_data;	<span class="comment">//把接收到的数据存入发送数据寄存器</span></span><br><span class="line">			tx_en &lt;= <span class="number">1&#x27;b1</span>;		<span class="comment">//进入发送数据状态中</span></span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span>(num == <span class="number">4&#x27;d10</span>) <span class="keyword">begin</span>	<span class="comment">//数据发送完成，复位</span></span><br><span class="line">			bps_start_r &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">			tx_en &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">assign</span> bps_start = bps_start_r;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//---------------------------------------------------------</span></span><br><span class="line">	<span class="keyword">reg</span> uart_tx_r;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">always</span> @ (<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">negedge</span> rst_n)</span><br><span class="line">		<span class="keyword">if</span>(!rst_n) <span class="keyword">begin</span></span><br><span class="line">			num &lt;= <span class="number">4&#x27;d0</span>;</span><br><span class="line">			uart_tx_r &lt;= <span class="number">1&#x27;b1</span>;</span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span>(tx_en) <span class="keyword">begin</span></span><br><span class="line">			<span class="keyword">if</span>(clk_bps)	<span class="keyword">begin</span></span><br><span class="line">				num &lt;= num+<span class="number">1&#x27;b1</span>;</span><br><span class="line">				<span class="keyword">case</span> (num)</span><br><span class="line">					<span class="number">4&#x27;d0</span>: uart_tx_r &lt;= <span class="number">1&#x27;b0</span>; 	<span class="comment">//发送起始位</span></span><br><span class="line">					<span class="number">4&#x27;d1</span>: uart_tx_r &lt;= tx_data[<span class="number">0</span>];	<span class="comment">//发送bit0</span></span><br><span class="line">					<span class="number">4&#x27;d2</span>: uart_tx_r &lt;= tx_data[<span class="number">1</span>];	<span class="comment">//发送bit1</span></span><br><span class="line">					<span class="number">4&#x27;d3</span>: uart_tx_r &lt;= tx_data[<span class="number">2</span>];	<span class="comment">//发送bit2</span></span><br><span class="line">					<span class="number">4&#x27;d4</span>: uart_tx_r &lt;= tx_data[<span class="number">3</span>];	<span class="comment">//发送bit3</span></span><br><span class="line">					<span class="number">4&#x27;d5</span>: uart_tx_r &lt;= tx_data[<span class="number">4</span>];	<span class="comment">//发送bit4</span></span><br><span class="line">					<span class="number">4&#x27;d6</span>: uart_tx_r &lt;= tx_data[<span class="number">5</span>];	<span class="comment">//发送bit5</span></span><br><span class="line">					<span class="number">4&#x27;d7</span>: uart_tx_r &lt;= tx_data[<span class="number">6</span>];	<span class="comment">//发送bit6</span></span><br><span class="line">					<span class="number">4&#x27;d8</span>: uart_tx_r &lt;= tx_data[<span class="number">7</span>];	<span class="comment">//发送bit7</span></span><br><span class="line">					<span class="number">4&#x27;d9</span>: uart_tx_r &lt;= <span class="number">1&#x27;b1</span>;	<span class="comment">//发送结束位</span></span><br><span class="line">				 	<span class="keyword">default</span>: uart_tx_r &lt;= <span class="number">1&#x27;b1</span>;</span><br><span class="line">				<span class="keyword">endcase</span></span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">			<span class="keyword">else</span> <span class="keyword">if</span>(num == <span class="number">4&#x27;d10</span>) num &lt;= <span class="number">4&#x27;d0</span>;	<span class="comment">//复位</span></span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">assign</span> uart_tx = uart_tx_r;</span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>my_uart_rx.v</li>
+</ul>
+<figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="keyword">module</span> my_uart_rx(</span><br><span class="line">	clk,</span><br><span class="line">	rst_n,</span><br><span class="line">	uart_rx,</span><br><span class="line">	rx_data,</span><br><span class="line">	rx_int,</span><br><span class="line">	clk_bps,</span><br><span class="line">	bps_start</span><br><span class="line">	);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">input</span> clk;		<span class="comment">// 25MHz主时钟</span></span><br><span class="line">	<span class="keyword">input</span> rst_n;	<span class="comment">//低电平复位信号</span></span><br><span class="line">	<span class="keyword">input</span> uart_rx;	<span class="comment">// RS232接收数据信号</span></span><br><span class="line">	<span class="keyword">input</span> clk_bps;	<span class="comment">// clk_bps的高电平为接收或者发送数据位的中间采样点</span></span><br><span class="line">	<span class="keyword">output</span> bps_start;		<span class="comment">//接收到数据后，波特率时钟启动信号置位</span></span><br><span class="line">	<span class="keyword">output</span>[<span class="number">7</span>:<span class="number">0</span>] rx_data;	<span class="comment">//接收数据寄存器，保存直至下一个数据来到 </span></span><br><span class="line">	<span class="keyword">output</span> rx_int;	<span class="comment">//接收数据中断信号,接收到数据期间始终为高电平</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//----------------------------------------------------------------</span></span><br><span class="line">	<span class="keyword">reg</span> uart_rx0,uart_rx1,uart_rx2,uart_rx3;	<span class="comment">//接收数据寄存器，滤波用</span></span><br><span class="line">	<span class="keyword">wire</span> neg_uart_rx;	<span class="comment">//表示数据线接收到下降沿</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">always</span> @ (<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">negedge</span> rst_n) </span><br><span class="line">		<span class="keyword">if</span>(!rst_n) <span class="keyword">begin</span></span><br><span class="line">			uart_rx0 &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">			uart_rx1 &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">			uart_rx2 &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">			uart_rx3 &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">			uart_rx0 &lt;= uart_rx;</span><br><span class="line">			uart_rx1 &lt;= uart_rx0;</span><br><span class="line">			uart_rx2 &lt;= uart_rx1;</span><br><span class="line">			uart_rx3 &lt;= uart_rx2;</span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">		<span class="comment">//下面的下降沿检测可以滤掉&lt;40ns-80ns的毛刺(包括高脉冲和低脉冲毛刺)，</span></span><br><span class="line">		<span class="comment">//这里就是用资源换稳定（前提是我们对时间要求不是那么苛刻，因为输入信号打了好几拍） </span></span><br><span class="line">		<span class="comment">//（当然我们的有效低脉冲信号肯定是远远大于80ns的）</span></span><br><span class="line">	<span class="keyword">assign</span> neg_uart_rx = uart_rx3 &amp; uart_rx2 &amp; ~uart_rx1 &amp; ~uart_rx0;	<span class="comment">//接收到下降沿后neg_uart_rx置高一个时钟周期</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//----------------------------------------------------------------</span></span><br><span class="line">	<span class="keyword">reg</span> bps_start_r;</span><br><span class="line">	<span class="keyword">reg</span>[<span class="number">3</span>:<span class="number">0</span>] num;	<span class="comment">//移位次数</span></span><br><span class="line">	<span class="keyword">reg</span> rx_int;		<span class="comment">//接收数据中断信号,接收到数据期间始终为高电平</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">always</span> @ (<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">negedge</span> rst_n)</span><br><span class="line">		<span class="keyword">if</span>(!rst_n) <span class="keyword">begin</span></span><br><span class="line">			bps_start_r &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">			rx_int &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span>(neg_uart_rx) <span class="keyword">begin</span>		<span class="comment">//接收到串口接收线uart_rx的下降沿标志信号</span></span><br><span class="line">			bps_start_r &lt;= <span class="number">1&#x27;b1</span>;	<span class="comment">//启动串口准备数据接收</span></span><br><span class="line">			rx_int &lt;= <span class="number">1&#x27;b1</span>;			<span class="comment">//接收数据中断信号使能</span></span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span>(num == <span class="number">4&#x27;d9</span>) <span class="keyword">begin</span>		<span class="comment">//接收完有用数据信息</span></span><br><span class="line">			bps_start_r &lt;= <span class="number">1&#x27;b0</span>;	<span class="comment">//数据接收完毕，释放波特率启动信号</span></span><br><span class="line">			rx_int &lt;= <span class="number">1&#x27;b0</span>;			<span class="comment">//接收数据中断信号关闭</span></span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">assign</span> bps_start = bps_start_r;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//----------------------------------------------------------------</span></span><br><span class="line">	<span class="keyword">reg</span>[<span class="number">7</span>:<span class="number">0</span>] rx_data_r;		<span class="comment">//串口接收数据寄存器，保存直至下一个数据来到</span></span><br><span class="line">	<span class="keyword">reg</span>[<span class="number">7</span>:<span class="number">0</span>] rx_temp_data;	<span class="comment">//当前接收数据寄存器</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">always</span> @ (<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">negedge</span> rst_n)</span><br><span class="line">		<span class="keyword">if</span>(!rst_n) <span class="keyword">begin</span></span><br><span class="line">			rx_temp_data &lt;= <span class="number">8&#x27;d0</span>;</span><br><span class="line">			num &lt;= <span class="number">4&#x27;d0</span>;</span><br><span class="line">			rx_data_r &lt;= <span class="number">8&#x27;d0</span>;</span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span>(rx_int) <span class="keyword">begin</span>	<span class="comment">//接收数据处理</span></span><br><span class="line">			<span class="keyword">if</span>(clk_bps) <span class="keyword">begin</span>	<span class="comment">//读取并保存数据,接收数据为一个起始位，8bit数据，1或2个结束位		</span></span><br><span class="line">				num &lt;= num+<span class="number">1&#x27;b1</span>;</span><br><span class="line">				<span class="keyword">case</span> (num)</span><br><span class="line">					<span class="number">4&#x27;d1</span>: rx_temp_data[<span class="number">0</span>] &lt;= uart_rx;	<span class="comment">//锁存第0bit</span></span><br><span class="line">					<span class="number">4&#x27;d2</span>: rx_temp_data[<span class="number">1</span>] &lt;= uart_rx;	<span class="comment">//锁存第1bit</span></span><br><span class="line">					<span class="number">4&#x27;d3</span>: rx_temp_data[<span class="number">2</span>] &lt;= uart_rx;	<span class="comment">//锁存第2bit</span></span><br><span class="line">					<span class="number">4&#x27;d4</span>: rx_temp_data[<span class="number">3</span>] &lt;= uart_rx;	<span class="comment">//锁存第3bit</span></span><br><span class="line">					<span class="number">4&#x27;d5</span>: rx_temp_data[<span class="number">4</span>] &lt;= uart_rx;	<span class="comment">//锁存第4bit</span></span><br><span class="line">					<span class="number">4&#x27;d6</span>: rx_temp_data[<span class="number">5</span>] &lt;= uart_rx;	<span class="comment">//锁存第5bit</span></span><br><span class="line">					<span class="number">4&#x27;d7</span>: rx_temp_data[<span class="number">6</span>] &lt;= uart_rx;	<span class="comment">//锁存第6bit</span></span><br><span class="line">					<span class="number">4&#x27;d8</span>: rx_temp_data[<span class="number">7</span>] &lt;= uart_rx;	<span class="comment">//锁存第7bit</span></span><br><span class="line">					<span class="keyword">default</span>: ;</span><br><span class="line">				<span class="keyword">endcase</span></span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">			<span class="keyword">else</span> <span class="keyword">if</span>(num == <span class="number">4&#x27;d9</span>) <span class="keyword">begin</span>		<span class="comment">//我们的标准接收模式下只有1+8+1(2)=11bit的有效数据</span></span><br><span class="line">				num &lt;= <span class="number">4&#x27;d0</span>;			<span class="comment">//接收到STOP位后结束,num清零</span></span><br><span class="line">				rx_data_r &lt;= rx_temp_data;	<span class="comment">//把数据锁存到数据寄存器rx_data中</span></span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">assign</span> rx_data = rx_data_r;	</span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="2-Testbench"><a href="#2-Testbench" class="headerlink" title="2.Testbench"></a>2.Testbench</h2><figure class="highlight verilog"><table><tr><td class="code"><pre><span class="line"><span class="meta">`<span class="keyword">timescale</span> 1ns/1ps</span></span><br><span class="line"><span class="keyword">module</span> uart_tb();</span><br><span class="line">	</span><br><span class="line"><span class="keyword">reg</span> sys_clk_i;	<span class="comment">//50MHz时钟信号</span></span><br><span class="line"><span class="keyword">reg</span> ext_rst_n;	<span class="comment">//复位信号，低电平有效</span></span><br><span class="line"><span class="keyword">reg</span> uart_rx;		<span class="comment">// UART接收数据信号</span></span><br><span class="line"><span class="keyword">wire</span> uart_tx;		<span class="comment">// UART发送数据信号</span></span><br><span class="line">	</span><br><span class="line">uart_design		u1_uart_design(</span><br><span class="line">			<span class="variable">.sys_clk_i</span>(sys_clk_i),	<span class="comment">//外部输入50MHz时钟信号</span></span><br><span class="line">			<span class="variable">.ext_rst_n</span>(ext_rst_n),	<span class="comment">//外部输入复位信号，低电平有效</span></span><br><span class="line">			<span class="variable">.uart_rx</span>(uart_rx),</span><br><span class="line">			<span class="variable">.uart_tx</span>(uart_tx)</span><br><span class="line">		);	</span><br><span class="line"></span><br><span class="line"><span class="meta">`<span class="keyword">define</span> UART_BPS_DELAY_NS	1_000_000_000/9600		</span><span class="comment">//串口波特率延时			</span></span><br><span class="line"><span class="keyword">reg</span>[<span class="number">7</span>:<span class="number">0</span>] uart_data_from_fpga;	<span class="comment">//接收FPGA发送的串口数据</span></span><br><span class="line"><span class="keyword">reg</span> uart_en_from_fpga;		<span class="comment">//接收FPGA发送的串口数据有效</span></span><br><span class="line">	</span><br><span class="line"><span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">	sys_clk_i = <span class="number">0</span>;</span><br><span class="line">	ext_rst_n = <span class="number">0</span>;	<span class="comment">//复位中</span></span><br><span class="line">	uart_rx = <span class="number">1</span>;</span><br><span class="line">	uart_data_from_fpga = <span class="number">0</span>;</span><br><span class="line">	uart_en_from_fpga = <span class="number">0</span>;</span><br><span class="line">	#<span class="number">1000</span>;</span><br><span class="line">	@(<span class="keyword">posedge</span> sys_clk_i); #<span class="number">2</span>;</span><br><span class="line">	ext_rst_n = <span class="number">1</span>;	<span class="comment">//复位结束，正常工作</span></span><br><span class="line"></span><br><span class="line">	#<span class="number">100_000</span>;	<span class="comment">//延时100us</span></span><br><span class="line">	</span><br><span class="line">	pc_uart_tx_task(<span class="number">8&#x27;haa</span>);	<span class="comment">//发送数据</span></span><br><span class="line">	</span><br><span class="line">	<span class="variable">#(`UART_BPS_DELAY_NS*10)</span>;	</span><br><span class="line">	<span class="built_in">$finish</span>;</span><br><span class="line"><span class="keyword">end</span>	</span><br><span class="line">	</span><br><span class="line"><span class="keyword">always</span> #<span class="number">10</span> sys_clk_i = ~sys_clk_i;	<span class="comment">//50MHz时钟产生</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//模拟发送一帧串口数据</span></span><br><span class="line"><span class="keyword">task</span> pc_uart_tx_task;</span><br><span class="line">	<span class="keyword">input</span>[<span class="number">7</span>:<span class="number">0</span>] value;</span><br><span class="line">	<span class="keyword">begin</span></span><br><span class="line">		uart_rx = <span class="number">0</span>;	<span class="comment">//起始位</span></span><br><span class="line">		<span class="variable">#(`UART_BPS_DELAY_NS)</span>;	</span><br><span class="line">		uart_rx = value[<span class="number">0</span>];</span><br><span class="line">		<span class="variable">#(`UART_BPS_DELAY_NS)</span>;</span><br><span class="line">		uart_rx = value[<span class="number">1</span>];</span><br><span class="line">		<span class="variable">#(`UART_BPS_DELAY_NS)</span>;</span><br><span class="line">		uart_rx = value[<span class="number">2</span>];</span><br><span class="line">		<span class="variable">#(`UART_BPS_DELAY_NS)</span>;</span><br><span class="line">		uart_rx = value[<span class="number">3</span>];</span><br><span class="line">		<span class="variable">#(`UART_BPS_DELAY_NS)</span>;</span><br><span class="line">		uart_rx = value[<span class="number">4</span>];</span><br><span class="line">		<span class="variable">#(`UART_BPS_DELAY_NS)</span>;</span><br><span class="line">		uart_rx = value[<span class="number">5</span>];</span><br><span class="line">		<span class="variable">#(`UART_BPS_DELAY_NS)</span>;</span><br><span class="line">		uart_rx = value[<span class="number">6</span>];</span><br><span class="line">		<span class="variable">#(`UART_BPS_DELAY_NS)</span>;</span><br><span class="line">		uart_rx = value[<span class="number">7</span>];</span><br><span class="line">		<span class="variable">#(`UART_BPS_DELAY_NS)</span>;</span><br><span class="line">		uart_rx = <span class="number">1</span>;	<span class="comment">//停止位</span></span><br><span class="line">		<span class="variable">#(`UART_BPS_DELAY_NS)</span>;		</span><br><span class="line">		uart_rx = <span class="number">1</span>;</span><br><span class="line">		<span class="variable">#(`UART_BPS_DELAY_NS)</span>;</span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line"><span class="keyword">endtask</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//接收串口数据帧</span></span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">negedge</span> uart_tx) <span class="keyword">begin</span></span><br><span class="line">	<span class="variable">#(`UART_BPS_DELAY_NS)</span>;</span><br><span class="line">	<span class="variable">#(`UART_BPS_DELAY_NS/2)</span>;</span><br><span class="line">	uart_data_from_fpga[<span class="number">0</span>] = uart_tx;</span><br><span class="line">	<span class="variable">#(`UART_BPS_DELAY_NS)</span>;</span><br><span class="line">	uart_data_from_fpga[<span class="number">1</span>] = uart_tx;</span><br><span class="line">	<span class="variable">#(`UART_BPS_DELAY_NS)</span>;</span><br><span class="line">	uart_data_from_fpga[<span class="number">2</span>] = uart_tx;</span><br><span class="line">	<span class="variable">#(`UART_BPS_DELAY_NS)</span>;</span><br><span class="line">	uart_data_from_fpga[<span class="number">3</span>] = uart_tx;</span><br><span class="line">	<span class="variable">#(`UART_BPS_DELAY_NS)</span>;</span><br><span class="line">	uart_data_from_fpga[<span class="number">4</span>] = uart_tx;</span><br><span class="line">	<span class="variable">#(`UART_BPS_DELAY_NS)</span>;</span><br><span class="line">	uart_data_from_fpga[<span class="number">5</span>] = uart_tx;</span><br><span class="line">	<span class="variable">#(`UART_BPS_DELAY_NS)</span>;</span><br><span class="line">	uart_data_from_fpga[<span class="number">6</span>] = uart_tx;</span><br><span class="line">	<span class="variable">#(`UART_BPS_DELAY_NS)</span>;</span><br><span class="line">	uart_data_from_fpga[<span class="number">7</span>] = uart_tx;</span><br><span class="line">	uart_en_from_fpga = <span class="number">1</span>;</span><br><span class="line">	<span class="built_in">$display</span>(<span class="string">&quot;uart_data_from_fpga = %x\n&quot;</span>,uart_data_from_fpga);</span><br><span class="line">	<span class="variable">#(`UART_BPS_DELAY_NS)</span>;</span><br><span class="line">	uart_en_from_fpga = <span class="number">0</span>;</span><br><span class="line">	<span class="variable">#(`UART_BPS_DELAY_NS/2)</span>;</span><br><span class="line"><span class="keyword">end</span>	</span><br><span class="line">	</span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="3-仿真结果"><a href="#3-仿真结果" class="headerlink" title="3.仿真结果"></a>3.仿真结果</h2><ul>
+<li>RTL视图</li>
+</ul>
+<p><img src="/2023/01/05/Verilog%E4%B9%8B%E7%94%B1%E6%B5%85%E5%85%A5%E6%B7%B1%E5%AD%A6%E4%B9%A0/image-20230210172236844.png" alt="image-20230210172236844"></p>
+<ul>
+<li>仿真波形：</li>
+</ul>
+<p><img src="/2023/01/05/Verilog%E4%B9%8B%E7%94%B1%E6%B5%85%E5%85%A5%E6%B7%B1%E5%AD%A6%E4%B9%A0/image-20230210201852096.png" alt="image-20230210201852096"></p>
+<ul>
+<li>发送数据：</li>
+</ul>
+<p><img src="/2023/01/05/Verilog%E4%B9%8B%E7%94%B1%E6%B5%85%E5%85%A5%E6%B7%B1%E5%AD%A6%E4%B9%A0/image-20230210200729375.png" alt="image-20230210200729375"></p>
+<hr>
+<h1 id="SPI接口DAC驱动控制"><a href="#SPI接口DAC驱动控制" class="headerlink" title="SPI接口DAC驱动控制"></a>SPI接口DAC驱动控制</h1><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
 <li><a href="https://space.bilibili.com/505270558">学习使我快乐100的个人空间_哔哩哔哩_bilibili</a></li>
 </ul>
 ]]></content>
@@ -1215,7 +1267,7 @@
 <h2 id="1-关键点-16"><a href="#1-关键点-16" class="headerlink" title="1.关键点"></a>1.关键点</h2><ul>
 <li><p>UART</p>
 <ul>
-<li>uUART（Universal Asynchronous Receiver/Transmitter），即通用异步收发，它的数据传输不需要时钟，只要两条信号线分别进行数据的收（RX）和发（TX）</li>
+<li>UART（Universal Asynchronous Receiver/Transmitter），即通用异步收发，它的数据传输不需要时钟，只要两条信号线分别进行数据的收（RX）和发（TX）</li>
 <li>收发双方首先需要约定好数据传输的速率（简单的讲就是约定好一个数据位传输的时间）和帧格式（即一帧的长短，一帧由哪些位组成，他们的功能都是什么</li>
 </ul>
 </li>
@@ -11090,6 +11142,116 @@ i:2000,    Train Loss:17.118926,    Test Loss:19.456854</code></pre><p><img src=
       </tags>
   </entry>
   <entry>
+    <title>Python基础之文件的读写</title>
+    <url>/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%BB%E5%86%99/</url>
+    <content><![CDATA[<p>数据处理可谓是Python最擅长的工作之一。那对于我们需要处理的大量数据，手动输入代码中是极其不科学的，故我们需要学会对文件进行读写操作，下面跟着小沈一起来探索吧！</p>
+<span id="more"></span>
+
+<h1 id="文件的打开"><a href="#文件的打开" class="headerlink" title="文件的打开"></a>文件的打开</h1><ul>
+<li><p><code>&lt;变量名&gt; = open(&lt;文件名&gt;,&lt;打开模式&gt;)</code></p>
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%BB%E5%86%99/image-20221027123041800.png" alt="image-20221027123041800" style="zoom: 50%;">
+</li>
+<li><p><strong>打开模式</strong></p>
+<table>
+<thead>
+<tr>
+<th>文件的打开模式</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>‘r’</td>
+<td>只读模式，默认值，如果文件不存在，返回FileNotFoundError</td>
+</tr>
+<tr>
+<td>‘w’</td>
+<td>覆盖写模式，文件不存在则创建，存在则完全覆盖</td>
+</tr>
+<tr>
+<td>‘x’</td>
+<td>创建写模式，文件不存咋则创建，存在则返回FileExistsError</td>
+</tr>
+<tr>
+<td>‘a’</td>
+<td>追加写模式，文件不存在则创建，存在则在文件最后追加内容</td>
+</tr>
+<tr>
+<td>‘b’</td>
+<td>二进制文本模式</td>
+</tr>
+<tr>
+<td>‘t’</td>
+<td>文本文件模式，默认值</td>
+</tr>
+<tr>
+<td>‘+’</td>
+<td>与r/w/x/a一同使用，在原功能基础上增加同时读写功能</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<hr>
+<h1 id="文件内容的获取"><a href="#文件内容的获取" class="headerlink" title="文件内容的获取"></a>文件内容的获取</h1><table>
+<thead>
+<tr>
+<th>操作方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>f.read(size=-1)</code></td>
+<td>读入全部内容，如果给出参数，读入前size长度</td>
+</tr>
+<tr>
+<td><code>f.readline(size=-1)</code></td>
+<td>读入一行内容，如果给出参数，读入该行前size长度</td>
+</tr>
+<tr>
+<td><code>f.readlines(hint=-1)</code></td>
+<td>读入文件所有行，以每行为元素形成列表，如果给出参数，读入前hint行</td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#逐行遍历文件</span></span><br><span class="line"><span class="comment">#方法一：</span></span><br><span class="line">fname=<span class="built_in">input</span>(<span class="string">&quot;请输入要打开的文件名称：&quot;</span>)</span><br><span class="line">fo=<span class="built_in">open</span>(fname,<span class="string">&quot;r&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> fo.readlines():</span><br><span class="line">    <span class="built_in">print</span>(line)</span><br><span class="line">fo.close()</span><br><span class="line"></span><br><span class="line"><span class="comment">#方法二</span></span><br><span class="line">fname=<span class="built_in">input</span>(<span class="string">&quot;请输入要打开的文件名称：&quot;</span>)</span><br><span class="line">fo=<span class="built_in">open</span>(fname,<span class="string">&quot;r&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> fo:</span><br><span class="line">    <span class="built_in">print</span>(line)</span><br><span class="line">fo.close()</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="数据的文件写入"><a href="#数据的文件写入" class="headerlink" title="数据的文件写入"></a>数据的文件写入</h1><table>
+<thead>
+<tr>
+<th>操作方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>f.write(s)</td>
+<td>向文件写入一个字符串或字节流</td>
+</tr>
+<tr>
+<td>f.writelines(lines)</td>
+<td>将一个元素全为字符串的列表写入文件</td>
+</tr>
+<tr>
+<td><code>f.seek(offset)</code></td>
+<td>改变当前文件操作指针的位置，offset=0(代表回到文件开头)，offset=1（代表当前位置），offset=2（代表回到文件结尾）</td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">fo = <span class="built_in">open</span>(<span class="string">&quot;output.txt&quot;</span>,<span class="string">&quot;w+&quot;</span>)</span><br><span class="line">ls=[<span class="string">&quot;努力是成功的别名&quot;</span>,<span class="string">&quot;每一次成长&quot;</span>,<span class="string">&quot;都是一次经历&quot;</span>]</span><br><span class="line">fo.writelines(ls)</span><br><span class="line"><span class="comment">#fo.writelines(&#x27;\n&#x27;.join(ls)) 可以加上这一句实现分行写入</span></span><br><span class="line">fo.seek(<span class="number">0</span>)<span class="comment">#必须要改变文件操作指针的位置，不然写完元素之后指针到了文章最后，会导致写下来读不出内容</span></span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> fo:</span><br><span class="line">    <span class="built_in">print</span>(line) <span class="comment">#由结果可以注意到实际上writelines不是一行行写入的，是连着写入的</span></span><br><span class="line">fo.close()</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%BB%E5%86%99/image-20221027140238501.png" alt="image-20221027140238501" style="zoom:67%;">
+
+<hr>
+<h1 id="文件的关闭"><a href="#文件的关闭" class="headerlink" title="文件的关闭"></a>文件的关闭</h1><ul>
+<li><code>&lt;变量名&gt;.close()</code>#使用完文件后一定要记得关闭文件</li>
+</ul>
+]]></content>
+      <categories>
+        <category>学习积累</category>
+      </categories>
+      <tags>
+        <tag>浪漫的Python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Python基础之标准库与第三方库</title>
     <url>/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/</url>
     <content><![CDATA[<p>这里记录着小沈学习在Python过程中遇到的6个重要又有趣的Python标准库与第三方库，分别是turle库、time库、random库、PyInstaller库、jieba库、wordcloud库。</p>
@@ -11313,116 +11475,6 @@ i:2000,    Train Loss:17.118926,    Test Loss:19.456854</code></pre><p><img src=
 
 <p>结果如下：</p>
 <img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%A0%87%E5%87%86%E5%BA%93%E4%B8%8E%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93/grwordcloud.png" alt="grwordcloud" style="zoom: 67%;">
-]]></content>
-      <categories>
-        <category>学习积累</category>
-      </categories>
-      <tags>
-        <tag>浪漫的Python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Python基础之文件的读写</title>
-    <url>/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%BB%E5%86%99/</url>
-    <content><![CDATA[<p>数据处理可谓是Python最擅长的工作之一。那对于我们需要处理的大量数据，手动输入代码中是极其不科学的，故我们需要学会对文件进行读写操作，下面跟着小沈一起来探索吧！</p>
-<span id="more"></span>
-
-<h1 id="文件的打开"><a href="#文件的打开" class="headerlink" title="文件的打开"></a>文件的打开</h1><ul>
-<li><p><code>&lt;变量名&gt; = open(&lt;文件名&gt;,&lt;打开模式&gt;)</code></p>
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%BB%E5%86%99/image-20221027123041800.png" alt="image-20221027123041800" style="zoom: 50%;">
-</li>
-<li><p><strong>打开模式</strong></p>
-<table>
-<thead>
-<tr>
-<th>文件的打开模式</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>‘r’</td>
-<td>只读模式，默认值，如果文件不存在，返回FileNotFoundError</td>
-</tr>
-<tr>
-<td>‘w’</td>
-<td>覆盖写模式，文件不存在则创建，存在则完全覆盖</td>
-</tr>
-<tr>
-<td>‘x’</td>
-<td>创建写模式，文件不存咋则创建，存在则返回FileExistsError</td>
-</tr>
-<tr>
-<td>‘a’</td>
-<td>追加写模式，文件不存在则创建，存在则在文件最后追加内容</td>
-</tr>
-<tr>
-<td>‘b’</td>
-<td>二进制文本模式</td>
-</tr>
-<tr>
-<td>‘t’</td>
-<td>文本文件模式，默认值</td>
-</tr>
-<tr>
-<td>‘+’</td>
-<td>与r/w/x/a一同使用，在原功能基础上增加同时读写功能</td>
-</tr>
-</tbody></table>
-</li>
-</ul>
-<hr>
-<h1 id="文件内容的获取"><a href="#文件内容的获取" class="headerlink" title="文件内容的获取"></a>文件内容的获取</h1><table>
-<thead>
-<tr>
-<th>操作方法</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>f.read(size=-1)</code></td>
-<td>读入全部内容，如果给出参数，读入前size长度</td>
-</tr>
-<tr>
-<td><code>f.readline(size=-1)</code></td>
-<td>读入一行内容，如果给出参数，读入该行前size长度</td>
-</tr>
-<tr>
-<td><code>f.readlines(hint=-1)</code></td>
-<td>读入文件所有行，以每行为元素形成列表，如果给出参数，读入前hint行</td>
-</tr>
-</tbody></table>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#逐行遍历文件</span></span><br><span class="line"><span class="comment">#方法一：</span></span><br><span class="line">fname=<span class="built_in">input</span>(<span class="string">&quot;请输入要打开的文件名称：&quot;</span>)</span><br><span class="line">fo=<span class="built_in">open</span>(fname,<span class="string">&quot;r&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> fo.readlines():</span><br><span class="line">    <span class="built_in">print</span>(line)</span><br><span class="line">fo.close()</span><br><span class="line"></span><br><span class="line"><span class="comment">#方法二</span></span><br><span class="line">fname=<span class="built_in">input</span>(<span class="string">&quot;请输入要打开的文件名称：&quot;</span>)</span><br><span class="line">fo=<span class="built_in">open</span>(fname,<span class="string">&quot;r&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> fo:</span><br><span class="line">    <span class="built_in">print</span>(line)</span><br><span class="line">fo.close()</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h1 id="数据的文件写入"><a href="#数据的文件写入" class="headerlink" title="数据的文件写入"></a>数据的文件写入</h1><table>
-<thead>
-<tr>
-<th>操作方法</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>f.write(s)</td>
-<td>向文件写入一个字符串或字节流</td>
-</tr>
-<tr>
-<td>f.writelines(lines)</td>
-<td>将一个元素全为字符串的列表写入文件</td>
-</tr>
-<tr>
-<td><code>f.seek(offset)</code></td>
-<td>改变当前文件操作指针的位置，offset=0(代表回到文件开头)，offset=1（代表当前位置），offset=2（代表回到文件结尾）</td>
-</tr>
-</tbody></table>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">fo = <span class="built_in">open</span>(<span class="string">&quot;output.txt&quot;</span>,<span class="string">&quot;w+&quot;</span>)</span><br><span class="line">ls=[<span class="string">&quot;努力是成功的别名&quot;</span>,<span class="string">&quot;每一次成长&quot;</span>,<span class="string">&quot;都是一次经历&quot;</span>]</span><br><span class="line">fo.writelines(ls)</span><br><span class="line"><span class="comment">#fo.writelines(&#x27;\n&#x27;.join(ls)) 可以加上这一句实现分行写入</span></span><br><span class="line">fo.seek(<span class="number">0</span>)<span class="comment">#必须要改变文件操作指针的位置，不然写完元素之后指针到了文章最后，会导致写下来读不出内容</span></span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> fo:</span><br><span class="line">    <span class="built_in">print</span>(line) <span class="comment">#由结果可以注意到实际上writelines不是一行行写入的，是连着写入的</span></span><br><span class="line">fo.close()</span><br></pre></td></tr></table></figure>
-
-<p>结果如下：</p>
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%BB%E5%86%99/image-20221027140238501.png" alt="image-20221027140238501" style="zoom:67%;">
-
-<hr>
-<h1 id="文件的关闭"><a href="#文件的关闭" class="headerlink" title="文件的关闭"></a>文件的关闭</h1><ul>
-<li><code>&lt;变量名&gt;.close()</code>#使用完文件后一定要记得关闭文件</li>
-</ul>
 ]]></content>
       <categories>
         <category>学习积累</category>
