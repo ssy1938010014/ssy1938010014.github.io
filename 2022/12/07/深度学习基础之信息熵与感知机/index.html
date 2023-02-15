@@ -269,56 +269,49 @@
       
         <p>本节主要介绍了信息熵的计算与感知机算法</p>
 <span id="more"></span>
+
 <h1 id="信息熵"><a href="#信息熵" class="headerlink" title="信息熵"></a>信息熵</h1><ul>
-<li><p>信息熵的计算：</p>
-<script type="math/tex; mode=display">
-H(U)=\sum_{i=1}^np_ilog(\frac1{p_i})</script></li>
+<li><p>信息熵的计算：<br>$$<br>H(U)=\sum_{i=1}^np_ilog(\frac1{p_i})<br>$$</p>
+</li>
 <li><p>交叉熵：用于表征两个变量概率分布P、Q（假设P表示真实分布、Q为模型预测的分布）的差异性</p>
 <ul>
 <li><p>交叉熵越大，两个变量差异程度越大</p>
 </li>
-<li><p>交叉熵公式：</p>
-<script type="math/tex; mode=display">
-H(P,Q)=\sum_{x\in X}P(x)log\frac{1}{Q(x)}</script></li>
+<li><p>交叉熵公式：<br>$$<br>H(P,Q)=\sum_{x\in X}P(x)log\frac{1}{Q(x)}<br>$$</p>
+</li>
 </ul>
 </li>
 <li><p>相对熵：是交叉熵与信息熵的差值</p>
 <ul>
 <li><p>表示用分布Q模拟真实分布P，所需的额外信息</p>
 </li>
-<li><p>计算公式：</p>
-<script type="math/tex; mode=display">
-D_{KL}(P||Q)=\sum_{x\in X}P(x)log\frac1{Q(x)}-\sum_{x\in X}P(x)log\frac1{P(x)}=\sum_{x\in X}P(x)log\frac{P(x)}{Q(x)}</script></li>
+<li><p>计算公式：<br>$$<br>D_{KL}(P||Q)=\sum_{x\in X}P(x)log\frac1{Q(x)}-\sum_{x\in X}P(x)log\frac1{P(x)}=\sum_{x\in X}P(x)log\frac{P(x)}{Q(x)}<br>$$</p>
+</li>
 <li><p>性质：</p>
 <ul>
-<li><p>相对熵(KL散度)不具有对称性，即：</p>
-<script type="math/tex; mode=display">
-D_{KL}(P||Q)\neq D_{KL}(Q||P)</script></li>
-<li><p>相对熵具有非负性</p>
-<script type="math/tex; mode=display">
-D_{KL}(P||Q)\ge0</script></li>
-</ul>
+<li><p>相对熵(KL散度)不具有对称性，即：<br>$$<br>D_{KL}(P||Q)\neq D_{KL}(Q||P)<br>$$</p>
+</li>
+<li><p>相对熵具有非负性<br>$$<br>D_{KL}(P||Q)\ge0<br>$$</p>
 </li>
 </ul>
 </li>
-<li><p>JS散度：具有对称性，现有两个分布$p1,p2$，其JS散度公式为：</p>
-<script type="math/tex; mode=display">
-JS(P1||P2)=\frac12KL(P1||\frac{P_1+P_2}{2})+\frac12KL(P_2|\frac{P_1+P_2}2)</script></li>
+</ul>
+</li>
+<li><p>JS散度：具有对称性，现有两个分布$p1,p2$，其JS散度公式为：<br>$$<br>JS(P1||P2)=\frac12KL(P1||\frac{P_1+P_2}{2})+\frac12KL(P_2|\frac{P_1+P_2}2)<br>$$</p>
+</li>
 </ul>
 <hr>
 <h1 id="感知机"><a href="#感知机" class="headerlink" title="感知机"></a>感知机</h1><ul>
-<li><p>感知机是两类分类的线性分类模型，假设输入样本的特征向量x，输出实例样本的类别y，有：</p>
-<script type="math/tex; mode=display">
-y=g(w\cdot x+b)\\
-g为激励函数</script><p><img src="/2022/12/07/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E4%BF%A1%E6%81%AF%E7%86%B5%E4%B8%8E%E6%84%9F%E7%9F%A5%E6%9C%BA/image-20221207141334347.png" alt="image-20221207141334347" style="zoom: 50%;"></p>
+<li><p>感知机是两类分类的线性分类模型，假设输入样本的特征向量x，输出实例样本的类别y，有：<br>$$<br>y=g(w\cdot x+b)\<br>g为激励函数<br>$$</p>
+<img src="/2022/12/07/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E4%BF%A1%E6%81%AF%E7%86%B5%E4%B8%8E%E6%84%9F%E7%9F%A5%E6%9C%BA/image-20221207141334347.png" alt="image-20221207141334347" style="zoom: 50%;">
 </li>
 <li><p>感知机的算法</p>
-<p><img src="/2022/12/07/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E4%BF%A1%E6%81%AF%E7%86%B5%E4%B8%8E%E6%84%9F%E7%9F%A5%E6%9C%BA/image-20221207143108429.png" alt="image-20221207143108429" style="zoom:50%;"></p>
+<img src="/2022/12/07/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E4%BF%A1%E6%81%AF%E7%86%B5%E4%B8%8E%E6%84%9F%E7%9F%A5%E6%9C%BA/image-20221207143108429.png" alt="image-20221207143108429" style="zoom:50%;">
 </li>
 <li><p>例：</p>
-<p><img src="/2022/12/07/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E4%BF%A1%E6%81%AF%E7%86%B5%E4%B8%8E%E6%84%9F%E7%9F%A5%E6%9C%BA/image-20221207143404643.png" alt="image-20221207143404643" style="zoom:50%;"></p>
-<p><img src="/2022/12/07/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E4%BF%A1%E6%81%AF%E7%86%B5%E4%B8%8E%E6%84%9F%E7%9F%A5%E6%9C%BA/image-20221207143217695.png" alt="image-20221207143217695" style="zoom:50%;"></p>
-</li>
+<img src="/2022/12/07/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E4%BF%A1%E6%81%AF%E7%86%B5%E4%B8%8E%E6%84%9F%E7%9F%A5%E6%9C%BA/image-20221207143404643.png" alt="image-20221207143404643" style="zoom:50%;">
+
+<img src="/2022/12/07/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E4%BF%A1%E6%81%AF%E7%86%B5%E4%B8%8E%E6%84%9F%E7%9F%A5%E6%9C%BA/image-20221207143217695.png" alt="image-20221207143217695" style="zoom:50%;"></li>
 </ul>
 
     </div>
