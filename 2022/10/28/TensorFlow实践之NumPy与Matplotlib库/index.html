@@ -65,10 +65,10 @@
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221028120441204.png">
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221028120530479.png">
 <meta property="article:published_time" content="2022-10-28T12:07:12.000Z">
-<meta property="article:modified_time" content="2022-11-11T16:18:33.857Z">
+<meta property="article:modified_time" content="2023-02-18T04:57:34.340Z">
 <meta property="article:author" content="ssy">
-<meta property="article:tag" content="深度学习">
 <meta property="article:tag" content="TensorFlow">
+<meta property="article:tag" content="深度学习">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027163211507.png">
 
@@ -275,7 +275,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-11-12 00:18:33" itemprop="dateModified" datetime="2022-11-12T00:18:33+08:00">2022-11-12</time>
+                <time title="修改时间：2023-02-18 12:57:34" itemprop="dateModified" datetime="2023-02-18T12:57:34+08:00">2023-02-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -321,8 +321,7 @@
 
 </li>
 </ul>
-<h2 id="2-NumPy数组的创建及其属性"><a href="#2-NumPy数组的创建及其属性" class="headerlink" title="2.NumPy数组的创建及其属性"></a>2.NumPy数组的创建及其属性</h2><ul>
-<li><h3 id="创建数组：array-列表-元组"><a href="#创建数组：array-列表-元组" class="headerlink" title="创建数组：array([列表]/(元组))"></a>创建数组：<code>array([列表]/(元组))</code></h3><ul>
+<h2 id="2-NumPy数组的创建及其属性"><a href="#2-NumPy数组的创建及其属性" class="headerlink" title="2.NumPy数组的创建及其属性"></a>2.NumPy数组的创建及其属性</h2><h3 id="2-1-创建数组：array-列表-元组"><a href="#2-1-创建数组：array-列表-元组" class="headerlink" title="2.1 创建数组：array([列表]/(元组))"></a>2.1 创建数组：<code>array([列表]/(元组))</code></h3><ul>
 <li><p><strong>一维数组的创建与索引</strong></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np </span><br><span class="line"><span class="comment">#一维数组的创建</span></span><br><span class="line">a=np.array([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>])</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">type</span>(a),<span class="string">&quot; &quot;</span>,a)</span><br><span class="line"><span class="comment">#一维数组的索引，同序列</span></span><br><span class="line"><span class="built_in">print</span>(a[<span class="number">0</span>:<span class="number">2</span>])</span><br></pre></td></tr></table></figure>
 
@@ -340,10 +339,10 @@
 
 <p>结果如下：</p>
 <img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027170734415.png" alt="image-20221027170734415" style="zoom: 67%;">
+
 </li>
 </ul>
-</li>
-<li><h3 id="数组的属性"><a href="#数组的属性" class="headerlink" title="数组的属性"></a>数组的属性</h3><table>
+<h3 id="2-2-数组的属性"><a href="#2-2-数组的属性" class="headerlink" title="2.2 数组的属性"></a>2.2 数组的属性</h3><table>
 <thead>
 <tr>
 <th>属性</th>
@@ -374,8 +373,8 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="comment">#三维数组的创建</span></span><br><span class="line">c=np.array([[[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>],[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>],[<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">0</span>]],[[<span class="number">11</span>,<span class="number">12</span>,<span class="number">13</span>,<span class="number">14</span>],[<span class="number">12</span>,<span class="number">13</span>,<span class="number">15</span>,<span class="number">16</span>],[<span class="number">16</span>,<span class="number">17</span>,<span class="number">18</span>,<span class="number">19</span>]]])</span><br><span class="line"><span class="comment">#三维数组的属性</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;三维数组的属性：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;数组维度：&quot;</span>,c.ndim)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;数组形状：&quot;</span>,c.shape)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;数组元素总个数：&quot;</span>,c.size)</span><br><span class="line"><span class="built_in">print</span>(<span class="number">20</span>*<span class="string">&quot;-&quot;</span>)</span><br><span class="line"><span class="comment">#二维数组的属性</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;二维数组的属性：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;数组维度：&quot;</span>,c[<span class="number">0</span>].ndim)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;数组形状：&quot;</span>,c[<span class="number">0</span>].shape)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;数组元素总个数：&quot;</span>,c[<span class="number">0</span>].size)</span><br></pre></td></tr></table></figure>
 <p>结果如下：</p>
 <img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027172312521.png" alt="image-20221027172312521" style="zoom:67%;">
-</li>
-<li><h3 id="创建特殊的数组"><a href="#创建特殊的数组" class="headerlink" title="创建特殊的数组"></a>创建特殊的数组</h3><table>
+
+<h3 id="2-3创建特殊的数组"><a href="#2-3创建特殊的数组" class="headerlink" title="2.3创建特殊的数组"></a>2.3创建特殊的数组</h3><table>
 <thead>
 <tr>
 <th>函数</th>
@@ -412,8 +411,6 @@
 <p>结果如下：</p>
 <img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027184800827.png" alt="image-20221027184800827" style="zoom:67%;">
 
-</li>
-</ul>
 <h2 id="3-数组运算"><a href="#3-数组运算" class="headerlink" title="3.数组运算"></a>3.数组运算</h2><ul>
 <li><h3 id="改变数组的函数"><a href="#改变数组的函数" class="headerlink" title="改变数组的函数"></a>改变数组的函数</h3><table>
 <thead>
@@ -963,8 +960,8 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"># 深度学习</a>
               <a href="/tags/TensorFlow/" rel="tag"># TensorFlow</a>
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"># 深度学习</a>
           </div>
 
         
@@ -1038,7 +1035,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#NumPy%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97%E5%BA%93"><span class="nav-number">1.</span> <span class="nav-text">NumPy科学计算库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%A4%9A%E7%BB%B4%E6%95%B0%E7%BB%84%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">1.1.</span> <span class="nav-text">1.多维数组的基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-NumPy%E6%95%B0%E7%BB%84%E7%9A%84%E5%88%9B%E5%BB%BA%E5%8F%8A%E5%85%B6%E5%B1%9E%E6%80%A7"><span class="nav-number">1.2.</span> <span class="nav-text">2.NumPy数组的创建及其属性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%95%B0%E7%BB%84%EF%BC%9Aarray-%E5%88%97%E8%A1%A8-%E5%85%83%E7%BB%84"><span class="nav-number">1.2.1.</span> <span class="nav-text">创建数组：array([列表]&#x2F;(元组))</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E7%BB%84%E7%9A%84%E5%B1%9E%E6%80%A7"><span class="nav-number">1.2.2.</span> <span class="nav-text">数组的属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E7%89%B9%E6%AE%8A%E7%9A%84%E6%95%B0%E7%BB%84"><span class="nav-number">1.2.3.</span> <span class="nav-text">创建特殊的数组</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%95%B0%E7%BB%84%E8%BF%90%E7%AE%97"><span class="nav-number">1.3.</span> <span class="nav-text">3.数组运算</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%B9%E5%8F%98%E6%95%B0%E7%BB%84%E7%9A%84%E5%87%BD%E6%95%B0"><span class="nav-number">1.3.1.</span> <span class="nav-text">改变数组的函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E7%BB%84%E4%B8%8E%E6%95%B0%E7%BB%84%E4%B9%8B%E9%97%B4%E5%B8%B8%E8%A7%81%E8%BF%90%E7%AE%97"><span class="nav-number">1.3.2.</span> <span class="nav-text">数组与数组之间常见运算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E7%BB%84%E4%B8%AD%E5%85%83%E7%B4%A0%E7%9A%84%E8%AE%A1%E7%AE%97"><span class="nav-number">1.3.3.</span> <span class="nav-text">数组中元素的计算</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E7%9F%A9%E9%98%B5"><span class="nav-number">1.4.</span> <span class="nav-text">4.矩阵</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A9%E9%98%B5%E7%94%9F%E6%88%90"><span class="nav-number">1.4.1.</span> <span class="nav-text">矩阵生成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A9%E9%98%B5%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%B1%9E%E6%80%A7"><span class="nav-number">1.4.2.</span> <span class="nav-text">矩阵对象的属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A9%E9%98%B5%E8%BF%90%E7%AE%97"><span class="nav-number">1.4.3.</span> <span class="nav-text">矩阵运算</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E9%9A%8F%E6%9C%BA%E6%95%B0%E6%A8%A1%E5%9D%97"><span class="nav-number">1.5.</span> <span class="nav-text">5.随机数模块</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Matplotlib%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96"><span class="nav-number">2.</span> <span class="nav-text">Matplotlib数据可视化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Matplotlib%E7%BB%98%E5%9B%BE%E5%9F%BA%E7%A1%80"><span class="nav-number">2.1.</span> <span class="nav-text">1.Matplotlib绘图基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%95%A3%E7%82%B9%E5%9B%BE"><span class="nav-number">2.2.</span> <span class="nav-text">2.散点图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%8A%98%E7%BA%BF%E5%9B%BE"><span class="nav-number">2.3.</span> <span class="nav-text">3.折线图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E6%9F%B1%E7%8A%B6%E5%9B%BE"><span class="nav-number">2.4.</span> <span class="nav-text">4.柱状图</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E5%88%86%E6%9E%90%EF%BC%9A%E6%B3%A2%E5%A3%AB%E9%A1%BF%E6%88%BF%E4%BB%B7%E6%95%B0%E6%8D%AE%E9%9B%86%E5%8F%AF%E8%A7%86%E5%8C%96"><span class="nav-number">3.</span> <span class="nav-text">实例分析：波士顿房价数据集可视化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%EF%BC%9A%E7%9B%B8%E5%85%B3%E7%BD%91%E7%AB%99"><span class="nav-number">4.</span> <span class="nav-text">附：相关网站</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#NumPy%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97%E5%BA%93"><span class="nav-number">1.</span> <span class="nav-text">NumPy科学计算库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%A4%9A%E7%BB%B4%E6%95%B0%E7%BB%84%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">1.1.</span> <span class="nav-text">1.多维数组的基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-NumPy%E6%95%B0%E7%BB%84%E7%9A%84%E5%88%9B%E5%BB%BA%E5%8F%8A%E5%85%B6%E5%B1%9E%E6%80%A7"><span class="nav-number">1.2.</span> <span class="nav-text">2.NumPy数组的创建及其属性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%88%9B%E5%BB%BA%E6%95%B0%E7%BB%84%EF%BC%9Aarray-%E5%88%97%E8%A1%A8-%E5%85%83%E7%BB%84"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 创建数组：array([列表]&#x2F;(元组))</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E6%95%B0%E7%BB%84%E7%9A%84%E5%B1%9E%E6%80%A7"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 数组的属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3%E5%88%9B%E5%BB%BA%E7%89%B9%E6%AE%8A%E7%9A%84%E6%95%B0%E7%BB%84"><span class="nav-number">1.2.3.</span> <span class="nav-text">2.3创建特殊的数组</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%95%B0%E7%BB%84%E8%BF%90%E7%AE%97"><span class="nav-number">1.3.</span> <span class="nav-text">3.数组运算</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%B9%E5%8F%98%E6%95%B0%E7%BB%84%E7%9A%84%E5%87%BD%E6%95%B0"><span class="nav-number">1.3.1.</span> <span class="nav-text">改变数组的函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E7%BB%84%E4%B8%8E%E6%95%B0%E7%BB%84%E4%B9%8B%E9%97%B4%E5%B8%B8%E8%A7%81%E8%BF%90%E7%AE%97"><span class="nav-number">1.3.2.</span> <span class="nav-text">数组与数组之间常见运算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E7%BB%84%E4%B8%AD%E5%85%83%E7%B4%A0%E7%9A%84%E8%AE%A1%E7%AE%97"><span class="nav-number">1.3.3.</span> <span class="nav-text">数组中元素的计算</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E7%9F%A9%E9%98%B5"><span class="nav-number">1.4.</span> <span class="nav-text">4.矩阵</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A9%E9%98%B5%E7%94%9F%E6%88%90"><span class="nav-number">1.4.1.</span> <span class="nav-text">矩阵生成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A9%E9%98%B5%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%B1%9E%E6%80%A7"><span class="nav-number">1.4.2.</span> <span class="nav-text">矩阵对象的属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A9%E9%98%B5%E8%BF%90%E7%AE%97"><span class="nav-number">1.4.3.</span> <span class="nav-text">矩阵运算</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E9%9A%8F%E6%9C%BA%E6%95%B0%E6%A8%A1%E5%9D%97"><span class="nav-number">1.5.</span> <span class="nav-text">5.随机数模块</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Matplotlib%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96"><span class="nav-number">2.</span> <span class="nav-text">Matplotlib数据可视化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Matplotlib%E7%BB%98%E5%9B%BE%E5%9F%BA%E7%A1%80"><span class="nav-number">2.1.</span> <span class="nav-text">1.Matplotlib绘图基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%95%A3%E7%82%B9%E5%9B%BE"><span class="nav-number">2.2.</span> <span class="nav-text">2.散点图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%8A%98%E7%BA%BF%E5%9B%BE"><span class="nav-number">2.3.</span> <span class="nav-text">3.折线图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E6%9F%B1%E7%8A%B6%E5%9B%BE"><span class="nav-number">2.4.</span> <span class="nav-text">4.柱状图</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E5%88%86%E6%9E%90%EF%BC%9A%E6%B3%A2%E5%A3%AB%E9%A1%BF%E6%88%BF%E4%BB%B7%E6%95%B0%E6%8D%AE%E9%9B%86%E5%8F%AF%E8%A7%86%E5%8C%96"><span class="nav-number">3.</span> <span class="nav-text">实例分析：波士顿房价数据集可视化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%EF%BC%9A%E7%9B%B8%E5%85%B3%E7%BD%91%E7%AB%99"><span class="nav-number">4.</span> <span class="nav-text">附：相关网站</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -1054,7 +1051,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">69</span>
+          <span class="site-state-item-count">70</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
