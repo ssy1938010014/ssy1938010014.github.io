@@ -272,6 +272,7 @@
       
         <p>本文将分享一些信号处理中常见却难懂的小知识点，并推荐一些好的小文章</p>
 <span id="more"></span>
+
 <h1 id="FS、FT、DTFT、DFS、DFT"><a href="#FS、FT、DTFT、DFS、DFT" class="headerlink" title="FS、FT、DTFT、DFS、DFT"></a>FS、FT、DTFT、DFS、DFT</h1><ul>
 <li>$连续\Longleftrightarrow非周期$</li>
 <li>$离散\Longleftrightarrow周期$</li>
@@ -280,54 +281,53 @@
 <h2 id="1-FS"><a href="#1-FS" class="headerlink" title="1.FS"></a>1.FS</h2><ul>
 <li><p><strong>时域连续周期、频域离散非周期</strong></p>
 </li>
-<li><p>傅里叶级数的指数形式：</p>
-<script type="math/tex; mode=display">
-f(t)=\sum_{n=\infty}^\infty C_ne^{jnw_1t}</script><script type="math/tex; mode=display">
-C_n=\frac{1}{T}\int_0^Tf(t)e^{-jnw_1t}dt</script></li>
+<li><p>傅里叶级数的指数形式：<br>$$<br>f(t)=\sum_{n=\infty}^\infty C_ne^{jnw_1t}<br>$$</p>
+<p>$$<br>C_n=\frac{1}{T}\int_0^Tf(t)e^{-jnw_1t}dt<br>$$</p>
+</li>
 </ul>
 <h2 id="2-FT"><a href="#2-FT" class="headerlink" title="2.FT"></a>2.FT</h2><ul>
 <li><p><strong>傅里叶变换的本质，即将一个信号拆分成不同频率的cos和sin分量的叠加。得到的是这些不同频率分量的幅值</strong></p>
 </li>
 <li><p><strong>时域连续非周期，频域连续非周期</strong></p>
 </li>
-<li><p>傅里叶变换的公式：</p>
-<script type="math/tex; mode=display">
-x(w)=\int_{-\infty}^{+\infty}x(t)e^{-jwt}dt</script><script type="math/tex; mode=display">
-逆变换:x(t)=\frac1{2\pi}\int_{-\infty}^{+\infty}x(w)e^{jwt}dw</script></li>
+<li><p>傅里叶变换的公式：<br>$$<br>x(w)=\int_{-\infty}^{+\infty}x(t)e^{-jwt}dt<br>$$</p>
+<p>$$<br>逆变换:x(t)=\frac1{2\pi}\int_{-\infty}^{+\infty}x(w)e^{jwt}dw<br>$$</p>
+</li>
 </ul>
 <h2 id="3-DTFT"><a href="#3-DTFT" class="headerlink" title="3.DTFT"></a>3.DTFT</h2><ul>
 <li><p>一个<strong>N点离散时间序列的傅里叶变换（DTFT）的频谱是以（$2\pi$）为周期进行延拓的连续函数</strong></p>
 </li>
 <li><p><strong>时域离散非周期，频域连续周期</strong></p>
 </li>
-<li><p>离散时间傅里叶变换的公式：</p>
-<script type="math/tex; mode=display">
-x(e^{jw})=\sum_{n=-\infty}^{+\infty}x(n)e^{-jwn}</script><script type="math/tex; mode=display">
-逆变换:x(n)=\frac1{2\pi}\int_{2\pi}x(e^{jw})e^{jwn}dw</script></li>
+<li><p>离散时间傅里叶变换的公式：<br>$$<br>x(e^{jw})=\sum_{n=-\infty}^{+\infty}x(n)e^{-jwn}<br>$$</p>
+<p>$$<br>逆变换:x(n)=\frac1{2\pi}\int_{2\pi}x(e^{jw})e^{jwn}dw<br>$$</p>
+</li>
 </ul>
 <h2 id="4-DFS"><a href="#4-DFS" class="headerlink" title="4.DFS"></a>4.DFS</h2><ul>
 <li><p><strong>当离散的信号为周期序列时，严格的讲，离散时间傅里叶变换是不存在的，因为它不满足信号序列绝对级数和收敛（绝对可和）这一傅里叶变换的充要条件</strong>，但是采用DFS这一分析工具仍然可以对其进行傅里叶分析</p>
 </li>
 <li><p><strong>时域离散周期，频域离散周期</strong></p>
 </li>
-<li><p>离散傅里叶级数的公式：</p>
-<script type="math/tex; mode=display">
-x(n)=\sum_{k=0}^{N-1}c(k)e^{j\frac{2\pi}{N}kn}</script><script type="math/tex; mode=display">
-x(k)=\frac1N\sum_{n=0}^{N-1}x(n)e^{-j\frac{2\pi}Nkn}\quad k=0\sim N-1</script></li>
+<li><p>离散傅里叶级数的公式：<br>$$<br>x(n)=\sum_{k=0}^{N-1}c(k)e^{j\frac{2\pi}{N}kn}<br>$$</p>
+<p>$$<br>x(k)=\frac1N\sum_{n=0}^{N-1}x(n)e^{-j\frac{2\pi}Nkn}\quad k=0\sim N-1<br>$$</p>
+</li>
 </ul>
 <h2 id="5-DFT"><a href="#5-DFT" class="headerlink" title="5.DFT"></a>5.DFT</h2><ul>
-<li><strong>DFT只是对一周期内的有限个离散频率的表示，所以它在频率上是离散的，就相当于DTFT变换成连续频谱后再对其采样</strong></li>
-<li><strong>DFT只是为了计算机处理方便，在频率域对DTFT进行的采样并截取主值而已</strong></li>
+<li><p><strong>DFT只是对一周期内的有限个离散频率的表示，所以它在频率上是离散的，就相当于DTFT变换成连续频谱后再对其采样</strong></p>
+</li>
+<li><p><strong>DFT只是为了计算机处理方便，在频率域对DTFT进行的采样并截取主值而已</strong></p>
+</li>
 <li><p><strong>一个N点离散时间信号可以用频域内一个N点序列来唯一确定，这就是DFT表达式所揭示的内容</strong></p>
 </li>
-<li><p>离散傅里叶变换的公式：</p>
-<script type="math/tex; mode=display">
-x(k)=\sum_{n=0}^{N-1}x(n)e^{-j\frac{2\pi k}Nn} \quad k=0\sim N-1</script><script type="math/tex; mode=display">
-逆变换:x(n)=\frac1N\sum_{k=0}^{N-1}x(k)e^{j\frac{2\pi k}Nn}</script></li>
+<li><p>离散傅里叶变换的公式：<br>$$<br>x(k)=\sum_{n=0}^{N-1}x(n)e^{-j\frac{2\pi k}Nn} \quad k=0\sim N-1<br>$$</p>
+<p>$$<br>逆变换:x(n)=\frac1N\sum_{k=0}^{N-1}x(k)e^{j\frac{2\pi k}Nn}<br>$$</p>
+</li>
 </ul>
-<h2 id="6-不同变换之间的示意图"><a href="#6-不同变换之间的示意图" class="headerlink" title="6.不同变换之间的示意图"></a>6.不同变换之间的示意图</h2><p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230304010731421.png" alt="image-20230304010731421" style="zoom: 50%;"></p>
+<h2 id="6-不同变换之间的示意图"><a href="#6-不同变换之间的示意图" class="headerlink" title="6.不同变换之间的示意图"></a>6.不同变换之间的示意图</h2><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230304010731421.png" alt="image-20230304010731421" style="zoom: 50%;">
+
 <h2 id="7-Reference"><a href="#7-Reference" class="headerlink" title="7.Reference"></a>7.Reference</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/guojun-junguo/p/10099489.html">FS，FT，DFS，DTFT，DFT，FFT的联系和区别 - 骏骏 - 博客园 (cnblogs.com)</a></li>
+<li><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/guojun-junguo/p/10099489.html">FS，FT，DFS，DTFT，DFT，FFT的联系和区别 - 骏骏 - 博客园 (cnblogs.com)</a></p>
+</li>
 <li><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/BitArt/archive/2012/11/24/2786390.html">一幅图弄清DFT与DTFT,DFS的关系 - BitArt - 博客园 (cnblogs.com)</a></p>
 </li>
 <li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44618906/article/details/116379127">(深入理解DSP中的重要概念（FT、DTFT、DFT、DFS、ZT、FFT）_ft与dft的区别_IT说的博客-CSDN博客</a></p>
