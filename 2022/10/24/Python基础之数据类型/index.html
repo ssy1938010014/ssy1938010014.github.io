@@ -284,25 +284,25 @@
       
         <p>数据类型是Python基本语法中非常重要的一部分，本文对集合、序列、字典这三大类数据类型做了部分总结。</p>
 <span id="more"></span>
-
 <h1 id="集合类型及操作"><a href="#集合类型及操作" class="headerlink" title="集合类型及操作"></a>集合类型及操作</h1><ul>
 <li>集合是多个元素的无序组合</li>
 <li>集合元素之间<strong>无序</strong>，每个元素<strong>唯一，不存在相同元素</strong></li>
 <li>集合元素<strong>不可更改</strong>，不能是可变数据类型</li>
 </ul>
 <h2 id="1-集合的创建"><a href="#1-集合的创建" class="headerlink" title="1.集合的创建"></a>1.集合的创建</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#使用&#123;&#125;建立集合</span></span><br><span class="line">A=&#123;<span class="string">&quot;python&quot;</span>,<span class="number">123</span>,(<span class="string">&quot;python&quot;</span>,<span class="number">123</span>)&#125;</span><br><span class="line"><span class="comment">#使用set()建立集合</span></span><br><span class="line">B=<span class="built_in">set</span>(<span class="string">&quot;pypy123&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;输出结果如下：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(A)</span><br><span class="line"><span class="built_in">print</span>(B)</span><br><span class="line"><span class="built_in">print</span>(&#123;<span class="string">&quot;python&quot;</span>,<span class="string">&quot;123&quot;</span>,<span class="string">&quot;123&quot;</span>,<span class="string">&quot;python&quot;</span>&#125;)</span><br></pre></td></tr></table></figure>
-
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221026222311648.png" alt="image-20221026222311648" style="zoom:67%;">
-
-<h2 id="2-集合操作符"><a href="#2-集合操作符" class="headerlink" title="2.集合操作符"></a>2.集合操作符</h2><table>
+<p><img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221026222311648.png" alt="image-20221026222311648" style="zoom:67%;"></p>
+<h2 id="2-集合操作符"><a href="#2-集合操作符" class="headerlink" title="2.集合操作符"></a>2.集合操作符</h2><div class="table-container">
+<table>
 <thead>
 <tr>
 <th>操作符及应用</th>
 <th>描述</th>
 </tr>
 </thead>
-<tbody><tr>
-<td>S|T</td>
+<tbody>
+<tr>
+<td>S\</td>
+<td>T</td>
 <td>并，返回一个新集合，包括在集合S和T中的所有元素</td>
 </tr>
 <tr>
@@ -325,15 +325,19 @@
 <td>S&gt;=T 或S&gt;T</td>
 <td>返回True/False，判断S和T的包含关系</td>
 </tr>
-</tbody></table>
-<h2 id="3-集合处理方法"><a href="#3-集合处理方法" class="headerlink" title="3.集合处理方法"></a>3.集合处理方法</h2><table>
+</tbody>
+</table>
+</div>
+<h2 id="3-集合处理方法"><a href="#3-集合处理方法" class="headerlink" title="3.集合处理方法"></a>3.集合处理方法</h2><div class="table-container">
+<table>
 <thead>
 <tr>
 <th>操作函数或方法</th>
 <th>描述</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>S.add(x)</td>
 <td>如何x不在集合S中，将x增加到S</td>
 </tr>
@@ -373,15 +377,13 @@
 <td>set(x)</td>
 <td>将其他类型变量x转变为集合类型</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">S=&#123;<span class="string">&quot;s&quot;</span>,<span class="string">&quot;f&quot;</span>,<span class="string">&quot;e&quot;</span>,<span class="string">&quot;h&quot;</span>,<span class="string">&quot;g&quot;</span>&#125;</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;输出结果如下：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">len</span>(S))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;s&quot;</span> <span class="keyword">in</span> S)</span><br><span class="line"><span class="built_in">print</span>(S.pop())</span><br><span class="line"><span class="built_in">print</span>(S)<span class="comment">#S中的元素&quot;h&quot;已经被取出</span></span><br><span class="line">S.remove(<span class="string">&#x27;s&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(S)</span><br></pre></td></tr></table></figure>
-
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221026224237804.png" alt="image-20221026224237804" style="zoom:67%;">
-
+<p><img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221026224237804.png" alt="image-20221026224237804" style="zoom:67%;"></p>
 <h2 id="4-集合类型应用场景：数据去重"><a href="#4-集合类型应用场景：数据去重" class="headerlink" title="4.集合类型应用场景：数据去重"></a>4.集合类型应用场景：数据去重</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ls=[<span class="string">&quot;p&quot;</span>,<span class="string">&quot;p&quot;</span>,<span class="string">&quot;y&quot;</span>,<span class="string">&quot;y&quot;</span>,<span class="number">123</span>]</span><br><span class="line"><span class="comment">#利用了集合无重复元素的特点</span></span><br><span class="line">s=<span class="built_in">set</span>(ls)</span><br><span class="line"><span class="comment">#将结合转化为列表</span></span><br><span class="line">lt=<span class="built_in">list</span>(s)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;输出结果如下：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(s)</span><br><span class="line"><span class="built_in">print</span>(lt)</span><br></pre></td></tr></table></figure>
-
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221026224557362.png" alt="image-20221026224557362" style="zoom: 67%;">
-
+<p><img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221026224557362.png" alt="image-20221026224557362" style="zoom: 67%;"></p>
 <hr>
 <h1 id="序列类型及操作"><a href="#序列类型及操作" class="headerlink" title="序列类型及操作"></a>序列类型及操作</h1><ul>
 <li>序列是<strong>具有先后关系</strong>的一组元素</li>
@@ -397,72 +399,12 @@
 <h2 id="1-序列处理操作符与函数"><a href="#1-序列处理操作符与函数" class="headerlink" title="1.序列处理操作符与函数"></a>1.序列处理操作符与函数</h2><p><strong>其同样适用于字符串类型、元组类型、列表类型</strong></p>
 <ul>
 <li><p><strong>6个操作符</strong></p>
-<table>
-<thead>
-<tr>
-<th>操作符及应用</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>x in s</td>
-<td>如果x是序列s的元素，返回True，否则返回False</td>
-</tr>
-<tr>
-<td>x not in s</td>
-<td>如果x是序列s的元素，返回False，否则返回True</td>
-</tr>
-<tr>
-<td>s + t</td>
-<td>连接两个序列s和t</td>
-</tr>
-<tr>
-<td>s*n</td>
-<td>序列s复制n次</td>
-</tr>
-<tr>
-<td>s[i]</td>
-<td>索引，返回s中的第i元素，i是序列的序号</td>
-</tr>
-<tr>
-<td>s[i:j] 或 s[i:j:k]</td>
-<td>切片，返回序列s中第i到j以K为步长的元素子序列</td>
-</tr>
-</tbody></table>
+<p>| 操作符及应用       | 描述                                         |<br>| ————————— | —————————————————————— |<br>| x in s             | 如果x是序列s的元素，返回True，否则返回False  |<br>| x not in s         | 如果x是序列s的元素，返回False，否则返回True  |<br>| s + t              | 连接两个序列s和t                             |<br>| s*n                | 序列s复制n次                                 |<br>| s[i]               | 索引，返回s中的第i元素，i是序列的序号        |<br>| s[i:j] 或 s[i:j:k] | 切片，返回序列s中第i到j以K为步长的元素子序列 |</p>
 </li>
 <li><p><strong>5个函数</strong></p>
-<table>
-<thead>
-<tr>
-<th>函数</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>len(s)</td>
-<td>返回序列s的长度，即元素个数</td>
-</tr>
-<tr>
-<td>min(s)</td>
-<td>返回序列s的最小元素，s中元素需要可比较</td>
-</tr>
-<tr>
-<td>max(s)</td>
-<td>返回序列s的最大元素，s中元素需要可比较</td>
-</tr>
-<tr>
-<td>s.index(x) 或 s.index(x,i,j)</td>
-<td>返回序列从i开始到j位置中第一次出现元素x的位置</td>
-</tr>
-<tr>
-<td>s.count(x)</td>
-<td>返回序列s中出现x的总次数</td>
-</tr>
-</tbody></table>
+<p>| 函数                         | 描述                                          |<br>| —————————————— | ——————————————————————- |<br>| len(s)                       | 返回序列s的长度，即元素个数                   |<br>| min(s)                       | 返回序列s的最小元素，s中元素需要可比较        |<br>| max(s)                       | 返回序列s的最大元素，s中元素需要可比较        |<br>| s.index(x) 或 s.index(x,i,j) | 返回序列从i开始到j位置中第一次出现元素x的位置 |<br>| s.count(x)                   | 返回序列s中出现x的总次数                      |</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">s=[<span class="number">1</span>,<span class="number">9</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">2</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>]</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;输出结果如下：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(s[<span class="number">0</span>:<span class="number">4</span>])</span><br><span class="line"><span class="built_in">print</span>(s.index(<span class="number">9</span>,<span class="number">2</span>,<span class="number">8</span>))</span><br></pre></td></tr></table></figure>
-
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221026230659752.png" alt="image-20221026230659752" style="zoom:67%;">
-
+<p><img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221026230659752.png" alt="image-20221026230659752" style="zoom:67%;"></p>
 </li>
 </ul>
 <h2 id="2-元组类型及操作"><a href="#2-元组类型及操作" class="headerlink" title="2.元组类型及操作"></a>2.元组类型及操作</h2><ul>
@@ -472,9 +414,7 @@
 </li>
 <li><p>使用小括号<code>()</code>或<code>tuple</code>创建，元素间用逗号<code>,</code>分割</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">s=<span class="string">&quot;helloworld&quot;</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;输出结果如下：&quot;</span>)</span><br><span class="line"><span class="comment">#使用tuple创建</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">tuple</span>(s))</span><br><span class="line"><span class="comment">#使用()创建</span></span><br><span class="line"><span class="built_in">print</span>((<span class="string">&#x27;s&#x27;</span>,<span class="string">&#x27;s&#x27;</span>,<span class="string">&#x27;y&#x27;</span>))</span><br></pre></td></tr></table></figure>
-
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221026231303489.png" alt="image-20221026231303489" style="zoom: 67%;">
-
+<p><img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221026231303489.png" alt="image-20221026231303489" style="zoom: 67%;"></p>
 </li>
 </ul>
 <h2 id="3-列表类型及操作"><a href="#3-列表类型及操作" class="headerlink" title="3.列表类型及操作"></a>3.列表类型及操作</h2><ul>
@@ -485,152 +425,31 @@
 <li><p>列表中各元素类型可以不同，无长度限制</p>
 </li>
 <li><p>列表类型的操作函数</p>
-<table>
-<thead>
-<tr>
-<th>函数</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>ls.append(x)</td>
-<td>在列表ls最后增加一个元素</td>
-</tr>
-<tr>
-<td>ls.clear()</td>
-<td>删除列表ls中所有的元素</td>
-</tr>
-<tr>
-<td>ls.copy()</td>
-<td>生成一个新列表，赋值ls中所有元素</td>
-</tr>
-<tr>
-<td>ls.insert(i,x)</td>
-<td>在列表ls的第i位置增加元素x</td>
-</tr>
-<tr>
-<td>ls.pop(i)</td>
-<td>将列表ls中第i位置元素取出并删除该元素</td>
-</tr>
-<tr>
-<td>ls.remove(x)</td>
-<td>将列表ls中出现的第一个元素x删除</td>
-</tr>
-<tr>
-<td>ls.reverse()</td>
-<td>将列表中ls的元素反转</td>
-</tr>
-<tr>
-<td>del ls[i:j:k]</td>
-<td>删除列表ls中第i到j以k为步长的元素</td>
-</tr>
-</tbody></table>
+<p>| 函数           | 描述                                  |<br>| ——————— | ——————————————————- |<br>| ls.append(x)   | 在列表ls最后增加一个元素              |<br>| ls.clear()     | 删除列表ls中所有的元素                |<br>| ls.copy()      | 生成一个新列表，赋值ls中所有元素      |<br>| ls.insert(i,x) | 在列表ls的第i位置增加元素x            |<br>| ls.pop(i)      | 将列表ls中第i位置元素取出并删除该元素 |<br>| ls.remove(x)   | 将列表ls中出现的第一个元素x删除       |<br>| ls.reverse()   | 将列表中ls的元素反转                  |<br>| del ls[i:j:k]  | 删除列表ls中第i到j以k为步长的元素     |</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ls=[<span class="number">9</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>]</span><br><span class="line"><span class="keyword">del</span> ls[<span class="number">0</span>:<span class="number">2</span>:<span class="number">1</span>]</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;输出结果如下：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(ls)</span><br><span class="line">ls.insert(<span class="number">3</span>,<span class="string">&quot;s&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(ls)</span><br><span class="line">ls.reverse()</span><br><span class="line"><span class="built_in">print</span>(ls)</span><br></pre></td></tr></table></figure>
-
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221026233245494.png" alt="image-20221026233245494" style="zoom:67%;">
-
+<p><img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221026233245494.png" alt="image-20221026233245494" style="zoom:67%;"></p>
 </li>
 </ul>
 <h2 id="4-字符串类型及操作"><a href="#4-字符串类型及操作" class="headerlink" title="4.字符串类型及操作"></a>4.字符串类型及操作</h2><ul>
 <li><p><strong>字符串的序号</strong>：</p>
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221027124853404.png" alt="image-20221027124853404" style="zoom: 25%;">
-
+<p><img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221027124853404.png" alt="image-20221027124853404" style="zoom: 25%;"></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">s=<span class="string">&quot;python is a romantic language&quot;</span></span><br><span class="line"><span class="comment">#字符反转</span></span><br><span class="line"><span class="built_in">print</span>(s[::-<span class="number">1</span>])</span><br></pre></td></tr></table></figure>
-
 <p>结果如下：</p>
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221027130050044.png" alt="image-20221027130050044" style="zoom: 80%;">
+<p><img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221027130050044.png" alt="image-20221027130050044" style="zoom: 80%;"></p>
 </li>
 <li><p><strong>字符串处理函数</strong></p>
-<table>
-<thead>
-<tr>
-<th>函数</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>str(x)</td>
-<td>任意类型所以对应的字符串形式</td>
-</tr>
-<tr>
-<td>hex(x) 或 oct(x)</td>
-<td>整数x的十六进制或八进制小写形式字符串</td>
-</tr>
-<tr>
-<td>chr(u)</td>
-<td>u为Unicode编码，返回其对应的字符</td>
-</tr>
-<tr>
-<td>ord(x)</td>
-<td>x为字符，返回其对应的Unicode编码</td>
-</tr>
-</tbody></table>
+<p>| 函数             | 描述                                  |<br>| ———————— | ——————————————————- |<br>| str(x)           | 任意类型所以对应的字符串形式          |<br>| hex(x) 或 oct(x) | 整数x的十六进制或八进制小写形式字符串 |<br>| chr(u)           | u为Unicode编码，返回其对应的字符      |<br>| ord(x)           | x为字符，返回其对应的Unicode编码      |</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#打印十二星座对应的字符</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">12</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="built_in">chr</span>(<span class="number">9800</span>+i),end=<span class="string">&quot; &quot;</span>)</span><br></pre></td></tr></table></figure>
-
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221027091451848.png" alt="image-20221027091451848" style="zoom:80%;">
+<p><img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221027091451848.png" alt="image-20221027091451848" style="zoom:80%;"></p>
 </li>
 <li><p><strong>字符串处理方法</strong></p>
-<table>
-<thead>
-<tr>
-<th>方法</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>str.lower() 或 str.upper()</td>
-<td>返回字符串的副本，全部字符小写/大写</td>
-</tr>
-<tr>
-<td><code>str.split(sep=None)</code></td>
-<td>返回一个列表，有str根据sep被分隔的部分组成</td>
-</tr>
-<tr>
-<td>str.replace(old,new)</td>
-<td>返回字符串str副本，所有old子串被替换成new</td>
-</tr>
-<tr>
-<td>str.center(width[,fillchar])</td>
-<td>字符串str根据宽度width居中，fillchar可选</td>
-</tr>
-<tr>
-<td>str.strip(chars)</td>
-<td>从str中去掉在其左侧和右侧chars中列出的字符</td>
-</tr>
-<tr>
-<td><code>str.join(iter)</code></td>
-<td>在iter变量除最后元素外每个元素后增加一个str，<strong>此方法也适用于列表，返回的是字符串类型</strong></td>
-</tr>
-</tbody></table>
+<p>| 方法                         | 描述                                                         |<br>| —————————————— | —————————————————————————————— |<br>| str.lower() 或 str.upper()   | 返回字符串的副本，全部字符小写/大写                          |<br>| <code>str.split(sep=None)</code>        | 返回一个列表，有str根据sep被分隔的部分组成                   |<br>| str.replace(old,new)         | 返回字符串str副本，所有old子串被替换成new                    |<br>| str.center(width[,fillchar]) | 字符串str根据宽度width居中，fillchar可选                     |<br>| str.strip(chars)             | 从str中去掉在其左侧和右侧chars中列出的字符                   |<br>| <code>str.join(iter)</code>             | 在iter变量除最后元素外每个元素后增加一个str，<strong>此方法也适用于列表，返回的是字符串类型</strong> |</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">s=<span class="string">&quot;helloworld&quot;</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;输出结果如下：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(s.upper())</span><br><span class="line"><span class="built_in">print</span>(s) <span class="comment">#返回了大写的副本，原来的字符串s并没有被改变</span></span><br><span class="line">s_new=<span class="string">&quot;,&quot;</span>.join(s)</span><br><span class="line"><span class="built_in">print</span>(s_new)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">type</span>(s_new))<span class="comment">#说明使用str.join(iter)返回的类型是一个字符串</span></span><br><span class="line"><span class="built_in">print</span>(s_new.split(<span class="string">&quot;,&quot;</span>))</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">type</span>(s_new.split(<span class="string">&quot;,&quot;</span>)))<span class="comment">#说明使用str.join(iter)返回的类型是列表</span></span><br><span class="line"><span class="built_in">print</span>(s.center(<span class="number">20</span>,<span class="string">&quot;=&quot;</span>))</span><br></pre></td></tr></table></figure>
-
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221027100523337.png" alt="image-20221027100523337" style="zoom:67%;">
+<p><img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221027100523337.png" alt="image-20221027100523337" style="zoom:67%;"></p>
 </li>
 <li><p><strong>字符串类型的格式化</strong></p>
-<table>
-<thead>
-<tr>
-<th>:</th>
-<th>&lt;填充&gt;</th>
-<th>&lt;对齐&gt;</th>
-<th>&lt;宽度&gt;</th>
-<th>&lt;,&gt;</th>
-<th>&lt;. 精度&gt;</th>
-<th>&lt;类型&gt;</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>引导符号</td>
-<td>用于填充的单个字符</td>
-<td><code>&lt;</code>: 左对齐；<code>&lt;</code>: 右对齐；<code>^</code>: 居中对齐</td>
-<td>设定输出位宽</td>
-<td>数字的千位分隔符</td>
-<td>浮点数小数精度 或 字符串最大输出长度</td>
-<td>整数类型：<code>b,c,d,o,x,X</code>；浮点数类型：<code>e,E,f,%</code></td>
-</tr>
-</tbody></table>
+<p>| :        | &lt;填充&gt;             | &lt;对齐&gt;                                  | &lt;宽度&gt;       | &lt;,&gt;              | &lt;. 精度&gt;                             | &lt;类型&gt;                                         |<br>| ———— | ————————— | ———————————————————- | —————— | ———————— | —————————————————— | ——————————————————————— |<br>| 引导符号 | 用于填充的单个字符 | <code>&lt;</code>: 左对齐；<code>&lt;</code>: 右对齐；<code>^</code>: 居中对齐 | 设定输出位宽 | 数字的千位分隔符 | 浮点数小数精度 或 字符串最大输出长度 | 整数类型：<code>b,c,d,o,x,X</code>；浮点数类型：<code>e,E,f,%</code> |</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="string">&quot;小明的数学成绩是&#123;1:=^20.2f&#125;，英语成绩是&#123;0:*&gt;20.2f&#125;，语文成绩是&#123;2:#&lt;20.2f&#125;&quot;</span>.<span class="built_in">format</span>(<span class="number">98.773</span>,<span class="number">97.273</span>,<span class="number">96.094</span>))</span><br></pre></td></tr></table></figure>
-
 <p><img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221027102813322.png" alt="image-20221027102813322"></p>
 </li>
 </ul>
@@ -642,18 +461,18 @@
 <li>采用大括号<code>&#123;&#125;</code>和<code>dict</code>创建，键值对用冒号<code>:</code>表示</li>
 </ul>
 <h2 id="1-字典的创建"><a href="#1-字典的创建" class="headerlink" title="1.字典的创建"></a>1.字典的创建</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#用&#123;&#125;创建</span></span><br><span class="line">d=&#123;<span class="string">&quot;中国&quot;</span>:<span class="string">&quot;北京&quot;</span>,<span class="string">&quot;美国&quot;</span>:<span class="string">&quot;华盛顿&quot;</span>,<span class="string">&quot;法国&quot;</span>:<span class="string">&quot;巴黎&quot;</span>&#125;</span><br><span class="line"><span class="built_in">print</span>(d)</span><br><span class="line"><span class="comment">#用dict创建</span></span><br><span class="line">lis = [(<span class="string">&#x27;name&#x27;</span>, <span class="string">&#x27;Jack&#x27;</span>), (<span class="string">&#x27;age&#x27;</span>, <span class="number">18</span>), (<span class="string">&#x27;height&#x27;</span>, <span class="number">180</span>)]</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">dict</span>(lis))</span><br><span class="line"><span class="comment">#创建空字典</span></span><br><span class="line">de=&#123;&#125;</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">type</span>(de))</span><br></pre></td></tr></table></figure>
-
 <p>结果如下：</p>
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221027110024611.png" alt="image-20221027110024611" style="zoom:67%;">
-
-<h2 id="2-字典处理函数及方法"><a href="#2-字典处理函数及方法" class="headerlink" title="2.字典处理函数及方法"></a>2.字典处理函数及方法</h2><table>
+<p><img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221027110024611.png" alt="image-20221027110024611" style="zoom:67%;"></p>
+<h2 id="2-字典处理函数及方法"><a href="#2-字典处理函数及方法" class="headerlink" title="2.字典处理函数及方法"></a>2.字典处理函数及方法</h2><div class="table-container">
+<table>
 <thead>
 <tr>
 <th>函数或方法</th>
 <th>描述</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>del d[k]</td>
 <td>删除字典d中键k对应的数据值</td>
 </tr>
@@ -693,11 +512,13 @@
 <td>len(d)</td>
 <td>返回字典d中元素的个数</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#定义一个空字典d</span></span><br><span class="line">d=&#123;&#125;</span><br><span class="line"><span class="comment">#向d新增2个键值对元素</span></span><br><span class="line">d[<span class="string">&quot;a&quot;</span>]=<span class="number">1</span></span><br><span class="line">d[<span class="string">&quot;b&quot;</span>]=<span class="number">2</span></span><br><span class="line"><span class="built_in">print</span>(d)</span><br><span class="line"><span class="comment">#修改第2个元素</span></span><br><span class="line">d[<span class="string">&quot;b&quot;</span>]=<span class="number">3</span></span><br><span class="line"><span class="built_in">print</span>(d)</span><br><span class="line"><span class="comment">#判断”c&quot;是否是d的键值</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;c&quot;</span> <span class="keyword">in</span> d)</span><br><span class="line"><span class="comment">#计算d的长度</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">len</span>(d))</span><br><span class="line"><span class="comment">#随机从字典d中取出一个键值对，并以元组形式返回</span></span><br><span class="line"><span class="built_in">print</span>(d.popitem())</span><br><span class="line"><span class="built_in">print</span>(d)</span><br><span class="line"><span class="comment">#通过键返回相应值，但字典d并没有被改变</span></span><br><span class="line"><span class="built_in">print</span>(d.get(<span class="string">&quot;a&quot;</span>))</span><br><span class="line"><span class="built_in">print</span>(d)</span><br></pre></td></tr></table></figure>
-
 <p>结果如下：</p>
-<img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221027111632810.png" alt="image-20221027111632810" style="zoom: 67%;">
+<p><img src="/2022/10/24/Python%E5%9F%BA%E7%A1%80%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20221027111632810.png" alt="image-20221027111632810" style="zoom: 67%;"></p>
+
     </div>
 
     
