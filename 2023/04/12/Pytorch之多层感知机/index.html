@@ -33,8 +33,9 @@
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/04/12/Pytorch%E4%B9%8B%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA/image-20230419235927270.png">
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/04/12/Pytorch%E4%B9%8B%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA/image-20230419235953900.png">
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/04/12/Pytorch%E4%B9%8B%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA/image-20230420000011181.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/04/12/Pytorch%E4%B9%8B%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA/image-20230624232454855.png">
 <meta property="article:published_time" content="2023-04-12T02:07:12.000Z">
-<meta property="article:modified_time" content="2023-04-19T16:16:03.187Z">
+<meta property="article:modified_time" content="2023-06-24T16:36:32.391Z">
 <meta property="article:author" content="ssy">
 <meta property="article:tag" content="Pytorch">
 <meta property="article:tag" content="神经网络">
@@ -244,7 +245,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-04-20 00:16:03" itemprop="dateModified" datetime="2023-04-20T00:16:03+08:00">2023-04-20</time>
+                <time title="修改时间：2023-06-25 00:36:32" itemprop="dateModified" datetime="2023-06-25T00:36:32+08:00">2023-06-25</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -307,7 +308,91 @@
 <li><code>with torch.no_grad()</code>的理解：<a target="_blank" rel="noopener" href="https://blog.csdn.net/sazass/article/details/116668755">【pytorch系列】 with torch.no_grad():用法详解_大黑山修道的博客-CSDN博客</a></li>
 </ul>
 <hr>
-<h1 id="欠拟合与过拟合"><a href="#欠拟合与过拟合" class="headerlink" title="欠拟合与过拟合"></a>欠拟合与过拟合</h1><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<h1 id="K-折交叉验证"><a href="#K-折交叉验证" class="headerlink" title="K-折交叉验证"></a>K-折交叉验证</h1><ul>
+<li><p>非大数据集上通常使用k-折交叉验证</p>
+</li>
+<li><p>训练数据集：训练模型参数</p>
+</li>
+<li><p>验证数据集：选择模型超参数</p>
+</li>
+<li><p>K-折交叉验证的算法：</p>
+<ul>
+<li>将训练数据分割成K块</li>
+<li><p>For i = 1,…,K</p>
+<ul>
+<li>使用第i块作为验证数据集，其余的k-1块作为训练数据集</li>
+</ul>
+</li>
+<li><p>报告K个验证集误差的平均</p>
+</li>
+<li><p>常用K=5或10</p>
+</li>
+<li><p>例如：若K=3</p>
+<p>|      | 块1   | 块2   | 块3   |<br>| —— | ——- | ——- | ——- |<br>| i=1  | val   | train | train |<br>| i=2  | train | val   | train |<br>| i=3  | train | train | val   |</p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="欠拟合与过拟合"><a href="#欠拟合与过拟合" class="headerlink" title="欠拟合与过拟合"></a>欠拟合与过拟合</h1><ul>
+<li><p>模型容量：</p>
+<ul>
+<li>拟合各种函数的能力</li>
+<li>低容量的模型难以拟合训练数据</li>
+<li>高容量的模型可以记住所有的训练数据</li>
+</ul>
+</li>
+<li><p>过拟合与欠拟合</p>
+<p>|                  | <strong>数据：简单</strong> | <strong>数据：复杂</strong> |<br>| ———————— | ——————— | ——————— |<br>| <strong>模型容量：低</strong> | 正常           | 欠拟合         |<br>| <strong>模型容量：高</strong> | 过拟合         | 正常           |</p>
+</li>
+<li><p>模型复杂度对欠拟合和过拟合的影响</p>
+<p><img src="/2023/04/12/Pytorch%E4%B9%8B%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA/image-20230624232454855.png" alt="image-20230624232454855" style="zoom: 67%;"></p>
+</li>
+</ul>
+<hr>
+<h1 id="权重衰退"><a href="#权重衰退" class="headerlink" title="权重衰退"></a>权重衰退</h1><ul>
+<li><p>在训练参数化机器学习模型时， <em>权重衰减</em>（weight decay）是最广泛使用的正则化的技术之一， 它通常也被称为$L_2$正则化</p>
+</li>
+<li><p>使用均方范数作为硬性限制：</p>
+<ul>
+<li><p>通过限制参数值的选择范围来控制模型容量</p>
+<script type="math/tex; mode=display">
+min[l(w,b)]\,\,\,subject\, to\, ||W||^2\leq\theta</script></li>
+<li><p>通常不限制偏移b</p>
+</li>
+<li><p>小的$\theta$意味着更强的正则项</p>
+</li>
+</ul>
+</li>
+<li><p>使用均方范数作为柔性限制</p>
+<ul>
+<li><p>对于每一个$\theta$，都可以找到$\lambda$使得之前的目标函数等价于：</p>
+<script type="math/tex; mode=display">
+min[l(w,b)+\frac\lambda2||w||^2]</script></li>
+<li><p>超参数$\lambda$控制了正则项的重要程度</p>
+<ul>
+<li>$\lambda=0$：正则项无作用</li>
+<li>$\lambda\rightarrow \infty$：意味着$\theta\rightarrow0$,$w\rightarrow0$</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>参数更新法则：</p>
+<ul>
+<li><p>计算梯度：</p>
+<script type="math/tex; mode=display">
+\frac{\partial (l(w,b)+\frac\lambda2||w||^2)}{\partial w}=\frac{\partial l(w,b)}{\part w}+\lambda w</script></li>
+<li><p>时间t更新参数：</p>
+<script type="math/tex; mode=display">
+w_{t+1}=w_t-\eta\frac{\part loss}{\part w_t}</script><script type="math/tex; mode=display">
+w_{t+1}=(1-\eta\lambda)w_t-\eta\frac{\part l(w_t,b_t)}{\part w_t}</script></li>
+<li><p>通常$\eta\lambda&lt;1$，在深度学习中通常叫做权重衰退</p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
 <li><a target="_blank" rel="noopener" href="https://zh.d2l.ai/chapter_multilayer-perceptrons/index.html">4. 多层感知机 — 动手学深度学习 2.0.0 documentation (d2l.ai)</a></li>
 </ul>
 
@@ -423,7 +508,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA"><span class="nav-number">1.</span> <span class="nav-text">多层感知机</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA%E7%9A%84%E7%AE%80%E6%B4%81%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.</span> <span class="nav-text">多层感知机的简洁实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AC%A0%E6%8B%9F%E5%90%88%E4%B8%8E%E8%BF%87%E6%8B%9F%E5%90%88"><span class="nav-number">3.</span> <span class="nav-text">欠拟合与过拟合</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA"><span class="nav-number">1.</span> <span class="nav-text">多层感知机</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA%E7%9A%84%E7%AE%80%E6%B4%81%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.</span> <span class="nav-text">多层感知机的简洁实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#K-%E6%8A%98%E4%BA%A4%E5%8F%89%E9%AA%8C%E8%AF%81"><span class="nav-number">3.</span> <span class="nav-text">K-折交叉验证</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AC%A0%E6%8B%9F%E5%90%88%E4%B8%8E%E8%BF%87%E6%8B%9F%E5%90%88"><span class="nav-number">4.</span> <span class="nav-text">欠拟合与过拟合</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9D%83%E9%87%8D%E8%A1%B0%E9%80%80"><span class="nav-number">5.</span> <span class="nav-text">权重衰退</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">6.</span> <span class="nav-text">Reference</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
