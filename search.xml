@@ -544,9 +544,189 @@
   <entry>
     <title>计算机体系结构之指令系统</title>
     <url>/2023/08/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8A%80%E6%9C%AF/</url>
-    <content><![CDATA[<p>本节主要介绍了</p>
+    <content><![CDATA[<p>本节主要介绍了流水线的相关基础知识</p>
 <span id="more"></span>
 
+<h1 id="流水线基本概念"><a href="#流水线基本概念" class="headerlink" title="流水线基本概念"></a>流水线基本概念</h1><h2 id="1-流水线的特点"><a href="#1-流水线的特点" class="headerlink" title="1.流水线的特点"></a>1.流水线的特点</h2><ul>
+<li>流水过程由多个相关的子过程组成，这些子过程称为流水线的“级”或“段”，“段”的数目称为流水线的“深度”</li>
+<li>每个子过程由专用的功能段实现</li>
+<li>各功能段的时间应基本相等，通常为1个时钟周期（1拍）</li>
+<li>流水线需要经过<strong>一定的通过时间</strong>才能稳定</li>
+<li>流水技术适合于<strong>大量重复</strong>的时序过程</li>
+</ul>
+<h2 id="2-流水线的分类"><a href="#2-流水线的分类" class="headerlink" title="2.流水线的分类"></a>2.流水线的分类</h2><ul>
+<li><p>按流水线所<strong>完成的功能</strong>分类：</p>
+<ul>
+<li><p>单功能流水线，是指只能完成一种固定功能的流水线</p>
+</li>
+<li><p>多功能流水线，是指各段可以进行不同的连接，从而完成不同的功能</p>
+<img src="/2023/08/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8A%80%E6%9C%AF/image-20230804102006973.png" alt="image-20230804102006973" style="zoom:50%;">
+</li>
+</ul>
+</li>
+<li><p>按<strong>同一时间内流水线的连接方式</strong>划分</p>
+<ul>
+<li>静态流水线，是指在同一时间内，流水线的各段只能按同一种功能的连接方式工作</li>
+<li>动态流水线，是指在同一时间内，当某些段正在实现某种运算时，另一些段却在实现另一种运算</li>
+</ul>
+</li>
+<li><p>按<strong>流水的级别</strong>划分</p>
+<ul>
+<li>部件级流水线，又叫运算操作流水线，是把处理机的算术逻辑部件分段，使得各种数据类型的操作能够进行流水</li>
+<li>处理机级流水线，又叫指令流水线，是把解释指令的过程按照流水方式处理</li>
+<li>处理时间流水线，又叫宏流水线，是由两个以上的处理机串行地对同一数据流进行处理，每个处理机完成一项任务</li>
+</ul>
+</li>
+<li><p>按照<strong>数据</strong>表示来进行分类</p>
+<ul>
+<li>标量流水处理机，是指处理机不具有向量数据表示，仅对标量数据进行流水处理</li>
+<li>向量流水处理机，是指处理机具有向量数据表示，并通过向量指令对向量的各元素进行处理</li>
+</ul>
+</li>
+<li><p>按照是否有<strong>反馈回路</strong>来进行分类</p>
+<ul>
+<li><p>线性流水线，是指流水线的各段串行连接，没有反馈回路</p>
+</li>
+<li><p>非线性流水线，是指流水线种除有串行连接的通路外，还有反馈回路</p>
+<ul>
+<li>但其存在流水线调度问题</li>
+<li>确定什么时候向流水线引进新的输入，从而使新输入的数据和先前操作的反馈数据流水线中不产生冲突，此即所谓流水线调度问题</li>
+</ul>
+<p><img src="/2023/08/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8A%80%E6%9C%AF/image-20230804103817743.png" alt="image-20230804103817743"></p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="MIPS基本流水线"><a href="#MIPS基本流水线" class="headerlink" title="MIPS基本流水线"></a>MIPS基本流水线</h1><h2 id="1-实现MIPS指令的一种简单数据通路"><a href="#1-实现MIPS指令的一种简单数据通路" class="headerlink" title="1.实现MIPS指令的一种简单数据通路"></a>1.实现MIPS指令的一种简单数据通路</h2><img src="/2023/08/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8A%80%E6%9C%AF/image-20230804110313673.png" alt="image-20230804110313673" style="zoom:50%;">
+
+<ul>
+<li><p>这是一种非流水方式</p>
+</li>
+<li><p>将指令执行划分为5个阶段：</p>
+<ul>
+<li><p>取指令周期（IF）</p>
+<ul>
+<li><p>根据PC值从存储器中取出指令，并将指令送入指令寄存器IR，PC值增加4，指向顺序的下一条指令，</p>
+</li>
+<li><p>并将下一条指令的地址放入临时寄存器NPC中<br>$$<br>IR\leftarrow Mem[PC]\\NPC\leftarrow PC+4<br>$$</p>
+</li>
+</ul>
+</li>
+<li><p>指令译码/读寄存器周期（ID）</p>
+<ul>
+<li><p>进行指令译码，读取IR寄存器（指令寄存器），按照相应寄存器号读寄存器文件，并将读出结果放入两个临时寄存器A和B中</p>
+</li>
+<li><p>同时对IR寄存器中内容的低16位进行符号扩展，然后将符号扩展后的32位立即值保存在临时寄存器Imm中<br>$$<br>A\leftarrow Regs[IR_{6..10}]\\B\leftarrow Regs[IR_{11..15}]\\Imm\leftarrow ((IR_{16})^{16}##IR_{16..31})<br>$$</p>
+</li>
+</ul>
+</li>
+<li><p>执行/有效地址计算周期（EX）</p>
+<ul>
+<li>存储器访问：$ALUoutput\leftarrow A+Imm$</li>
+<li>寄存器-寄存器ALU：$ALUoutput\leftarrow A,op,B$</li>
+<li>寄存器-立即数ALU：$ALUoutput\leftarrow A, op, Imm$</li>
+<li>分支操作：$ALUoutput\leftarrow NPC+Imm\quad Cond\leftarrow (A,op, 0)$</li>
+</ul>
+</li>
+<li><p>存储器访问/分支完成周期（MEM）</p>
+<ul>
+<li><p>访问操作：</p>
+<ul>
+<li>$Load:\quad LMD\leftarrow LMDMEN[ALUoutput]$</li>
+<li>$Store:\quad Mem[ALUoutput]\leftarrow B$</li>
+</ul>
+</li>
+<li><p>分支操作：<br>$$<br>if,(Cond),PC\leftarrow ALUouput\<br>else, PC\leftarrow NPC<br>$$</p>
+</li>
+</ul>
+</li>
+<li><p>写回周期（WB）</p>
+<ul>
+<li>寄存器-寄存器型ALU指令：$Reg[IR_{16..20}]\leftarrow ALUoutput$</li>
+<li>寄存器-立即值型ALU指令：$Reg[IR_{11..15}]\leftarrow ALUoutput$</li>
+<li>Load指令：$Reg[IR_{11..15}]\leftarrow LMD$</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-一种简单的MIPS流水线"><a href="#2-一种简单的MIPS流水线" class="headerlink" title="2.一种简单的MIPS流水线"></a>2.一种简单的MIPS流水线</h2><ul>
+<li><p>数据通路中的每一个周期成为流水线的一段</p>
+</li>
+<li><p>每个时钟周期启动一条指令</p>
+<p><img src="/2023/08/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8A%80%E6%9C%AF/image-20230804114637409.png" alt="image-20230804114637409"></p>
+</li>
+<li><p>实现流水技术应解决的一些问题</p>
+<ul>
+<li>应保证流水线各段不会在同一时钟周期内使用相同的寄存器通路资源</li>
+<li>PC计算问题：为了能够在每个时钟周期启动一条新的指令，流水线必须在IF段获取下一条指令的地址，并将其保存在PC中</li>
+<li>合理划分流水段，每段内的操作必须在一个时钟周期内完成</li>
+<li>流水线寄存器设计：为防止寄存器中的值在为流水线中某条指令所用时被流水线中其他的指令所重写，可在流水线各段时间设置流水线寄存器文件，也称锁存器</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="流水线性能分析"><a href="#流水线性能分析" class="headerlink" title="流水线性能分析"></a>流水线性能分析</h1><h2 id="1-吞吐率"><a href="#1-吞吐率" class="headerlink" title="1.吞吐率"></a>1.吞吐率</h2><ul>
+<li><p>是衡量流水线速度的重要指标</p>
+</li>
+<li><p><strong>吞吐率</strong>：是指单位时间内流水线所完成的任务数或输出结果的数量</p>
+</li>
+<li><p><strong>最大吞吐率</strong>$TP_{max}$：是指流水线在达到稳定状态后所得到的吞吐率</p>
+<ul>
+<li><p>假设流水线各段的时间相等，均为$\Delta t_0$，则：<br>$$<br>TP_{max}=\frac 1{\Delta t_0}<br>$$</p>
+</li>
+<li><p>假设流水线各段的时间不相等，第i段的时间为$\Delta t_i$，则：<br>$$<br>TP_{max}=\frac 1{max(\Delta t_i)}<br>$$</p>
+</li>
+<li><p>最大吞吐率取决于流水线中最慢一段所需要的时间，该段为流水线的瓶颈</p>
+</li>
+</ul>
+</li>
+<li><p><strong>实际吞吐率</strong>$TP$：设流水线由m段组成，完成n个任务的吞吐率称为实际吞吐率</p>
+<ul>
+<li><p>若各段时间相等（假设均为$\Delta t_0$），则完成时间：<br>$$<br>T_{流水}=m\Delta t_0+(n-1)\Delta t_0<br>$$<br><img src="/2023/08/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8A%80%E6%9C%AF/image-20230804183304160.png" alt="image-20230804183304160"></p>
+</li>
+<li><p>则实际吞吐率为：<br>$$<br>TP=\frac{n}{T_{流水}}=\frac{n}{m\Delta t_0+(n-1)\Delta t_0}=\frac{TP_{max}}{1+\frac{m-1}{n}}<br>$$</p>
+</li>
+<li><p>若各段时间不等（假设第i段为$\Delta t_i$），且假设$\Delta t_j=max{\Delta t_i}$，则完成时间：<br>$$<br>T=\sum_{i=1}^m\Delta t_i+(n-1)\Delta t_j<br>$$</p>
+</li>
+<li><p>则实际吞吐率为：<br>$$<br>TP=\frac{n}{\sum_{i=1}^m\Delta t_i+(n-1)\Delta t_j}<br>$$</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-加速比"><a href="#2-加速比" class="headerlink" title="2.加速比"></a>2.加速比</h2><ul>
+<li><p>加速比S是指流水线速度与等功能的非流水线速度之比<br>$$<br>S=\frac{T_{非流水}}{T_{流水}}<br>$$</p>
+</li>
+<li><p>若流水线为m段，每段时间均为$\Delta t_0$，则：<br>$$<br>T_{非流水}=nm\Delta t_0<br>$$</p>
+<p>$$<br>T_{流水}=m\Delta t_0+(n-1)\Delta t_0<br>$$</p>
+<p>$$<br>S=\frac{mn}{m+n-1}=\frac{m}{1+\frac{m-1}{n}}<br>$$</p>
+</li>
+</ul>
+<p><img src="/2023/08/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8A%80%E6%9C%AF/image-20230804183540421.png" alt="image-20230804183540421"></p>
+<h2 id="3-效率"><a href="#3-效率" class="headerlink" title="3.效率"></a>3.效率</h2><ul>
+<li><p>效率是指流水线的设备利用率</p>
+</li>
+<li><p>由于流水线有<strong>通过时间</strong>和<strong>排空时间</strong>，所以流水线的各段并非一直满负荷工作，E&lt;1</p>
+<p><img src="/2023/08/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8A%80%E6%9C%AF/image-20230804183356816.png" alt="image-20230804183356816"></p>
+</li>
+<li><p>若各段时间相等，则各段效率也相等，即e1=e2=e3……=$n\Delta t_0/T_{流水}$</p>
+</li>
+<li><p>整个流水线效率：<br>$$<br>E=\frac{n\Delta t_0}{T_{流水}}=\frac{n}{m+n-1}=\frac{1}{1+\frac{m-1}{n}}<br>$$<br><img src="/2023/08/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8A%80%E6%9C%AF/image-20230804183419046.png" alt="image-20230804183419046"></p>
+</li>
+<li><p>当$n&gt;&gt;m$时，$E\approx1$</p>
+</li>
+</ul>
+<h2 id="4-吞吐率、加速比和效率的关系"><a href="#4-吞吐率、加速比和效率的关系" class="headerlink" title="4.吞吐率、加速比和效率的关系"></a>4.吞吐率、加速比和效率的关系</h2><ul>
+<li><p>效率是实际加速比S与最大加速比m之比<br>$$<br>E=\frac{n\Delta t_0}{T_{流水}}=\frac{mn\Delta t_0}{T_{流水}m}=\frac Sm<br>$$</p>
+</li>
+<li><p>当$\Delta t_0$不变时，流水线的效率与吞吐率呈正比，为了提高效率而采取的措施，也有助于提高吞吐率<br>$$<br>E=\frac{n\Delta t_0}{T_{流水}}=\frac{n}{T_{流水}}.\Delta t_0=TP\Delta t_0<br>$$</p>
+</li>
+</ul>
+<hr>
+<h1 id="向量处理机"><a href="#向量处理机" class="headerlink" title="向量处理机"></a>向量处理机</h1><ul>
+<li>向量处理机：具有向量数据表示和相应向量指令的流水线处理机称为向量流水线处理机，也称向量处理机</li>
+</ul>
 ]]></content>
       <categories>
         <category>学习积累</category>
@@ -1396,7 +1576,7 @@ $$
 <li>torch.layout表示torch.Tensor内存布局的对象</li>
 </ul>
 </li>
-<li>稀疏张量的定义：<ul>
+<li><strong>稀疏张量的定义</strong>：<ul>
 <li>torch.sparse_coo_tensor，coo类型表示非零元素的坐标形式</li>
 </ul>
 </li>
@@ -1411,17 +1591,22 @@ $$
 <p>结果如下：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">x is: tensor([1., 2., 4., 8.])</span><br><span class="line">y is: tensor([2, 2, 2, 2])</span><br><span class="line">x+y is: tensor([ 3.,  4.,  6., 10.])</span><br><span class="line">x-y is: tensor([-1.,  0.,  2.,  6.])</span><br><span class="line">x*y is: tensor([ 2.,  4.,  8., 16.])</span><br><span class="line">x/y is: tensor([0.5000, 1.0000, 2.0000, 4.0000])</span><br><span class="line">x^y is: tensor([ 1.,  4., 16., 64.])</span><br><span class="line">e^x is: tensor([2.7183e+00, 7.3891e+00, 5.4598e+01, 2.9810e+03])</span><br><span class="line">----------------------------------------</span><br><span class="line">X is: tensor([[ 0.,  1.,  2.,  3.],</span><br><span class="line">        [ 4.,  5.,  6.,  7.],</span><br><span class="line">        [ 8.,  9., 10., 11.]])</span><br><span class="line">Y is: tensor([[2, 1, 4, 3],</span><br><span class="line">        [1, 2, 3, 4],</span><br><span class="line">        [4, 3, 2, 1]])</span><br><span class="line">tensor([[ 0.,  1.,  2.,  3.],</span><br><span class="line">        [ 4.,  5.,  6.,  7.],</span><br><span class="line">        [ 8.,  9., 10., 11.],</span><br><span class="line">        [ 2.,  1.,  4.,  3.],</span><br><span class="line">        [ 1.,  2.,  3.,  4.],</span><br><span class="line">        [ 4.,  3.,  2.,  1.]])</span><br><span class="line">tensor([[ 0.,  1.,  2.,  3.,  2.,  1.,  4.,  3.],</span><br><span class="line">        [ 4.,  5.,  6.,  7.,  1.,  2.,  3.,  4.],</span><br><span class="line">        [ 8.,  9., 10., 11.,  4.,  3.,  2.,  1.]])</span><br><span class="line">----------------------------------------</span><br><span class="line">tensor([[False,  True, False,  True],</span><br><span class="line">        [False, False, False, False],</span><br><span class="line">        [False, False, False, False]])</span><br><span class="line">----------------------------------------</span><br><span class="line">The sum is: tensor(66.)</span><br><span class="line">The sum is: tensor([ 6., 22., 38.])</span><br></pre></td></tr></table></figure>
 
-<h2 id="4-索引与切片"><a href="#4-索引与切片" class="headerlink" title="4.索引与切片"></a>4.索引与切片</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line">X=torch.tensor([[<span class="number">2</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">3</span>], [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>], [<span class="number">4</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">1</span>],[<span class="number">5</span>,<span class="number">9</span>,<span class="number">8</span>,<span class="number">7</span>]])</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;X is:&quot;</span>,X)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;X[-1] is:&quot;</span>,X[-<span class="number">1</span>]) <span class="comment">#-1代表取最后</span></span><br><span class="line"><span class="built_in">print</span>(<span class="number">40</span>*<span class="string">&#x27;-&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;X[1:3] is:&quot;</span>,X[<span class="number">1</span>:<span class="number">3</span>])</span><br><span class="line"><span class="built_in">print</span>(<span class="number">40</span>*<span class="string">&#x27;-&#x27;</span>)</span><br><span class="line">X[<span class="number">1</span>, <span class="number">2</span>] = <span class="number">9</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;X is:&quot;</span>,X)</span><br><span class="line"><span class="built_in">print</span>(<span class="number">40</span>*<span class="string">&#x27;-&#x27;</span>)</span><br><span class="line">X[<span class="number">0</span>:<span class="number">2</span>, :] = <span class="number">12</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;X is:&quot;</span>,X)</span><br></pre></td></tr></table></figure>
+<h2 id="4-张量索引"><a href="#4-张量索引" class="headerlink" title="4.张量索引"></a>4.张量索引</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line">X=torch.tensor([[<span class="number">2</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">3</span>], [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>], [<span class="number">4</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">1</span>],[<span class="number">5</span>,<span class="number">9</span>,<span class="number">8</span>,<span class="number">7</span>]])</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;X is:&quot;</span>,X)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;X[-1] is:&quot;</span>,X[-<span class="number">1</span>]) <span class="comment">#-1代表取最后</span></span><br><span class="line"><span class="built_in">print</span>(<span class="number">40</span>*<span class="string">&#x27;-&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;X[1:3] is:&quot;</span>,X[<span class="number">1</span>:<span class="number">3</span>])</span><br><span class="line"><span class="built_in">print</span>(<span class="number">40</span>*<span class="string">&#x27;-&#x27;</span>)</span><br><span class="line">X[<span class="number">1</span>, <span class="number">2</span>] = <span class="number">9</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;X is:&quot;</span>,X)</span><br><span class="line"><span class="built_in">print</span>(<span class="number">40</span>*<span class="string">&#x27;-&#x27;</span>)</span><br><span class="line">X[<span class="number">0</span>:<span class="number">2</span>, :] = <span class="number">12</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;X is:&quot;</span>,X)</span><br></pre></td></tr></table></figure>
 
 <p>结果如下：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">X is: tensor([[2, 1, 4, 3],</span><br><span class="line">        [1, 2, 3, 4],</span><br><span class="line">        [4, 3, 2, 1],</span><br><span class="line">        [5, 9, 8, 7]])</span><br><span class="line">X[-1] is: tensor([5, 9, 8, 7])</span><br><span class="line">----------------------------------------</span><br><span class="line">X[1:3] is: tensor([[1, 2, 3, 4],</span><br><span class="line">        [4, 3, 2, 1]])</span><br><span class="line">----------------------------------------</span><br><span class="line">X is: tensor([[2, 1, 4, 3],</span><br><span class="line">        [1, 2, 9, 4],</span><br><span class="line">        [4, 3, 2, 1],</span><br><span class="line">        [5, 9, 8, 7]])</span><br><span class="line">----------------------------------------</span><br><span class="line">X is: tensor([[12, 12, 12, 12],</span><br><span class="line">        [12, 12, 12, 12],</span><br><span class="line">        [ 4,  3,  2,  1],</span><br><span class="line">        [ 5,  9,  8,  7]])</span><br></pre></td></tr></table></figure>
 
-<h2 id="5-排序运算与最大值求取"><a href="#5-排序运算与最大值求取" class="headerlink" title="5.排序运算与最大值求取"></a>5.排序运算与最大值求取</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line"><span class="comment">#1.张量的排序torch.sort</span></span><br><span class="line">a = torch.tensor([[<span class="number">1</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">3</span>, <span class="number">5</span>],[<span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>]])</span><br><span class="line"><span class="built_in">print</span>(a.shape)</span><br><span class="line"><span class="built_in">print</span>(torch.sort(a, dim = <span class="number">1</span>, descending = <span class="literal">True</span>)) <span class="comment">#descending = True代表降序排列，为False代表升序排列</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;---------------------------------&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#2.张量中：沿着指定维度返回最大k个数值及其索引值torch.topk</span></span><br><span class="line">a = torch.tensor([[<span class="number">1</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">3</span>, <span class="number">5</span>],[<span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>]])</span><br><span class="line"><span class="built_in">print</span>(a.shape)</span><br><span class="line"><span class="built_in">print</span>(torch.topk(a, k = <span class="number">2</span>, dim = <span class="number">0</span>))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;---------------------------------&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#3.张量中：沿着指定维度返回第k个最小值及其索引值torch.kthvalue</span></span><br><span class="line">a = torch.tensor([[<span class="number">1</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">3</span>, <span class="number">5</span>],[<span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>]])</span><br><span class="line"><span class="built_in">print</span>(a.shape)</span><br><span class="line"><span class="built_in">print</span>(torch.kthvalue(a, k = <span class="number">2</span>, dim = <span class="number">0</span>))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;---------------------------------&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="5-张量切片"><a href="#5-张量切片" class="headerlink" title="5.张量切片"></a>5.张量切片</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line"><span class="comment">#1.torch.chunk</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;torch.chunk&#x27;</span>)</span><br><span class="line">a = torch.rand(<span class="number">3</span>, <span class="number">4</span>)</span><br><span class="line"><span class="built_in">print</span>(a)</span><br><span class="line">out = torch.chunk(a, <span class="number">2</span>, dim = <span class="number">0</span>)</span><br><span class="line"><span class="built_in">print</span>(out[<span class="number">0</span>], out[<span class="number">0</span>].shape)</span><br><span class="line"><span class="built_in">print</span>(out[<span class="number">1</span>], out[<span class="number">1</span>].shape)</span><br><span class="line"><span class="built_in">print</span>(<span class="number">50</span>*<span class="string">&#x27;-&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#2.torch.split</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;torch.split&#x27;</span>)</span><br><span class="line">a = torch.rand(<span class="number">6</span>, <span class="number">4</span>)</span><br><span class="line"><span class="built_in">print</span>(a)</span><br><span class="line">out = torch.split(a, <span class="number">2</span>, dim = <span class="number">0</span>) <span class="comment">#split的拆分方式一</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> out:</span><br><span class="line">    <span class="built_in">print</span>(i, i.shape)</span><br><span class="line"></span><br><span class="line">out = torch.split(a, [<span class="number">1</span>, <span class="number">3</span>, <span class="number">2</span>], dim = <span class="number">0</span>) <span class="comment">#split的拆分方式二</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> out:</span><br><span class="line">    <span class="built_in">print</span>(i, i.shape)</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">torch.chunk</span><br><span class="line">tensor([[0.2251, 0.0545, 0.7452, 0.7359],</span><br><span class="line">        [0.1663, 0.7839, 0.9890, 0.5553],</span><br><span class="line">        [0.4612, 0.9375, 0.9323, 0.0996]])</span><br><span class="line">tensor([[0.2251, 0.0545, 0.7452, 0.7359],</span><br><span class="line">        [0.1663, 0.7839, 0.9890, 0.5553]]) torch.Size([2, 4])</span><br><span class="line">tensor([[0.4612, 0.9375, 0.9323, 0.0996]]) torch.Size([1, 4])</span><br><span class="line">--------------------------------------------------</span><br><span class="line">torch.split</span><br><span class="line">tensor([[0.3003, 0.9461, 0.4454, 0.1446],</span><br><span class="line">        [0.8573, 0.5407, 0.9421, 0.2710],</span><br><span class="line">        [0.4454, 0.8425, 0.0993, 0.9189],</span><br><span class="line">        [0.3519, 0.9107, 0.2126, 0.4638],</span><br><span class="line">        [0.0914, 0.5672, 0.5462, 0.7540],</span><br><span class="line">        [0.8343, 0.8356, 0.4863, 0.5255]])</span><br><span class="line">tensor([[0.3003, 0.9461, 0.4454, 0.1446],</span><br><span class="line">        [0.8573, 0.5407, 0.9421, 0.2710]]) torch.Size([2, 4])</span><br><span class="line">tensor([[0.4454, 0.8425, 0.0993, 0.9189],</span><br><span class="line">        [0.3519, 0.9107, 0.2126, 0.4638]]) torch.Size([2, 4])</span><br><span class="line">tensor([[0.0914, 0.5672, 0.5462, 0.7540],</span><br><span class="line">        [0.8343, 0.8356, 0.4863, 0.5255]]) torch.Size([2, 4])</span><br><span class="line">tensor([[0.3003, 0.9461, 0.4454, 0.1446]]) torch.Size([1, 4])</span><br><span class="line">tensor([[0.8573, 0.5407, 0.9421, 0.2710],</span><br><span class="line">        [0.4454, 0.8425, 0.0993, 0.9189],</span><br><span class="line">        [0.3519, 0.9107, 0.2126, 0.4638]]) torch.Size([3, 4])</span><br><span class="line">tensor([[0.0914, 0.5672, 0.5462, 0.7540],</span><br><span class="line">        [0.8343, 0.8356, 0.4863, 0.5255]]) torch.Size([2, 4])</span><br></pre></td></tr></table></figure>
+
+<h2 id="6-排序运算与最大值求取"><a href="#6-排序运算与最大值求取" class="headerlink" title="6.排序运算与最大值求取"></a>6.排序运算与最大值求取</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line"><span class="comment">#1.张量的排序torch.sort</span></span><br><span class="line">a = torch.tensor([[<span class="number">1</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">3</span>, <span class="number">5</span>],[<span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>]])</span><br><span class="line"><span class="built_in">print</span>(a.shape)</span><br><span class="line"><span class="built_in">print</span>(torch.sort(a, dim = <span class="number">1</span>, descending = <span class="literal">True</span>)) <span class="comment">#descending = True代表降序排列，为False代表升序排列</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;---------------------------------&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#2.张量中：沿着指定维度返回最大k个数值及其索引值torch.topk</span></span><br><span class="line">a = torch.tensor([[<span class="number">1</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">3</span>, <span class="number">5</span>],[<span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>]])</span><br><span class="line"><span class="built_in">print</span>(a.shape)</span><br><span class="line"><span class="built_in">print</span>(torch.topk(a, k = <span class="number">2</span>, dim = <span class="number">0</span>))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;---------------------------------&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#3.张量中：沿着指定维度返回第k个最小值及其索引值torch.kthvalue</span></span><br><span class="line">a = torch.tensor([[<span class="number">1</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">3</span>, <span class="number">5</span>],[<span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>]])</span><br><span class="line"><span class="built_in">print</span>(a.shape)</span><br><span class="line"><span class="built_in">print</span>(torch.kthvalue(a, k = <span class="number">2</span>, dim = <span class="number">0</span>))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;---------------------------------&#x27;</span>)</span><br></pre></td></tr></table></figure>
 
 <p>结果如下：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">torch.Size([2, 5])</span><br><span class="line">torch.return_types.sort(</span><br><span class="line">values=tensor([[5, 4, 4, 3, 1],</span><br><span class="line">        [5, 3, 3, 2, 1]]),</span><br><span class="line">indices=tensor([[4, 1, 2, 3, 0],</span><br><span class="line">        [4, 1, 3, 0, 2]]))</span><br><span class="line">---------------------------------</span><br><span class="line">torch.Size([2, 5])</span><br><span class="line">torch.return_types.topk(</span><br><span class="line">values=tensor([[2, 4, 4, 3, 5],</span><br><span class="line">        [1, 3, 1, 3, 5]]),</span><br><span class="line">indices=tensor([[1, 0, 0, 0, 0],</span><br><span class="line">        [0, 1, 1, 1, 1]]))</span><br><span class="line">---------------------------------</span><br><span class="line">torch.Size([2, 5])</span><br><span class="line">torch.return_types.kthvalue(</span><br><span class="line">values=tensor([2, 4, 4, 3, 5]),</span><br><span class="line">indices=tensor([1, 0, 0, 1, 1]))</span><br><span class="line">---------------------------------</span><br></pre></td></tr></table></figure>
 
-<h2 id="6-类型转换"><a href="#6-类型转换" class="headerlink" title="6.类型转换"></a>6.类型转换</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line">X=torch.tensor([[<span class="number">2</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">3</span>], [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>], [<span class="number">4</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">1</span>],[<span class="number">5</span>,<span class="number">9</span>,<span class="number">8</span>,<span class="number">7</span>]])</span><br><span class="line">A = X.numpy() <span class="comment">#将tensor类型转化为numpy类型</span></span><br><span class="line">B = torch.tensor(A) <span class="comment">#将numpy类型转化为tensor类型</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;type of A is:&quot;</span>,<span class="built_in">type</span>(A)) </span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;type of B is:&quot;</span>,<span class="built_in">type</span>(B))</span><br><span class="line"><span class="built_in">print</span>(<span class="number">40</span>*<span class="string">&#x27;-&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#要将大小为1的张量转换为Python标量，我们可以调用item函数或Python的内置函数</span></span><br><span class="line">a = torch.tensor([<span class="number">3.5</span>])</span><br><span class="line"><span class="built_in">print</span>(a, a.item(), <span class="built_in">float</span>(a), <span class="built_in">int</span>(a))</span><br></pre></td></tr></table></figure>
+<h2 id="7-类型转换"><a href="#7-类型转换" class="headerlink" title="7.类型转换"></a>7.类型转换</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line">X=torch.tensor([[<span class="number">2</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">3</span>], [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>], [<span class="number">4</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">1</span>],[<span class="number">5</span>,<span class="number">9</span>,<span class="number">8</span>,<span class="number">7</span>]])</span><br><span class="line">A = X.numpy() <span class="comment">#将tensor类型转化为numpy类型</span></span><br><span class="line">B = torch.tensor(A) <span class="comment">#将numpy类型转化为tensor类型</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;type of A is:&quot;</span>,<span class="built_in">type</span>(A)) </span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;type of B is:&quot;</span>,<span class="built_in">type</span>(B))</span><br><span class="line"><span class="built_in">print</span>(<span class="number">40</span>*<span class="string">&#x27;-&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#要将大小为1的张量转换为Python标量，我们可以调用item函数或Python的内置函数</span></span><br><span class="line">a = torch.tensor([<span class="number">3.5</span>])</span><br><span class="line"><span class="built_in">print</span>(a, a.item(), <span class="built_in">float</span>(a), <span class="built_in">int</span>(a))</span><br></pre></td></tr></table></figure>
 
 <p>结果如下：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">type of A is: &lt;class &#x27;numpy.ndarray&#x27;&gt;</span><br><span class="line">type of B is: &lt;class &#x27;torch.Tensor&#x27;&gt;</span><br><span class="line">----------------------------------------</span><br><span class="line">tensor([3.5000]) 3.5 3.5 3</span><br></pre></td></tr></table></figure>
@@ -1436,7 +1621,17 @@ $$
 <p>结果如下：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">   NumRooms Alley   Price</span><br><span class="line">0       NaN  Pave  127500</span><br><span class="line">1       2.0   NaN  106000</span><br><span class="line">2       4.0   NaN  178100</span><br><span class="line">3       NaN   NaN  140000</span><br></pre></td></tr></table></figure>
 
-<h2 id="3-处理缺失值"><a href="#3-处理缺失值" class="headerlink" title="3.处理缺失值"></a>3.处理缺失值</h2><ul>
+<h2 id="3-张量裁剪"><a href="#3-张量裁剪" class="headerlink" title="3.张量裁剪"></a>3.张量裁剪</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line">a = torch.rand(<span class="number">2</span>, <span class="number">2</span>)*<span class="number">10</span></span><br><span class="line"><span class="built_in">print</span>(a)</span><br><span class="line"></span><br><span class="line">a = a.clamp(<span class="number">2</span>, <span class="number">5</span>) <span class="comment">#将数据限制在2到5之间，小于2的数为2，大于5的数为5</span></span><br><span class="line"><span class="built_in">print</span>(a)</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">tensor([[5.5637, 0.2108],</span><br><span class="line">        [2.4912, 3.2161]])</span><br><span class="line">tensor([[5.0000, 2.0000],</span><br><span class="line">        [2.4912, 3.2161]])</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-数据筛选"><a href="#4-数据筛选" class="headerlink" title="4.数据筛选"></a>4.数据筛选</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line"><span class="comment">#1.torch.where(condition, x, y)：按照条件从x和y中选出满足条件的元素组成新的tensor</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;torch.where&#x27;</span>)</span><br><span class="line">a = torch.rand(<span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line">b = torch.rand(<span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line"><span class="built_in">print</span>(a)</span><br><span class="line"><span class="built_in">print</span>(b)</span><br><span class="line">out = torch.where(a &gt; <span class="number">0.5</span>, a, b) <span class="comment">#若a大于0.5输出a，否则输出b</span></span><br><span class="line"><span class="built_in">print</span>(out)</span><br><span class="line"><span class="built_in">print</span>(<span class="number">50</span>*<span class="string">&#x27;-&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#2.torch.index_select(input, dim, index, out = None)：按照指定索引输出tensor</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;torch.index_select&#x27;</span>)</span><br><span class="line">a = torch.rand(<span class="number">4</span>, <span class="number">4</span>)</span><br><span class="line"><span class="built_in">print</span>(a)</span><br><span class="line">out = torch.index_select(a, dim = <span class="number">0</span>, index = torch.tensor([<span class="number">0</span>, <span class="number">3</span>, <span class="number">2</span>]))</span><br><span class="line"><span class="built_in">print</span>(out)</span><br><span class="line"><span class="built_in">print</span>(<span class="number">50</span>*<span class="string">&#x27;-&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#3.torch.gather(input, dim, index, out = None)：在指定维度上按照索引赋值输出tensor</span></span><br><span class="line"><span class="comment">#dim = 0, out[i, j, k] = input[index[i, j, k], j, k]</span></span><br><span class="line"><span class="comment">#dim = 1, out[i, j, k] = input[i, index[i, j, k], k]</span></span><br><span class="line"><span class="comment">#dim = 2, out[i, j, k] = input[i, j, index[i, j, k]]</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;torch.gather&#x27;</span>)</span><br><span class="line">a = torch.linspace(<span class="number">1</span>, <span class="number">16</span>, <span class="number">16</span>).view(<span class="number">4</span>, <span class="number">4</span>)</span><br><span class="line"><span class="built_in">print</span>(a)</span><br><span class="line">out = torch.gather(a, dim = <span class="number">0</span>, index = torch.tensor([[<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>],</span><br><span class="line">                                                     [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>], </span><br><span class="line">                                                     [<span class="number">0</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">3</span>]]))</span><br><span class="line"><span class="built_in">print</span>(out)</span><br><span class="line"><span class="built_in">print</span>(<span class="number">50</span>*<span class="string">&#x27;-&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#4.torch.masked_select(input, mask, out = None)：按照mask输出tensor，输出为向量</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;torch.masked_select&#x27;</span>)</span><br><span class="line">a = torch.linspace(<span class="number">1</span>, <span class="number">16</span>, <span class="number">16</span>).view(<span class="number">4</span>, <span class="number">4</span>)</span><br><span class="line"><span class="built_in">print</span>(a)</span><br><span class="line">mask = torch.gt(a, <span class="number">8</span>)</span><br><span class="line"><span class="built_in">print</span>(mask)</span><br><span class="line">out = torch.masked_select(a, mask)</span><br><span class="line"><span class="built_in">print</span>(out)</span><br><span class="line"><span class="built_in">print</span>(<span class="number">50</span>*<span class="string">&#x27;-&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#5.torch.take(input, indices)：将输入看成1D-tensor，按照索引得到输出tensor</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;torch.take&#x27;</span>)</span><br><span class="line">a = torch.linspace(<span class="number">1</span>, <span class="number">16</span>, <span class="number">16</span>).view(<span class="number">4</span>, <span class="number">4</span>)</span><br><span class="line">b = torch.take(a, index = torch.tensor([<span class="number">0</span>, <span class="number">15</span>, <span class="number">13</span>, <span class="number">10</span>]))</span><br><span class="line"><span class="built_in">print</span>(b)</span><br><span class="line"><span class="built_in">print</span>(<span class="number">50</span>*<span class="string">&#x27;-&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#6.torch.nonzero(input, out = None)：输出非0元素的坐标</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;torch.nonzero&#x27;</span>)</span><br><span class="line">a = torch.tensor([[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">0</span>], [<span class="number">2</span>, <span class="number">3</span>, <span class="number">0</span>, <span class="number">1</span>]])</span><br><span class="line">out = torch.nonzero(a)</span><br><span class="line"><span class="built_in">print</span>(out)</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">torch.where</span><br><span class="line">tensor([[0.8185, 0.1795, 0.9199],</span><br><span class="line">        [0.0798, 0.4916, 0.7768]])</span><br><span class="line">tensor([[0.7131, 0.4783, 0.1815],</span><br><span class="line">        [0.6423, 0.9752, 0.2171]])</span><br><span class="line">tensor([[0.8185, 0.4783, 0.9199],</span><br><span class="line">        [0.6423, 0.9752, 0.7768]])</span><br><span class="line">--------------------------------------------------</span><br><span class="line">torch.index_select</span><br><span class="line">tensor([[0.8434, 0.7979, 0.2893, 0.9534],</span><br><span class="line">        [0.0751, 0.2321, 0.8226, 0.6785],</span><br><span class="line">        [0.9144, 0.2765, 0.5214, 0.9405],</span><br><span class="line">        [0.0807, 0.1131, 0.1234, 0.2099]])</span><br><span class="line">tensor([[0.8434, 0.7979, 0.2893, 0.9534],</span><br><span class="line">        [0.0807, 0.1131, 0.1234, 0.2099],</span><br><span class="line">        [0.9144, 0.2765, 0.5214, 0.9405]])</span><br><span class="line">--------------------------------------------------</span><br><span class="line">torch.gather</span><br><span class="line">tensor([[ 1.,  2.,  3.,  4.],</span><br><span class="line">        [ 5.,  6.,  7.,  8.],</span><br><span class="line">        [ 9., 10., 11., 12.],</span><br><span class="line">        [13., 14., 15., 16.]])</span><br><span class="line">tensor([[ 1.,  6.,  7.,  8.],</span><br><span class="line">        [ 1.,  6., 11., 12.],</span><br><span class="line">        [ 1.,  6., 15., 16.]])</span><br><span class="line">--------------------------------------------------</span><br><span class="line">torch.masked_select</span><br><span class="line">tensor([[ 1.,  2.,  3.,  4.],</span><br><span class="line">        [ 5.,  6.,  7.,  8.],</span><br><span class="line">        [ 9., 10., 11., 12.],</span><br><span class="line">        [13., 14., 15., 16.]])</span><br><span class="line">tensor([[False, False, False, False],</span><br><span class="line">        [False, False, False, False],</span><br><span class="line">        [ True,  True,  True,  True],</span><br><span class="line">        [ True,  True,  True,  True]])</span><br><span class="line">tensor([ 9., 10., 11., 12., 13., 14., 15., 16.])</span><br><span class="line">--------------------------------------------------</span><br><span class="line">torch.take</span><br><span class="line">tensor([ 1., 16., 14., 11.])</span><br><span class="line">--------------------------------------------------</span><br><span class="line">torch.nonzero</span><br><span class="line">tensor([[0, 1],</span><br><span class="line">        [0, 2],</span><br><span class="line">        [1, 0],</span><br><span class="line">        [1, 1],</span><br><span class="line">        [1, 3]])</span><br></pre></td></tr></table></figure>
+
+<h2 id="5-处理缺失值"><a href="#5-处理缺失值" class="headerlink" title="5.处理缺失值"></a>5.处理缺失值</h2><ul>
 <li>通过位置索引<code>iloc</code>，将<code>data</code>分成<code>inputs</code>和<code>outputs</code>， 其中前者为<code>data</code>的前两列，而后者为<code>data</code>的最后一列。 对于<code>inputs</code>中缺少的数值，我们用同一列的均值替换“NaN”项。</li>
 <li>或通过独热码的形式填充NaN</li>
 </ul>
@@ -1445,7 +1640,7 @@ $$
 <p>结果如下：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">--------------------------------------------------</span><br><span class="line">The inputs data is:</span><br><span class="line">    NumRooms Alley</span><br><span class="line">0       NaN  Pave</span><br><span class="line">1       2.0   NaN</span><br><span class="line">2       4.0   NaN</span><br><span class="line">3       NaN   NaN</span><br><span class="line">--------------------------------------------------</span><br><span class="line">The outputs data is:</span><br><span class="line">     Price</span><br><span class="line">0  127500</span><br><span class="line">1  106000</span><br><span class="line">2  178100</span><br><span class="line">3  140000</span><br><span class="line">--------------------------------------------------</span><br><span class="line">   NumRooms Alley</span><br><span class="line">0       3.0  Pave</span><br><span class="line">1       2.0   NaN</span><br><span class="line">2       4.0   NaN</span><br><span class="line">3       3.0   NaN</span><br><span class="line">--------------------------------------------------</span><br><span class="line">   NumRooms  Alley_Pave  Alley_nan</span><br><span class="line">0       3.0           1          0</span><br><span class="line">1       2.0           0          1</span><br><span class="line">2       4.0           0          1</span><br><span class="line">3       3.0           0          1</span><br></pre></td></tr></table></figure>
 
-<h2 id="4-转化为张量格式"><a href="#4-转化为张量格式" class="headerlink" title="4.转化为张量格式"></a>4.转化为张量格式</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#将输入CSV数据转化为张量形式</span></span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line">X, y = torch.tensor(inputs.values), torch.tensor(outputs.values)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;X is:\n&quot;</span>,X)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;y is:\n&quot;</span>,y)</span><br></pre></td></tr></table></figure>
+<h2 id="6-转化为张量格式"><a href="#6-转化为张量格式" class="headerlink" title="6.转化为张量格式"></a>6.转化为张量格式</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#将输入CSV数据转化为张量形式</span></span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line">X, y = torch.tensor(inputs.values), torch.tensor(outputs.values)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;X is:\n&quot;</span>,X)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;y is:\n&quot;</span>,y)</span><br></pre></td></tr></table></figure>
 
 <p>结果如下：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">X is:</span><br><span class="line"> tensor([[3., 1., 0.],</span><br><span class="line">        [2., 0., 1.],</span><br><span class="line">        [4., 0., 1.],</span><br><span class="line">        [3., 0., 1.]], dtype=torch.float64)</span><br><span class="line">y is:</span><br><span class="line"> tensor([[127500],</span><br><span class="line">        [106000],</span><br><span class="line">        [178100],</span><br><span class="line">        [140000]])</span><br></pre></td></tr></table></figure>
@@ -8798,546 +8993,6 @@ _________________________________________________________________</code></pre><h
       </tags>
   </entry>
   <entry>
-    <title>TensorFlow实践之人工神经网路</title>
-    <url>/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/</url>
-    <content><![CDATA[<p>本节从单层神经网络到多层神经网络，一步步介绍了神经网络的基本结构与简单实现，并借助TensorFlow框架中提供的Sequential模型，快速进行神经网络的搭建与训练。</p>
-<span id="more"></span>
-
-<h1 id="单层神经网络的实现"><a href="#单层神经网络的实现" class="headerlink" title="单层神经网络的实现"></a>单层神经网络的实现</h1><h2 id="1-单层神经网络的设计"><a href="#1-单层神经网络的设计" class="headerlink" title="1.单层神经网络的设计"></a>1.单层神经网络的设计</h2><ul>
-<li>神经网络的结构：单层前馈型神经网络</li>
-<li>激活函数：softmax函数</li>
-<li>损失函数：交叉熵损失函数</li>
-</ul>
-<p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107100009490.png" alt="image-20221107100009490"></p>
-<h2 id="2-单层神经网络实现的相关函数"><a href="#2-单层神经网络实现的相关函数" class="headerlink" title="2.单层神经网络实现的相关函数"></a>2.单层神经网络实现的相关函数</h2><ul>
-<li><h3 id="softmax函数：tf-nn-softmax"><a href="#softmax函数：tf-nn-softmax" class="headerlink" title="softmax函数：tf.nn.softmax()"></a>softmax函数：<code>tf.nn.softmax()</code></h3><ul>
-<li>tf.nn.softmax(tf.matmul(X_train,W)+B)</li>
-</ul>
-</li>
-<li><h3 id="独热编码：tf-one-hot-indices-depth"><a href="#独热编码：tf-one-hot-indices-depth" class="headerlink" title="独热编码：tf.one_hot(indices,depth)"></a>独热编码：<code>tf.one_hot(indices,depth)</code></h3><ul>
-<li>tf.one_hot(tf.constant(y_test,dtype=tf.int32),3)</li>
-</ul>
-</li>
-<li><h3 id="交叉熵损失函数：tf-keras-losses-categorical-crossentropy-y-true-y-pred"><a href="#交叉熵损失函数：tf-keras-losses-categorical-crossentropy-y-true-y-pred" class="headerlink" title="交叉熵损失函数：tf.keras.losses.categorical_crossentropy(y_true,y_pred)"></a>交叉熵损失函数：<code>tf.keras.losses.categorical_crossentropy(y_true,y_pred)</code></h3><ul>
-<li>y_true表示为独热编码的标签值</li>
-<li>y_pred为softmax函数的输出</li>
-<li>其返回的是每个样本的交叉熵损失</li>
-<li>则平均交叉熵损失为：tf.reduce_mean(tf.keras.losses.categorical_crossentropy(y_true=Y_train,y_pred=PRED_train))</li>
-</ul>
-</li>
-</ul>
-<h2 id="3-单层神经网络的代码实现"><a href="#3-单层神经网络的代码实现" class="headerlink" title="3.单层神经网络的代码实现"></a>3.单层神经网络的代码实现</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#1.导入库，加载数据</span></span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np </span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="comment">#2.下载鸢尾花数据集iris</span></span><br><span class="line"><span class="comment">#训练集</span></span><br><span class="line">TRAIN_URL = <span class="string">&quot;http://download.tensorflow.org/data/iris_training.csv&quot;</span></span><br><span class="line">train_path = tf.keras.utils.get_file(<span class="string">&quot;iris_train.csv&quot;</span>,TRAIN_URL,cache_dir=<span class="string">&quot;D:\App_Data_File\Anaconda_data\jupyter\TensorFlow&quot;</span>)</span><br><span class="line"><span class="comment">#测试集</span></span><br><span class="line">TRAIN_URL = <span class="string">&quot;http://download.tensorflow.org/data/iris_test.csv&quot;</span></span><br><span class="line">test_path = tf.keras.utils.get_file(<span class="string">&quot;iris_test.csv&quot;</span>,TRAIN_URL,cache_dir=<span class="string">&quot;D:\App_Data_File\Anaconda_data\jupyter\TensorFlow&quot;</span>)</span><br><span class="line">df_iris_train=pd.read_csv(train_path,header=<span class="number">0</span>)</span><br><span class="line">df_iris_test=pd.read_csv(test_path,header=<span class="number">0</span>)</span><br><span class="line"><span class="comment">#3.处理数据</span></span><br><span class="line"><span class="comment">#转化为numpy数组</span></span><br><span class="line">iris_train=np.array(df_iris_train)</span><br><span class="line">iris_test=np.array(df_iris_test)</span><br><span class="line"><span class="comment">#取出属性</span></span><br><span class="line">x_train=iris_train[:,<span class="number">0</span>:<span class="number">4</span>]</span><br><span class="line">x_test=iris_test[:,<span class="number">0</span>:<span class="number">4</span>]</span><br><span class="line"><span class="comment">#取出标签</span></span><br><span class="line">y_train=iris_train[:,<span class="number">4</span>]</span><br><span class="line">y_test=iris_test[:,<span class="number">4</span>]</span><br><span class="line"><span class="comment">#对属性值进行标准化处理</span></span><br><span class="line">x_train=x_train-np.mean(x_train,axis=<span class="number">0</span>)<span class="comment">#x_train为120*4</span></span><br><span class="line">x_test=x_test-np.mean(x_test,axis=<span class="number">0</span>)<span class="comment">#x_test为30*4</span></span><br><span class="line"><span class="comment">#生成标签的独热编码</span></span><br><span class="line">X_train=tf.cast(x_train,tf.float32)</span><br><span class="line">Y_train=tf.one_hot(tf.constant(y_train,dtype=tf.int32),<span class="number">3</span>)<span class="comment">#Y_train为120*3</span></span><br><span class="line">X_test=tf.cast(x_test,tf.float32)</span><br><span class="line">Y_test=tf.one_hot(tf.constant(y_test,dtype=tf.int32),<span class="number">3</span>)<span class="comment">#Y_test为30*3</span></span><br><span class="line"><span class="comment">#3.设置超参数学习率与迭代次数</span></span><br><span class="line">learn_rate=<span class="number">0.5</span></span><br><span class="line"><span class="built_in">iter</span>=<span class="number">50</span></span><br><span class="line">display_step=<span class="number">10</span> <span class="comment">#设置每十次迭代输出一次结果</span></span><br><span class="line"><span class="comment">#4.设置模型参数初值W、B</span></span><br><span class="line">np.random.seed(<span class="number">612</span>)</span><br><span class="line">W=tf.Variable(np.random.randn(<span class="number">4</span>,<span class="number">3</span>),dtype=tf.float32)</span><br><span class="line">B=tf.Variable(np.zeros([<span class="number">3</span>]),dtype=tf.float32)</span><br><span class="line"><span class="comment">#5.训练模型</span></span><br><span class="line">ce_train=[]<span class="comment">#用来存放训练集的交叉熵损失</span></span><br><span class="line">acc_train=[]<span class="comment">#用来存放训练集的准确率</span></span><br><span class="line">ce_test=[]<span class="comment">#用来存放测试集的交叉熵损失</span></span><br><span class="line">acc_test=[]<span class="comment">#用来存放测试集的准确率</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="built_in">iter</span>+<span class="number">1</span>):</span><br><span class="line">    <span class="keyword">with</span> tf.GradientTape() <span class="keyword">as</span> tape:</span><br><span class="line">        PRED_train=tf.nn.softmax(tf.matmul(X_train,W)+B)<span class="comment">#PRED_train是120*3的矩阵</span></span><br><span class="line">        Loss_train=tf.reduce_mean(tf.keras.losses.categorical_crossentropy(y_true=Y_train,y_pred=PRED_train))</span><br><span class="line">    PRED_test=tf.nn.softmax(tf.matmul(X_test,W)+B)</span><br><span class="line">    Loss_test=tf.reduce_mean(tf.keras.losses.categorical_crossentropy(y_true=Y_test,y_pred=PRED_test))</span><br><span class="line">    Accuracy_train=tf.reduce_mean(tf.cast(tf.equal(tf.argmax(PRED_train.numpy(),axis=<span class="number">1</span>),y_train),tf.float32))</span><br><span class="line">    Accuracy_test=tf.reduce_mean(tf.cast(tf.equal(tf.argmax(PRED_test.numpy(),axis=<span class="number">1</span>),y_test),tf.float32))</span><br><span class="line">    ce_train.append(Loss_train)</span><br><span class="line">    acc_train.append(Accuracy_train)</span><br><span class="line">    ce_test.append(Loss_test)</span><br><span class="line">    acc_test.append(Accuracy_test)</span><br><span class="line">    dL_dW,dL_dB=tape.gradient(Loss_train,[W,B])</span><br><span class="line">    W.assign_sub(learn_rate*dL_dW)</span><br><span class="line">    B.assign_sub(learn_rate*dL_dB)</span><br><span class="line">    <span class="keyword">if</span> i % display_step==<span class="number">0</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;i:%i\tTrain Acc:%f\tTrain Loss:%f,\tTest Acc:%f\tTest Loss:%f&quot;</span>%(i,Accuracy_train,Loss_train,Accuracy_test,Loss_test))</span><br><span class="line"><span class="comment">#6.结果可视化</span></span><br><span class="line">plt.figure(figsize=(<span class="number">10</span>,<span class="number">4</span>))</span><br><span class="line">plt.subplot(<span class="number">121</span>)</span><br><span class="line">plt.plot(ce_train,color=<span class="string">&quot;blue&quot;</span>,label=<span class="string">&quot;Train Loss&quot;</span>)</span><br><span class="line">plt.plot(ce_test,color=<span class="string">&quot;green&quot;</span>,label=<span class="string">&quot;test Loss&quot;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&quot;Iteration&quot;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&quot;Loss&quot;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.subplot(<span class="number">122</span>)</span><br><span class="line">plt.plot(acc_train,color=<span class="string">&quot;blue&quot;</span>,label=<span class="string">&quot;Train acc&quot;</span>)</span><br><span class="line">plt.plot(acc_test,color=<span class="string">&quot;green&quot;</span>,label=<span class="string">&quot;test acc&quot;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&quot;Iteration&quot;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&quot;Accuracy&quot;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-<p>结果如下：</p>
-<pre><code>i:0    Train Acc:0.333333    Train Loss:2.066978,    Test Acc:0.266667    Test Loss:1.880856
-i:10    Train Acc:0.875000    Train Loss:0.339410,    Test Acc:0.866667    Test Loss:0.461705
-i:20    Train Acc:0.875000    Train Loss:0.279647,    Test Acc:0.866667    Test Loss:0.368414
-i:30    Train Acc:0.916667    Train Loss:0.245924,    Test Acc:0.933333    Test Loss:0.314814
-i:40    Train Acc:0.933333    Train Loss:0.222922,    Test Acc:0.933333    Test Loss:0.278643
-i:50    Train Acc:0.933333    Train Loss:0.205636,    Test Acc:0.966667    Test Loss:0.251937</code></pre><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_7_1.png" alt="output_7_1"></p>
-<hr>
-<h1 id="多层神经网络"><a href="#多层神经网络" class="headerlink" title="多层神经网络"></a>多层神经网络</h1><ul>
-<li>具有隐含层的神经网络称为多层神经网络</li>
-</ul>
-<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107101251196.png" alt="image-20221107101251196" style="zoom: 25%;">
-
-<h2 id="1-线性分类器"><a href="#1-线性分类器" class="headerlink" title="1.线性分类器"></a>1.线性分类器</h2><ul>
-<li>与运算</li>
-<li>或运算</li>
-<li>非运算</li>
-<li>对感知机（二分类的线性分类模型）给定一个合适的权值向量即可实现运算</li>
-</ul>
-<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107101405138.png" alt="image-20221107101405138" style="zoom:33%;">
-
-<h2 id="2-通过实现异或运算进而理解多层神经网络"><a href="#2-通过实现异或运算进而理解多层神经网络" class="headerlink" title="2.通过实现异或运算进而理解多层神经网络"></a>2.通过实现异或运算进而理解多层神经网络</h2><ul>
-<li>隐藏层由与运算与或非运算两个感知机组成</li>
-<li>这两个感知机的输出作为下一层神经元的输入</li>
-<li>增加的这一层权值（W）和阈值（B）与前一层的第二个感知机一样，则也是实现了或非运算</li>
-<li>红圈为有计算能力的神经元</li>
-<li>一个感知机对应一根直线</li>
-</ul>
-<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107101503565.png" alt="image-20221107101503565" style="zoom: 50%;">
-
-<h2 id="3-线性不可分数据集的分类思路"><a href="#3-线性不可分数据集的分类思路" class="headerlink" title="3.线性不可分数据集的分类思路"></a>3.线性不可分数据集的分类思路</h2><ul>
-<li>弯曲的直线可以看成是多条直线的线性组合</li>
-<li>其中的每一条直线可以用一个感知机来实现<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107101620753.png" alt="image-20221107101620753" style="zoom: 33%;"></li>
-<li>如果神经网络中有足够的隐藏层，每个隐藏层中有足够多的神经元，神经网络就可以表示任意复杂的函数或空间分布<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107101758824.png" alt="image-20221107101758824" style="zoom:33%;">
-<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107101832691.png" alt="image-20221107101832691" style="zoom:33%;"></li>
-<li><strong>多隐含层神经网络：能够表示非连续的函数或空间区域，减小泛化误差，减小每层神经元的数量</strong></li>
-</ul>
-<h2 id="4-前馈神经网络（Feedforward-Neural-Network）"><a href="#4-前馈神经网络（Feedforward-Neural-Network）" class="headerlink" title="4.前馈神经网络（Feedforward Neural Network）"></a>4.前馈神经网络（Feedforward Neural Network）</h2><ul>
-<li>每层神经元只与前一层的神经元相连</li>
-<li>处于同一层的神经元之间没有连接</li>
-<li>各层间没有反馈，不存在跨层连接<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102034190.png" alt="image-20221107102034190" style="zoom: 50%;"></li>
-<li><strong>万能近似定理：在前馈型神经网络中，只要有一个隐含层，并且这个隐含层中有足够多的神经元，就可以逼近任意一个连续的函数或空间分布</strong></li>
-</ul>
-<h2 id="5-全连接网络（Full-Connected-Network）"><a href="#5-全连接网络（Full-Connected-Network）" class="headerlink" title="5.全连接网络（Full Connected Network）"></a>5.全连接网络（Full Connected Network）</h2><ul>
-<li>每一层中的任何一个节点都与其后面一层的所有节点连接<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102143789.png" alt="image-20221107102143789" style="zoom:50%;"></li>
-<li>第n层中的每个节点接收来自第n-1层中所有节点的输入<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102222409.png" alt="image-20221107102222409" style="zoom:50%;">
-
-</li>
-</ul>
-<h2 id="6-超参数与验证集"><a href="#6-超参数与验证集" class="headerlink" title="6.超参数与验证集"></a>6.超参数与验证集</h2><ul>
-<li>训练集：训练模型，确定模型参数</li>
-<li>验证集：确定超参数</li>
-<li>测试集：评估模型的泛化能力</li>
-</ul>
-<hr>
-<h1 id="误差反向传播算法"><a href="#误差反向传播算法" class="headerlink" title="误差反向传播算法"></a>误差反向传播算法</h1><ul>
-<li>通过误差反向传播法计算梯度<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102259737.png" alt="image-20221107102259737" style="zoom: 50%;"></li>
-<li>先计算输出层对误差的梯度，进而更新输出层的权值<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102350316.png" alt="image-20221107102350316" style="zoom: 33%;"></li>
-<li>再计算隐藏层对误差的梯度，进而更新隐藏层的权值<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102420550.png" alt="image-20221107102420550" style="zoom: 25%;"></li>
-<li>输出端有多个神经元的误差反向传播<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102503633.png" alt="image-20221107102503633" style="zoom:33%;">
-
-</li>
-</ul>
-<hr>
-<h1 id="激活函数"><a href="#激活函数" class="headerlink" title="激活函数"></a>激活函数</h1><h2 id="1-激活函数的性质"><a href="#1-激活函数的性质" class="headerlink" title="1.激活函数的性质"></a>1.激活函数的性质</h2><ul>
-<li>简单的非线性函数</li>
-<li>连续并可导</li>
-<li>单调函数<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102618782.png" alt="image-20221107102618782" style="zoom:25%;">
-
-</li>
-</ul>
-<h2 id="2-常用的激活函数"><a href="#2-常用的激活函数" class="headerlink" title="2.常用的激活函数"></a>2.常用的激活函数</h2><ul>
-<li>logistic函数与Tanh函数<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102808313.png" alt="image-20221107102808313" style="zoom: 33%;"></li>
-<li>ReLU函数（Rectified Linear Unit，修正线性单元）<ul>
-<li>z&gt;0时，导数等于1，缓解了梯度消失问题</li>
-<li>不存在幂运算，计算速度快</li>
-<li>导数恒等于1，训练模型收敛速度快</li>
-<li>输出不是以0为均值的</li>
-<li>z&lt;0时，梯度为0，神经元死亡<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102905651.png" alt="image-20221107102905651" style="zoom:33%;"></li>
-</ul>
-</li>
-<li>Leaky-ReLU函数<ul>
-<li>避免了ReLU神经元死亡</li>
-<li>神经网络的计算和训练速度快</li>
-<li>超参数a需要人工调整<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102942585.png" alt="image-20221107102942585" style="zoom: 25%;">
-
-</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h1 id="实例：多层神经网络实现鸢尾花分类"><a href="#实例：多层神经网络实现鸢尾花分类" class="headerlink" title="实例：多层神经网络实现鸢尾花分类"></a>实例：多层神经网络实现鸢尾花分类</h1><ul>
-<li><p>思路：</p>
-<ul>
-<li>隐藏层激活函数：relu函数</li>
-<li>输出层激活函数：softmax函数</li>
-<li>损失函数：交叉熵损失函数</li>
-<li>W是属性个数（前一层的输入神经元数）×分类数（本层的个数），B是关于分类数的一维向量</li>
-</ul>
-<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107103055953.png" alt="image-20221107103055953" style="zoom: 33%;">
-</li>
-<li><p>具体代码实现：</p>
-</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#1.导入库，加载数据</span></span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np </span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="comment">#2.下载鸢尾花数据集iris</span></span><br><span class="line"><span class="comment">#训练集</span></span><br><span class="line">TRAIN_URL = <span class="string">&quot;http://download.tensorflow.org/data/iris_training.csv&quot;</span></span><br><span class="line">train_path = tf.keras.utils.get_file(<span class="string">&quot;iris_train.csv&quot;</span>,TRAIN_URL,cache_dir=<span class="string">&quot;D:\App_Data_File\Anaconda_data\jupyter\TensorFlow&quot;</span>)</span><br><span class="line"><span class="comment">#测试集</span></span><br><span class="line">TRAIN_URL = <span class="string">&quot;http://download.tensorflow.org/data/iris_test.csv&quot;</span></span><br><span class="line">test_path = tf.keras.utils.get_file(<span class="string">&quot;iris_test.csv&quot;</span>,TRAIN_URL,cache_dir=<span class="string">&quot;D:\App_Data_File\Anaconda_data\jupyter\TensorFlow&quot;</span>)</span><br><span class="line">df_iris_train=pd.read_csv(train_path,header=<span class="number">0</span>)</span><br><span class="line">df_iris_test=pd.read_csv(test_path,header=<span class="number">0</span>)</span><br><span class="line"><span class="comment">#3.处理数据</span></span><br><span class="line"><span class="comment">#转化为numpy数组</span></span><br><span class="line">iris_train=np.array(df_iris_train)</span><br><span class="line">iris_test=np.array(df_iris_test)</span><br><span class="line"><span class="comment">#取出属性</span></span><br><span class="line">x_train=iris_train[:,<span class="number">0</span>:<span class="number">4</span>]</span><br><span class="line">x_test=iris_test[:,<span class="number">0</span>:<span class="number">4</span>]</span><br><span class="line"><span class="comment">#取出标签</span></span><br><span class="line">y_train=iris_train[:,<span class="number">4</span>]</span><br><span class="line">y_test=iris_test[:,<span class="number">4</span>]</span><br><span class="line"><span class="comment">#对属性值进行标准化处理</span></span><br><span class="line">x_train=x_train-np.mean(x_train,axis=<span class="number">0</span>)<span class="comment">#x_train为120*4</span></span><br><span class="line">x_test=x_test-np.mean(x_test,axis=<span class="number">0</span>)<span class="comment">#x_test为30*4</span></span><br><span class="line"><span class="comment">#生成标签的独热编码</span></span><br><span class="line">X_train=tf.cast(x_train,tf.float32)</span><br><span class="line">Y_train=tf.one_hot(tf.constant(y_train,dtype=tf.int32),<span class="number">3</span>)<span class="comment">#Y_train为120*3</span></span><br><span class="line">X_test=tf.cast(x_test,tf.float32)</span><br><span class="line">Y_test=tf.one_hot(tf.constant(y_test,dtype=tf.int32),<span class="number">3</span>)<span class="comment">#Y_test为130*3</span></span><br><span class="line"><span class="comment">#4.设置超参数学习率与迭代次数</span></span><br><span class="line">learn_rate=<span class="number">0.5</span></span><br><span class="line"><span class="built_in">iter</span>=<span class="number">50</span></span><br><span class="line">display_step=<span class="number">10</span> <span class="comment">#设置每十次迭代输出一次结果</span></span><br><span class="line"><span class="comment">#5.设置模型参数初值W1、B1,W2、B2（重点在此）</span></span><br><span class="line">np.random.seed(<span class="number">612</span>)</span><br><span class="line">W1=tf.Variable(np.random.randn(<span class="number">4</span>,<span class="number">16</span>),dtype=tf.float32)</span><br><span class="line">B1=tf.Variable(np.zeros([<span class="number">16</span>]),dtype=tf.float32)</span><br><span class="line">W2=tf.Variable(np.random.randn(<span class="number">16</span>,<span class="number">3</span>),dtype=tf.float32)</span><br><span class="line">B2=tf.Variable(np.zeros([<span class="number">3</span>]),dtype=tf.float32)</span><br><span class="line"><span class="comment">#6.定义梯度带并构造神经网络模型</span></span><br><span class="line">ce_train=[]<span class="comment">#用来存放训练集的交叉熵损失</span></span><br><span class="line">acc_train=[]<span class="comment">#用来存放训练集的准确率</span></span><br><span class="line">ce_test=[]<span class="comment">#用来存放测试集的交叉熵损失</span></span><br><span class="line">acc_test=[]<span class="comment">#用来存放测试集的准确率</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="built_in">iter</span>+<span class="number">1</span>):</span><br><span class="line">    <span class="keyword">with</span> tf.GradientTape() <span class="keyword">as</span> tape:<span class="comment">#（重点在此）</span></span><br><span class="line">        Hidden_train=tf.nn.relu(tf.matmul(X_train,W1)+B1)</span><br><span class="line">        PRED_train=tf.nn.softmax(tf.matmul(Hidden_train,W2)+B2)<span class="comment">#PRED_train是120*3的矩阵</span></span><br><span class="line">        Loss_train=tf.reduce_mean(tf.keras.losses.categorical_crossentropy(y_true=Y_train,y_pred=PRED_train))</span><br><span class="line">    Hidden_test=tf.nn.relu(tf.matmul(X_test,W1)+B1)</span><br><span class="line">    PRED_test=tf.nn.softmax(tf.matmul(Hidden_test,W2)+B2)</span><br><span class="line">    Loss_test=tf.reduce_mean(tf.keras.losses.categorical_crossentropy(y_true=Y_test,y_pred=PRED_test))</span><br><span class="line">    </span><br><span class="line">    Accuracy_train=tf.reduce_mean(tf.cast(tf.equal(tf.argmax(PRED_train.numpy(),axis=<span class="number">1</span>),y_train),tf.float32))</span><br><span class="line">    Accuracy_test=tf.reduce_mean(tf.cast(tf.equal(tf.argmax(PRED_test.numpy(),axis=<span class="number">1</span>),y_test),tf.float32))</span><br><span class="line">    </span><br><span class="line">    ce_train.append(Loss_train)</span><br><span class="line">    acc_train.append(Accuracy_train)</span><br><span class="line">    ce_test.append(Loss_test)</span><br><span class="line">    acc_test.append(Accuracy_test)</span><br><span class="line">    </span><br><span class="line">    grads=tape.gradient(Loss_train,[W1,B1,W2,B2])</span><br><span class="line">    W1.assign_sub(learn_rate*grads[<span class="number">0</span>])</span><br><span class="line">    B1.assign_sub(learn_rate*grads[<span class="number">1</span>])</span><br><span class="line">    W2.assign_sub(learn_rate*grads[<span class="number">2</span>])</span><br><span class="line">    B2.assign_sub(learn_rate*grads[<span class="number">3</span>])</span><br><span class="line">    <span class="keyword">if</span> i % display_step==<span class="number">0</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;i:%i\tTrain Acc:%f\tTrain Loss:%f,\tTest Acc:%f\tTest Loss:%f&quot;</span>%(i,Accuracy_train,Loss_train,Accuracy_test,Loss_test))</span><br><span class="line"><span class="comment">#7.结果可视化</span></span><br><span class="line">plt.figure(figsize=(<span class="number">10</span>,<span class="number">4</span>))</span><br><span class="line">plt.subplot(<span class="number">121</span>)</span><br><span class="line">plt.plot(ce_train,color=<span class="string">&quot;blue&quot;</span>,label=<span class="string">&quot;Train Loss&quot;</span>)</span><br><span class="line">plt.plot(ce_test,color=<span class="string">&quot;green&quot;</span>,label=<span class="string">&quot;test Loss&quot;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&quot;Iteration&quot;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&quot;Loss&quot;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.subplot(<span class="number">122</span>)</span><br><span class="line">plt.plot(acc_train,color=<span class="string">&quot;blue&quot;</span>,label=<span class="string">&quot;Train acc&quot;</span>)</span><br><span class="line">plt.plot(acc_test,color=<span class="string">&quot;green&quot;</span>,label=<span class="string">&quot;test acc&quot;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&quot;Iteration&quot;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&quot;Accuracy&quot;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-<p>结果如下：</p>
-<pre><code>i:0    Train Acc:0.433333    Train Loss:2.205641,    Test Acc:0.400000    Test Loss:1.721138
-i:10    Train Acc:0.941667    Train Loss:0.205314,    Test Acc:0.966667    Test Loss:0.249661
-i:20    Train Acc:0.950000    Train Loss:0.149540,    Test Acc:1.000000    Test Loss:0.167103
-i:30    Train Acc:0.958333    Train Loss:0.122346,    Test Acc:1.000000    Test Loss:0.124693
-i:40    Train Acc:0.958333    Train Loss:0.105099,    Test Acc:1.000000    Test Loss:0.099869
-i:50    Train Acc:0.958333    Train Loss:0.092934,    Test Acc:1.000000    Test Loss:0.084885</code></pre><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_20_1.png" alt="output_20_1"></p>
-<hr>
-<h1 id="小批量梯度下降法"><a href="#小批量梯度下降法" class="headerlink" title="小批量梯度下降法"></a>小批量梯度下降法</h1><ul>
-<li>对于多层神经网络，使用梯度下降法，从理论上无法保证一定可以达到最小值</li>
-<li>使用小批量梯度下降法对其进行改进</li>
-<li>影响小批量梯度下降法的主要因素：<ul>
-<li>小批量样本的选择：打乱样本</li>
-<li>批量大小：选择2的幂数，如32、64、128、……</li>
-<li>学习率</li>
-<li>梯度</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h1 id="Sequential模型"><a href="#Sequential模型" class="headerlink" title="Sequential模型"></a>Sequential模型</h1><ul>
-<li>其是一个神经网络框架</li>
-<li>只有一组输入和一组输出</li>
-<li>各层按照先后顺序堆叠</li>
-</ul>
-<h2 id="1-建立Sequential模型"><a href="#1-建立Sequential模型" class="headerlink" title="1.建立Sequential模型"></a>1.建立Sequential模型</h2><ul>
-<li><code>model=tf.keras.Sequential()</code></li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line">model=tf.keras.Sequential()</span><br><span class="line"><span class="built_in">print</span>(model)</span><br></pre></td></tr></table></figure>
-<p>结果如下：</p>
-<pre><code>&lt;tensorflow.python.keras.engine.sequential.Sequential object at 0x0000014AC0B9FD90&gt;</code></pre><h3 id="1-1-添加全连接层"><a href="#1-1-添加全连接层" class="headerlink" title="1.1 添加全连接层"></a>1.1 添加全连接层</h3><ul>
-<li><code>model.add(tf.keras.layers)</code></li>
-<li><code>tf.keras.layers.Dense(inputs,activation,input_shape)</code><ul>
-<li>inputs: 本层神经元的个数</li>
-<li>activation: 激活函数(“relu”、”softmax”、”sigmoid”、”tanh”</li>
-<li>input_shape: 输入数据的形状</li>
-</ul>
-</li>
-<li>示例：<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107103755860.png" alt="image-20221107103755860" style="zoom:33%;">
-
-
-</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line">model=tf.keras.Sequential()</span><br><span class="line">model.add(tf.keras.layers.Dense(<span class="number">8</span>,activation=<span class="string">&quot;relu&quot;</span>,input_shape=(<span class="number">4</span>,)))</span><br><span class="line">model.add(tf.keras.layers.Dense(<span class="number">4</span>,activation=<span class="string">&quot;relu&quot;</span>))</span><br><span class="line">model.add(tf.keras.layers.Dense(<span class="number">3</span>,activation=<span class="string">&quot;softmax&quot;</span>))</span><br></pre></td></tr></table></figure>
-
-<h3 id="1-2-查看摘要"><a href="#1-2-查看摘要" class="headerlink" title="1.2 查看摘要"></a>1.2 查看摘要</h3><ul>
-<li><code>model.summary()</code></li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">model.summary()</span><br></pre></td></tr></table></figure>
-<p>结果如下：</p>
-<pre><code>Model: &quot;sequential_8&quot;
-_________________________________________________________________
-Layer (type)                 Output Shape              Param #   
-=================================================================
-dense_15 (Dense)             (None, 8)                 40        
-_________________________________________________________________
-dense_16 (Dense)             (None, 4)                 36        
-_________________________________________________________________
-dense_17 (Dense)             (None, 3)                 15        
-=================================================================
-Total params: 91
-Trainable params: 91
-Non-trainable params: 0
-_________________________________________________________________</code></pre><h2 id="2-配置训练方法"><a href="#2-配置训练方法" class="headerlink" title="2.配置训练方法"></a>2.配置训练方法</h2><ul>
-<li><code>model.compile(loss,optimizer,metrics)</code></li>
-</ul>
-<h3 id="2-1-常用的损失函数loss"><a href="#2-1-常用的损失函数loss" class="headerlink" title="2.1 常用的损失函数loss"></a>2.1 常用的损失函数loss</h3><ul>
-<li>对于多分类交叉熵损失函数<ul>
-<li>当标签的编码为独热编码时，采用”categorical_crossentropy”</li>
-<li>当标签的编码为自然顺序码时，采用”sparse_categorical_crossentropy”</li>
-<li>from_logits=False表示神经网络在输出前，已经使用softmax函数将预测结果变成了概率分布，否则设置为True<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107104412770.png" alt="image-20221107104412770" style="zoom: 33%;">
-
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="2-2-优化器optimizer"><a href="#2-2-优化器optimizer" class="headerlink" title="2.2 优化器optimizer"></a>2.2 优化器optimizer</h3><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107104453525.png" alt="image-20221107104453525" style="zoom: 25%;">
-
-<h3 id="2-3-评估函数metrics"><a href="#2-3-评估函数metrics" class="headerlink" title="2.3 评估函数metrics"></a>2.3 评估函数metrics</h3><ul>
-<li>keras模型性能评估函数<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107104601631.png" alt="image-20221107104601631" style="zoom:50%;"></li>
-<li>可以使用model.metrics_names查看评估函数</li>
-</ul>
-<h2 id="3-训练模型"><a href="#3-训练模型" class="headerlink" title="3.训练模型"></a>3.训练模型</h2><ul>
-<li><code>model.fit()</code><ul>
-<li>validation_data与validation_split二选一</li>
-<li>validation_freq：每隔多少次训练，使用测试集计算并输出一次评测指标</li>
-<li>verbose:<ul>
-<li>=0：不在标准输出流输出</li>
-<li>=1：输出进度条记录</li>
-<li>=2：每个epoch输出一行记录</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107104731779.png" alt="image-20221107104731779" style="zoom:33%;">
-
-<ul>
-<li><p>model.fit()初始值</p>
-<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107104829486.png" alt="image-20221107104829486" style="zoom:33%;">
-</li>
-<li><p><code>history=model.fit();history.history</code></p>
-<ul>
-<li>其以字典的形式分别返回训练集和测试集的损失和准确率</li>
-</ul>
-</li>
-</ul>
-<h2 id="4-评估模型"><a href="#4-评估模型" class="headerlink" title="4.评估模型"></a>4.评估模型</h2><ul>
-<li><code>model.evaluate(test_set_x,test_set_y,batch_size,verbose)</code></li>
-</ul>
-<h2 id="5-使用模型"><a href="#5-使用模型" class="headerlink" title="5.使用模型"></a>5.使用模型</h2><ul>
-<li><code>model.predict(x,batch_size,verbose) #x为数据的属性值</code></li>
-</ul>
-<h2 id="6-模型的保存与加载"><a href="#6-模型的保存与加载" class="headerlink" title="6.模型的保存与加载"></a>6.模型的保存与加载</h2><h3 id="仅保存神经网络的模型参数"><a href="#仅保存神经网络的模型参数" class="headerlink" title="仅保存神经网络的模型参数"></a>仅保存神经网络的模型参数</h3><ul>
-<li>保存：<code>model.save_weights()</code>#相当于替代了model.fit()<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107104943429.png" alt="image-20221107104943429" style="zoom:33%;"></li>
-<li>加载：<code>model.load_weights()</code></li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">model2.save_weights(<span class="string">&quot;mnist_save_weights.h5&quot;</span>)</span><br><span class="line">model2.load_weights(<span class="string">&quot;mnist_save_weights.h5&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-<h3 id="保存整个模型"><a href="#保存整个模型" class="headerlink" title="保存整个模型"></a>保存整个模型</h3><ul>
-<li><code>model.save()</code><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107105022947.png" alt="image-20221107105022947" style="zoom:33%;"></li>
-<li><code>tf.keras.models.load_model()</code></li>
-</ul>
-<hr>
-<h1 id="实例：Sequential实现手写数字识别"><a href="#实例：Sequential实现手写数字识别" class="headerlink" title="实例：Sequential实现手写数字识别"></a>实例：Sequential实现手写数字识别</h1><h2 id="1-设计神经网络结构"><a href="#1-设计神经网络结构" class="headerlink" title="1.设计神经网络结构"></a>1.设计神经网络结构</h2><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107105108812.png" alt="image-20221107105108812"></p>
-<h2 id="2-代码实现"><a href="#2-代码实现" class="headerlink" title="2.代码实现"></a>2.代码实现</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#1.导入库</span></span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="comment">#2.加载数据</span></span><br><span class="line">mnist=tf.keras.datasets.mnist</span><br><span class="line">(train_x,train_y),(test_x,test_y)=mnist.load_data(path=<span class="string">&quot;D:\App_Data_File\Anaconda_data\jupyter\image\mnist.npz&quot;</span>)</span><br><span class="line"><span class="comment">#3.数据预处理:对属性进行归一化并转化为Tensor张量</span></span><br><span class="line">X_train,X_test=tf.cast(train_x/<span class="number">255.0</span>,tf.float32),tf.cast(test_x/<span class="number">255.0</span>,tf.float32)</span><br><span class="line">y_train,y_test = tf.cast(train_y,tf.int16),tf.cast(test_y,tf.int16)</span><br><span class="line"><span class="comment">#4.建立模型</span></span><br><span class="line">model2=tf.keras.Sequential()</span><br><span class="line">model2.add(tf.keras.layers.Flatten(input_shape=(<span class="number">28</span>,<span class="number">28</span>)))<span class="comment">#将输入的数据形状拉直</span></span><br><span class="line">model2.add(tf.keras.layers.Dense(<span class="number">128</span>,activation=<span class="string">&quot;relu&quot;</span>))</span><br><span class="line">model2.add(tf.keras.layers.Dense(<span class="number">10</span>,activation=<span class="string">&quot;softmax&quot;</span>))</span><br><span class="line">model2.summary()</span><br><span class="line"><span class="built_in">print</span>(<span class="number">80</span>*<span class="string">&quot;*&quot;</span>)</span><br><span class="line"><span class="comment">#5.配置训练方法</span></span><br><span class="line">model2.<span class="built_in">compile</span>(optimizer=<span class="string">&quot;adam&quot;</span>,loss=<span class="string">&quot;sparse_categorical_crossentropy&quot;</span>,metrics=[<span class="string">&quot;sparse_categorical_accuracy&quot;</span>])</span><br><span class="line"><span class="comment">#6.训练模型</span></span><br><span class="line">model2.fit(X_train,y_train,batch_size=<span class="number">64</span>,epochs=<span class="number">5</span>,validation_split=<span class="number">0.2</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="number">80</span>*<span class="string">&quot;*&quot;</span>)</span><br><span class="line"><span class="comment">#7.评估模型</span></span><br><span class="line">model2.evaluate(X_test,y_test,verbose=<span class="number">2</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="number">80</span>*<span class="string">&quot;*&quot;</span>)</span><br><span class="line"><span class="comment">#8.使用模型</span></span><br><span class="line"><span class="built_in">print</span>(model2.predict(tf.reshape(X_test[<span class="number">0</span>], (<span class="number">1</span>, <span class="number">28</span>, <span class="number">28</span>))))</span><br><span class="line"><span class="built_in">print</span>(np.argmax(model2.predict(tf.reshape(X_test[<span class="number">0</span>], (<span class="number">1</span>, <span class="number">28</span>, <span class="number">28</span>)))))  </span><br><span class="line">plt.rcParams[<span class="string">&quot;font.sans-serif&quot;</span>]=<span class="string">&quot;SimHei&quot;</span></span><br><span class="line"><span class="comment"># 下面取出测试集中的前4个数据进行识别</span></span><br><span class="line">y_pred = np.argmax(model2.predict(X_test[<span class="number">0</span>:<span class="number">4</span>]), axis=<span class="number">1</span>)</span><br><span class="line">plt.figure()</span><br><span class="line">plt.suptitle(<span class="string">&quot;取出测试集中的前4个数据进行识别&quot;</span>, fontsize=<span class="number">20</span>, color=<span class="string">&quot;green&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):</span><br><span class="line">    plt.subplot(<span class="number">2</span>, <span class="number">2</span>, i+<span class="number">1</span>)</span><br><span class="line">    plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">    plt.imshow(test_x[i], cmap=<span class="string">&quot;gray&quot;</span>)  <span class="comment"># cmap=&quot;gray&quot;表示绘制的是灰度图</span></span><br><span class="line">    plt.title(<span class="string">&quot;y= &quot;</span>+<span class="built_in">str</span>(test_y[i]) + <span class="string">&quot;\n&quot;</span> + <span class="string">&quot;y_pred=&quot;</span> + <span class="built_in">str</span>(y_pred[i]))</span><br><span class="line">plt.tight_layout(rect=[<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0.98</span>])</span><br><span class="line"><span class="comment"># 下面再随机取出测试集中的任意4个数据进行识别</span></span><br><span class="line">plt.figure()</span><br><span class="line">plt.suptitle(<span class="string">&quot;随机取出测试集中的任意4个数据进行识别&quot;</span>, fontsize=<span class="number">20</span>, color=<span class="string">&quot;blue&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):</span><br><span class="line">    num = np.random.randint(<span class="number">1</span>, <span class="number">10000</span>)</span><br><span class="line">    plt.subplot(<span class="number">2</span>, <span class="number">2</span>, i+<span class="number">1</span>)</span><br><span class="line">    plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">    plt.imshow(test_x[num], cmap=<span class="string">&quot;gray&quot;</span>)</span><br><span class="line">    y_pred = np.argmax(model2.predict(tf.reshape(X_test[num],(<span class="number">1</span>, <span class="number">28</span>, <span class="number">28</span>))))</span><br><span class="line">    plt.title(<span class="string">&quot;y= &quot;</span>+<span class="built_in">str</span>(test_y[num]) + <span class="string">&quot;\n&quot;</span> + <span class="string">&quot;y_pred=&quot;</span> + <span class="built_in">str</span>(y_pred))</span><br><span class="line">plt.tight_layout(rect=[<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0.98</span>])</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-<p>结果如下：</p>
-<pre><code>Model: &quot;sequential_3&quot;
-_________________________________________________________________
-Layer (type)                 Output Shape              Param #   
-=================================================================
-flatten_3 (Flatten)          (None, 784)               0         
-_________________________________________________________________
-dense_6 (Dense)              (None, 128)               100480    
-_________________________________________________________________
-dense_7 (Dense)              (None, 10)                1290      
-=================================================================
-Total params: 101,770
-Trainable params: 101,770
-Non-trainable params: 0
-_________________________________________________________________
-********************************************************************************
-Epoch 1/5
-750/750 [==============================] - 4s 4ms/step - loss: 0.3279 - sparse_categorical_accuracy: 0.9079 - val_loss: 0.1745 - val_sparse_categorical_accuracy: 0.9503
-Epoch 2/5
-750/750 [==============================] - 3s 4ms/step - loss: 0.1517 - sparse_categorical_accuracy: 0.9566 - val_loss: 0.1307 - val_sparse_categorical_accuracy: 0.9626
-Epoch 3/5
-750/750 [==============================] - 2s 2ms/step - loss: 0.1087 - sparse_categorical_accuracy: 0.9691 - val_loss: 0.1137 - val_sparse_categorical_accuracy: 0.9668
-Epoch 4/5
-750/750 [==============================] - 1s 1ms/step - loss: 0.0830 - sparse_categorical_accuracy: 0.9752 - val_loss: 0.1081 - val_sparse_categorical_accuracy: 0.9678
-Epoch 5/5
-750/750 [==============================] - 1s 2ms/step - loss: 0.0649 - sparse_categorical_accuracy: 0.9801 - val_loss: 0.1021 - val_sparse_categorical_accuracy: 0.9694
-********************************************************************************
-313/313 - 0s - loss: 0.0890 - sparse_categorical_accuracy: 0.9732
-********************************************************************************
-[[4.3734741e-07 4.9217494e-08 1.3537046e-04 1.3679784e-03 1.0147285e-09
-  6.0127795e-06 8.5093779e-11 9.9846399e-01 5.7829629e-06 2.0411160e-05]]
-7</code></pre><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_43_1.png" alt="output_43_1"></p>
-<p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_43_2.png" alt="output_43_2"></p>
-]]></content>
-      <categories>
-        <category>学习积累</category>
-      </categories>
-      <tags>
-        <tag>神经网络</tag>
-        <tag>TensorFlow</tag>
-        <tag>深度学习</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>TensorFlow实践之卷积神经网路</title>
-    <url>/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/</url>
-    <content><![CDATA[<p>本节主要介绍了卷积神经网络的基本结构，并通过Sequential模型对卷积神经网络进行了搭建。</p>
-<span id="more"></span>
-
-<h1 id="深度学习基础"><a href="#深度学习基础" class="headerlink" title="深度学习基础"></a>深度学习基础</h1><ul>
-<li><strong>深度神经网络</strong>：有多层隐含层的神经网络</li>
-<li><strong>端到端学习</strong>：自动的从数据中学习特征</li>
-<li><strong>具有多层隐含层的深度神经网络就是深度学习（Deep Learning）</strong></li>
-<li>深度学习能够自动从数据中学习到与任务相关的特征，提取出的特征缺乏可解释性</li>
-</ul>
-<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107120929581.png" alt="image-20221107120929581" style="zoom: 33%;">
-
-<hr>
-<h1 id="图像卷积"><a href="#图像卷积" class="headerlink" title="图像卷积"></a>图像卷积</h1><h2 id="1-图像卷积运算"><a href="#1-图像卷积运算" class="headerlink" title="1.图像卷积运算"></a>1.图像卷积运算</h2><ul>
-<li>首先，把卷积核和图像中的像素点一一对应</li>
-<li>加权求和，把得到的结果作为中心像素点新的灰度值</li>
-<li>用卷积核从左至右，从上至下滑动，就可以计算出每个像素点的取值<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107121513161.png" alt="image-20221107121513161" style="zoom: 33%;"></li>
-<li>使用卷积核计算后的结果会比原图稍微小一点，因为对于图像边界上的点，无法进行卷积运算<br>  <img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107121617059.png" alt="image-20221107121617059" style="zoom: 25%;">            <img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107121658899.png" alt="image-20221107121658899" style="zoom:25%;"></li>
-<li>可以通过填充外层使得卷积后图像大小和原图一样<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107121827880.png" alt="image-20221107121827880" style="zoom: 50%;"></li>
-<li>步长(stride)：卷积核一次移动的像素数</li>
-<li>步长等于卷积核的边长，相当于将图像缩小了n倍<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107121906994.png" alt="image-20221107121906994" style="zoom: 50%;">
-
-</li>
-</ul>
-<h2 id="2-卷积核的作用效果"><a href="#2-卷积核的作用效果" class="headerlink" title="2.卷积核的作用效果"></a>2.卷积核的作用效果</h2><ul>
-<li><p><strong>卷积核的尺寸，决定了周围像素的范围，卷积核的数值，表明了其权值，采用不同的卷积核，能够产生不同的效果</strong></p>
-</li>
-<li><p>输出原图：</p>
-<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107122049776.png" alt="image-20221107122049776" style="zoom:50%;">
-</li>
-<li><p><strong>均值模糊</strong>：可以将图像中的高频噪声过滤掉，故对图像的卷积运算，也称为平滑或者滤波，卷积核也称为滤波器</p>
-<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107122126981.png" alt="image-20221107122126981" style="zoom:50%;">
-
-<ul>
-<li><strong>卷积核尺寸越大，图像越模糊</strong></li>
-</ul>
-<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107122232759.png" alt="image-20221107122232759" style="zoom: 50%;">
-</li>
-<li><p><strong>高斯模糊</strong>：根据高斯分布的取值来确定权值</p>
-<ul>
-<li>为了尽可能保留图像中的边缘信息，给不同位置的像素点赋予不同的权值，离中心点越近的像素，权值越大，远离中心点的像素，权值也逐渐减小<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107122501280.png" alt="image-20221107122501280" style="zoom:50%;">
-</li>
-</ul>
-</li>
-<li><p>均值模糊与高斯模糊的对比：高斯模糊能够更好的保留图像的边缘和轮廓</p>
-<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107123237685.png" alt="image-20221107123237685" style="zoom: 50%;">
-
-</li>
-</ul>
-<h2 id="3-边缘检测"><a href="#3-边缘检测" class="headerlink" title="3.边缘检测"></a>3.边缘检测</h2><ul>
-<li>计算当前点和周围点颜色值或灰度值的差别</li>
-<li><strong>Prewitt算子</strong>：<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107123416992.png" alt="image-20221107123416992" style="zoom:33%;"></li>
-<li><strong>Roberts算子</strong>：能够比较好的检测45°角方向的边缘</li>
-<li><strong>Sobel算子</strong>：在Prewitt算子的基础上增加的权重的概念，认为上下左右直线方向的距离大于斜线方向的距离</li>
-<li><strong>Laplacian算子</strong>：判断中心像素的灰度与邻域内其他像素灰度的关系</li>
-<li><strong>Log算子</strong>：综合考虑了噪声的抑制和边缘检测,其抗干扰能力强，边界定位精度高，边缘连续性好，而且能有效提取对比度弱的边界<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107123553479.png" alt="image-20221107123553479" style="zoom:33%;">
-
-</li>
-</ul>
-<hr>
-<h1 id="卷积神经网络"><a href="#卷积神经网络" class="headerlink" title="卷积神经网络"></a>卷积神经网络</h1><h2 id="1-基本概念"><a href="#1-基本概念" class="headerlink" title="1.基本概念"></a>1.基本概念</h2><ul>
-<li>卷积神经网络中的每一个神经元相当于使用同一个卷积核（卷积核中的数值就是权重）在整个图像上滑动</li>
-<li>一个卷积核只能提取一种特征，使用不同的卷积核提取不同的特征</li>
-<li>卷积神经网络具有局部连接和权值共享的特点</li>
-<li>卷积核中的权值是从数据中学习得到的</li>
-</ul>
-<h2 id="2-卷积神经网络的构成"><a href="#2-卷积神经网络的构成" class="headerlink" title="2.卷积神经网络的构成"></a>2.卷积神经网络的构成</h2><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107123809535.png" alt="image-20221107123809535" style="zoom: 33%;">
-
-<ul>
-<li><strong>特征提取阶段</strong><ul>
-<li>卷积层：特征提取层<ul>
-<li><strong>每个卷积层中包含多个卷积核提取不同的特征</strong></li>
-<li><strong>每个卷积核（每个卷积核又可能包含多通道）都输出一张特征图</strong></li>
-<li>激励函数：如ReLU<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107123910625.png" alt="image-20221107123910625" style="zoom:33%;"></li>
-</ul>
-</li>
-<li>池化层：特征映射层<ul>
-<li><strong>下采样：使用n×n的池化模板，且步长为n，将其尺寸减小到1/n</strong></li>
-<li>在减小数据的处理量的同时，保留有用的信息<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107124037477.png" alt="image-20221107124037477" style="zoom:33%;"></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><strong>分类识别阶段</strong>：由全连接层或支持向量机组成</li>
-</ul>
-<hr>
-<h1 id="实例：卷积神经网络实现手写数字识别"><a href="#实例：卷积神经网络实现手写数字识别" class="headerlink" title="实例：卷积神经网络实现手写数字识别"></a>实例：卷积神经网络实现手写数字识别</h1><h2 id="1-创建卷积层"><a href="#1-创建卷积层" class="headerlink" title="1.创建卷积层"></a>1.创建卷积层</h2><ul>
-<li><code>tf.keras.layers.Conv2D(filters,kernel_size,padding,activation,input_shape)</code></li>
-<li>filters表示卷积核的数量</li>
-<li>kernel_size表示卷积核大小</li>
-<li>padding表示扩充图像的方式<ul>
-<li>padding=”same”：以0扩充</li>
-<li>padding=”valid”：不扩充图像边界</li>
-</ul>
-</li>
-<li>activation用来设置激活函数</li>
-<li>input_shape表示输入卷积层的数据形状，分别是samples（由batch_size自动指定）,rows,cols,channels</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">tf.keras.layers.Conv2D(filters=<span class="number">16</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu,input_shape=(<span class="number">28</span>,<span class="number">28</span>,<span class="number">1</span>))<span class="comment">#因为MNIST数据集是灰度图像，所以通道数为1</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="2-创建池化层"><a href="#2-创建池化层" class="headerlink" title="2.创建池化层"></a>2.创建池化层</h2><ul>
-<li><code>tf.keras.layers.MaxPool2D(pool_size)</code></li>
-<li>pool_size指定池化窗口的大小</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>))</span><br></pre></td></tr></table></figure>
-
-<h2 id="3-模型设计"><a href="#3-模型设计" class="headerlink" title="3.模型设计"></a>3.模型设计</h2><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107124332422.png" alt="image-20221107124332422" style="zoom: 50%;">
-
-<h2 id="4-具体代码实现"><a href="#4-具体代码实现" class="headerlink" title="4.具体代码实现"></a>4.具体代码实现</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#1.导入库</span></span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="comment">#2.加载数据</span></span><br><span class="line">mnist=tf.keras.datasets.mnist</span><br><span class="line">(train_x,train_y),(test_x,test_y)=mnist.load_data(path=<span class="string">&quot;D:\App_Data_File\Anaconda_data\jupyter\image\mnist.npz&quot;</span>)</span><br><span class="line"><span class="comment">#3.数据预处理:对属性进行归一化并转化为Tensor张量</span></span><br><span class="line">X_train,X_test=tf.cast(train_x/<span class="number">255.0</span>,tf.float32),tf.cast(test_x/<span class="number">255.0</span>,tf.float32)</span><br><span class="line">y_train,y_test=tf.cast(train_y,tf.int16),tf.cast(test_y,tf.int16)</span><br><span class="line">X_train=tf.reshape(X_train,[<span class="number">60000</span>,<span class="number">28</span>,<span class="number">28</span>,<span class="number">1</span>])</span><br><span class="line">X_test=tf.reshape(X_test,[<span class="number">10000</span>,<span class="number">28</span>,<span class="number">28</span>,<span class="number">1</span>])</span><br><span class="line"><span class="comment">#4.建立模型</span></span><br><span class="line">model=tf.keras.Sequential()</span><br><span class="line"><span class="comment">#添加卷积层1</span></span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">16</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu,input_shape=(<span class="number">28</span>,<span class="number">28</span>,<span class="number">1</span>)))</span><br><span class="line"><span class="comment">#添加池化层1</span></span><br><span class="line">model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line"><span class="comment">#添加卷积层2</span></span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">32</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line"><span class="comment">#添加池化层2</span></span><br><span class="line">model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line"><span class="comment">#添加Flatten层，将数据拉直</span></span><br><span class="line">model.add(tf.keras.layers.Flatten())</span><br><span class="line"><span class="comment">#添加隐含层和输出层</span></span><br><span class="line">model.add(tf.keras.layers.Dense(<span class="number">128</span>,activation=<span class="string">&quot;relu&quot;</span>))</span><br><span class="line">model.add(tf.keras.layers.Dense(<span class="number">10</span>,activation=<span class="string">&quot;softmax&quot;</span>))</span><br><span class="line">model.summary()</span><br><span class="line"><span class="comment">#5.配置训练方法</span></span><br><span class="line">model.<span class="built_in">compile</span>(optimizer=<span class="string">&quot;adam&quot;</span>,loss=<span class="string">&quot;sparse_categorical_crossentropy&quot;</span>,metrics=[<span class="string">&quot;sparse_categorical_accuracy&quot;</span>])</span><br><span class="line"><span class="comment">#6.训练模型</span></span><br><span class="line"><span class="comment">#model.load_weights(&quot;mnist_save_weights_CNN.h5&quot;)</span></span><br><span class="line">history=model.fit(X_train,y_train,batch_size=<span class="number">64</span>,epochs=<span class="number">5</span>,validation_split=<span class="number">0.2</span>)</span><br><span class="line"><span class="comment">#7.评估模型</span></span><br><span class="line">model.evaluate(X_test,y_test,verbose=<span class="number">2</span>)</span><br><span class="line"><span class="comment">#8.保存训练日志并绘制训练曲线</span></span><br><span class="line">plt.rcParams[<span class="string">&quot;font.sans-serif&quot;</span>]=<span class="string">&quot;SimHei&quot;</span></span><br><span class="line">plt.rcParams[<span class="string">&quot;axes.unicode_minus&quot;</span>]=<span class="literal">False</span></span><br><span class="line">pd.DataFrame(history.history).to_csv(<span class="string">&quot;trainning_log.csv&quot;</span>,index=<span class="literal">False</span>)</span><br><span class="line">graph=pd.read_csv(<span class="string">&quot;trainning_log.csv&quot;</span>)</span><br><span class="line">graph.plot(figsize=(<span class="number">8</span>,<span class="number">5</span>))</span><br><span class="line">plt.grid(<span class="number">1</span>)</span><br><span class="line">plt.xlim(<span class="number">0</span>,<span class="number">4</span>)</span><br><span class="line">plt.ylim(<span class="number">0</span>,<span class="number">1</span>)</span><br><span class="line">plt.show()</span><br><span class="line"><span class="comment">#9.使用模型</span></span><br><span class="line"><span class="comment"># 下面再随机取出测试集中的任意10个数据进行识别</span></span><br><span class="line">plt.figure()</span><br><span class="line">plt.suptitle(<span class="string">&quot;随机取出测试集中的任意10个数据进行识别&quot;</span>, fontsize=<span class="number">20</span>, color=<span class="string">&quot;blue&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">    num = np.random.randint(<span class="number">1</span>, <span class="number">10000</span>)</span><br><span class="line">    plt.subplot(<span class="number">2</span>, <span class="number">5</span>, i+<span class="number">1</span>)</span><br><span class="line">    plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">    plt.imshow(test_x[num], cmap=<span class="string">&quot;gray&quot;</span>)</span><br><span class="line">    y_pred = np.argmax(model.predict(tf.reshape(X_test[num],(<span class="number">1</span>,<span class="number">28</span>,<span class="number">28</span>,<span class="number">1</span>))))</span><br><span class="line">    plt.title(<span class="string">&quot;y= &quot;</span>+<span class="built_in">str</span>(test_y[num]) + <span class="string">&quot;\n&quot;</span> + <span class="string">&quot;y_pred=&quot;</span> + <span class="built_in">str</span>(y_pred))</span><br><span class="line">plt.tight_layout(rect=[<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0.98</span>])</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-<p>结果如下：</p>
-<pre><code>Model: &quot;sequential_2&quot;
-_________________________________________________________________
-Layer (type)                 Output Shape              Param #   
-=================================================================
-conv2d_4 (Conv2D)            (None, 28, 28, 16)        160       
-_________________________________________________________________
-max_pooling2d_4 (MaxPooling2 (None, 14, 14, 16)        0         
-_________________________________________________________________
-conv2d_5 (Conv2D)            (None, 14, 14, 32)        4640      
-_________________________________________________________________
-max_pooling2d_5 (MaxPooling2 (None, 7, 7, 32)          0         
-_________________________________________________________________
-flatten_2 (Flatten)          (None, 1568)              0         
-_________________________________________________________________
-dense_4 (Dense)              (None, 128)               200832    
-_________________________________________________________________
-dense_5 (Dense)              (None, 10)                1290      
-=================================================================
-Total params: 206,922
-Trainable params: 206,922
-Non-trainable params: 0
-_________________________________________________________________
-Epoch 1/5
-750/750 [==============================] - 25s 32ms/step - loss: 0.2131 - sparse_categorical_accuracy: 0.9379 - val_loss: 0.0909 - val_sparse_categorical_accuracy: 0.9721
-Epoch 2/5
-750/750 [==============================] - 25s 33ms/step - loss: 0.0646 - sparse_categorical_accuracy: 0.9796 - val_loss: 0.0538 - val_sparse_categorical_accuracy: 0.9843
-Epoch 3/5
-750/750 [==============================] - 25s 34ms/step - loss: 0.0429 - sparse_categorical_accuracy: 0.9872 - val_loss: 0.0508 - val_sparse_categorical_accuracy: 0.9859
-Epoch 4/5
-750/750 [==============================] - 25s 34ms/step - loss: 0.0332 - sparse_categorical_accuracy: 0.9892 - val_loss: 0.0412 - val_sparse_categorical_accuracy: 0.9892
-Epoch 5/5
-750/750 [==============================] - 25s 33ms/step - loss: 0.0246 - sparse_categorical_accuracy: 0.9920 - val_loss: 0.0450 - val_sparse_categorical_accuracy: 0.9855
-313/313 - 2s - loss: 0.0345 - sparse_categorical_accuracy: 0.9884</code></pre><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_14_1.png" alt="output_14_1"></p>
-<p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_14_2.png" alt="output_14_2"></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#保存训练的模型参数</span></span><br><span class="line">model.save_weights(<span class="string">&quot;mnist_save_weights_CNN.h5&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h1 id="卷积神经网络的优化"><a href="#卷积神经网络的优化" class="headerlink" title="卷积神经网络的优化"></a>卷积神经网络的优化</h1><h2 id="1-Dropout-：减少过拟合"><a href="#1-Dropout-：减少过拟合" class="headerlink" title="1.Dropout()：减少过拟合"></a>1.Dropout()：减少过拟合</h2><ul>
-<li>随机让神经网络的某些隐含层节点停止工作，也就是让他们的权值为0</li>
-<li><strong>tf.layers.Dropout(inputs,rate,seed=None,training=False,name=None)</strong></li>
-<li>inputs为输入的张量</li>
-<li>rate指定神经元每一次随机被丢弃的比例</li>
-<li>seed丢弃固定位置的神经元</li>
-<li>trainning=True处于训练阶段时，才会进行dropout操作</li>
-<li>name表示dropout层的名称</li>
-</ul>
-<h2 id="2-级联卷积核"><a href="#2-级联卷积核" class="headerlink" title="2.级联卷积核"></a>2.级联卷积核</h2><ul>
-<li>使用两个3×3的卷积核级联与使用一个5×5的卷积核得到的感受野是一样的，但参数个数却少了<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107124918062.png" alt="image-20221107124918062" style="zoom:33%;"></li>
-<li>多通道的级联卷积核<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107124939129.png" alt="image-20221107124939129" style="zoom:33%;">
-
-</li>
-</ul>
-<hr>
-<h1 id="实例：卷积神经网络识别cifar10图片"><a href="#实例：卷积神经网络识别cifar10图片" class="headerlink" title="实例：卷积神经网络识别cifar10图片"></a>实例：卷积神经网络识别cifar10图片</h1><h2 id="1-设计卷积神经网络的结构"><a href="#1-设计卷积神经网络的结构" class="headerlink" title="1.设计卷积神经网络的结构"></a>1.设计卷积神经网络的结构</h2><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107125056907.png" alt="image-20221107125056907"></p>
-<h2 id="2-代码实现"><a href="#2-代码实现" class="headerlink" title="2.代码实现"></a>2.代码实现</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#1.导入库</span></span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="comment">#2.加载数据</span></span><br><span class="line">cifar10=tf.keras.datasets.cifar10</span><br><span class="line">(train_x,train_y),(test_x,test_y)=cifar10.load_data()</span><br><span class="line"><span class="comment">#3.数据预处理:对属性进行归一化并转化为Tensor张量</span></span><br><span class="line">X_train,X_test=tf.cast(train_x/<span class="number">255.0</span>,tf.float32),tf.cast(test_x/<span class="number">255.0</span>,tf.float32)</span><br><span class="line">Y_train,Y_test=tf.cast(train_y,tf.int16),tf.cast(test_y,tf.int16)</span><br><span class="line"><span class="comment">#4.建立模型</span></span><br><span class="line">model=tf.keras.Sequential()</span><br><span class="line"><span class="comment">#添加卷积层1-1、1-2、池化层1</span></span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">16</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu,input_shape=(<span class="number">32</span>,<span class="number">32</span>,<span class="number">3</span>)))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">16</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line">model.add(tf.keras.layers.Dropout(<span class="number">0.2</span>))</span><br><span class="line"><span class="comment">#添加卷积层2-1、2-2、池化层2</span></span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">32</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">32</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line">model.add(tf.keras.layers.Dropout(<span class="number">0.2</span>))</span><br><span class="line"><span class="comment">#添加Flatten层，将数据拉直</span></span><br><span class="line">model.add(tf.keras.layers.Flatten())</span><br><span class="line">model.add(tf.keras.layers.Dropout(<span class="number">0.2</span>))</span><br><span class="line"><span class="comment">#添加隐含层和输出层</span></span><br><span class="line">model.add(tf.keras.layers.Dense(<span class="number">128</span>,activation=<span class="string">&quot;relu&quot;</span>))</span><br><span class="line">model.add(tf.keras.layers.Dropout(<span class="number">0.2</span>))</span><br><span class="line">model.add(tf.keras.layers.Dense(<span class="number">10</span>,activation=<span class="string">&quot;softmax&quot;</span>))</span><br><span class="line">model.summary()</span><br><span class="line"><span class="comment">#5.配置训练方法</span></span><br><span class="line">model.<span class="built_in">compile</span>(optimizer=<span class="string">&quot;adam&quot;</span>,loss=<span class="string">&quot;sparse_categorical_crossentropy&quot;</span>,metrics=[<span class="string">&quot;sparse_categorical_accuracy&quot;</span>])</span><br><span class="line"><span class="comment">#6.训练模型</span></span><br><span class="line">history=model.fit(X_train,Y_train,batch_size=<span class="number">64</span>,epochs=<span class="number">10</span>,validation_split=<span class="number">0.2</span>)</span><br><span class="line"><span class="comment">#7.评估模型</span></span><br><span class="line">model.evaluate(X_test,Y_test,verbose=<span class="number">2</span>)</span><br><span class="line"><span class="comment">#8.保存训练日志并绘制训练曲线</span></span><br><span class="line">plt.rcParams[<span class="string">&quot;font.sans-serif&quot;</span>]=<span class="string">&quot;SimHei&quot;</span></span><br><span class="line">plt.rcParams[<span class="string">&quot;axes.unicode_minus&quot;</span>]=<span class="literal">False</span></span><br><span class="line">pd.DataFrame(history.history).to_csv(<span class="string">&quot;cifar10_trainning_log.csv&quot;</span>,index=<span class="literal">False</span>)</span><br><span class="line">graph=pd.read_csv(<span class="string">&quot;cifar10_trainning_log.csv&quot;</span>)</span><br><span class="line">graph.plot(figsize=(<span class="number">8</span>,<span class="number">5</span>))</span><br><span class="line">plt.grid(<span class="number">1</span>)</span><br><span class="line">plt.xlim(<span class="number">0</span>,<span class="number">4</span>)</span><br><span class="line">plt.ylim(<span class="number">0</span>,<span class="number">4</span>)</span><br><span class="line">plt.show()</span><br><span class="line"><span class="comment">#9.使用模型</span></span><br><span class="line"><span class="comment"># 下面再随机取出测试集中的任意10个数据进行识别</span></span><br><span class="line">plt.figure()                                       </span><br><span class="line">plt.suptitle(<span class="string">&quot;随机取出测试集中的任意10个数据进行识别&quot;</span>, fontsize=<span class="number">20</span>, color=<span class="string">&quot;blue&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">    num = np.random.randint(<span class="number">1</span>, <span class="number">10000</span>)</span><br><span class="line">    plt.subplot(<span class="number">2</span>, <span class="number">5</span>, i+<span class="number">1</span>)</span><br><span class="line">    plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">    plt.imshow(test_x[num], cmap=<span class="string">&quot;gray&quot;</span>)</span><br><span class="line">    y_pred = np.argmax(model.predict(tf.reshape(X_test[num],(<span class="number">1</span>,<span class="number">32</span>,<span class="number">32</span>,<span class="number">3</span>))))</span><br><span class="line">    plt.title(<span class="string">&quot;标签值：&quot;</span>+<span class="built_in">str</span>(test_y[num,<span class="number">0</span>]) + <span class="string">&quot;\n&quot;</span> + <span class="string">&quot;预测值：&quot;</span> + <span class="built_in">str</span>(y_pred))</span><br><span class="line">plt.tight_layout(rect=[<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0.98</span>])</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-<p>结果如下：</p>
-<pre><code>Model: &quot;sequential_3&quot;
-_________________________________________________________________
-Layer (type)                 Output Shape              Param #   
-=================================================================
-conv2d_6 (Conv2D)            (None, 32, 32, 16)        448       
-_________________________________________________________________
-conv2d_7 (Conv2D)            (None, 32, 32, 16)        2320      
-_________________________________________________________________
-max_pooling2d_6 (MaxPooling2 (None, 16, 16, 16)        0         
-_________________________________________________________________
-dropout (Dropout)            (None, 16, 16, 16)        0         
-_________________________________________________________________
-conv2d_8 (Conv2D)            (None, 16, 16, 32)        4640      
-_________________________________________________________________
-conv2d_9 (Conv2D)            (None, 16, 16, 32)        9248      
-_________________________________________________________________
-max_pooling2d_7 (MaxPooling2 (None, 8, 8, 32)          0         
-_________________________________________________________________
-dropout_1 (Dropout)          (None, 8, 8, 32)          0         
-_________________________________________________________________
-flatten_3 (Flatten)          (None, 2048)              0         
-_________________________________________________________________
-dropout_2 (Dropout)          (None, 2048)              0         
-_________________________________________________________________
-dense_6 (Dense)              (None, 128)               262272    
-_________________________________________________________________
-dropout_3 (Dropout)          (None, 128)               0         
-_________________________________________________________________
-dense_7 (Dense)              (None, 10)                1290      
-=================================================================
-Total params: 280,218
-Trainable params: 280,218
-Non-trainable params: 0
-_________________________________________________________________
-Epoch 1/10
-625/625 [==============================] - 76s 120ms/step - loss: 1.6868 - sparse_categorical_accuracy: 0.3793 - val_loss: 1.3407 - val_sparse_categorical_accuracy: 0.5164
-Epoch 2/10
-625/625 [==============================] - 76s 122ms/step - loss: 1.3250 - sparse_categorical_accuracy: 0.5247 - val_loss: 1.1971 - val_sparse_categorical_accuracy: 0.5724
-Epoch 3/10
-625/625 [==============================] - 76s 122ms/step - loss: 1.1885 - sparse_categorical_accuracy: 0.5766 - val_loss: 1.0775 - val_sparse_categorical_accuracy: 0.6217
-Epoch 4/10
-625/625 [==============================] - 75s 121ms/step - loss: 1.1078 - sparse_categorical_accuracy: 0.6027 - val_loss: 1.0216 - val_sparse_categorical_accuracy: 0.6404
-Epoch 5/10
-625/625 [==============================] - 75s 121ms/step - loss: 1.0438 - sparse_categorical_accuracy: 0.6285 - val_loss: 0.9560 - val_sparse_categorical_accuracy: 0.6635
-Epoch 6/10
-625/625 [==============================] - 76s 122ms/step - loss: 0.9973 - sparse_categorical_accuracy: 0.6466 - val_loss: 0.9293 - val_sparse_categorical_accuracy: 0.6713
-Epoch 7/10
-625/625 [==============================] - 76s 121ms/step - loss: 0.9587 - sparse_categorical_accuracy: 0.6584 - val_loss: 0.9301 - val_sparse_categorical_accuracy: 0.6723
-Epoch 8/10
-625/625 [==============================] - 75s 121ms/step - loss: 0.9225 - sparse_categorical_accuracy: 0.6694 - val_loss: 0.8832 - val_sparse_categorical_accuracy: 0.6938
-Epoch 9/10
-625/625 [==============================] - 76s 121ms/step - loss: 0.8886 - sparse_categorical_accuracy: 0.6809 - val_loss: 0.8450 - val_sparse_categorical_accuracy: 0.6965
-Epoch 10/10
-625/625 [==============================] - 76s 121ms/step - loss: 0.8632 - sparse_categorical_accuracy: 0.6917 - val_loss: 0.8446 - val_sparse_categorical_accuracy: 0.7016
-313/313 - 7s - loss: 0.8541 - sparse_categorical_accuracy: 0.7033</code></pre><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_22_1.png" alt="output_22_1"></p>
-<p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_22_2.png" alt="output_22_2"></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#保存所有模型与数据</span></span><br><span class="line">model.save(<span class="string">&quot;cifar10_save_all.h5&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>学习积累</category>
-      </categories>
-      <tags>
-        <tag>神经网络</tag>
-        <tag>TensorFlow</tag>
-        <tag>深度学习</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>TensorFlow实践之分类问题</title>
     <url>/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%88%86%E7%B1%BB%E9%97%AE%E9%A2%98/</url>
     <content><![CDATA[<p>本节从二分类问题到多分类问题均进行了简单的介绍以及相应示例的实现，同时对Pandas处理二维数据进行了基本介绍。</p>
@@ -9968,6 +9623,546 @@ tf.Tensor(0.295599, shape=(), dtype=float32)</code></pre>]]></content>
         <category>学习积累</category>
       </categories>
       <tags>
+        <tag>TensorFlow</tag>
+        <tag>深度学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>TensorFlow实践之卷积神经网路</title>
+    <url>/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/</url>
+    <content><![CDATA[<p>本节主要介绍了卷积神经网络的基本结构，并通过Sequential模型对卷积神经网络进行了搭建。</p>
+<span id="more"></span>
+
+<h1 id="深度学习基础"><a href="#深度学习基础" class="headerlink" title="深度学习基础"></a>深度学习基础</h1><ul>
+<li><strong>深度神经网络</strong>：有多层隐含层的神经网络</li>
+<li><strong>端到端学习</strong>：自动的从数据中学习特征</li>
+<li><strong>具有多层隐含层的深度神经网络就是深度学习（Deep Learning）</strong></li>
+<li>深度学习能够自动从数据中学习到与任务相关的特征，提取出的特征缺乏可解释性</li>
+</ul>
+<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107120929581.png" alt="image-20221107120929581" style="zoom: 33%;">
+
+<hr>
+<h1 id="图像卷积"><a href="#图像卷积" class="headerlink" title="图像卷积"></a>图像卷积</h1><h2 id="1-图像卷积运算"><a href="#1-图像卷积运算" class="headerlink" title="1.图像卷积运算"></a>1.图像卷积运算</h2><ul>
+<li>首先，把卷积核和图像中的像素点一一对应</li>
+<li>加权求和，把得到的结果作为中心像素点新的灰度值</li>
+<li>用卷积核从左至右，从上至下滑动，就可以计算出每个像素点的取值<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107121513161.png" alt="image-20221107121513161" style="zoom: 33%;"></li>
+<li>使用卷积核计算后的结果会比原图稍微小一点，因为对于图像边界上的点，无法进行卷积运算<br>  <img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107121617059.png" alt="image-20221107121617059" style="zoom: 25%;">            <img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107121658899.png" alt="image-20221107121658899" style="zoom:25%;"></li>
+<li>可以通过填充外层使得卷积后图像大小和原图一样<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107121827880.png" alt="image-20221107121827880" style="zoom: 50%;"></li>
+<li>步长(stride)：卷积核一次移动的像素数</li>
+<li>步长等于卷积核的边长，相当于将图像缩小了n倍<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107121906994.png" alt="image-20221107121906994" style="zoom: 50%;">
+
+</li>
+</ul>
+<h2 id="2-卷积核的作用效果"><a href="#2-卷积核的作用效果" class="headerlink" title="2.卷积核的作用效果"></a>2.卷积核的作用效果</h2><ul>
+<li><p><strong>卷积核的尺寸，决定了周围像素的范围，卷积核的数值，表明了其权值，采用不同的卷积核，能够产生不同的效果</strong></p>
+</li>
+<li><p>输出原图：</p>
+<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107122049776.png" alt="image-20221107122049776" style="zoom:50%;">
+</li>
+<li><p><strong>均值模糊</strong>：可以将图像中的高频噪声过滤掉，故对图像的卷积运算，也称为平滑或者滤波，卷积核也称为滤波器</p>
+<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107122126981.png" alt="image-20221107122126981" style="zoom:50%;">
+
+<ul>
+<li><strong>卷积核尺寸越大，图像越模糊</strong></li>
+</ul>
+<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107122232759.png" alt="image-20221107122232759" style="zoom: 50%;">
+</li>
+<li><p><strong>高斯模糊</strong>：根据高斯分布的取值来确定权值</p>
+<ul>
+<li>为了尽可能保留图像中的边缘信息，给不同位置的像素点赋予不同的权值，离中心点越近的像素，权值越大，远离中心点的像素，权值也逐渐减小<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107122501280.png" alt="image-20221107122501280" style="zoom:50%;">
+</li>
+</ul>
+</li>
+<li><p>均值模糊与高斯模糊的对比：高斯模糊能够更好的保留图像的边缘和轮廓</p>
+<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107123237685.png" alt="image-20221107123237685" style="zoom: 50%;">
+
+</li>
+</ul>
+<h2 id="3-边缘检测"><a href="#3-边缘检测" class="headerlink" title="3.边缘检测"></a>3.边缘检测</h2><ul>
+<li>计算当前点和周围点颜色值或灰度值的差别</li>
+<li><strong>Prewitt算子</strong>：<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107123416992.png" alt="image-20221107123416992" style="zoom:33%;"></li>
+<li><strong>Roberts算子</strong>：能够比较好的检测45°角方向的边缘</li>
+<li><strong>Sobel算子</strong>：在Prewitt算子的基础上增加的权重的概念，认为上下左右直线方向的距离大于斜线方向的距离</li>
+<li><strong>Laplacian算子</strong>：判断中心像素的灰度与邻域内其他像素灰度的关系</li>
+<li><strong>Log算子</strong>：综合考虑了噪声的抑制和边缘检测,其抗干扰能力强，边界定位精度高，边缘连续性好，而且能有效提取对比度弱的边界<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107123553479.png" alt="image-20221107123553479" style="zoom:33%;">
+
+</li>
+</ul>
+<hr>
+<h1 id="卷积神经网络"><a href="#卷积神经网络" class="headerlink" title="卷积神经网络"></a>卷积神经网络</h1><h2 id="1-基本概念"><a href="#1-基本概念" class="headerlink" title="1.基本概念"></a>1.基本概念</h2><ul>
+<li>卷积神经网络中的每一个神经元相当于使用同一个卷积核（卷积核中的数值就是权重）在整个图像上滑动</li>
+<li>一个卷积核只能提取一种特征，使用不同的卷积核提取不同的特征</li>
+<li>卷积神经网络具有局部连接和权值共享的特点</li>
+<li>卷积核中的权值是从数据中学习得到的</li>
+</ul>
+<h2 id="2-卷积神经网络的构成"><a href="#2-卷积神经网络的构成" class="headerlink" title="2.卷积神经网络的构成"></a>2.卷积神经网络的构成</h2><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107123809535.png" alt="image-20221107123809535" style="zoom: 33%;">
+
+<ul>
+<li><strong>特征提取阶段</strong><ul>
+<li>卷积层：特征提取层<ul>
+<li><strong>每个卷积层中包含多个卷积核提取不同的特征</strong></li>
+<li><strong>每个卷积核（每个卷积核又可能包含多通道）都输出一张特征图</strong></li>
+<li>激励函数：如ReLU<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107123910625.png" alt="image-20221107123910625" style="zoom:33%;"></li>
+</ul>
+</li>
+<li>池化层：特征映射层<ul>
+<li><strong>下采样：使用n×n的池化模板，且步长为n，将其尺寸减小到1/n</strong></li>
+<li>在减小数据的处理量的同时，保留有用的信息<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107124037477.png" alt="image-20221107124037477" style="zoom:33%;"></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>分类识别阶段</strong>：由全连接层或支持向量机组成</li>
+</ul>
+<hr>
+<h1 id="实例：卷积神经网络实现手写数字识别"><a href="#实例：卷积神经网络实现手写数字识别" class="headerlink" title="实例：卷积神经网络实现手写数字识别"></a>实例：卷积神经网络实现手写数字识别</h1><h2 id="1-创建卷积层"><a href="#1-创建卷积层" class="headerlink" title="1.创建卷积层"></a>1.创建卷积层</h2><ul>
+<li><code>tf.keras.layers.Conv2D(filters,kernel_size,padding,activation,input_shape)</code></li>
+<li>filters表示卷积核的数量</li>
+<li>kernel_size表示卷积核大小</li>
+<li>padding表示扩充图像的方式<ul>
+<li>padding=”same”：以0扩充</li>
+<li>padding=”valid”：不扩充图像边界</li>
+</ul>
+</li>
+<li>activation用来设置激活函数</li>
+<li>input_shape表示输入卷积层的数据形状，分别是samples（由batch_size自动指定）,rows,cols,channels</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">tf.keras.layers.Conv2D(filters=<span class="number">16</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu,input_shape=(<span class="number">28</span>,<span class="number">28</span>,<span class="number">1</span>))<span class="comment">#因为MNIST数据集是灰度图像，所以通道数为1</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="2-创建池化层"><a href="#2-创建池化层" class="headerlink" title="2.创建池化层"></a>2.创建池化层</h2><ul>
+<li><code>tf.keras.layers.MaxPool2D(pool_size)</code></li>
+<li>pool_size指定池化窗口的大小</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>))</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-模型设计"><a href="#3-模型设计" class="headerlink" title="3.模型设计"></a>3.模型设计</h2><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107124332422.png" alt="image-20221107124332422" style="zoom: 50%;">
+
+<h2 id="4-具体代码实现"><a href="#4-具体代码实现" class="headerlink" title="4.具体代码实现"></a>4.具体代码实现</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#1.导入库</span></span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="comment">#2.加载数据</span></span><br><span class="line">mnist=tf.keras.datasets.mnist</span><br><span class="line">(train_x,train_y),(test_x,test_y)=mnist.load_data(path=<span class="string">&quot;D:\App_Data_File\Anaconda_data\jupyter\image\mnist.npz&quot;</span>)</span><br><span class="line"><span class="comment">#3.数据预处理:对属性进行归一化并转化为Tensor张量</span></span><br><span class="line">X_train,X_test=tf.cast(train_x/<span class="number">255.0</span>,tf.float32),tf.cast(test_x/<span class="number">255.0</span>,tf.float32)</span><br><span class="line">y_train,y_test=tf.cast(train_y,tf.int16),tf.cast(test_y,tf.int16)</span><br><span class="line">X_train=tf.reshape(X_train,[<span class="number">60000</span>,<span class="number">28</span>,<span class="number">28</span>,<span class="number">1</span>])</span><br><span class="line">X_test=tf.reshape(X_test,[<span class="number">10000</span>,<span class="number">28</span>,<span class="number">28</span>,<span class="number">1</span>])</span><br><span class="line"><span class="comment">#4.建立模型</span></span><br><span class="line">model=tf.keras.Sequential()</span><br><span class="line"><span class="comment">#添加卷积层1</span></span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">16</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu,input_shape=(<span class="number">28</span>,<span class="number">28</span>,<span class="number">1</span>)))</span><br><span class="line"><span class="comment">#添加池化层1</span></span><br><span class="line">model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line"><span class="comment">#添加卷积层2</span></span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">32</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line"><span class="comment">#添加池化层2</span></span><br><span class="line">model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line"><span class="comment">#添加Flatten层，将数据拉直</span></span><br><span class="line">model.add(tf.keras.layers.Flatten())</span><br><span class="line"><span class="comment">#添加隐含层和输出层</span></span><br><span class="line">model.add(tf.keras.layers.Dense(<span class="number">128</span>,activation=<span class="string">&quot;relu&quot;</span>))</span><br><span class="line">model.add(tf.keras.layers.Dense(<span class="number">10</span>,activation=<span class="string">&quot;softmax&quot;</span>))</span><br><span class="line">model.summary()</span><br><span class="line"><span class="comment">#5.配置训练方法</span></span><br><span class="line">model.<span class="built_in">compile</span>(optimizer=<span class="string">&quot;adam&quot;</span>,loss=<span class="string">&quot;sparse_categorical_crossentropy&quot;</span>,metrics=[<span class="string">&quot;sparse_categorical_accuracy&quot;</span>])</span><br><span class="line"><span class="comment">#6.训练模型</span></span><br><span class="line"><span class="comment">#model.load_weights(&quot;mnist_save_weights_CNN.h5&quot;)</span></span><br><span class="line">history=model.fit(X_train,y_train,batch_size=<span class="number">64</span>,epochs=<span class="number">5</span>,validation_split=<span class="number">0.2</span>)</span><br><span class="line"><span class="comment">#7.评估模型</span></span><br><span class="line">model.evaluate(X_test,y_test,verbose=<span class="number">2</span>)</span><br><span class="line"><span class="comment">#8.保存训练日志并绘制训练曲线</span></span><br><span class="line">plt.rcParams[<span class="string">&quot;font.sans-serif&quot;</span>]=<span class="string">&quot;SimHei&quot;</span></span><br><span class="line">plt.rcParams[<span class="string">&quot;axes.unicode_minus&quot;</span>]=<span class="literal">False</span></span><br><span class="line">pd.DataFrame(history.history).to_csv(<span class="string">&quot;trainning_log.csv&quot;</span>,index=<span class="literal">False</span>)</span><br><span class="line">graph=pd.read_csv(<span class="string">&quot;trainning_log.csv&quot;</span>)</span><br><span class="line">graph.plot(figsize=(<span class="number">8</span>,<span class="number">5</span>))</span><br><span class="line">plt.grid(<span class="number">1</span>)</span><br><span class="line">plt.xlim(<span class="number">0</span>,<span class="number">4</span>)</span><br><span class="line">plt.ylim(<span class="number">0</span>,<span class="number">1</span>)</span><br><span class="line">plt.show()</span><br><span class="line"><span class="comment">#9.使用模型</span></span><br><span class="line"><span class="comment"># 下面再随机取出测试集中的任意10个数据进行识别</span></span><br><span class="line">plt.figure()</span><br><span class="line">plt.suptitle(<span class="string">&quot;随机取出测试集中的任意10个数据进行识别&quot;</span>, fontsize=<span class="number">20</span>, color=<span class="string">&quot;blue&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">    num = np.random.randint(<span class="number">1</span>, <span class="number">10000</span>)</span><br><span class="line">    plt.subplot(<span class="number">2</span>, <span class="number">5</span>, i+<span class="number">1</span>)</span><br><span class="line">    plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">    plt.imshow(test_x[num], cmap=<span class="string">&quot;gray&quot;</span>)</span><br><span class="line">    y_pred = np.argmax(model.predict(tf.reshape(X_test[num],(<span class="number">1</span>,<span class="number">28</span>,<span class="number">28</span>,<span class="number">1</span>))))</span><br><span class="line">    plt.title(<span class="string">&quot;y= &quot;</span>+<span class="built_in">str</span>(test_y[num]) + <span class="string">&quot;\n&quot;</span> + <span class="string">&quot;y_pred=&quot;</span> + <span class="built_in">str</span>(y_pred))</span><br><span class="line">plt.tight_layout(rect=[<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0.98</span>])</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<pre><code>Model: &quot;sequential_2&quot;
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+conv2d_4 (Conv2D)            (None, 28, 28, 16)        160       
+_________________________________________________________________
+max_pooling2d_4 (MaxPooling2 (None, 14, 14, 16)        0         
+_________________________________________________________________
+conv2d_5 (Conv2D)            (None, 14, 14, 32)        4640      
+_________________________________________________________________
+max_pooling2d_5 (MaxPooling2 (None, 7, 7, 32)          0         
+_________________________________________________________________
+flatten_2 (Flatten)          (None, 1568)              0         
+_________________________________________________________________
+dense_4 (Dense)              (None, 128)               200832    
+_________________________________________________________________
+dense_5 (Dense)              (None, 10)                1290      
+=================================================================
+Total params: 206,922
+Trainable params: 206,922
+Non-trainable params: 0
+_________________________________________________________________
+Epoch 1/5
+750/750 [==============================] - 25s 32ms/step - loss: 0.2131 - sparse_categorical_accuracy: 0.9379 - val_loss: 0.0909 - val_sparse_categorical_accuracy: 0.9721
+Epoch 2/5
+750/750 [==============================] - 25s 33ms/step - loss: 0.0646 - sparse_categorical_accuracy: 0.9796 - val_loss: 0.0538 - val_sparse_categorical_accuracy: 0.9843
+Epoch 3/5
+750/750 [==============================] - 25s 34ms/step - loss: 0.0429 - sparse_categorical_accuracy: 0.9872 - val_loss: 0.0508 - val_sparse_categorical_accuracy: 0.9859
+Epoch 4/5
+750/750 [==============================] - 25s 34ms/step - loss: 0.0332 - sparse_categorical_accuracy: 0.9892 - val_loss: 0.0412 - val_sparse_categorical_accuracy: 0.9892
+Epoch 5/5
+750/750 [==============================] - 25s 33ms/step - loss: 0.0246 - sparse_categorical_accuracy: 0.9920 - val_loss: 0.0450 - val_sparse_categorical_accuracy: 0.9855
+313/313 - 2s - loss: 0.0345 - sparse_categorical_accuracy: 0.9884</code></pre><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_14_1.png" alt="output_14_1"></p>
+<p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_14_2.png" alt="output_14_2"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#保存训练的模型参数</span></span><br><span class="line">model.save_weights(<span class="string">&quot;mnist_save_weights_CNN.h5&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="卷积神经网络的优化"><a href="#卷积神经网络的优化" class="headerlink" title="卷积神经网络的优化"></a>卷积神经网络的优化</h1><h2 id="1-Dropout-：减少过拟合"><a href="#1-Dropout-：减少过拟合" class="headerlink" title="1.Dropout()：减少过拟合"></a>1.Dropout()：减少过拟合</h2><ul>
+<li>随机让神经网络的某些隐含层节点停止工作，也就是让他们的权值为0</li>
+<li><strong>tf.layers.Dropout(inputs,rate,seed=None,training=False,name=None)</strong></li>
+<li>inputs为输入的张量</li>
+<li>rate指定神经元每一次随机被丢弃的比例</li>
+<li>seed丢弃固定位置的神经元</li>
+<li>trainning=True处于训练阶段时，才会进行dropout操作</li>
+<li>name表示dropout层的名称</li>
+</ul>
+<h2 id="2-级联卷积核"><a href="#2-级联卷积核" class="headerlink" title="2.级联卷积核"></a>2.级联卷积核</h2><ul>
+<li>使用两个3×3的卷积核级联与使用一个5×5的卷积核得到的感受野是一样的，但参数个数却少了<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107124918062.png" alt="image-20221107124918062" style="zoom:33%;"></li>
+<li>多通道的级联卷积核<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107124939129.png" alt="image-20221107124939129" style="zoom:33%;">
+
+</li>
+</ul>
+<hr>
+<h1 id="实例：卷积神经网络识别cifar10图片"><a href="#实例：卷积神经网络识别cifar10图片" class="headerlink" title="实例：卷积神经网络识别cifar10图片"></a>实例：卷积神经网络识别cifar10图片</h1><h2 id="1-设计卷积神经网络的结构"><a href="#1-设计卷积神经网络的结构" class="headerlink" title="1.设计卷积神经网络的结构"></a>1.设计卷积神经网络的结构</h2><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107125056907.png" alt="image-20221107125056907"></p>
+<h2 id="2-代码实现"><a href="#2-代码实现" class="headerlink" title="2.代码实现"></a>2.代码实现</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#1.导入库</span></span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="comment">#2.加载数据</span></span><br><span class="line">cifar10=tf.keras.datasets.cifar10</span><br><span class="line">(train_x,train_y),(test_x,test_y)=cifar10.load_data()</span><br><span class="line"><span class="comment">#3.数据预处理:对属性进行归一化并转化为Tensor张量</span></span><br><span class="line">X_train,X_test=tf.cast(train_x/<span class="number">255.0</span>,tf.float32),tf.cast(test_x/<span class="number">255.0</span>,tf.float32)</span><br><span class="line">Y_train,Y_test=tf.cast(train_y,tf.int16),tf.cast(test_y,tf.int16)</span><br><span class="line"><span class="comment">#4.建立模型</span></span><br><span class="line">model=tf.keras.Sequential()</span><br><span class="line"><span class="comment">#添加卷积层1-1、1-2、池化层1</span></span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">16</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu,input_shape=(<span class="number">32</span>,<span class="number">32</span>,<span class="number">3</span>)))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">16</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line">model.add(tf.keras.layers.Dropout(<span class="number">0.2</span>))</span><br><span class="line"><span class="comment">#添加卷积层2-1、2-2、池化层2</span></span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">32</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">32</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line">model.add(tf.keras.layers.Dropout(<span class="number">0.2</span>))</span><br><span class="line"><span class="comment">#添加Flatten层，将数据拉直</span></span><br><span class="line">model.add(tf.keras.layers.Flatten())</span><br><span class="line">model.add(tf.keras.layers.Dropout(<span class="number">0.2</span>))</span><br><span class="line"><span class="comment">#添加隐含层和输出层</span></span><br><span class="line">model.add(tf.keras.layers.Dense(<span class="number">128</span>,activation=<span class="string">&quot;relu&quot;</span>))</span><br><span class="line">model.add(tf.keras.layers.Dropout(<span class="number">0.2</span>))</span><br><span class="line">model.add(tf.keras.layers.Dense(<span class="number">10</span>,activation=<span class="string">&quot;softmax&quot;</span>))</span><br><span class="line">model.summary()</span><br><span class="line"><span class="comment">#5.配置训练方法</span></span><br><span class="line">model.<span class="built_in">compile</span>(optimizer=<span class="string">&quot;adam&quot;</span>,loss=<span class="string">&quot;sparse_categorical_crossentropy&quot;</span>,metrics=[<span class="string">&quot;sparse_categorical_accuracy&quot;</span>])</span><br><span class="line"><span class="comment">#6.训练模型</span></span><br><span class="line">history=model.fit(X_train,Y_train,batch_size=<span class="number">64</span>,epochs=<span class="number">10</span>,validation_split=<span class="number">0.2</span>)</span><br><span class="line"><span class="comment">#7.评估模型</span></span><br><span class="line">model.evaluate(X_test,Y_test,verbose=<span class="number">2</span>)</span><br><span class="line"><span class="comment">#8.保存训练日志并绘制训练曲线</span></span><br><span class="line">plt.rcParams[<span class="string">&quot;font.sans-serif&quot;</span>]=<span class="string">&quot;SimHei&quot;</span></span><br><span class="line">plt.rcParams[<span class="string">&quot;axes.unicode_minus&quot;</span>]=<span class="literal">False</span></span><br><span class="line">pd.DataFrame(history.history).to_csv(<span class="string">&quot;cifar10_trainning_log.csv&quot;</span>,index=<span class="literal">False</span>)</span><br><span class="line">graph=pd.read_csv(<span class="string">&quot;cifar10_trainning_log.csv&quot;</span>)</span><br><span class="line">graph.plot(figsize=(<span class="number">8</span>,<span class="number">5</span>))</span><br><span class="line">plt.grid(<span class="number">1</span>)</span><br><span class="line">plt.xlim(<span class="number">0</span>,<span class="number">4</span>)</span><br><span class="line">plt.ylim(<span class="number">0</span>,<span class="number">4</span>)</span><br><span class="line">plt.show()</span><br><span class="line"><span class="comment">#9.使用模型</span></span><br><span class="line"><span class="comment"># 下面再随机取出测试集中的任意10个数据进行识别</span></span><br><span class="line">plt.figure()                                       </span><br><span class="line">plt.suptitle(<span class="string">&quot;随机取出测试集中的任意10个数据进行识别&quot;</span>, fontsize=<span class="number">20</span>, color=<span class="string">&quot;blue&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">    num = np.random.randint(<span class="number">1</span>, <span class="number">10000</span>)</span><br><span class="line">    plt.subplot(<span class="number">2</span>, <span class="number">5</span>, i+<span class="number">1</span>)</span><br><span class="line">    plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">    plt.imshow(test_x[num], cmap=<span class="string">&quot;gray&quot;</span>)</span><br><span class="line">    y_pred = np.argmax(model.predict(tf.reshape(X_test[num],(<span class="number">1</span>,<span class="number">32</span>,<span class="number">32</span>,<span class="number">3</span>))))</span><br><span class="line">    plt.title(<span class="string">&quot;标签值：&quot;</span>+<span class="built_in">str</span>(test_y[num,<span class="number">0</span>]) + <span class="string">&quot;\n&quot;</span> + <span class="string">&quot;预测值：&quot;</span> + <span class="built_in">str</span>(y_pred))</span><br><span class="line">plt.tight_layout(rect=[<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0.98</span>])</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<pre><code>Model: &quot;sequential_3&quot;
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+conv2d_6 (Conv2D)            (None, 32, 32, 16)        448       
+_________________________________________________________________
+conv2d_7 (Conv2D)            (None, 32, 32, 16)        2320      
+_________________________________________________________________
+max_pooling2d_6 (MaxPooling2 (None, 16, 16, 16)        0         
+_________________________________________________________________
+dropout (Dropout)            (None, 16, 16, 16)        0         
+_________________________________________________________________
+conv2d_8 (Conv2D)            (None, 16, 16, 32)        4640      
+_________________________________________________________________
+conv2d_9 (Conv2D)            (None, 16, 16, 32)        9248      
+_________________________________________________________________
+max_pooling2d_7 (MaxPooling2 (None, 8, 8, 32)          0         
+_________________________________________________________________
+dropout_1 (Dropout)          (None, 8, 8, 32)          0         
+_________________________________________________________________
+flatten_3 (Flatten)          (None, 2048)              0         
+_________________________________________________________________
+dropout_2 (Dropout)          (None, 2048)              0         
+_________________________________________________________________
+dense_6 (Dense)              (None, 128)               262272    
+_________________________________________________________________
+dropout_3 (Dropout)          (None, 128)               0         
+_________________________________________________________________
+dense_7 (Dense)              (None, 10)                1290      
+=================================================================
+Total params: 280,218
+Trainable params: 280,218
+Non-trainable params: 0
+_________________________________________________________________
+Epoch 1/10
+625/625 [==============================] - 76s 120ms/step - loss: 1.6868 - sparse_categorical_accuracy: 0.3793 - val_loss: 1.3407 - val_sparse_categorical_accuracy: 0.5164
+Epoch 2/10
+625/625 [==============================] - 76s 122ms/step - loss: 1.3250 - sparse_categorical_accuracy: 0.5247 - val_loss: 1.1971 - val_sparse_categorical_accuracy: 0.5724
+Epoch 3/10
+625/625 [==============================] - 76s 122ms/step - loss: 1.1885 - sparse_categorical_accuracy: 0.5766 - val_loss: 1.0775 - val_sparse_categorical_accuracy: 0.6217
+Epoch 4/10
+625/625 [==============================] - 75s 121ms/step - loss: 1.1078 - sparse_categorical_accuracy: 0.6027 - val_loss: 1.0216 - val_sparse_categorical_accuracy: 0.6404
+Epoch 5/10
+625/625 [==============================] - 75s 121ms/step - loss: 1.0438 - sparse_categorical_accuracy: 0.6285 - val_loss: 0.9560 - val_sparse_categorical_accuracy: 0.6635
+Epoch 6/10
+625/625 [==============================] - 76s 122ms/step - loss: 0.9973 - sparse_categorical_accuracy: 0.6466 - val_loss: 0.9293 - val_sparse_categorical_accuracy: 0.6713
+Epoch 7/10
+625/625 [==============================] - 76s 121ms/step - loss: 0.9587 - sparse_categorical_accuracy: 0.6584 - val_loss: 0.9301 - val_sparse_categorical_accuracy: 0.6723
+Epoch 8/10
+625/625 [==============================] - 75s 121ms/step - loss: 0.9225 - sparse_categorical_accuracy: 0.6694 - val_loss: 0.8832 - val_sparse_categorical_accuracy: 0.6938
+Epoch 9/10
+625/625 [==============================] - 76s 121ms/step - loss: 0.8886 - sparse_categorical_accuracy: 0.6809 - val_loss: 0.8450 - val_sparse_categorical_accuracy: 0.6965
+Epoch 10/10
+625/625 [==============================] - 76s 121ms/step - loss: 0.8632 - sparse_categorical_accuracy: 0.6917 - val_loss: 0.8446 - val_sparse_categorical_accuracy: 0.7016
+313/313 - 7s - loss: 0.8541 - sparse_categorical_accuracy: 0.7033</code></pre><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_22_1.png" alt="output_22_1"></p>
+<p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_22_2.png" alt="output_22_2"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#保存所有模型与数据</span></span><br><span class="line">model.save(<span class="string">&quot;cifar10_save_all.h5&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>学习积累</category>
+      </categories>
+      <tags>
+        <tag>神经网络</tag>
+        <tag>TensorFlow</tag>
+        <tag>深度学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>TensorFlow实践之人工神经网路</title>
+    <url>/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/</url>
+    <content><![CDATA[<p>本节从单层神经网络到多层神经网络，一步步介绍了神经网络的基本结构与简单实现，并借助TensorFlow框架中提供的Sequential模型，快速进行神经网络的搭建与训练。</p>
+<span id="more"></span>
+
+<h1 id="单层神经网络的实现"><a href="#单层神经网络的实现" class="headerlink" title="单层神经网络的实现"></a>单层神经网络的实现</h1><h2 id="1-单层神经网络的设计"><a href="#1-单层神经网络的设计" class="headerlink" title="1.单层神经网络的设计"></a>1.单层神经网络的设计</h2><ul>
+<li>神经网络的结构：单层前馈型神经网络</li>
+<li>激活函数：softmax函数</li>
+<li>损失函数：交叉熵损失函数</li>
+</ul>
+<p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107100009490.png" alt="image-20221107100009490"></p>
+<h2 id="2-单层神经网络实现的相关函数"><a href="#2-单层神经网络实现的相关函数" class="headerlink" title="2.单层神经网络实现的相关函数"></a>2.单层神经网络实现的相关函数</h2><ul>
+<li><h3 id="softmax函数：tf-nn-softmax"><a href="#softmax函数：tf-nn-softmax" class="headerlink" title="softmax函数：tf.nn.softmax()"></a>softmax函数：<code>tf.nn.softmax()</code></h3><ul>
+<li>tf.nn.softmax(tf.matmul(X_train,W)+B)</li>
+</ul>
+</li>
+<li><h3 id="独热编码：tf-one-hot-indices-depth"><a href="#独热编码：tf-one-hot-indices-depth" class="headerlink" title="独热编码：tf.one_hot(indices,depth)"></a>独热编码：<code>tf.one_hot(indices,depth)</code></h3><ul>
+<li>tf.one_hot(tf.constant(y_test,dtype=tf.int32),3)</li>
+</ul>
+</li>
+<li><h3 id="交叉熵损失函数：tf-keras-losses-categorical-crossentropy-y-true-y-pred"><a href="#交叉熵损失函数：tf-keras-losses-categorical-crossentropy-y-true-y-pred" class="headerlink" title="交叉熵损失函数：tf.keras.losses.categorical_crossentropy(y_true,y_pred)"></a>交叉熵损失函数：<code>tf.keras.losses.categorical_crossentropy(y_true,y_pred)</code></h3><ul>
+<li>y_true表示为独热编码的标签值</li>
+<li>y_pred为softmax函数的输出</li>
+<li>其返回的是每个样本的交叉熵损失</li>
+<li>则平均交叉熵损失为：tf.reduce_mean(tf.keras.losses.categorical_crossentropy(y_true=Y_train,y_pred=PRED_train))</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-单层神经网络的代码实现"><a href="#3-单层神经网络的代码实现" class="headerlink" title="3.单层神经网络的代码实现"></a>3.单层神经网络的代码实现</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#1.导入库，加载数据</span></span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np </span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="comment">#2.下载鸢尾花数据集iris</span></span><br><span class="line"><span class="comment">#训练集</span></span><br><span class="line">TRAIN_URL = <span class="string">&quot;http://download.tensorflow.org/data/iris_training.csv&quot;</span></span><br><span class="line">train_path = tf.keras.utils.get_file(<span class="string">&quot;iris_train.csv&quot;</span>,TRAIN_URL,cache_dir=<span class="string">&quot;D:\App_Data_File\Anaconda_data\jupyter\TensorFlow&quot;</span>)</span><br><span class="line"><span class="comment">#测试集</span></span><br><span class="line">TRAIN_URL = <span class="string">&quot;http://download.tensorflow.org/data/iris_test.csv&quot;</span></span><br><span class="line">test_path = tf.keras.utils.get_file(<span class="string">&quot;iris_test.csv&quot;</span>,TRAIN_URL,cache_dir=<span class="string">&quot;D:\App_Data_File\Anaconda_data\jupyter\TensorFlow&quot;</span>)</span><br><span class="line">df_iris_train=pd.read_csv(train_path,header=<span class="number">0</span>)</span><br><span class="line">df_iris_test=pd.read_csv(test_path,header=<span class="number">0</span>)</span><br><span class="line"><span class="comment">#3.处理数据</span></span><br><span class="line"><span class="comment">#转化为numpy数组</span></span><br><span class="line">iris_train=np.array(df_iris_train)</span><br><span class="line">iris_test=np.array(df_iris_test)</span><br><span class="line"><span class="comment">#取出属性</span></span><br><span class="line">x_train=iris_train[:,<span class="number">0</span>:<span class="number">4</span>]</span><br><span class="line">x_test=iris_test[:,<span class="number">0</span>:<span class="number">4</span>]</span><br><span class="line"><span class="comment">#取出标签</span></span><br><span class="line">y_train=iris_train[:,<span class="number">4</span>]</span><br><span class="line">y_test=iris_test[:,<span class="number">4</span>]</span><br><span class="line"><span class="comment">#对属性值进行标准化处理</span></span><br><span class="line">x_train=x_train-np.mean(x_train,axis=<span class="number">0</span>)<span class="comment">#x_train为120*4</span></span><br><span class="line">x_test=x_test-np.mean(x_test,axis=<span class="number">0</span>)<span class="comment">#x_test为30*4</span></span><br><span class="line"><span class="comment">#生成标签的独热编码</span></span><br><span class="line">X_train=tf.cast(x_train,tf.float32)</span><br><span class="line">Y_train=tf.one_hot(tf.constant(y_train,dtype=tf.int32),<span class="number">3</span>)<span class="comment">#Y_train为120*3</span></span><br><span class="line">X_test=tf.cast(x_test,tf.float32)</span><br><span class="line">Y_test=tf.one_hot(tf.constant(y_test,dtype=tf.int32),<span class="number">3</span>)<span class="comment">#Y_test为30*3</span></span><br><span class="line"><span class="comment">#3.设置超参数学习率与迭代次数</span></span><br><span class="line">learn_rate=<span class="number">0.5</span></span><br><span class="line"><span class="built_in">iter</span>=<span class="number">50</span></span><br><span class="line">display_step=<span class="number">10</span> <span class="comment">#设置每十次迭代输出一次结果</span></span><br><span class="line"><span class="comment">#4.设置模型参数初值W、B</span></span><br><span class="line">np.random.seed(<span class="number">612</span>)</span><br><span class="line">W=tf.Variable(np.random.randn(<span class="number">4</span>,<span class="number">3</span>),dtype=tf.float32)</span><br><span class="line">B=tf.Variable(np.zeros([<span class="number">3</span>]),dtype=tf.float32)</span><br><span class="line"><span class="comment">#5.训练模型</span></span><br><span class="line">ce_train=[]<span class="comment">#用来存放训练集的交叉熵损失</span></span><br><span class="line">acc_train=[]<span class="comment">#用来存放训练集的准确率</span></span><br><span class="line">ce_test=[]<span class="comment">#用来存放测试集的交叉熵损失</span></span><br><span class="line">acc_test=[]<span class="comment">#用来存放测试集的准确率</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="built_in">iter</span>+<span class="number">1</span>):</span><br><span class="line">    <span class="keyword">with</span> tf.GradientTape() <span class="keyword">as</span> tape:</span><br><span class="line">        PRED_train=tf.nn.softmax(tf.matmul(X_train,W)+B)<span class="comment">#PRED_train是120*3的矩阵</span></span><br><span class="line">        Loss_train=tf.reduce_mean(tf.keras.losses.categorical_crossentropy(y_true=Y_train,y_pred=PRED_train))</span><br><span class="line">    PRED_test=tf.nn.softmax(tf.matmul(X_test,W)+B)</span><br><span class="line">    Loss_test=tf.reduce_mean(tf.keras.losses.categorical_crossentropy(y_true=Y_test,y_pred=PRED_test))</span><br><span class="line">    Accuracy_train=tf.reduce_mean(tf.cast(tf.equal(tf.argmax(PRED_train.numpy(),axis=<span class="number">1</span>),y_train),tf.float32))</span><br><span class="line">    Accuracy_test=tf.reduce_mean(tf.cast(tf.equal(tf.argmax(PRED_test.numpy(),axis=<span class="number">1</span>),y_test),tf.float32))</span><br><span class="line">    ce_train.append(Loss_train)</span><br><span class="line">    acc_train.append(Accuracy_train)</span><br><span class="line">    ce_test.append(Loss_test)</span><br><span class="line">    acc_test.append(Accuracy_test)</span><br><span class="line">    dL_dW,dL_dB=tape.gradient(Loss_train,[W,B])</span><br><span class="line">    W.assign_sub(learn_rate*dL_dW)</span><br><span class="line">    B.assign_sub(learn_rate*dL_dB)</span><br><span class="line">    <span class="keyword">if</span> i % display_step==<span class="number">0</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;i:%i\tTrain Acc:%f\tTrain Loss:%f,\tTest Acc:%f\tTest Loss:%f&quot;</span>%(i,Accuracy_train,Loss_train,Accuracy_test,Loss_test))</span><br><span class="line"><span class="comment">#6.结果可视化</span></span><br><span class="line">plt.figure(figsize=(<span class="number">10</span>,<span class="number">4</span>))</span><br><span class="line">plt.subplot(<span class="number">121</span>)</span><br><span class="line">plt.plot(ce_train,color=<span class="string">&quot;blue&quot;</span>,label=<span class="string">&quot;Train Loss&quot;</span>)</span><br><span class="line">plt.plot(ce_test,color=<span class="string">&quot;green&quot;</span>,label=<span class="string">&quot;test Loss&quot;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&quot;Iteration&quot;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&quot;Loss&quot;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.subplot(<span class="number">122</span>)</span><br><span class="line">plt.plot(acc_train,color=<span class="string">&quot;blue&quot;</span>,label=<span class="string">&quot;Train acc&quot;</span>)</span><br><span class="line">plt.plot(acc_test,color=<span class="string">&quot;green&quot;</span>,label=<span class="string">&quot;test acc&quot;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&quot;Iteration&quot;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&quot;Accuracy&quot;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<pre><code>i:0    Train Acc:0.333333    Train Loss:2.066978,    Test Acc:0.266667    Test Loss:1.880856
+i:10    Train Acc:0.875000    Train Loss:0.339410,    Test Acc:0.866667    Test Loss:0.461705
+i:20    Train Acc:0.875000    Train Loss:0.279647,    Test Acc:0.866667    Test Loss:0.368414
+i:30    Train Acc:0.916667    Train Loss:0.245924,    Test Acc:0.933333    Test Loss:0.314814
+i:40    Train Acc:0.933333    Train Loss:0.222922,    Test Acc:0.933333    Test Loss:0.278643
+i:50    Train Acc:0.933333    Train Loss:0.205636,    Test Acc:0.966667    Test Loss:0.251937</code></pre><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_7_1.png" alt="output_7_1"></p>
+<hr>
+<h1 id="多层神经网络"><a href="#多层神经网络" class="headerlink" title="多层神经网络"></a>多层神经网络</h1><ul>
+<li>具有隐含层的神经网络称为多层神经网络</li>
+</ul>
+<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107101251196.png" alt="image-20221107101251196" style="zoom: 25%;">
+
+<h2 id="1-线性分类器"><a href="#1-线性分类器" class="headerlink" title="1.线性分类器"></a>1.线性分类器</h2><ul>
+<li>与运算</li>
+<li>或运算</li>
+<li>非运算</li>
+<li>对感知机（二分类的线性分类模型）给定一个合适的权值向量即可实现运算</li>
+</ul>
+<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107101405138.png" alt="image-20221107101405138" style="zoom:33%;">
+
+<h2 id="2-通过实现异或运算进而理解多层神经网络"><a href="#2-通过实现异或运算进而理解多层神经网络" class="headerlink" title="2.通过实现异或运算进而理解多层神经网络"></a>2.通过实现异或运算进而理解多层神经网络</h2><ul>
+<li>隐藏层由与运算与或非运算两个感知机组成</li>
+<li>这两个感知机的输出作为下一层神经元的输入</li>
+<li>增加的这一层权值（W）和阈值（B）与前一层的第二个感知机一样，则也是实现了或非运算</li>
+<li>红圈为有计算能力的神经元</li>
+<li>一个感知机对应一根直线</li>
+</ul>
+<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107101503565.png" alt="image-20221107101503565" style="zoom: 50%;">
+
+<h2 id="3-线性不可分数据集的分类思路"><a href="#3-线性不可分数据集的分类思路" class="headerlink" title="3.线性不可分数据集的分类思路"></a>3.线性不可分数据集的分类思路</h2><ul>
+<li>弯曲的直线可以看成是多条直线的线性组合</li>
+<li>其中的每一条直线可以用一个感知机来实现<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107101620753.png" alt="image-20221107101620753" style="zoom: 33%;"></li>
+<li>如果神经网络中有足够的隐藏层，每个隐藏层中有足够多的神经元，神经网络就可以表示任意复杂的函数或空间分布<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107101758824.png" alt="image-20221107101758824" style="zoom:33%;">
+<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107101832691.png" alt="image-20221107101832691" style="zoom:33%;"></li>
+<li><strong>多隐含层神经网络：能够表示非连续的函数或空间区域，减小泛化误差，减小每层神经元的数量</strong></li>
+</ul>
+<h2 id="4-前馈神经网络（Feedforward-Neural-Network）"><a href="#4-前馈神经网络（Feedforward-Neural-Network）" class="headerlink" title="4.前馈神经网络（Feedforward Neural Network）"></a>4.前馈神经网络（Feedforward Neural Network）</h2><ul>
+<li>每层神经元只与前一层的神经元相连</li>
+<li>处于同一层的神经元之间没有连接</li>
+<li>各层间没有反馈，不存在跨层连接<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102034190.png" alt="image-20221107102034190" style="zoom: 50%;"></li>
+<li><strong>万能近似定理：在前馈型神经网络中，只要有一个隐含层，并且这个隐含层中有足够多的神经元，就可以逼近任意一个连续的函数或空间分布</strong></li>
+</ul>
+<h2 id="5-全连接网络（Full-Connected-Network）"><a href="#5-全连接网络（Full-Connected-Network）" class="headerlink" title="5.全连接网络（Full Connected Network）"></a>5.全连接网络（Full Connected Network）</h2><ul>
+<li>每一层中的任何一个节点都与其后面一层的所有节点连接<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102143789.png" alt="image-20221107102143789" style="zoom:50%;"></li>
+<li>第n层中的每个节点接收来自第n-1层中所有节点的输入<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102222409.png" alt="image-20221107102222409" style="zoom:50%;">
+
+</li>
+</ul>
+<h2 id="6-超参数与验证集"><a href="#6-超参数与验证集" class="headerlink" title="6.超参数与验证集"></a>6.超参数与验证集</h2><ul>
+<li>训练集：训练模型，确定模型参数</li>
+<li>验证集：确定超参数</li>
+<li>测试集：评估模型的泛化能力</li>
+</ul>
+<hr>
+<h1 id="误差反向传播算法"><a href="#误差反向传播算法" class="headerlink" title="误差反向传播算法"></a>误差反向传播算法</h1><ul>
+<li>通过误差反向传播法计算梯度<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102259737.png" alt="image-20221107102259737" style="zoom: 50%;"></li>
+<li>先计算输出层对误差的梯度，进而更新输出层的权值<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102350316.png" alt="image-20221107102350316" style="zoom: 33%;"></li>
+<li>再计算隐藏层对误差的梯度，进而更新隐藏层的权值<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102420550.png" alt="image-20221107102420550" style="zoom: 25%;"></li>
+<li>输出端有多个神经元的误差反向传播<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102503633.png" alt="image-20221107102503633" style="zoom:33%;">
+
+</li>
+</ul>
+<hr>
+<h1 id="激活函数"><a href="#激活函数" class="headerlink" title="激活函数"></a>激活函数</h1><h2 id="1-激活函数的性质"><a href="#1-激活函数的性质" class="headerlink" title="1.激活函数的性质"></a>1.激活函数的性质</h2><ul>
+<li>简单的非线性函数</li>
+<li>连续并可导</li>
+<li>单调函数<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102618782.png" alt="image-20221107102618782" style="zoom:25%;">
+
+</li>
+</ul>
+<h2 id="2-常用的激活函数"><a href="#2-常用的激活函数" class="headerlink" title="2.常用的激活函数"></a>2.常用的激活函数</h2><ul>
+<li>logistic函数与Tanh函数<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102808313.png" alt="image-20221107102808313" style="zoom: 33%;"></li>
+<li>ReLU函数（Rectified Linear Unit，修正线性单元）<ul>
+<li>z&gt;0时，导数等于1，缓解了梯度消失问题</li>
+<li>不存在幂运算，计算速度快</li>
+<li>导数恒等于1，训练模型收敛速度快</li>
+<li>输出不是以0为均值的</li>
+<li>z&lt;0时，梯度为0，神经元死亡<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102905651.png" alt="image-20221107102905651" style="zoom:33%;"></li>
+</ul>
+</li>
+<li>Leaky-ReLU函数<ul>
+<li>避免了ReLU神经元死亡</li>
+<li>神经网络的计算和训练速度快</li>
+<li>超参数a需要人工调整<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102942585.png" alt="image-20221107102942585" style="zoom: 25%;">
+
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="实例：多层神经网络实现鸢尾花分类"><a href="#实例：多层神经网络实现鸢尾花分类" class="headerlink" title="实例：多层神经网络实现鸢尾花分类"></a>实例：多层神经网络实现鸢尾花分类</h1><ul>
+<li><p>思路：</p>
+<ul>
+<li>隐藏层激活函数：relu函数</li>
+<li>输出层激活函数：softmax函数</li>
+<li>损失函数：交叉熵损失函数</li>
+<li>W是属性个数（前一层的输入神经元数）×分类数（本层的个数），B是关于分类数的一维向量</li>
+</ul>
+<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107103055953.png" alt="image-20221107103055953" style="zoom: 33%;">
+</li>
+<li><p>具体代码实现：</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#1.导入库，加载数据</span></span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np </span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="comment">#2.下载鸢尾花数据集iris</span></span><br><span class="line"><span class="comment">#训练集</span></span><br><span class="line">TRAIN_URL = <span class="string">&quot;http://download.tensorflow.org/data/iris_training.csv&quot;</span></span><br><span class="line">train_path = tf.keras.utils.get_file(<span class="string">&quot;iris_train.csv&quot;</span>,TRAIN_URL,cache_dir=<span class="string">&quot;D:\App_Data_File\Anaconda_data\jupyter\TensorFlow&quot;</span>)</span><br><span class="line"><span class="comment">#测试集</span></span><br><span class="line">TRAIN_URL = <span class="string">&quot;http://download.tensorflow.org/data/iris_test.csv&quot;</span></span><br><span class="line">test_path = tf.keras.utils.get_file(<span class="string">&quot;iris_test.csv&quot;</span>,TRAIN_URL,cache_dir=<span class="string">&quot;D:\App_Data_File\Anaconda_data\jupyter\TensorFlow&quot;</span>)</span><br><span class="line">df_iris_train=pd.read_csv(train_path,header=<span class="number">0</span>)</span><br><span class="line">df_iris_test=pd.read_csv(test_path,header=<span class="number">0</span>)</span><br><span class="line"><span class="comment">#3.处理数据</span></span><br><span class="line"><span class="comment">#转化为numpy数组</span></span><br><span class="line">iris_train=np.array(df_iris_train)</span><br><span class="line">iris_test=np.array(df_iris_test)</span><br><span class="line"><span class="comment">#取出属性</span></span><br><span class="line">x_train=iris_train[:,<span class="number">0</span>:<span class="number">4</span>]</span><br><span class="line">x_test=iris_test[:,<span class="number">0</span>:<span class="number">4</span>]</span><br><span class="line"><span class="comment">#取出标签</span></span><br><span class="line">y_train=iris_train[:,<span class="number">4</span>]</span><br><span class="line">y_test=iris_test[:,<span class="number">4</span>]</span><br><span class="line"><span class="comment">#对属性值进行标准化处理</span></span><br><span class="line">x_train=x_train-np.mean(x_train,axis=<span class="number">0</span>)<span class="comment">#x_train为120*4</span></span><br><span class="line">x_test=x_test-np.mean(x_test,axis=<span class="number">0</span>)<span class="comment">#x_test为30*4</span></span><br><span class="line"><span class="comment">#生成标签的独热编码</span></span><br><span class="line">X_train=tf.cast(x_train,tf.float32)</span><br><span class="line">Y_train=tf.one_hot(tf.constant(y_train,dtype=tf.int32),<span class="number">3</span>)<span class="comment">#Y_train为120*3</span></span><br><span class="line">X_test=tf.cast(x_test,tf.float32)</span><br><span class="line">Y_test=tf.one_hot(tf.constant(y_test,dtype=tf.int32),<span class="number">3</span>)<span class="comment">#Y_test为130*3</span></span><br><span class="line"><span class="comment">#4.设置超参数学习率与迭代次数</span></span><br><span class="line">learn_rate=<span class="number">0.5</span></span><br><span class="line"><span class="built_in">iter</span>=<span class="number">50</span></span><br><span class="line">display_step=<span class="number">10</span> <span class="comment">#设置每十次迭代输出一次结果</span></span><br><span class="line"><span class="comment">#5.设置模型参数初值W1、B1,W2、B2（重点在此）</span></span><br><span class="line">np.random.seed(<span class="number">612</span>)</span><br><span class="line">W1=tf.Variable(np.random.randn(<span class="number">4</span>,<span class="number">16</span>),dtype=tf.float32)</span><br><span class="line">B1=tf.Variable(np.zeros([<span class="number">16</span>]),dtype=tf.float32)</span><br><span class="line">W2=tf.Variable(np.random.randn(<span class="number">16</span>,<span class="number">3</span>),dtype=tf.float32)</span><br><span class="line">B2=tf.Variable(np.zeros([<span class="number">3</span>]),dtype=tf.float32)</span><br><span class="line"><span class="comment">#6.定义梯度带并构造神经网络模型</span></span><br><span class="line">ce_train=[]<span class="comment">#用来存放训练集的交叉熵损失</span></span><br><span class="line">acc_train=[]<span class="comment">#用来存放训练集的准确率</span></span><br><span class="line">ce_test=[]<span class="comment">#用来存放测试集的交叉熵损失</span></span><br><span class="line">acc_test=[]<span class="comment">#用来存放测试集的准确率</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="built_in">iter</span>+<span class="number">1</span>):</span><br><span class="line">    <span class="keyword">with</span> tf.GradientTape() <span class="keyword">as</span> tape:<span class="comment">#（重点在此）</span></span><br><span class="line">        Hidden_train=tf.nn.relu(tf.matmul(X_train,W1)+B1)</span><br><span class="line">        PRED_train=tf.nn.softmax(tf.matmul(Hidden_train,W2)+B2)<span class="comment">#PRED_train是120*3的矩阵</span></span><br><span class="line">        Loss_train=tf.reduce_mean(tf.keras.losses.categorical_crossentropy(y_true=Y_train,y_pred=PRED_train))</span><br><span class="line">    Hidden_test=tf.nn.relu(tf.matmul(X_test,W1)+B1)</span><br><span class="line">    PRED_test=tf.nn.softmax(tf.matmul(Hidden_test,W2)+B2)</span><br><span class="line">    Loss_test=tf.reduce_mean(tf.keras.losses.categorical_crossentropy(y_true=Y_test,y_pred=PRED_test))</span><br><span class="line">    </span><br><span class="line">    Accuracy_train=tf.reduce_mean(tf.cast(tf.equal(tf.argmax(PRED_train.numpy(),axis=<span class="number">1</span>),y_train),tf.float32))</span><br><span class="line">    Accuracy_test=tf.reduce_mean(tf.cast(tf.equal(tf.argmax(PRED_test.numpy(),axis=<span class="number">1</span>),y_test),tf.float32))</span><br><span class="line">    </span><br><span class="line">    ce_train.append(Loss_train)</span><br><span class="line">    acc_train.append(Accuracy_train)</span><br><span class="line">    ce_test.append(Loss_test)</span><br><span class="line">    acc_test.append(Accuracy_test)</span><br><span class="line">    </span><br><span class="line">    grads=tape.gradient(Loss_train,[W1,B1,W2,B2])</span><br><span class="line">    W1.assign_sub(learn_rate*grads[<span class="number">0</span>])</span><br><span class="line">    B1.assign_sub(learn_rate*grads[<span class="number">1</span>])</span><br><span class="line">    W2.assign_sub(learn_rate*grads[<span class="number">2</span>])</span><br><span class="line">    B2.assign_sub(learn_rate*grads[<span class="number">3</span>])</span><br><span class="line">    <span class="keyword">if</span> i % display_step==<span class="number">0</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;i:%i\tTrain Acc:%f\tTrain Loss:%f,\tTest Acc:%f\tTest Loss:%f&quot;</span>%(i,Accuracy_train,Loss_train,Accuracy_test,Loss_test))</span><br><span class="line"><span class="comment">#7.结果可视化</span></span><br><span class="line">plt.figure(figsize=(<span class="number">10</span>,<span class="number">4</span>))</span><br><span class="line">plt.subplot(<span class="number">121</span>)</span><br><span class="line">plt.plot(ce_train,color=<span class="string">&quot;blue&quot;</span>,label=<span class="string">&quot;Train Loss&quot;</span>)</span><br><span class="line">plt.plot(ce_test,color=<span class="string">&quot;green&quot;</span>,label=<span class="string">&quot;test Loss&quot;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&quot;Iteration&quot;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&quot;Loss&quot;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.subplot(<span class="number">122</span>)</span><br><span class="line">plt.plot(acc_train,color=<span class="string">&quot;blue&quot;</span>,label=<span class="string">&quot;Train acc&quot;</span>)</span><br><span class="line">plt.plot(acc_test,color=<span class="string">&quot;green&quot;</span>,label=<span class="string">&quot;test acc&quot;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&quot;Iteration&quot;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&quot;Accuracy&quot;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<pre><code>i:0    Train Acc:0.433333    Train Loss:2.205641,    Test Acc:0.400000    Test Loss:1.721138
+i:10    Train Acc:0.941667    Train Loss:0.205314,    Test Acc:0.966667    Test Loss:0.249661
+i:20    Train Acc:0.950000    Train Loss:0.149540,    Test Acc:1.000000    Test Loss:0.167103
+i:30    Train Acc:0.958333    Train Loss:0.122346,    Test Acc:1.000000    Test Loss:0.124693
+i:40    Train Acc:0.958333    Train Loss:0.105099,    Test Acc:1.000000    Test Loss:0.099869
+i:50    Train Acc:0.958333    Train Loss:0.092934,    Test Acc:1.000000    Test Loss:0.084885</code></pre><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_20_1.png" alt="output_20_1"></p>
+<hr>
+<h1 id="小批量梯度下降法"><a href="#小批量梯度下降法" class="headerlink" title="小批量梯度下降法"></a>小批量梯度下降法</h1><ul>
+<li>对于多层神经网络，使用梯度下降法，从理论上无法保证一定可以达到最小值</li>
+<li>使用小批量梯度下降法对其进行改进</li>
+<li>影响小批量梯度下降法的主要因素：<ul>
+<li>小批量样本的选择：打乱样本</li>
+<li>批量大小：选择2的幂数，如32、64、128、……</li>
+<li>学习率</li>
+<li>梯度</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="Sequential模型"><a href="#Sequential模型" class="headerlink" title="Sequential模型"></a>Sequential模型</h1><ul>
+<li>其是一个神经网络框架</li>
+<li>只有一组输入和一组输出</li>
+<li>各层按照先后顺序堆叠</li>
+</ul>
+<h2 id="1-建立Sequential模型"><a href="#1-建立Sequential模型" class="headerlink" title="1.建立Sequential模型"></a>1.建立Sequential模型</h2><ul>
+<li><code>model=tf.keras.Sequential()</code></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line">model=tf.keras.Sequential()</span><br><span class="line"><span class="built_in">print</span>(model)</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<pre><code>&lt;tensorflow.python.keras.engine.sequential.Sequential object at 0x0000014AC0B9FD90&gt;</code></pre><h3 id="1-1-添加全连接层"><a href="#1-1-添加全连接层" class="headerlink" title="1.1 添加全连接层"></a>1.1 添加全连接层</h3><ul>
+<li><code>model.add(tf.keras.layers)</code></li>
+<li><code>tf.keras.layers.Dense(inputs,activation,input_shape)</code><ul>
+<li>inputs: 本层神经元的个数</li>
+<li>activation: 激活函数(“relu”、”softmax”、”sigmoid”、”tanh”</li>
+<li>input_shape: 输入数据的形状</li>
+</ul>
+</li>
+<li>示例：<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107103755860.png" alt="image-20221107103755860" style="zoom:33%;">
+
+
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line">model=tf.keras.Sequential()</span><br><span class="line">model.add(tf.keras.layers.Dense(<span class="number">8</span>,activation=<span class="string">&quot;relu&quot;</span>,input_shape=(<span class="number">4</span>,)))</span><br><span class="line">model.add(tf.keras.layers.Dense(<span class="number">4</span>,activation=<span class="string">&quot;relu&quot;</span>))</span><br><span class="line">model.add(tf.keras.layers.Dense(<span class="number">3</span>,activation=<span class="string">&quot;softmax&quot;</span>))</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-2-查看摘要"><a href="#1-2-查看摘要" class="headerlink" title="1.2 查看摘要"></a>1.2 查看摘要</h3><ul>
+<li><code>model.summary()</code></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">model.summary()</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<pre><code>Model: &quot;sequential_8&quot;
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+dense_15 (Dense)             (None, 8)                 40        
+_________________________________________________________________
+dense_16 (Dense)             (None, 4)                 36        
+_________________________________________________________________
+dense_17 (Dense)             (None, 3)                 15        
+=================================================================
+Total params: 91
+Trainable params: 91
+Non-trainable params: 0
+_________________________________________________________________</code></pre><h2 id="2-配置训练方法"><a href="#2-配置训练方法" class="headerlink" title="2.配置训练方法"></a>2.配置训练方法</h2><ul>
+<li><code>model.compile(loss,optimizer,metrics)</code></li>
+</ul>
+<h3 id="2-1-常用的损失函数loss"><a href="#2-1-常用的损失函数loss" class="headerlink" title="2.1 常用的损失函数loss"></a>2.1 常用的损失函数loss</h3><ul>
+<li>对于多分类交叉熵损失函数<ul>
+<li>当标签的编码为独热编码时，采用”categorical_crossentropy”</li>
+<li>当标签的编码为自然顺序码时，采用”sparse_categorical_crossentropy”</li>
+<li>from_logits=False表示神经网络在输出前，已经使用softmax函数将预测结果变成了概率分布，否则设置为True<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107104412770.png" alt="image-20221107104412770" style="zoom: 33%;">
+
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-2-优化器optimizer"><a href="#2-2-优化器optimizer" class="headerlink" title="2.2 优化器optimizer"></a>2.2 优化器optimizer</h3><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107104453525.png" alt="image-20221107104453525" style="zoom: 25%;">
+
+<h3 id="2-3-评估函数metrics"><a href="#2-3-评估函数metrics" class="headerlink" title="2.3 评估函数metrics"></a>2.3 评估函数metrics</h3><ul>
+<li>keras模型性能评估函数<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107104601631.png" alt="image-20221107104601631" style="zoom:50%;"></li>
+<li>可以使用model.metrics_names查看评估函数</li>
+</ul>
+<h2 id="3-训练模型"><a href="#3-训练模型" class="headerlink" title="3.训练模型"></a>3.训练模型</h2><ul>
+<li><code>model.fit()</code><ul>
+<li>validation_data与validation_split二选一</li>
+<li>validation_freq：每隔多少次训练，使用测试集计算并输出一次评测指标</li>
+<li>verbose:<ul>
+<li>=0：不在标准输出流输出</li>
+<li>=1：输出进度条记录</li>
+<li>=2：每个epoch输出一行记录</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107104731779.png" alt="image-20221107104731779" style="zoom:33%;">
+
+<ul>
+<li><p>model.fit()初始值</p>
+<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107104829486.png" alt="image-20221107104829486" style="zoom:33%;">
+</li>
+<li><p><code>history=model.fit();history.history</code></p>
+<ul>
+<li>其以字典的形式分别返回训练集和测试集的损失和准确率</li>
+</ul>
+</li>
+</ul>
+<h2 id="4-评估模型"><a href="#4-评估模型" class="headerlink" title="4.评估模型"></a>4.评估模型</h2><ul>
+<li><code>model.evaluate(test_set_x,test_set_y,batch_size,verbose)</code></li>
+</ul>
+<h2 id="5-使用模型"><a href="#5-使用模型" class="headerlink" title="5.使用模型"></a>5.使用模型</h2><ul>
+<li><code>model.predict(x,batch_size,verbose) #x为数据的属性值</code></li>
+</ul>
+<h2 id="6-模型的保存与加载"><a href="#6-模型的保存与加载" class="headerlink" title="6.模型的保存与加载"></a>6.模型的保存与加载</h2><h3 id="仅保存神经网络的模型参数"><a href="#仅保存神经网络的模型参数" class="headerlink" title="仅保存神经网络的模型参数"></a>仅保存神经网络的模型参数</h3><ul>
+<li>保存：<code>model.save_weights()</code>#相当于替代了model.fit()<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107104943429.png" alt="image-20221107104943429" style="zoom:33%;"></li>
+<li>加载：<code>model.load_weights()</code></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">model2.save_weights(<span class="string">&quot;mnist_save_weights.h5&quot;</span>)</span><br><span class="line">model2.load_weights(<span class="string">&quot;mnist_save_weights.h5&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="保存整个模型"><a href="#保存整个模型" class="headerlink" title="保存整个模型"></a>保存整个模型</h3><ul>
+<li><code>model.save()</code><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107105022947.png" alt="image-20221107105022947" style="zoom:33%;"></li>
+<li><code>tf.keras.models.load_model()</code></li>
+</ul>
+<hr>
+<h1 id="实例：Sequential实现手写数字识别"><a href="#实例：Sequential实现手写数字识别" class="headerlink" title="实例：Sequential实现手写数字识别"></a>实例：Sequential实现手写数字识别</h1><h2 id="1-设计神经网络结构"><a href="#1-设计神经网络结构" class="headerlink" title="1.设计神经网络结构"></a>1.设计神经网络结构</h2><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107105108812.png" alt="image-20221107105108812"></p>
+<h2 id="2-代码实现"><a href="#2-代码实现" class="headerlink" title="2.代码实现"></a>2.代码实现</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#1.导入库</span></span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="comment">#2.加载数据</span></span><br><span class="line">mnist=tf.keras.datasets.mnist</span><br><span class="line">(train_x,train_y),(test_x,test_y)=mnist.load_data(path=<span class="string">&quot;D:\App_Data_File\Anaconda_data\jupyter\image\mnist.npz&quot;</span>)</span><br><span class="line"><span class="comment">#3.数据预处理:对属性进行归一化并转化为Tensor张量</span></span><br><span class="line">X_train,X_test=tf.cast(train_x/<span class="number">255.0</span>,tf.float32),tf.cast(test_x/<span class="number">255.0</span>,tf.float32)</span><br><span class="line">y_train,y_test = tf.cast(train_y,tf.int16),tf.cast(test_y,tf.int16)</span><br><span class="line"><span class="comment">#4.建立模型</span></span><br><span class="line">model2=tf.keras.Sequential()</span><br><span class="line">model2.add(tf.keras.layers.Flatten(input_shape=(<span class="number">28</span>,<span class="number">28</span>)))<span class="comment">#将输入的数据形状拉直</span></span><br><span class="line">model2.add(tf.keras.layers.Dense(<span class="number">128</span>,activation=<span class="string">&quot;relu&quot;</span>))</span><br><span class="line">model2.add(tf.keras.layers.Dense(<span class="number">10</span>,activation=<span class="string">&quot;softmax&quot;</span>))</span><br><span class="line">model2.summary()</span><br><span class="line"><span class="built_in">print</span>(<span class="number">80</span>*<span class="string">&quot;*&quot;</span>)</span><br><span class="line"><span class="comment">#5.配置训练方法</span></span><br><span class="line">model2.<span class="built_in">compile</span>(optimizer=<span class="string">&quot;adam&quot;</span>,loss=<span class="string">&quot;sparse_categorical_crossentropy&quot;</span>,metrics=[<span class="string">&quot;sparse_categorical_accuracy&quot;</span>])</span><br><span class="line"><span class="comment">#6.训练模型</span></span><br><span class="line">model2.fit(X_train,y_train,batch_size=<span class="number">64</span>,epochs=<span class="number">5</span>,validation_split=<span class="number">0.2</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="number">80</span>*<span class="string">&quot;*&quot;</span>)</span><br><span class="line"><span class="comment">#7.评估模型</span></span><br><span class="line">model2.evaluate(X_test,y_test,verbose=<span class="number">2</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="number">80</span>*<span class="string">&quot;*&quot;</span>)</span><br><span class="line"><span class="comment">#8.使用模型</span></span><br><span class="line"><span class="built_in">print</span>(model2.predict(tf.reshape(X_test[<span class="number">0</span>], (<span class="number">1</span>, <span class="number">28</span>, <span class="number">28</span>))))</span><br><span class="line"><span class="built_in">print</span>(np.argmax(model2.predict(tf.reshape(X_test[<span class="number">0</span>], (<span class="number">1</span>, <span class="number">28</span>, <span class="number">28</span>)))))  </span><br><span class="line">plt.rcParams[<span class="string">&quot;font.sans-serif&quot;</span>]=<span class="string">&quot;SimHei&quot;</span></span><br><span class="line"><span class="comment"># 下面取出测试集中的前4个数据进行识别</span></span><br><span class="line">y_pred = np.argmax(model2.predict(X_test[<span class="number">0</span>:<span class="number">4</span>]), axis=<span class="number">1</span>)</span><br><span class="line">plt.figure()</span><br><span class="line">plt.suptitle(<span class="string">&quot;取出测试集中的前4个数据进行识别&quot;</span>, fontsize=<span class="number">20</span>, color=<span class="string">&quot;green&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):</span><br><span class="line">    plt.subplot(<span class="number">2</span>, <span class="number">2</span>, i+<span class="number">1</span>)</span><br><span class="line">    plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">    plt.imshow(test_x[i], cmap=<span class="string">&quot;gray&quot;</span>)  <span class="comment"># cmap=&quot;gray&quot;表示绘制的是灰度图</span></span><br><span class="line">    plt.title(<span class="string">&quot;y= &quot;</span>+<span class="built_in">str</span>(test_y[i]) + <span class="string">&quot;\n&quot;</span> + <span class="string">&quot;y_pred=&quot;</span> + <span class="built_in">str</span>(y_pred[i]))</span><br><span class="line">plt.tight_layout(rect=[<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0.98</span>])</span><br><span class="line"><span class="comment"># 下面再随机取出测试集中的任意4个数据进行识别</span></span><br><span class="line">plt.figure()</span><br><span class="line">plt.suptitle(<span class="string">&quot;随机取出测试集中的任意4个数据进行识别&quot;</span>, fontsize=<span class="number">20</span>, color=<span class="string">&quot;blue&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):</span><br><span class="line">    num = np.random.randint(<span class="number">1</span>, <span class="number">10000</span>)</span><br><span class="line">    plt.subplot(<span class="number">2</span>, <span class="number">2</span>, i+<span class="number">1</span>)</span><br><span class="line">    plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">    plt.imshow(test_x[num], cmap=<span class="string">&quot;gray&quot;</span>)</span><br><span class="line">    y_pred = np.argmax(model2.predict(tf.reshape(X_test[num],(<span class="number">1</span>, <span class="number">28</span>, <span class="number">28</span>))))</span><br><span class="line">    plt.title(<span class="string">&quot;y= &quot;</span>+<span class="built_in">str</span>(test_y[num]) + <span class="string">&quot;\n&quot;</span> + <span class="string">&quot;y_pred=&quot;</span> + <span class="built_in">str</span>(y_pred))</span><br><span class="line">plt.tight_layout(rect=[<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0.98</span>])</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<pre><code>Model: &quot;sequential_3&quot;
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+flatten_3 (Flatten)          (None, 784)               0         
+_________________________________________________________________
+dense_6 (Dense)              (None, 128)               100480    
+_________________________________________________________________
+dense_7 (Dense)              (None, 10)                1290      
+=================================================================
+Total params: 101,770
+Trainable params: 101,770
+Non-trainable params: 0
+_________________________________________________________________
+********************************************************************************
+Epoch 1/5
+750/750 [==============================] - 4s 4ms/step - loss: 0.3279 - sparse_categorical_accuracy: 0.9079 - val_loss: 0.1745 - val_sparse_categorical_accuracy: 0.9503
+Epoch 2/5
+750/750 [==============================] - 3s 4ms/step - loss: 0.1517 - sparse_categorical_accuracy: 0.9566 - val_loss: 0.1307 - val_sparse_categorical_accuracy: 0.9626
+Epoch 3/5
+750/750 [==============================] - 2s 2ms/step - loss: 0.1087 - sparse_categorical_accuracy: 0.9691 - val_loss: 0.1137 - val_sparse_categorical_accuracy: 0.9668
+Epoch 4/5
+750/750 [==============================] - 1s 1ms/step - loss: 0.0830 - sparse_categorical_accuracy: 0.9752 - val_loss: 0.1081 - val_sparse_categorical_accuracy: 0.9678
+Epoch 5/5
+750/750 [==============================] - 1s 2ms/step - loss: 0.0649 - sparse_categorical_accuracy: 0.9801 - val_loss: 0.1021 - val_sparse_categorical_accuracy: 0.9694
+********************************************************************************
+313/313 - 0s - loss: 0.0890 - sparse_categorical_accuracy: 0.9732
+********************************************************************************
+[[4.3734741e-07 4.9217494e-08 1.3537046e-04 1.3679784e-03 1.0147285e-09
+  6.0127795e-06 8.5093779e-11 9.9846399e-01 5.7829629e-06 2.0411160e-05]]
+7</code></pre><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_43_1.png" alt="output_43_1"></p>
+<p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_43_2.png" alt="output_43_2"></p>
+]]></content>
+      <categories>
+        <category>学习积累</category>
+      </categories>
+      <tags>
+        <tag>神经网络</tag>
         <tag>TensorFlow</tag>
         <tag>深度学习</tag>
       </tags>

@@ -22,18 +22,27 @@
     var CONFIG = {"hostname":"xn--ssy-lq6e63gg6fuu2d.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="本节主要介绍了">
+  <meta name="description" content="本节主要介绍了流水线的相关基础知识">
 <meta property="og:type" content="article">
 <meta property="og:title" content="计算机体系结构之指令系统">
 <meta property="og:url" content="http://ssy的小天地.com/2023/08/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8A%80%E6%9C%AF/index.html">
 <meta property="og:site_name" content="ssy的小天地">
-<meta property="og:description" content="本节主要介绍了">
+<meta property="og:description" content="本节主要介绍了流水线的相关基础知识">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/08/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8A%80%E6%9C%AF/image-20230804102006973.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/08/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8A%80%E6%9C%AF/image-20230804103817743.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/08/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8A%80%E6%9C%AF/image-20230804110313673.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/08/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8A%80%E6%9C%AF/image-20230804114637409.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/08/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8A%80%E6%9C%AF/image-20230804183304160.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/08/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8A%80%E6%9C%AF/image-20230804183540421.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/08/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8A%80%E6%9C%AF/image-20230804183356816.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/08/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8A%80%E6%9C%AF/image-20230804183419046.png">
 <meta property="article:published_time" content="2023-08-04T00:07:12.000Z">
-<meta property="article:modified_time" content="2023-08-04T01:47:44.029Z">
+<meta property="article:modified_time" content="2023-08-04T12:56:55.675Z">
 <meta property="article:author" content="ssy">
 <meta property="article:tag" content="计算机体系结构">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/08/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8A%80%E6%9C%AF/image-20230804102006973.png">
 
 <link rel="canonical" href="http://ssy的小天地.com/2023/08/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8A%80%E6%9C%AF/">
 
@@ -232,7 +241,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2023-08-04 08:07:12 / 修改时间：09:47:44" itemprop="dateCreated datePublished" datetime="2023-08-04T08:07:12+08:00">2023-08-04</time>
+              <time title="创建时间：2023-08-04 08:07:12 / 修改时间：20:56:55" itemprop="dateCreated datePublished" datetime="2023-08-04T08:07:12+08:00">2023-08-04</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -262,9 +271,189 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>本节主要介绍了</p>
+        <p>本节主要介绍了流水线的相关基础知识</p>
 <span id="more"></span>
 
+<h1 id="流水线基本概念"><a href="#流水线基本概念" class="headerlink" title="流水线基本概念"></a>流水线基本概念</h1><h2 id="1-流水线的特点"><a href="#1-流水线的特点" class="headerlink" title="1.流水线的特点"></a>1.流水线的特点</h2><ul>
+<li>流水过程由多个相关的子过程组成，这些子过程称为流水线的“级”或“段”，“段”的数目称为流水线的“深度”</li>
+<li>每个子过程由专用的功能段实现</li>
+<li>各功能段的时间应基本相等，通常为1个时钟周期（1拍）</li>
+<li>流水线需要经过<strong>一定的通过时间</strong>才能稳定</li>
+<li>流水技术适合于<strong>大量重复</strong>的时序过程</li>
+</ul>
+<h2 id="2-流水线的分类"><a href="#2-流水线的分类" class="headerlink" title="2.流水线的分类"></a>2.流水线的分类</h2><ul>
+<li><p>按流水线所<strong>完成的功能</strong>分类：</p>
+<ul>
+<li><p>单功能流水线，是指只能完成一种固定功能的流水线</p>
+</li>
+<li><p>多功能流水线，是指各段可以进行不同的连接，从而完成不同的功能</p>
+<img src="/2023/08/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8A%80%E6%9C%AF/image-20230804102006973.png" alt="image-20230804102006973" style="zoom:50%;">
+</li>
+</ul>
+</li>
+<li><p>按<strong>同一时间内流水线的连接方式</strong>划分</p>
+<ul>
+<li>静态流水线，是指在同一时间内，流水线的各段只能按同一种功能的连接方式工作</li>
+<li>动态流水线，是指在同一时间内，当某些段正在实现某种运算时，另一些段却在实现另一种运算</li>
+</ul>
+</li>
+<li><p>按<strong>流水的级别</strong>划分</p>
+<ul>
+<li>部件级流水线，又叫运算操作流水线，是把处理机的算术逻辑部件分段，使得各种数据类型的操作能够进行流水</li>
+<li>处理机级流水线，又叫指令流水线，是把解释指令的过程按照流水方式处理</li>
+<li>处理时间流水线，又叫宏流水线，是由两个以上的处理机串行地对同一数据流进行处理，每个处理机完成一项任务</li>
+</ul>
+</li>
+<li><p>按照<strong>数据</strong>表示来进行分类</p>
+<ul>
+<li>标量流水处理机，是指处理机不具有向量数据表示，仅对标量数据进行流水处理</li>
+<li>向量流水处理机，是指处理机具有向量数据表示，并通过向量指令对向量的各元素进行处理</li>
+</ul>
+</li>
+<li><p>按照是否有<strong>反馈回路</strong>来进行分类</p>
+<ul>
+<li><p>线性流水线，是指流水线的各段串行连接，没有反馈回路</p>
+</li>
+<li><p>非线性流水线，是指流水线种除有串行连接的通路外，还有反馈回路</p>
+<ul>
+<li>但其存在流水线调度问题</li>
+<li>确定什么时候向流水线引进新的输入，从而使新输入的数据和先前操作的反馈数据流水线中不产生冲突，此即所谓流水线调度问题</li>
+</ul>
+<p><img src="/2023/08/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8A%80%E6%9C%AF/image-20230804103817743.png" alt="image-20230804103817743"></p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="MIPS基本流水线"><a href="#MIPS基本流水线" class="headerlink" title="MIPS基本流水线"></a>MIPS基本流水线</h1><h2 id="1-实现MIPS指令的一种简单数据通路"><a href="#1-实现MIPS指令的一种简单数据通路" class="headerlink" title="1.实现MIPS指令的一种简单数据通路"></a>1.实现MIPS指令的一种简单数据通路</h2><img src="/2023/08/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8A%80%E6%9C%AF/image-20230804110313673.png" alt="image-20230804110313673" style="zoom:50%;">
+
+<ul>
+<li><p>这是一种非流水方式</p>
+</li>
+<li><p>将指令执行划分为5个阶段：</p>
+<ul>
+<li><p>取指令周期（IF）</p>
+<ul>
+<li><p>根据PC值从存储器中取出指令，并将指令送入指令寄存器IR，PC值增加4，指向顺序的下一条指令，</p>
+</li>
+<li><p>并将下一条指令的地址放入临时寄存器NPC中<br>$$<br>IR\leftarrow Mem[PC]\\NPC\leftarrow PC+4<br>$$</p>
+</li>
+</ul>
+</li>
+<li><p>指令译码/读寄存器周期（ID）</p>
+<ul>
+<li><p>进行指令译码，读取IR寄存器（指令寄存器），按照相应寄存器号读寄存器文件，并将读出结果放入两个临时寄存器A和B中</p>
+</li>
+<li><p>同时对IR寄存器中内容的低16位进行符号扩展，然后将符号扩展后的32位立即值保存在临时寄存器Imm中<br>$$<br>A\leftarrow Regs[IR_{6..10}]\\B\leftarrow Regs[IR_{11..15}]\\Imm\leftarrow ((IR_{16})^{16}##IR_{16..31})<br>$$</p>
+</li>
+</ul>
+</li>
+<li><p>执行/有效地址计算周期（EX）</p>
+<ul>
+<li>存储器访问：$ALUoutput\leftarrow A+Imm$</li>
+<li>寄存器-寄存器ALU：$ALUoutput\leftarrow A,op,B$</li>
+<li>寄存器-立即数ALU：$ALUoutput\leftarrow A, op, Imm$</li>
+<li>分支操作：$ALUoutput\leftarrow NPC+Imm\quad Cond\leftarrow (A,op, 0)$</li>
+</ul>
+</li>
+<li><p>存储器访问/分支完成周期（MEM）</p>
+<ul>
+<li><p>访问操作：</p>
+<ul>
+<li>$Load:\quad LMD\leftarrow LMDMEN[ALUoutput]$</li>
+<li>$Store:\quad Mem[ALUoutput]\leftarrow B$</li>
+</ul>
+</li>
+<li><p>分支操作：<br>$$<br>if,(Cond),PC\leftarrow ALUouput\<br>else, PC\leftarrow NPC<br>$$</p>
+</li>
+</ul>
+</li>
+<li><p>写回周期（WB）</p>
+<ul>
+<li>寄存器-寄存器型ALU指令：$Reg[IR_{16..20}]\leftarrow ALUoutput$</li>
+<li>寄存器-立即值型ALU指令：$Reg[IR_{11..15}]\leftarrow ALUoutput$</li>
+<li>Load指令：$Reg[IR_{11..15}]\leftarrow LMD$</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-一种简单的MIPS流水线"><a href="#2-一种简单的MIPS流水线" class="headerlink" title="2.一种简单的MIPS流水线"></a>2.一种简单的MIPS流水线</h2><ul>
+<li><p>数据通路中的每一个周期成为流水线的一段</p>
+</li>
+<li><p>每个时钟周期启动一条指令</p>
+<p><img src="/2023/08/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8A%80%E6%9C%AF/image-20230804114637409.png" alt="image-20230804114637409"></p>
+</li>
+<li><p>实现流水技术应解决的一些问题</p>
+<ul>
+<li>应保证流水线各段不会在同一时钟周期内使用相同的寄存器通路资源</li>
+<li>PC计算问题：为了能够在每个时钟周期启动一条新的指令，流水线必须在IF段获取下一条指令的地址，并将其保存在PC中</li>
+<li>合理划分流水段，每段内的操作必须在一个时钟周期内完成</li>
+<li>流水线寄存器设计：为防止寄存器中的值在为流水线中某条指令所用时被流水线中其他的指令所重写，可在流水线各段时间设置流水线寄存器文件，也称锁存器</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="流水线性能分析"><a href="#流水线性能分析" class="headerlink" title="流水线性能分析"></a>流水线性能分析</h1><h2 id="1-吞吐率"><a href="#1-吞吐率" class="headerlink" title="1.吞吐率"></a>1.吞吐率</h2><ul>
+<li><p>是衡量流水线速度的重要指标</p>
+</li>
+<li><p><strong>吞吐率</strong>：是指单位时间内流水线所完成的任务数或输出结果的数量</p>
+</li>
+<li><p><strong>最大吞吐率</strong>$TP_{max}$：是指流水线在达到稳定状态后所得到的吞吐率</p>
+<ul>
+<li><p>假设流水线各段的时间相等，均为$\Delta t_0$，则：<br>$$<br>TP_{max}=\frac 1{\Delta t_0}<br>$$</p>
+</li>
+<li><p>假设流水线各段的时间不相等，第i段的时间为$\Delta t_i$，则：<br>$$<br>TP_{max}=\frac 1{max(\Delta t_i)}<br>$$</p>
+</li>
+<li><p>最大吞吐率取决于流水线中最慢一段所需要的时间，该段为流水线的瓶颈</p>
+</li>
+</ul>
+</li>
+<li><p><strong>实际吞吐率</strong>$TP$：设流水线由m段组成，完成n个任务的吞吐率称为实际吞吐率</p>
+<ul>
+<li><p>若各段时间相等（假设均为$\Delta t_0$），则完成时间：<br>$$<br>T_{流水}=m\Delta t_0+(n-1)\Delta t_0<br>$$<br><img src="/2023/08/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8A%80%E6%9C%AF/image-20230804183304160.png" alt="image-20230804183304160"></p>
+</li>
+<li><p>则实际吞吐率为：<br>$$<br>TP=\frac{n}{T_{流水}}=\frac{n}{m\Delta t_0+(n-1)\Delta t_0}=\frac{TP_{max}}{1+\frac{m-1}{n}}<br>$$</p>
+</li>
+<li><p>若各段时间不等（假设第i段为$\Delta t_i$），且假设$\Delta t_j=max{\Delta t_i}$，则完成时间：<br>$$<br>T=\sum_{i=1}^m\Delta t_i+(n-1)\Delta t_j<br>$$</p>
+</li>
+<li><p>则实际吞吐率为：<br>$$<br>TP=\frac{n}{\sum_{i=1}^m\Delta t_i+(n-1)\Delta t_j}<br>$$</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-加速比"><a href="#2-加速比" class="headerlink" title="2.加速比"></a>2.加速比</h2><ul>
+<li><p>加速比S是指流水线速度与等功能的非流水线速度之比<br>$$<br>S=\frac{T_{非流水}}{T_{流水}}<br>$$</p>
+</li>
+<li><p>若流水线为m段，每段时间均为$\Delta t_0$，则：<br>$$<br>T_{非流水}=nm\Delta t_0<br>$$</p>
+<p>$$<br>T_{流水}=m\Delta t_0+(n-1)\Delta t_0<br>$$</p>
+<p>$$<br>S=\frac{mn}{m+n-1}=\frac{m}{1+\frac{m-1}{n}}<br>$$</p>
+</li>
+</ul>
+<p><img src="/2023/08/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8A%80%E6%9C%AF/image-20230804183540421.png" alt="image-20230804183540421"></p>
+<h2 id="3-效率"><a href="#3-效率" class="headerlink" title="3.效率"></a>3.效率</h2><ul>
+<li><p>效率是指流水线的设备利用率</p>
+</li>
+<li><p>由于流水线有<strong>通过时间</strong>和<strong>排空时间</strong>，所以流水线的各段并非一直满负荷工作，E&lt;1</p>
+<p><img src="/2023/08/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8A%80%E6%9C%AF/image-20230804183356816.png" alt="image-20230804183356816"></p>
+</li>
+<li><p>若各段时间相等，则各段效率也相等，即e1=e2=e3……=$n\Delta t_0/T_{流水}$</p>
+</li>
+<li><p>整个流水线效率：<br>$$<br>E=\frac{n\Delta t_0}{T_{流水}}=\frac{n}{m+n-1}=\frac{1}{1+\frac{m-1}{n}}<br>$$<br><img src="/2023/08/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8A%80%E6%9C%AF/image-20230804183419046.png" alt="image-20230804183419046"></p>
+</li>
+<li><p>当$n&gt;&gt;m$时，$E\approx1$</p>
+</li>
+</ul>
+<h2 id="4-吞吐率、加速比和效率的关系"><a href="#4-吞吐率、加速比和效率的关系" class="headerlink" title="4.吞吐率、加速比和效率的关系"></a>4.吞吐率、加速比和效率的关系</h2><ul>
+<li><p>效率是实际加速比S与最大加速比m之比<br>$$<br>E=\frac{n\Delta t_0}{T_{流水}}=\frac{mn\Delta t_0}{T_{流水}m}=\frac Sm<br>$$</p>
+</li>
+<li><p>当$\Delta t_0$不变时，流水线的效率与吞吐率呈正比，为了提高效率而采取的措施，也有助于提高吞吐率<br>$$<br>E=\frac{n\Delta t_0}{T_{流水}}=\frac{n}{T_{流水}}.\Delta t_0=TP\Delta t_0<br>$$</p>
+</li>
+</ul>
+<hr>
+<h1 id="向量处理机"><a href="#向量处理机" class="headerlink" title="向量处理机"></a>向量处理机</h1><ul>
+<li>向量处理机：具有向量数据表示和相应向量指令的流水线处理机称为向量流水线处理机，也称向量处理机</li>
+</ul>
 
     </div>
 
@@ -377,6 +566,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B5%81%E6%B0%B4%E7%BA%BF%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">流水线基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%B5%81%E6%B0%B4%E7%BA%BF%E7%9A%84%E7%89%B9%E7%82%B9"><span class="nav-number">1.1.</span> <span class="nav-text">1.流水线的特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%B5%81%E6%B0%B4%E7%BA%BF%E7%9A%84%E5%88%86%E7%B1%BB"><span class="nav-number">1.2.</span> <span class="nav-text">2.流水线的分类</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MIPS%E5%9F%BA%E6%9C%AC%E6%B5%81%E6%B0%B4%E7%BA%BF"><span class="nav-number">2.</span> <span class="nav-text">MIPS基本流水线</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%AE%9E%E7%8E%B0MIPS%E6%8C%87%E4%BB%A4%E7%9A%84%E4%B8%80%E7%A7%8D%E7%AE%80%E5%8D%95%E6%95%B0%E6%8D%AE%E9%80%9A%E8%B7%AF"><span class="nav-number">2.1.</span> <span class="nav-text">1.实现MIPS指令的一种简单数据通路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%B8%80%E7%A7%8D%E7%AE%80%E5%8D%95%E7%9A%84MIPS%E6%B5%81%E6%B0%B4%E7%BA%BF"><span class="nav-number">2.2.</span> <span class="nav-text">2.一种简单的MIPS流水线</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90"><span class="nav-number">3.</span> <span class="nav-text">流水线性能分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%90%9E%E5%90%90%E7%8E%87"><span class="nav-number">3.1.</span> <span class="nav-text">1.吞吐率</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%8A%A0%E9%80%9F%E6%AF%94"><span class="nav-number">3.2.</span> <span class="nav-text">2.加速比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%95%88%E7%8E%87"><span class="nav-number">3.3.</span> <span class="nav-text">3.效率</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%90%9E%E5%90%90%E7%8E%87%E3%80%81%E5%8A%A0%E9%80%9F%E6%AF%94%E5%92%8C%E6%95%88%E7%8E%87%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">3.4.</span> <span class="nav-text">4.吞吐率、加速比和效率的关系</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%91%E9%87%8F%E5%A4%84%E7%90%86%E6%9C%BA"><span class="nav-number">4.</span> <span class="nav-text">向量处理机</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
