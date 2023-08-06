@@ -24,18 +24,18 @@
 
   <meta name="description" content="本节主要介绍了">
 <meta property="og:type" content="article">
-<meta property="og:title" content="计算机体系结构之指令级并行">
-<meta property="og:url" content="http://ssy的小天地.com/2023/08/05/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%8C%87%E4%BB%A4%E7%BA%A7%E5%B9%B6%E8%A1%8C/index.html">
+<meta property="og:title" content="线性代数之矩阵">
+<meta property="og:url" content="http://ssy的小天地.com/2023/08/06/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%E4%B9%8B%E7%9F%A9%E9%98%B5/index.html">
 <meta property="og:site_name" content="ssy的小天地">
 <meta property="og:description" content="本节主要介绍了">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-08-05T00:07:12.000Z">
-<meta property="article:modified_time" content="2023-08-05T03:55:06.241Z">
+<meta property="article:published_time" content="2023-08-06T02:07:12.000Z">
+<meta property="article:modified_time" content="2023-08-06T08:45:20.717Z">
 <meta property="article:author" content="ssy">
-<meta property="article:tag" content="计算机体系结构">
+<meta property="article:tag" content="线性代数">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://ssy的小天地.com/2023/08/05/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%8C%87%E4%BB%A4%E7%BA%A7%E5%B9%B6%E8%A1%8C/">
+<link rel="canonical" href="http://ssy的小天地.com/2023/08/06/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%E4%B9%8B%E7%9F%A9%E9%98%B5/">
 
 
 <script id="page-configurations">
@@ -48,7 +48,7 @@
   };
 </script>
 
-  <title>计算机体系结构之指令级并行 | ssy的小天地</title>
+  <title>线性代数之矩阵 | ssy的小天地</title>
   
 
 
@@ -205,7 +205,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://ssy的小天地.com/2023/08/05/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%8C%87%E4%BB%A4%E7%BA%A7%E5%B9%B6%E8%A1%8C/">
+    <link itemprop="mainEntityOfPage" href="http://ssy的小天地.com/2023/08/06/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%E4%B9%8B%E7%9F%A9%E9%98%B5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/ssy.png">
@@ -218,7 +218,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          计算机体系结构之指令级并行
+          线性代数之矩阵
         </h1>
 
         <div class="post-meta">
@@ -232,7 +232,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2023-08-05 08:07:12 / 修改时间：11:55:06" itemprop="dateCreated datePublished" datetime="2023-08-05T08:07:12+08:00">2023-08-05</time>
+              <time title="创建时间：2023-08-06 10:07:12 / 修改时间：16:45:20" itemprop="dateCreated datePublished" datetime="2023-08-06T10:07:12+08:00">2023-08-06</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -264,6 +264,183 @@
       
         <p>本节主要介绍了</p>
 <span id="more"></span>
+
+<h1 id="矩阵概念"><a href="#矩阵概念" class="headerlink" title="矩阵概念"></a>矩阵概念</h1><ul>
+<li>矩阵的定义：由一些数构成的$m\times n$的数表<br>$$<br>A_{m\times n} = \begin{bmatrix}<br>a_{11} &amp; a_{12} &amp; \dots &amp; a_{1n}\<br>a_{21} &amp; a_{21} &amp; \dots &amp; a_{2n}\<br>\dots &amp; \dots &amp; \dots &amp; \dots \<br>a_{m1} &amp; a_{m2} &amp; \dots &amp; a_{mn}\<br>\end{bmatrix}<br>$$</li>
+</ul>
+<ul>
+<li><p><strong>矩阵和行列式的区别</strong>：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>行列式</th>
+<th>矩阵</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>本质</td>
+<td>一个数</td>
+<td>数表</td>
+</tr>
+<tr>
+<td>符号</td>
+<td>| |</td>
+<td>[ ]或( )</td>
+</tr>
+<tr>
+<td>形状</td>
+<td>行数=列数，是方形</td>
+<td>行数$\neq$列数（也可等）</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>方阵：矩阵中若行数=列数，则称为n阶方阵$A_{n\times n},or,A_n$</p>
+</li>
+<li><p>单位阵$E$：主对角线上的数均为1，其余均为0，<strong>单位阵一定是方阵</strong></p>
+</li>
+<li><p>同形矩阵：行列数均相等的矩阵，<strong>两个矩阵相等的前提必须是同形矩阵</strong></p>
+</li>
+</ul>
+<hr>
+<h1 id="矩阵运算"><a href="#矩阵运算" class="headerlink" title="矩阵运算"></a>矩阵运算</h1><h2 id="1-矩阵加减法"><a href="#1-矩阵加减法" class="headerlink" title="1.矩阵加减法"></a>1.矩阵加减法</h2><ul>
+<li>矩阵的加减法：将两个矩阵中对应的元素相加减，必须是同形矩阵才能相加减</li>
+</ul>
+<h2 id="2-矩阵乘法"><a href="#2-矩阵乘法" class="headerlink" title="2.矩阵乘法"></a>2.矩阵乘法</h2><ul>
+<li>矩阵的数乘运算：<ul>
+<li>一个数乘以一个矩阵，是这个数乘以这个矩阵的所有元素</li>
+<li>矩阵所有元素均有公因子，这个公因子朝外提一次</li>
+</ul>
+</li>
+<li><strong>矩阵的乘法</strong>：<ul>
+<li>前提条件：第一个矩阵的列数=第二个矩阵的行数</li>
+<li>结果矩阵形状：结果矩阵的行数=第一个矩阵的行数，结果矩阵的列数=第二个矩阵的列数</li>
+<li><strong>矩阵$AB\ne BA$，$AB$有意义时，$BA$不一定有意义</strong></li>
+<li>矩阵$AB$相乘时，称$A$左乘$B$，$B$右乘$A$</li>
+<li><strong>若$AB=0$，并不意味着$A=0,or,B=0$</strong></li>
+<li><strong>若$AB=AC，A\ne0$，并不意味着$B=C$</strong></li>
+<li>与零矩阵相乘都等于0，但得注意必须是同形矩阵</li>
+<li><strong>与单位阵$E$相乘：$AE=A，EB=B$</strong></li>
+<li>结合率：$(AB)C=A(BC)$</li>
+<li>分配律：$(A+B)C=AC+BC\quad C(A+B)=CA+CB$</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-矩阵的幂"><a href="#3-矩阵的幂" class="headerlink" title="3.矩阵的幂"></a>3.矩阵的幂</h2><ul>
+<li><p>矩阵的幂：</p>
+<ul>
+<li><p>求幂运算，A必须是方阵</p>
+</li>
+<li><p>$A^0=E$</p>
+</li>
+<li><p>$A^{k_1}A^{k_2}=A^{k_1+k_2}$</p>
+</li>
+<li><p>$(A^{k_1})^{k_2}=A^{k_1k_2}$</p>
+</li>
+<li><p>$(AB)^k\ne A^kB^k$</p>
+</li>
+<li><p>$(A+B)^2\ne A^2+2AB+B^2$</p>
+</li>
+<li><p>$(A+E)^2=A^2+2AE+E^2$</p>
+</li>
+</ul>
+</li>
+<li><p>矩阵的转置：</p>
+<ul>
+<li>行列交换</li>
+<li>若$A_{m\times n}$，则$A^T=A_{n\times m}$</li>
+<li>$((A)^T)^T=A$</li>
+<li>$(A+B)^T=A^T+B^T$</li>
+<li>$(kA)^T=kA^T$</li>
+<li>$(AB)^T=B^TA^T$</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="特殊的矩阵"><a href="#特殊的矩阵" class="headerlink" title="特殊的矩阵"></a>特殊的矩阵</h1><h2 id="1-对角线矩阵"><a href="#1-对角线矩阵" class="headerlink" title="1.对角线矩阵"></a>1.对角线矩阵</h2><p>$$<br>diag(a_1,a_2,\dots,a_n) = \begin{bmatrix}<br>a_{11} &amp; 0 &amp; \dots &amp; 0\<br>0 &amp; a_{21} &amp; \dots &amp; 0\<br>\dots &amp; \dots &amp; \dots &amp; \dots \<br>0 &amp; 0 &amp; \dots &amp; a_{mn}\<br>\end{bmatrix}<br>$$</p>
+<ul>
+<li><p>对一个矩阵，左乘对角形矩阵，其结果相当于矩阵中每行元素乘以对角形矩阵中的数<br>$$<br>\begin{bmatrix}<br>k_1 &amp; 0 &amp; 0\<br>0 &amp; k_2 &amp; 0\<br>0 &amp; 0 &amp; k_3\<br>\end{bmatrix}\begin{bmatrix}<br>1 &amp; 2 &amp; 3\<br>2 &amp; 2 &amp; 2\<br>8 &amp; 8 &amp; 8\<br>\end{bmatrix}=\begin{bmatrix}<br>k_1 &amp; 2k_1 &amp; 3k_1\<br>2k_2 &amp; 2k_2 &amp; 2k_2\<br>8k_3 &amp; 8k_3 &amp; 8k_3\<br>\end{bmatrix}<br>$$</p>
+</li>
+<li><p>对一个矩阵，右乘对角形矩阵，其结果相当于矩阵中每列元素乘以对角形矩阵中的数<br>$$<br>\begin{bmatrix}<br>1 &amp; 2 &amp; 3\<br>2 &amp; 2 &amp; 2\<br>8 &amp; 8 &amp; 8\<br>\end{bmatrix}\begin{bmatrix}<br>k_1 &amp; 0 &amp; 0\<br>0 &amp; k_2 &amp; 0\<br>0 &amp; 0 &amp; k_3\<br>\end{bmatrix}=\begin{bmatrix}<br>k_1 &amp; 2k_2 &amp; 3k_3\<br>2k_1 &amp; 2k_2 &amp; 2k_3\<br>8k_1 &amp; 8k_2 &amp; 8k_3\<br>\end{bmatrix}<br>$$</p>
+</li>
+<li><p>对角形矩阵既是上三角矩阵又是下三角矩阵</p>
+</li>
+</ul>
+<h2 id="2-对称矩阵"><a href="#2-对称矩阵" class="headerlink" title="2.对称矩阵"></a>2.对称矩阵</h2><ul>
+<li><p>$a_{ij}=a_{ji}$：<br>$$<br>\begin{bmatrix}<br>1 &amp; 1 &amp; -1\<br>1 &amp; 2 &amp; 4\<br>-1 &amp; 4 &amp; 3\<br>\end{bmatrix}<br>$$</p>
+</li>
+<li><p>若A、B是同阶对称，则：</p>
+<ul>
+<li>$A^T=A，B^T=B$</li>
+<li>$(A+B)^T=A^T+B^T=A+B$</li>
+<li>$(kA)^T=kA^T=kA$</li>
+<li>$(AB)^T=B^TA^T=BA\neq AB$</li>
+<li>若AB的结果依旧是对称矩阵，则A、B是可交换的</li>
+</ul>
+</li>
+<li><p>反对称矩阵：</p>
+<ul>
+<li>主对角线全为0，$a_{ij}=-a_{ji}$<br>$$<br>\begin{bmatrix}<br>0 &amp; 1 &amp; -3\<br>-1 &amp; 0 &amp; -4\<br>3 &amp; 4 &amp; 0\<br>\end{bmatrix}<br>$$</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>$A^T=-A$</li>
+</ul>
+<hr>
+<h1 id="伴随矩阵"><a href="#伴随矩阵" class="headerlink" title="伴随矩阵"></a>伴随矩阵</h1><ul>
+<li><p>方阵的行列式：<br>$$<br>方阵A=\begin{bmatrix}<br>2 &amp; 2 &amp; 2\<br>3 &amp; 3 &amp; 3\<br>1 &amp; 1 &amp; 1\<br>\end{bmatrix}\quad 行列式|A|=\begin{vmatrix}<br>2 &amp; 2 &amp; 2\<br>3 &amp; 3 &amp; 3\<br>1 &amp; 1 &amp; 1\<br>\end{vmatrix}<br>$$</p>
+<ul>
+<li>方阵行列式的性质：<ul>
+<li>$|A^T|=|A|$</li>
+<li>$|kA|=k^n|A|$</li>
+<li>$|AB|=|A||B|$</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>伴随矩阵：<br>$$<br>A=\begin{bmatrix}<br>1 &amp; 1 &amp; 1\<br>2 &amp; 1 &amp; 3\<br>1 &amp; 1 &amp; 4\<br>\end{bmatrix}<br>$$</p>
+</li>
+</ul>
+<ul>
+<li><p>求所有元素的代数余子式<br>$$<br>A_{11}=1\quad A_{12}=-5\quad A_{13}=1\<br>A_{21}=3\quad A_{22}=3\quad A_{23}=0\<br>A_{31}=2\quad A_{32}=-1\quad A_{33}=-1<br>$$</p>
+</li>
+<li><p>按行求得代数余子式按列放，构成的矩阵$A^<em>$为伴随矩阵<br>$$<br>A^</em>=\begin{bmatrix}<br>1 &amp; -3 &amp; 2\<br>-5 &amp; 3 &amp; -1\<br>1 &amp; 0 &amp; -1\<br>\end{bmatrix}<br>$$</p>
+</li>
+<li><p><strong>伴随矩阵的相关定理</strong>：</p>
+<ul>
+<li>对任意方阵A：$AA^<em>=A^</em>A=|A|E$</li>
+<li>若方阵$|A|\ne 0$，则$|A^*|=|A|^{n-1}$</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="逆矩阵"><a href="#逆矩阵" class="headerlink" title="逆矩阵"></a>逆矩阵</h1><h2 id="1-基本概念"><a href="#1-基本概念" class="headerlink" title="1.基本概念"></a>1.基本概念</h2><ul>
+<li>定义：若A是n阶方阵，且存在n阶方阵B，使得$AB=BA=E$，则A可逆，称B为A的逆矩阵，即$B=A^{-1}$</li>
+<li>相关性质：<ul>
+<li>未必所有方阵均可逆</li>
+<li>若存在逆矩阵，那么逆矩阵唯一</li>
+</ul>
+</li>
+<li>相关定理：<strong>A可逆的充要条件为$|A|\ne 0$</strong>，则此时$A^{-1}=\frac{1}{|A|}A^*$</li>
+<li>推论：若A、B是n阶方阵，存在$AB=E(BA=E)$，则A可逆，且$A^{-1}=B$</li>
+</ul>
+<h2 id="2-逆矩阵性质"><a href="#2-逆矩阵性质" class="headerlink" title="2.逆矩阵性质"></a>2.逆矩阵性质</h2><ul>
+<li>若A可逆，那么$A^{-1}$也可逆，即$(A^{-1})^{-1}=A$</li>
+<li>若A、B均可逆，那么AB均可逆，且$(AB)^{-1}=B^{-1}A^{-1}$</li>
+<li>若A可逆，则$A^T$也可逆，且$(A^T)^{-1}=(A^{-1})^T$；若$k\ne 0$，则$(kA)^{-1}=\frac1kA^{-1}$</li>
+<li>若A可逆，则$|A^{-1}|=|A|^{-1}$</li>
+<li>若A可逆，则$A^<em>$也可逆，且$(A^</em>)^{-1}=\frac1{|A|}A$</li>
+</ul>
+<hr>
+<h1 id="分块矩阵"><a href="#分块矩阵" class="headerlink" title="分块矩阵"></a>分块矩阵</h1><ul>
+<li><p>标准形矩阵：从左上角开始的一串1，串中1不能间断，不一定是方阵<br>$$<br>A =\begin{bmatrix}<br>1 &amp; 0 &amp; \dots &amp; 0\<br>0 &amp; 1 &amp; \dots &amp; 0\<br>\dots &amp; \dots &amp; \dots &amp; \dots \<br>0 &amp; 0 &amp; \dots &amp; 0\<br>\end{bmatrix}_{m\times n}=\begin{bmatrix}<br>A_1 &amp; A_2\<br>A_3 &amp; A_4<br>\end{bmatrix}<br>$$</p>
+</li>
+<li><p>分块矩阵的乘法与基本矩阵乘法一致，前提是可乘</p>
+</li>
+</ul>
+<hr>
+<h1 id="初等变换"><a href="#初等变换" class="headerlink" title="初等变换"></a>初等变换</h1>
     </div>
 
     
@@ -293,7 +470,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://ssy的小天地.com/2023/08/05/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%8C%87%E4%BB%A4%E7%BA%A7%E5%B9%B6%E8%A1%8C/" title="计算机体系结构之指令级并行">http://ssy的小天地.com/2023/08/05/计算机体系结构之指令级并行/</a>
+    <a href="http://ssy的小天地.com/2023/08/06/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%E4%B9%8B%E7%9F%A9%E9%98%B5/" title="线性代数之矩阵">http://ssy的小天地.com/2023/08/06/线性代数之矩阵/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -304,7 +481,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/" rel="tag"># 计算机体系结构</a>
+              <a href="/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/" rel="tag"># 线性代数</a>
           </div>
 
         
@@ -313,13 +490,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2023/08/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8A%80%E6%9C%AF/" rel="prev" title="计算机体系结构之指令系统">
-      <i class="fa fa-chevron-left"></i> 计算机体系结构之指令系统
+    <a href="/2023/08/05/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%E4%B9%8B%E8%A1%8C%E5%88%97%E5%BC%8F/" rel="prev" title="线性代数之行列式">
+      <i class="fa fa-chevron-left"></i> 线性代数之行列式
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2023/08/05/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%E4%B9%8B%E8%A1%8C%E5%88%97%E5%BC%8F/" rel="next" title="线性代数之行列式">
-      线性代数之行列式 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -378,6 +552,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9F%A9%E9%98%B5%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">矩阵概念</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9F%A9%E9%98%B5%E8%BF%90%E7%AE%97"><span class="nav-number">2.</span> <span class="nav-text">矩阵运算</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%9F%A9%E9%98%B5%E5%8A%A0%E5%87%8F%E6%B3%95"><span class="nav-number">2.1.</span> <span class="nav-text">1.矩阵加减法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E7%9F%A9%E9%98%B5%E4%B9%98%E6%B3%95"><span class="nav-number">2.2.</span> <span class="nav-text">2.矩阵乘法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E7%9F%A9%E9%98%B5%E7%9A%84%E5%B9%82"><span class="nav-number">2.3.</span> <span class="nav-text">3.矩阵的幂</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%89%B9%E6%AE%8A%E7%9A%84%E7%9F%A9%E9%98%B5"><span class="nav-number">3.</span> <span class="nav-text">特殊的矩阵</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%AF%B9%E8%A7%92%E7%BA%BF%E7%9F%A9%E9%98%B5"><span class="nav-number">3.1.</span> <span class="nav-text">1.对角线矩阵</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%AF%B9%E7%A7%B0%E7%9F%A9%E9%98%B5"><span class="nav-number">3.2.</span> <span class="nav-text">2.对称矩阵</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BC%B4%E9%9A%8F%E7%9F%A9%E9%98%B5"><span class="nav-number">4.</span> <span class="nav-text">伴随矩阵</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%80%86%E7%9F%A9%E9%98%B5"><span class="nav-number">5.</span> <span class="nav-text">逆矩阵</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">5.1.</span> <span class="nav-text">1.基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E9%80%86%E7%9F%A9%E9%98%B5%E6%80%A7%E8%B4%A8"><span class="nav-number">5.2.</span> <span class="nav-text">2.逆矩阵性质</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E5%9D%97%E7%9F%A9%E9%98%B5"><span class="nav-number">6.</span> <span class="nav-text">分块矩阵</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%9D%E7%AD%89%E5%8F%98%E6%8D%A2"><span class="nav-number">7.</span> <span class="nav-text">初等变换</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
