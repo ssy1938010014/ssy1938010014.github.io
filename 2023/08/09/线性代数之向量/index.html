@@ -22,18 +22,20 @@
     var CONFIG = {"hostname":"xn--ssy-lq6e63gg6fuu2d.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="本节主要介绍了">
+  <meta name="description" content="本节主要介绍了向量的基本概念、线性相关与线性无关、向量组的秩">
 <meta property="og:type" content="article">
 <meta property="og:title" content="线性代数之向量">
 <meta property="og:url" content="http://ssy的小天地.com/2023/08/09/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%E4%B9%8B%E5%90%91%E9%87%8F/index.html">
 <meta property="og:site_name" content="ssy的小天地">
-<meta property="og:description" content="本节主要介绍了">
+<meta property="og:description" content="本节主要介绍了向量的基本概念、线性相关与线性无关、向量组的秩">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/08/09/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%E4%B9%8B%E5%90%91%E9%87%8F/image-20230810103558833.png">
 <meta property="article:published_time" content="2023-08-09T02:07:12.000Z">
-<meta property="article:modified_time" content="2023-08-09T14:23:48.404Z">
+<meta property="article:modified_time" content="2023-08-10T08:16:37.697Z">
 <meta property="article:author" content="ssy">
 <meta property="article:tag" content="线性代数">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/08/09/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%E4%B9%8B%E5%90%91%E9%87%8F/image-20230810103558833.png">
 
 <link rel="canonical" href="http://ssy的小天地.com/2023/08/09/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%E4%B9%8B%E5%90%91%E9%87%8F/">
 
@@ -230,10 +232,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2023-08-09 10:07:12 / 修改时间：22:23:48" itemprop="dateCreated datePublished" datetime="2023-08-09T10:07:12+08:00">2023-08-09</time>
+              <time title="创建时间：2023-08-09 10:07:12" itemprop="dateCreated datePublished" datetime="2023-08-09T10:07:12+08:00">2023-08-09</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-08-10 16:16:37" itemprop="dateModified" datetime="2023-08-10T16:16:37+08:00">2023-08-10</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -262,7 +270,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>本节主要介绍了</p>
+        <p>本节主要介绍了向量的基本概念、线性相关与线性无关、向量组的秩</p>
 <span id="more"></span>
 
 <h1 id="n维向量以及运算"><a href="#n维向量以及运算" class="headerlink" title="n维向量以及运算"></a>n维向量以及运算</h1><ul>
@@ -270,7 +278,7 @@
 </li>
 <li><p><strong>定理</strong>：$k\alpha=0\Leftrightarrow k=0,or,\alpha=0$</p>
 </li>
-<li><p>线性组合：$\beta,\alpha_1,\alpha_2,…,\alpha_n$是m维向量，若存在$k_1,k_2,…,k_n$使得下式成立：<br>$$<br>\beta=k_1\alpha_1+k_2\alpha_2+…+k_n\alpha_n<br>$$<br>则称$\beta$是$\alpha$向量们的线性组合，$k_1,k_2,…,k_n$为组合系数，系数可全取0</p>
+<li><p><strong>线性组合</strong>：$\beta,\alpha_1,\alpha_2,…,\alpha_n$是m维向量，若存在$k_1,k_2,…,k_n$使得下式成立：<br>$$<br>\beta=k_1\alpha_1+k_2\alpha_2+…+k_n\alpha_n<br>$$<br>则称$\beta$是$\alpha$向量们的线性组合，$k_1,k_2,…,k_n$为组合系数，系数可全取0</p>
 </li>
 <li><p>零向量可由任意向量组表示</p>
 </li>
@@ -303,14 +311,33 @@
 <li><p>相关定理：</p>
 <ul>
 <li>若$a_1,a_2,…,a_s$线性相关$\Leftrightarrow$至少一个向量可由其余向量表示</li>
-<li>若$a_1,a_2,…,a_s$线性无关，$a_1,a_2,…,a_s,\beta$线性无关$\Leftrightarrow\beta$可由$a_1,a_2,…,a_s$唯一表示</li>
-<li>若m&gt;n（向量的个数大于向量的维数），m个n维向量一定相关</li>
+<li>若$a_1,a_2,…,a_s$线性无关，$a_1,a_2,…,a_s,\beta$线性相关$\Leftrightarrow\beta$可由$a_1,a_2,…,a_s$唯一表示</li>
+<li><strong>若m&gt;n（向量的个数大于向量的维数），m个n维向量一定相关</strong></li>
 </ul>
 </li>
 </ul>
 <hr>
 <h1 id="向量组的秩"><a href="#向量组的秩" class="headerlink" title="向量组的秩"></a>向量组的秩</h1><ul>
-<li>极大线性无关组</li>
+<li><p>极大线性无关组：</p>
+<p>若$a_1,a_2,\alpha_3,\alpha_4,a_5$中的部分组$\alpha_1,\alpha_2$线性无关且每个向量均可由$\alpha_1,\alpha_2$表示，则$\alpha_1,\alpha_2$为极大无关组</p>
+</li>
+<li><p><strong>向量组的秩：极大无关组含向量个数</strong></p>
+<ul>
+<li>$0\le r(a_1,a_2,…,a_s)\le min\{向量的个数，向量的维数\}$</li>
+<li>$a_1,a_2,…,a_s$线性无关$\Leftrightarrow r=s$</li>
+<li>$a_1,a_2,…,a_s$线性相关$\Leftrightarrow r&lt;s$</li>
+</ul>
+</li>
+<li><p><strong>行秩</strong>：矩阵中的行向量组的秩</p>
+</li>
+<li><p><strong>列秩</strong>：矩阵中列向量组的秩</p>
+</li>
+<li><p><strong>定理：行秩=列秩=$r(A)$（矩阵的秩）</strong></p>
+</li>
+<li><p>$r(AB)\le min\{r(A),r(B)\}$</p>
+</li>
+<li><p>初等行变换不改变矩阵列向量组的线性关系</p>
+<img src="/2023/08/09/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%E4%B9%8B%E5%90%91%E9%87%8F/image-20230810103558833.png" alt="image-20230810103558833" style="zoom: 33%;"></li>
 </ul>
 
     </div>
@@ -443,7 +470,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">80</span>
+          <span class="site-state-item-count">81</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
