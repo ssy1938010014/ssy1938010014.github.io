@@ -32,7 +32,7 @@
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/08/10/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%E4%B9%8B%E7%BA%BF%E6%80%A7%E6%96%B9%E7%A8%8B%E7%BB%84/image-20230810170229366.png">
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/08/10/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%E4%B9%8B%E7%BA%BF%E6%80%A7%E6%96%B9%E7%A8%8B%E7%BB%84/image-20230810173523688.png">
 <meta property="article:published_time" content="2023-08-10T02:07:12.000Z">
-<meta property="article:modified_time" content="2023-08-11T04:46:06.731Z">
+<meta property="article:modified_time" content="2023-08-12T09:07:47.299Z">
 <meta property="article:author" content="ssy">
 <meta property="article:tag" content="线性代数">
 <meta name="twitter:card" content="summary">
@@ -241,7 +241,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-08-11 12:46:06" itemprop="dateModified" datetime="2023-08-11T12:46:06+08:00">2023-08-11</time>
+                <time title="修改时间：2023-08-12 17:07:47" itemprop="dateModified" datetime="2023-08-12T17:07:47+08:00">2023-08-12</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -273,30 +273,14 @@
       
         <p>本节主要介绍了非齐次线性方程与齐次线性方程的解法</p>
 <span id="more"></span>
+
 <h1 id="线性方程组有解判定"><a href="#线性方程组有解判定" class="headerlink" title="线性方程组有解判定"></a>线性方程组有解判定</h1><ul>
-<li><p>若由如下方程组：</p>
-<script type="math/tex; mode=display">
-\begin{cases}
-\begin{aligned}
-x_1 + x_2 + x_3 &= 1\\
-x_1 - x_2 - x_3 &= -3\\
-2x_1 + 9x_2 + 10x_3 &= 11\\
-\end{aligned}
-\end{cases}</script></li>
-<li><p>则系数矩阵为：</p>
-<script type="math/tex; mode=display">
-A=\begin{bmatrix}
-1 & 1 & -1\\
-1 & -1 & -1\\
-2 & 9 & 10\\
-\end{bmatrix}</script></li>
-<li><p>增广矩阵为：</p>
-<script type="math/tex; mode=display">
-\bar A=\begin{bmatrix}
-1 & 1 & -1 & 1\\
-1 & -1 & -1 & -3\\
-2 & 9 & 10 & 11\\
-\end{bmatrix}</script></li>
+<li><p>若由如下方程组：<br>$$<br>\begin{cases}<br>\begin{aligned}<br>x_1 + x_2 + x_3 &amp;= 1\<br>x_1 - x_2 - x_3 &amp;= -3\<br>2x_1 + 9x_2 + 10x_3 &amp;= 11\<br>\end{aligned}<br>\end{cases}<br>$$</p>
+</li>
+<li><p>则系数矩阵为：<br>$$<br>A=\begin{bmatrix}<br>1 &amp; 1 &amp; -1\<br>1 &amp; -1 &amp; -1\<br>2 &amp; 9 &amp; 10\<br>\end{bmatrix}<br>$$</p>
+</li>
+<li><p>增广矩阵为：<br>$$<br>\bar A=\begin{bmatrix}<br>1 &amp; 1 &amp; -1 &amp; 1\<br>1 &amp; -1 &amp; -1 &amp; -3\<br>2 &amp; 9 &amp; 10 &amp; 11\<br>\end{bmatrix}<br>$$</p>
+</li>
 <li><p>在方程组中，通常用m表示方程个数，n表示未知量的个数</p>
 </li>
 <li><p><strong>是否有解的判断方式</strong>：</p>
@@ -315,7 +299,7 @@ A=\begin{bmatrix}
 <li>方程组$Ax=b$中，向量$b$为0向量，即$Ax=0$则称为齐次线性方程组</li>
 <li><strong>齐次线性方程组一定有解，至少有零解</strong></li>
 <li><strong>齐次线性方程组解的情况</strong>：<ul>
-<li>当$r(A)=r(\bar A)=n$时，方程组有唯一零解$\Leftrightarrow r(A)=n$</li>
+<li>有唯一零解$\Leftrightarrow r(A)=n$</li>
 <li>有非零解$\Leftrightarrow r(A)&lt;n$</li>
 <li><strong>方程个数m&lt;未知数个数n$\Leftrightarrow$有非零解</strong></li>
 <li><strong>方程个数=未知数个数，有非零解$\Leftrightarrow |A|=0$</strong></li>
@@ -334,11 +318,12 @@ A=\begin{bmatrix}
 <li>$\eta_1,\eta_2,…,\eta_s$线性无关</li>
 <li>任何解都可以由$\eta_1,\eta_2,…,\eta_s$表示</li>
 </ul>
-<p><img src="/2023/08/10/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%E4%B9%8B%E7%BA%BF%E6%80%A7%E6%96%B9%E7%A8%8B%E7%BB%84/image-20230810170229366.png" alt="image-20230810170229366" style="zoom: 50%;"></p>
+<img src="/2023/08/10/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%E4%B9%8B%E7%BA%BF%E6%80%A7%E6%96%B9%E7%A8%8B%E7%BB%84/image-20230810170229366.png" alt="image-20230810170229366" style="zoom: 50%;">
 </li>
 <li><p>基础解系的个数$=n-r(A)$</p>
 </li>
-<li><strong>若$A_{m\times n}B_{n\times s}=0_{m\times s}$，则$r(A)+r(B)\le n$</strong></li>
+<li><p><strong>若$A_{m\times n}B_{n\times s}=0_{m\times s}$，则$r(A)+r(B)\le n$</strong></p>
+</li>
 </ul>
 <h2 id="2-非齐次线性方程的结构"><a href="#2-非齐次线性方程的结构" class="headerlink" title="2.非齐次线性方程的结构"></a>2.非齐次线性方程的结构</h2><ul>
 <li><p>对于非齐次线性方程组$Ax=b$：</p>
@@ -347,8 +332,8 @@ A=\begin{bmatrix}
 <li>若$\alpha_0$是$Ax=b$的解，$\eta$是$Ax=0$的解，那么$\alpha_0+\eta$也是$Ax=b$的解</li>
 </ul>
 </li>
-<li><p>非齐次线性方程解的结构=（$Ax=b$的一个特解）+（$Ax=0$的基础解系的线性组合）</p>
-<p><img src="/2023/08/10/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%E4%B9%8B%E7%BA%BF%E6%80%A7%E6%96%B9%E7%A8%8B%E7%BB%84/image-20230810173523688.png" alt="image-20230810173523688" style="zoom:50%;"></p>
+<li><p><strong>非齐次线性方程解的结构=（$Ax=b$的一个特解）+（$Ax=0$的基础解系的线性组合）</strong></p>
+<img src="/2023/08/10/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%E4%B9%8B%E7%BA%BF%E6%80%A7%E6%96%B9%E7%A8%8B%E7%BB%84/image-20230810173523688.png" alt="image-20230810173523688" style="zoom:50%;">
 </li>
 </ul>
 
@@ -482,7 +467,7 @@ A=\begin{bmatrix}
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-count">84</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -495,7 +480,7 @@ A=\begin{bmatrix}
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-count">25</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

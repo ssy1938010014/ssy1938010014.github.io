@@ -275,8 +275,10 @@
       
         <p>本节主要介绍了</p>
 <span id="more"></span>
+
 <h1 id="卷积层"><a href="#卷积层" class="headerlink" title="卷积层"></a>卷积层</h1><h2 id="1-torch-nn-Conv2d"><a href="#1-torch-nn-Conv2d" class="headerlink" title="1.torch.nn.Conv2d"></a>1.torch.nn.Conv2d</h2><ul>
-<li>对图像和滤波矩阵做内积（逐个元素相乘再求和）的操作</li>
+<li><p>对图像和滤波矩阵做内积（逐个元素相乘再求和）的操作</p>
+</li>
 <li><p><code>torch.nn.Conv2d(in_channels,out_channels,kernel_size,stride=1,padding=0,dilation=1,groups=1,bias=True,padding_mode=&#39;zeros&#39;)</code></p>
 <ul>
 <li><strong>in_channels</strong>(int)：输入的特征维度</li>
@@ -290,12 +292,11 @@
 <li><strong>padding_mode</strong>(str)：可选值为”zeros”、”reflect”、”replicate”、“circular”，默认值为”zeros”</li>
 </ul>
 </li>
-<li><p>输入输出形状的关系：</p>
-<script type="math/tex; mode=display">
-H_{out}=[\frac{H_{in}+2\times padding[0]-dilation[0]\times(kernel\_size[0]-1)-1}{stride[0]}+1]</script><script type="math/tex; mode=display">
-W_{out}=[\frac{W_{in}+2\times padding[1]-dilation[1]\times(kernel\_size[1]-1)-1}{stride[1]}+1]</script></li>
+<li><p>输入输出形状的关系：<br>$$<br>H_{out}=[\frac{H_{in}+2\times padding[0]-dilation[0]\times(kernel_size[0]-1)-1}{stride[0]}+1]<br>$$</p>
+<p>$$<br>W_{out}=[\frac{W_{in}+2\times padding[1]-dilation[1]\times(kernel_size[1]-1)-1}{stride[1]}+1]<br>$$</p>
+</li>
 <li><p><strong>dilation：扩张操作，控制kernel点（卷积核点）的间距</strong></p>
-<p><img src="/2023/08/09/Pytorch%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20230809175517005.png" alt="image-20230809175517005" style="zoom: 33%;"></p>
+<img src="/2023/08/09/Pytorch%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20230809175517005.png" alt="image-20230809175517005" style="zoom: 33%;">
 </li>
 <li><p><strong>padding_mode：填充方式</strong></p>
 <ul>
@@ -312,10 +313,9 @@ W_{out}=[\frac{W_{in}+2\times padding[1]-dilation[1]\times(kernel\_size[1]-1)-1}
 </li>
 <li><p><strong>在反卷积中，stride参数就是表示往输入图片每两个像素点中间填充0，而填充的数量就是 stride - 1</strong></p>
 </li>
-<li><p>输入与输出形状的关系：</p>
-<script type="math/tex; mode=display">
-H_{out}=(H_{in}-1)\times stride[0]-2\times padding[0]+dilation[0]\times(kernel\_size[0]-1)+out\_padding[0]+1</script><script type="math/tex; mode=display">
-W_{out}=(W_{in}-1)\times stride[1]-2\times padding[1]+dilation[1]\times(kernel\_size[1]-1)+out\_padding[1]+1</script></li>
+<li><p>输入与输出形状的关系：<br>$$<br>H_{out}=(H_{in}-1)\times stride[0]-2\times padding[0]+dilation[0]\times(kernel_size[0]-1)+out_padding[0]+1<br>$$</p>
+<p>$$<br>W_{out}=(W_{in}-1)\times stride[1]-2\times padding[1]+dilation[1]\times(kernel_size[1]-1)+out_padding[1]+1<br>$$</p>
+</li>
 <li><p><strong>output_padding的作用就是：在输出图像右侧和下侧补值，用于弥补stride大于1带来的缺失</strong></p>
 </li>
 <li><p><strong>ConvTranspose2d可用于上采样</strong></p>
@@ -324,15 +324,18 @@ W_{out}=(W_{in}-1)\times stride[1]-2\times padding[1]+dilation[1]\times(kernel\_
 </li>
 </ul>
 <h2 id="3-感受野"><a href="#3-感受野" class="headerlink" title="3.感受野"></a>3.感受野</h2><ul>
-<li>使用两个3×3的卷积核级联与使用一个5×5的卷积核得到的感受野是一样的，但参数个数却少了<br><img src="/2023/08/09/Pytorch%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107124918062.png" alt="image-20221107124918062" style="zoom:33%;"></li>
+<li>使用两个3×3的卷积核级联与使用一个5×5的卷积核得到的感受野是一样的，但参数个数却少了<img src="/2023/08/09/Pytorch%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107124918062.png" alt="image-20221107124918062" style="zoom:33%;">
+
+</li>
 </ul>
 <h2 id="4-常见的卷积层组合结构"><a href="#4-常见的卷积层组合结构" class="headerlink" title="4.常见的卷积层组合结构"></a>4.常见的卷积层组合结构</h2><ul>
-<li><p>堆叠—跳连—并连</p>
+<li><p>堆叠–跳连–并连</p>
 <p><img src="/2023/08/09/Pytorch%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20230809190541362.png" alt="image-20230809190541362"></p>
 </li>
 </ul>
 <h2 id="5-池化层"><a href="#5-池化层" class="headerlink" title="5.池化层"></a>5.池化层</h2><ul>
-<li>对输入的特征图进行压缩：<ul>
+<li><p>对输入的特征图进行压缩：</p>
+<ul>
 <li>一方面使特征图变小，简化网络计算复杂度</li>
 <li>一方面进行特征压缩，提取主要特征</li>
 </ul>
@@ -347,10 +350,9 @@ W_{out}=(W_{in}-1)\times stride[1]-2\times padding[1]+dilation[1]\times(kernel\_
 <li><strong>ceil_mode</strong> ：布尔类型，为True，用向上取整的方法，计算输出形状；默认是向下取整。</li>
 </ul>
 </li>
-<li><p>输入与输出形状的关系：</p>
-<script type="math/tex; mode=display">
-H_{out}=[\frac{H_{in}+2\times padding[0]-dilation[0]\times(kernel\_size[0]-1)-1}{stride[0]}+1]</script><script type="math/tex; mode=display">
-W_{out}=[\frac{W_{in}+2\times padding[1]-dilation[1]\times(kernel\_size[1]-1)-1}{stride[1]}+1]</script></li>
+<li><p>输入与输出形状的关系：<br>$$<br>H_{out}=[\frac{H_{in}+2\times padding[0]-dilation[0]\times(kernel_size[0]-1)-1}{stride[0]}+1]<br>$$</p>
+<p>$$<br>W_{out}=[\frac{W_{in}+2\times padding[1]-dilation[1]\times(kernel_size[1]-1)-1}{stride[1]}+1]<br>$$</p>
+</li>
 <li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_38481963/article/details/109962715">torch.nn.MaxPool2d详解_Medlen的博客-CSDN博客</a></p>
 </li>
 </ul>
@@ -389,7 +391,7 @@ W_{out}=[\frac{W_{in}+2\times padding[1]-dilation[1]\times(kernel\_size[1]-1)-1}
 </li>
 <li>回归问题损失：<ul>
 <li><code>nn.L1Loss</code>、<code>nn.MSELoss</code>、<code>nn.SmoothL1Los</code>s等</li>
-<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/83131026">PyTorch中的损失函数—L1Loss /L2Loss/SmoothL1Loss - 知乎 (zhihu.com)</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/83131026">PyTorch中的损失函数–L1Loss /L2Loss/SmoothL1Loss - 知乎 (zhihu.com)</a></li>
 <li><a target="_blank" rel="noopener" href="https://blog.csdn.net/zfhsfdhdfajhsr/article/details/115637954">【Pytorch基础】torch.nn.MSELoss损失函数_一穷二白到年薪百万的博客-CSDN博客</a></li>
 <li>用于检测或回归问题中</li>
 </ul>
@@ -540,7 +542,7 @@ W_{out}=[\frac{W_{in}+2\times padding[1]-dilation[1]\times(kernel\_size[1]-1)-1}
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-count">84</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -553,7 +555,7 @@ W_{out}=[\frac{W_{in}+2\times padding[1]-dilation[1]\times(kernel\_size[1]-1)-1}
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-count">25</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
