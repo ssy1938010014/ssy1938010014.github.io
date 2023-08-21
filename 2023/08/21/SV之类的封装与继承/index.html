@@ -22,17 +22,22 @@
     var CONFIG = {"hostname":"xn--ssy-lq6e63gg6fuu2d.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="满怀希望 就会所向披靡">
-<meta property="og:type" content="website">
-<meta property="og:title" content="ssy的小天地">
-<meta property="og:url" content="http://ssy的小天地.com/tags/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86/index.html">
+  <meta name="description" content="本节主要介绍了SystemVerilog中">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SV之类的封装与继承">
+<meta property="og:url" content="http://ssy的小天地.com/2023/08/21/SV%E4%B9%8B%E7%B1%BB%E7%9A%84%E5%B0%81%E8%A3%85%E4%B8%8E%E7%BB%A7%E6%89%BF/index.html">
 <meta property="og:site_name" content="ssy的小天地">
-<meta property="og:description" content="满怀希望 就会所向披靡">
+<meta property="og:description" content="本节主要介绍了SystemVerilog中">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/08/21/SV%E4%B9%8B%E7%B1%BB%E7%9A%84%E5%B0%81%E8%A3%85%E4%B8%8E%E7%BB%A7%E6%89%BF/image-20230821173617016.png">
+<meta property="article:published_time" content="2023-08-21T02:07:12.000Z">
+<meta property="article:modified_time" content="2023-08-21T10:24:36.737Z">
 <meta property="article:author" content="ssy">
+<meta property="article:tag" content="SystemVerilog">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/08/21/SV%E4%B9%8B%E7%B1%BB%E7%9A%84%E5%B0%81%E8%A3%85%E4%B8%8E%E7%BB%A7%E6%89%BF/image-20230821173617016.png">
 
-<link rel="canonical" href="http://ssy的小天地.com/tags/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86/">
+<link rel="canonical" href="http://ssy的小天地.com/2023/08/21/SV%E4%B9%8B%E7%B1%BB%E7%9A%84%E5%B0%81%E8%A3%85%E4%B8%8E%E7%BB%A7%E6%89%BF/">
 
 
 <script id="page-configurations">
@@ -40,12 +45,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>标签: 信号处理 | ssy的小天地</title>
+  <title>SV之类的封装与继承 | ssy的小天地</title>
   
 
 
@@ -195,51 +200,199 @@
         <div class="content-wrap">
           
 
-          <div class="content tag">
+          <div class="content post posts-expand">
             
 
+    
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <h2 class="collection-header">信号处理
-          <small>标签</small>
-        </h2>
-      </div>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ssy的小天地.com/2023/08/21/SV%E4%B9%8B%E7%B1%BB%E7%9A%84%E5%B0%81%E8%A3%85%E4%B8%8E%E7%BB%A7%E6%89%BF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ssy.png">
+      <meta itemprop="name" content="ssy">
+      <meta itemprop="description" content="满怀希望 就会所向披靡">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ssy的小天地">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SV之类的封装与继承
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+
+
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-08-21 10:07:12 / 修改时间：18:24:36" itemprop="dateCreated datePublished" datetime="2023-08-21T10:07:12+08:00">2023-08-21</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%A7%AF%E7%B4%AF/" itemprop="url" rel="index"><span itemprop="name">学习积累</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <span class="collection-header">2023</span>
+        <p>本节主要介绍了SystemVerilog中</p>
+<span id="more"></span>
+
+<h1 id="类的概述"><a href="#类的概述" class="headerlink" title="类的概述"></a>类的概述</h1><ul>
+<li><strong>类的三要素：封装、继承、多态（虚方法）</strong></li>
+<li>类是一种可以包含数据和方法的类型</li>
+<li>OOP(Object-Oriented Programming)术语：<ul>
+<li>类（class）：包括成员变量和成员方法</li>
+<li>对象（object）：类在例化后的实例</li>
+<li>句柄（handle）：指向对象的指针，通过句柄可以索引对象的变量和方法</li>
+<li>原型（prototype）：程序的声明部分，包含程序名、返回类型和参数列表</li>
+</ul>
+</li>
+</ul>
+<p><img src="/2023/08/21/SV%E4%B9%8B%E7%B1%BB%E7%9A%84%E5%B0%81%E8%A3%85%E4%B8%8E%E7%BB%A7%E6%89%BF/image-20230821173617016.png" alt="image-20230821173617016"></p>
+<hr>
+<h1 id="类的封装"><a href="#类的封装" class="headerlink" title="类的封装"></a>类的封装</h1><h2 id="1-句柄的使用"><a href="#1-句柄的使用" class="headerlink" title="1.句柄的使用"></a>1.句柄的使用</h2><ul>
+<li><p>当<strong>句柄指向一个对象时</strong>， SystemVerilog不会释放该对象的内存空间（<strong>对象的创建</strong>）</p>
+</li>
+<li><p>如果<strong>没有句柄指向个对象，</strong> Systemverilog将释放该对象的内存空间（<strong>对象的销毁</strong>）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Transaction t1, t2; //声明两个句柄</span><br><span class="line">t1 = new();//创建一个对象，并将t1指向该对象</span><br><span class="line">t2 = new();//创建一个对象，并将t2指向该对象</span><br><span class="line">t1 = t2;   //将t2的值赋予t1,这时t1和t2指向同一对象，t1之前指向的对象被释放</span><br><span class="line">t1.display();//调用对象的成员方法</span><br><span class="line">t1.addr = 32&#x27;h42;//给对象成员赋值</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="2-静态变量和静态方法"><a href="#2-静态变量和静态方法" class="headerlink" title="2.静态变量和静态方法"></a>2.静态变量和静态方法</h2><ul>
+<li><strong>静态变量</strong>：<ul>
+<li>class内部声明的变量默认为动态变量，其生命周期始于对象创建，终于对象销毁</li>
+<li>使用static声明class内部的变量时，其为静态变量。其生命周期始于编译阶段，贯穿于整个仿真阶段</li>
+<li>静态变量的引用：<strong>使用类名直接引用（<code>Transaction::count</code>）或者通过例化对象引用(<code>tr.count</code>)</strong></li>
+</ul>
+</li>
+<li><strong>静态方法：静态方法内可以声明并使用动态变量，但不能使用类的动态成员变量</strong></li>
+</ul>
+<h2 id="3-类的成员"><a href="#3-类的成员" class="headerlink" title="3.类的成员"></a>3.类的成员</h2><ul>
+<li><p>类中的成员默认是<code>public</code>,子类和外部均可访问</p>
+</li>
+<li><p>但如果指明了类型为<code>protected</code>,那么只有<strong>该类或者子类可以访问</strong></p>
+</li>
+<li><p>如果访问类型为<code>local</code>，那么只有该类可以访问成员，<strong>子类和外部均不可访问</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">class clock;</span><br><span class="line">  local bit is_summer = 0;</span><br><span class="line">  local bit nclock = 6;</span><br><span class="line">  function int get_clock();</span><br><span class="line">  ...</span><br><span class="line">  endfunction</span><br><span class="line">endclass</span><br><span class="line"> </span><br><span class="line">clock ck;</span><br><span class="line">initial begin</span><br><span class="line">  ck = new();</span><br><span class="line">  $display(&quot;now time is %0d&quot;,ck.get_clock);//成功访问</span><br><span class="line">  ck.set_summer(1);</span><br><span class="line">  $display(&quot;now time is %0d&quot;,ck.nclock); //报错，外部句柄不能访问local变量</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="4-this"><a href="#4-this" class="headerlink" title="4.this"></a>4.this</h2><ul>
+<li><p>this是用来明确索引当前所在对象的成员</p>
+</li>
+<li><p>this只可以用来在类的非静态成员、约束和覆盖组中使用</p>
+</li>
+<li><p>this可以明确所指向变量的作用域</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">class Demo;</span><br><span class="line">	integer x;</span><br><span class="line">	function new (integer x);</span><br><span class="line">		this.x = x; //说明这时this.x代表成员变量integer x</span><br><span class="line">	endfunction</span><br><span class="line">endclass</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="5-浅拷贝与深拷贝"><a href="#5-浅拷贝与深拷贝" class="headerlink" title="5.浅拷贝与深拷贝"></a>5.浅拷贝与深拷贝</h2><ul>
+<li><p>浅拷贝：<strong>new复制创建了一个新的对象，原对象的值被盲目的抄写到目的对象中，但如果类中包含了一个指向另一个类的句柄，那么只有最高一级的对象被new操作符复制，下层的对象不会被复制</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">b2 = new b1</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>深拷贝：<strong>当使用深复制时，所有的变量都会被复制，包括下层的对象</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">b2.copy(b1);       //深复制，其中一个改变，不会影响另外一个</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<hr>
+<h1 id="类的继承"><a href="#类的继承" class="headerlink" title="类的继承"></a>类的继承</h1><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_59670134/article/details/119190972">SV基础知识3—Class类和Package_sv中类和包的区别_持续学习_ing的博客-CSDN博客</a></li>
+</ul>
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2023-03-03T10:07:12+08:00"
-              content="2023-03-03">
-          03-03
-        </time>
+    
+    
+    
+        <div class="reward-container">
+  <div>欢迎来到ssy的世界</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/WeChaPay.jpg" alt="ssy 微信支付">
+        <p>微信支付</p>
       </div>
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/" itemprop="url">
-            <span itemprop="name">信号处理中的小知识点</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-    </div>
   </div>
-  
-  
-  
+</div>
 
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>ssy
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://ssy的小天地.com/2023/08/21/SV%E4%B9%8B%E7%B1%BB%E7%9A%84%E5%B0%81%E8%A3%85%E4%B8%8E%E7%BB%A7%E6%89%BF/" title="SV之类的封装与继承">http://ssy的小天地.com/2023/08/21/SV之类的封装与继承/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/SystemVerilog/" rel="tag"># SystemVerilog</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/08/17/Pytorch%E4%B9%8B%E6%96%87%E6%9C%AC%E6%83%85%E6%84%9F%E5%88%86%E7%B1%BB/" rel="prev" title="Pytorch之文本情感分类">
+      <i class="fa fa-chevron-left"></i> Pytorch之文本情感分类
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/08/21/SV%E4%B9%8B%E6%95%B0%E7%BB%84/" rel="next" title="SV之数组">
+      SV之数组 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
   
 
 
@@ -292,6 +445,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B1%BB%E7%9A%84%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">类的概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B1%BB%E7%9A%84%E5%B0%81%E8%A3%85"><span class="nav-number">2.</span> <span class="nav-text">类的封装</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%8F%A5%E6%9F%84%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">2.1.</span> <span class="nav-text">1.句柄的使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E9%9D%99%E6%80%81%E5%8F%98%E9%87%8F%E5%92%8C%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95"><span class="nav-number">2.2.</span> <span class="nav-text">2.静态变量和静态方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%98"><span class="nav-number">2.3.</span> <span class="nav-text">3.类的成员</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-this"><span class="nav-number">2.4.</span> <span class="nav-text">4.this</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E6%B5%85%E6%8B%B7%E8%B4%9D%E4%B8%8E%E6%B7%B1%E6%8B%B7%E8%B4%9D"><span class="nav-number">2.5.</span> <span class="nav-text">5.浅拷贝与深拷贝</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B1%BB%E7%9A%84%E7%BB%A7%E6%89%BF"><span class="nav-number">3.</span> <span class="nav-text">类的继承</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -542,6 +696,61 @@ document.querySelectorAll('.pdfobject-container').forEach(element => {
   
 
   
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 
