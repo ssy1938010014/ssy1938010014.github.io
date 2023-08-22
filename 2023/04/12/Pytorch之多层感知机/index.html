@@ -277,7 +277,6 @@
       
         <p>本节主要介绍了多层感知机、K-折交叉验证、欠拟合与过拟合以及权重衰退</p>
 <span id="more"></span>
-
 <h1 id="多层感知机"><a href="#多层感知机" class="headerlink" title="多层感知机"></a>多层感知机</h1><ul>
 <li><p>我们可以通过在网络中加入一个或多个隐藏层来克服线性模型的限制， 使其能处理更普遍的函数关系类型。</p>
 </li>
@@ -286,7 +285,7 @@
 <li><p>我们可以把前$L−1$层看作表示，把最后一层看作线性预测器</p>
 </li>
 <li><p>这种架构通常称为<em>多层感知机</em>（multilayer perceptron），通常缩写为MLP</p>
-<img src="/2023/04/12/Pytorch%E4%B9%8B%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA/image-20230413192102040.png" alt="image-20230413192102040" style="zoom:50%;">
+<p><img src="/2023/04/12/Pytorch%E4%B9%8B%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA/image-20230413192102040.png" alt="image-20230413192102040" style="zoom:50%;"></p>
 </li>
 <li><p>这个多层感知机有4个输入，3个输出，其隐藏层包含5个隐藏单元</p>
 </li>
@@ -296,17 +295,13 @@
 </li>
 <li><p><strong>多层感知机在输出层和输入层之间增加一个或多个全连接隐藏层，并通过激活函数转换隐藏层的输出</strong></p>
 </li>
-<li><p><strong>常用的激活函数包括ReLU函数、sigmoid函数和tanh函数</strong></p>
-</li>
+<li><strong>常用的激活函数包括ReLU函数、sigmoid函数和tanh函数</strong></li>
 </ul>
 <hr>
 <h1 id="多层感知机的简洁实现"><a href="#多层感知机的简洁实现" class="headerlink" title="多层感知机的简洁实现"></a>多层感知机的简洁实现</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">from</span> torch.utils <span class="keyword">import</span> data</span><br><span class="line"><span class="keyword">from</span> torchvision <span class="keyword">import</span> transforms</span><br><span class="line"><span class="keyword">import</span> torchvision</span><br><span class="line"><span class="keyword">from</span> torch <span class="keyword">import</span> nn</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="comment">#读取数据集</span></span><br><span class="line">trans = transforms.ToTensor() <span class="comment">#通过ToTensor实例将图像数据从PIL类型变换成32位浮点数格式</span></span><br><span class="line">mnist_train = torchvision.datasets.FashionMNIST(</span><br><span class="line">    root=<span class="string">&quot;D:\App_Data_File\VScode_Project\Python\Pytorch\dataset\Fashion-MNIST&quot;</span>, train=<span class="literal">True</span>, transform=trans, download=<span class="literal">False</span>)</span><br><span class="line">mnist_test = torchvision.datasets.FashionMNIST(</span><br><span class="line">    root=<span class="string">&quot;D:\App_Data_File\VScode_Project\Python\Pytorch\dataset\Fashion-MNIST&quot;</span>, train=<span class="literal">False</span>, transform=trans, download=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">batch_size = <span class="number">256</span></span><br><span class="line">train_iter = data.DataLoader(mnist_train, batch_size, shuffle=<span class="literal">True</span>)</span><br><span class="line">test_iter = data.DataLoader(mnist_test, batch_size, shuffle=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#模型参数</span></span><br><span class="line">net = nn.Sequential(nn.Flatten(),</span><br><span class="line">                    nn.Linear(<span class="number">784</span>, <span class="number">256</span>),</span><br><span class="line">                    nn.ReLU(),</span><br><span class="line">                    nn.Linear(<span class="number">256</span>, <span class="number">10</span>))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">init_weights</span>(<span class="params">m</span>):</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">type</span>(m) == nn.Linear:</span><br><span class="line">        nn.init.normal_(m.weight, std=<span class="number">0.01</span>)</span><br><span class="line"></span><br><span class="line">net.apply(init_weights)</span><br><span class="line"></span><br><span class="line"><span class="comment">#损失函数</span></span><br><span class="line">loss = nn.CrossEntropyLoss(reduction=<span class="string">&#x27;none&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#优化算法：使用学习率为0.1的小批量随机梯度下降作为优化算法</span></span><br><span class="line">trainer = torch.optim.SGD(net.parameters(), lr=<span class="number">0.1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#训练模型</span></span><br><span class="line">num_epochs = <span class="number">10</span></span><br><span class="line"></span><br><span class="line">train_loss = []</span><br><span class="line">train_acc = []</span><br><span class="line">test_loss = []</span><br><span class="line">test_acc = []</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(num_epochs):</span><br><span class="line">    net.train()</span><br><span class="line">    total_loss, total_correct = <span class="number">0.0</span>, <span class="number">0.0</span></span><br><span class="line">    <span class="keyword">for</span> X, y <span class="keyword">in</span> train_iter:</span><br><span class="line">        y_hat = net(X)</span><br><span class="line">        l = loss(y_hat, y)</span><br><span class="line">        trainer.zero_grad()</span><br><span class="line">        l.mean().backward()</span><br><span class="line">        trainer.step()</span><br><span class="line"></span><br><span class="line">        total_loss += l.<span class="built_in">sum</span>()</span><br><span class="line">        total_correct += (y_hat.argmax(dim=<span class="number">1</span>) == y).<span class="built_in">sum</span>().<span class="built_in">float</span>()</span><br><span class="line"></span><br><span class="line">    train_loss.append(total_loss.detach().numpy() / <span class="built_in">len</span>(mnist_train))</span><br><span class="line">    train_acc.append(total_correct / <span class="built_in">len</span>(mnist_train))</span><br><span class="line"></span><br><span class="line">    net.<span class="built_in">eval</span>()</span><br><span class="line">    total_loss, total_correct = <span class="number">0.0</span>, <span class="number">0.0</span></span><br><span class="line">    <span class="keyword">for</span> X, y <span class="keyword">in</span> test_iter:</span><br><span class="line">        y_hat = net(X)</span><br><span class="line">        l = loss(y_hat, y)</span><br><span class="line"></span><br><span class="line">        total_loss += l.<span class="built_in">sum</span>()</span><br><span class="line">        total_correct += (y_hat.argmax(dim=<span class="number">1</span>) == y).<span class="built_in">sum</span>().<span class="built_in">float</span>()</span><br><span class="line"></span><br><span class="line">    test_loss.append(total_loss.detach().numpy() / <span class="built_in">len</span>(mnist_test))</span><br><span class="line">    test_acc.append(total_correct / <span class="built_in">len</span>(mnist_test))</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Epoch [<span class="subst">&#123;epoch + <span class="number">1</span>&#125;</span>/<span class="subst">&#123;num_epochs&#125;</span>], Train Loss: <span class="subst">&#123;train_loss[-<span class="number">1</span>]:<span class="number">.4</span>f&#125;</span>, Train Acc: <span class="subst">&#123;train_acc[-<span class="number">1</span>]*<span class="number">100</span>:<span class="number">.2</span>f&#125;</span>%, Test Loss: <span class="subst">&#123;test_loss[-<span class="number">1</span>]:<span class="number">.4</span>f&#125;</span>, Test Acc: <span class="subst">&#123;test_acc[-<span class="number">1</span>]*<span class="number">100</span>:<span class="number">.2</span>f&#125;</span>%&quot;</span>)</span><br><span class="line"></span><br><span class="line">plt.figure(figsize=(<span class="number">10</span>, <span class="number">5</span>))</span><br><span class="line">plt.subplot(<span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>)</span><br><span class="line">plt.plot(train_loss, label=<span class="string">&#x27;Train Loss&#x27;</span>)</span><br><span class="line">plt.plot(test_loss, label=<span class="string">&#x27;Test Loss&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Epoch&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Loss&#x27;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>)</span><br><span class="line">plt.plot(train_acc, label=<span class="string">&#x27;Train Acc&#x27;</span>)</span><br><span class="line">plt.plot(test_acc, label=<span class="string">&#x27;Test Acc&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Epoch&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Accuracy&#x27;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line"></span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"><span class="comment">##从测试集中选中10个样本去测试训练好的模型，并可视化测试结果</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_fashion_mnist_labels</span>(<span class="params">labels</span>):  <span class="comment">#@save</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;返回Fashion-MNIST数据集的文本标签&quot;&quot;&quot;</span></span><br><span class="line">    text_labels = [<span class="string">&#x27;t-shirt&#x27;</span>, <span class="string">&#x27;trouser&#x27;</span>, <span class="string">&#x27;pullover&#x27;</span>, <span class="string">&#x27;dress&#x27;</span>, <span class="string">&#x27;coat&#x27;</span>,</span><br><span class="line">                   <span class="string">&#x27;sandal&#x27;</span>, <span class="string">&#x27;shirt&#x27;</span>, <span class="string">&#x27;sneaker&#x27;</span>, <span class="string">&#x27;bag&#x27;</span>, <span class="string">&#x27;ankle boot&#x27;</span>]</span><br><span class="line">    <span class="keyword">return</span> text_labels[labels]</span><br><span class="line"></span><br><span class="line">test_samples = data.DataLoader(mnist_test, batch_size=<span class="number">10</span>, shuffle=<span class="literal">True</span>)</span><br><span class="line">test_batch = <span class="built_in">next</span>(<span class="built_in">iter</span>(test_samples))</span><br><span class="line">X_test, y_test = test_batch</span><br><span class="line"></span><br><span class="line"><span class="comment"># 预测并可视化结果</span></span><br><span class="line">net.<span class="built_in">eval</span>()</span><br><span class="line"><span class="keyword">with</span> torch.no_grad():</span><br><span class="line">    y_pred = net(X_test).argmax(dim=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">fig2=plt.figure(figsize=(<span class="number">10</span>, <span class="number">3</span>))</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">    plt.subplot(<span class="number">2</span>, <span class="number">5</span>, i+<span class="number">1</span>)</span><br><span class="line">    plt.imshow(X_test[i, <span class="number">0</span>], cmap=<span class="string">&#x27;CMRmap&#x27;</span>)</span><br><span class="line">    plt.title(<span class="string">f&quot;Pred: <span class="subst">&#123;get_fashion_mnist_labels(y_pred[i])&#125;</span>, Actual: <span class="subst">&#123;get_fashion_mnist_labels(y_test[i])&#125;</span>&quot;</span>)</span><br><span class="line">    plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">fig2.subplots_adjust(hspace=<span class="number">1.2</span>, wspace=<span class="number">0.5</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-
 <p>结果如下：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Epoch [1/10], Train Loss: 1.0367, Train Acc: 64.71%, Test Loss: 0.6816, Test Acc: 76.38%</span><br><span class="line">Epoch [2/10], Train Loss: 0.5972, Train Acc: 78.91%, Test Loss: 0.5632, Test Acc: 80.51%</span><br><span class="line">Epoch [3/10], Train Loss: 0.5189, Train Acc: 81.77%, Test Loss: 0.5277, Test Acc: 81.49%</span><br><span class="line">Epoch [4/10], Train Loss: 0.4791, Train Acc: 83.14%, Test Loss: 0.5051, Test Acc: 82.13%</span><br><span class="line">Epoch [5/10], Train Loss: 0.4549, Train Acc: 83.95%, Test Loss: 0.4625, Test Acc: 83.73%</span><br><span class="line">Epoch [6/10], Train Loss: 0.4315, Train Acc: 84.88%, Test Loss: 0.4773, Test Acc: 83.28%</span><br><span class="line">Epoch [7/10], Train Loss: 0.4155, Train Acc: 85.26%, Test Loss: 0.4530, Test Acc: 83.56%</span><br><span class="line">Epoch [8/10], Train Loss: 0.4036, Train Acc: 85.76%, Test Loss: 0.4420, Test Acc: 84.14%</span><br><span class="line">Epoch [9/10], Train Loss: 0.3904, Train Acc: 86.21%, Test Loss: 0.4351, Test Acc: 84.05%</span><br><span class="line">Epoch [10/10], Train Loss: 0.3824, Train Acc: 86.46%, Test Loss: 0.4199, Test Acc: 84.63%</span><br></pre></td></tr></table></figure>
-
-<img src="/2023/04/12/Pytorch%E4%B9%8B%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA/image-20230419235927270.png" alt="image-20230419235927270" style="zoom:50%;">
-
+<p><img src="/2023/04/12/Pytorch%E4%B9%8B%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA/image-20230419235927270.png" alt="image-20230419235927270" style="zoom:50%;"></p>
 <p><img src="/2023/04/12/Pytorch%E4%B9%8B%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA/image-20230419235953900.png" alt="image-20230419235953900"></p>
 <p><img src="/2023/04/12/Pytorch%E4%B9%8B%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA/image-20230420000011181.png" alt="image-20230420000011181"></p>
 <ul>
@@ -322,8 +317,7 @@
 </li>
 <li><p>K-折交叉验证的算法：</p>
 <ul>
-<li><p>将训练数据分割成K块</p>
-</li>
+<li>将训练数据分割成K块</li>
 <li><p>For i = 1,…,K</p>
 <ul>
 <li>使用第i块作为验证数据集，其余的k-1块作为训练数据集</li>
@@ -334,34 +328,7 @@
 <li><p>常用K=5或10</p>
 </li>
 <li><p>例如：若K=3</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>块1</th>
-<th>块2</th>
-<th>块3</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>i=1</td>
-<td>val</td>
-<td>train</td>
-<td>train</td>
-</tr>
-<tr>
-<td>i=2</td>
-<td>train</td>
-<td>val</td>
-<td>train</td>
-</tr>
-<tr>
-<td>i=3</td>
-<td>train</td>
-<td>train</td>
-<td>val</td>
-</tr>
-</tbody></table>
+<p>|      | 块1   | 块2   | 块3   |<br>| —— | ——- | ——- | ——- |<br>| i=1  | val   | train | train |<br>| i=2  | train | val   | train |<br>| i=3  | train | train | val   |</p>
 </li>
 </ul>
 </li>
@@ -376,25 +343,7 @@
 </ul>
 </li>
 <li><p><strong>过拟合与欠拟合</strong></p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th><strong>数据：简单</strong></th>
-<th><strong>数据：复杂</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>模型容量：低</strong></td>
-<td>正常</td>
-<td>欠拟合</td>
-</tr>
-<tr>
-<td><strong>模型容量：高</strong></td>
-<td>过拟合</td>
-<td>正常</td>
-</tr>
-</tbody></table>
+<p>|                  | <strong>数据：简单</strong> | <strong>数据：复杂</strong> |<br>| ———————— | ——————— | ——————— |<br>| <strong>模型容量：低</strong> | 正常           | 欠拟合         |<br>| <strong>模型容量：高</strong> | 过拟合         | 正常           |</p>
 <ul>
 <li>过拟合：在训练集上表现好，但是在测试集上效果差</li>
 <li>欠拟合（高偏差）：模型拟合不够，在训练集上表现效果差，没有充分的利用数据，预测的准确度低</li>
@@ -403,7 +352,7 @@
 </ul>
 </li>
 <li><p>模型复杂度对欠拟合和过拟合的影响</p>
-<img src="/2023/04/12/Pytorch%E4%B9%8B%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA/image-20230624232454855.png" alt="image-20230624232454855" style="zoom: 67%;">
+<p><img src="/2023/04/12/Pytorch%E4%B9%8B%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA/image-20230624232454855.png" alt="image-20230624232454855" style="zoom: 67%;"></p>
 </li>
 <li><p>如何防止过拟合与欠拟合：</p>
 <ul>
@@ -430,8 +379,9 @@
 </li>
 <li><p>使用均方范数作为硬性限制：</p>
 <ul>
-<li><p>通过限制参数值的选择范围来控制模型容量<br>$$<br>min[l(w,b)],,,subject, to, ||W||^2\leq\theta<br>$$</p>
-</li>
+<li><p>通过限制参数值的选择范围来控制模型容量</p>
+<script type="math/tex; mode=display">
+min[l(w,b)]\,\,\,subject\, to\, ||W||^2\leq\theta</script></li>
 <li><p>通常不限制偏移b</p>
 </li>
 <li><p>小的$\theta$意味着更强的正则项</p>
@@ -440,8 +390,9 @@
 </li>
 <li><p>使用均方范数作为柔性限制</p>
 <ul>
-<li><p>对于每一个$\theta$，都可以找到$\lambda$使得之前的目标函数等价于：<br>$$<br>min[l(w,b)+\frac\lambda2||w||^2]<br>$$</p>
-</li>
+<li><p>对于每一个$\theta$，都可以找到$\lambda$使得之前的目标函数等价于：</p>
+<script type="math/tex; mode=display">
+min[l(w,b)+\frac\lambda2||w||^2]</script></li>
 <li><p>超参数$\lambda$控制了正则项的重要程度</p>
 <ul>
 <li>$\lambda=0$：正则项无作用</li>
@@ -452,11 +403,13 @@
 </li>
 <li><p>参数更新法则：</p>
 <ul>
-<li><p>计算梯度：<br>$$<br>\frac{\partial (l(w,b)+\frac\lambda2||w||^2)}{\partial w}=\frac{\partial l(w,b)}{\partial w}+\lambda w<br>$$</p>
-</li>
-<li><p>时间t更新参数：<br>$$<br>w_{t+1}=w_t-\eta\frac{\partial loss}{\partial w_t}<br>$$</p>
-<p>$$<br>w_{t+1}=(1-\eta\lambda)w_t-\eta\frac{\partial l(w_t,b_t)}{\partial w_t}<br>$$</p>
-</li>
+<li><p>计算梯度：</p>
+<script type="math/tex; mode=display">
+\frac{\partial (l(w,b)+\frac\lambda2||w||^2)}{\partial w}=\frac{\partial l(w,b)}{\partial w}+\lambda w</script></li>
+<li><p>时间t更新参数：</p>
+<script type="math/tex; mode=display">
+w_{t+1}=w_t-\eta\frac{\partial loss}{\partial w_t}</script><script type="math/tex; mode=display">
+w_{t+1}=(1-\eta\lambda)w_t-\eta\frac{\partial l(w_t,b_t)}{\partial w_t}</script></li>
 <li><p>通常$\eta\lambda&lt;1$，在深度学习中通常叫做权重衰退</p>
 </li>
 </ul>
