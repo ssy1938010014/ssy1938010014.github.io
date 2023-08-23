@@ -22,16 +22,16 @@
     var CONFIG = {"hostname":"xn--ssy-lq6e63gg6fuu2d.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="本节主要介绍了SystemVerilog中类的封装与继承的基本内容、以及包的使用。">
+  <meta name="description" content="本节主要介绍了SystemVerilog中类的封装与继承的基本内容、虚方法以及包的使用。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SV之类的封装与继承">
 <meta property="og:url" content="http://ssy的小天地.com/2023/08/21/SV%E4%B9%8B%E7%B1%BB%E7%9A%84%E5%B0%81%E8%A3%85%E4%B8%8E%E7%BB%A7%E6%89%BF/index.html">
 <meta property="og:site_name" content="ssy的小天地">
-<meta property="og:description" content="本节主要介绍了SystemVerilog中类的封装与继承的基本内容、以及包的使用。">
+<meta property="og:description" content="本节主要介绍了SystemVerilog中类的封装与继承的基本内容、虚方法以及包的使用。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/08/21/SV%E4%B9%8B%E7%B1%BB%E7%9A%84%E5%B0%81%E8%A3%85%E4%B8%8E%E7%BB%A7%E6%89%BF/image-20230821173617016.png">
 <meta property="article:published_time" content="2023-08-21T02:07:12.000Z">
-<meta property="article:modified_time" content="2023-08-22T05:13:09.747Z">
+<meta property="article:modified_time" content="2023-08-23T03:39:19.402Z">
 <meta property="article:author" content="ssy">
 <meta property="article:tag" content="SystemVerilog">
 <meta name="twitter:card" content="summary">
@@ -240,7 +240,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-08-22 13:13:09" itemprop="dateModified" datetime="2023-08-22T13:13:09+08:00">2023-08-22</time>
+                <time title="修改时间：2023-08-23 11:39:19" itemprop="dateModified" datetime="2023-08-23T11:39:19+08:00">2023-08-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -270,8 +270,9 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>本节主要介绍了SystemVerilog中类的封装与继承的基本内容、以及包的使用。</p>
+        <p>本节主要介绍了SystemVerilog中类的封装与继承的基本内容、虚方法以及包的使用。</p>
 <span id="more"></span>
+
 <h1 id="类的概述"><a href="#类的概述" class="headerlink" title="类的概述"></a>类的概述</h1><ul>
 <li><strong>类的三要素：封装、继承、多态（虚方法）</strong></li>
 <li>类是一种可以包含数据和方法的类型</li>
@@ -290,6 +291,7 @@
 </li>
 <li><p>如果<strong>没有句柄指向个对象，</strong> Systemverilog将释放该对象的内存空间（<strong>对象的销毁</strong>）</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Transaction t1, t2; //声明两个句柄</span><br><span class="line">t1 = new();//创建一个对象，并将t1指向该对象</span><br><span class="line">t2 = new();//创建一个对象，并将t2指向该对象</span><br><span class="line">t1 = t2;   //将t2的值赋予t1,这时t1和t2指向同一对象，t1之前指向的对象被释放</span><br><span class="line">t1.display();//调用对象的成员方法</span><br><span class="line">t1.addr = 32&#x27;h42;//给对象成员赋值</span><br></pre></td></tr></table></figure>
+
 </li>
 </ul>
 <h2 id="2-静态变量和静态方法"><a href="#2-静态变量和静态方法" class="headerlink" title="2.静态变量和静态方法"></a>2.静态变量和静态方法</h2><ul>
@@ -308,6 +310,7 @@
 </li>
 <li><p>如果访问类型为<code>local</code>，那么只有该类可以访问成员，<strong>子类和外部均不可访问</strong></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">class clock;</span><br><span class="line">  local bit is_summer = 0;</span><br><span class="line">  local bit nclock = 6;</span><br><span class="line">  function int get_clock();</span><br><span class="line">  ...</span><br><span class="line">  endfunction</span><br><span class="line">endclass</span><br><span class="line"> </span><br><span class="line">clock ck;</span><br><span class="line">initial begin</span><br><span class="line">  ck = new();</span><br><span class="line">  $display(&quot;now time is %0d&quot;,ck.get_clock);//成功访问</span><br><span class="line">  ck.set_summer(1);</span><br><span class="line">  $display(&quot;now time is %0d&quot;,ck.nclock); //报错，外部句柄不能访问local变量</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
 </li>
 </ul>
 <h2 id="4-this"><a href="#4-this" class="headerlink" title="4.this"></a>4.this</h2><ul>
@@ -317,6 +320,7 @@
 </li>
 <li><p>this可以明确所指向变量的作用域</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">class Demo;</span><br><span class="line">	integer x;</span><br><span class="line">	function new (integer x);</span><br><span class="line">		this.x = x; //说明这时this.x代表成员变量integer x</span><br><span class="line">	endfunction</span><br><span class="line">endclass</span><br></pre></td></tr></table></figure>
+
 </li>
 </ul>
 <h2 id="5-浅拷贝与深拷贝"><a href="#5-浅拷贝与深拷贝" class="headerlink" title="5.浅拷贝与深拷贝"></a>5.浅拷贝与深拷贝</h2><ul>
@@ -325,6 +329,7 @@
 </li>
 <li><p>深拷贝：<strong>当使用深复制时，所有的变量都会被复制，包括下层的对象</strong></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">b2.copy(b1);       //深复制，其中一个改变，不会影响另外一个</span><br></pre></td></tr></table></figure>
+
 </li>
 </ul>
 <hr>
@@ -338,11 +343,18 @@
 </li>
 <li><p>通过<code>extends</code>，LinkedPacket继承于其父类Packet</p>
 </li>
-<li><p>当子类成员与父类成员同名，必须使用<code>super</code>来指定访问其父类成员</p>
+<li><p>当子类成员与父类成员同名，<strong>必须</strong>使用<code>super</code>来指定访问其父类成员</p>
 </li>
 <li><p>当父类的new没有参数时，子类也会自动先调用父类的new，当父类的new有参数时，需加上<code>super.new(参数列表)</code>使得子类先调用父类的new</p>
 </li>
 <li><p>子类句柄赋值给父类之后，<strong>被赋值的父类句柄只能指向整个子类中属于父类的部分</strong></p>
+</li>
+</ul>
+<hr>
+<h1 id="虚方法"><a href="#虚方法" class="headerlink" title="虚方法"></a>虚方法</h1><ul>
+<li><p>通过在父类里定义虚方法(task or function)，可以在当父类句柄调用一个方法时候，<strong>前提是若是这个句柄指向了子类对象</strong>，则<strong>调用的方法为子类的方法而不是父类的方法</strong></p>
+</li>
+<li><p>使用系统函数<code>$cast</code>将父类句柄转化为子类句柄,，使其可以访问子类的变量</p>
 </li>
 </ul>
 <hr>
@@ -355,8 +367,9 @@
 </ul>
 <hr>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_59670134/article/details/119190972">SV基础知识3—-Class类和Package_sv中类和包的区别_持续学习_ing的博客-CSDN博客</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1k7411H7Jo?p=21&amp;vd_source=221b76534ba13cfad544149d75ce9b6c">SV系统验证 第七周 类的继承-2_哔哩哔哩_bilibili</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_59670134/article/details/119190972">SV基础知识3—Class类和Package_sv中类和包的区别_持续学习_ing的博客-CSDN博客</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1k7411H7Jo?p=21&vd_source=221b76534ba13cfad544149d75ce9b6c">SV系统验证 第七周 类的继承-2_哔哩哔哩_bilibili</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_41467882/article/details/121704198">System Verilog——虚方法的使用_虚方法systemverilog_ty_xiumud的博客-CSDN博客</a></li>
 </ul>
 
     </div>
@@ -408,12 +421,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2023/08/21/SV%E4%B9%8B%E6%95%B0%E7%BB%84/" rel="prev" title="SV之数组">
-      <i class="fa fa-chevron-left"></i> SV之数组
+    <a href="/2023/08/17/Pytorch%E4%B9%8B%E6%96%87%E6%9C%AC%E6%83%85%E6%84%9F%E5%88%86%E7%B1%BB/" rel="prev" title="Pytorch之文本情感分类">
+      <i class="fa fa-chevron-left"></i> Pytorch之文本情感分类
     </a></div>
       <div class="post-nav-item">
-    <a href="/2023/08/22/SV%E4%B9%8B%E9%9A%8F%E6%9C%BA%E7%BA%A6%E6%9D%9F/" rel="next" title="SV之随机约束">
-      SV之随机约束 <i class="fa fa-chevron-right"></i>
+    <a href="/2023/08/21/SV%E4%B9%8B%E6%95%B0%E7%BB%84/" rel="next" title="SV之数组">
+      SV之数组 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -473,7 +486,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B1%BB%E7%9A%84%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">类的概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B1%BB%E7%9A%84%E5%B0%81%E8%A3%85"><span class="nav-number">2.</span> <span class="nav-text">类的封装</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%8F%A5%E6%9F%84%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">2.1.</span> <span class="nav-text">1.句柄的使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E9%9D%99%E6%80%81%E5%8F%98%E9%87%8F%E5%92%8C%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95"><span class="nav-number">2.2.</span> <span class="nav-text">2.静态变量和静态方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%98"><span class="nav-number">2.3.</span> <span class="nav-text">3.类的成员</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-this"><span class="nav-number">2.4.</span> <span class="nav-text">4.this</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E6%B5%85%E6%8B%B7%E8%B4%9D%E4%B8%8E%E6%B7%B1%E6%8B%B7%E8%B4%9D"><span class="nav-number">2.5.</span> <span class="nav-text">5.浅拷贝与深拷贝</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B1%BB%E7%9A%84%E7%BB%A7%E6%89%BF"><span class="nav-number">3.</span> <span class="nav-text">类的继承</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8C%85%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">4.</span> <span class="nav-text">包的使用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B1%BB%E7%9A%84%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">类的概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B1%BB%E7%9A%84%E5%B0%81%E8%A3%85"><span class="nav-number">2.</span> <span class="nav-text">类的封装</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%8F%A5%E6%9F%84%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">2.1.</span> <span class="nav-text">1.句柄的使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E9%9D%99%E6%80%81%E5%8F%98%E9%87%8F%E5%92%8C%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95"><span class="nav-number">2.2.</span> <span class="nav-text">2.静态变量和静态方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%98"><span class="nav-number">2.3.</span> <span class="nav-text">3.类的成员</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-this"><span class="nav-number">2.4.</span> <span class="nav-text">4.this</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E6%B5%85%E6%8B%B7%E8%B4%9D%E4%B8%8E%E6%B7%B1%E6%8B%B7%E8%B4%9D"><span class="nav-number">2.5.</span> <span class="nav-text">5.浅拷贝与深拷贝</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B1%BB%E7%9A%84%E7%BB%A7%E6%89%BF"><span class="nav-number">3.</span> <span class="nav-text">类的继承</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%99%9A%E6%96%B9%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text">虚方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8C%85%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">5.</span> <span class="nav-text">包的使用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">6.</span> <span class="nav-text">Reference</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -489,7 +502,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">91</span>
+          <span class="site-state-item-count">92</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

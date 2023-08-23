@@ -22,20 +22,20 @@
     var CONFIG = {"hostname":"xn--ssy-lq6e63gg6fuu2d.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="本节主要介绍了R方的计算步骤、范数以及正则化。">
+  <meta name="description" content="本节主要介绍了SystemVerilog中">
 <meta property="og:type" content="article">
-<meta property="og:title" content="深度学习基础之范数及正则化">
-<meta property="og:url" content="http://ssy的小天地.com/2022/12/06/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E8%8C%83%E6%95%B0%E5%8F%8A%E6%AD%A3%E5%88%99%E5%8C%96/index.html">
+<meta property="og:title" content="SV之线程控制与通信">
+<meta property="og:url" content="http://ssy的小天地.com/2023/08/23/SV%E4%B9%8B%E7%BA%BF%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E9%80%9A%E4%BF%A1/index.html">
 <meta property="og:site_name" content="ssy的小天地">
-<meta property="og:description" content="本节主要介绍了R方的计算步骤、范数以及正则化。">
+<meta property="og:description" content="本节主要介绍了SystemVerilog中">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-12-06T02:07:12.000Z">
-<meta property="article:modified_time" content="2022-12-13T06:37:19.475Z">
+<meta property="article:published_time" content="2023-08-23T02:07:12.000Z">
+<meta property="article:modified_time" content="2023-08-23T03:12:12.058Z">
 <meta property="article:author" content="ssy">
-<meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="SystemVerilog">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://ssy的小天地.com/2022/12/06/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E8%8C%83%E6%95%B0%E5%8F%8A%E6%AD%A3%E5%88%99%E5%8C%96/">
+<link rel="canonical" href="http://ssy的小天地.com/2023/08/23/SV%E4%B9%8B%E7%BA%BF%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E9%80%9A%E4%BF%A1/">
 
 
 <script id="page-configurations">
@@ -48,7 +48,7 @@
   };
 </script>
 
-  <title>深度学习基础之范数及正则化 | ssy的小天地</title>
+  <title>SV之线程控制与通信 | ssy的小天地</title>
   
 
 
@@ -205,7 +205,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://ssy的小天地.com/2022/12/06/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E8%8C%83%E6%95%B0%E5%8F%8A%E6%AD%A3%E5%88%99%E5%8C%96/">
+    <link itemprop="mainEntityOfPage" href="http://ssy的小天地.com/2023/08/23/SV%E4%B9%8B%E7%BA%BF%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E9%80%9A%E4%BF%A1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/ssy.png">
@@ -218,7 +218,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          深度学习基础之范数及正则化
+          SV之线程控制与通信
         </h1>
 
         <div class="post-meta">
@@ -230,16 +230,10 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2022-12-06 10:07:12" itemprop="dateCreated datePublished" datetime="2022-12-06T10:07:12+08:00">2022-12-06</time>
+              <time title="创建时间：2023-08-23 10:07:12 / 修改时间：11:12:12" itemprop="dateCreated datePublished" datetime="2023-08-23T10:07:12+08:00">2023-08-23</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-12-13 14:37:19" itemprop="dateModified" datetime="2022-12-13T14:37:19+08:00">2022-12-13</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -268,61 +262,69 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>本节主要介绍了R方的计算步骤、范数以及正则化。</p>
+        <p>本节主要介绍了SystemVerilog中</p>
 <span id="more"></span>
 
-<h1 id="R方的计算步骤"><a href="#R方的计算步骤" class="headerlink" title="R方的计算步骤"></a>R方的计算步骤</h1><ul>
-<li><p>R方可以用于评估回归模型对现实数据的拟合程度</p>
+<h1 id="线程的控制"><a href="#线程的控制" class="headerlink" title="线程的控制"></a>线程的控制</h1><ul>
+<li><code>fork……join</code>需要所有并行线程都结束才会继续执行</li>
+<li><code>fork……join_any</code>其中任意一个线程结束就继续执行</li>
+<li><code>fork……join_none</code>不等待子线程，直接继续执行</li>
+<li>在Fork/Join结构之后，加一句<code>wait fork</code>，会阻塞后续语句，直到fork出来的进程都执行完；如果加一句<code>disable fork</code>，则是直接结束掉fork出来的进程，后续语句往下执行。</li>
+</ul>
+<hr>
+<h1 id="线程的通信"><a href="#线程的通信" class="headerlink" title="线程的通信"></a>线程的通信</h1><h2 id="1-事件event"><a href="#1-事件event" class="headerlink" title="1.事件event"></a>1.事件event</h2><ul>
+<li><p>使用@操作符或者wait() 等待事件被触发</p>
 </li>
-<li><p>设$y_i$是测试集第$i$个样本的价格，$\bar y$是真实价格的均值，$f(x_i)$是模型对第$i$个样本的预测价格，$n$是样本数量，则$R$方的计算步骤为：</p>
+<li><p>使用-&gt;操作符触发事件</p>
 <ul>
-<li><p>计算残差平方和$SS_{res}$：<br>$$<br>SS_{res}=\sum_{i=1}^n(y_i-f(x_i))^2<br>$$</p>
-</li>
-<li><p>计算样本总离差平方和$SS_{tss}$：<br>$$<br>SS_{tss}=\sum_{i=1}^n(y_i-\bar y)^2<br>$$</p>
-</li>
-<li><p>最后得到$R$方：<br>$$<br>R^2=1-\frac{SS_{res}}{SS_{tss}}<br>$$</p>
-</li>
+<li><strong>使用@等待某个事件发生时产生竞争的情况</strong></li>
 </ul>
-</li>
-<li><p>$R$方的取值越大，说明模型的效果越好</p>
-</li>
-</ul>
-<hr>
-<h1 id="范数"><a href="#范数" class="headerlink" title="范数"></a>范数</h1><h2 id="1-向量范数"><a href="#1-向量范数" class="headerlink" title="1.向量范数"></a>1.向量范数</h2><ul>
-<li><p>L1-范数：即向量与元素绝对值之和<br>$$<br>||x||<em>1=\sum</em>{i=1}^N|x_i|<br>$$</p>
-</li>
-<li><p>L2-范数：即向量元素绝对值的平方和再开方<br>$$<br>||x||<em>2=(\sum</em>{i=1}^N|x_i|^2)^{\frac12}<br>$$</p>
-</li>
-<li><p>$\infty$-范数：即所有向量元素绝对值中的最大值<br>$$<br>||x||_{\infty}=\mathop{max}_i|x_i|<br>$$</p>
-</li>
-<li><p>$-\infty$-范数：即所有向量元素绝对值中的最小值<br>$$<br>||x||_{-\infty}=\mathop{min}_i|x_i|<br>$$</p>
-</li>
-<li><p>$p$-范数：即向量元素绝对值的$p$次方和的$\frac1p$次幂<br>$$<br>||x||<em>p=(\sum</em>{i=1}^N|x_i|^p)^{\frac1p}<br>$$</p>
-</li>
-</ul>
-<h2 id="2-矩阵范数"><a href="#2-矩阵范数" class="headerlink" title="2.矩阵范数"></a>2.矩阵范数</h2><p>假设矩阵A为$m\cdot n$，即m行n列</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">`timescale 1ns/10fs</span><br><span class="line"> </span><br><span class="line">module event_test();</span><br><span class="line">  event a;    //使用关键字event来声明一个事件a</span><br><span class="line"> </span><br><span class="line">  initial begin</span><br><span class="line">    #50ns;</span><br><span class="line">    -&gt;a;</span><br><span class="line">  end</span><br><span class="line"> </span><br><span class="line">  initial begin</span><br><span class="line">    #50ns;</span><br><span class="line">    @a; //第一个进程在50ns后触发了事件a，第二个进程在50ns的时候等待a，有可能等的到，有可能等不到，产生竞争</span><br><span class="line">  end</span><br><span class="line"> </span><br><span class="line">endmodule</span><br></pre></td></tr></table></figure>
+
 <ul>
-<li><p>L1-范数：即矩阵的所有列元素绝对值之和的最大值<br>$$<br>||A||<em>1=\mathop{max}_j\sum</em>{i=1}^m|a_{ij}|<br>$$</p>
+<li><strong>使用wait(event_a.triggered) 等待event</strong>：Systemverilog 引入了<strong>triggered()</strong>函数，<strong>用于检测某个事件是否已被触发过，包括正在触发</strong></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">module event_test();</span><br><span class="line">  event a;    //使用关键字event来声明一个事件a</span><br><span class="line"> </span><br><span class="line">  initial begin</span><br><span class="line">    #50;</span><br><span class="line">    -&gt;a;</span><br><span class="line">    $display(&quot;Event a is being triggered!&quot;);</span><br><span class="line">  end</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">  initial begin</span><br><span class="line">    #20;</span><br><span class="line">    wait(a.triggered); //使用wait来等待事件a，这种方式是一定可以等到a的</span><br><span class="line">    $display(&quot;#20 a.triggered!&quot;);</span><br><span class="line">  end</span><br><span class="line"> </span><br><span class="line">  initial begin</span><br><span class="line">    #50;</span><br><span class="line">    wait(a.triggered); //使用wait来等待事件a，这种方式是一定可以等到a的，这是和使用@来等待的区别</span><br><span class="line">    $display(&quot;#50 a.triggered!&quot;);</span><br><span class="line">  end</span><br><span class="line"> </span><br><span class="line">  initial begin</span><br><span class="line">    #60;</span><br><span class="line">    wait(a.triggered); //使用wait来等待事件a，a會被trigger一次，並且並且發生在wait之前，永遠等不到</span><br><span class="line">    $display(&quot;#60 a.triggered!&quot;);  //不會被打印</span><br><span class="line">  end</span><br><span class="line"> </span><br><span class="line">endmodule</span><br></pre></td></tr></table></figure>
+
 </li>
-<li><p>L2-范数：即$A^TA$矩阵的最大特征值开平方<br>$$<br>||A||_2=\sqrt{\lambda_1},\lambda_1为A^TA的最大特征值<br>$$</p>
+</ul>
+<h2 id="2-旗语semaphore"><a href="#2-旗语semaphore" class="headerlink" title="2.旗语semaphore"></a>2.旗语semaphore</h2><ul>
+<li><p>使用旗语可以<strong>实现对同一资源的访问控制</strong></p>
 </li>
-<li><p>$\infty$-范数：即矩阵的所有行向量元素绝对值之和的最大值<br>$$<br>||A||<em>{\infty}=\mathop{max}_i\sum</em>{j=1}^n|a_{ij}|<br>$$</p>
+<li><p>旗语有三种基本操作：</p>
+<ul>
+<li>new：可以创建一个带单个或者多个钥匙的旗语</li>
+<li>get：可以获取一个或多个钥匙</li>
+<li>put：可以返回一个或多个钥匙</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">program automatic test(bus_ifc.TB bus);</span><br><span class="line">    semaphore sem;              //创建一个旗语</span><br><span class="line">    initial</span><br><span class="line">    begin</span><br><span class="line">        sem = new(1);           //分配一个钥匙</span><br><span class="line">        fork</span><br><span class="line">            sequencer();</span><br><span class="line">            sequencer();</span><br><span class="line">        join</span><br><span class="line">    end</span><br><span class="line">    </span><br><span class="line">    task sequencer;</span><br><span class="line">        repeat($urandom()%10)   @bus.cb;    //等待0~9个周期</span><br><span class="line">        sendTrans();                        //执行总线事务</span><br><span class="line">    endtask</span><br><span class="line">    </span><br><span class="line">    task sendTrans;</span><br><span class="line">        sem.get(1);                         //获取总线钥匙</span><br><span class="line">        @bus.cb;                            </span><br><span class="line">        bus.cb.addr &lt;= t.addr;</span><br><span class="line">        ...</span><br><span class="line">        sem.put(1);                         //返回总线钥匙</span><br><span class="line">    endtask</span><br><span class="line">endprogram</span><br></pre></td></tr></table></figure>
+
 </li>
-<li><p>F-范数：即矩阵元素绝对值的平方和再开平方<br>$$<br>||A||<em>F=(\sum</em>{i=1}^m\sum_{j=1}^n|a_{ij}|^2)^{\frac12}<br>$$</p>
+</ul>
+<h2 id="3-信箱mailbox"><a href="#3-信箱mailbox" class="headerlink" title="3.信箱mailbox"></a>3.信箱mailbox</h2><ul>
+<li><p>mailbox是一种对象，因此也需要使用new()来例化</p>
+</li>
+<li><p>使用<code>put()</code>可以把数据放入mailbox，使用<code>get()</code>可从信箱移除数据</p>
+</li>
+<li><p>如果信箱为满，则put()会阻塞；如果信箱为空，则get()会阻塞</p>
+</li>
+<li><p>maibox的存取方法put() 和get()是<strong>阻塞方法</strong>，即使用时方法不一定立即返回</p>
+</li>
+<li><p><code>peek()</code>可以获取对信箱里数据的拷贝而不移除它</p>
+</li>
+<li><p><strong>mailbox只能够用作FIFO</strong></p>
+</li>
+<li><p>在线程之间做数据通信或者内部数据缓存时可以考虑使用此方式</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">program automatic bounded;</span><br><span class="line">    mailbox mbx;</span><br><span class="line">    initial begin</span><br><span class="line">        mbx=new(1); //容量为1</span><br><span class="line">        fork</span><br><span class="line">            //Producer线程</span><br><span class="line">            for(inti=1; i&lt;4; i++) begin</span><br><span class="line">            $display(&quot;Producer: before put(%0d)&quot;, i);</span><br><span class="line">            mbx.put(i);</span><br><span class="line">            $display(&quot;Producer: after put(%0d)&quot;, i);</span><br><span class="line">            end</span><br><span class="line">            //consumer线程</span><br><span class="line">            repeat(3) begin</span><br><span class="line">                int j;</span><br><span class="line">                #1ns mbx.get(j);</span><br><span class="line">                $display(&quot;Consumer: after get(%0d)&quot;, j);</span><br><span class="line">            end</span><br><span class="line">        join</span><br><span class="line">    end</span><br><span class="line">endprogram</span><br><span class="line"></span><br><span class="line">//测试结果</span><br><span class="line">// Producer: before put(1)</span><br><span class="line">// Producer: after put(1)</span><br><span class="line">// Producer: before put(2)</span><br><span class="line">// Consumer: after get(1)</span><br><span class="line">// Producer: after put(2)</span><br><span class="line">// Producer: before put(3)</span><br><span class="line">// Consumer: after get(2)</span><br><span class="line">// Producer: after put(3)</span><br><span class="line">// Consumer: after get(3)</span><br></pre></td></tr></table></figure>
+
 </li>
 </ul>
 <hr>
-<h1 id="线性回归的正则化"><a href="#线性回归的正则化" class="headerlink" title="线性回归的正则化"></a>线性回归的正则化</h1><ul>
-<li><p>其目的是应用过拟合</p>
-</li>
-<li><p>在原有损失函数中加入正则化项：<br>$$<br>J(\theta)=\frac1{2m}[\sum_{i=1}^m(h_\theta(x^{(i)})-y^{(i)})^2+\alpha\sum_{j=1}^n\theta_j^2]<br>$$</p>
-</li>
-<li><p>其中$\alpha$是正则化参数</p>
-</li>
-<li><p>可以通过交叉验证的方式设置调整超参数$\alpha$</p>
-</li>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/404698267">SystemVerilog | 多线程，从概念到编程框架 - 知乎 (zhihu.com)</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.wenhui.space/docs/07-ic-verify/training/sv-study-note-five/#fork-dot-dot-dot-join">SV学习笔记（五） – Wenhui’s Rotten Pen</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_56242485/article/details/124260107">Systemverilog中关于@和wait的区别_verilog @ wait_借问众神明.的博客-CSDN博客</a></li>
 </ul>
-<hr>
 
     </div>
 
@@ -353,7 +355,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://ssy的小天地.com/2022/12/06/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E8%8C%83%E6%95%B0%E5%8F%8A%E6%AD%A3%E5%88%99%E5%8C%96/" title="深度学习基础之范数及正则化">http://ssy的小天地.com/2022/12/06/深度学习基础之范数及正则化/</a>
+    <a href="http://ssy的小天地.com/2023/08/23/SV%E4%B9%8B%E7%BA%BF%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E9%80%9A%E4%BF%A1/" title="SV之线程控制与通信">http://ssy的小天地.com/2023/08/23/SV之线程控制与通信/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -364,7 +366,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"># 深度学习</a>
+              <a href="/tags/SystemVerilog/" rel="tag"># SystemVerilog</a>
           </div>
 
         
@@ -373,13 +375,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2022/12/05/C++%E4%B9%8B%E5%88%86%E6%94%AF%E8%AF%AD%E5%8F%A5%E4%B8%8E%E7%AE%80%E5%8D%95%E6%96%87%E4%BB%B6%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA/" rel="prev" title="C++之分支语句与简单文件输入输出">
-      <i class="fa fa-chevron-left"></i> C++之分支语句与简单文件输入输出
+    <a href="/2023/08/22/SV%E4%B9%8B%E9%9A%8F%E6%9C%BA%E7%BA%A6%E6%9D%9F/" rel="prev" title="SV之随机约束">
+      <i class="fa fa-chevron-left"></i> SV之随机约束
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2022/12/06/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E4%B9%8B%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E4%B8%8E%E6%B5%81/" rel="next" title="数据结构与算法之面向对象与流">
-      数据结构与算法之面向对象与流 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -438,7 +437,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#R%E6%96%B9%E7%9A%84%E8%AE%A1%E7%AE%97%E6%AD%A5%E9%AA%A4"><span class="nav-number">1.</span> <span class="nav-text">R方的计算步骤</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%8C%83%E6%95%B0"><span class="nav-number">2.</span> <span class="nav-text">范数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%90%91%E9%87%8F%E8%8C%83%E6%95%B0"><span class="nav-number">2.1.</span> <span class="nav-text">1.向量范数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E7%9F%A9%E9%98%B5%E8%8C%83%E6%95%B0"><span class="nav-number">2.2.</span> <span class="nav-text">2.矩阵范数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%E7%9A%84%E6%AD%A3%E5%88%99%E5%8C%96"><span class="nav-number">3.</span> <span class="nav-text">线性回归的正则化</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E7%9A%84%E6%8E%A7%E5%88%B6"><span class="nav-number">1.</span> <span class="nav-text">线程的控制</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E7%9A%84%E9%80%9A%E4%BF%A1"><span class="nav-number">2.</span> <span class="nav-text">线程的通信</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BA%8B%E4%BB%B6event"><span class="nav-number">2.1.</span> <span class="nav-text">1.事件event</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%97%97%E8%AF%ADsemaphore"><span class="nav-number">2.2.</span> <span class="nav-text">2.旗语semaphore</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E4%BF%A1%E7%AE%B1mailbox"><span class="nav-number">2.3.</span> <span class="nav-text">3.信箱mailbox</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
