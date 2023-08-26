@@ -30,7 +30,7 @@
 <meta property="og:description" content="本节主要介绍了SystemVerilog中产生随机数的方法以及约束块的使用">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-08-22T02:07:12.000Z">
-<meta property="article:modified_time" content="2023-08-22T08:05:06.650Z">
+<meta property="article:modified_time" content="2023-08-24T03:40:40.722Z">
 <meta property="article:author" content="ssy">
 <meta property="article:tag" content="SystemVerilog">
 <meta name="twitter:card" content="summary">
@@ -230,10 +230,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2023-08-22 10:07:12 / 修改时间：16:05:06" itemprop="dateCreated datePublished" datetime="2023-08-22T10:07:12+08:00">2023-08-22</time>
+              <time title="创建时间：2023-08-22 10:07:12" itemprop="dateCreated datePublished" datetime="2023-08-22T10:07:12+08:00">2023-08-22</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-08-24 11:40:40" itemprop="dateModified" datetime="2023-08-24T11:40:40+08:00">2023-08-24</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -290,7 +296,7 @@
 <hr>
 <h1 id="约束块"><a href="#约束块" class="headerlink" title="约束块"></a>约束块</h1><ul>
 <li><p>约束块支持整形通过<code>constraint</code>操作符来设置它们的可取值范围</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">class set_rand;</span><br><span class="line">    rand integer x, y, z;</span><br><span class="line">    constraint c1 &#123;x inside &#123;3, 5, [9:15], [24:32], [y:2*y], z&#125;;&#125;</span><br><span class="line">    </span><br><span class="line">    rand integer a, b, c;</span><br><span class="line">    constraint c2 &#123;a inside &#123;b,  c&#125;;&#125;</span><br><span class="line">    </span><br><span class="line">    integer fives[4] = &#x27;&#123;5, 10, 15, 20&#125;;</span><br><span class="line">    rand integer v;</span><br><span class="line">    constraint c3 &#123;v inside &#123;fives&#125;;&#125;</span><br><span class="line">    </span><br><span class="line">    //unique可以用来约束一组变量，使得其在随机后变量之间不会有相同的数值</span><br><span class="line">    rand byte a[5];</span><br><span class="line">    rand byte b;</span><br><span class="line">    rand byte excluded;</span><br><span class="line">    constraint u &#123;unique &#123;b, a[2:3],exclude&#125;;&#125;//这里a[2]、a[3]、b和excluded在随机之后将包含不相同的数值</span><br><span class="line">    constraint exclusion &#123;excluded == 5;&#125;</span><br><span class="line">    </span><br><span class="line">    //使用-&gt;操作符来表示条件约束</span><br><span class="line">    bit [3:0] a, b;</span><br><span class="line">    constraint c &#123;(a == 0) -&gt; (b &lt; 10)&#125; //表示如果a等于0，那么b就随机取小于10的数</span><br><span class="line">endclass</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">class set_rand;</span><br><span class="line">    rand integer x, y, z;</span><br><span class="line">    constraint c1 &#123;x inside &#123;3, 5, [9:15], [24:32], [y:2*y], z&#125;;&#125;</span><br><span class="line">    </span><br><span class="line">    rand integer a, b, c;</span><br><span class="line">    constraint c2 &#123;a inside &#123;b,  c&#125;;&#125;</span><br><span class="line">    </span><br><span class="line">    integer fives[4] = &#x27;&#123;5, 10, 15, 20&#125;;</span><br><span class="line">    rand integer v;</span><br><span class="line">    constraint c3 &#123;v inside &#123;fives&#125;;&#125;</span><br><span class="line">    </span><br><span class="line">    //unique可以用来约束一组变量，使得其在随机后变量之间不会有相同的数值</span><br><span class="line">    rand byte a[5];</span><br><span class="line">    rand byte b;</span><br><span class="line">    rand byte excluded;</span><br><span class="line">    constraint u &#123;unique &#123;b, a[2:3], exclude&#125;;&#125;//这里a[2]、a[3]、b和excluded在随机之后将包含不相同的数值</span><br><span class="line">    constraint exclusion &#123;excluded == 5;&#125;</span><br><span class="line">    </span><br><span class="line">    //使用-&gt;操作符来表示条件约束</span><br><span class="line">    bit [3:0] a, b;</span><br><span class="line">    constraint c &#123;(a == 0) -&gt; (b &lt; 10)&#125; //表示如果a等于0，那么b就随机取小于10的数</span><br><span class="line">endclass</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>权重分布</strong>：</p>
 <ul>
@@ -453,7 +459,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">92</span>
+          <span class="site-state-item-count">94</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -466,7 +472,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-count">27</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

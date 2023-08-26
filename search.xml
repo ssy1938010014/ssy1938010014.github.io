@@ -542,6 +542,239 @@
       </tags>
   </entry>
   <entry>
+    <title>VCS之基本操作</title>
+    <url>/2023/08/25/VCS%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/</url>
+    <content><![CDATA[<p>本文主要</p>
+<span id="more"></span>
+
+<h1 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h1><h2 id="1-源代码"><a href="#1-源代码" class="headerlink" title="1.源代码"></a>1.源代码</h2><ul>
+<li><p>counter.sv</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">`timescale  1ns/1ps</span><br><span class="line"></span><br><span class="line">module counter(</span><br><span class="line">    input clk,</span><br><span class="line">    input rst,</span><br><span class="line">    output logic [5:0] count</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">always @(posedge clk or negedge rst) begin</span><br><span class="line">    if(!rst)</span><br><span class="line">        count &lt;= 0;</span><br><span class="line">    else </span><br><span class="line">        count &lt;= count + 6&#x27;b1;</span><br><span class="line">end</span><br><span class="line"></span><br><span class="line">endmodule</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="2-Testbench"><a href="#2-Testbench" class="headerlink" title="2.Testbench"></a>2.Testbench</h2><ul>
+<li><p>counter_tb.sv</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">`timescale  1ns/1ps</span><br><span class="line"></span><br><span class="line">module counter_tb();</span><br><span class="line">    </span><br><span class="line">    logic clk;</span><br><span class="line">    logic rst;</span><br><span class="line">    wire [5:0] count;</span><br><span class="line"></span><br><span class="line">    counter u1(clk, rst, count);</span><br><span class="line"></span><br><span class="line">    always #(5) begin</span><br><span class="line">        clk = ~clk;</span><br><span class="line">    end</span><br><span class="line"></span><br><span class="line">    initial begin</span><br><span class="line">        clk = 0;</span><br><span class="line">        rst = 0;</span><br><span class="line"></span><br><span class="line">        #20;</span><br><span class="line">        rst = 1;</span><br><span class="line">        #50;</span><br><span class="line">        if(count != 5)</span><br><span class="line">            $display(&quot;Failure 1: the counter should be 5 but it is %d&quot;, count);</span><br><span class="line">        else</span><br><span class="line">            $display(&quot;You gotta the right result! It is five!&quot;);</span><br><span class="line">        $finish;</span><br><span class="line">    end</span><br><span class="line"></span><br><span class="line">endmodule</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="3-filelist"><a href="#3-filelist" class="headerlink" title="3.filelist"></a>3.filelist</h2><ul>
+<li><p>filelist.f：将需要编译的文件都放在这个文件夹下</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">./counter.sv</span><br><span class="line">./counter_tb.sv</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="4-Makefile"><a href="#4-Makefile" class="headerlink" title="4.Makefile"></a>4.Makefile</h2><ul>
+<li><p>将编译相关的一些指令集成在Makefile文件中</p>
+<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="section">all: clean comp sim</span></span><br><span class="line"></span><br><span class="line">sim_name = simv <span class="comment">#recommend simv_* to rename</span></span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm -rf ./csrc *.daidir *.log simv* *.key</span><br><span class="line"></span><br><span class="line"><span class="section">comp:</span></span><br><span class="line">	vcs -full64 -cpp g++ -cc gcc -LDFLAGS -no-pie -LDFLAGS -Wl,--no-as-needed -CFLAGS -fPIE \</span><br><span class="line">		-sverilog +v2k -timescale=1ns/1ps \</span><br><span class="line">		-debug_acc+all \</span><br><span class="line">		-o $&#123;sim_name&#125; \</span><br><span class="line">		-l compile.log \</span><br><span class="line">		-f filelist.f \</span><br><span class="line"></span><br><span class="line"><span class="section">sim:</span></span><br><span class="line">	./$&#123;sim_name&#125; -l sim.log</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编译相关的常见指令：</p>
+<ul>
+<li><code>-full64</code> #以64位linux系统运行</li>
+<li><code>-sverilog</code> #支持sv语法</li>
+<li><code>+ v2k</code> #支持verilog2001特性</li>
+<li><code>-debug_acc+all</code> #在仿真时，能使用调试功能</li>
+<li><code>-f filelist.f</code> #指定包含源文件和编译时选项的路径名列表的文件</li>
+<li><code>-o $&#123;sim_name&#125;</code> #更改编译输出文件的名称</li>
+<li><code>-l compile.log</code> #输出编译日志</li>
+</ul>
+</li>
+<li><p><code>make comp</code>后的结果：</p>
+<p><img src="/2023/08/25/VCS%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/image-20230826135356734.png" alt="image-20230826135356734"></p>
+</li>
+<li><p><code>make run</code>后的结果：</p>
+<p><img src="/2023/08/25/VCS%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/image-20230826135515122.png" alt="image-20230826135515122"></p>
+</li>
+<li><p><code>make clean</code>后的结果：</p>
+<p><img src="/2023/08/25/VCS%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/image-20230826135610278.png" alt="image-20230826135610278"></p>
+</li>
+</ul>
+<hr>
+<h1 id="仿真"><a href="#仿真" class="headerlink" title="仿真"></a>仿真</h1><h2 id="1-vcdpluson-的使用"><a href="#1-vcdpluson-的使用" class="headerlink" title="1.$vcdpluson()的使用"></a>1.$vcdpluson()的使用</h2><ul>
+<li><p>调用<code>$vcdpluson()</code>记录仿真过程中的波形</p>
+<ul>
+<li><p><code>$vcdpluson()</code> 或者<code>$vcdpluson(0, counter_tb)</code>记录counter_tb及其所有子模块的波形</p>
+<img src="/2023/08/25/VCS%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/image-20230826183314771.png" alt="image-20230826183314771" style="zoom:67%;">
+</li>
+<li><p><code>$vcdpluson(1, counter_tb)</code> 只记录counter_tb层的波形</p>
+<img src="/2023/08/25/VCS%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/image-20230826183552241.png" alt="image-20230826183552241" style="zoom:67%;">
+</li>
+<li><p><code>$vcdpluson(2, counter_tb)</code> 记录 counter_tb层及其下一子层的波形</p>
+<img src="/2023/08/25/VCS%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/image-20230826201418663.png" alt="image-20230826201418663" style="zoom: 67%;">
+</li>
+<li><p><code>$vcdpluson(counter, counter_tb);</code>也可以通过打出模块名的方式记录波形</p>
+<img src="/2023/08/25/VCS%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/image-20230826202001555.png" alt="image-20230826202001555" style="zoom:67%;">
+</li>
+</ul>
+</li>
+<li><p>想要使用这个功能，需要在Testbench中加入如下代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//dump vpd file</span><br><span class="line">initial begin</span><br><span class="line">`ifdef DUMP_VPD</span><br><span class="line">    //$vcdpluson();</span><br><span class="line">    $vcdpluson(1, counter_tb); //only save 1-layer wave message</span><br><span class="line">    // $vcdplusmemon();</span><br><span class="line">`endif</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>filelist.f也应该修改，加上宏定义</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//Macro define</span><br><span class="line">+define+DUMP_VPD</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Makefile文件也要做适当修改，完成的Makefile文件如下：</p>
+<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line"><span class="section">all: clean comp sim</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#if you want to delete simv, recommend simv_* to rename</span></span><br><span class="line">sim_name = simv_counter</span><br><span class="line"></span><br><span class="line"><span class="comment">#set a new vpd file name</span></span><br><span class="line">vpd_name = +vpdfile+$&#123;sim_name&#125;.vpd</span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm -rf ./csrc *.daidir *.log simv* *.key *.vpd ./DVEfiles</span><br><span class="line"></span><br><span class="line"><span class="section">comp:</span></span><br><span class="line">	vcs -full64 -cpp g++ -cc gcc -LDFLAGS -no-pie -LDFLAGS -Wl,--no-as-needed -CFLAGS -fPIE \</span><br><span class="line">		-sverilog +v2k -timescale=1ns/1ps \</span><br><span class="line">		-debug_acc+all \</span><br><span class="line">		$&#123;vpd_name&#125; \</span><br><span class="line">		-o $&#123;sim_name&#125; \</span><br><span class="line">		-l compile.log \</span><br><span class="line">		-f filelist.f \</span><br><span class="line"></span><br><span class="line"><span class="section">sim:</span></span><br><span class="line">	./$&#123;sim_name&#125; $&#123;vpd_name&#125; -l sim.log</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在<strong>仿真完成后</strong>会生成simv_counter.vpd波形文件</p>
+<ul>
+<li>可以使用<code>dve -vpd simv_counter.vpd &amp;</code>查看波形</li>
+<li>或者使用<code>dve &amp;</code>打开gui界面后，再点击file处加载vpd文件</li>
+</ul>
+<p><img src="/2023/08/25/VCS%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/image-20230826203856375.png" alt="image-20230826203856375"></p>
+</li>
+</ul>
+<h2 id="2-vcdplusmemon-的使用"><a href="#2-vcdplusmemon-的使用" class="headerlink" title="2.$vcdplusmemon()的使用"></a>2.$vcdplusmemon()的使用</h2><ul>
+<li><p>VCS默认是不会记录数组波形的</p>
+</li>
+<li><p>若通过<code>$readmemh</code>读取文件中的数据，在Testbench中不添加<code>$vcdplusmemon()</code>时，读取的数据不会保存至vpd</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//test readmemh</span><br><span class="line">logic [7:0] mem[0:15];</span><br><span class="line">integer i;</span><br><span class="line">initial begin</span><br><span class="line">    $readmemh(&quot;./data/src.txt&quot;, mem);</span><br><span class="line">    for(i = 0; i&lt;16; i = i + 1) begin</span><br><span class="line">        $display(&quot;mem[%2d] = %0h&quot;, i, mem[i]);</span><br><span class="line">    end</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+<ul>
+<li>src.txt</li>
+</ul>
+<img src="/2023/08/25/VCS%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/image-20230826213100490.png" alt="image-20230826213100490" style="zoom:50%;">
+
+<ul>
+<li>打印相关信息</li>
+</ul>
+<img src="/2023/08/25/VCS%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/image-20230826211349689.png" alt="image-20230826211349689" style="zoom:50%;">
+
+<ul>
+<li>下图说明通过readmem读取的数据未保存至vpd文件中</li>
+</ul>
+<p><img src="/2023/08/25/VCS%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/image-20230826211205796.png" alt="image-20230826211205796"></p>
+</li>
+</ul>
+<ul>
+<li><p>若在Testbench中加上<code>$vcdplusmemon()</code>，则能将数据保存至vpd文件中</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//dump vpd file</span><br><span class="line"> initial begin</span><br><span class="line"> `ifdef DUMP_VPD</span><br><span class="line">     //$vcdpluson();</span><br><span class="line">     $vcdpluson(1, counter_tb); //only save 1-layer wave message</span><br><span class="line">     $vcdplusmemon();</span><br><span class="line"> `endif</span><br><span class="line"> end</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>此时读取的数据被保存至vpd文件中</li>
+</ul>
+<p><img src="/2023/08/25/VCS%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/image-20230826212115924.png" alt="image-20230826212115924"></p>
+</li>
+</ul>
+<h2 id="3-39-FILE-39-LINE-两个宏"><a href="#3-39-FILE-39-LINE-两个宏" class="headerlink" title="3.&#39;__FILE__, &#39;__LINE__两个宏"></a>3.<code>&#39;__FILE__,</code> <code>&#39;__LINE__</code>两个宏</h2><ul>
+<li><p>执行仿真之后，由于有上面的宏，将显示出文件路径以及执行的行数</p>
+</li>
+<li><p>源代码与testbench：</p>
+<ul>
+<li><p>counter.sv</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">module counter(</span><br><span class="line">    input clk,</span><br><span class="line">    input rst,</span><br><span class="line">    output logic [5:0] count</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">    always @(posedge clk or negedge rst) begin</span><br><span class="line">        if(!rst)</span><br><span class="line">            count &lt;= 0;</span><br><span class="line">        else </span><br><span class="line">            count &lt;= count + 6&#x27;b1;</span><br><span class="line">    end</span><br><span class="line"></span><br><span class="line">    initial begin</span><br><span class="line">      $display(&quot;Hello Verilog! \t&quot;,`__FILE__,`__LINE__);</span><br><span class="line">    end</span><br><span class="line"></span><br><span class="line">endmodule</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>counter_tb.sv</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">module counter_tb();</span><br><span class="line">    </span><br><span class="line">    logic clk;</span><br><span class="line">    logic rst;</span><br><span class="line">    wire [5:0] count;</span><br><span class="line"></span><br><span class="line">    counter u1(clk, rst, count);</span><br><span class="line"></span><br><span class="line">    always #(5) begin</span><br><span class="line">        clk = ~clk;</span><br><span class="line">    end</span><br><span class="line"></span><br><span class="line">    initial begin</span><br><span class="line">        clk = 0;</span><br><span class="line">        rst = 0;</span><br><span class="line"></span><br><span class="line">        #20;</span><br><span class="line">        rst = 1;</span><br><span class="line">        #50;</span><br><span class="line">        if(count != 5)</span><br><span class="line">            $display(&quot;Failure 1: the counter should be 5 but it is %d&quot;, count);</span><br><span class="line">        else</span><br><span class="line">            $display(&quot;You gotta the right result! It is five!&quot;);</span><br><span class="line">        $finish;</span><br><span class="line">    end</span><br><span class="line"></span><br><span class="line">    //dump vpd file</span><br><span class="line">    initial begin</span><br><span class="line">    `ifdef DUMP_VPD</span><br><span class="line">        //$vcdpluson();</span><br><span class="line">        $vcdpluson(1, counter_tb); //only save 1-layer wave message</span><br><span class="line">        $vcdplusmemon();</span><br><span class="line">    `endif</span><br><span class="line">    end</span><br><span class="line"></span><br><span class="line">    //test readmemh</span><br><span class="line">    logic [7:0] mem[0:15];</span><br><span class="line">    integer i;</span><br><span class="line">    initial begin</span><br><span class="line">        $readmemh(&quot;./data/src.txt&quot;, mem);</span><br><span class="line">        for(i = 0; i&lt;16; i = i + 1) begin</span><br><span class="line">            $display(&quot;mem[%2d] = %0h&quot;, i, mem[i]);</span><br><span class="line">        end</span><br><span class="line">    end</span><br><span class="line"></span><br><span class="line">    initial begin</span><br><span class="line">      $display(&quot;Hello Verilog! \t&quot;,`__FILE__,`__LINE__);</span><br><span class="line">    end</span><br><span class="line"></span><br><span class="line">    initial begin</span><br><span class="line">      $display(&quot;Hello Verilog! \t&quot;,`__FILE__,`__LINE__);</span><br><span class="line">    end</span><br><span class="line"></span><br><span class="line">endmodule</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>结果如下：</p>
+</li>
+</ul>
+<img src="/2023/08/25/VCS%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/image-20230826214450732.png" alt="image-20230826214450732" style="zoom: 50%;">
+
+</li>
+</ul>
+<h2 id="4-gui界面"><a href="#4-gui界面" class="headerlink" title="4.gui界面"></a>4.gui界面</h2><ul>
+<li>若仅仅是想交互性的观察仿真波形，可在编译后使用<code>/simv_counter -gui &amp;</code> 来记载可视化界面</li>
+</ul>
+<hr>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a href="https://zhuanlan.zhihu.com/p/127335447">VCS入门教程(一) - 知乎 (zhihu.com)</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/129034106">VCS入门教程(二) - 知乎 (zhihu.com)</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>学习积累</category>
+      </categories>
+      <tags>
+        <tag>VCS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Pytorch之Transformer</title>
+    <url>/2023/08/24/Pytorch%E4%B9%8BTransformer/</url>
+    <content><![CDATA[<p>本节主要介绍了</p>
+<span id="more"></span>
+
+
+
+<h1 id="Transformer的基本架构"><a href="#Transformer的基本架构" class="headerlink" title="Transformer的基本架构"></a>Transformer的基本架构</h1><img src="/2023/08/24/Pytorch%E4%B9%8BTransformer/image-20230824185446460.png" alt="image-20230824185446460" style="zoom: 67%;">
+
+<ul>
+<li>Transformer总体框架可分为四个部分：<ul>
+<li>输入部分</li>
+<li>输出部分</li>
+<li>编码器部分</li>
+<li>解码器部分</li>
+</ul>
+</li>
+</ul>
+<h2 id="1-输入部分"><a href="#1-输入部分" class="headerlink" title="1.输入部分"></a>1.输入部分</h2><ul>
+<li><p>源文本嵌入层及其位置编码器</p>
+</li>
+<li><p>目标文本嵌入层及其位置编码器</p>
+<p><img src="/2023/08/24/Pytorch%E4%B9%8BTransformer/image-20230824185730961.png" alt="image-20230824185730961"></p>
+</li>
+</ul>
+<h2 id="2-输出部分"><a href="#2-输出部分" class="headerlink" title="2.输出部分"></a>2.输出部分</h2><ul>
+<li><p>线性层</p>
+</li>
+<li><p>softmax层</p>
+<p><img src="/2023/08/24/Pytorch%E4%B9%8BTransformer/image-20230824185805336.png" alt="image-20230824185805336"></p>
+</li>
+</ul>
+<h2 id="3-编码器部分"><a href="#3-编码器部分" class="headerlink" title="3.编码器部分"></a>3.编码器部分</h2><ul>
+<li><p>由N个编码器堆叠而成</p>
+</li>
+<li><p>每个编码器层由两个子层连接结构组成</p>
+</li>
+<li><p>第一个子层连接结构包括一个多头自注意力层和规范化层以及一个残差连接</p>
+</li>
+<li><p>第二个子层连接结构包括一个前馈全连接子层和规范化层以及一个残差连接</p>
+<p><img src="/2023/08/24/Pytorch%E4%B9%8BTransformer/image-20230824190116917.png" alt="image-20230824190116917"></p>
+</li>
+</ul>
+<h2 id="4-解码器部分"><a href="#4-解码器部分" class="headerlink" title="4.解码器部分"></a>4.解码器部分</h2><ul>
+<li><p>由N个编码器堆叠而成</p>
+</li>
+<li><p>每个编码器层由三个子层连接结构组成</p>
+</li>
+<li><p>第一个子层连接结构包括一个多头自注意力层和规范化层以及一个残差连接</p>
+</li>
+<li><p>第一个子层连接结构包括一个多头注意力层和规范化层以及一个残差连接</p>
+</li>
+<li><p>第三个子层连接结构包括一个前馈全连接子层和规范化层以及一个残差连接</p>
+<p><img src="/2023/08/24/Pytorch%E4%B9%8BTransformer/image-20230824190320460.png" alt="image-20230824190320460"></p>
+</li>
+</ul>
+<hr>
+<h1 id="位置编码"><a href="#位置编码" class="headerlink" title="位置编码"></a>位置编码</h1><ul>
+<li><p>位置编码器的作用：因为在Transformer的编码器结构中，并没有针对词汇位置信息的处理，因此需要在embedding层后加入位置编码器，将词汇位置不同而可能产生不同语义的信息加入到词嵌入张量中，以弥补位置信息的缺失</p>
+</li>
+<li><p>根据视频中所述公式计算：<a href="https://www.bilibili.com/video/BV1yG411Z78H/?spm_id_from=333.337.search-card.all.click&vd_source=221b76534ba13cfad544149d75ce9b6c">transformer计算位置编码的过程示例_哔哩哔哩_bilibili</a></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> numpy</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"></span><br><span class="line"><span class="comment">#关于word embedding，以序列建模为例</span></span><br><span class="line"><span class="comment">#考虑source sentence和target sentence</span></span><br><span class="line"><span class="comment">#构建序列，序列的字符以其在词表中的索引形式表示</span></span><br><span class="line">batch_size = <span class="number">2</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#单词表的大小</span></span><br><span class="line">max_num_src_words = <span class="number">8</span></span><br><span class="line">max_num_tgt_words = <span class="number">8</span></span><br><span class="line">model_dim = <span class="number">7</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#序列的最大长度</span></span><br><span class="line">max_src_seq_len = <span class="number">5</span></span><br><span class="line">max_tgt_seq_len = <span class="number">5</span></span><br><span class="line">max_position_len = <span class="number">5</span></span><br><span class="line"></span><br><span class="line">src_len = torch.tensor([<span class="number">2</span>, <span class="number">4</span>], dtype = torch.int32)</span><br><span class="line">tgt_len = torch.tensor([<span class="number">4</span>, <span class="number">3</span>], dtype = torch.int32)</span><br><span class="line"></span><br><span class="line"><span class="comment">#单词索引构成的句子</span></span><br><span class="line">src_seq = torch.cat([torch.unsqueeze(F.pad(torch.randint(<span class="number">0</span>, max_num_src_words, (L,)), (<span class="number">0</span>, max_src_seq_len - L)), <span class="number">0</span>) </span><br><span class="line">                     <span class="keyword">for</span> L <span class="keyword">in</span> src_len])</span><br><span class="line">tgt_seq = torch.cat([torch.unsqueeze(F.pad(torch.randint(<span class="number">0</span>, max_num_tgt_words, (L,)), (<span class="number">0</span>, max_tgt_seq_len - L)), <span class="number">0</span>) </span><br><span class="line">                     <span class="keyword">for</span> L <span class="keyword">in</span> src_len])</span><br><span class="line"></span><br><span class="line"><span class="comment">#构造embedding</span></span><br><span class="line">src_embedding_table = nn.Embedding(max_num_src_words, model_dim, padding_idx = <span class="number">7</span>)</span><br><span class="line">tgt_embedding_table = nn.Embedding(max_num_tgt_words, model_dim, padding_idx = <span class="number">7</span>)</span><br><span class="line">src_embedding = src_embedding_table(src_seq)</span><br><span class="line">tgt_embedding = tgt_embedding_table(tgt_seq)</span><br><span class="line"></span><br><span class="line"><span class="comment"># print(src_embedding)</span></span><br><span class="line"><span class="comment"># print(tgt_embedding)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#构造position embedding</span></span><br><span class="line">pos_mat = torch.arange(max_position_len).reshape(-<span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">i_mat_even = torch.<span class="built_in">pow</span>(<span class="number">10000</span>, torch.arange(<span class="number">0</span>, model_dim, <span class="number">2</span>).reshape(<span class="number">1</span>, -<span class="number">1</span>)/model_dim)</span><br><span class="line">i_mat_odd = torch.<span class="built_in">pow</span>(<span class="number">10000</span>, torch.arange(<span class="number">1</span>, model_dim, <span class="number">2</span>).reshape(<span class="number">1</span>, -<span class="number">1</span>)/model_dim)</span><br><span class="line">pe_embedding_table = torch.zeros(max_position_len, model_dim)</span><br><span class="line">pe_embedding_table[:, <span class="number">0</span>::<span class="number">2</span>] = torch.sin(pos_mat / i_mat_even)</span><br><span class="line">pe_embedding_table[:, <span class="number">1</span>::<span class="number">2</span>] = torch.cos(pos_mat / i_mat_odd)</span><br><span class="line"></span><br><span class="line">pe_embedding = nn.Embedding(max_position_len, model_dim)</span><br><span class="line">pe_embedding.weight = nn.Parameter(pe_embedding_table, requires_grad = <span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">src_pos = torch.cat([torch.unsqueeze(torch.arange(<span class="built_in">max</span>(src_len)), <span class="number">0</span>) <span class="keyword">for</span> _ <span class="keyword">in</span> src_len]).to(torch.int32)</span><br><span class="line">tgt_pos = torch.cat([torch.unsqueeze(torch.arange(<span class="built_in">max</span>(tgt_len)), <span class="number">0</span>) <span class="keyword">for</span> _ <span class="keyword">in</span> tgt_len]).to(torch.int32)</span><br><span class="line"></span><br><span class="line">src_pe_embedding = pe_embedding(src_pos) <span class="comment">#只与句子中词的位置有关</span></span><br><span class="line">tgt_pe_embedding = pe_embedding(tgt_pos)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(src_pe_embedding)</span><br><span class="line"><span class="built_in">print</span>(tgt_pe_embedding)</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">tensor([[[0.0000e+00, 1.0000e+00, 0.0000e+00, 1.0000e+00, 0.0000e+00,</span><br><span class="line">          1.0000e+00, 0.0000e+00],</span><br><span class="line">         [8.4147e-01, 9.6423e-01, 7.1906e-02, 9.9981e-01, 5.1794e-03,</span><br><span class="line">          1.0000e+00, 3.7276e-04],</span><br><span class="line">         [9.0930e-01, 8.5948e-01, 1.4344e-01, 9.9925e-01, 1.0359e-02,</span><br><span class="line">          1.0000e+00, 7.4552e-04],</span><br><span class="line">         [1.4112e-01, 6.9325e-01, 2.1423e-01, 9.9832e-01, 1.5538e-02,</span><br><span class="line">          9.9999e-01, 1.1183e-03]],</span><br><span class="line"></span><br><span class="line">        [[0.0000e+00, 1.0000e+00, 0.0000e+00, 1.0000e+00, 0.0000e+00,</span><br><span class="line">          1.0000e+00, 0.0000e+00],</span><br><span class="line">         [8.4147e-01, 9.6423e-01, 7.1906e-02, 9.9981e-01, 5.1794e-03,</span><br><span class="line">          1.0000e+00, 3.7276e-04],</span><br><span class="line">         [9.0930e-01, 8.5948e-01, 1.4344e-01, 9.9925e-01, 1.0359e-02,</span><br><span class="line">          1.0000e+00, 7.4552e-04],</span><br><span class="line">         [1.4112e-01, 6.9325e-01, 2.1423e-01, 9.9832e-01, 1.5538e-02,</span><br><span class="line">          9.9999e-01, 1.1183e-03]]])</span><br><span class="line">tensor([[[0.0000e+00, 1.0000e+00, 0.0000e+00, 1.0000e+00, 0.0000e+00,</span><br><span class="line">          1.0000e+00, 0.0000e+00],</span><br><span class="line">         [8.4147e-01, 9.6423e-01, 7.1906e-02, 9.9981e-01, 5.1794e-03,</span><br><span class="line">          1.0000e+00, 3.7276e-04],</span><br><span class="line">         [9.0930e-01, 8.5948e-01, 1.4344e-01, 9.9925e-01, 1.0359e-02,</span><br><span class="line">          1.0000e+00, 7.4552e-04],</span><br><span class="line">         [1.4112e-01, 6.9325e-01, 2.1423e-01, 9.9832e-01, 1.5538e-02,</span><br><span class="line">          9.9999e-01, 1.1183e-03]],</span><br><span class="line"></span><br><span class="line">        [[0.0000e+00, 1.0000e+00, 0.0000e+00, 1.0000e+00, 0.0000e+00,</span><br><span class="line">          1.0000e+00, 0.0000e+00],</span><br><span class="line">         [8.4147e-01, 9.6423e-01, 7.1906e-02, 9.9981e-01, 5.1794e-03,</span><br><span class="line">          1.0000e+00, 3.7276e-04],</span><br><span class="line">         [9.0930e-01, 8.5948e-01, 1.4344e-01, 9.9925e-01, 1.0359e-02,</span><br><span class="line">          1.0000e+00, 7.4552e-04],</span><br><span class="line">         [1.4112e-01, 6.9325e-01, 2.1423e-01, 9.9832e-01, 1.5538e-02,</span><br><span class="line">          9.9999e-01, 1.1183e-03]]])</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<hr>
+<p># </p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a href="https://www.bilibili.com/video/BV188411H71g/?spm_id_from=333.337.search-card.all.click&vd_source=221b76534ba13cfad544149d75ce9b6c">这是B站目前讲的最好的【Transformer实战】教程！带你从零详细解读Transformer模型 一次学到饱！——人工智能、深度学习、神经网络_哔哩哔哩_bilibili</a></li>
+<li><a href="https://www.bilibili.com/video/BV1cP4y1V7GF/?spm_id_from=333.788&vd_source=221b76534ba13cfad544149d75ce9b6c">19、Transformer模型Encoder原理精讲及其PyTorch逐行实现_哔哩哔哩_bilibili</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>学习积累</category>
+      </categories>
+      <tags>
+        <tag>Pytorch</tag>
+        <tag>神经网络</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>SV之线程控制与通信</title>
     <url>/2023/08/23/SV%E4%B9%8B%E7%BA%BF%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E9%80%9A%E4%BF%A1/</url>
     <content><![CDATA[<p>本节主要介绍了SystemVerilog中线程控制与相关通信的方法</p>
@@ -646,7 +879,7 @@
 <hr>
 <h1 id="约束块"><a href="#约束块" class="headerlink" title="约束块"></a>约束块</h1><ul>
 <li><p>约束块支持整形通过<code>constraint</code>操作符来设置它们的可取值范围</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">class set_rand;</span><br><span class="line">    rand integer x, y, z;</span><br><span class="line">    constraint c1 &#123;x inside &#123;3, 5, [9:15], [24:32], [y:2*y], z&#125;;&#125;</span><br><span class="line">    </span><br><span class="line">    rand integer a, b, c;</span><br><span class="line">    constraint c2 &#123;a inside &#123;b,  c&#125;;&#125;</span><br><span class="line">    </span><br><span class="line">    integer fives[4] = &#x27;&#123;5, 10, 15, 20&#125;;</span><br><span class="line">    rand integer v;</span><br><span class="line">    constraint c3 &#123;v inside &#123;fives&#125;;&#125;</span><br><span class="line">    </span><br><span class="line">    //unique可以用来约束一组变量，使得其在随机后变量之间不会有相同的数值</span><br><span class="line">    rand byte a[5];</span><br><span class="line">    rand byte b;</span><br><span class="line">    rand byte excluded;</span><br><span class="line">    constraint u &#123;unique &#123;b, a[2:3],exclude&#125;;&#125;//这里a[2]、a[3]、b和excluded在随机之后将包含不相同的数值</span><br><span class="line">    constraint exclusion &#123;excluded == 5;&#125;</span><br><span class="line">    </span><br><span class="line">    //使用-&gt;操作符来表示条件约束</span><br><span class="line">    bit [3:0] a, b;</span><br><span class="line">    constraint c &#123;(a == 0) -&gt; (b &lt; 10)&#125; //表示如果a等于0，那么b就随机取小于10的数</span><br><span class="line">endclass</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">class set_rand;</span><br><span class="line">    rand integer x, y, z;</span><br><span class="line">    constraint c1 &#123;x inside &#123;3, 5, [9:15], [24:32], [y:2*y], z&#125;;&#125;</span><br><span class="line">    </span><br><span class="line">    rand integer a, b, c;</span><br><span class="line">    constraint c2 &#123;a inside &#123;b,  c&#125;;&#125;</span><br><span class="line">    </span><br><span class="line">    integer fives[4] = &#x27;&#123;5, 10, 15, 20&#125;;</span><br><span class="line">    rand integer v;</span><br><span class="line">    constraint c3 &#123;v inside &#123;fives&#125;;&#125;</span><br><span class="line">    </span><br><span class="line">    //unique可以用来约束一组变量，使得其在随机后变量之间不会有相同的数值</span><br><span class="line">    rand byte a[5];</span><br><span class="line">    rand byte b;</span><br><span class="line">    rand byte excluded;</span><br><span class="line">    constraint u &#123;unique &#123;b, a[2:3], exclude&#125;;&#125;//这里a[2]、a[3]、b和excluded在随机之后将包含不相同的数值</span><br><span class="line">    constraint exclusion &#123;excluded == 5;&#125;</span><br><span class="line">    </span><br><span class="line">    //使用-&gt;操作符来表示条件约束</span><br><span class="line">    bit [3:0] a, b;</span><br><span class="line">    constraint c &#123;(a == 0) -&gt; (b &lt; 10)&#125; //表示如果a等于0，那么b就随机取小于10的数</span><br><span class="line">endclass</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>权重分布</strong>：</p>
 <ul>
@@ -970,7 +1203,7 @@
   <entry>
     <title>Pytorch之文本情感分类</title>
     <url>/2023/08/17/Pytorch%E4%B9%8B%E6%96%87%E6%9C%AC%E6%83%85%E6%84%9F%E5%88%86%E7%B1%BB/</url>
-    <content><![CDATA[<p>本节主要介绍了文本情况分析的基本概念以及相关代码示例</p>
+    <content><![CDATA[<p>本节主要介绍了文本情感分析的基本概念以及相关代码示例</p>
 <span id="more"></span>
 
 <h1 id="情感分析基本概念"><a href="#情感分析基本概念" class="headerlink" title="情感分析基本概念"></a>情感分析基本概念</h1><ul>
@@ -1015,7 +1248,7 @@
 </ul>
 <hr>
 <h1 id="网络搭建"><a href="#网络搭建" class="headerlink" title="网络搭建"></a>网络搭建</h1><ul>
-<li><p>词嵌入：将句子中单词在字典中的索引，用与之对应的词向量表示</p>
+<li><p>词嵌入：<strong>将句子中单词在字典中的索引，用与之对应的词向量表示</strong></p>
 <ul>
 <li><p><a href="https://blog.csdn.net/weixin_43646592/article/details/119180298">基于Pytorch的torch.nn.embedding()实现词嵌入层<em>embidding 分页 大小</em>#苦行僧的博客-CSDN博客</a></p>
 </li>
@@ -1368,6 +1601,47 @@
 <li>问题分析：vmware虚拟机磁盘空间不足</li>
 <li>解决办法：磁盘扩容<ul>
 <li><a href="https://blog.csdn.net/qq_44447544/article/details/128189713">Ubuntu22.04 磁盘扩容_ubuntu 22.04 lts 虚拟机 硬盘扩容_雪天鱼的博客-CSDN博客</a></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="ubuntu之gvim下载与相关配置"><a href="#ubuntu之gvim下载与相关配置" class="headerlink" title="ubuntu之gvim下载与相关配置"></a>ubuntu之gvim下载与相关配置</h1><ul>
+<li><p><a href="https://blog.csdn.net/bigtree9527/article/details/128560670">Linux环境下Ubuntu系统中下载gvim及相关配置_ubuntu安装gvim_bigtree9527的博客-CSDN博客</a></p>
+</li>
+<li><p><a href="https://blog.csdn.net/weixin_45061010/article/details/120668601">ubuntu中vim简易配置_ubuntu vim配置_maosql的博客-CSDN博客</a></p>
+</li>
+<li><p>搜了各种资料，觉得vim还是很难用，决定转战vscode，打算在windows下的共享文件夹中创建文件，在windonws下使用vscode编辑SV代码，接下来需要在vscode中配置systemverilog的编辑条件</p>
+<ul>
+<li><p><strong>首先，安装如下插件</strong>：</p>
+<p><img src="/2023/08/12/ubuntu%E4%B9%8B%E9%97%AE%E9%A2%98%E5%8F%8A%E5%85%B6%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95%E8%AE%B0%E5%BD%95/image-20230825200224520.png" alt="image-20230825200224520"></p>
+</li>
+<li><p><strong>其次，下载ctags</strong></p>
+<ul>
+<li><p><a href="https://github.com/universal-ctags/ctags-win32/releases/tag/v6.0.0">Release v6.0.0 · universal-ctags/ctags-win32 (github.com)</a></p>
+<p><img src="/2023/08/12/ubuntu%E4%B9%8B%E9%97%AE%E9%A2%98%E5%8F%8A%E5%85%B6%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95%E8%AE%B0%E5%BD%95/image-20230825200614554.png" alt="image-20230825200614554"></p>
+</li>
+</ul>
+</li>
+<li><p><strong>接着，配置环境变量</strong>：将这个路径添加到系统环境变量中</p>
+<p><img src="/2023/08/12/ubuntu%E4%B9%8B%E9%97%AE%E9%A2%98%E5%8F%8A%E5%85%B6%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95%E8%AE%B0%E5%BD%95/image-20230825200736729.png" alt="image-20230825200736729"></p>
+<ul>
+<li><p>首先输入“win+R”，打开运行框，然后在里面输入命令：control system，在打开的系统信息界面中，选择左侧菜单的“高级系统设置”，随后在打开的“系统属性”窗口选择下方的“环境变量”选项</p>
+</li>
+<li><p>接着如图所示操作：</p>
+<p><img src="/2023/08/12/ubuntu%E4%B9%8B%E9%97%AE%E9%A2%98%E5%8F%8A%E5%85%B6%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95%E8%AE%B0%E5%BD%95/image-20230825201049324.png" alt="image-20230825201049324"></p>
+</li>
+</ul>
+</li>
+<li><p><strong>在vscode中配置插件</strong>：按如下图所示操作</p>
+<p><img src="/2023/08/12/ubuntu%E4%B9%8B%E9%97%AE%E9%A2%98%E5%8F%8A%E5%85%B6%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95%E8%AE%B0%E5%BD%95/image-20230825201348926.png" alt="image-20230825201348926"></p>
+</li>
+<li><p>最后重启vscode即可完成设置</p>
+</li>
+</ul>
+</li>
+<li><p>发现把文件直接放在共享文件夹中编译，会报错，故在ubuntu中安装vscode，其配置与windows中类似，参考此教程：</p>
+<ul>
+<li><a href="https://zhuanlan.zhihu.com/p/456446138">Linux下使用VSCode+iVerilog进行Verilog开发 - 知乎 (zhihu.com)</a></li>
 </ul>
 </li>
 </ul>
@@ -10738,163 +11012,6 @@ $$
       </tags>
   </entry>
   <entry>
-    <title>TensorFlow实践之典型的卷积神经网路</title>
-    <url>/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%85%B8%E5%9E%8B%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/</url>
-    <content><![CDATA[<p>本节主要介绍了LeNet、VGGNet、GoogLeNet神经网络。其中，对LeNet模型进行了函数封装，对VGGNet进行了基本介绍，并着重介绍了GoogLeNet神经网络中1×1卷积核的作用。</p>
-<span id="more"></span>
-
-<h1 id="LeNet神经网络"><a href="#LeNet神经网络" class="headerlink" title="LeNet神经网络"></a>LeNet神经网络</h1><h2 id="1-网络结构"><a href="#1-网络结构" class="headerlink" title="1.网络结构"></a>1.网络结构</h2><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%85%B8%E5%9E%8B%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107140234908.png" alt="image-20221107140234908"></p>
-<h2 id="2-封装LeNet模型"><a href="#2-封装LeNet模型" class="headerlink" title="2.封装LeNet模型"></a>2.封装LeNet模型</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">LeNet</span>(<span class="params">input_shape,padding</span>):</span><br><span class="line">    model=tf.keras.Sequential()</span><br><span class="line">    <span class="comment">#添加卷积层1、池化层1</span></span><br><span class="line">    model.add(tf.keras.layers.Conv2D(<span class="number">6</span>,kernel_size=(<span class="number">5</span>,<span class="number">5</span>),padding=padding,activation=<span class="string">&quot;sigmoid&quot;</span>,input_shape=input_shape))</span><br><span class="line">    model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line">    <span class="comment">#添加卷积层2、池化层2</span></span><br><span class="line">    model.add(tf.keras.layers.Conv2D(<span class="number">16</span>,kernel_size=(<span class="number">5</span>,<span class="number">5</span>),padding=<span class="string">&quot;valid&quot;</span>,activation=<span class="string">&quot;sigmoid&quot;</span>))</span><br><span class="line">    model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line">    <span class="comment">#添加卷积层3</span></span><br><span class="line">    model.add(tf.keras.layers.Conv2D(<span class="number">120</span>,kernel_size=(<span class="number">5</span>,<span class="number">5</span>),padding=<span class="string">&quot;valid&quot;</span>,activation=<span class="string">&quot;sigmoid&quot;</span>))<span class="comment">#本层输出为形状为（1，1，120）</span></span><br><span class="line">    <span class="comment">#添加Flatten层，将数据拉直</span></span><br><span class="line">    model.add(tf.keras.layers.Flatten())</span><br><span class="line">    <span class="comment">#添加隐含层和输出层</span></span><br><span class="line">    model.add(tf.keras.layers.Dense(<span class="number">84</span>,activation=<span class="string">&quot;sigmoid&quot;</span>))</span><br><span class="line">    model.add(tf.keras.layers.Dense(<span class="number">10</span>,activation=<span class="string">&quot;softmax&quot;</span>))</span><br><span class="line">    <span class="keyword">return</span> model</span><br><span class="line"><span class="comment">#调用方法</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;model=LeNet((28,28,1),&quot;same&quot;)</span></span><br><span class="line"><span class="string">model=LeNet((32,32,1),&quot;valid&quot;)&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="3-实例：LeNet实现手写数字识别"><a href="#3-实例：LeNet实现手写数字识别" class="headerlink" title="3.实例：LeNet实现手写数字识别"></a>3.实例：LeNet实现手写数字识别</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#1.导入库</span></span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="comment">#2.加载数据</span></span><br><span class="line">mnist=tf.keras.datasets.mnist</span><br><span class="line">(train_x,train_y),(test_x,test_y)=mnist.load_data(path=<span class="string">&quot;D:\App_Data_File\Anaconda_data\jupyter\image\mnist.npz&quot;</span>)</span><br><span class="line"><span class="comment">#3.数据预处理:对属性进行归一化并转化为Tensor张量</span></span><br><span class="line">X_train,X_test=tf.cast(train_x/<span class="number">255.0</span>,tf.float32),tf.cast(test_x/<span class="number">255.0</span>,tf.float32)</span><br><span class="line">Y_train,Y_test=tf.cast(train_y,tf.int16),tf.cast(test_y,tf.int16)</span><br><span class="line">X_train=tf.reshape(X_train,[<span class="number">60000</span>,<span class="number">28</span>,<span class="number">28</span>,<span class="number">1</span>])</span><br><span class="line">X_test=tf.reshape(X_test,[<span class="number">10000</span>,<span class="number">28</span>,<span class="number">28</span>,<span class="number">1</span>])</span><br><span class="line"><span class="comment">#4.建立LeNet模型</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;model=tf.keras.Sequential()</span></span><br><span class="line"><span class="string">#添加卷积层1、池化层1</span></span><br><span class="line"><span class="string">model.add(tf.keras.layers.Conv2D(6,kernel_size=(5,5),padding=&quot;same&quot;,activation=&quot;sigmoid&quot;,input_shape=(28,28,1)))</span></span><br><span class="line"><span class="string">model.add(tf.keras.layers.MaxPool2D(pool_size=(2,2)))</span></span><br><span class="line"><span class="string">#添加卷积层2、池化层2</span></span><br><span class="line"><span class="string">model.add(tf.keras.layers.Conv2D(16,kernel_size=(5,5),padding=&quot;valid&quot;,activation=&quot;sigmoid&quot;))</span></span><br><span class="line"><span class="string">model.add(tf.keras.layers.MaxPool2D(pool_size=(2,2)))</span></span><br><span class="line"><span class="string">#添加卷积层3</span></span><br><span class="line"><span class="string">model.add(tf.keras.layers.Conv2D(120,kernel_size=(5,5),padding=&quot;valid&quot;,activation=&quot;sigmoid&quot;))</span></span><br><span class="line"><span class="string">#添加Flatten层，将数据拉直</span></span><br><span class="line"><span class="string">model.add(tf.keras.layers.Flatten())</span></span><br><span class="line"><span class="string">#添加隐含层和输出层</span></span><br><span class="line"><span class="string">model.add(tf.keras.layers.Dense(84,activation=&quot;sigmoid&quot;))</span></span><br><span class="line"><span class="string">model.add(tf.keras.layers.Dense(10,activation=&quot;softmax&quot;))&#x27;&#x27;&#x27;</span></span><br><span class="line">model=LeNet((<span class="number">28</span>,<span class="number">28</span>,<span class="number">1</span>),<span class="string">&quot;same&quot;</span>)</span><br><span class="line">model.summary()</span><br><span class="line"><span class="comment">#5.配置训练方法</span></span><br><span class="line">model.<span class="built_in">compile</span>(optimizer=<span class="string">&quot;adam&quot;</span>,loss=<span class="string">&quot;sparse_categorical_crossentropy&quot;</span>,metrics=[<span class="string">&quot;accuracy&quot;</span>])</span><br><span class="line"><span class="comment">#6.训练模型</span></span><br><span class="line">history=model.fit(X_train,Y_train,batch_size=<span class="number">64</span>,epochs=<span class="number">5</span>,validation_split=<span class="number">0.2</span>)</span><br><span class="line"><span class="comment">#7.评估模型</span></span><br><span class="line">model.evaluate(X_test,Y_test,verbose=<span class="number">2</span>)</span><br><span class="line"><span class="comment">#8.使用模型</span></span><br><span class="line"><span class="comment"># 下面再随机取出测试集中的任意10个数据进行识别</span></span><br><span class="line">plt.rcParams[<span class="string">&quot;font.sans-serif&quot;</span>]=<span class="string">&quot;SimHei&quot;</span></span><br><span class="line">plt.rcParams[<span class="string">&quot;axes.unicode_minus&quot;</span>]=<span class="literal">False</span></span><br><span class="line">plt.figure()</span><br><span class="line">plt.suptitle(<span class="string">&quot;随机取出测试集中的任意10个数据进行识别&quot;</span>, fontsize=<span class="number">20</span>, color=<span class="string">&quot;blue&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">    num = np.random.randint(<span class="number">1</span>, <span class="number">10000</span>)</span><br><span class="line">    plt.subplot(<span class="number">2</span>, <span class="number">5</span>, i+<span class="number">1</span>)</span><br><span class="line">    plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">    plt.imshow(test_x[num], cmap=<span class="string">&quot;gray&quot;</span>)</span><br><span class="line">    y_pred = np.argmax(model.predict(tf.reshape(X_test[num],(<span class="number">1</span>,<span class="number">28</span>,<span class="number">28</span>,<span class="number">1</span>))))</span><br><span class="line">    plt.title(<span class="string">&quot;y= &quot;</span>+<span class="built_in">str</span>(test_y[num]) + <span class="string">&quot;\n&quot;</span> + <span class="string">&quot;y_pred=&quot;</span> + <span class="built_in">str</span>(y_pred))</span><br><span class="line">plt.tight_layout(rect=[<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0.98</span>])</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-<p>结果如下：</p>
-<pre><code>Model: &quot;sequential_9&quot;
-_________________________________________________________________
-Layer (type)                 Output Shape              Param #   
-=================================================================
-conv2d_27 (Conv2D)           (None, 28, 28, 6)         156       
-_________________________________________________________________
-max_pooling2d_18 (MaxPooling (None, 14, 14, 6)         0         
-_________________________________________________________________
-conv2d_28 (Conv2D)           (None, 10, 10, 16)        2416      
-_________________________________________________________________
-max_pooling2d_19 (MaxPooling (None, 5, 5, 16)          0         
-_________________________________________________________________
-conv2d_29 (Conv2D)           (None, 1, 1, 120)         48120     
-_________________________________________________________________
-flatten_9 (Flatten)          (None, 120)               0         
-_________________________________________________________________
-dense_18 (Dense)             (None, 84)                10164     
-_________________________________________________________________
-dense_19 (Dense)             (None, 10)                850       
-=================================================================
-Total params: 61,706
-Trainable params: 61,706
-Non-trainable params: 0
-_________________________________________________________________
-Epoch 1/5
-750/750 [==============================] - 23s 29ms/step - loss: 1.1872 - accuracy: 0.6143 - val_loss: 0.3047 - val_accuracy: 0.9153
-Epoch 2/5
-750/750 [==============================] - 22s 29ms/step - loss: 0.2160 - accuracy: 0.9393 - val_loss: 0.1392 - val_accuracy: 0.9581
-Epoch 3/5
-750/750 [==============================] - 22s 29ms/step - loss: 0.1238 - accuracy: 0.9627 - val_loss: 0.0956 - val_accuracy: 0.9721
-Epoch 4/5
-750/750 [==============================] - 21s 28ms/step - loss: 0.0919 - accuracy: 0.9717 - val_loss: 0.0836 - val_accuracy: 0.9755
-Epoch 5/5
-750/750 [==============================] - 21s 28ms/step - loss: 0.0759 - accuracy: 0.9766 - val_loss: 0.0788 - val_accuracy: 0.9761
-313/313 - 3s - loss: 0.0719 - accuracy: 0.9774</code></pre><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%85%B8%E5%9E%8B%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_4_1.png" alt="output_4_1"></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#保存训练的模型参数</span></span><br><span class="line">model.save_weights(<span class="string">&quot;mnist_save_weights_LeNet.h5&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h1 id="AlexNet神经网络"><a href="#AlexNet神经网络" class="headerlink" title="AlexNet神经网络"></a>AlexNet神经网络</h1><ul>
-<li><p><strong>AlexNet网络结构</strong></p>
-<p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%85%B8%E5%9E%8B%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221111181303375.png" alt="image-20221111181303375"></p>
-<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%85%B8%E5%9E%8B%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221111181352031.png" alt="image-20221111181352031" style="zoom:50%;">
-</li>
-<li><p><strong>AlexNet创新点</strong></p>
-<ul>
-<li>使用ReLU激活函数：使网络训练收敛更快</li>
-<li>使用Dropout训练模型</li>
-<li>数据增强：增加了2048倍的数据量<ul>
-<li>原始图像256×256，随机截取224×224区域</li>
-<li>水平翻转的镜像</li>
-</ul>
-</li>
-<li>使用重叠最大池化：能够很好克服过拟合问题</li>
-<li>使用GPU加速训练过程</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h1 id="VGGNet神经网络"><a href="#VGGNet神经网络" class="headerlink" title="VGGNet神经网络"></a>VGGNet神经网络</h1><ul>
-<li>多个小卷积核级联加深网络结构<ul>
-<li>减少网络计算量</li>
-<li>增加网络的泛化能力和表达能力</li>
-</ul>
-</li>
-<li>先训练级别A的简单网络，再复用A网络的权重初始化复杂模型<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%85%B8%E5%9E%8B%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107140620259.png" alt="image-20221107140620259" style="zoom: 33%;">
-
-
-</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#VGG16模型的建立</span></span><br><span class="line">model=tf.keras.Sequential()</span><br><span class="line"><span class="comment">#添加卷积层1-2、池化层</span></span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">64</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu,input_shape=(<span class="number">224</span>,<span class="number">244</span>,<span class="number">3</span>)))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">64</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line"><span class="comment">#添加卷积层3-4、池化层</span></span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">128</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">128</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line"><span class="comment">#添加卷积层5-7、池化层</span></span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">256</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">256</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">256</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line"><span class="comment">#添加卷积层8-10、池化层</span></span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">512</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">512</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">512</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line"><span class="comment">#添加卷积层11-13、池化层</span></span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">512</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">512</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">512</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line"><span class="comment">#添加Flatten层，将数据拉直</span></span><br><span class="line">model.add(tf.keras.layers.Flatten())</span><br><span class="line"><span class="comment">#全连接层1，Dropout层</span></span><br><span class="line">model.add(tf.keras.layers.Dense(<span class="number">4096</span>,activation=<span class="string">&quot;relu&quot;</span>))</span><br><span class="line">model.add(tf.keras.layers.Dropout(<span class="number">0.5</span>))</span><br><span class="line"><span class="comment">#全连接层2，Dropout层</span></span><br><span class="line">model.add(tf.keras.layers.Dense(<span class="number">4096</span>,activation=<span class="string">&quot;relu&quot;</span>))</span><br><span class="line">model.add(tf.keras.layers.Dropout(<span class="number">0.5</span>))</span><br><span class="line"><span class="comment">#全连接层3（输出层）</span></span><br><span class="line">model.add(tf.keras.layers.Dense(<span class="number">1000</span>,activation=<span class="string">&quot;softmax&quot;</span>))</span><br><span class="line">model.summary()</span><br></pre></td></tr></table></figure>
-<p>结果如下：</p>
-<pre><code>Model: &quot;sequential_14&quot;
-_________________________________________________________________
-Layer (type)                 Output Shape              Param #   
-=================================================================
-conv2d_56 (Conv2D)           (None, 224, 244, 64)      1792      
-_________________________________________________________________
-conv2d_57 (Conv2D)           (None, 224, 244, 64)      36928     
-_________________________________________________________________
-max_pooling2d_32 (MaxPooling (None, 112, 122, 64)      0         
-_________________________________________________________________
-conv2d_58 (Conv2D)           (None, 112, 122, 128)     73856     
-_________________________________________________________________
-conv2d_59 (Conv2D)           (None, 112, 122, 128)     147584    
-_________________________________________________________________
-max_pooling2d_33 (MaxPooling (None, 56, 61, 128)       0         
-_________________________________________________________________
-conv2d_60 (Conv2D)           (None, 56, 61, 256)       295168    
-_________________________________________________________________
-conv2d_61 (Conv2D)           (None, 56, 61, 256)       590080    
-_________________________________________________________________
-conv2d_62 (Conv2D)           (None, 56, 61, 256)       590080    
-_________________________________________________________________
-max_pooling2d_34 (MaxPooling (None, 28, 30, 256)       0         
-_________________________________________________________________
-conv2d_63 (Conv2D)           (None, 28, 30, 512)       1180160   
-_________________________________________________________________
-conv2d_64 (Conv2D)           (None, 28, 30, 512)       2359808   
-_________________________________________________________________
-conv2d_65 (Conv2D)           (None, 28, 30, 512)       2359808   
-_________________________________________________________________
-max_pooling2d_35 (MaxPooling (None, 14, 15, 512)       0         
-_________________________________________________________________
-conv2d_66 (Conv2D)           (None, 14, 15, 512)       2359808   
-_________________________________________________________________
-conv2d_67 (Conv2D)           (None, 14, 15, 512)       2359808   
-_________________________________________________________________
-conv2d_68 (Conv2D)           (None, 14, 15, 512)       2359808   
-_________________________________________________________________
-max_pooling2d_36 (MaxPooling (None, 7, 7, 512)         0         
-_________________________________________________________________
-flatten_14 (Flatten)         (None, 25088)             0         
-_________________________________________________________________
-dense_30 (Dense)             (None, 4096)              102764544 
-_________________________________________________________________
-dropout_4 (Dropout)          (None, 4096)              0         
-_________________________________________________________________
-dense_31 (Dense)             (None, 4096)              16781312  
-_________________________________________________________________
-dropout_5 (Dropout)          (None, 4096)              0         
-_________________________________________________________________
-dense_32 (Dense)             (None, 1000)              4097000   
-=================================================================
-Total params: 138,357,544
-Trainable params: 138,357,544
-Non-trainable params: 0
-_________________________________________________________________</code></pre><hr>
-<h1 id="GoogLeNet神经网络"><a href="#GoogLeNet神经网络" class="headerlink" title="GoogLeNet神经网络"></a>GoogLeNet神经网络</h1><h2 id="1-Inception-Module的初代"><a href="#1-Inception-Module的初代" class="headerlink" title="1.Inception Module的初代"></a>1.Inception Module的初代</h2><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%85%B8%E5%9E%8B%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107140740258.png" alt="image-20221107140740258" style="zoom:50%;">
-
-<h2 id="2-1×1卷积核"><a href="#2-1×1卷积核" class="headerlink" title="2.1×1卷积核"></a>2.1×1卷积核</h2><ul>
-<li><p><strong>能够降维/升维，跨通道信息交流</strong></p>
-<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%85%B8%E5%9E%8B%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107140820217.png" alt="image-20221107140820217" style="zoom:50%;">
-</li>
-<li><p>个人对1×1，7与1×1×7，1的理解：前者表示有七个1×1的卷积核，其中每个卷积核都与图像去卷一卷，那么每个卷积核都会输出一个特征图，则一个会输出七个特征图；后者表示一个卷积核，这个卷积核的大小是1×1×7，可以理解为有七个通道，每个通道里都有1×1的一个小卷积核（也就是这7个所谓的小卷积核从不同维度共同组成一个整体的大卷积核，实际上还是只有一个卷积核），这7个小卷积核与前一层中7个对应通道的图像分别卷积，将其结果相加后，最终还是只会得到一个特征图。</p>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>学习积累</category>
-      </categories>
-      <tags>
-        <tag>神经网络</tag>
-        <tag>TensorFlow</tag>
-        <tag>深度学习</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>TensorFlow实践之人工神经网路</title>
     <url>/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/</url>
     <content><![CDATA[<p>本节从单层神经网络到多层神经网络，一步步介绍了神经网络的基本结构与简单实现，并借助TensorFlow框架中提供的Sequential模型，快速进行神经网络的搭建与训练。</p>
@@ -11188,6 +11305,163 @@ Epoch 5/5
   6.0127795e-06 8.5093779e-11 9.9846399e-01 5.7829629e-06 2.0411160e-05]]
 7</code></pre><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_43_1.png" alt="output_43_1"></p>
 <p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_43_2.png" alt="output_43_2"></p>
+]]></content>
+      <categories>
+        <category>学习积累</category>
+      </categories>
+      <tags>
+        <tag>神经网络</tag>
+        <tag>TensorFlow</tag>
+        <tag>深度学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>TensorFlow实践之典型的卷积神经网路</title>
+    <url>/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%85%B8%E5%9E%8B%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/</url>
+    <content><![CDATA[<p>本节主要介绍了LeNet、VGGNet、GoogLeNet神经网络。其中，对LeNet模型进行了函数封装，对VGGNet进行了基本介绍，并着重介绍了GoogLeNet神经网络中1×1卷积核的作用。</p>
+<span id="more"></span>
+
+<h1 id="LeNet神经网络"><a href="#LeNet神经网络" class="headerlink" title="LeNet神经网络"></a>LeNet神经网络</h1><h2 id="1-网络结构"><a href="#1-网络结构" class="headerlink" title="1.网络结构"></a>1.网络结构</h2><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%85%B8%E5%9E%8B%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107140234908.png" alt="image-20221107140234908"></p>
+<h2 id="2-封装LeNet模型"><a href="#2-封装LeNet模型" class="headerlink" title="2.封装LeNet模型"></a>2.封装LeNet模型</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">LeNet</span>(<span class="params">input_shape,padding</span>):</span><br><span class="line">    model=tf.keras.Sequential()</span><br><span class="line">    <span class="comment">#添加卷积层1、池化层1</span></span><br><span class="line">    model.add(tf.keras.layers.Conv2D(<span class="number">6</span>,kernel_size=(<span class="number">5</span>,<span class="number">5</span>),padding=padding,activation=<span class="string">&quot;sigmoid&quot;</span>,input_shape=input_shape))</span><br><span class="line">    model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line">    <span class="comment">#添加卷积层2、池化层2</span></span><br><span class="line">    model.add(tf.keras.layers.Conv2D(<span class="number">16</span>,kernel_size=(<span class="number">5</span>,<span class="number">5</span>),padding=<span class="string">&quot;valid&quot;</span>,activation=<span class="string">&quot;sigmoid&quot;</span>))</span><br><span class="line">    model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line">    <span class="comment">#添加卷积层3</span></span><br><span class="line">    model.add(tf.keras.layers.Conv2D(<span class="number">120</span>,kernel_size=(<span class="number">5</span>,<span class="number">5</span>),padding=<span class="string">&quot;valid&quot;</span>,activation=<span class="string">&quot;sigmoid&quot;</span>))<span class="comment">#本层输出为形状为（1，1，120）</span></span><br><span class="line">    <span class="comment">#添加Flatten层，将数据拉直</span></span><br><span class="line">    model.add(tf.keras.layers.Flatten())</span><br><span class="line">    <span class="comment">#添加隐含层和输出层</span></span><br><span class="line">    model.add(tf.keras.layers.Dense(<span class="number">84</span>,activation=<span class="string">&quot;sigmoid&quot;</span>))</span><br><span class="line">    model.add(tf.keras.layers.Dense(<span class="number">10</span>,activation=<span class="string">&quot;softmax&quot;</span>))</span><br><span class="line">    <span class="keyword">return</span> model</span><br><span class="line"><span class="comment">#调用方法</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;model=LeNet((28,28,1),&quot;same&quot;)</span></span><br><span class="line"><span class="string">model=LeNet((32,32,1),&quot;valid&quot;)&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="3-实例：LeNet实现手写数字识别"><a href="#3-实例：LeNet实现手写数字识别" class="headerlink" title="3.实例：LeNet实现手写数字识别"></a>3.实例：LeNet实现手写数字识别</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#1.导入库</span></span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="comment">#2.加载数据</span></span><br><span class="line">mnist=tf.keras.datasets.mnist</span><br><span class="line">(train_x,train_y),(test_x,test_y)=mnist.load_data(path=<span class="string">&quot;D:\App_Data_File\Anaconda_data\jupyter\image\mnist.npz&quot;</span>)</span><br><span class="line"><span class="comment">#3.数据预处理:对属性进行归一化并转化为Tensor张量</span></span><br><span class="line">X_train,X_test=tf.cast(train_x/<span class="number">255.0</span>,tf.float32),tf.cast(test_x/<span class="number">255.0</span>,tf.float32)</span><br><span class="line">Y_train,Y_test=tf.cast(train_y,tf.int16),tf.cast(test_y,tf.int16)</span><br><span class="line">X_train=tf.reshape(X_train,[<span class="number">60000</span>,<span class="number">28</span>,<span class="number">28</span>,<span class="number">1</span>])</span><br><span class="line">X_test=tf.reshape(X_test,[<span class="number">10000</span>,<span class="number">28</span>,<span class="number">28</span>,<span class="number">1</span>])</span><br><span class="line"><span class="comment">#4.建立LeNet模型</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;model=tf.keras.Sequential()</span></span><br><span class="line"><span class="string">#添加卷积层1、池化层1</span></span><br><span class="line"><span class="string">model.add(tf.keras.layers.Conv2D(6,kernel_size=(5,5),padding=&quot;same&quot;,activation=&quot;sigmoid&quot;,input_shape=(28,28,1)))</span></span><br><span class="line"><span class="string">model.add(tf.keras.layers.MaxPool2D(pool_size=(2,2)))</span></span><br><span class="line"><span class="string">#添加卷积层2、池化层2</span></span><br><span class="line"><span class="string">model.add(tf.keras.layers.Conv2D(16,kernel_size=(5,5),padding=&quot;valid&quot;,activation=&quot;sigmoid&quot;))</span></span><br><span class="line"><span class="string">model.add(tf.keras.layers.MaxPool2D(pool_size=(2,2)))</span></span><br><span class="line"><span class="string">#添加卷积层3</span></span><br><span class="line"><span class="string">model.add(tf.keras.layers.Conv2D(120,kernel_size=(5,5),padding=&quot;valid&quot;,activation=&quot;sigmoid&quot;))</span></span><br><span class="line"><span class="string">#添加Flatten层，将数据拉直</span></span><br><span class="line"><span class="string">model.add(tf.keras.layers.Flatten())</span></span><br><span class="line"><span class="string">#添加隐含层和输出层</span></span><br><span class="line"><span class="string">model.add(tf.keras.layers.Dense(84,activation=&quot;sigmoid&quot;))</span></span><br><span class="line"><span class="string">model.add(tf.keras.layers.Dense(10,activation=&quot;softmax&quot;))&#x27;&#x27;&#x27;</span></span><br><span class="line">model=LeNet((<span class="number">28</span>,<span class="number">28</span>,<span class="number">1</span>),<span class="string">&quot;same&quot;</span>)</span><br><span class="line">model.summary()</span><br><span class="line"><span class="comment">#5.配置训练方法</span></span><br><span class="line">model.<span class="built_in">compile</span>(optimizer=<span class="string">&quot;adam&quot;</span>,loss=<span class="string">&quot;sparse_categorical_crossentropy&quot;</span>,metrics=[<span class="string">&quot;accuracy&quot;</span>])</span><br><span class="line"><span class="comment">#6.训练模型</span></span><br><span class="line">history=model.fit(X_train,Y_train,batch_size=<span class="number">64</span>,epochs=<span class="number">5</span>,validation_split=<span class="number">0.2</span>)</span><br><span class="line"><span class="comment">#7.评估模型</span></span><br><span class="line">model.evaluate(X_test,Y_test,verbose=<span class="number">2</span>)</span><br><span class="line"><span class="comment">#8.使用模型</span></span><br><span class="line"><span class="comment"># 下面再随机取出测试集中的任意10个数据进行识别</span></span><br><span class="line">plt.rcParams[<span class="string">&quot;font.sans-serif&quot;</span>]=<span class="string">&quot;SimHei&quot;</span></span><br><span class="line">plt.rcParams[<span class="string">&quot;axes.unicode_minus&quot;</span>]=<span class="literal">False</span></span><br><span class="line">plt.figure()</span><br><span class="line">plt.suptitle(<span class="string">&quot;随机取出测试集中的任意10个数据进行识别&quot;</span>, fontsize=<span class="number">20</span>, color=<span class="string">&quot;blue&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">    num = np.random.randint(<span class="number">1</span>, <span class="number">10000</span>)</span><br><span class="line">    plt.subplot(<span class="number">2</span>, <span class="number">5</span>, i+<span class="number">1</span>)</span><br><span class="line">    plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">    plt.imshow(test_x[num], cmap=<span class="string">&quot;gray&quot;</span>)</span><br><span class="line">    y_pred = np.argmax(model.predict(tf.reshape(X_test[num],(<span class="number">1</span>,<span class="number">28</span>,<span class="number">28</span>,<span class="number">1</span>))))</span><br><span class="line">    plt.title(<span class="string">&quot;y= &quot;</span>+<span class="built_in">str</span>(test_y[num]) + <span class="string">&quot;\n&quot;</span> + <span class="string">&quot;y_pred=&quot;</span> + <span class="built_in">str</span>(y_pred))</span><br><span class="line">plt.tight_layout(rect=[<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0.98</span>])</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<pre><code>Model: &quot;sequential_9&quot;
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+conv2d_27 (Conv2D)           (None, 28, 28, 6)         156       
+_________________________________________________________________
+max_pooling2d_18 (MaxPooling (None, 14, 14, 6)         0         
+_________________________________________________________________
+conv2d_28 (Conv2D)           (None, 10, 10, 16)        2416      
+_________________________________________________________________
+max_pooling2d_19 (MaxPooling (None, 5, 5, 16)          0         
+_________________________________________________________________
+conv2d_29 (Conv2D)           (None, 1, 1, 120)         48120     
+_________________________________________________________________
+flatten_9 (Flatten)          (None, 120)               0         
+_________________________________________________________________
+dense_18 (Dense)             (None, 84)                10164     
+_________________________________________________________________
+dense_19 (Dense)             (None, 10)                850       
+=================================================================
+Total params: 61,706
+Trainable params: 61,706
+Non-trainable params: 0
+_________________________________________________________________
+Epoch 1/5
+750/750 [==============================] - 23s 29ms/step - loss: 1.1872 - accuracy: 0.6143 - val_loss: 0.3047 - val_accuracy: 0.9153
+Epoch 2/5
+750/750 [==============================] - 22s 29ms/step - loss: 0.2160 - accuracy: 0.9393 - val_loss: 0.1392 - val_accuracy: 0.9581
+Epoch 3/5
+750/750 [==============================] - 22s 29ms/step - loss: 0.1238 - accuracy: 0.9627 - val_loss: 0.0956 - val_accuracy: 0.9721
+Epoch 4/5
+750/750 [==============================] - 21s 28ms/step - loss: 0.0919 - accuracy: 0.9717 - val_loss: 0.0836 - val_accuracy: 0.9755
+Epoch 5/5
+750/750 [==============================] - 21s 28ms/step - loss: 0.0759 - accuracy: 0.9766 - val_loss: 0.0788 - val_accuracy: 0.9761
+313/313 - 3s - loss: 0.0719 - accuracy: 0.9774</code></pre><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%85%B8%E5%9E%8B%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_4_1.png" alt="output_4_1"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#保存训练的模型参数</span></span><br><span class="line">model.save_weights(<span class="string">&quot;mnist_save_weights_LeNet.h5&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="AlexNet神经网络"><a href="#AlexNet神经网络" class="headerlink" title="AlexNet神经网络"></a>AlexNet神经网络</h1><ul>
+<li><p><strong>AlexNet网络结构</strong></p>
+<p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%85%B8%E5%9E%8B%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221111181303375.png" alt="image-20221111181303375"></p>
+<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%85%B8%E5%9E%8B%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221111181352031.png" alt="image-20221111181352031" style="zoom:50%;">
+</li>
+<li><p><strong>AlexNet创新点</strong></p>
+<ul>
+<li>使用ReLU激活函数：使网络训练收敛更快</li>
+<li>使用Dropout训练模型</li>
+<li>数据增强：增加了2048倍的数据量<ul>
+<li>原始图像256×256，随机截取224×224区域</li>
+<li>水平翻转的镜像</li>
+</ul>
+</li>
+<li>使用重叠最大池化：能够很好克服过拟合问题</li>
+<li>使用GPU加速训练过程</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="VGGNet神经网络"><a href="#VGGNet神经网络" class="headerlink" title="VGGNet神经网络"></a>VGGNet神经网络</h1><ul>
+<li>多个小卷积核级联加深网络结构<ul>
+<li>减少网络计算量</li>
+<li>增加网络的泛化能力和表达能力</li>
+</ul>
+</li>
+<li>先训练级别A的简单网络，再复用A网络的权重初始化复杂模型<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%85%B8%E5%9E%8B%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107140620259.png" alt="image-20221107140620259" style="zoom: 33%;">
+
+
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#VGG16模型的建立</span></span><br><span class="line">model=tf.keras.Sequential()</span><br><span class="line"><span class="comment">#添加卷积层1-2、池化层</span></span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">64</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu,input_shape=(<span class="number">224</span>,<span class="number">244</span>,<span class="number">3</span>)))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">64</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line"><span class="comment">#添加卷积层3-4、池化层</span></span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">128</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">128</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line"><span class="comment">#添加卷积层5-7、池化层</span></span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">256</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">256</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">256</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line"><span class="comment">#添加卷积层8-10、池化层</span></span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">512</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">512</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">512</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line"><span class="comment">#添加卷积层11-13、池化层</span></span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">512</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">512</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">512</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line"><span class="comment">#添加Flatten层，将数据拉直</span></span><br><span class="line">model.add(tf.keras.layers.Flatten())</span><br><span class="line"><span class="comment">#全连接层1，Dropout层</span></span><br><span class="line">model.add(tf.keras.layers.Dense(<span class="number">4096</span>,activation=<span class="string">&quot;relu&quot;</span>))</span><br><span class="line">model.add(tf.keras.layers.Dropout(<span class="number">0.5</span>))</span><br><span class="line"><span class="comment">#全连接层2，Dropout层</span></span><br><span class="line">model.add(tf.keras.layers.Dense(<span class="number">4096</span>,activation=<span class="string">&quot;relu&quot;</span>))</span><br><span class="line">model.add(tf.keras.layers.Dropout(<span class="number">0.5</span>))</span><br><span class="line"><span class="comment">#全连接层3（输出层）</span></span><br><span class="line">model.add(tf.keras.layers.Dense(<span class="number">1000</span>,activation=<span class="string">&quot;softmax&quot;</span>))</span><br><span class="line">model.summary()</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<pre><code>Model: &quot;sequential_14&quot;
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+conv2d_56 (Conv2D)           (None, 224, 244, 64)      1792      
+_________________________________________________________________
+conv2d_57 (Conv2D)           (None, 224, 244, 64)      36928     
+_________________________________________________________________
+max_pooling2d_32 (MaxPooling (None, 112, 122, 64)      0         
+_________________________________________________________________
+conv2d_58 (Conv2D)           (None, 112, 122, 128)     73856     
+_________________________________________________________________
+conv2d_59 (Conv2D)           (None, 112, 122, 128)     147584    
+_________________________________________________________________
+max_pooling2d_33 (MaxPooling (None, 56, 61, 128)       0         
+_________________________________________________________________
+conv2d_60 (Conv2D)           (None, 56, 61, 256)       295168    
+_________________________________________________________________
+conv2d_61 (Conv2D)           (None, 56, 61, 256)       590080    
+_________________________________________________________________
+conv2d_62 (Conv2D)           (None, 56, 61, 256)       590080    
+_________________________________________________________________
+max_pooling2d_34 (MaxPooling (None, 28, 30, 256)       0         
+_________________________________________________________________
+conv2d_63 (Conv2D)           (None, 28, 30, 512)       1180160   
+_________________________________________________________________
+conv2d_64 (Conv2D)           (None, 28, 30, 512)       2359808   
+_________________________________________________________________
+conv2d_65 (Conv2D)           (None, 28, 30, 512)       2359808   
+_________________________________________________________________
+max_pooling2d_35 (MaxPooling (None, 14, 15, 512)       0         
+_________________________________________________________________
+conv2d_66 (Conv2D)           (None, 14, 15, 512)       2359808   
+_________________________________________________________________
+conv2d_67 (Conv2D)           (None, 14, 15, 512)       2359808   
+_________________________________________________________________
+conv2d_68 (Conv2D)           (None, 14, 15, 512)       2359808   
+_________________________________________________________________
+max_pooling2d_36 (MaxPooling (None, 7, 7, 512)         0         
+_________________________________________________________________
+flatten_14 (Flatten)         (None, 25088)             0         
+_________________________________________________________________
+dense_30 (Dense)             (None, 4096)              102764544 
+_________________________________________________________________
+dropout_4 (Dropout)          (None, 4096)              0         
+_________________________________________________________________
+dense_31 (Dense)             (None, 4096)              16781312  
+_________________________________________________________________
+dropout_5 (Dropout)          (None, 4096)              0         
+_________________________________________________________________
+dense_32 (Dense)             (None, 1000)              4097000   
+=================================================================
+Total params: 138,357,544
+Trainable params: 138,357,544
+Non-trainable params: 0
+_________________________________________________________________</code></pre><hr>
+<h1 id="GoogLeNet神经网络"><a href="#GoogLeNet神经网络" class="headerlink" title="GoogLeNet神经网络"></a>GoogLeNet神经网络</h1><h2 id="1-Inception-Module的初代"><a href="#1-Inception-Module的初代" class="headerlink" title="1.Inception Module的初代"></a>1.Inception Module的初代</h2><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%85%B8%E5%9E%8B%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107140740258.png" alt="image-20221107140740258" style="zoom:50%;">
+
+<h2 id="2-1×1卷积核"><a href="#2-1×1卷积核" class="headerlink" title="2.1×1卷积核"></a>2.1×1卷积核</h2><ul>
+<li><p><strong>能够降维/升维，跨通道信息交流</strong></p>
+<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%85%B8%E5%9E%8B%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107140820217.png" alt="image-20221107140820217" style="zoom:50%;">
+</li>
+<li><p>个人对1×1，7与1×1×7，1的理解：前者表示有七个1×1的卷积核，其中每个卷积核都与图像去卷一卷，那么每个卷积核都会输出一个特征图，则一个会输出七个特征图；后者表示一个卷积核，这个卷积核的大小是1×1×7，可以理解为有七个通道，每个通道里都有1×1的一个小卷积核（也就是这7个所谓的小卷积核从不同维度共同组成一个整体的大卷积核，实际上还是只有一个卷积核），这7个小卷积核与前一层中7个对应通道的图像分别卷积，将其结果相加后，最终还是只会得到一个特征图。</p>
+</li>
+</ul>
 ]]></content>
       <categories>
         <category>学习积累</category>
