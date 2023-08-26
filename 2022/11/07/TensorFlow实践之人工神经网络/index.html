@@ -46,7 +46,7 @@
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102503633.png">
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102618782.png">
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102808313.png">
-<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102905651.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102905651.png">
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102942585.png">
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107103055953.png">
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_20_1.png">
@@ -305,7 +305,6 @@
       
         <p>本节从单层神经网络到多层神经网络，一步步介绍了神经网络的基本结构与简单实现，并借助TensorFlow框架中提供的Sequential模型，快速进行神经网络的搭建与训练。</p>
 <span id="more"></span>
-
 <h1 id="单层神经网络的实现"><a href="#单层神经网络的实现" class="headerlink" title="单层神经网络的实现"></a>单层神经网络的实现</h1><h2 id="1-单层神经网络的设计"><a href="#1-单层神经网络的设计" class="headerlink" title="1.单层神经网络的设计"></a>1.单层神经网络的设计</h2><ul>
 <li>神经网络的结构：单层前馈型神经网络</li>
 <li>激活函数：softmax函数</li>
@@ -336,21 +335,20 @@ i:10    Train Acc:0.875000    Train Loss:0.339410,    Test Acc:0.866667    Test 
 i:20    Train Acc:0.875000    Train Loss:0.279647,    Test Acc:0.866667    Test Loss:0.368414
 i:30    Train Acc:0.916667    Train Loss:0.245924,    Test Acc:0.933333    Test Loss:0.314814
 i:40    Train Acc:0.933333    Train Loss:0.222922,    Test Acc:0.933333    Test Loss:0.278643
-i:50    Train Acc:0.933333    Train Loss:0.205636,    Test Acc:0.966667    Test Loss:0.251937</code></pre><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_7_1.png" alt="output_7_1"></p>
+i:50    Train Acc:0.933333    Train Loss:0.205636,    Test Acc:0.966667    Test Loss:0.251937
+</code></pre><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_7_1.png" alt="output_7_1"></p>
 <hr>
 <h1 id="多层神经网络"><a href="#多层神经网络" class="headerlink" title="多层神经网络"></a>多层神经网络</h1><ul>
 <li>具有隐含层的神经网络称为多层神经网络</li>
 </ul>
-<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107101251196.png" alt="image-20221107101251196" style="zoom: 25%;">
-
+<p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107101251196.png" alt="image-20221107101251196" style="zoom: 25%;"></p>
 <h2 id="1-线性分类器"><a href="#1-线性分类器" class="headerlink" title="1.线性分类器"></a>1.线性分类器</h2><ul>
 <li>与运算</li>
 <li>或运算</li>
 <li>非运算</li>
 <li>对感知机（二分类的线性分类模型）给定一个合适的权值向量即可实现运算</li>
 </ul>
-<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107101405138.png" alt="image-20221107101405138" style="zoom:33%;">
-
+<p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107101405138.png" alt="image-20221107101405138" style="zoom:33%;"></p>
 <h2 id="2-通过实现异或运算进而理解多层神经网络"><a href="#2-通过实现异或运算进而理解多层神经网络" class="headerlink" title="2.通过实现异或运算进而理解多层神经网络"></a>2.通过实现异或运算进而理解多层神经网络</h2><ul>
 <li>隐藏层由与运算与或非运算两个感知机组成</li>
 <li>这两个感知机的输出作为下一层神经元的输入</li>
@@ -358,26 +356,22 @@ i:50    Train Acc:0.933333    Train Loss:0.205636,    Test Acc:0.966667    Test 
 <li>红圈为有计算能力的神经元</li>
 <li>一个感知机对应一根直线</li>
 </ul>
-<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107101503565.png" alt="image-20221107101503565" style="zoom: 50%;">
-
+<p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107101503565.png" alt="image-20221107101503565" style="zoom: 50%;"></p>
 <h2 id="3-线性不可分数据集的分类思路"><a href="#3-线性不可分数据集的分类思路" class="headerlink" title="3.线性不可分数据集的分类思路"></a>3.线性不可分数据集的分类思路</h2><ul>
 <li>弯曲的直线可以看成是多条直线的线性组合</li>
-<li>其中的每一条直线可以用一个感知机来实现<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107101620753.png" alt="image-20221107101620753" style="zoom: 33%;"></li>
-<li>如果神经网络中有足够的隐藏层，每个隐藏层中有足够多的神经元，神经网络就可以表示任意复杂的函数或空间分布<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107101758824.png" alt="image-20221107101758824" style="zoom:33%;">
-<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107101832691.png" alt="image-20221107101832691" style="zoom:33%;"></li>
+<li>其中的每一条直线可以用一个感知机来实现<br><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107101620753.png" alt="image-20221107101620753" style="zoom: 33%;"></li>
+<li>如果神经网络中有足够的隐藏层，每个隐藏层中有足够多的神经元，神经网络就可以表示任意复杂的函数或空间分布<br><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107101758824.png" alt="image-20221107101758824" style="zoom:33%;"><br><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107101832691.png" alt="image-20221107101832691" style="zoom:33%;"></li>
 <li><strong>多隐含层神经网络：能够表示非连续的函数或空间区域，减小泛化误差，减小每层神经元的数量</strong></li>
 </ul>
 <h2 id="4-前馈神经网络（Feedforward-Neural-Network）"><a href="#4-前馈神经网络（Feedforward-Neural-Network）" class="headerlink" title="4.前馈神经网络（Feedforward Neural Network）"></a>4.前馈神经网络（Feedforward Neural Network）</h2><ul>
 <li>每层神经元只与前一层的神经元相连</li>
 <li>处于同一层的神经元之间没有连接</li>
-<li>各层间没有反馈，不存在跨层连接<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102034190.png" alt="image-20221107102034190" style="zoom: 50%;"></li>
+<li>各层间没有反馈，不存在跨层连接<br><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102034190.png" alt="image-20221107102034190" style="zoom: 50%;"></li>
 <li><strong>万能近似定理：在前馈型神经网络中，只要有一个隐含层，并且这个隐含层中有足够多的神经元，就可以逼近任意一个连续的函数或空间分布</strong></li>
 </ul>
 <h2 id="5-全连接网络（Full-Connected-Network）"><a href="#5-全连接网络（Full-Connected-Network）" class="headerlink" title="5.全连接网络（Full Connected Network）"></a>5.全连接网络（Full Connected Network）</h2><ul>
-<li>每一层中的任何一个节点都与其后面一层的所有节点连接<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102143789.png" alt="image-20221107102143789" style="zoom:50%;"></li>
-<li>第n层中的每个节点接收来自第n-1层中所有节点的输入<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102222409.png" alt="image-20221107102222409" style="zoom:50%;">
-
-</li>
+<li>每一层中的任何一个节点都与其后面一层的所有节点连接<br><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102143789.png" alt="image-20221107102143789" style="zoom:50%;"></li>
+<li>第n层中的每个节点接收来自第n-1层中所有节点的输入<br><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102222409.png" alt="image-20221107102222409" style="zoom:50%;"></li>
 </ul>
 <h2 id="6-超参数与验证集"><a href="#6-超参数与验证集" class="headerlink" title="6.超参数与验证集"></a>6.超参数与验证集</h2><ul>
 <li>训练集：训练模型，确定模型参数</li>
@@ -386,37 +380,31 @@ i:50    Train Acc:0.933333    Train Loss:0.205636,    Test Acc:0.966667    Test 
 </ul>
 <hr>
 <h1 id="误差反向传播算法"><a href="#误差反向传播算法" class="headerlink" title="误差反向传播算法"></a>误差反向传播算法</h1><ul>
-<li>通过误差反向传播法计算梯度<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102259737.png" alt="image-20221107102259737" style="zoom: 50%;"></li>
-<li>先计算输出层对误差的梯度，进而更新输出层的权值<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102350316.png" alt="image-20221107102350316" style="zoom: 33%;"></li>
-<li>再计算隐藏层对误差的梯度，进而更新隐藏层的权值<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102420550.png" alt="image-20221107102420550" style="zoom: 25%;"></li>
-<li>输出端有多个神经元的误差反向传播<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102503633.png" alt="image-20221107102503633" style="zoom:33%;">
-
-</li>
+<li>通过误差反向传播法计算梯度<br><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102259737.png" alt="image-20221107102259737" style="zoom: 50%;"></li>
+<li>先计算输出层对误差的梯度，进而更新输出层的权值<br><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102350316.png" alt="image-20221107102350316" style="zoom: 33%;"></li>
+<li>再计算隐藏层对误差的梯度，进而更新隐藏层的权值<br><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102420550.png" alt="image-20221107102420550" style="zoom: 25%;"></li>
+<li>输出端有多个神经元的误差反向传播<br><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102503633.png" alt="image-20221107102503633" style="zoom:33%;"></li>
 </ul>
 <hr>
 <h1 id="激活函数"><a href="#激活函数" class="headerlink" title="激活函数"></a>激活函数</h1><h2 id="1-激活函数的性质"><a href="#1-激活函数的性质" class="headerlink" title="1.激活函数的性质"></a>1.激活函数的性质</h2><ul>
 <li>简单的非线性函数</li>
 <li>连续并可导</li>
-<li>单调函数<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102618782.png" alt="image-20221107102618782" style="zoom:25%;">
-
-</li>
+<li>单调函数<br><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102618782.png" alt="image-20221107102618782" style="zoom:25%;"></li>
 </ul>
 <h2 id="2-常用的激活函数"><a href="#2-常用的激活函数" class="headerlink" title="2.常用的激活函数"></a>2.常用的激活函数</h2><ul>
-<li>logistic函数与Tanh函数<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102808313.png" alt="image-20221107102808313" style="zoom: 33%;"></li>
+<li>logistic函数与Tanh函数<br><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102808313.png" alt="image-20221107102808313" style="zoom: 33%;"></li>
 <li>ReLU函数（Rectified Linear Unit，修正线性单元）<ul>
 <li>z&gt;0时，导数等于1，缓解了梯度消失问题</li>
 <li>不存在幂运算，计算速度快</li>
 <li>导数恒等于1，训练模型收敛速度快</li>
 <li>输出不是以0为均值的</li>
-<li>z&lt;0时，梯度为0，神经元死亡<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102905651.png" alt="image-20221107102905651" style="zoom:33%;"></li>
+<li>z<0时，梯度为0，神经元死亡 <img src="TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102905651.png" alt="image-20221107102905651" style="zoom:33%;"></0时，梯度为0，神经元死亡></li>
 </ul>
 </li>
 <li>Leaky-ReLU函数<ul>
 <li>避免了ReLU神经元死亡</li>
 <li>神经网络的计算和训练速度快</li>
-<li>超参数a需要人工调整<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102942585.png" alt="image-20221107102942585" style="zoom: 25%;">
-
-</li>
+<li>超参数a需要人工调整<br><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107102942585.png" alt="image-20221107102942585" style="zoom: 25%;"></li>
 </ul>
 </li>
 </ul>
@@ -429,7 +417,7 @@ i:50    Train Acc:0.933333    Train Loss:0.205636,    Test Acc:0.966667    Test 
 <li>损失函数：交叉熵损失函数</li>
 <li>W是属性个数（前一层的输入神经元数）×分类数（本层的个数），B是关于分类数的一维向量</li>
 </ul>
-<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107103055953.png" alt="image-20221107103055953" style="zoom: 33%;">
+<p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107103055953.png" alt="image-20221107103055953" style="zoom: 33%;"></p>
 </li>
 <li><p>具体代码实现：</p>
 </li>
@@ -441,7 +429,8 @@ i:10    Train Acc:0.941667    Train Loss:0.205314,    Test Acc:0.966667    Test 
 i:20    Train Acc:0.950000    Train Loss:0.149540,    Test Acc:1.000000    Test Loss:0.167103
 i:30    Train Acc:0.958333    Train Loss:0.122346,    Test Acc:1.000000    Test Loss:0.124693
 i:40    Train Acc:0.958333    Train Loss:0.105099,    Test Acc:1.000000    Test Loss:0.099869
-i:50    Train Acc:0.958333    Train Loss:0.092934,    Test Acc:1.000000    Test Loss:0.084885</code></pre><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_20_1.png" alt="output_20_1"></p>
+i:50    Train Acc:0.958333    Train Loss:0.092934,    Test Acc:1.000000    Test Loss:0.084885
+</code></pre><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_20_1.png" alt="output_20_1"></p>
 <hr>
 <h1 id="小批量梯度下降法"><a href="#小批量梯度下降法" class="headerlink" title="小批量梯度下降法"></a>小批量梯度下降法</h1><ul>
 <li>对于多层神经网络，使用梯度下降法，从理论上无法保证一定可以达到最小值</li>
@@ -465,7 +454,8 @@ i:50    Train Acc:0.958333    Train Loss:0.092934,    Test Acc:1.000000    Test 
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line">model=tf.keras.Sequential()</span><br><span class="line"><span class="built_in">print</span>(model)</span><br></pre></td></tr></table></figure>
 <p>结果如下：</p>
-<pre><code>&lt;tensorflow.python.keras.engine.sequential.Sequential object at 0x0000014AC0B9FD90&gt;</code></pre><h3 id="1-1-添加全连接层"><a href="#1-1-添加全连接层" class="headerlink" title="1.1 添加全连接层"></a>1.1 添加全连接层</h3><ul>
+<pre><code>&lt;tensorflow.python.keras.engine.sequential.Sequential object at 0x0000014AC0B9FD90&gt;
+</code></pre><h3 id="1-1-添加全连接层"><a href="#1-1-添加全连接层" class="headerlink" title="1.1 添加全连接层"></a>1.1 添加全连接层</h3><ul>
 <li><code>model.add(tf.keras.layers)</code></li>
 <li><code>tf.keras.layers.Dense(inputs,activation,input_shape)</code><ul>
 <li>inputs: 本层神经元的个数</li>
@@ -473,13 +463,9 @@ i:50    Train Acc:0.958333    Train Loss:0.092934,    Test Acc:1.000000    Test 
 <li>input_shape: 输入数据的形状</li>
 </ul>
 </li>
-<li>示例：<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107103755860.png" alt="image-20221107103755860" style="zoom:33%;">
-
-
-</li>
+<li>示例：<br><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107103755860.png" alt="image-20221107103755860" style="zoom:33%;"></li>
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line">model=tf.keras.Sequential()</span><br><span class="line">model.add(tf.keras.layers.Dense(<span class="number">8</span>,activation=<span class="string">&quot;relu&quot;</span>,input_shape=(<span class="number">4</span>,)))</span><br><span class="line">model.add(tf.keras.layers.Dense(<span class="number">4</span>,activation=<span class="string">&quot;relu&quot;</span>))</span><br><span class="line">model.add(tf.keras.layers.Dense(<span class="number">3</span>,activation=<span class="string">&quot;softmax&quot;</span>))</span><br></pre></td></tr></table></figure>
-
 <h3 id="1-2-查看摘要"><a href="#1-2-查看摘要" class="headerlink" title="1.2 查看摘要"></a>1.2 查看摘要</h3><ul>
 <li><code>model.summary()</code></li>
 </ul>
@@ -498,23 +484,21 @@ dense_17 (Dense)             (None, 3)                 15
 Total params: 91
 Trainable params: 91
 Non-trainable params: 0
-_________________________________________________________________</code></pre><h2 id="2-配置训练方法"><a href="#2-配置训练方法" class="headerlink" title="2.配置训练方法"></a>2.配置训练方法</h2><ul>
+_________________________________________________________________
+</code></pre><h2 id="2-配置训练方法"><a href="#2-配置训练方法" class="headerlink" title="2.配置训练方法"></a>2.配置训练方法</h2><ul>
 <li><code>model.compile(loss,optimizer,metrics)</code></li>
 </ul>
 <h3 id="2-1-常用的损失函数loss"><a href="#2-1-常用的损失函数loss" class="headerlink" title="2.1 常用的损失函数loss"></a>2.1 常用的损失函数loss</h3><ul>
 <li>对于多分类交叉熵损失函数<ul>
 <li>当标签的编码为独热编码时，采用”categorical_crossentropy”</li>
 <li>当标签的编码为自然顺序码时，采用”sparse_categorical_crossentropy”</li>
-<li>from_logits=False表示神经网络在输出前，已经使用softmax函数将预测结果变成了概率分布，否则设置为True<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107104412770.png" alt="image-20221107104412770" style="zoom: 33%;">
-
-</li>
+<li>from_logits=False表示神经网络在输出前，已经使用softmax函数将预测结果变成了概率分布，否则设置为True<br><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107104412770.png" alt="image-20221107104412770" style="zoom: 33%;"></li>
 </ul>
 </li>
 </ul>
-<h3 id="2-2-优化器optimizer"><a href="#2-2-优化器optimizer" class="headerlink" title="2.2 优化器optimizer"></a>2.2 优化器optimizer</h3><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107104453525.png" alt="image-20221107104453525" style="zoom: 25%;">
-
+<h3 id="2-2-优化器optimizer"><a href="#2-2-优化器optimizer" class="headerlink" title="2.2 优化器optimizer"></a>2.2 优化器optimizer</h3><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107104453525.png" alt="image-20221107104453525" style="zoom: 25%;"></p>
 <h3 id="2-3-评估函数metrics"><a href="#2-3-评估函数metrics" class="headerlink" title="2.3 评估函数metrics"></a>2.3 评估函数metrics</h3><ul>
-<li>keras模型性能评估函数<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107104601631.png" alt="image-20221107104601631" style="zoom:50%;"></li>
+<li>keras模型性能评估函数<br><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107104601631.png" alt="image-20221107104601631" style="zoom:50%;"></li>
 <li>可以使用model.metrics_names查看评估函数</li>
 </ul>
 <h2 id="3-训练模型"><a href="#3-训练模型" class="headerlink" title="3.训练模型"></a>3.训练模型</h2><ul>
@@ -530,11 +514,10 @@ _________________________________________________________________</code></pre><h
 </ul>
 </li>
 </ul>
-<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107104731779.png" alt="image-20221107104731779" style="zoom:33%;">
-
+<p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107104731779.png" alt="image-20221107104731779" style="zoom:33%;"></p>
 <ul>
 <li><p>model.fit()初始值</p>
-<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107104829486.png" alt="image-20221107104829486" style="zoom:33%;">
+<p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107104829486.png" alt="image-20221107104829486" style="zoom:33%;"></p>
 </li>
 <li><p><code>history=model.fit();history.history</code></p>
 <ul>
@@ -549,13 +532,12 @@ _________________________________________________________________</code></pre><h
 <li><code>model.predict(x,batch_size,verbose) #x为数据的属性值</code></li>
 </ul>
 <h2 id="6-模型的保存与加载"><a href="#6-模型的保存与加载" class="headerlink" title="6.模型的保存与加载"></a>6.模型的保存与加载</h2><h3 id="仅保存神经网络的模型参数"><a href="#仅保存神经网络的模型参数" class="headerlink" title="仅保存神经网络的模型参数"></a>仅保存神经网络的模型参数</h3><ul>
-<li>保存：<code>model.save_weights()</code>#相当于替代了model.fit()<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107104943429.png" alt="image-20221107104943429" style="zoom:33%;"></li>
+<li>保存：<code>model.save_weights()</code>#相当于替代了model.fit()<br><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107104943429.png" alt="image-20221107104943429" style="zoom:33%;"></li>
 <li>加载：<code>model.load_weights()</code></li>
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">model2.save_weights(<span class="string">&quot;mnist_save_weights.h5&quot;</span>)</span><br><span class="line">model2.load_weights(<span class="string">&quot;mnist_save_weights.h5&quot;</span>)</span><br></pre></td></tr></table></figure>
-
 <h3 id="保存整个模型"><a href="#保存整个模型" class="headerlink" title="保存整个模型"></a>保存整个模型</h3><ul>
-<li><code>model.save()</code><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107105022947.png" alt="image-20221107105022947" style="zoom:33%;"></li>
+<li><code>model.save()</code><br><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107105022947.png" alt="image-20221107105022947" style="zoom:33%;"></li>
 <li><code>tf.keras.models.load_model()</code></li>
 </ul>
 <hr>
@@ -592,7 +574,8 @@ Epoch 5/5
 ********************************************************************************
 [[4.3734741e-07 4.9217494e-08 1.3537046e-04 1.3679784e-03 1.0147285e-09
   6.0127795e-06 8.5093779e-11 9.9846399e-01 5.7829629e-06 2.0411160e-05]]
-7</code></pre><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_43_1.png" alt="output_43_1"></p>
+7
+</code></pre><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_43_1.png" alt="output_43_1"></p>
 <p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_43_2.png" alt="output_43_2"></p>
 
     </div>
