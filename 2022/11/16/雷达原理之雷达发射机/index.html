@@ -33,10 +33,11 @@
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/16/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA/image-20221116122512747.png">
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/16/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA/image-20221116122709279.png">
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/16/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA/image-20221116123217773.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/16/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA/image-20230910162736851.png">
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/16/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA/image-20221116124123261.png">
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/16/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA/image-20221116130342927.png">
 <meta property="article:published_time" content="2022-11-15T16:07:12.000Z">
-<meta property="article:modified_time" content="2022-11-19T07:40:39.663Z">
+<meta property="article:modified_time" content="2023-09-10T08:31:10.886Z">
 <meta property="article:author" content="ssy">
 <meta property="article:tag" content="雷达原理">
 <meta name="twitter:card" content="summary">
@@ -245,7 +246,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-11-19 15:40:39" itemprop="dateModified" datetime="2022-11-19T15:40:39+08:00">2022-11-19</time>
+                <time title="修改时间：2023-09-10 16:31:10" itemprop="dateModified" datetime="2023-09-10T16:31:10+08:00">2023-09-10</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -277,6 +278,7 @@
       
         <p>本节主要介绍了雷达接收机，包括雷达接收机频率调制与相位调制的原理，以及单级振荡式发射机与主振放大式发射机。</p>
 <span id="more"></span>
+
 <h1 id="雷达发射机的任务"><a href="#雷达发射机的任务" class="headerlink" title="雷达发射机的任务"></a>雷达发射机的任务</h1><ul>
 <li><p>产生<strong>大功率</strong>、<strong>特定调制</strong>的<strong>射频</strong>信号。</p>
 </li>
@@ -290,15 +292,17 @@
 <li><p>线性调频信号：$S_t(t)=Acos(2\pi f_0t+\pi\mu t^2+\phi)$</p>
 </li>
 <li><p>时域波形：</p>
-<p><img src="/2022/11/16/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA/image-20221116122426205.png" alt="image-20221116122426205" style="zoom: 50%;"></p>
+<img src="/2022/11/16/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA/image-20221116122426205.png" alt="image-20221116122426205" style="zoom: 50%;">
 </li>
 <li><p>频域波形：</p>
-<p><img src="/2022/11/16/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA/image-20221116122512747.png" alt="image-20221116122512747" style="zoom:50%;"></p>
+<img src="/2022/11/16/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA/image-20221116122512747.png" alt="image-20221116122512747" style="zoom:50%;">
+
 </li>
 </ul>
 <h2 id="2-频率捷变"><a href="#2-频率捷变" class="headerlink" title="2.频率捷变"></a>2.频率捷变</h2><ul>
 <li><p>每一个脉冲的频率不同，是一种有效的抗干扰手段</p>
-<p><img src="/2022/11/16/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA/image-20221116122709279.png" alt="image-20221116122709279" style="zoom:50%;"></p>
+<img src="/2022/11/16/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA/image-20221116122709279.png" alt="image-20221116122709279" style="zoom:50%;">
+
 </li>
 </ul>
 <hr>
@@ -307,26 +311,31 @@
 <li>其产生对应单级振荡式发射机</li>
 </ul>
 <h2 id="2-相位相参"><a href="#2-相位相参" class="headerlink" title="2.相位相参"></a>2.相位相参</h2><ul>
-<li>脉冲之间具有固定的相位关系</li>
+<li>脉冲之间具有固定的相位关系，相参性是指两个信号（两个脉冲重复周期之间雷达发射的信号）的相位之间存在着确定的关系</li>
 <li>其产生对应主振放大式发射机</li>
 </ul>
 <hr>
-<h1 id="单极振荡式发射机"><a href="#单极振荡式发射机" class="headerlink" title="单极振荡式发射机"></a>单极振荡式发射机</h1><ul>
+<h1 id="发射机的组成"><a href="#发射机的组成" class="headerlink" title="发射机的组成"></a>发射机的组成</h1><h2 id="1-单极振荡式发射机"><a href="#1-单极振荡式发射机" class="headerlink" title="1.单极振荡式发射机"></a>1.单极振荡式发射机</h2><ul>
 <li><p>大功率电磁震荡产生与调制同时完成</p>
 </li>
 <li><p>因为脉冲调制器直接控制振荡器的工作，每个射频脉冲的起始射频相位是由振荡器的噪声决定的，相继脉冲的射频相位是随机的，不能根据一个周期内的确定时刻，确定下一周期内相同位置的幅度信息，这样的信号<strong>相位是不相参的。</strong></p>
 </li>
 <li><p>其组成如下：</p>
-<p><img src="/2022/11/16/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA/image-20221116123217773.png" alt="image-20221116123217773" style="zoom: 33%;"></p>
+<img src="/2022/11/16/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA/image-20221116123217773.png" alt="image-20221116123217773" style="zoom: 33%;">
+
 </li>
 </ul>
-<hr>
-<h1 id="主振放大式发射机"><a href="#主振放大式发射机" class="headerlink" title="主振放大式发射机"></a>主振放大式发射机</h1><ul>
-<li>先产生小功率连续波信号，再分多级进行调制放大</li>
-<li><p>发射机的发射信号$f_0$，稳定本振电压$f_L$，相参振荡电压$f_c$，定时器触发脉冲$f_r$，均是由基准信号F产生的，他们之间具有相位相参性</p>
+<h2 id="2-主振放大式发射机"><a href="#2-主振放大式发射机" class="headerlink" title="2.主振放大式发射机"></a>2.主振放大式发射机</h2><ul>
+<li><p>主振放大器的脉冲实际上是从连续波上“切”下来的</p>
+<p><img src="/2022/11/16/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA/image-20230910162736851.png" alt="image-20230910162736851"></p>
+</li>
+<li><p>先产生小功率连续波信号，再分多级进行调制放大</p>
+</li>
+<li><p>发射机的发射信号$f_0$，稳定本振电压$f_L$，相参振荡电压$f_c$，定时器触发脉冲$f_r$，均是由基准信号F产生的，他们之间具有<strong>相位相参性</strong></p>
 </li>
 <li><p>其组成如下：</p>
-<p><img src="/2022/11/16/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA/image-20221116124123261.png" alt="image-20221116124123261" style="zoom:50%;"></p>
+<img src="/2022/11/16/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA/image-20221116124123261.png" alt="image-20221116124123261" style="zoom:50%;">
+
 </li>
 </ul>
 <hr>
@@ -340,16 +349,14 @@
 <li>平均功率$P_{av}$：$T_r$内的输出平均功率</li>
 <li>峰值功率$P_t$：$\tau$内的输出平均功率</li>
 </ul>
-<script type="math/tex; mode=display">
-P_{av}=P_t\times\frac{\tau}{T_r}=P_tD
-\\其中，D为工作比</script><h2 id="3-总效率"><a href="#3-总效率" class="headerlink" title="3.总效率"></a>3.总效率</h2><script type="math/tex; mode=display">
-\eta=\frac{P_{av}}{P_s}
-\\其中，P_s发射机发射的总功率</script><hr>
+<p>$$<br>P_{av}=P_t\times\frac{\tau}{T_r}=P_tD<br>\\其中，D为工作比<br>$$</p>
+<h2 id="3-总效率"><a href="#3-总效率" class="headerlink" title="3.总效率"></a>3.总效率</h2><p>$$<br>\eta=\frac{P_{av}}{P_s}<br>\\其中，P_s发射机发射的总功率<br>$$</p>
+<hr>
 <h1 id="脉冲调制器"><a href="#脉冲调制器" class="headerlink" title="脉冲调制器"></a>脉冲调制器</h1><ul>
 <li><p>脉冲调制器的任务是给发射机的射频各级提供合适的视频调制脉冲</p>
 </li>
 <li><p>基本组成：</p>
-<p><img src="/2022/11/16/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA/image-20221116130342927.png" alt="image-20221116130342927" style="zoom:50%;"></p>
+<img src="/2022/11/16/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA/image-20221116130342927.png" alt="image-20221116130342927" style="zoom:50%;">
 </li>
 <li><p>刚性开关脉冲调制器：产生的脉冲前后沿由预调器的脉冲控制</p>
 </li>
@@ -475,7 +482,7 @@ P_{av}=P_t\times\frac{\tau}{T_r}=P_tD
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA%E7%9A%84%E4%BB%BB%E5%8A%A1"><span class="nav-number">1.</span> <span class="nav-text">雷达发射机的任务</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A2%91%E7%8E%87%E8%B0%83%E5%88%B6"><span class="nav-number">2.</span> <span class="nav-text">频率调制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%BA%BF%E6%80%A7%E8%B0%83%E9%A2%91%EF%BC%88LFM%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">1.线性调频（LFM）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E9%A2%91%E7%8E%87%E6%8D%B7%E5%8F%98"><span class="nav-number">2.2.</span> <span class="nav-text">2.频率捷变</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9B%B8%E4%BD%8D%E8%B0%83%E5%88%B6"><span class="nav-number">3.</span> <span class="nav-text">相位调制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E9%9A%8F%E6%9C%BA%E7%9B%B8%E4%BD%8D"><span class="nav-number">3.1.</span> <span class="nav-text">1.随机相位</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E7%9B%B8%E4%BD%8D%E7%9B%B8%E5%8F%82"><span class="nav-number">3.2.</span> <span class="nav-text">2.相位相参</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8D%95%E6%9E%81%E6%8C%AF%E8%8D%A1%E5%BC%8F%E5%8F%91%E5%B0%84%E6%9C%BA"><span class="nav-number">4.</span> <span class="nav-text">单极振荡式发射机</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BB%E6%8C%AF%E6%94%BE%E5%A4%A7%E5%BC%8F%E5%8F%91%E5%B0%84%E6%9C%BA"><span class="nav-number">5.</span> <span class="nav-text">主振放大式发射机</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA%E7%9A%84%E4%B8%BB%E8%A6%81%E8%B4%A8%E9%87%8F%E6%8C%87%E6%A0%87"><span class="nav-number">6.</span> <span class="nav-text">雷达发射机的主要质量指标</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%B7%A5%E4%BD%9C%E9%A2%91%E7%8E%87"><span class="nav-number">6.1.</span> <span class="nav-text">1.工作频率</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E8%BE%93%E5%87%BA%E5%8A%9F%E7%8E%87"><span class="nav-number">6.2.</span> <span class="nav-text">2.输出功率</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%80%BB%E6%95%88%E7%8E%87"><span class="nav-number">6.3.</span> <span class="nav-text">3.总效率</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%84%89%E5%86%B2%E8%B0%83%E5%88%B6%E5%99%A8"><span class="nav-number">7.</span> <span class="nav-text">脉冲调制器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">8.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA%E7%9A%84%E4%BB%BB%E5%8A%A1"><span class="nav-number">1.</span> <span class="nav-text">雷达发射机的任务</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A2%91%E7%8E%87%E8%B0%83%E5%88%B6"><span class="nav-number">2.</span> <span class="nav-text">频率调制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%BA%BF%E6%80%A7%E8%B0%83%E9%A2%91%EF%BC%88LFM%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">1.线性调频（LFM）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E9%A2%91%E7%8E%87%E6%8D%B7%E5%8F%98"><span class="nav-number">2.2.</span> <span class="nav-text">2.频率捷变</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9B%B8%E4%BD%8D%E8%B0%83%E5%88%B6"><span class="nav-number">3.</span> <span class="nav-text">相位调制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E9%9A%8F%E6%9C%BA%E7%9B%B8%E4%BD%8D"><span class="nav-number">3.1.</span> <span class="nav-text">1.随机相位</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E7%9B%B8%E4%BD%8D%E7%9B%B8%E5%8F%82"><span class="nav-number">3.2.</span> <span class="nav-text">2.相位相参</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%91%E5%B0%84%E6%9C%BA%E7%9A%84%E7%BB%84%E6%88%90"><span class="nav-number">4.</span> <span class="nav-text">发射机的组成</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%8D%95%E6%9E%81%E6%8C%AF%E8%8D%A1%E5%BC%8F%E5%8F%91%E5%B0%84%E6%9C%BA"><span class="nav-number">4.1.</span> <span class="nav-text">1.单极振荡式发射机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%B8%BB%E6%8C%AF%E6%94%BE%E5%A4%A7%E5%BC%8F%E5%8F%91%E5%B0%84%E6%9C%BA"><span class="nav-number">4.2.</span> <span class="nav-text">2.主振放大式发射机</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA%E7%9A%84%E4%B8%BB%E8%A6%81%E8%B4%A8%E9%87%8F%E6%8C%87%E6%A0%87"><span class="nav-number">5.</span> <span class="nav-text">雷达发射机的主要质量指标</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%B7%A5%E4%BD%9C%E9%A2%91%E7%8E%87"><span class="nav-number">5.1.</span> <span class="nav-text">1.工作频率</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E8%BE%93%E5%87%BA%E5%8A%9F%E7%8E%87"><span class="nav-number">5.2.</span> <span class="nav-text">2.输出功率</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%80%BB%E6%95%88%E7%8E%87"><span class="nav-number">5.3.</span> <span class="nav-text">3.总效率</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%84%89%E5%86%B2%E8%B0%83%E5%88%B6%E5%99%A8"><span class="nav-number">6.</span> <span class="nav-text">脉冲调制器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">7.</span> <span class="nav-text">Reference</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -491,7 +498,7 @@ P_{av}=P_t\times\frac{\tau}{T_r}=P_tD
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">96</span>
+          <span class="site-state-item-count">95</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
