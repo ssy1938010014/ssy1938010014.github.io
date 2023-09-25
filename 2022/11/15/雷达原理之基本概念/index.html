@@ -22,12 +22,12 @@
     var CONFIG = {"hostname":"xn--ssy-lq6e63gg6fuu2d.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="本节主要介绍了雷达原理中的基本概念，包括雷达的基本组成，目标参数的测量、雷达方程等。">
+  <meta name="description" content="本节主要介绍了雷达原理中的基本概念，包括雷达的基本组成，目标参数的测量等。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="雷达原理之基本概念">
 <meta property="og:url" content="http://ssy的小天地.com/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/index.html">
 <meta property="og:site_name" content="ssy的小天地">
-<meta property="og:description" content="本节主要介绍了雷达原理中的基本概念，包括雷达的基本组成，目标参数的测量、雷达方程等。">
+<meta property="og:description" content="本节主要介绍了雷达原理中的基本概念，包括雷达的基本组成，目标参数的测量等。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115111416164.png">
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115111529539.png">
@@ -36,14 +36,22 @@
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115113038131.png">
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115112757492.png">
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115115632640.png">
-<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115120758904.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20230914093307513.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20230914095252912.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20230914095946418.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/287a82878c8955c70a57b081fde66d8.jpg">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20230914102012510.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20230914102628116.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20230914102657113.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20230914144959366.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20230914145639644.png">
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115121354695.png">
-<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115121835869.png">
-<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115121932764.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/v2-a77998f30d31deaf70b623b4286e5da2_r.jpg">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/v2-279a4d9436e14aec4a071e4a8bbf36a4_r.jpg">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/v2-4b96d474dc1b06970c0911ce5732b54d_r.jpg">
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115123347246.png">
-<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221116111811248.png">
 <meta property="article:published_time" content="2022-11-14T16:07:12.000Z">
-<meta property="article:modified_time" content="2023-09-10T14:17:25.756Z">
+<meta property="article:modified_time" content="2023-09-14T09:00:55.755Z">
 <meta property="article:author" content="ssy">
 <meta property="article:tag" content="雷达原理">
 <meta name="twitter:card" content="summary">
@@ -252,7 +260,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-09-10 22:17:25" itemprop="dateModified" datetime="2023-09-10T22:17:25+08:00">2023-09-10</time>
+                <time title="修改时间：2023-09-14 17:00:55" itemprop="dateModified" datetime="2023-09-14T17:00:55+08:00">2023-09-14</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -282,7 +290,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>本节主要介绍了雷达原理中的基本概念，包括雷达的基本组成，目标参数的测量、雷达方程等。</p>
+        <p>本节主要介绍了雷达原理中的基本概念，包括雷达的基本组成，目标参数的测量等。</p>
 <span id="more"></span>
 
 <h1 id="雷达的基本组成"><a href="#雷达的基本组成" class="headerlink" title="雷达的基本组成"></a>雷达的基本组成</h1><h2 id="1-天线"><a href="#1-天线" class="headerlink" title="1.天线"></a>1.天线</h2><ul>
@@ -343,13 +351,13 @@
 <li>同步设备：雷达的频率和时间标准。产生各种频率振荡，提供统一的时钟</li>
 </ul>
 <hr>
-<h1 id="目标距离测量"><a href="#目标距离测量" class="headerlink" title="目标距离测量"></a>目标距离测量</h1><ul>
+<h1 id="简单的目标距离测量"><a href="#简单的目标距离测量" class="headerlink" title="简单的目标距离测量"></a>简单的目标距离测量</h1><ul>
 <li>$2R=Ct_r\Rightarrow R=\frac{Ct_r}{2}$ </li>
 </ul>
 <img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115112757492.png" alt="image-20221115112757492" style="zoom:50%;">
 
 <hr>
-<h1 id="目标速度测量"><a href="#目标速度测量" class="headerlink" title="目标速度测量"></a>目标速度测量</h1><ul>
+<h1 id="多普勒效率与速度测量"><a href="#多普勒效率与速度测量" class="headerlink" title="多普勒效率与速度测量"></a>多普勒效率与速度测量</h1><ul>
 <li>测速原理：利用多普勒效应</li>
 <li>实际测量的是径向速度，目标和雷达之间必须有径向速度分量</li>
 </ul>
@@ -386,33 +394,122 @@
 <li><p>当$f_d$为负数时，目标远离；当$f_d$为正数时，目标靠近</p>
 </li>
 </ul>
+<h2 id="4-多普勒频率的详细解释与推导"><a href="#4-多普勒频率的详细解释与推导" class="headerlink" title="4.多普勒频率的详细解释与推导"></a>4.多普勒频率的详细解释与推导</h2><ul>
+<li><p>当目标向着雷达运动时。多普勒频率为正；当目标远离雷达时，多普勒频率为负</p>
+</li>
+<li><p>照射到目标上的波形具有间隔为$\lambda$（波长）的等相位波前：</p>
+<ul>
+<li>靠近雷达的目标导致反射回波的等相位波前相互靠近（较短波长），$\lambda &gt; \lambda’$（$\lambda’$为反射波波长）</li>
+<li>远离雷达运动的目标导致反射回波的等相位波前相互扩展（较长波长）$\lambda &lt; \lambda’$</li>
+</ul>
+<p><img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20230914093307513.png" alt="image-20230914093307513"></p>
+</li>
+<li><p><strong>运动目标速度对发射脉冲的影响</strong>：</p>
+<ul>
+<li><p>假设雷达的发射脉冲宽度为$\tau$，对应的波程为$L = c\tau$（c为光速），目标的径向速度为$v_r$</p>
+</li>
+<li><p>假设脉冲前沿到达目标与后沿到达目标的时间间隔为$\Delta t$，在$\Delta t$时间内目标移动脉冲内的距离为$d = v_r \Delta t$</p>
+</li>
+<li><p>由于脉冲以光速传播，后沿已经移动的距离是$c\tau - d$，那么：<br>$$<br>c\tau = c\Delta t + v_r\Delta t<br>$$</p>
+<p>$$<br>c\tau’ = c\Delta t - v_r\Delta t<br>$$</p>
+</li>
+<li><p>由上式可得到反射脉冲宽度$\tau’$和入射脉冲宽度$\tau$之间的关系为：<br>$$<br>\tau’ = \frac{c-v_r}{c+v_r}\tau<br>$$</p>
+<ul>
+<li><p>式中，$\frac{c-v_r}{c+v_r}$通常称为时间扩展因子</p>
+</li>
+<li><p>若$v_r = 0$，则$\tau’ = \tau$</p>
+</li>
+<li><p>同理可计算，当目标以速度$v_r$远离雷达时，反射和入射脉冲宽度之间的关系为：<br>$$<br>\tau’ = \frac{c+ v_r}{c - v_r}\tau<br>$$</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20230914095252912.png" alt="image-20230914095252912"></p>
+</li>
+<li><p><strong>多普勒频率的推导</strong>：</p>
+<ul>
+<li><p>假设两个入射脉冲的重复频率（PRF）为$f_r$，脉冲1的前沿到达目标以后，脉冲2的前沿要花$\Delta t$时间到达目标，电波传播的距离为$(\frac{c}{f_r}-d)$，且脉冲2前沿在$\Delta t$时间的迟延距离$d = v_r\Delta t$，则<br>$$<br>\frac{c}{f_r}-d = \frac{c}{f_r}-v_r\Delta t = c\Delta t<br>$$</p>
+</li>
+<li><p>经化简得：<br>$$<br>\Delta t = \frac{c/f_r}{c+v_r}<br>$$</p>
+<p>$$<br>d = v_r\Delta t = \frac{v_rc/f_r}{c + v_r}<br>$$</p>
+<p><img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20230914095946418.png" alt="image-20230914095946418"></p>
+</li>
+<li><p>反射脉冲间隔$T_r’$所对应的波程为$s-d$（下图是关于为什么反射脉冲间隔为s-d的个人见解），其中$s = c\Delta t$，则回波脉冲的重复频率$f_r’ = \frac{1}{T_r’}$，且：</p>
+<img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/287a82878c8955c70a57b081fde66d8.jpg" alt="287a82878c8955c70a57b081fde66d8" style="zoom: 33%;">
+$$
+s-d =\frac{c}{f_r'}=\Delta t-\frac{v_rc/f_r}{c+v_r}
+$$
+</li>
+<li><p>由此得到回波脉冲的PRF与入射脉冲的PRF之间的关系为：<br>$$<br>f_r’ = \frac{c + v_r}{c-v_r}f_r<br>$$</p>
+</li>
+<li><p>由于周期的数量不变，反射信号的频率也以相同的因子上升，回波信号的载频$f_0’$与入射信号的载频$f_0$之间的关系为：<br>$$<br>f_0’ = \frac{c+v_r}{c-v_r}f_0<br>$$</p>
+</li>
+<li><p>多普勒频率定义为回波信号的载频$f_0’$与入射信号的载频$f_0$之差，即：<br>$$<br>f_d = f_0’-f_0 = \frac{c+v_r}{c-v_r}f_0-f_0 = \frac{2v_r}{c-v_r}f_0<br>$$</p>
+</li>
+<li><p>由于$v_r&lt;&lt;c$，则波长$\lambda = c/f_0$，则：<br>$$<br>f_d\approx \frac{2v_r}{c}f_0 = \frac{2v_r}{\lambda}<br>$$</p>
+</li>
+</ul>
+</li>
+<li><p><strong>影响多普勒频率的因素</strong>：</p>
+<ul>
+<li><p>多普勒频率和<strong>雷达视线与目标运动方向之间的夹角</strong>有关</p>
+<p><img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20230914102012510.png" alt="image-20230914102012510"></p>
+</li>
+<li><p>对于双基地雷达，若目标的运动方向相对于雷达视线的方位和仰角分别为$\theta_a$和$\theta_e$，则目标回波的多普勒频率为：<br>$$<br>f_d = \frac{2v_t}{\lambda}cos\theta=\frac{2v_t}{\lambda}cos\theta_ecos\theta_a<br>$$</p>
+<ul>
+<li>式中，$cos\theta = cos\theta_ecos\theta_a$，目标速度$v_t$投影到雷达实现的径向速度为$v_r = v_t cos\theta=v_tcos\theta_ecos\theta_a$</li>
+</ul>
+<p><img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20230914102628116.png" alt="image-20230914102628116"></p>
+<p><img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20230914102657113.png" alt="image-20230914102657113"></p>
+</li>
+</ul>
+</li>
+</ul>
 <hr>
-<h1 id="目标角度测量"><a href="#目标角度测量" class="headerlink" title="目标角度测量"></a>目标角度测量</h1><ul>
-<li><p>需测量方位角与俯仰角</p>
-<img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115120758904.png" alt="image-20221115120758904" style="zoom: 33%;">
+<h1 id="天线"><a href="#天线" class="headerlink" title="天线"></a>天线</h1><ul>
+<li>定义：发射或接收系统中，经设计用于辐射和接收电磁波的部分</li>
+</ul>
+<h2 id="1-天线的基本功能"><a href="#1-天线的基本功能" class="headerlink" title="1.天线的基本功能"></a>1.天线的基本功能</h2><ul>
+<li><p>用于发射时，将高频电流（或导波）能量转化为无线电波并按照预定的分布传送到空间</p>
+</li>
+<li><p>用于接收时，将空间传来的无线电波能量转化为高频电流（或导波）能量</p>
+</li>
+<li><p>因此，天线可认为是导波和辐射波的变换转置，是一个能量转换器件</p>
+<img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20230914144959366.png" alt="image-20230914144959366" style="zoom:50%;">
 
 </li>
 </ul>
-<h2 id="1-角度测量需要满足的条件"><a href="#1-角度测量需要满足的条件" class="headerlink" title="1.角度测量需要满足的条件"></a>1.角度测量需要满足的条件</h2><ul>
-<li><p>电磁波是直线传播</p>
+<h2 id="2-天线的主要性能指标"><a href="#2-天线的主要性能指标" class="headerlink" title="2.天线的主要性能指标"></a>2.天线的主要性能指标</h2><h3 id="2-1-天线效率"><a href="#2-1-天线效率" class="headerlink" title="2.1 天线效率"></a>2.1 天线效率</h3><ul>
+<li><p>发射机输出的功率为$P_G$，进入到天线的功率为$P_{in} = (1-|\eta|^2)P_G$ ，天线辐射的功率为$P_{\sum}$，</p>
+<ul>
+<li>$\eta$是反射系数</li>
+<li>这是由于天线和传输线之间的失配而产生的，完全匹配时，$P_{in} = P_{P_G}$</li>
+</ul>
+<img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20230914145639644.png" alt="image-20230914145639644" style="zoom:50%;">
 </li>
-<li><p>雷达天线具有方向性</p>
+<li><p>天线的效率定义为：<br>$$<br>\eta_A = \frac{P_{\sum}}{P_{in}} = \frac{P_{\sum}}{P_{\sum}+P_{loss}}<br>$$</p>
+<ul>
+<li><p>$P_{loss}$表示损耗功率，它是由天线的铜耗、介质损耗、加载元件的损耗以及接地损耗等造成的</p>
+</li>
+<li><p>假设这一部分功率为一电阻所吸收，称此电阻为损耗电阻，记为$R_{loss}$，则：<br>$$<br>R_{loss} = \frac{2P_{loss}}{I_{A}^{2}}<br>$$</p>
+</li>
+<li><p>式中$I_A$式天线上某点的电流，则$R_{loss}$是归算于此电流的损耗电阻</p>
+</li>
+<li><p>若天线阻抗为$R_{\sum}$，上式也可表示为：<br>$$<br>\eta_A = \frac{R_{\sum}}{R_{\sum}+R_{loss}}<br>$$</p>
 </li>
 </ul>
-<h2 id="2-雷达天线的分类"><a href="#2-雷达天线的分类" class="headerlink" title="2.雷达天线的分类"></a>2.雷达天线的分类</h2><ul>
-<li>各向异性天线，即有方向性天线</li>
-<li>各向同性天线，即无方向性天线</li>
-</ul>
-<h2 id="3-天线方向图"><a href="#3-天线方向图" class="headerlink" title="3.天线方向图"></a>3.天线方向图</h2><ul>
-<li><p>指有方向性天线相对于无方向性天线，在某个方向上功率增加的倍数</p>
 </li>
-<li><p>对于无方向性天线，到各个方向径长相等，在平面上就是一个以天线为圆心的圆。各个方向的增益都是1</p>
+</ul>
+<h3 id="2-2-天线方向图"><a href="#2-2-天线方向图" class="headerlink" title="2.2 天线方向图"></a>2.2 天线方向图</h3><ul>
+<li><p><strong>天线的方向性</strong>是指天线向一定方向辐射电磁波的能力。对于接收天线而言，方向性表示天线对不同方向传来的电磁波具有不同的接收能力。天线的方向性通常用方向图来表示</p>
+<ul>
+<li><p>如果把天<strong>线在各方向辐射的强度</strong>用从原点出发的矢量来表示，则连接全部矢量端点所形成的曲面就是<strong>天线的方向图</strong></p>
 <img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115121354695.png" alt="image-20221115121354695" style="zoom:33%;">
 
 <ul>
 <li><p>$P_t$：发射机功率</p>
 </li>
-<li><p>$G_t$：最大增益</p>
+<li><p>$G_t$：最大增益（天线在最大辐射方向上辐射的功率$P_{max}$或$|E_{max}|^2$和无方向性天线（电源）的辐射功率$P_0$或$|E_0|^2$之比称为此天线的方向系数）</p>
 </li>
 <li><p>$G_tF(\theta)$：与最大增益方向夹角为$\theta$的方向对应的增益</p>
 </li>
@@ -421,14 +518,27 @@
 <li><p>天线方向图实际在360°方向都有值，与最大增益方向夹角越大，增益越小（只在主瓣范围内有效）</p>
 </li>
 <li><p>主瓣获得的功率增益，是以牺牲副瓣增益得到的</p>
-<img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115121835869.png" alt="image-20221115121835869" style="zoom:33%;">
 </li>
-<li><p>直角坐标系下的天线方向图</p>
-<img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115121932764.png" alt="image-20221115121932764" style="zoom:33%;">
+<li><p>在方向图（又称波瓣图）中，<strong>包含所需最大辐射方向的辐射波瓣叫天线主波瓣</strong>，也称天线波束。主瓣之外的波瓣叫副瓣或旁瓣、边瓣，主瓣相反方向上的旁瓣叫后瓣、尾瓣</p>
+<ul>
+<li>直角坐标系表示的方向图</li>
+</ul>
+<img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/v2-a77998f30d31deaf70b623b4286e5da2_r.jpg" alt="img" style="zoom:50%;">
+
+<ul>
+<li><p>极坐标系表示的方向图</p>
+<img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/v2-279a4d9436e14aec4a071e4a8bbf36a4_r.jpg" alt="img" style="zoom:50%;">
+</li>
+<li><p>球坐标系表示的3D方向图</p>
+<img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/v2-4b96d474dc1b06970c0911ce5732b54d_r.jpg" alt="img" style="zoom:50%;">
 
 </li>
 </ul>
-<h2 id="4-波束宽度"><a href="#4-波束宽度" class="headerlink" title="4.波束宽度"></a>4.波束宽度</h2><ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-3-波束宽度"><a href="#2-3-波束宽度" class="headerlink" title="2.3 波束宽度"></a>2.3 波束宽度</h2><ul>
 <li><p>主瓣的宽度称为波束宽度，是衡量天线方向图胖瘦的指标</p>
 </li>
 <li><p>定义为主瓣功率下降到波束中央 1/2 功率处的宽度</p>
@@ -436,42 +546,6 @@
 <li><p>波束宽度用$\theta_{3dB}$或者$\theta_{0.5}$表示<br>$$<br>\begin{cases}<br>\begin{aligned}<br>20log_{10}^\frac{\sqrt 2}{2} &amp;= -3dB\<br>10log_{10}^\frac{1}{2} &amp;= -3dB<br>\end{aligned}<br>\end{cases}<br>$$</p>
 <img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115123347246.png" alt="image-20221115123347246" style="zoom: 33%;">
 
-</li>
-</ul>
-<hr>
-<h1 id="基本雷达方程"><a href="#基本雷达方程" class="headerlink" title="基本雷达方程"></a>基本雷达方程</h1><ul>
-<li>雷达基本方程，也叫做最大作用距离方程</li>
-</ul>
-<h2 id="1-基本思路"><a href="#1-基本思路" class="headerlink" title="1.基本思路"></a>1.基本思路</h2>  <img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221116111811248.png" alt="image-20221116111811248" style="zoom:50%;">
-
-<ul>
-<li><p>$P_t$：雷达发射机发射信号的功率</p>
-</li>
-<li><p>$G_t$：发射天线增益，这里假设目标与雷达天线的连线正好穿过天线方向图最大增益处</p>
-</li>
-<li><p>$G_r$：接收天线增益，若天线为收发共用，有$G_r$=$G_t$</p>
-</li>
-<li><p>$\sigma$：表示目标的雷达截面积（RCS），其反应入射电磁波照射到目标上之后发射回来的电磁波的大小。隐身飞机就是将 σ 做的很小。当雷达电磁波照射到目标上之后，反射回来的电磁波功率很弱，就达到了目标对雷达隐身的目的。</p>
-</li>
-<li><p>$S_{imin}$表示接收手机灵敏度，即最小可检测信号</p>
-</li>
-<li><p>假设电磁波反射回来之后，经过接收天线主瓣最大值（接收天线方向图最大增益为$G_r$），接收机接收到的信号功率就等于反射回来的信号功率乘以接收天线增益$G_r$。此时，接收机能否检测到信号跟$S_{imin}$有关。</p>
-</li>
-<li><p>如果满足，$P_r≥S_{imin}$，雷达就可以探测到目标</p>
-</li>
-</ul>
-<h2 id="2-方程公式推导"><a href="#2-方程公式推导" class="headerlink" title="2.方程公式推导"></a>2.方程公式推导</h2><ul>
-<li><p>到达目标的入射功率密度为:<br>$$<br>\frac{P_tG_t}{4\pi R^2}<br>$$</p>
-</li>
-<li><p>目标反射回来的功率为：<br>$$<br>\frac{P_tG_t\sigma}{4\pi R^2}<br>$$</p>
-</li>
-<li><p>假设接收天线的有效面积为$A_r$：<br>$$<br>\frac{P_tG_t\sigma}{4\pi R^2}\times\frac{A_r}{4\pi R^2}<br>$$</p>
-</li>
-<li><p>由于$A_r$与$G_r$的关系为：<br>$$<br>G_r=\frac{4\pi A_r}{\lambda^2}<br>$$</p>
-</li>
-<li><p>故最终接收到的功率为：<br>$$<br>P_r=\frac{P_tG_tG_r\lambda^2\sigma}{(4\pi)^3R^4}<br>$$</p>
-</li>
-<li><p>而当$P_r$=$S_{simin}$时，R就取得最大值：<br>$$<br>R_{max}=[\frac{P_tG_tG_r\lambda^2\sigma}{(4\pi)^3S_{simin}}]^{1/4}<br>$$</p>
 </li>
 </ul>
 <hr>
@@ -548,6 +622,7 @@
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
 <li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/149757466">一，雷达原理-基础知识1 - 知乎 (zhihu.com)</a></li>
 <li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/150601023">一，雷达原理-基础知识2 - 知乎 (zhihu.com)</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/550161645">方向图与天线增益 - 知乎 (zhihu.com)</a></li>
 </ul>
 
     </div>
@@ -664,7 +739,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9B%B7%E8%BE%BE%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%BB%84%E6%88%90"><span class="nav-number">1.</span> <span class="nav-text">雷达的基本组成</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%A4%A9%E7%BA%BF"><span class="nav-number">1.1.</span> <span class="nav-text">1.天线</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%8F%91%E5%B0%84%E6%9C%BA"><span class="nav-number">1.2.</span> <span class="nav-text">2.发射机</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E8%BF%9E%E7%BB%AD%E6%B3%A2%E4%BF%A1%E5%8F%B7"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 连续波信号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E8%84%89%E5%86%B2%E4%BF%A1%E5%8F%B7"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 脉冲信号</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%8E%A5%E6%94%B6%E6%9C%BA"><span class="nav-number">1.3.</span> <span class="nav-text">3.接收机</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E5%B0%84%E9%A2%91%E4%BF%A1%E5%8F%B7"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1 射频信号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E4%B8%AD%E9%A2%91%E4%BF%A1%E5%8F%B7"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.2 中频信号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E8%A7%86%E9%A2%91%E4%BF%A1%E5%8F%B7"><span class="nav-number">1.3.3.</span> <span class="nav-text">3.3 视频信号</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E6%9C%BA"><span class="nav-number">1.4.</span> <span class="nav-text">4.信号处理机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E7%BB%88%E7%AB%AF%E6%98%BE%E7%A4%BA%E8%AE%BE%E5%A4%87"><span class="nav-number">1.5.</span> <span class="nav-text">5.终端显示设备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E4%BC%BA%E6%9C%8D%E7%B3%BB%E7%BB%9F%E4%B8%8E%E5%90%8C%E6%AD%A5%E8%AE%BE%E5%A4%87"><span class="nav-number">1.6.</span> <span class="nav-text">6.伺服系统与同步设备</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9B%AE%E6%A0%87%E8%B7%9D%E7%A6%BB%E6%B5%8B%E9%87%8F"><span class="nav-number">2.</span> <span class="nav-text">目标距离测量</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9B%AE%E6%A0%87%E9%80%9F%E5%BA%A6%E6%B5%8B%E9%87%8F"><span class="nav-number">3.</span> <span class="nav-text">目标速度测量</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%A4%9A%E6%99%AE%E5%8B%92%E6%95%88%E5%BA%94"><span class="nav-number">3.1.</span> <span class="nav-text">1.多普勒效应</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E9%A2%91%E7%8E%87%E4%B8%8E%E7%9B%B8%E4%BD%8D%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">3.2.</span> <span class="nav-text">2.频率与相位的关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%B5%8B%E9%80%9F%E5%85%AC%E5%BC%8F%E6%8E%A8%E5%AF%BC"><span class="nav-number">3.3.</span> <span class="nav-text">3.测速公式推导</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F"><span class="nav-number">4.</span> <span class="nav-text">目标角度测量</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F%E9%9C%80%E8%A6%81%E6%BB%A1%E8%B6%B3%E7%9A%84%E6%9D%A1%E4%BB%B6"><span class="nav-number">4.1.</span> <span class="nav-text">1.角度测量需要满足的条件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E9%9B%B7%E8%BE%BE%E5%A4%A9%E7%BA%BF%E7%9A%84%E5%88%86%E7%B1%BB"><span class="nav-number">4.2.</span> <span class="nav-text">2.雷达天线的分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%A4%A9%E7%BA%BF%E6%96%B9%E5%90%91%E5%9B%BE"><span class="nav-number">4.3.</span> <span class="nav-text">3.天线方向图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E6%B3%A2%E6%9D%9F%E5%AE%BD%E5%BA%A6"><span class="nav-number">4.4.</span> <span class="nav-text">4.波束宽度</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E9%9B%B7%E8%BE%BE%E6%96%B9%E7%A8%8B"><span class="nav-number">5.</span> <span class="nav-text">基本雷达方程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%9F%BA%E6%9C%AC%E6%80%9D%E8%B7%AF"><span class="nav-number">5.1.</span> <span class="nav-text">1.基本思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%96%B9%E7%A8%8B%E5%85%AC%E5%BC%8F%E6%8E%A8%E5%AF%BC"><span class="nav-number">5.2.</span> <span class="nav-text">2.方程公式推导</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9B%B7%E8%BE%BE%E7%9A%84%E5%B7%A5%E4%BD%9C%E9%A2%91%E7%8E%87"><span class="nav-number">6.</span> <span class="nav-text">雷达的工作频率</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E5%8D%95%E4%BD%8D%E6%8D%A2%E7%AE%97"><span class="nav-number">7.</span> <span class="nav-text">相关单位换算</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">8.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9B%B7%E8%BE%BE%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%BB%84%E6%88%90"><span class="nav-number">1.</span> <span class="nav-text">雷达的基本组成</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%A4%A9%E7%BA%BF"><span class="nav-number">1.1.</span> <span class="nav-text">1.天线</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%8F%91%E5%B0%84%E6%9C%BA"><span class="nav-number">1.2.</span> <span class="nav-text">2.发射机</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E8%BF%9E%E7%BB%AD%E6%B3%A2%E4%BF%A1%E5%8F%B7"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 连续波信号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E8%84%89%E5%86%B2%E4%BF%A1%E5%8F%B7"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 脉冲信号</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%8E%A5%E6%94%B6%E6%9C%BA"><span class="nav-number">1.3.</span> <span class="nav-text">3.接收机</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E5%B0%84%E9%A2%91%E4%BF%A1%E5%8F%B7"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1 射频信号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E4%B8%AD%E9%A2%91%E4%BF%A1%E5%8F%B7"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.2 中频信号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E8%A7%86%E9%A2%91%E4%BF%A1%E5%8F%B7"><span class="nav-number">1.3.3.</span> <span class="nav-text">3.3 视频信号</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E6%9C%BA"><span class="nav-number">1.4.</span> <span class="nav-text">4.信号处理机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E7%BB%88%E7%AB%AF%E6%98%BE%E7%A4%BA%E8%AE%BE%E5%A4%87"><span class="nav-number">1.5.</span> <span class="nav-text">5.终端显示设备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E4%BC%BA%E6%9C%8D%E7%B3%BB%E7%BB%9F%E4%B8%8E%E5%90%8C%E6%AD%A5%E8%AE%BE%E5%A4%87"><span class="nav-number">1.6.</span> <span class="nav-text">6.伺服系统与同步设备</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E7%9A%84%E7%9B%AE%E6%A0%87%E8%B7%9D%E7%A6%BB%E6%B5%8B%E9%87%8F"><span class="nav-number">2.</span> <span class="nav-text">简单的目标距离测量</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%9A%E6%99%AE%E5%8B%92%E6%95%88%E7%8E%87%E4%B8%8E%E9%80%9F%E5%BA%A6%E6%B5%8B%E9%87%8F"><span class="nav-number">3.</span> <span class="nav-text">多普勒效率与速度测量</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%A4%9A%E6%99%AE%E5%8B%92%E6%95%88%E5%BA%94"><span class="nav-number">3.1.</span> <span class="nav-text">1.多普勒效应</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E9%A2%91%E7%8E%87%E4%B8%8E%E7%9B%B8%E4%BD%8D%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">3.2.</span> <span class="nav-text">2.频率与相位的关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%B5%8B%E9%80%9F%E5%85%AC%E5%BC%8F%E6%8E%A8%E5%AF%BC"><span class="nav-number">3.3.</span> <span class="nav-text">3.测速公式推导</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%A4%9A%E6%99%AE%E5%8B%92%E9%A2%91%E7%8E%87%E7%9A%84%E8%AF%A6%E7%BB%86%E8%A7%A3%E9%87%8A%E4%B8%8E%E6%8E%A8%E5%AF%BC"><span class="nav-number">3.4.</span> <span class="nav-text">4.多普勒频率的详细解释与推导</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%A9%E7%BA%BF"><span class="nav-number">4.</span> <span class="nav-text">天线</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%A4%A9%E7%BA%BF%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8A%9F%E8%83%BD"><span class="nav-number">4.1.</span> <span class="nav-text">1.天线的基本功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%A4%A9%E7%BA%BF%E7%9A%84%E4%B8%BB%E8%A6%81%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87"><span class="nav-number">4.2.</span> <span class="nav-text">2.天线的主要性能指标</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%A4%A9%E7%BA%BF%E6%95%88%E7%8E%87"><span class="nav-number">4.2.1.</span> <span class="nav-text">2.1 天线效率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E5%A4%A9%E7%BA%BF%E6%96%B9%E5%90%91%E5%9B%BE"><span class="nav-number">4.2.2.</span> <span class="nav-text">2.2 天线方向图</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-%E6%B3%A2%E6%9D%9F%E5%AE%BD%E5%BA%A6"><span class="nav-number">4.3.</span> <span class="nav-text">2.3 波束宽度</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9B%B7%E8%BE%BE%E7%9A%84%E5%B7%A5%E4%BD%9C%E9%A2%91%E7%8E%87"><span class="nav-number">5.</span> <span class="nav-text">雷达的工作频率</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E5%8D%95%E4%BD%8D%E6%8D%A2%E7%AE%97"><span class="nav-number">6.</span> <span class="nav-text">相关单位换算</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">7.</span> <span class="nav-text">Reference</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -680,7 +755,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">96</span>
+          <span class="site-state-item-count">102</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -693,7 +768,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-count">29</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
