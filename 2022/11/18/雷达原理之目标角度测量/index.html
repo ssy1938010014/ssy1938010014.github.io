@@ -43,7 +43,7 @@
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118193310164.png">
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118194933733.png">
 <meta property="article:published_time" content="2022-11-18T13:07:12.000Z">
-<meta property="article:modified_time" content="2022-11-19T07:22:11.530Z">
+<meta property="article:modified_time" content="2023-09-25T10:42:28.104Z">
 <meta property="article:author" content="ssy">
 <meta property="article:tag" content="雷达原理">
 <meta name="twitter:card" content="summary">
@@ -252,7 +252,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-11-19 15:22:11" itemprop="dateModified" datetime="2022-11-19T15:22:11+08:00">2022-11-19</time>
+                <time title="修改时间：2023-09-25 18:42:28" itemprop="dateModified" datetime="2023-09-25T18:42:28+08:00">2023-09-25</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -333,7 +333,7 @@
 </li>
 </ul>
 <h2 id="3-多基线测角"><a href="#3-多基线测角" class="headerlink" title="3.多基线测角"></a>3.多基线测角</h2><ul>
-<li>短基线保证最大无模糊测角范围；长基线保证高的测角精度，故采用多基线测角结合二者优点。</li>
+<li><strong>短基线保证最大无模糊测角范围；长基线保证高的测角精度</strong>，故采用多基线测角结合二者优点。</li>
 </ul>
 <img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118152009476.png" alt="image-20221118152009476" style="zoom:50%;">
 
@@ -363,7 +363,7 @@
 <h2 id="1-最大信号法"><a href="#1-最大信号法" class="headerlink" title="1.最大信号法"></a>1.最大信号法</h2><ul>
 <li>天线扫描的过程就是雷达天线方向图函数最大值指向不断发生变化的过程</li>
 <li>如果把从扫描起始时刻到扫描结束时刻，雷达收到目标回波的幅度作图，其幅度的变化过程就类似于天线方向图函数的变化过程，开始比较小，然后逐渐增大，到最大值再慢慢减小</li>
-<li>最大信号法就是在找幅度变化过程中的极大值所在的位置</li>
+<li><strong>最大信号法就是在找幅度变化过程中的极大值所在的位置</strong></li>
 </ul>
 <img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118154913552.png" alt="image-20221118154913552" style="zoom: 50%;">
 
@@ -377,8 +377,8 @@
 </ul>
 <h2 id="2-等信号法"><a href="#2-等信号法" class="headerlink" title="2.等信号法"></a>2.等信号法</h2><ul>
 <li>等信号法测角釆用两个相同且彼此部分重叠的波束，两个天线方向图交叠处大概在 3dB 点处</li>
-<li>如果目标处在两波束的交叠轴方向，则由两波束收到的信号强度相等，否则一个波束收到的信号强度高于另一个</li>
-<li>故常常称 0A 为等信号轴。当两个波束收到的回波信号相等时，等信号轴所指方向即为目标方向</li>
+<li><strong>如果目标处在两波束的交叠轴方向，则由两波束收到的信号强度相等，否则一个波束收到的信号强度高于另一个</strong></li>
+<li>故常常称 0A 为等信号轴。<strong>当两个波束收到的回波信号相等时，等信号轴所指方向即为目标方向</strong></li>
 </ul>
 <img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118155608746.png" alt="image-20221118155608746" style="zoom: 50%;">
 
@@ -398,7 +398,7 @@
 </ul>
 <h3 id="2-1-比幅法"><a href="#2-1-比幅法" class="headerlink" title="2.1 比幅法"></a>2.1 比幅法</h3><ul>
 <li><p>根据雷达方程可以算得到达天线口面的回波信号功率，然后开方就可以得到幅度，因为两个相同且彼此部分重叠的波束的雷达方程中只有$F(\theta)$不同，其他相同部分均用用$K$统一表示，则有：<br>$$<br>u_1(\theta)=KF(\theta_t+\theta_k)<br>$$</p>
-<p>$$<br>u_1(\theta)=KF(\theta_t+\theta_k)<br>$$</p>
+<p>$$<br>u_2(\theta)=KF(\theta_t-\theta_k)<br>$$</p>
 </li>
 <li><p>比幅法就是将二者相比，得到：<br>$$<br>\frac{u_1(\theta)}{u_2(\theta)}=\frac{F(\theta_t+\theta_k)}{F(\theta_t-\theta_k)}<br>$$</p>
 </li>
@@ -647,7 +647,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-count">104</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

@@ -36,7 +36,7 @@
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/09/14/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BF%A1%E5%8F%B7%E6%B3%A2%E5%BD%A2%E5%8F%8A%E5%85%B6%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95/image-20230917133954885.png">
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/09/14/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BF%A1%E5%8F%B7%E6%B3%A2%E5%BD%A2%E5%8F%8A%E5%85%B6%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95/image-20230918140907536.png">
 <meta property="article:published_time" content="2023-09-14T02:07:12.000Z">
-<meta property="article:modified_time" content="2023-09-19T06:01:10.436Z">
+<meta property="article:modified_time" content="2023-09-25T12:43:34.050Z">
 <meta property="article:author" content="ssy">
 <meta property="article:tag" content="雷达原理">
 <meta name="twitter:card" content="summary">
@@ -245,7 +245,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-09-19 14:01:10" itemprop="dateModified" datetime="2023-09-19T14:01:10+08:00">2023-09-19</time>
+                <time title="修改时间：2023-09-25 20:43:34" itemprop="dateModified" datetime="2023-09-25T20:43:34+08:00">2023-09-25</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -481,6 +481,12 @@
 <p>则有：<br>$$<br>s_{r1}(t) = s_1(t-t_0+\frac{2v}c(t-t_0))=s_1(\gamma(t-t_0))<br>$$<br>其中：<br>$$<br>\gamma = 1+\frac{2v}c<br>$$</p>
 </li>
 </ul>
+<p>这一部分暂时还没完全整明白，等整明白了再来记录</p>
+<ul>
+<li>匹配滤波器的压缩比？？</li>
+<li>为什么脉冲压缩对多普勒频率不敏感？</li>
+<li>在频域和时域上的匹配滤波到底有个啥区别？</li>
+</ul>
 <h1 id="多脉冲积累的处理方法"><a href="#多脉冲积累的处理方法" class="headerlink" title="多脉冲积累的处理方法"></a>多脉冲积累的处理方法</h1><h2 id="1-多脉冲积累的概念"><a href="#1-多脉冲积累的概念" class="headerlink" title="1.多脉冲积累的概念"></a>1.多脉冲积累的概念</h2><ul>
 <li><p>因为雷达单个脉冲的回波能量是有限的，通常不采用单个接收脉冲来进行检测判决</p>
 </li>
@@ -522,8 +528,7 @@
 </ul>
 </li>
 </ul>
-<hr>
-<h3 id="脉冲压缩处理中的t-t0的理解？（r-1）？"><a href="#脉冲压缩处理中的t-t0的理解？（r-1）？" class="headerlink" title="脉冲压缩处理中的t-t0的理解？（r-1）？"></a>脉冲压缩处理中的t-t0的理解？（r-1）？</h3><h3 id="匹配滤波器的压缩比？？"><a href="#匹配滤波器的压缩比？？" class="headerlink" title="匹配滤波器的压缩比？？"></a>匹配滤波器的压缩比？？</h3>
+
     </div>
 
     
@@ -638,7 +643,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9B%B7%E8%BE%BE%E4%BF%A1%E5%8F%B7%E7%9A%84%E6%95%B0%E5%AD%A6%E8%A1%A8%E7%A4%BA"><span class="nav-number">1.</span> <span class="nav-text">雷达信号的数学表示</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%B8%8C%E5%B0%94%E4%BC%AF%E7%89%B9%EF%BC%88Hilbert%EF%BC%89%E5%8F%98%E6%8D%A2%E8%A1%A8%E7%A4%BA%E6%B3%95"><span class="nav-number">1.1.</span> <span class="nav-text">1. 希尔伯特（Hilbert）变换表示法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%8C%87%E6%95%B0%E8%A1%A8%E7%A4%BA%E6%B3%95"><span class="nav-number">1.2.</span> <span class="nav-text">2. 指数表示法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A8%A1%E7%B3%8A%E5%87%BD%E6%95%B0%E4%B8%8E%E9%9B%B7%E8%BE%BE%E5%88%86%E8%BE%A8%E7%8E%87"><span class="nav-number">2.</span> <span class="nav-text">模糊函数与雷达分辨率</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%A8%A1%E7%B3%8A%E5%87%BD%E6%95%B0"><span class="nav-number">2.1.</span> <span class="nav-text">1. 模糊函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%88%86%E8%BE%A8%E7%8E%87"><span class="nav-number">2.2.</span> <span class="nav-text">2. 分辨率</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E8%B7%9D%E7%A6%BB%E5%88%86%E8%BE%A8%E7%8E%87"><span class="nav-number">2.2.1.</span> <span class="nav-text">2.1 距离分辨率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E9%80%9F%E5%BA%A6%E5%88%86%E8%BE%A8%E7%8E%87"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.2 速度分辨率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E8%B7%9D%E7%A6%BB-%E9%80%9F%E5%BA%A6%E8%81%94%E5%90%88%E5%88%86%E8%BE%A8%E7%8E%87"><span class="nav-number">2.2.3.</span> <span class="nav-text">2.3 距离-速度联合分辨率</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7%E8%B0%83%E9%A2%91%EF%BC%88LFM-or-Chirp%EF%BC%89%E8%84%89%E5%86%B2%E4%BF%A1%E5%8F%B7"><span class="nav-number">3.</span> <span class="nav-text">线性调频（LFM or Chirp）脉冲信号</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7%E8%B0%83%E9%A2%91%E8%84%89%E5%86%B2%E4%BF%A1%E5%8F%B7%E7%9A%84%E5%8E%8B%E7%BC%A9%E5%A4%84%E7%90%86"><span class="nav-number">4.</span> <span class="nav-text">线性调频脉冲信号的压缩处理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%9A%E8%84%89%E5%86%B2%E7%A7%AF%E7%B4%AF%E7%9A%84%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95"><span class="nav-number">5.</span> <span class="nav-text">多脉冲积累的处理方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%A4%9A%E8%84%89%E5%86%B2%E7%A7%AF%E7%B4%AF%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="nav-number">5.1.</span> <span class="nav-text">1.多脉冲积累的概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E7%9B%B8%E5%B9%B2%E7%A7%AF%E7%B4%AF%E7%9A%84%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95"><span class="nav-number">5.2.</span> <span class="nav-text">2.相干积累的处理方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%84%89%E5%86%B2%E5%8E%8B%E7%BC%A9%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84t-t0%E7%9A%84%E7%90%86%E8%A7%A3%EF%BC%9F%EF%BC%88r-1%EF%BC%89%EF%BC%9F"><span class="nav-number">5.2.1.</span> <span class="nav-text">脉冲压缩处理中的t-t0的理解？（r-1）？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%B9%E9%85%8D%E6%BB%A4%E6%B3%A2%E5%99%A8%E7%9A%84%E5%8E%8B%E7%BC%A9%E6%AF%94%EF%BC%9F%EF%BC%9F"><span class="nav-number">5.2.2.</span> <span class="nav-text">匹配滤波器的压缩比？？</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9B%B7%E8%BE%BE%E4%BF%A1%E5%8F%B7%E7%9A%84%E6%95%B0%E5%AD%A6%E8%A1%A8%E7%A4%BA"><span class="nav-number">1.</span> <span class="nav-text">雷达信号的数学表示</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%B8%8C%E5%B0%94%E4%BC%AF%E7%89%B9%EF%BC%88Hilbert%EF%BC%89%E5%8F%98%E6%8D%A2%E8%A1%A8%E7%A4%BA%E6%B3%95"><span class="nav-number">1.1.</span> <span class="nav-text">1. 希尔伯特（Hilbert）变换表示法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%8C%87%E6%95%B0%E8%A1%A8%E7%A4%BA%E6%B3%95"><span class="nav-number">1.2.</span> <span class="nav-text">2. 指数表示法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A8%A1%E7%B3%8A%E5%87%BD%E6%95%B0%E4%B8%8E%E9%9B%B7%E8%BE%BE%E5%88%86%E8%BE%A8%E7%8E%87"><span class="nav-number">2.</span> <span class="nav-text">模糊函数与雷达分辨率</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%A8%A1%E7%B3%8A%E5%87%BD%E6%95%B0"><span class="nav-number">2.1.</span> <span class="nav-text">1. 模糊函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%88%86%E8%BE%A8%E7%8E%87"><span class="nav-number">2.2.</span> <span class="nav-text">2. 分辨率</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E8%B7%9D%E7%A6%BB%E5%88%86%E8%BE%A8%E7%8E%87"><span class="nav-number">2.2.1.</span> <span class="nav-text">2.1 距离分辨率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E9%80%9F%E5%BA%A6%E5%88%86%E8%BE%A8%E7%8E%87"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.2 速度分辨率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E8%B7%9D%E7%A6%BB-%E9%80%9F%E5%BA%A6%E8%81%94%E5%90%88%E5%88%86%E8%BE%A8%E7%8E%87"><span class="nav-number">2.2.3.</span> <span class="nav-text">2.3 距离-速度联合分辨率</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7%E8%B0%83%E9%A2%91%EF%BC%88LFM-or-Chirp%EF%BC%89%E8%84%89%E5%86%B2%E4%BF%A1%E5%8F%B7"><span class="nav-number">3.</span> <span class="nav-text">线性调频（LFM or Chirp）脉冲信号</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7%E8%B0%83%E9%A2%91%E8%84%89%E5%86%B2%E4%BF%A1%E5%8F%B7%E7%9A%84%E5%8E%8B%E7%BC%A9%E5%A4%84%E7%90%86"><span class="nav-number">4.</span> <span class="nav-text">线性调频脉冲信号的压缩处理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%9A%E8%84%89%E5%86%B2%E7%A7%AF%E7%B4%AF%E7%9A%84%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95"><span class="nav-number">5.</span> <span class="nav-text">多脉冲积累的处理方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%A4%9A%E8%84%89%E5%86%B2%E7%A7%AF%E7%B4%AF%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="nav-number">5.1.</span> <span class="nav-text">1.多脉冲积累的概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E7%9B%B8%E5%B9%B2%E7%A7%AF%E7%B4%AF%E7%9A%84%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95"><span class="nav-number">5.2.</span> <span class="nav-text">2.相干积累的处理方法</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -654,7 +659,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-count">104</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
