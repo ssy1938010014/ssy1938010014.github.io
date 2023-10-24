@@ -22,27 +22,17 @@
     var CONFIG = {"hostname":"xn--ssy-lq6e63gg6fuu2d.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="本节主要介绍了衰落信道的多径效应与多普勒效应，以及相干带宽与相干时间。">
-<meta property="og:type" content="article">
-<meta property="og:title" content="VLSI DSP之衰落信道">
-<meta property="og:url" content="http://ssy的小天地.com/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/index.html">
+  <meta name="description" content="满怀希望 就会所向披靡">
+<meta property="og:type" content="website">
+<meta property="og:title" content="ssy的小天地">
+<meta property="og:url" content="http://ssy的小天地.com/archives/2023/10/page/2/index.html">
 <meta property="og:site_name" content="ssy的小天地">
-<meta property="og:description" content="本节主要介绍了衰落信道的多径效应与多普勒效应，以及相干带宽与相干时间。">
+<meta property="og:description" content="满怀希望 就会所向披靡">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/image-20221201202614344.png">
-<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/image-20221201204327892.png">
-<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/image-20221201204945516.png">
-<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/image-20221201205434545.png">
-<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/image-20221201221409445.png">
-<meta property="article:published_time" content="2022-12-01T02:07:12.000Z">
-<meta property="article:modified_time" content="2022-12-01T14:27:52.296Z">
 <meta property="article:author" content="ssy">
-<meta property="article:tag" content="VLSI">
-<meta property="article:tag" content="DSP">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/image-20221201202614344.png">
 
-<link rel="canonical" href="http://ssy的小天地.com/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/">
+<link rel="canonical" href="http://ssy的小天地.com/archives/2023/10/page/2/">
 
 
 <script id="page-configurations">
@@ -50,12 +40,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : true,
+    isPost : false,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>VLSI DSP之衰落信道 | ssy的小天地</title>
+  <title>归档 | ssy的小天地</title>
   
 
 
@@ -205,245 +195,55 @@
         <div class="content-wrap">
           
 
-          <div class="content post posts-expand">
+          <div class="content archive">
             
 
-    
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://ssy的小天地.com/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/ssy.png">
-      <meta itemprop="name" content="ssy">
-      <meta itemprop="description" content="满怀希望 就会所向披靡">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="ssy的小天地">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          VLSI DSP之衰落信道
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-
-
-
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-12-01 10:07:12 / 修改时间：22:27:52" itemprop="dateCreated datePublished" datetime="2022-12-01T10:07:12+08:00">2022-12-01</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%A7%AF%E7%B4%AF/" itemprop="url" rel="index"><span itemprop="name">学习积累</span></a>
-                </span>
-            </span>
-
-          
-            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span id="busuanzi_value_page_pv"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-        <p>本节主要介绍了衰落信道的多径效应与多普勒效应，以及相干带宽与相干时间。</p>
-<span id="more"></span>
-
-<h1 id="无线信道的多径效应"><a href="#无线信道的多径效应" class="headerlink" title="无线信道的多径效应"></a>无线信道的多径效应</h1><h2 id="1-多径效应的基本概念与产生原因"><a href="#1-多径效应的基本概念与产生原因" class="headerlink" title="1.多径效应的基本概念与产生原因"></a>1.多径效应的基本概念与产生原因</h2><ul>
-<li><p><strong>信道的衰落</strong>：无线通信中信道特征的变化，引起接收机接收到的信号强度随时间而变化的现象</p>
-</li>
-<li><p><strong>多径衰落</strong>：无线通信接收机接收到的多个子径信号所合成的信号，在不同的时间、地点上会时大时小的现象</p>
-<img src="/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/image-20221201202614344.png" alt="image-20221201202614344" style="zoom:50%;">
-</li>
-<li><p><strong>多径衰落的原因</strong>：</p>
-<ul>
-<li><p>发射的电波经历了不同路径，导致传播时间和相位均不相同</p>
-</li>
-<li><p>合成的接收信号幅度在较短时间内急剧变化，产生了衰落</p>
-</li>
-</ul>
-</li>
-<li><p><strong>多径衰落引起了码间串扰</strong></p>
-</li>
-</ul>
-<h2 id="2-时延扩展"><a href="#2-时延扩展" class="headerlink" title="2.时延扩展"></a>2.时延扩展</h2><ul>
-<li><p><strong>时延扩展</strong>：时延扩展是对多径信道的统计描述</p>
-</li>
-<li><p><strong>平均附加时延</strong>：<br>$$<br>\bar{\tau}=\frac{\sum_k{P(\tau_k)}\cdot\tau_k}{\sum_{k}P(\tau_k)}<br>$$</p>
-<p>$$<br>其中:\tau_k是接收到的第k个时延信号的延迟时间;P(\tau_k)是接收到的第k个时延信号的功率<br>$$</p>
-<img src="/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/image-20221201204327892.png" alt="image-20221201204327892" style="zoom:50%;">
-</li>
-<li><p><strong>时延扩展的描述方法</strong>：平均附加时延扩展标准差<br>$$<br>\sigma_\tau=\tau_{RMS}=\sqrt{\bar{\tau^2}-(\bar{\tau})^2}<br>$$</p>
-</li>
-<li><p><strong>时延扩展小好，其意味着多径信号延迟相当</strong></p>
-</li>
-</ul>
-<h2 id="3-相干带宽"><a href="#3-相干带宽" class="headerlink" title="3.相干带宽"></a>3.相干带宽</h2><ul>
-<li><p><strong>相干带宽</strong>：接收信号在频带内任两个频率分量的信号，相关系数不小于0.5</p>
-</li>
-<li><p><strong>在相干带宽范围内，两个频率分量有很强的相关性</strong><br>$$<br>B_c≈\frac{1}{5\sigma_\tau}<br>$$</p>
-</li>
-</ul>
-<img src="/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/image-20221201204945516.png" alt="image-20221201204945516" style="zoom: 33%;">
-
-<h2 id="4-平衰落与频率选择性衰落"><a href="#4-平衰落与频率选择性衰落" class="headerlink" title="4.平衰落与频率选择性衰落"></a>4.平衰落与频率选择性衰落</h2><ul>
-<li><strong>平衰落</strong>：<ul>
-<li>在相干带宽内，信号的所有频率分量经历相同的衰落</li>
-<li>码间串扰小</li>
-<li>条件：信号带宽&lt;相干带宽</li>
-</ul>
-</li>
-<li><strong>频率选择性衰落</strong>：<ul>
-<li>在相干带宽外，信号的不同频率分量经历不同的衰落</li>
-<li>码间串扰大</li>
-<li>条件：信号带宽&lt;相干带宽</li>
-</ul>
-</li>
-</ul>
-<img src="/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/image-20221201205434545.png" alt="image-20221201205434545" style="zoom:50%;">
-
-<ul>
-<li><strong>对抗频率选择性衰落的方法</strong>：<ul>
-<li>均衡器</li>
-<li>OFDM技术（正交频分复用）</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h1 id="无线信道的多普勒效应"><a href="#无线信道的多普勒效应" class="headerlink" title="无线信道的多普勒效应"></a>无线信道的多普勒效应</h1><h2 id="1-多普勒频率"><a href="#1-多普勒频率" class="headerlink" title="1.多普勒频率"></a>1.多普勒频率</h2><ul>
-<li><p><strong>多普勒频率</strong>：<br>$$<br>f_d=\frac{v}{c}f_tcos\theta<br>$$</p>
-</li>
-<li><p><strong>接收信号频率</strong>：<br>$$<br>f_r=f_t(1-\frac vccos\theta)<br>$$</p>
-</li>
-<li><p><strong>移动速度增大，多普勒频移变大，导致误码率上升</strong></p>
-</li>
-</ul>
-<h2 id="2-相干时间"><a href="#2-相干时间" class="headerlink" title="2.相干时间"></a>2.相干时间</h2><ul>
-<li><strong>无线信道的相干时间</strong>：在此时间间隔内任两个时刻对接收信号的复包络采样，各频率分量信号的相关系数不小于0.5</li>
-<li><strong>在相干时间间隔内，接收的信号的幅值有很强的相关性</strong></li>
-</ul>
-<p>$$<br>T_c≈\frac{0.5}{f_d}<br>$$</p>
-<ul>
-<li><p><strong>相干时间度量了信道的时变特性</strong></p>
-<ul>
-<li>相干时间$T_c$大意味着信道变化慢</li>
-<li>相干时间$T_c$小意味着信道变化快</li>
-</ul>
-</li>
-<li><p><strong>信号幅值的相干性</strong></p>
-<ul>
-<li>在相干时间的时间间隔内，接收信号幅值有很强的相关性</li>
-<li>在相干时间的时间间隔外，接收信号幅值得相关性不明显</li>
-</ul>
-<img src="/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/image-20221201221409445.png" alt="image-20221201221409445" style="zoom: 50%;">
-
-</li>
-</ul>
-<h2 id="3-快衰落与慢衰落"><a href="#3-快衰落与慢衰落" class="headerlink" title="3.快衰落与慢衰落"></a>3.快衰落与慢衰落</h2><ul>
-<li><p><strong>快衰落</strong>：相干时间$T_c$小于码元周期$T_s$，该信道即为快衰落<br>$$<br>T_c&lt;T_s<br>$$</p>
-<ul>
-<li><strong>衰落特性将在码元周期内改变多次，误码率提升</strong></li>
-</ul>
-</li>
-<li><p><strong>慢衰落</strong>：相干时间$T_c$大于码元周期$T_s$，该信道即为慢衰落<br>$$<br>T_c&gt;T_s<br>$$</p>
-<ul>
-<li><strong>慢衰落信道误码率性能降低的主要原因是信噪比的损失</strong></li>
-</ul>
-</li>
-<li><p><strong>无线信道快衰落的解决办法</strong></p>
-<ul>
-<li>导频：是在数据帧中加入一段接收端的发射端均已知的数据，估计无线信道特征，用来频偏校正</li>
-</ul>
-</li>
-</ul>
-
-    </div>
-
-    
-    
-    
-        <div class="reward-container">
-  <div>欢迎来到ssy的世界</div>
-  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
-    打赏
-  </button>
-  <div id="qr" style="display: none;">
-      
-      <div style="display: inline-block;">
-        <img src="/images/WeChaPay.jpg" alt="ssy 微信支付">
-        <p>微信支付</p>
+  
+  <div class="post-block">
+    <div class="posts-collapse">
+      <div class="collection-title">
+        
+        <span class="collection-header">很好! 目前共计 118 篇日志。 继续努力。</span>
       </div>
 
-  </div>
-</div>
-
-        
-
-<div>
-<ul class="post-copyright">
-  <li class="post-copyright-author">
-    <strong>本文作者： </strong>ssy
-  </li>
-  <li class="post-copyright-link">
-    <strong>本文链接：</strong>
-    <a href="http://ssy的小天地.com/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/" title="VLSI DSP之衰落信道">http://ssy的小天地.com/2022/12/01/VLSI DSP之衰落信道/</a>
-  </li>
-  <li class="post-copyright-license">
-    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
-  </li>
-</ul>
-</div>
-
-
-      <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/VLSI/" rel="tag"># VLSI</a>
-              <a href="/tags/DSP/" rel="tag"># DSP</a>
-          </div>
-
-        
-
-
-        
-    <div class="post-nav">
-      <div class="post-nav-item">
-    <a href="/2022/11/28/VLSI%20DSP%E4%B9%8B%E8%84%89%E5%8A%A8%E9%98%B5%E5%88%97/" rel="prev" title="VLSI DSP之脉动阵列">
-      <i class="fa fa-chevron-left"></i> VLSI DSP之脉动阵列
-    </a></div>
-      <div class="post-nav-item">
-    <a href="/2022/12/02/VLSI%20DSP%E4%B9%8B%E5%B8%A6%E9%80%9A%E8%B0%83%E5%88%B6%E4%B8%8E%E8%A7%A3%E8%B0%83/" rel="next" title="VLSI DSP之带通调制与解调">
-      VLSI DSP之带通调制与解调 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      
+    <div class="collection-year">
+      <span class="collection-header">2023</span>
     </div>
-      </footer>
-    
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2023-10-02T08:07:12+08:00"
+              content="2023-10-02">
+          10-02
+        </time>
+      </div>
+
+      <div class="post-title">
+          <a class="post-title-link" href="/2023/10/02/ZYNQ%E5%B5%8C%E5%85%A5%E5%BC%8F%E4%B9%8BAXI%EF%BC%88%E5%9F%BA%E4%BA%8EPYNQ-Z2%E5%BC%80%E5%8F%91%E6%9D%BF%EF%BC%89/" itemprop="url">
+            <span itemprop="name">ZYNQ嵌入式之AXI（基于PYNQ-Z2开发板）</span>
+          </a>
+      </div>
+
+    </header>
   </article>
+
+
+    </div>
+  </div>
   
   
   
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/archives/2023/10/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/archives/2023/10/">1</a><span class="page-number current">2</span>
+  </nav>
 
 
 
@@ -495,7 +295,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%97%A0%E7%BA%BF%E4%BF%A1%E9%81%93%E7%9A%84%E5%A4%9A%E5%BE%84%E6%95%88%E5%BA%94"><span class="nav-number">1.</span> <span class="nav-text">无线信道的多径效应</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%A4%9A%E5%BE%84%E6%95%88%E5%BA%94%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E4%B8%8E%E4%BA%A7%E7%94%9F%E5%8E%9F%E5%9B%A0"><span class="nav-number">1.1.</span> <span class="nav-text">1.多径效应的基本概念与产生原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%97%B6%E5%BB%B6%E6%89%A9%E5%B1%95"><span class="nav-number">1.2.</span> <span class="nav-text">2.时延扩展</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E7%9B%B8%E5%B9%B2%E5%B8%A6%E5%AE%BD"><span class="nav-number">1.3.</span> <span class="nav-text">3.相干带宽</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%B9%B3%E8%A1%B0%E8%90%BD%E4%B8%8E%E9%A2%91%E7%8E%87%E9%80%89%E6%8B%A9%E6%80%A7%E8%A1%B0%E8%90%BD"><span class="nav-number">1.4.</span> <span class="nav-text">4.平衰落与频率选择性衰落</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%97%A0%E7%BA%BF%E4%BF%A1%E9%81%93%E7%9A%84%E5%A4%9A%E6%99%AE%E5%8B%92%E6%95%88%E5%BA%94"><span class="nav-number">2.</span> <span class="nav-text">无线信道的多普勒效应</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%A4%9A%E6%99%AE%E5%8B%92%E9%A2%91%E7%8E%87"><span class="nav-number">2.1.</span> <span class="nav-text">1.多普勒频率</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E7%9B%B8%E5%B9%B2%E6%97%B6%E9%97%B4"><span class="nav-number">2.2.</span> <span class="nav-text">2.相干时间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%BF%AB%E8%A1%B0%E8%90%BD%E4%B8%8E%E6%85%A2%E8%A1%B0%E8%90%BD"><span class="nav-number">2.3.</span> <span class="nav-text">3.快衰落与慢衰落</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -746,61 +545,6 @@ document.querySelectorAll('.pdfobject-container').forEach(element => {
   
 
   
-      
-
-<script>
-  if (typeof MathJax === 'undefined') {
-    window.MathJax = {
-      loader: {
-          load: ['[tex]/mhchem'],
-        source: {
-          '[tex]/amsCd': '[tex]/amscd',
-          '[tex]/AMScd': '[tex]/amscd'
-        }
-      },
-      tex: {
-        inlineMath: {'[+]': [['$', '$']]},
-          packages: {'[+]': ['mhchem']},
-        tags: 'ams'
-      },
-      options: {
-        renderActions: {
-          findScript: [10, doc => {
-            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
-              const display = !!node.type.match(/; *mode=display/);
-              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
-              const text = document.createTextNode('');
-              node.parentNode.replaceChild(text, node);
-              math.start = {node: text, delim: '', n: 0};
-              math.end = {node: text, delim: '', n: 0};
-              doc.math.push(math);
-            });
-          }, '', false],
-          insertedScript: [200, () => {
-            document.querySelectorAll('mjx-container').forEach(node => {
-              let target = node.parentNode;
-              if (target.nodeName.toLowerCase() === 'li') {
-                target.parentNode.classList.add('has-jax');
-              }
-            });
-          }, '', false]
-        }
-      }
-    };
-    (function () {
-      var script = document.createElement('script');
-      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
-      script.defer = true;
-      document.head.appendChild(script);
-    })();
-  } else {
-    MathJax.startup.document.state(0);
-    MathJax.texReset();
-    MathJax.typeset();
-  }
-</script>
-
-    
 
   
 

@@ -270,6 +270,7 @@
       
         <p>本节主要介绍了指令集结构的基本概念及其寻址方式</p>
 <span id="more"></span>
+
 <h1 id="指令集结构概述"><a href="#指令集结构概述" class="headerlink" title="指令集结构概述"></a>指令集结构概述</h1><ul>
 <li><p>指令集：一些指令的集合，每条指令都是直接由CPU硬件执行</p>
 </li>
@@ -292,9 +293,8 @@
 <li>操作数地址隐含表示或显式表示</li>
 </ul>
 </li>
-<li><p>指令集与计算机的性能：</p>
-<script type="math/tex; mode=display">
-T_{CPU}=CPI\times IC \times T_{CLK}</script></li>
+<li><p>指令集与计算机的性能：<br>$$<br>T_{CPU}=CPI\times IC \times T_{CLK}<br>$$</p>
+</li>
 </ul>
 <hr>
 <h1 id="通用寄存器型指令集结构（GPR）"><a href="#通用寄存器型指令集结构（GPR）" class="headerlink" title="通用寄存器型指令集结构（GPR）"></a>通用寄存器型指令集结构（GPR）</h1><ul>
@@ -323,22 +323,26 @@ T_{CPU}=CPI\times IC \times T_{CLK}</script></li>
 <li><strong>必须加速有效地址生成</strong></li>
 </ul>
 <h2 id="2-常用的一些操作数寻址方式"><a href="#2-常用的一些操作数寻址方式" class="headerlink" title="2.常用的一些操作数寻址方式"></a>2.常用的一些操作数寻址方式</h2><ul>
-<li><strong>寄存器寻址</strong>：<ul>
+<li><p><strong>寄存器寻址</strong>：</p>
+<ul>
 <li>指令实例：Add R4,R3</li>
 <li>含义：Regs[R4]&lt;-Regs[R4]+Regs[R3]</li>
 </ul>
 </li>
-<li><strong>立即值寻址</strong>：<ul>
+<li><p><strong>立即值寻址</strong>：</p>
+<ul>
 <li>指令实例：Add R4,#3</li>
 <li>含义：Regs[R4]&lt;-Regs[R4]+3</li>
 </ul>
 </li>
-<li><strong>偏移寻址</strong>：<ul>
+<li><p><strong>偏移寻址</strong>：</p>
+<ul>
 <li>指令实例：Add R4,100(R1)</li>
 <li>含义：Regs[R4]&lt;-Regs[R4]+Mem[100+Regs[R1]]</li>
 </ul>
 </li>
-<li><strong>寄存器间接寻址</strong>：<ul>
+<li><p><strong>寄存器间接寻址</strong>：</p>
+<ul>
 <li>指令实例：Add R4,(R1)</li>
 <li>含义：Regs[R4]&lt;-Regs[R4]+Mem[Regs[R1]]</li>
 </ul>
@@ -372,7 +376,8 @@ T_{CPU}=CPI\times IC \times T_{CLK}</script></li>
 </li>
 </ul>
 </li>
-<li><strong>自减寻址</strong>：<ul>
+<li><p><strong>自减寻址</strong>：</p>
+<ul>
 <li>指令实例：Add R1,-(R2)</li>
 <li>含义：<ul>
 <li>Regs[R2]&lt;-Regs[R2]-d</li>
@@ -381,7 +386,8 @@ T_{CPU}=CPI\times IC \times T_{CLK}</script></li>
 </li>
 </ul>
 </li>
-<li><strong>缩放寻址</strong>：<ul>
+<li><p><strong>缩放寻址</strong>：</p>
+<ul>
 <li>指令实例：Add R1,100(R2)[R3]</li>
 <li>含义：Regs[R1]&lt;-Regs[R1]+Mem[100+Regs[R2]+Regs[R3]*d]</li>
 </ul>
@@ -389,12 +395,14 @@ T_{CPU}=CPI\times IC \times T_{CLK}</script></li>
 </ul>
 <hr>
 <h1 id="MIPS指令集结构"><a href="#MIPS指令集结构" class="headerlink" title="MIPS指令集结构"></a>MIPS指令集结构</h1><ul>
-<li>寄存器：<ul>
+<li><p>寄存器：</p>
+<ul>
 <li>32个32位的通用寄存器（GPRs），寄存器R0的内容恒为全0</li>
 <li>32个32位浮点寄存器（FPRS），单精度浮点数表示和双精度浮点数表示</li>
 </ul>
 </li>
-<li>数据类型：<ul>
+<li><p>数据类型：</p>
+<ul>
 <li>整型数据：8位、16位、32位</li>
 <li>浮点数据：<ul>
 <li>32位单精度浮点</li>
@@ -403,7 +411,8 @@ T_{CPU}=CPI\times IC \times T_{CLK}</script></li>
 </li>
 </ul>
 </li>
-<li>操作类型：<ul>
+<li><p>操作类型：</p>
+<ul>
 <li>符号“&lt;-”表示数据传送操作，其后附带一个下标n，也即“&lt;-n”表示传送一个n位数据</li>
 <li>符号”##”用来表示两个域的串联操作，它可以出现在数据传送操作的任何一边</li>
 </ul>
