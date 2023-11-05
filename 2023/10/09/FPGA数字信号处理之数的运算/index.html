@@ -54,7 +54,7 @@
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/QuantCoeff.bmp">
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/QuantArith.bmp">
 <meta property="article:published_time" content="2023-10-09T02:07:12.000Z">
-<meta property="article:modified_time" content="2023-10-19T03:51:47.743Z">
+<meta property="article:modified_time" content="2023-10-31T08:11:25.205Z">
 <meta property="article:author" content="ssy">
 <meta property="article:tag" content="数字信号处理">
 <meta name="twitter:card" content="summary">
@@ -263,7 +263,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-10-19 11:51:47" itemprop="dateModified" datetime="2023-10-19T11:51:47+08:00">2023-10-19</time>
+                <time title="修改时间：2023-10-31 16:11:25" itemprop="dateModified" datetime="2023-10-31T16:11:25+08:00">2023-10-31</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -295,7 +295,6 @@
       
         <p>本节主要介绍了FPGA进行数字运算的准则以及有效字长效应出现的原因</p>
 <span id="more"></span>
-
 <h1 id="定点整数与小数的表示方法"><a href="#定点整数与小数的表示方法" class="headerlink" title="定点整数与小数的表示方法"></a>定点整数与小数的表示方法</h1><ul>
 <li><p><strong>N位负数，补码数值+原码值=$2^N$</strong></p>
 <ul>
@@ -309,10 +308,16 @@
 </li>
 <li><p>小数的转换方法：乘以2的整数次倍M，即乘以$2^M$，转为成整数（如果是负数的话再转换为补码），再左移M位</p>
 <ul>
-<li><p>例：十进制-1.5转换为2进制<br>$$<br>1.5\times 2^1=3\<br>3的二进制补码是：2^3-3=5,5的原码是：101\<br>左移1位\rightarrow 10.1<br>$$</p>
-</li>
-<li><p>例：十进制25.125转为2进制<br>$$<br>25.125\times 2^3=201\<br>201的原码是：11001001<br>左移3位\rightarrow 11001.001<br>$$</p>
-</li>
+<li><p>例：十进制-1.5转换为2进制</p>
+<script type="math/tex; mode=display">
+1.5\times 2^1=3\\
+3的二进制补码是：2^3-3=5,5的原码是：101\\
+左移1位\rightarrow 10.1</script></li>
+<li><p>例：十进制25.125转为2进制</p>
+<script type="math/tex; mode=display">
+25.125\times 2^3=201\\
+201的原码是：11001001
+左移3位\rightarrow 11001.001</script></li>
 </ul>
 </li>
 </ul>
@@ -320,17 +325,17 @@
 </ul>
 <hr>
 <h1 id="浮点数"><a href="#浮点数" class="headerlink" title="浮点数"></a>浮点数</h1><h2 id="1-浮点数的表示方式"><a href="#1-浮点数的表示方式" class="headerlink" title="1.浮点数的表示方式"></a>1.浮点数的表示方式</h2><ul>
-<li><p>单精度 32 位浮点数的 IEEE 浮点格式：<br>$$<br>x=(-1)^s\times 1\times m\times 2^{e-b}<br>$$</p>
-<ul>
+<li><p>单精度 32 位浮点数的 IEEE 浮点格式：</p>
+<script type="math/tex; mode=display">
+x=(-1)^s\times 1\times m\times 2^{e-b}</script><ul>
 <li>$s$代表符号位</li>
 <li>$m$代表小数部分，其隐含了一个1.，也就是它表示1~2之间的数</li>
 <li>$e$代表偏指数，$b$是偏差，$e-b$代表真实指数</li>
 </ul>
-<img src="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/image-20231019103533554.png" alt="image-20231019103533554" style="zoom: 67%;">
+<p><img src="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/image-20231019103533554.png" alt="image-20231019103533554" style="zoom: 67%;"></p>
 </li>
 <li><p>例子：</p>
-<img src="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/image-20231019103627373.png" alt="image-20231019103627373" style="zoom:67%;">
-
+<p><img src="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/image-20231019103627373.png" alt="image-20231019103627373" style="zoom:67%;"></p>
 </li>
 </ul>
 <h2 id="2-浮点数的加法运算"><a href="#2-浮点数的加法运算" class="headerlink" title="2.浮点数的加法运算"></a>2.浮点数的加法运算</h2><p>假设有两个浮点数$0_1010_00101$和$0_1001_00101$，设偏差为7，即$b=7$</p>
@@ -349,66 +354,63 @@
 <h2 id="3-浮点数的乘法运算"><a href="#3-浮点数的乘法运算" class="headerlink" title="3.浮点数的乘法运算"></a>3.浮点数的乘法运算</h2><p>若有两个浮点数3.5($0_1000_11000$)和5.0($0_1001_01000$)，设偏差为7，即$b=7$</p>
 <ul>
 <li><p>step1：两个数的指数相加并减去偏差</p>
-<img src="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/image-20231019105539709.png" alt="image-20231019105539709" style="zoom:67%;">
+<p><img src="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/image-20231019105539709.png" alt="image-20231019105539709" style="zoom:67%;"></p>
 </li>
 <li><p>step2：添加隐含的1.，将尾数进行两个无符号乘法运算</p>
-<img src="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/image-20231019110015307.png" alt="image-20231019110015307" style="zoom: 50%;">
+<p><img src="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/image-20231019110015307.png" alt="image-20231019110015307" style="zoom: 50%;"></p>
 </li>
 <li><p>step3：整理得到的结果</p>
-<img src="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/image-20231019110242933.png" alt="image-20231019110242933" style="zoom:67%;">
+<p><img src="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/image-20231019110242933.png" alt="image-20231019110242933" style="zoom:67%;"></p>
 </li>
 <li><p>step4：将结果写成浮点数格式：</p>
-<img src="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/image-20231019110404916.png" alt="image-20231019110404916" style="zoom: 67%;">
-
+<p><img src="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/image-20231019110404916.png" alt="image-20231019110404916" style="zoom: 67%;"></p>
 </li>
 </ul>
 <hr>
 <h1 id="定点数"><a href="#定点数" class="headerlink" title="定点数"></a>定点数</h1><h2 id="1-定点数的表示方法"><a href="#1-定点数的表示方法" class="headerlink" title="1.定点数的表示方法"></a>1.定点数的表示方法</h2><ul>
 <li><p>定点数采用$Q_{n,m}$格式，其中$n$表示小数点左边的位数，也就是整数部分的位数，$m$表示小数点右边的位数，也就是小数点右边的位数</p>
-<img src="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/image-20231019110717122.png" alt="image-20231019110717122" style="zoom:50%;">
-
+<p><img src="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/image-20231019110717122.png" alt="image-20231019110717122" style="zoom:50%;"></p>
 </li>
 </ul>
-<h2 id="2-定点数的加法运算"><a href="#2-定点数的加法运算" class="headerlink" title="2.定点数的加法运算"></a>2.定点数的加法运算</h2><img src="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/image-20231019111054752.png" alt="image-20231019111054752" style="zoom: 67%;">
-
+<h2 id="2-定点数的加法运算"><a href="#2-定点数的加法运算" class="headerlink" title="2.定点数的加法运算"></a>2.定点数的加法运算</h2><p><img src="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/image-20231019111054752.png" alt="image-20231019111054752" style="zoom: 67%;"></p>
 <ul>
 <li>。在 Q2.2 中，格式 a 是 1110，在 Q4.4 格式中，格式 b 是 0111 0110。由于 n1 小于 n2，因此扩展了 a 的符号位以将其格式从 Q2.2 更改为 Q4.2</li>
 </ul>
 <h2 id="3-定点数的乘法运算"><a href="#3-定点数的乘法运算" class="headerlink" title="3.定点数的乘法运算"></a>3.定点数的乘法运算</h2><ul>
-<li><p>对于乘法运算，有：<br>$$<br>Q_{n1.m1}\times Q_{n2.m2}=Q(n_1+n_2).(m_1+m_2)<br>$$</p>
-<ul>
-<li>对于两个有符号乘法，其实是：<br>$$<br>Q_{n1.m1}\times Q_{n2.m2}=Q(n_1+n_2-1).(m_1+m_2+1)<br>$$</li>
+<li><p>对于乘法运算，有：</p>
+<script type="math/tex; mode=display">
+Q_{n1.m1}\times Q_{n2.m2}=Q(n_1+n_2).(m_1+m_2)</script><ul>
+<li>对于两个有符号乘法，其实是：<script type="math/tex; mode=display">
+Q_{n1.m1}\times Q_{n2.m2}=Q(n_1+n_2-1).(m_1+m_2+1)</script></li>
 </ul>
 </li>
 </ul>
 <h3 id="3-1-无符号数-times-无符号数"><a href="#3-1-无符号数-times-无符号数" class="headerlink" title="3.1 无符号数$\times$无符号数"></a>3.1 无符号数$\times$无符号数</h3><ul>
 <li><p>无符号数的乘法不需要符号的拓展</p>
-<img src="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/image-20231019113000346.png" alt="image-20231019113000346" style="zoom:50%;">
-
+<p><img src="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/image-20231019113000346.png" alt="image-20231019113000346" style="zoom:50%;"></p>
 </li>
 </ul>
-<h3 id="3-2-符号数-times-无符号数"><a href="#3-2-符号数-times-无符号数" class="headerlink" title="3.2 符号数$\times$无符号数"></a>3.2 符号数$\times$无符号数</h3><img src="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/image-20231019113607806.png" alt="image-20231019113607806" style="zoom: 67%;">
-
-<h3 id="3-3-无符号数-times-有符号数"><a href="#3-3-无符号数-times-有符号数" class="headerlink" title="3.3 无符号数$\times$有符号数"></a>3.3 无符号数$\times$有符号数</h3><img src="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/image-20231019114039349.png" alt="image-20231019114039349" style="zoom:67%;">
-
-<h3 id="3-4-有符号数-times-有符号数"><a href="#3-4-有符号数-times-有符号数" class="headerlink" title="3.4 有符号数$\times$有符号数"></a>3.4 有符号数$\times$有符号数</h3><img src="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/image-20231019114509204.png" alt="image-20231019114509204" style="zoom:67%;">
-
+<h3 id="3-2-有符号数-times-无符号数"><a href="#3-2-有符号数-times-无符号数" class="headerlink" title="3.2 有符号数$\times$无符号数"></a>3.2 有符号数$\times$无符号数</h3><p><img src="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/image-20231019113607806.png" alt="image-20231019113607806" style="zoom: 67%;"></p>
+<h3 id="3-3-无符号数-times-有符号数"><a href="#3-3-无符号数-times-有符号数" class="headerlink" title="3.3 无符号数$\times$有符号数"></a>3.3 无符号数$\times$有符号数</h3><p><img src="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/image-20231019114039349.png" alt="image-20231019114039349" style="zoom:67%;"></p>
+<h3 id="3-4-有符号数-times-有符号数"><a href="#3-4-有符号数-times-有符号数" class="headerlink" title="3.4 有符号数$\times$有符号数"></a>3.4 有符号数$\times$有符号数</h3><p><img src="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/image-20231019114509204.png" alt="image-20231019114509204" style="zoom:67%;"></p>
 <ul>
-<li>总结一下：<ul>
+<li><p><strong>并且最终的结果要左移一位，即0000_1001左移一位，得到000_100010</strong></p>
+</li>
+<li><p>总结一下：</p>
+<ul>
 <li>只要是负数，都用补码，</li>
 <li>$A\times B$，A为有符号数，相乘时符号位扩展</li>
-<li>B为有符号数负数，最后符号位与A相乘的结果去补码</li>
+<li>B为有符号数负数，最后符号位与A相乘的结果取补码</li>
 </ul>
 </li>
 </ul>
-<h2 id="4-带截断的舍弃"><a href="#4-带截断的舍弃" class="headerlink" title="4.带截断的舍弃"></a>4.带截断的舍弃</h2><img src="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/image-20231019115132253.png" alt="image-20231019115132253" style="zoom: 67%;">
-
+<h2 id="4-带截断的舍弃"><a href="#4-带截断的舍弃" class="headerlink" title="4.带截断的舍弃"></a>4.带截断的舍弃</h2><p><img src="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/image-20231019115132253.png" alt="image-20231019115132253" style="zoom: 67%;"></p>
 <hr>
 <h1 id="AD-DA接口程序设计"><a href="#AD-DA接口程序设计" class="headerlink" title="AD/DA接口程序设计"></a>AD/DA接口程序设计</h1><ul>
 <li><p>无符号转成有符号：-$2^{N-1}$</p>
 </li>
 <li><p>有符号转成无符号：+$2^{N-1}$</p>
-<img src="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/image-20231012163136239.png" alt="image-20231012163136239" style="zoom:50%;">
+<p><img src="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/image-20231012163136239.png" alt="image-20231012163136239" style="zoom:50%;"></p>
 </li>
 <li><p>将AD采样得到的无符号数据转化成有符号数据，可供程序的其他模块使用</p>
 </li>
@@ -431,13 +433,10 @@
 </li>
 <li><p>$B$bit的二进制数，若当成无符号整数，表示的范围为$0\sim 2^B-1$，若当成有符号整数，表示的范围是$-2^{B-1}\sim 2^{B-1}-1$</p>
 </li>
-<li><p><strong>如果二进制数的表示范围没有溢出，将运算数据均看成无符号数或有符号数，则运算结果正确</strong></p>
-</li>
-<li><p><strong>两个$B$bit的二进制数进行加法和减法运算，若要运算结果不溢出，则需要$B+1$bit的数存放运算结果</strong></p>
-</li>
+<li><strong>如果二进制数的表示范围没有溢出，将运算数据均看成无符号数或有符号数，则运算结果正确</strong></li>
+<li><strong>两个$B$bit的二进制数进行加法和减法运算，若要运算结果不溢出，则需要$B+1$bit的数存放运算结果</strong></li>
 </ul>
-<img src="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/image-20231009151153488.png" alt="image-20231009151153488" style="zoom: 80%;">
-
+<p><img src="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/image-20231009151153488.png" alt="image-20231009151153488" style="zoom: 80%;"></p>
 <ul>
 <li>计算多个数加减，计算的个数为$M$，则扩展位宽$N$倍，有$2^N\ge M$<ul>
 <li>例：两个10bit的有符号数A和B进行加法运算，则运算结果的最小值为$-2^{10}$，运算结果的最大值为$2^{10}-1$，因此需要用11bit。依次类推，如果有3～4个10 bit的有符号数进行加法运算，则需要用12bit 的数表示运算结果；如果有5～8个10bit的有符号数进行加法运算， 需要用13bit的数表示运算结果</li>
@@ -449,12 +448,10 @@
 <ul>
 <li>乘法左移：</li>
 </ul>
-<img src="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/image-20231009153227099.png" alt="image-20231009153227099" style="zoom:80%;">
-
+<p><img src="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/image-20231009153227099.png" alt="image-20231009153227099" style="zoom:80%;"></p>
 <ul>
 <li><p>除法右移：</p>
-<img src="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/image-20231009153331133.png" alt="image-20231009153331133" style="zoom:80%;">
-
+<p><img src="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/image-20231009153331133.png" alt="image-20231009153331133" style="zoom:80%;"></p>
 </li>
 </ul>
 </li>
@@ -464,8 +461,7 @@
 <li><p>计算所有滤波器系数绝对值之和，再计算表示该绝对值之和所需的最小无符号二进制数的位宽为n ，则滤波器输出的有效数据位为N+n</p>
 </li>
 <li><p>例：$2^8&gt;1+80+80+1$，故总共需要的位宽是$10+8=18$</p>
-<img src="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/image-20231009161358196.png" alt="image-20231009161358196" style="zoom:50%;">
-
+<p><img src="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/image-20231009161358196.png" alt="image-20231009161358196" style="zoom:50%;"></p>
 </li>
 </ul>
 <h2 id="2-滤波器系数的字长效应"><a href="#2-滤波器系数的字长效应" class="headerlink" title="2.滤波器系数的字长效应"></a>2.滤波器系数的字长效应</h2><ul>
@@ -473,15 +469,16 @@
 </li>
 <li><p><strong>系数量化对数字滤波器性能的影响和字长有关</strong>，也与数字滤波器结构有关</p>
 </li>
-<li><p>滤波器系数的字长效应例子：<br>$$<br>H(z)=\frac{0.05}{1+1.7z^{-1}+0.745z^{-2}}<br>$$</p>
-<ul>
+<li><p>滤波器系数的字长效应例子：</p>
+<script type="math/tex; mode=display">
+H(z)=\frac{0.05}{1+1.7z^{-1}+0.745z^{-2}}</script><ul>
 <li><p>量化的方法：分子分母同时乘以一个整数，使其均为整数</p>
 </li>
 <li><p>MATLAB程序：</p>
 <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">b=<span class="number">0.05</span>;</span><br><span class="line">a=[<span class="number">1</span>,<span class="number">1.7</span>,<span class="number">0.745</span>];</span><br><span class="line"></span><br><span class="line"><span class="comment">%对滤波器系数进行归一化处理</span></span><br><span class="line">m=<span class="built_in">max</span>(<span class="built_in">max</span>(b),<span class="built_in">max</span>(a));</span><br><span class="line">b1=b/m;</span><br><span class="line">a1=a/m;</span><br><span class="line"></span><br><span class="line"><span class="comment">%滤波器系数进行量化处理</span></span><br><span class="line">Q=<span class="number">8</span>;                                        </span><br><span class="line">b8=<span class="built_in">floor</span>(b1*(<span class="number">2</span>^(Q<span class="number">-1</span>)<span class="number">-1</span>));</span><br><span class="line">a8=<span class="built_in">floor</span>(a1*(<span class="number">2</span>^(Q<span class="number">-1</span>)<span class="number">-1</span>));</span><br><span class="line"></span><br><span class="line">N=<span class="number">2048</span>;</span><br><span class="line">xn=<span class="number">0</span>:N<span class="number">-1</span>;</span><br><span class="line">xn=xn/N*<span class="number">2</span>;                                     <span class="comment">%频率归一化处理</span></span><br><span class="line">dn=[<span class="number">1</span>,<span class="built_in">zeros</span>(<span class="number">1</span>,N<span class="number">-1</span>)];                           <span class="comment">%产生单位抽样序列</span></span><br><span class="line"></span><br><span class="line"><span class="comment">%计算原系统的频率响应</span></span><br><span class="line">hn=filter(b,a,dn);                             <span class="comment">%计算系统单位脉冲响应</span></span><br><span class="line">fn=<span class="number">10</span>*<span class="built_in">log10</span>(<span class="built_in">abs</span>(fft(hn,N)));                   <span class="comment">%计算系统频率响应</span></span><br><span class="line">fn=fn-<span class="built_in">max</span>(fn);                                 <span class="comment">%幅度归一化处理</span></span><br><span class="line"></span><br><span class="line"><span class="comment">%计算8比特系数量化后的系统的频率响应</span></span><br><span class="line">hn8=filter(b8,a8,dn);                          <span class="comment">%计算系统单位脉冲响应</span></span><br><span class="line">fn8=<span class="number">10</span>*<span class="built_in">log10</span>(<span class="built_in">abs</span>(fft(hn8,N)));                 <span class="comment">%计算系统频率响应</span></span><br><span class="line">fn8=fn8-<span class="built_in">max</span>(fn8);                              <span class="comment">%幅度归一化处理</span></span><br><span class="line"></span><br><span class="line"><span class="comment">%绘制系统的频率响应图</span></span><br><span class="line"><span class="built_in">plot</span>(xn(<span class="number">1</span>:N/<span class="number">2</span>),fn(<span class="number">1</span>:N/<span class="number">2</span>),<span class="string">&#x27;-&#x27;</span>,xn(<span class="number">1</span>:N/<span class="number">2</span>),fn8(<span class="number">1</span>:N/<span class="number">2</span>),<span class="string">&#x27;--&#x27;</span>);                     </span><br><span class="line">xlabel(<span class="string">&#x27;归一化频率（fs/2）&#x27;</span>);</span><br><span class="line">ylabel(<span class="string">&#x27;归一化幅度（dB）&#x27;</span>);</span><br><span class="line"><span class="built_in">legend</span>(<span class="string">&#x27;原系统的频率响应&#x27;</span>,<span class="string">&#x27;8比特量化后的频率响应&#x27;</span>);</span><br><span class="line">grid on;</span><br><span class="line"></span><br><span class="line"><span class="comment">%计算系数的极点</span></span><br><span class="line">s0=roots(a)</span><br><span class="line">s8=roots(a8)</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>结果如下：</p>
-<img src="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/QuantCoeff.bmp" alt="QuantCoeff" style="zoom:50%;">
+<p><img src="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/QuantCoeff.bmp" alt="QuantCoeff" style="zoom:50%;"></p>
 </li>
 <li><p>从该图可明显看出系数量化后系统的频率响应与原系统的频率响应的差别，量化位数越大，频率响应越接近</p>
 </li>
@@ -493,19 +490,21 @@
 <h2 id="3-滤波器运算的字长效应"><a href="#3-滤波器运算的字长效应" class="headerlink" title="3.滤波器运算的字长效应"></a>3.滤波器运算的字长效应</h2><ul>
 <li><p><strong>定点数的乘法运算存在有限字长效应，因为2个$B$bit的定点数相乘，要保留所有的有效位就需要使用$2B$bit的数</strong>，截位或舍入必定会引起有限字长效应；在浮点数运算中，乘法或加法运算均有可能引起尾数位的增加，因此也存在有限字长效应</p>
 </li>
-<li><p>滤波器运算的字长效应例子：<br>$$<br>H(z)=\frac{1}{1+0.5z^{-1}}<br>$$</p>
-<ul>
-<li><p>在无限精度运算的情况下，其差分方程为：<br>$$<br>y(n)=-0.5y(n-1)+x(n)<br>$$</p>
-</li>
-<li><p>在定点数运算中，每次乘法和加法运算后都必须对尾数进行舍入或截位处理，即量化处理，而量化过程是一个非线性过程，处理后相 应的非线性差分方程变为：<br>$$<br>w(n)=Q[-0.5w(n-1)+x(n)]<br>$$</p>
-</li>
+<li><p>滤波器运算的字长效应例子：</p>
+<script type="math/tex; mode=display">
+H(z)=\frac{1}{1+0.5z^{-1}}</script><ul>
+<li><p>在无限精度运算的情况下，其差分方程为：</p>
+<script type="math/tex; mode=display">
+y(n)=-0.5y(n-1)+x(n)</script></li>
+<li><p>在定点数运算中，每次乘法和加法运算后都必须对尾数进行舍入或截位处理，即量化处理，而量化过程是一个非线性过程，处理后相 应的非线性差分方程变为：</p>
+<script type="math/tex; mode=display">
+w(n)=Q[-0.5w(n-1)+x(n)]</script></li>
 <li><p>MATLAB程序：</p>
 <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line">x=[<span class="number">7</span>/<span class="number">8</span> <span class="built_in">zeros</span>(<span class="number">1</span>,<span class="number">15</span>)];</span><br><span class="line">y=<span class="built_in">zeros</span>(<span class="number">1</span>,<span class="built_in">length</span>(x));    <span class="comment">%存放原始运算结果</span></span><br><span class="line">B=<span class="number">2</span>;                     <span class="comment">%量化位数</span></span><br><span class="line">Qy=<span class="built_in">zeros</span>(<span class="number">1</span>,<span class="built_in">length</span>(x));   <span class="comment">%存放量化运算结果</span></span><br><span class="line">Qy2=<span class="built_in">zeros</span>(<span class="number">1</span>,<span class="built_in">length</span>(x));  <span class="comment">%存放量化运算结果</span></span><br><span class="line">Qy4=<span class="built_in">zeros</span>(<span class="number">1</span>,<span class="built_in">length</span>(x));  <span class="comment">%存放量化运算结果</span></span><br><span class="line">Qy6=<span class="built_in">zeros</span>(<span class="number">1</span>,<span class="built_in">length</span>(x));  <span class="comment">%存放量化运算结果</span></span><br><span class="line"></span><br><span class="line"><span class="comment">%系统系数</span></span><br><span class="line">A=<span class="number">0.5</span>;</span><br><span class="line">b=[<span class="number">1</span>];</span><br><span class="line">a=[<span class="number">1</span>,A];</span><br><span class="line"></span><br><span class="line"><span class="comment">%未经过量化处理的运算</span></span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span>=<span class="number">1</span>:<span class="built_in">length</span>(x);</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">i</span>==<span class="number">1</span></span><br><span class="line">        y(<span class="built_in">i</span>)=x(<span class="built_in">i</span>);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        y(<span class="built_in">i</span>)=-A*y(<span class="built_in">i</span><span class="number">-1</span>)+x(<span class="built_in">i</span>);</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">%经过2比特量化处理的运算</span></span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span>=<span class="number">1</span>:<span class="built_in">length</span>(x);</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">i</span>==<span class="number">1</span></span><br><span class="line">        Qy(<span class="built_in">i</span>)=x(<span class="built_in">i</span>);</span><br><span class="line">        Qy(<span class="built_in">i</span>)=<span class="built_in">round</span>(Qy(<span class="built_in">i</span>)*(<span class="number">2</span>^(B<span class="number">-1</span>)))/<span class="number">2</span>^(B<span class="number">-1</span>);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        Qy(<span class="built_in">i</span>)=-A*Qy(<span class="built_in">i</span><span class="number">-1</span>)+x(<span class="built_in">i</span>);</span><br><span class="line">        Qy(<span class="built_in">i</span>)=<span class="built_in">round</span>(Qy(<span class="built_in">i</span>)*(<span class="number">2</span>^(B<span class="number">-1</span>)))/<span class="number">2</span>^(B<span class="number">-1</span>);</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line">Qy2=Qy;</span><br><span class="line"></span><br><span class="line">B=<span class="number">4</span>;</span><br><span class="line"><span class="comment">%经过4比特量化处理的运算</span></span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span>=<span class="number">1</span>:<span class="built_in">length</span>(x);</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">i</span>==<span class="number">1</span></span><br><span class="line">        Qy(<span class="built_in">i</span>)=x(<span class="built_in">i</span>);</span><br><span class="line">        Qy(<span class="built_in">i</span>)=<span class="built_in">round</span>(Qy(<span class="built_in">i</span>)*(<span class="number">2</span>^(B<span class="number">-1</span>)))/<span class="number">2</span>^(B<span class="number">-1</span>);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        Qy(<span class="built_in">i</span>)=-A*Qy(<span class="built_in">i</span><span class="number">-1</span>)+x(<span class="built_in">i</span>);</span><br><span class="line">        Qy(<span class="built_in">i</span>)=<span class="built_in">round</span>(Qy(<span class="built_in">i</span>)*(<span class="number">2</span>^(B<span class="number">-1</span>)))/<span class="number">2</span>^(B<span class="number">-1</span>);</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line">Qy4=Qy;</span><br><span class="line"></span><br><span class="line">B=<span class="number">6</span>;</span><br><span class="line"><span class="comment">%经过6比特量化处理的运算</span></span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span>=<span class="number">1</span>:<span class="built_in">length</span>(x);</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">i</span>==<span class="number">1</span></span><br><span class="line">        Qy(<span class="built_in">i</span>)=x(<span class="built_in">i</span>);</span><br><span class="line">        Qy(<span class="built_in">i</span>)=<span class="built_in">round</span>(Qy(<span class="built_in">i</span>)*(<span class="number">2</span>^(B<span class="number">-1</span>)))/<span class="number">2</span>^(B<span class="number">-1</span>);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        Qy(<span class="built_in">i</span>)=-A*Qy(<span class="built_in">i</span><span class="number">-1</span>)+x(<span class="built_in">i</span>);</span><br><span class="line">        Qy(<span class="built_in">i</span>)=<span class="built_in">round</span>(Qy(<span class="built_in">i</span>)*(<span class="number">2</span>^(B<span class="number">-1</span>)))/<span class="number">2</span>^(B<span class="number">-1</span>);</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line">Qy6=Qy;</span><br><span class="line"></span><br><span class="line"><span class="comment">%绘图显示不同量化位宽的滤波结果</span></span><br><span class="line">xa=<span class="number">0</span>:<span class="number">1</span>:<span class="built_in">length</span>(x)<span class="number">-1</span>;</span><br><span class="line"><span class="built_in">plot</span>(xa,y,<span class="string">&#x27;-&#x27;</span>,xa,Qy2,<span class="string">&#x27;--&#x27;</span>,xa,Qy4,<span class="string">&#x27;O&#x27;</span>,xa,Qy6,<span class="string">&#x27;+&#x27;</span>);</span><br><span class="line"><span class="built_in">legend</span>(<span class="string">&#x27;原系统运算结果&#x27;</span>,<span class="string">&#x27;2bit量化运算结果&#x27;</span>,<span class="string">&#x27;4bit量化运算结果&#x27;</span>,<span class="string">&#x27;6bit量化运算结果&#x27;</span>)</span><br><span class="line">xlabel(<span class="string">&#x27;运算次数&#x27;</span>);ylabel(<span class="string">&#x27;滤波结果&#x27;</span>);</span><br></pre></td></tr></table></figure>
-
 <ul>
 <li>结果如下：</li>
 </ul>
-<img src="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/QuantArith.bmp" alt="QuantArith" style="zoom: 67%;">
+<p><img src="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/QuantArith.bmp" alt="QuantArith" style="zoom: 67%;"></p>
 </li>
 <li><p>从图中可以看出，当采用无限精度进行运算时，输出响应逐渐趋近于0；经过量化 处理后，输出响应在几次运算后在固定值处振荡，量化位数越少，振荡幅度就越大</p>
 </li>
@@ -514,7 +513,7 @@
 </ul>
 <hr>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
-<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1fT411B7zj/?spm_id_from=333.788&vd_source=221b76534ba13cfad544149d75ce9b6c">Xilinx/ISE版 FPGA数字信号处理设计-定点整数与小数的表示方法_哔哩哔哩_bilibili</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1fT411B7zj/?spm_id_from=333.788&amp;vd_source=221b76534ba13cfad544149d75ce9b6c">Xilinx/ISE版 FPGA数字信号处理设计-定点整数与小数的表示方法_哔哩哔哩_bilibili</a></li>
 <li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_44626493/article/details/107935257">Verilog实现二进制有符号定点数的乘法运算_verilog乘法运算-CSDN博客</a></li>
 </ul>
 
@@ -632,7 +631,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9A%E7%82%B9%E6%95%B4%E6%95%B0%E4%B8%8E%E5%B0%8F%E6%95%B0%E7%9A%84%E8%A1%A8%E7%A4%BA%E6%96%B9%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">定点整数与小数的表示方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B5%AE%E7%82%B9%E6%95%B0"><span class="nav-number">2.</span> <span class="nav-text">浮点数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%B5%AE%E7%82%B9%E6%95%B0%E7%9A%84%E8%A1%A8%E7%A4%BA%E6%96%B9%E5%BC%8F"><span class="nav-number">2.1.</span> <span class="nav-text">1.浮点数的表示方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%B5%AE%E7%82%B9%E6%95%B0%E7%9A%84%E5%8A%A0%E6%B3%95%E8%BF%90%E7%AE%97"><span class="nav-number">2.2.</span> <span class="nav-text">2.浮点数的加法运算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%B5%AE%E7%82%B9%E6%95%B0%E7%9A%84%E4%B9%98%E6%B3%95%E8%BF%90%E7%AE%97"><span class="nav-number">2.3.</span> <span class="nav-text">3.浮点数的乘法运算</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9A%E7%82%B9%E6%95%B0"><span class="nav-number">3.</span> <span class="nav-text">定点数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%AE%9A%E7%82%B9%E6%95%B0%E7%9A%84%E8%A1%A8%E7%A4%BA%E6%96%B9%E6%B3%95"><span class="nav-number">3.1.</span> <span class="nav-text">1.定点数的表示方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%AE%9A%E7%82%B9%E6%95%B0%E7%9A%84%E5%8A%A0%E6%B3%95%E8%BF%90%E7%AE%97"><span class="nav-number">3.2.</span> <span class="nav-text">2.定点数的加法运算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%AE%9A%E7%82%B9%E6%95%B0%E7%9A%84%E4%B9%98%E6%B3%95%E8%BF%90%E7%AE%97"><span class="nav-number">3.3.</span> <span class="nav-text">3.定点数的乘法运算</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E6%97%A0%E7%AC%A6%E5%8F%B7%E6%95%B0-times-%E6%97%A0%E7%AC%A6%E5%8F%B7%E6%95%B0"><span class="nav-number">3.3.1.</span> <span class="nav-text">3.1 无符号数$\times$无符号数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E7%AC%A6%E5%8F%B7%E6%95%B0-times-%E6%97%A0%E7%AC%A6%E5%8F%B7%E6%95%B0"><span class="nav-number">3.3.2.</span> <span class="nav-text">3.2 符号数$\times$无符号数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E6%97%A0%E7%AC%A6%E5%8F%B7%E6%95%B0-times-%E6%9C%89%E7%AC%A6%E5%8F%B7%E6%95%B0"><span class="nav-number">3.3.3.</span> <span class="nav-text">3.3 无符号数$\times$有符号数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-%E6%9C%89%E7%AC%A6%E5%8F%B7%E6%95%B0-times-%E6%9C%89%E7%AC%A6%E5%8F%B7%E6%95%B0"><span class="nav-number">3.3.4.</span> <span class="nav-text">3.4 有符号数$\times$有符号数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%B8%A6%E6%88%AA%E6%96%AD%E7%9A%84%E8%88%8D%E5%BC%83"><span class="nav-number">3.4.</span> <span class="nav-text">4.带截断的舍弃</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#AD-DA%E6%8E%A5%E5%8F%A3%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1"><span class="nav-number">4.</span> <span class="nav-text">AD&#x2F;DA接口程序设计</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#FPGA%E7%9A%84%E5%9B%9B%E5%88%99%E8%BF%90%E7%AE%97"><span class="nav-number">5.</span> <span class="nav-text">FPGA的四则运算</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%8A%A0%E5%87%8F%E8%BF%90%E7%AE%97"><span class="nav-number">5.1.</span> <span class="nav-text">1.加减运算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%B9%98%E9%99%A4%E8%BF%90%E7%AE%97"><span class="nav-number">5.2.</span> <span class="nav-text">2.乘除运算</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%89%E6%95%88%E5%AD%97%E9%95%BF%E6%95%88%E5%BA%94"><span class="nav-number">6.</span> <span class="nav-text">有效字长效应</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%B9%98%E5%8A%A0%E8%BF%90%E7%AE%97%E7%9A%84%E4%BD%8D%E5%AE%BD"><span class="nav-number">6.1.</span> <span class="nav-text">1.乘加运算的位宽</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%BB%A4%E6%B3%A2%E5%99%A8%E7%B3%BB%E6%95%B0%E7%9A%84%E5%AD%97%E9%95%BF%E6%95%88%E5%BA%94"><span class="nav-number">6.2.</span> <span class="nav-text">2.滤波器系数的字长效应</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%BB%A4%E6%B3%A2%E5%99%A8%E8%BF%90%E7%AE%97%E7%9A%84%E5%AD%97%E9%95%BF%E6%95%88%E5%BA%94"><span class="nav-number">6.3.</span> <span class="nav-text">3.滤波器运算的字长效应</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">7.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9A%E7%82%B9%E6%95%B4%E6%95%B0%E4%B8%8E%E5%B0%8F%E6%95%B0%E7%9A%84%E8%A1%A8%E7%A4%BA%E6%96%B9%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">定点整数与小数的表示方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B5%AE%E7%82%B9%E6%95%B0"><span class="nav-number">2.</span> <span class="nav-text">浮点数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%B5%AE%E7%82%B9%E6%95%B0%E7%9A%84%E8%A1%A8%E7%A4%BA%E6%96%B9%E5%BC%8F"><span class="nav-number">2.1.</span> <span class="nav-text">1.浮点数的表示方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%B5%AE%E7%82%B9%E6%95%B0%E7%9A%84%E5%8A%A0%E6%B3%95%E8%BF%90%E7%AE%97"><span class="nav-number">2.2.</span> <span class="nav-text">2.浮点数的加法运算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%B5%AE%E7%82%B9%E6%95%B0%E7%9A%84%E4%B9%98%E6%B3%95%E8%BF%90%E7%AE%97"><span class="nav-number">2.3.</span> <span class="nav-text">3.浮点数的乘法运算</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9A%E7%82%B9%E6%95%B0"><span class="nav-number">3.</span> <span class="nav-text">定点数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%AE%9A%E7%82%B9%E6%95%B0%E7%9A%84%E8%A1%A8%E7%A4%BA%E6%96%B9%E6%B3%95"><span class="nav-number">3.1.</span> <span class="nav-text">1.定点数的表示方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%AE%9A%E7%82%B9%E6%95%B0%E7%9A%84%E5%8A%A0%E6%B3%95%E8%BF%90%E7%AE%97"><span class="nav-number">3.2.</span> <span class="nav-text">2.定点数的加法运算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%AE%9A%E7%82%B9%E6%95%B0%E7%9A%84%E4%B9%98%E6%B3%95%E8%BF%90%E7%AE%97"><span class="nav-number">3.3.</span> <span class="nav-text">3.定点数的乘法运算</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E6%97%A0%E7%AC%A6%E5%8F%B7%E6%95%B0-times-%E6%97%A0%E7%AC%A6%E5%8F%B7%E6%95%B0"><span class="nav-number">3.3.1.</span> <span class="nav-text">3.1 无符号数$\times$无符号数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E6%9C%89%E7%AC%A6%E5%8F%B7%E6%95%B0-times-%E6%97%A0%E7%AC%A6%E5%8F%B7%E6%95%B0"><span class="nav-number">3.3.2.</span> <span class="nav-text">3.2 有符号数$\times$无符号数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E6%97%A0%E7%AC%A6%E5%8F%B7%E6%95%B0-times-%E6%9C%89%E7%AC%A6%E5%8F%B7%E6%95%B0"><span class="nav-number">3.3.3.</span> <span class="nav-text">3.3 无符号数$\times$有符号数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-%E6%9C%89%E7%AC%A6%E5%8F%B7%E6%95%B0-times-%E6%9C%89%E7%AC%A6%E5%8F%B7%E6%95%B0"><span class="nav-number">3.3.4.</span> <span class="nav-text">3.4 有符号数$\times$有符号数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%B8%A6%E6%88%AA%E6%96%AD%E7%9A%84%E8%88%8D%E5%BC%83"><span class="nav-number">3.4.</span> <span class="nav-text">4.带截断的舍弃</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#AD-DA%E6%8E%A5%E5%8F%A3%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1"><span class="nav-number">4.</span> <span class="nav-text">AD&#x2F;DA接口程序设计</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#FPGA%E7%9A%84%E5%9B%9B%E5%88%99%E8%BF%90%E7%AE%97"><span class="nav-number">5.</span> <span class="nav-text">FPGA的四则运算</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%8A%A0%E5%87%8F%E8%BF%90%E7%AE%97"><span class="nav-number">5.1.</span> <span class="nav-text">1.加减运算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%B9%98%E9%99%A4%E8%BF%90%E7%AE%97"><span class="nav-number">5.2.</span> <span class="nav-text">2.乘除运算</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%89%E6%95%88%E5%AD%97%E9%95%BF%E6%95%88%E5%BA%94"><span class="nav-number">6.</span> <span class="nav-text">有效字长效应</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%B9%98%E5%8A%A0%E8%BF%90%E7%AE%97%E7%9A%84%E4%BD%8D%E5%AE%BD"><span class="nav-number">6.1.</span> <span class="nav-text">1.乘加运算的位宽</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%BB%A4%E6%B3%A2%E5%99%A8%E7%B3%BB%E6%95%B0%E7%9A%84%E5%AD%97%E9%95%BF%E6%95%88%E5%BA%94"><span class="nav-number">6.2.</span> <span class="nav-text">2.滤波器系数的字长效应</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%BB%A4%E6%B3%A2%E5%99%A8%E8%BF%90%E7%AE%97%E7%9A%84%E5%AD%97%E9%95%BF%E6%95%88%E5%BA%94"><span class="nav-number">6.3.</span> <span class="nav-text">3.滤波器运算的字长效应</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">7.</span> <span class="nav-text">Reference</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -648,7 +647,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">118</span>
+          <span class="site-state-item-count">120</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -661,7 +660,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-count">33</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
