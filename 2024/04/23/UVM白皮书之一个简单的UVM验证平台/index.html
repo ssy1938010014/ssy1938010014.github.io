@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1/themes/blue/pace-theme-minimal.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"xn--ssy-lq6e63gg6fuu2d.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本文基于《UVM实战》白皮书，记录UVM学习的过程，本章是对第二章：一个简单的UVM验证的学习与记录。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UVM白皮书之一个简单的UVM验证">
+<meta property="og:url" content="http://ssy的小天地.com/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/index.html">
+<meta property="og:site_name" content="ssy的小天地">
+<meta property="og:description" content="本文基于《UVM实战》白皮书，记录UVM学习的过程，本章是对第二章：一个简单的UVM验证的学习与记录。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/image-20240428202136398.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/image-20240428215538079.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/image-20240428222429417.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/image-20240428222048974.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/image-20240428222357817.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/image-20240428222429417.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/image-20240429005146960.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/image-20240429005224640.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/image-20240428204545137.png">
+<meta property="article:published_time" content="2024-04-23T02:07:12.000Z">
+<meta property="article:modified_time" content="2024-04-28T16:53:25.854Z">
+<meta property="article:author" content="ssy">
+<meta property="article:tag" content="UVM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/image-20240428202136398.png">
+
+<link rel="canonical" href="http://ssy的小天地.com/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>UVM白皮书之一个简单的UVM验证 | ssy的小天地</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+    <a target="_blank" rel="noopener" href="https://github.com/ssy1938010014" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ssy的小天地</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">愿汝如是 千金不换</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-works">
+
+    <a href="/works/" rel="section"><i class="fa fa-fw fa-sitemap"></i>文章</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ssy的小天地.com/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ssy.png">
+      <meta itemprop="name" content="ssy">
+      <meta itemprop="description" content="满怀希望 就会所向披靡">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ssy的小天地">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          UVM白皮书之一个简单的UVM验证
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+
+
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-23 10:07:12" itemprop="dateCreated datePublished" datetime="2024-04-23T10:07:12+08:00">2024-04-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-04-29 00:53:25" itemprop="dateModified" datetime="2024-04-29T00:53:25+08:00">2024-04-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%A7%AF%E7%B4%AF/" itemprop="url" rel="index"><span itemprop="name">学习积累</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本文基于《UVM实战》白皮书，记录UVM学习的过程，本章是对第二章：一个简单的UVM验证的学习与记录。</p>
+<span id="more"></span>
+
+<h1 id="验证平台的组成"><a href="#验证平台的组成" class="headerlink" title="验证平台的组成"></a>验证平台的组成</h1><ul>
+<li>一个验证平台要实现如下基本功能：<ul>
+<li>验证平台要模拟DYT的各种真实使用情况，这意味着要给DUT施加各种激励。<strong>激励的功能是由driver来实现的</strong>。</li>
+<li>验证平台要能够根据DUT的输出来判断DUT的行为是否与预期相符合，<strong>完成这个功能的是scoreboard</strong></li>
+<li>验证平台要能收集DUT的输出并把它们传递给scoreboard，<strong>完成这个功能的是monitor</strong></li>
+<li>验证平台要能够给出预期结果，在driver传递给DUT计算的同时，验证平台中也需要有一个模块能完成相应的计算结果，给出预期。完成这个功能的是reference model</li>
+</ul>
+</li>
+<li>一个简单的验证平台框图如下：</li>
+<li>在UVM中，引入了agent和sequence的概念，因此UVM中验证平台的典型框图如下：</li>
+</ul>
+<h1 id="只有driver的验证平台"><a href="#只有driver的验证平台" class="headerlink" title="只有driver的验证平台"></a>只有driver的验证平台</h1><h2 id="1-最简单的验证平台"><a href="#1-最简单的验证平台" class="headerlink" title="1.最简单的验证平台"></a>1.最简单的验证平台</h2><ul>
+<li><p><strong>driver是验证平台最基本的组件，是整个验证平台数据流的源泉。</strong>（本节以一个简单的DUT为例，说明一个只有driver的UVM验证平台是如何搭建的）</p>
+</li>
+<li><p>dut.sv</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">module dut(clk,</span><br><span class="line">           rst_n, </span><br><span class="line">           rxd,</span><br><span class="line">           rx_dv,</span><br><span class="line">           txd,</span><br><span class="line">           tx_en);</span><br><span class="line">   input clk;</span><br><span class="line">   input rst_n;</span><br><span class="line">   input[7:0] rxd;</span><br><span class="line">   input rx_dv;</span><br><span class="line">   output [7:0] txd;</span><br><span class="line">   output tx_en;</span><br><span class="line"></span><br><span class="line">   reg[7:0] txd;</span><br><span class="line">   reg tx_en;</span><br><span class="line"></span><br><span class="line">   always @(posedge clk) begin</span><br><span class="line">      if(!rst_n) begin</span><br><span class="line">         txd &lt;= 8&#x27;b0;</span><br><span class="line">         tx_en &lt;= 1&#x27;b0;</span><br><span class="line">      end</span><br><span class="line">      else begin</span><br><span class="line">         txd &lt;= rxd;</span><br><span class="line">         tx_en &lt;= rx_dv;</span><br><span class="line">      end</span><br><span class="line">   end</span><br><span class="line"></span><br><span class="line">endmodule</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>UVM是一个库，在这个库中，几乎所有的东西使用类（class）来实现</strong>。driver、monitor、reference model、scoreboard等组成部分都是类</p>
+</li>
+<li><p>类有函数（function），另外还可以有任务（task），还有成员变量，这些成员变量可以控制类的行为，如控制driver的行为</p>
+</li>
+<li><p>当要实现一个功能时，首先应该想到的是<strong>从UVM的某个类派生出一个新的类</strong>，在这个新的类中实现所期望的功能</p>
+</li>
+<li><p>使用UVM的第一条原则是：<strong>验证平台中所有的组件应该派生自UVM中的类</strong></p>
+</li>
+<li><p><strong>UVM验证平台中的driver应该派生自uvm_driver</strong></p>
+</li>
+<li><p>一个简答的driver如下例所示：my_driver.sv</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">`ifndef MY_DRIVER__SV</span><br><span class="line">`define MY_DRIVER__SV</span><br><span class="line"></span><br><span class="line">class my_driver extends uvm_driver;</span><br><span class="line">   </span><br><span class="line">   function new(string name = &quot;my_driver&quot;, uvm_component parent = null);</span><br><span class="line">      super.new(name, parent);</span><br><span class="line">   endfunction</span><br><span class="line"></span><br><span class="line">   extern virtual task main_phase(uvm_phase phase);</span><br><span class="line"></span><br><span class="line">endclass</span><br><span class="line"></span><br><span class="line">task my_driver::main_phase(uvm_phase phase);</span><br><span class="line">   top_tb.rxd &lt;= 8&#x27;b0; </span><br><span class="line">   top_tb.rx_dv &lt;= 1&#x27;b0;</span><br><span class="line">   while(!top_tb.rst_n)</span><br><span class="line">      @(posedge top_tb.clk);</span><br><span class="line">   for(int i = 0; i &lt; 256; i++)begin</span><br><span class="line">      @(posedge top_tb.clk);</span><br><span class="line">      top_tb.rxd &lt;= $urandom_range(0, 255);</span><br><span class="line">      top_tb.rx_dv &lt;= 1&#x27;b1;</span><br><span class="line">      `uvm_info(&quot;my_driver&quot;, &quot;data is drived&quot;, UVM_LOW)</span><br><span class="line">   end</span><br><span class="line">   @(posedge top_tb.clk);</span><br><span class="line">   top_tb.rx_dv &lt;= 1&#x27;b0;</span><br><span class="line">endtask</span><br><span class="line">`endif</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>分析上述代码：</p>
+<ul>
+<li><p>所有派生自<strong>uvm_driver</strong>的类的new函数有两个参数，一个是string类型的name，一个是uvm_component类型的parent。事实上，这两个参数是由<strong>uvm_componen</strong>t要求的，每个派生自uvm_component或其派生的类在new函数中都要声明name和parent。<strong>uvm_driver是一个派生自uvm_component的类</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function new(string name = &quot;my_driver&quot;, uvm_component parent = null);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>driver所做的事情几乎都在main_phase中完成。UVM由phase来管理验证平台的运行，<strong>这些phase统一以xxx.phase命名，且都有一个类型为uvm_phase、名字为phase的参数</strong>。<strong>main_phase是uvm_driver中预先定义好的一个任务。</strong>因此几乎可以简单认为，实现一个driver等于实现其main_phase（感觉归根到底不就是实现了一个函数）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">task my_driver::main_phase(uvm_phase phase);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>代码中还出现了uvm_info宏。这个宏的功能与verilog中display语句的功能类似，但是它比display语句更加强大。它有三个参数：<strong>第一个参数是字符串，用于把打印的信息归类，第二个参数也是字符串，是具体需要打印的信息，第三个参数则是冗余级别</strong>（在验证平台中，某些信息是非常关键的，这样的信息可以设置为UVM_LOW，而有些信息可有可无，就可以设置为UVM_HIGH，介于两者之间的就是UVM_MEDIUM。UVM默认只显示UVM_MEDIUM或者UVM_HIGH的信息）。<strong>在搭建验证平台时应尽量使用uvm_info宏取代display语句。</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">`uvm_info(&quot;my_driver&quot;, &quot;data is drived&quot;, UVM_LOW)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>对my_driver实例化并且最终搭建的验证平台如下：（top_tb.sv）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">`timescale 1ns/1ps</span><br><span class="line">`include &quot;uvm_macros.svh&quot;</span><br><span class="line"></span><br><span class="line">import uvm_pkg::*;</span><br><span class="line">`include &quot;my_driver.sv&quot;</span><br><span class="line"></span><br><span class="line">module top_tb;</span><br><span class="line"></span><br><span class="line">    reg clk;</span><br><span class="line">    reg rst_n;</span><br><span class="line">    reg[7:0] rxd;</span><br><span class="line">    reg rx_dv;</span><br><span class="line">    wire[7:0] txd;</span><br><span class="line">    wire tx_en;</span><br><span class="line"></span><br><span class="line">    dut my_dut(.clk(clk),</span><br><span class="line">               .rst_n(rst_n),</span><br><span class="line">               .rxd(rxd),</span><br><span class="line">               .rx_dv(rx_dv),</span><br><span class="line">               .txd(txd),</span><br><span class="line">               .tx_en(tx_en));</span><br><span class="line"></span><br><span class="line">    initial begin</span><br><span class="line">       my_driver drv;</span><br><span class="line">       drv = new(&quot;drv&quot;, null);</span><br><span class="line">       drv.main_phase(null);</span><br><span class="line">       $finish();</span><br><span class="line">    end</span><br><span class="line"></span><br><span class="line">    initial begin</span><br><span class="line">       clk = 0;</span><br><span class="line">       forever begin</span><br><span class="line">          #100 clk = ~clk;</span><br><span class="line">       end</span><br><span class="line">    end</span><br><span class="line"></span><br><span class="line">    initial begin</span><br><span class="line">       rst_n = 1&#x27;b0;</span><br><span class="line">       #1000;</span><br><span class="line">       rst_n = 1&#x27;b1;</span><br><span class="line">    end</span><br><span class="line"></span><br><span class="line">endmodule</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>分析上述代码：</p>
+<ul>
+<li><p><strong>uvm_macro.svh</strong>文件通过include语句包含进来。<strong>这是UVM中的一个文件，里面包含了众多的宏定义</strong>，只需要包含一次</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">`include &quot;uvm_macros.svh&quot;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>通过import语句将整个<strong>uvm_pkg</strong>导入验证平台中。<strong>只有导入了这个库，编译器在编译my_driver.sv文件时才会认识其中的uvm_driver等类名</strong>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import uvm_pkg::*;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>定义drv为my_driver的实例，并将其例化。调用new函数时，其传入的名字参数为drv（<strong>uvm_info宏的打印信息时出现的代表路径索引的drv就是在这里传入的参数drv</strong>）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">my_driver drv;</span><br><span class="line">drv = new(&quot;drv&quot;, null);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>显示地调用my_driver的main_phase</strong>。在main_phase的声明中，有一个uvm_phase类型的参数phase（在真正的验证平台中，这个参数是不需要用户理会的，本节的验证平台还算不上一个完整的UVM验证平台，所以暂且传入null）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">drv.main_phase(null);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>该例最后的仿真打印结果如下：</p>
+<p><img src="/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/image-20240428202136398.png" alt="image-20240428202136398"></p>
+<ul>
+<li><p>“data is drived”被输出了256次</p>
+</li>
+<li><p>关于uvm_info宏打印的结果中有如下几项：</p>
+<ul>
+<li><p><strong>UVM_INFO关键字</strong>：表明这是一个uvM宏打印的结果</p>
+</li>
+<li><p>my_driver.sv(23)：指明该条打印信息的来源，其中<strong>括号的数字表示原始的uvm_info打印语句在my_driver.sv中的行号</strong></p>
+</li>
+<li><p>@后面的数字，比如51100表示此条信息的打印时间</p>
+</li>
+<li><p><strong>drv</strong>：<strong>这是driver在UVM数中的路径索引（其实就是后面实例调用时new传入的第一个参数）</strong>。UVM采用树形结构，对于树中任何一个节点，都有一个与其相应的字符串类型的路径索引。路径索引可以通过get_full_name函数来获取，把下列代码加入任何UVM数的节点中就可以得知当前节点的路径索引：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$display(&quot;the full name of current component is: %s&quot;, get_full_name());</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-加入factory机制"><a href="#2-加入factory机制" class="headerlink" title="2.加入factory机制"></a>2.加入factory机制</h2><ul>
+<li><p><strong>factory机制的实现被集成在了一个宏中：uvm_component_utils</strong>。这个宏所做的事情非常多，其中之一就是将my_driver登记在UVM内部的一张表中，这张表是factory功能实现的基础。</p>
+</li>
+<li><p><strong>只要在定义一个新的类时使用这个宏，就相当于把这个类注册到了这张表中</strong>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">class my_driver extends uvm_driver;</span><br><span class="line">   `uvm_component_utils(my_driver)</span><br><span class="line"></span><br><span class="line">   function new(string name = &quot;my_driver&quot;, uvm_component parent = null);</span><br><span class="line">      super.new(name, parent);</span><br><span class="line">      `uvm_info(&quot;my_driver&quot;, &quot;new is called&quot;, UVM_LOW);</span><br><span class="line">   endfunction</span><br><span class="line"></span><br><span class="line">   extern virtual task main_phase(uvm_phase phase);</span><br><span class="line">endclass</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在给driver中加入factory机制后，还需要对top_tb做一些改动：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">initial begin</span><br><span class="line">   run_test(&quot;my_driver&quot;);</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>这里使用一个run_test语句替换掉了前一小结中top_tb.sv中第23-28行的my_driver实例化以及main_phase的显示调用。</li>
+<li><strong>一个run_test语句会创建一个my_driver的实例，并且会自动调用my_driver的main_phase</strong>。</li>
+<li><strong>给run_test传递的是一个字符串，UVM根据这个字符串创建了其所代表类的一个实例</strong></li>
+</ul>
+</li>
+<li><p><strong>根据类名创建一个类的实例，这是uvm_component_utils宏所带来的效果</strong>，只有在类定义时声明了这个宏，才能使用这个功能。从某种程度上来说，这个宏起到了注册的作用。只有经过注册的类，才能使用这个功能，否则根本不能使用。</p>
+</li>
+<li><p><strong>所有派生自uvm_component及其派生类的类都应该使用uvm_component_utils宏注册</strong>（所谓注册，就是在定义一个新类时加上``uvm_component_utils(my_driver)`）</p>
+</li>
+<li><p><strong>在UVM验证平台中，只要一个类使用uvm_component_utils注册且此类被实例化（这里的实例化是通过run_test语句实现的）了，那么这个类的main_phase就会被自动调用</strong>。</p>
+</li>
+<li><p>经过上述修改后的代码（本书的代码开源，我就不一一粘贴了，网上随手一搜都能搜到），其仿真结果如下（并未打印256次data is driver，关于这个问题，牵扯UVM的objection机制）：（仿真波形也卡住了）</p>
+<p><img src="/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/image-20240428215538079.png" alt="image-20240428215538079"></p>
+<p><img src="/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/image-20240428222429417.png" alt="image-20240428222429417"></p>
+</li>
+</ul>
+<h2 id="3-加入objection机制"><a href="#3-加入objection机制" class="headerlink" title="3.加入objection机制"></a>3.加入objection机制</h2><ul>
+<li><p>在上一节中，虽然输出了“main_phase is called”，但是“data is drived”并没有输出，而main_phase是一个完整的任务，没有理由只执行第一句，而后面的代码不执行。看上去似乎main_phase在执行的过程中被外力”杀死“了，事实上也确实如此。</p>
+</li>
+<li><p><strong>UVM中通过objection机制来控制验证平台的关闭</strong></p>
+</li>
+<li><p><strong>在每个phase中，UVM会检查是否有objection被提起（raise_objection），如果有，那么等待这个objection被撤销（drop_objection）后停止仿真；如果没有，马上结束当前phase</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">phase.raise_objection(this);</span><br><span class="line">...</span><br><span class="line">phase.drop_objection(this);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在drop_objection语句之前必须先调用raise_objection语句，drop_objection和raise_objection总是成对出现的。加入objection机制后再运行验证平台，可以发现”data is drived”按照预期输出了256次。</p>
+<p><img src="/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/image-20240428222048974.png" alt="image-20240428222048974"></p>
+</li>
+<li><p><strong>raise_objection语句必须在main_phase中第一个消耗仿真时间的语句之前</strong>。如<code>$display</code>语句是不消耗仿真时间的，这些语句可以放在raise_objection之前，但是类似@(posedge top_tb.clk)等语句是要消耗仿真时间的。若my_driver.sv的代码修改为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@(posedge top_tb.clk);</span><br><span class="line">phase.raise_objection(this);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>其结果如下：（甚至连仿真波形都会卡住）</p>
+<p><img src="/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/image-20240428222357817.png" alt="image-20240428222357817"></p>
+<p><img src="/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/image-20240428222429417.png" alt="image-20240428222429417"></p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="4-加入virtual-interface"><a href="#4-加入virtual-interface" class="headerlink" title="4.加入virtual interface"></a>4.加入virtual interface</h2><ul>
+<li><p>在前面的例子中，driver中等待时钟时间@(posedge top.clk)、给DUT中输入端口赋值（top.rx_dv&lt;=1’b1）都是使用绝对路径，绝对路径的使用大大减弱了验证平台的可移植性。一个最简单的例子就是假设clk信号的层次从top.clk变成了top.clk_inst.clk，那么就需要对driver中的相关代码做大量修改。因此，从根本上来说，应该尽量杜绝在验证平台中使用绝对路径。</p>
+</li>
+<li><p>避免绝对路径的一个方法是使用宏：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">`define TOP top_tb</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>这样，当路径修改时，只需要修改宏的定义即可。但是假设clk的冷酷就变为了top_tb.clk_inst.clk，而rst_n的路径变为了top_tb.rst_inst.rst_n，那么单纯地修改宏定义是无法起到作用的。</p>
+</li>
+<li><p>避免绝对路径的另外一种方式是使用interface。<strong>在SV中使用interface来连接验证平台与DUT的端口。</strong></p>
+</li>
+<li><p>interface的定义比较简单：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">`ifndef MY_IF__SV</span><br><span class="line">`define MY_IF__SV</span><br><span class="line"></span><br><span class="line">   interface my_if(input clk, input rst_n);</span><br><span class="line"></span><br><span class="line">      logic [7:0] data;</span><br><span class="line">      logic valid;</span><br><span class="line">   endinterface</span><br><span class="line"></span><br><span class="line">`endif</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>定义了interface后，在top_tb中实例化DUT时，就可以直接使用：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">my_if input_if(clk, rst_n);</span><br><span class="line">my_if output_if(clk, rst_n);</span><br><span class="line"></span><br><span class="line">dut my_dut(.clk(clk),</span><br><span class="line">         .rst_n(rst_n),</span><br><span class="line">         .rxd(input_if.data),</span><br><span class="line">         .rx_dv(input_if.valid),</span><br><span class="line">         .txd(output_if.data),</span><br><span class="line">         .tx_en(output_if.valid));</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>在类中使用的是virtual interface</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">class my_driver extends uvm_driver;</span><br><span class="line">   virtual my_if vif;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在声明了vif后，就可以在main_phase中使用如下方式驱动其中的信号</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">task my_driver::main_phase(uvm_phase phase);</span><br><span class="line">   phase.raise_objection(this);</span><br><span class="line"></span><br><span class="line">   `uvm_info(&quot;my_driver&quot;, &quot;main_phase is called&quot;, UVM_LOW);</span><br><span class="line"></span><br><span class="line">   vif.data &lt;= 8&#x27;b0; </span><br><span class="line">   vif.valid &lt;= 1&#x27;b0;</span><br><span class="line">   while(!vif.rst_n)</span><br><span class="line">      @(posedge vif.clk);</span><br><span class="line">   for(int i = 0; i &lt; 256; i++)begin</span><br><span class="line">      @(posedge vif.clk);</span><br><span class="line">      vif.data &lt;= $urandom_range(0, 255);</span><br><span class="line">      vif.valid &lt;= 1&#x27;b1;</span><br><span class="line">      `uvm_info(&quot;my_driver&quot;, &quot;data is drived&quot;, UVM_LOW);</span><br><span class="line">   end</span><br><span class="line">   @(posedge vif.clk);</span><br><span class="line">   vif.valid &lt;= 1&#x27;b0;</span><br><span class="line">   </span><br><span class="line">   phase.drop_objection(this);</span><br><span class="line">endtask</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>UVM引进了config_db机制</strong>，来将top_tb中input_if和my_driver中的vif对应起来。</p>
+</li>
+<li><p>在config_db机制中，分为set和get两步操作。所谓set操作，可以简单地理解成是”寄信“，而set则相当于是”收信“。</p>
+</li>
+<li><p><strong>在top_tb中执行set操作</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">initial begin</span><br><span class="line">   uvm_config_db#(virtual my_if)::set(null, &quot;uvm_test_top&quot;, &quot;vif&quot;, input_if);</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>在my_driver中，执行get操作</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">virtual function void build_phase(uvm_phase phase);</span><br><span class="line">   super.build_phase(phase);</span><br><span class="line">   `uvm_info(&quot;my_driver&quot;, &quot;build_phase is called&quot;, UVM_LOW);</span><br><span class="line">   if(!uvm_config_db#(virtual my_if)::get(this, &quot;&quot;, &quot;vif&quot;, vif))</span><br><span class="line">      `uvm_fatal(&quot;my_driver&quot;, &quot;virtual interface must be set for vif!!!&quot;)</span><br><span class="line">endfunction</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>这里引入了build_phase。与main_phase一样，build_phase也是UVM中内建的一个phase。<strong>当UVM启动后，会自动执行build_phase，build_phase在new函数之后main_phase之前执行</strong>。</p>
+<ul>
+<li>这里需要加入<strong>super.build_phase</strong>语句，因为在其父类的build_phase中执行了一些必要的操作，这里必须显式地调用并执行它</li>
+<li>build_phase与main_phase不同的一点在于，<strong>build_phase是一个函数phase，而main_phase是一个任务phase，build_phase是不消耗仿真时间的，build_phase总是在仿真时间为0时执行。</strong></li>
+<li>在build_phase中出现了<strong>uvm_fatal宏</strong>，uvm_fatal宏是一个类似于uvm_info的宏，但是它只有两个参数，这两个参数于uvm_info宏的前两个参数的意义完全一样。<strong>当uvm_fatal打印出第二个参数之后，会直接调用verilog的finish函数来结束仿真，其意味着验证平台出现了重大问题而无法继续下去</strong>，必须停止仿真并做相应的检查。</li>
+<li>config_db的set和get函数都有四个参数，<strong>这两个函数的第三个参数必须完全一致</strong><ul>
+<li>set函数：<ul>
+<li>第一个参数：当使用 <code>null</code> 作为这个参数时，它意味着设置的配置项是全局可用的。</li>
+<li>第二个参数：表示路径索引，<strong>UVM通过run_test创建了一个my_driver的实例，其实例名即为uvm_test_top</strong></li>
+<li>第三个参数：<strong>指定配置项的名称，为一个与get第三个参数连接的虚拟接口</strong></li>
+<li>第四个参数：<strong>表示要将哪个interface通过config_db传递给my_driver</strong>（即把input_if接口给”vif”这个虚拟接口）</li>
+</ul>
+</li>
+<li>get函数：<ul>
+<li>第一个参数：<code>this</code>。这是调用<code>get</code>方法的组件的句柄。它定义了查询配置数据库的上下文。通常，它指的是希望获取配置信息的组件的实例。</li>
+<li>第二个参数：<code>&quot;&quot;</code>。这是一个字符串，定义了配置信息的作用域。空字符串表示全局作用域，即搜索整个UVM环境以找到匹配的配置项。如果这里指定了一个特定的层级路径，那么<code>uvm_config_db</code>将只在指定的层级内搜索配置信息。</li>
+<li>第三个参数：<strong>指定了要获取的配置项的名称，虚拟接口罢了</strong></li>
+<li>第四个参数：<strong>表示把得到的interface传递给哪个my_driver的成员变量</strong>（即从”vif”这个虚拟接口收到的接口传递给vif这个成员变量）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>set和get函数前面使用双冒号的原因是这两个函数都是静态函数</strong></li>
+<li><code>uvm_config_db#(virtual my_if)</code>则是一个参数化的类，其参数就是要寄信的类型，这里是<code>virtual my_if</code>，假设要传递一个int类型的数据，那么久写为<code>uvm_config_db#(int)</code></li>
+</ul>
+</li>
+<li><p>最终，加入上述所述机制的代码如下：</p>
+<ul>
+<li><p>my_driver.sv</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">`ifndef MY_DRIVER__SV</span><br><span class="line">`define MY_DRIVER__SV</span><br><span class="line"></span><br><span class="line">   class my_driver extends uvm_driver;</span><br><span class="line">      virtual my_if vif;</span><br><span class="line"></span><br><span class="line">      `uvm_component_utils(my_driver)</span><br><span class="line">      function new(string name = &quot;my_driver&quot;, uvm_component parent = null);</span><br><span class="line">         super.new(name, parent);</span><br><span class="line">         `uvm_info(&quot;my_driver&quot;, &quot;new is called&quot;, UVM_LOW);</span><br><span class="line">      endfunction</span><br><span class="line"></span><br><span class="line">      virtual function void build_phase(uvm_phase phase);</span><br><span class="line">         super.build_phase(phase);</span><br><span class="line">         `uvm_info(&quot;my_driver&quot;, &quot;build_phase is called&quot;, UVM_LOW);</span><br><span class="line">         if(!uvm_config_db#(virtual my_if)::get(this, &quot;&quot;, &quot;vif&quot;, vif))</span><br><span class="line">            `uvm_fatal(&quot;my_driver&quot;, &quot;virtual interface must be set for vif!!!&quot;)</span><br><span class="line">      endfunction</span><br><span class="line"></span><br><span class="line">      extern virtual task main_phase(uvm_phase phase);</span><br><span class="line">   endclass</span><br><span class="line"></span><br><span class="line">   task my_driver::main_phase(uvm_phase phase);</span><br><span class="line">      phase.raise_objection(this);</span><br><span class="line"></span><br><span class="line">      `uvm_info(&quot;my_driver&quot;, &quot;main_phase is called&quot;, UVM_LOW);</span><br><span class="line"></span><br><span class="line">      vif.data &lt;= 8&#x27;b0; </span><br><span class="line">      vif.valid &lt;= 1&#x27;b0;</span><br><span class="line">      while(!vif.rst_n)</span><br><span class="line">         @(posedge vif.clk);</span><br><span class="line">      for(int i = 0; i &lt; 256; i++)begin</span><br><span class="line">         @(posedge vif.clk);</span><br><span class="line">         vif.data &lt;= $urandom_range(0, 255);</span><br><span class="line">         vif.valid &lt;= 1&#x27;b1;</span><br><span class="line">         `uvm_info(&quot;my_driver&quot;, &quot;data is drived&quot;, UVM_LOW);</span><br><span class="line">      end</span><br><span class="line">      @(posedge vif.clk);</span><br><span class="line">      vif.valid &lt;= 1&#x27;b0;</span><br><span class="line">      </span><br><span class="line">      phase.drop_objection(this);</span><br><span class="line">   endtask</span><br><span class="line"></span><br><span class="line">`endif</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>my_if.sv</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">`ifndef MY_IF__SV</span><br><span class="line">`define MY_IF__SV</span><br><span class="line"></span><br><span class="line">   interface my_if(input clk, input rst_n);</span><br><span class="line"></span><br><span class="line">      logic [7:0] data;</span><br><span class="line">      logic valid;</span><br><span class="line">   endinterface</span><br><span class="line"></span><br><span class="line">`endif</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>top_tb.sv</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">`timescale 1ns/1ps</span><br><span class="line">`include &quot;uvm_macros.svh&quot;</span><br><span class="line"></span><br><span class="line">import uvm_pkg::*;</span><br><span class="line">`include &quot;my_if.sv&quot;</span><br><span class="line">`include &quot;my_driver.sv&quot;</span><br><span class="line"></span><br><span class="line">module top_tb;</span><br><span class="line"></span><br><span class="line">   reg clk;</span><br><span class="line">   reg rst_n;</span><br><span class="line">   reg[7:0] rxd;</span><br><span class="line">   reg rx_dv;</span><br><span class="line">   wire[7:0] txd;</span><br><span class="line">   wire tx_en;</span><br><span class="line"></span><br><span class="line">   my_if input_if(clk, rst_n);</span><br><span class="line">   my_if output_if(clk, rst_n);</span><br><span class="line"></span><br><span class="line">   dut my_dut(.clk(input_if.clk),</span><br><span class="line">            .rst_n(input_if.rst_n),</span><br><span class="line">            .rxd(input_if.data),</span><br><span class="line">            .rx_dv(input_if.valid),</span><br><span class="line">            .txd(output_if.data),</span><br><span class="line">            .tx_en(output_if.valid));</span><br><span class="line"></span><br><span class="line">   initial begin</span><br><span class="line">      clk = 0;</span><br><span class="line">      forever begin</span><br><span class="line">         #100 clk = ~clk;</span><br><span class="line">      end</span><br><span class="line">   end</span><br><span class="line"></span><br><span class="line">   initial begin</span><br><span class="line">      rst_n = 1&#x27;b0;</span><br><span class="line">      #1000;</span><br><span class="line">      rst_n = 1&#x27;b1;</span><br><span class="line">   end</span><br><span class="line"></span><br><span class="line">   initial begin</span><br><span class="line">      run_test(&quot;my_driver&quot;);</span><br><span class="line">   end</span><br><span class="line"></span><br><span class="line">   initial begin</span><br><span class="line">      uvm_config_db#(virtual my_if)::set(null, &quot;uvm_test_top&quot;, &quot;vif&quot;, input_if);</span><br><span class="line">   end</span><br><span class="line"></span><br><span class="line">endmodule</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>仿真结果如下：</p>
+<p><img src="/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/image-20240429005146960.png" alt="image-20240429005146960"></p>
+<p><img src="/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/image-20240429005224640.png" alt="image-20240429005224640"></p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="为验证平台加入各个组件"><a href="#为验证平台加入各个组件" class="headerlink" title="为验证平台加入各个组件"></a>为验证平台加入各个组件</h1><h2 id="1-加入transaction"><a href="#1-加入transaction" class="headerlink" title="1.加入transaction"></a>1.加入transaction</h2><h1 id="附加知识点"><a href="#附加知识点" class="headerlink" title="附加知识点"></a>附加知识点</h1><ul>
+<li><p>modelsim下运行UVM仿真平台</p>
+ <img src="/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/image-20240428204545137.png" alt="image-20240428204545137" style="zoom:50%;">
+</li>
+<li><p>run.do（每行脚本含义可参考<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2024/02/25/FPGA%E8%AE%BE%E8%AE%A1%E9%AB%98%E7%BA%A7%E6%8A%80%E5%B7%A7%E4%B9%8B%E7%8A%B6%E6%80%81%E6%9C%BA/中附加知识点部分）`UVM_HOME`、`UVM_DPI_DIR`在modelsim的安装目录下找">https://ssy1938010014.github.io/2024/02/25/FPGA%E8%AE%BE%E8%AE%A1%E9%AB%98%E7%BA%A7%E6%8A%80%E5%B7%A7%E4%B9%8B%E7%8A%B6%E6%80%81%E6%9C%BA/中附加知识点部分）`UVM_HOME`、`UVM_DPI_DIR`在modelsim的安装目录下找</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">vlib ./lib/</span><br><span class="line">vlib ./lib/work_design</span><br><span class="line"></span><br><span class="line">vmap work_design ./lib/work_design</span><br><span class="line"></span><br><span class="line">set UVM_HOME D:/SoftWare/ModelSim/verilog_src/uvm-1.1d/src</span><br><span class="line">set WORK_HOME D:/App_Data_File/ModelSim_project/UVM_Sim/UVM_learning_project</span><br><span class="line">set UVM_DPI_DIR D:/SoftWare/ModelSim/uvm-1.1d/win64</span><br><span class="line"></span><br><span class="line">vlog +incdir+$UVM_HOME -L mtiAvm -L mtiOvm -L mtiUvm -L mtiUPF $UVM_HOME/uvm_pkg.sv</span><br><span class="line">vlog -work work_design $WORK_HOME/ch2/dut/dut.sv $WORK_HOME/ch2/section2.2/2.2.1/sim/top_tb.sv </span><br><span class="line"></span><br><span class="line">vsim -t ns -voptargs=+acc -sv_lib $UVM_DPI_DIR/uvm_dpi work_design.top_tb  </span><br><span class="line"></span><br><span class="line">add wave -position insertpoint sim:/top_tb/*</span><br><span class="line"></span><br><span class="line">run -all</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>有关-sv_lib的解释：<code>-sv_lib</code>：这个选项用于指定一个SystemVerilog的DPI（Direct Programming Interface）库。DPI允许SystemVerilog代码调用C/C++函数，常用于模拟外部设备或高级功能。（来自GPT4）</p>
+</li>
+<li><p><code>-position</code>：这是一个选项，用来指定信号在波形窗口中的添加位置。</p>
+</li>
+<li><p><code>insertpoint</code>：这个参数的值指定了具体的插入点。在ModelSim的波形窗口中，<code>insertpoint</code> 指的是当前选中的波形组或信号的位置。如果你在波形窗口中选中了一个特定的信号或波形组，并执行带有 <code>-position insertpoint</code> 的命令，新添加的信号会被放置在选中的波形或组之后。</p>
+<ul>
+<li>举个例子：<ul>
+<li>如果你没有选中任何波形或信号，新的信号通常会被添加到波形列表的最前面或最后面，具体取决于ModelSim的默认行为或之前的配置。</li>
+<li>如果你选中了一个信号，然后运行带有 <code>-position insertpoint</code> 的 <code>add wave</code> 命令，新的信号将被插入到你选中的信号后面。（来自GPT4）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>本人能力和时间有限，有关run.do中的一些脚本命令，我也不是很清楚，但用到的都会在此记录。</p>
+</li>
+</ul>
+</li>
+<li><p>搭建UVM仿真平台时，一开始会一直报vlog(12110)以及vlog一行出错的命令，折腾了我很久（因为以为是vlog使用有问题，其实是modelsim自身的问题），最后参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/ye_ming_sheng/article/details/105166714">vlog 12110错误及解决-CSDN博客</a>，重启后解决（记得之前好像也是用脚本仿真出问题了，设置voptflow = 0才能仿真，但这次又重新设置为1才可以）</p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>欢迎来到ssy的世界</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/WeChaPay.jpg" alt="ssy 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>ssy
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://ssy的小天地.com/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/" title="UVM白皮书之一个简单的UVM验证">http://ssy的小天地.com/2024/04/23/UVM白皮书之一个简单的UVM验证平台/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/UVM/" rel="tag"># UVM</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/04/16/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BAXI%E6%80%BB%E7%BA%BF/" rel="prev" title="FPGA系统设计之AXI总线">
+      <i class="fa fa-chevron-left"></i> FPGA系统设计之AXI总线
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2024/04/26/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%AE%9E%E7%94%A8%E5%B0%8F%E5%B7%A5%E5%85%B7/" rel="next" title="FPGA设计之实用小工具">
+      FPGA设计之实用小工具 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0%E7%9A%84%E7%BB%84%E6%88%90"><span class="nav-number">1.</span> <span class="nav-text">验证平台的组成</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%AA%E6%9C%89driver%E7%9A%84%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0"><span class="nav-number">2.</span> <span class="nav-text">只有driver的验证平台</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0"><span class="nav-number">2.1.</span> <span class="nav-text">1.最简单的验证平台</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%8A%A0%E5%85%A5factory%E6%9C%BA%E5%88%B6"><span class="nav-number">2.2.</span> <span class="nav-text">2.加入factory机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%8A%A0%E5%85%A5objection%E6%9C%BA%E5%88%B6"><span class="nav-number">2.3.</span> <span class="nav-text">3.加入objection机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%8A%A0%E5%85%A5virtual-interface"><span class="nav-number">2.4.</span> <span class="nav-text">4.加入virtual interface</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BA%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0%E5%8A%A0%E5%85%A5%E5%90%84%E4%B8%AA%E7%BB%84%E4%BB%B6"><span class="nav-number">3.</span> <span class="nav-text">为验证平台加入各个组件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%8A%A0%E5%85%A5transaction"><span class="nav-number">3.1.</span> <span class="nav-text">1.加入transaction</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%8A%A0%E7%9F%A5%E8%AF%86%E7%82%B9"><span class="nav-number">4.</span> <span class="nav-text">附加知识点</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ssy"
+      src="/images/ssy.png">
+  <p class="site-author-name" itemprop="name">ssy</p>
+  <div class="site-description" itemprop="description">满怀希望 就会所向披靡</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">136</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ssy1938010014" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ssy1938010014" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://m.weibo.cn/u/5469432500?uid=5469432500&t=0&luicode=10000011&lfid=100103type=1&q=JIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" title="Weibo → https:&#x2F;&#x2F;m.weibo.cn&#x2F;u&#x2F;5469432500?uid&#x3D;5469432500&amp;t&#x3D;0&amp;luicode&#x3D;10000011&amp;lfid&#x3D;100103type%3D1%26q%3DJIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://ssy1938010014.github.io/" title="http:&#x2F;&#x2F;ssy1938010014.github.io" rel="noopener" target="_blank">ssy的小天地</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://y006.github.io/" title="http:&#x2F;&#x2F;y006.github.io" rel="noopener" target="_blank">邱院士的Blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://bengoooo.github.io/" title="http:&#x2F;&#x2F;BENgoooo.github.io" rel="noopener" target="_blank">赵总的Blog</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=1469041281&auto=1&height=66"></iframe>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ssy</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-ribbon@1/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+<script data-pjax>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  let url = element.dataset.target;
+  let pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  let pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  let fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+
+
+    <div id="pjax">
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+    </div>
+</body>
+</html>
