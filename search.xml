@@ -624,7 +624,7 @@
 <ul>
 <li><p>分析上述代码：</p>
 <ul>
-<li><p>所有派生自<strong>uvm_driver</strong>的类的new函数有两个参数，一个是string类型的name，一个是uvm_component类型的parent。事实上，这两个参数是由<strong>uvm_componen</strong>t要求的，每个派生自uvm_component或其派生的类在new函数中都要声明name和parent。<strong>uvm_driver是一个派生自uvm_component的类</strong></p>
+<li><p>所有派生自<strong>uvm_driver</strong>的类的new函数有两个参数，一个是string类型的name，一个是uvm_component类型的parent。事实上，这两个参数是由<strong>uvm_component</strong>要求的，每个派生自uvm_component或其派生的类在new函数中都要声明name和parent。<strong>uvm_driver是一个派生自uvm_component的类</strong></p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">function new(string name = &quot;my_driver&quot;, uvm_component parent = null);</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>driver所做的事情几乎都在main_phase中完成。UVM由phase来管理验证平台的运行，<strong>这些phase统一以xxx.phase命名，且都有一个类型为uvm_phase、名字为phase的参数</strong>。<strong>main_phase是uvm_driver中预先定义好的一个任务。</strong>因此几乎可以简单认为，实现一个driver等于实现其main_phase（感觉归根到底不就是实现了一个函数）</p>
@@ -761,7 +761,7 @@
 <li><p><strong>在my_driver中，执行get操作</strong>：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">virtual function void build_phase(uvm_phase phase);</span><br><span class="line">   super.build_phase(phase);</span><br><span class="line">   `uvm_info(&quot;my_driver&quot;, &quot;build_phase is called&quot;, UVM_LOW);</span><br><span class="line">   if(!uvm_config_db#(virtual my_if)::get(this, &quot;&quot;, &quot;vif&quot;, vif))</span><br><span class="line">      `uvm_fatal(&quot;my_driver&quot;, &quot;virtual interface must be set for vif!!!&quot;)</span><br><span class="line">endfunction</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>这里引入了build_phase。与main_phase一样，build_phase也是UVM中内建的一个phase。<strong>当UVM启动后，会自动执行build_phase，build_phase在new函数之后main_phase之前执行</strong>。</p>
+<li><p>这里引入了<strong>build_phase</strong>。与main_phase一样，build_phase也是UVM中内建的一个phase。<strong>当UVM启动后，会自动执行build_phase，build_phase在new函数之后main_phase之前执行</strong>。</p>
 <ul>
 <li>这里需要加入<strong>super.build_phase</strong>语句，因为在其父类的build_phase中执行了一些必要的操作，这里必须显式地调用并执行它</li>
 <li>build_phase与main_phase不同的一点在于，<strong>build_phase是一个函数phase，而main_phase是一个任务phase，build_phase是不消耗仿真时间的，build_phase总是在仿真时间为0时执行。</strong></li>
@@ -806,7 +806,312 @@
 </li>
 </ul>
 <hr>
-<h1 id="为验证平台加入各个组件"><a href="#为验证平台加入各个组件" class="headerlink" title="为验证平台加入各个组件"></a>为验证平台加入各个组件</h1><h2 id="1-加入transaction"><a href="#1-加入transaction" class="headerlink" title="1.加入transaction"></a>1.加入transaction</h2><h1 id="附加知识点"><a href="#附加知识点" class="headerlink" title="附加知识点"></a>附加知识点</h1><ul>
+<h1 id="为验证平台加入各个组件"><a href="#为验证平台加入各个组件" class="headerlink" title="为验证平台加入各个组件"></a>为验证平台加入各个组件</h1><h2 id="1-加入transaction"><a href="#1-加入transaction" class="headerlink" title="1.加入transaction"></a>1.加入transaction</h2><ul>
+<li><p>在UVM的各个组件之间，信息的传递时基于transaction的。一般来说，物理协议中的数据交换都是以帧或者包为单位的，通常在一帧或者一个包中要定义好各项参数，每个包的大小不一样。很少会有协议是以bit或者byte为单位来进行数据交换的，以以太网为例，每个包的大小至少是64byte，这个包中要包含源地址、目的地址、包的类型、整个包的CRC校验数据等<strong>。transaction就是用于模拟这种实际情况，一笔transaction就是一个包</strong>。</p>
+</li>
+<li><p>一个简单的transaction的定义如下：(my_transaction.sv)</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">`ifndef MY_TRANSACTION__SV</span><br><span class="line">`define MY_TRANSACTION__SV</span><br><span class="line"></span><br><span class="line">   class my_transaction extends uvm_sequence_item;</span><br><span class="line"></span><br><span class="line">      rand bit[47:0] dmac;</span><br><span class="line">      rand bit[47:0] smac;</span><br><span class="line">      rand bit[15:0] ether_type;</span><br><span class="line">      rand byte      pload[];</span><br><span class="line">      rand bit[31:0] crc;</span><br><span class="line"></span><br><span class="line">      constraint pload_cons&#123;</span><br><span class="line">         pload.size &gt;= 46;</span><br><span class="line">         pload.size &lt;= 1500;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      function bit[31:0] calc_crc();</span><br><span class="line">         return 32&#x27;h0;</span><br><span class="line">      endfunction</span><br><span class="line"></span><br><span class="line">      function void post_randomize();</span><br><span class="line">         crc = calc_crc;</span><br><span class="line">      endfunction</span><br><span class="line"></span><br><span class="line">      `uvm_object_utils(my_transaction)</span><br><span class="line"></span><br><span class="line">      function new(string name = &quot;my_transaction&quot;);</span><br><span class="line">         super.new();</span><br><span class="line">      endfunction</span><br><span class="line">   endclass</span><br><span class="line">   </span><br><span class="line">`endif</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>其中dmac是48bit的以太网目的地址，smac是48bit的以太网源地址，ether_type是以太网类型，pload是其携带数据的大小（通过pload_cons约束可以看到，其大小被限制在46~1500byte），CRC是前面所有数据的校验值（这里只是在post_randomize中加了一个空函数calc_crc，post_randomize是SV中提供的一个函数，当某个类的实例的randomize函数被调用后，post_randomize会紧随其后无条件地被调用）</li>
+<li><strong>my_transaction的基类是uvm_sequence_item</strong>，在UVM中，所有的transaction都是从uvm_sequence_item派生，只有从uvm_sequence_item派生的transaction才可以使用后文讲述的UVM中强大的sequence机制</li>
+<li>从本质上来说，my_transaction与my_driver是有区别的，在整个仿真期间，my_driver是一直存在的，my_transaction不同，它有生命周期，它在仿真的某一个时间产生，经过driver驱动，再经过reference model处理，最终由scoreboard比较完成后，其生命周期就结束了</li>
+<li>一般来说，这种类都是派生自uvm_objection或者uvm_objection的派生类，<strong>uvm_objection_item的祖先就是uvm_objection</strong>。<strong>UVM中具有这种特征的类都要使用uvm_objection_utils宏来实现。</strong></li>
+</ul>
+</li>
+<li><p>当完成transaction的定义后，就可以在my_driver中实现基于transaction的驱动：（my_driver.sv)</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">`ifndef MY_DRIVER__SV</span><br><span class="line">`define MY_DRIVER__SV</span><br><span class="line"></span><br><span class="line">   class my_driver extends uvm_driver;</span><br><span class="line"></span><br><span class="line">      virtual my_if vif;</span><br><span class="line"></span><br><span class="line">      `uvm_component_utils(my_driver)</span><br><span class="line">      function new(string name = &quot;my_driver&quot;, uvm_component parent = null);</span><br><span class="line">         super.new(name, parent);</span><br><span class="line">      endfunction</span><br><span class="line"></span><br><span class="line">      virtual function void build_phase(uvm_phase phase);</span><br><span class="line">         super.build_phase(phase);</span><br><span class="line">         if(!uvm_config_db#(virtual my_if)::get(this, &quot;&quot;, &quot;vif&quot;, vif))</span><br><span class="line">            `uvm_fatal(&quot;my_driver&quot;, &quot;virtual interface must be set for vif!!!&quot;)</span><br><span class="line">      endfunction</span><br><span class="line"></span><br><span class="line">      extern task main_phase(uvm_phase phase);</span><br><span class="line">      extern task drive_one_pkt(my_transaction tr);</span><br><span class="line">   endclass</span><br><span class="line"></span><br><span class="line">   task my_driver::main_phase(uvm_phase phase);</span><br><span class="line">      my_transaction tr;</span><br><span class="line">      phase.raise_objection(this);</span><br><span class="line">      vif.data &lt;= 8&#x27;b0;</span><br><span class="line">      vif.valid &lt;= 1&#x27;b0;</span><br><span class="line">      while(!vif.rst_n)</span><br><span class="line">         @(posedge vif.clk);</span><br><span class="line">      for(int i = 0; i &lt; 2; i++) begin </span><br><span class="line">         tr = new(&quot;tr&quot;);</span><br><span class="line">         assert(tr.randomize() with &#123;pload.size == 200;&#125;);</span><br><span class="line">         drive_one_pkt(tr);</span><br><span class="line">      end</span><br><span class="line">      repeat(5) @(posedge vif.clk);</span><br><span class="line">      phase.drop_objection(this);</span><br><span class="line">   endtask</span><br><span class="line"></span><br><span class="line">   task my_driver::drive_one_pkt(my_transaction tr);</span><br><span class="line">      bit [47:0] tmp_data;</span><br><span class="line">      bit [7:0] data_q[$]; </span><br><span class="line">   </span><br><span class="line">      //push dmac to data_q</span><br><span class="line">      tmp_data = tr.dmac;</span><br><span class="line">      for(int i = 0; i &lt; 6; i++) begin</span><br><span class="line">         data_q.push_back(tmp_data[7:0]);</span><br><span class="line">         tmp_data = (tmp_data &gt;&gt; 8);</span><br><span class="line">      end</span><br><span class="line">      //push smac to data_q</span><br><span class="line">      tmp_data = tr.smac;</span><br><span class="line">      for(int i = 0; i &lt; 6; i++) begin</span><br><span class="line">         data_q.push_back(tmp_data[7:0]);</span><br><span class="line">         tmp_data = (tmp_data &gt;&gt; 8);</span><br><span class="line">      end</span><br><span class="line">      //push ether_type to data_q</span><br><span class="line">      tmp_data = tr.ether_type;</span><br><span class="line">      for(int i = 0; i &lt; 2; i++) begin</span><br><span class="line">         data_q.push_back(tmp_data[7:0]);</span><br><span class="line">         tmp_data = (tmp_data &gt;&gt; 8);</span><br><span class="line">      end</span><br><span class="line">      //push payload to data_q</span><br><span class="line">      for(int i = 0; i &lt; tr.pload.size; i++) begin</span><br><span class="line">         data_q.push_back(tr.pload[i]);</span><br><span class="line">      end</span><br><span class="line">      //push crc to data_q</span><br><span class="line">      tmp_data = tr.crc;</span><br><span class="line">      for(int i = 0; i &lt; 4; i++) begin</span><br><span class="line">         data_q.push_back(tmp_data[7:0]);</span><br><span class="line">         tmp_data = (tmp_data &gt;&gt; 8);</span><br><span class="line">      end</span><br><span class="line"></span><br><span class="line">      `uvm_info(&quot;my_driver&quot;, &quot;begin to drive one pkt&quot;, UVM_LOW);</span><br><span class="line">      repeat(3) @(posedge vif.clk);</span><br><span class="line"></span><br><span class="line">      while(data_q.size() &gt; 0) begin</span><br><span class="line">         @(posedge vif.clk);</span><br><span class="line">         vif.valid &lt;= 1&#x27;b1;</span><br><span class="line">         vif.data &lt;= data_q.pop_front(); </span><br><span class="line">      end</span><br><span class="line"></span><br><span class="line">      @(posedge vif.clk);</span><br><span class="line">      vif.valid &lt;= 1&#x27;b0;</span><br><span class="line">      `uvm_info(&quot;my_driver&quot;, &quot;end drive one pkt&quot;, UVM_LOW);</span><br><span class="line">   endtask</span><br><span class="line"></span><br><span class="line">`endif</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><strong>在main_phase中，先使用randomize将tr随机化，之后通过drive_one_pkt任务将tr的内容驱动到DUT端口上</strong></p>
+</li>
+<li><p>这里定义了一个48位的临时变量<code>tmp_data</code>和一个<strong>动态大小的队列</strong>（使用<code>$</code>）<code>data_q</code>，用于存储8位宽的数据</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">bit [47:0] tmp_data;</span><br><span class="line">bit [7:0] data_q[$]; </span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>获取随机的目的地址：这部分代码从传入的事务<code>tr</code>中取出目的MAC地址，将其每8位截取并放入<code>data_q</code>。此循环执行6次，因为MAC地址总共有48位。</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//push dmac to data_q</span><br><span class="line">tmp_data = tr.dmac;</span><br><span class="line">for(int i = 0; i &lt; 6; i++) begin</span><br><span class="line">   data_q.push_back(tmp_data[7:0]);</span><br><span class="line">   tmp_data = (tmp_data &gt;&gt; 8);</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>开始传输数据</strong>：传输开始前，等待三个时钟周期，然后通过<code>vif</code>接口逐字节传输<code>data_q</code>中的数据。每个时钟上升沿，从队列前端弹出一个字节数据，直到队列为空。数据传输结束后，清除<code>valid</code>信号，表示数据包传输完成。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">repeat(3) @(posedge vif.clk);</span><br><span class="line"></span><br><span class="line">while(data_q.size() &gt; 0) begin</span><br><span class="line">   @(posedge vif.clk);</span><br><span class="line">   vif.valid &lt;= 1&#x27;b1;</span><br><span class="line">   vif.data &lt;= data_q.pop_front(); </span><br><span class="line">end</span><br><span class="line"></span><br><span class="line">@(posedge vif.clk);</span><br><span class="line">vif.valid &lt;= 1&#x27;b0;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>其实是通过push操作，先存下通过transaction生成的一个以太网格式的数据包，然后再发送</strong></p>
+</li>
+</ul>
+</li>
+<li><p>最终仿真结果如下：（以太网数据包总共发送了两次）</p>
+<p><img src="/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/image-20240429151021108.png" alt="image-20240429151021108"></p>
+<p><img src="/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/image-20240429151013179.png" alt="image-20240429151013179"></p>
+</li>
+</ul>
+<h2 id="2-加入env"><a href="#2-加入env" class="headerlink" title="2.加入env"></a>2.加入env</h2><ul>
+<li><p>在验证平台中加入reference model、scoreboard等之前，思考一个问题：假设这些组件已经定义好了，那么在验证平台的什么位置对它们进行实例化呢？</p>
+</li>
+<li><p>这个问题的解决方案是引入一个容器类，在这个容器类中实例化driver、monitor、reference model和scoreboard等。<strong>在调用run_test时，传递的参数不再是my_driver，而是这个容器类，即让UVM自动创建这个容器类的实例</strong>（my_env.sv）</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">`ifndef MY_ENV__SV</span><br><span class="line">`define MY_ENV__SV</span><br><span class="line"></span><br><span class="line">   class my_env extends uvm_env;</span><br><span class="line"></span><br><span class="line">      my_driver drv;</span><br><span class="line"></span><br><span class="line">      function new(string name = &quot;my_env&quot;, uvm_component parent);</span><br><span class="line">         super.new(name, parent);</span><br><span class="line">      endfunction</span><br><span class="line"></span><br><span class="line">      virtual function void build_phase(uvm_phase phase);</span><br><span class="line">         super.build_phase(phase);</span><br><span class="line">         drv = my_driver::type_id::create(&quot;drv&quot;, this); </span><br><span class="line">      endfunction</span><br><span class="line"></span><br><span class="line">      `uvm_component_utils(my_env)</span><br><span class="line">   endclass</span><br><span class="line">   </span><br><span class="line">`endif</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>所有的env应该派生自uvm_env，且与my_driver一样，容器类在仿真中也是一直存在的，<strong>使用uvm_component_utils宏来实现factory的注册</strong></p>
+</li>
+<li><p><strong>验证平台中的组件在实例化时都应该使用<code>type_name::type_id::create</code>的方式</strong></p>
+</li>
+<li><p><strong>在drv实例化时，传递了两个参数，一个名字drv，另一个是this指针</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">drv = my_driver::type_id::create(&quot;drv&quot;, this); </span><br></pre></td></tr></table></figure>
+</li>
+<li><p>回顾一下my_driver的new函数：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">function new(string name = &quot;my_driver&quot;, uvm_component parent = null);</span><br><span class="line">   super.new(name, parent);</span><br><span class="line">endfunction</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>这个new函数有两个参数，<strong>第一个参数是实例的名字，第二个则是parent</strong>。由于my_driver在uvm_env中实例化，所以my_driver的父节点（parent）就是my_env，通过parent的形式，UVM建立起了树形的组织结构。</p>
+</li>
+<li><p>在这种树形的组织结构中，由run_test创建的实例是数根（这里是my_env），并且树根的名字是固定的，为uvm_test_top，<strong>在树根之后会生长出枝叶（这里只有my_driver），长出枝叶的过程需要在my_env的build_phase中手动实现</strong>。无论是树根还是树叶，都必须由uvm_component或者其派生类继承而来。</p>
+</li>
+<li><p>当加入了my_env后，整个验证平台中存在两个build_phase，一个是my_env的，一个是my_driver的，其执行顺序：</p>
+<ul>
+<li>在UVM的树形结构中，build_phase的执行遵照<strong>从树根到树叶</strong>的顺序，即<strong>先执行my_env的build_phase，再执行my_driver的build_phase</strong>。当把整棵树的build_phase都执行完毕后，再执行后面的phase。</li>
+</ul>
+<img src="/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/image-20240429213951777.png" alt="image-20240429213951777" style="zoom:33%;">
+</li>
+</ul>
+</li>
+<li><p><strong>my_driver在验证平台中的层次结构发生了变化，所以在top_tb中使用config_db机制传递virtual my_if时，要改变相应的路径；同时，run_test的参数也要从my_driver变为my_env</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">initial begin</span><br><span class="line">   run_test(&quot;my_env&quot;);</span><br><span class="line">end</span><br><span class="line"></span><br><span class="line">initial begin</span><br><span class="line">   uvm_config_db#(virtual my_if)::set(null, &quot;uvm_test_top.drv&quot;, &quot;vif&quot;, input_if);</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>set函数的第二个参数从uvm_test_top变为了uvm_test_top.drv，其中uvm_test_top是UVM自动创建的树根的名字，而drv则是在my_env的build_phase中实例化drv（new创建时）时传递过去的名字</strong>。如果在实例化drv时传递的名字时my_drv，那么set函数的第二个参数中也应该是my_drv</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">class my_env extends uvm_env;</span><br><span class="line">...</span><br><span class="line">   virtual function void build_phase(uvm_phase phase);</span><br><span class="line">      super.build_phase(phase);</span><br><span class="line">       drv = my_driver::type_id::create(&quot;my_drv&quot;, this); </span><br><span class="line">   endfunction</span><br><span class="line"></span><br><span class="line">   `uvm_component_utils(my_env)</span><br><span class="line">endclass</span><br><span class="line"></span><br><span class="line">module top_tb;</span><br><span class="line">...</span><br><span class="line">   initial begin</span><br><span class="line">      uvm_config_db#(virtual my_if)::set(null, &quot;uvm_test_top.my_drv&quot;, &quot;vif&quot;, input_if);</span><br><span class="line">   end</span><br><span class="line"></span><br><span class="line">endmodule</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>发现UVM不管创建的类对象赋值给了哪个变量，但其实传递的时候都是用实例的名字（new的第一个参数字符串），与赋值给的等式左边的那个变量名字无关</strong></p>
+</li>
+<li><p>仿真结果如下：</p>
+<p><img src="/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/image-20240429220500560.png" alt="image-20240429220500560"></p>
+<p><img src="/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/image-20240429220520164.png" alt="image-20240429220520164"></p>
+</li>
+</ul>
+<h2 id="3-加入monitor"><a href="#3-加入monitor" class="headerlink" title="3.加入monitor"></a>3.加入monitor</h2><ul>
+<li><p>验证平台必须检测DUT的行为，只有知道DUT的输入输出信号变化之后，才能根据这些信号变化来判断DUT的行为是否正确</p>
+</li>
+<li><p><strong>验证平台中实现监测DUT行为的组件是monitor</strong></p>
+</li>
+<li><p>driver负责把transaction级别的数据转变成DUT的端口级别，并驱动给DUT，<strong>monitor的行为与其相对，用于收集DUT的端口数据，并将其转化成transaction交给后续的组件如reference model、scoreboard等处理</strong></p>
+</li>
+<li><p>一个monitor的定义如下：（my_monitor.sv）</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">`ifndef MY_MONITOR__SV</span><br><span class="line">`define MY_MONITOR__SV</span><br><span class="line">class my_monitor extends uvm_monitor;</span><br><span class="line"></span><br><span class="line">   virtual my_if vif;</span><br><span class="line"></span><br><span class="line">   `uvm_component_utils(my_monitor)</span><br><span class="line">   function new(string name = &quot;my_monitor&quot;, uvm_component parent = null);</span><br><span class="line">      super.new(name, parent);</span><br><span class="line">   endfunction</span><br><span class="line"></span><br><span class="line">   virtual function void build_phase(uvm_phase phase);</span><br><span class="line">      super.build_phase(phase);</span><br><span class="line">      if(!uvm_config_db#(virtual my_if)::get(this, &quot;&quot;, &quot;vif&quot;, vif))</span><br><span class="line">         `uvm_fatal(&quot;my_monitor&quot;, &quot;virtual interface must be set for vif!!!&quot;)</span><br><span class="line">   endfunction</span><br><span class="line"></span><br><span class="line">   extern task main_phase(uvm_phase phase);</span><br><span class="line">   extern task collect_one_pkt(my_transaction tr);</span><br><span class="line">endclass</span><br><span class="line"></span><br><span class="line">task my_monitor::main_phase(uvm_phase phase);</span><br><span class="line">   my_transaction tr;</span><br><span class="line">   while(1) begin</span><br><span class="line">      tr = new(&quot;tr&quot;);</span><br><span class="line">      collect_one_pkt(tr);</span><br><span class="line">   end</span><br><span class="line">endtask</span><br><span class="line"></span><br><span class="line">task my_monitor::collect_one_pkt(my_transaction tr);</span><br><span class="line">   bit[7:0] data_q[$]; </span><br><span class="line">   int psize;</span><br><span class="line">   while(1) begin</span><br><span class="line">      @(posedge vif.clk);</span><br><span class="line">      if(vif.valid) break;</span><br><span class="line">   end</span><br><span class="line"></span><br><span class="line">   `uvm_info(&quot;my_monitor&quot;, &quot;begin to collect one pkt&quot;, UVM_LOW);</span><br><span class="line">   while(vif.valid) begin</span><br><span class="line">      data_q.push_back(vif.data);</span><br><span class="line">      @(posedge vif.clk);</span><br><span class="line">   end</span><br><span class="line">   //pop dmac</span><br><span class="line">   for(int i = 0; i &lt; 6; i++) begin</span><br><span class="line">      tr.dmac = &#123;tr.dmac[39:0], data_q.pop_front()&#125;;</span><br><span class="line">   end</span><br><span class="line">   //pop smac</span><br><span class="line">   for(int i = 0; i &lt; 6; i++) begin</span><br><span class="line">      tr.smac = &#123;tr.smac[39:0], data_q.pop_front()&#125;;</span><br><span class="line">   end</span><br><span class="line">   //pop ether_type</span><br><span class="line">   for(int i = 0; i &lt; 2; i++) begin</span><br><span class="line">      tr.ether_type = &#123;tr.ether_type[7:0], data_q.pop_front()&#125;;</span><br><span class="line">   end</span><br><span class="line"></span><br><span class="line">   psize = data_q.size() - 4;</span><br><span class="line">   tr.pload = new[psize];</span><br><span class="line">   //pop payload</span><br><span class="line">   for(int i = 0; i &lt; psize; i++) begin</span><br><span class="line">      tr.pload[i] = data_q.pop_front();</span><br><span class="line">   end</span><br><span class="line">   //pop crc</span><br><span class="line">   for(int i = 0; i &lt; 4; i++) begin</span><br><span class="line">      tr.crc = &#123;tr.crc[23:0], data_q.pop_front()&#125;;</span><br><span class="line">   end</span><br><span class="line">   `uvm_info(&quot;my_monitor&quot;, &quot;end collect one pkt, print it:&quot;, UVM_LOW);</span><br><span class="line">    tr.my_print();</span><br><span class="line">endtask</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">`endif</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><strong>所有的monitor类应该派生自uvm_monitor</strong></p>
+</li>
+<li><p>与driver类似，在my_monitor中也需要有一个virtual my_if</p>
+</li>
+<li><p><strong>uvm_monitor在整个仿真中是一直存在的，所以它是一个component，要使用uvm_component_utils宏注册</strong></p>
+</li>
+<li><p><strong>由于monitor需要时刻收集数据，永不停歇，所以在main_phase中使用while(1)循环来实现这一目的</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">task my_monitor::main_phase(uvm_phase phase);</span><br><span class="line">   my_transaction tr;</span><br><span class="line">   while(1) begin</span><br><span class="line">      tr = new(&quot;tr&quot;);</span><br><span class="line">      collect_one_pkt(tr);</span><br><span class="line">   end</span><br><span class="line">endtask</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>当收集完一个transaction后，通过my_print函数将其打印出来，my_print在my_transaction中定义如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">function void my_print();</span><br><span class="line">   $display(&quot;dmac = %0h&quot;, dmac);</span><br><span class="line">   $display(&quot;smac = %0h&quot;, smac);</span><br><span class="line">   $display(&quot;ether_type = %0h&quot;, ether_type);</span><br><span class="line">   for(int i = 0; i &lt; pload.size; i++) begin</span><br><span class="line">      $display(&quot;pload[%0d] = %0h&quot;, i, pload[i]);</span><br><span class="line">   end</span><br><span class="line">   $display(&quot;crc = %0h&quot;, crc);</span><br><span class="line">endfunction</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>当完成monitor的定义后，可以在env中对其进行实例化</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">virtual function void build_phase(uvm_phase phase);</span><br><span class="line">   super.build_phase(phase);</span><br><span class="line">   drv = my_driver::type_id::create(&quot;drv&quot;, this); </span><br><span class="line">   i_mon = my_monitor::type_id::create(&quot;i_mon&quot;, this);</span><br><span class="line">   o_mon = my_monitor::type_id::create(&quot;o_mon&quot;, this);</span><br><span class="line">endfunction</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>实例了两个monitor，一个用来监测DUT的输入口，一个用来监测DUT的输出口（书中作者推荐）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>现在，整棵UVM数的结构如下：</p>
+<img src="/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/image-20240430014221095.png" alt="image-20240430014221095" style="zoom: 67%;">
+</li>
+<li><p>仿真结果如下：（仿真打印数据太多就不粘贴了，有发收发收共四次打印的结果）</p>
+<p><img src="/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/image-20240430012131785.png" alt="image-20240430012131785"></p>
+<p><img src="/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/image-20240430012241270.png" alt="image-20240430012241270"></p>
+</li>
+</ul>
+<h2 id="4-封装成agent"><a href="#4-封装成agent" class="headerlink" title="4.封装成agent"></a>4.封装成agent</h2><ul>
+<li><p><strong>UVM中通常将driver和monitor二者封装在一起，成为一个agent</strong></p>
+</li>
+<li><p><strong>所有的agent都要派生自uvm_agent类</strong>，且其<strong>本身是一个component</strong>，应该使用uvm_component_utils宏来来实现factory注册</p>
+</li>
+<li><p>my_agent.sv</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">`ifndef MY_AGENT__SV</span><br><span class="line">`define MY_AGENT__SV</span><br><span class="line"></span><br><span class="line">class my_agent extends uvm_agent ;</span><br><span class="line">   my_driver     drv;</span><br><span class="line">   my_monitor    mon;</span><br><span class="line">   </span><br><span class="line">   function new(string name, uvm_component parent);</span><br><span class="line">      super.new(name, parent);</span><br><span class="line">   endfunction </span><br><span class="line">   </span><br><span class="line">   extern virtual function void build_phase(uvm_phase phase);</span><br><span class="line">   extern virtual function void connect_phase(uvm_phase phase);</span><br><span class="line"></span><br><span class="line">   `uvm_component_utils(my_agent)</span><br><span class="line">endclass </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">function void my_agent::build_phase(uvm_phase phase);</span><br><span class="line">   super.build_phase(phase);</span><br><span class="line">   if (is_active == UVM_ACTIVE) begin</span><br><span class="line">       drv = my_driver::type_id::create(&quot;drv&quot;, this);</span><br><span class="line">   end</span><br><span class="line">   mon = my_monitor::type_id::create(&quot;mon&quot;, this);</span><br><span class="line">endfunction </span><br><span class="line"></span><br><span class="line">function void my_agent::connect_phase(uvm_phase phase);</span><br><span class="line">   super.connect_phase(phase);</span><br><span class="line">endfunction</span><br><span class="line"></span><br><span class="line">`endif</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><strong>在uvm_agent中，is_active的值默认为UVM_ACTIVE，在这种模式下，是需要实例化driver的（貌似也会自动实例化一个monitor），is_active=UVM_PASSIVE时只需要实例化monitor</strong></p>
+<img src="/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/image-20240430134044322.png" alt="image-20240430134044322" style="zoom:67%;">
+</li>
+</ul>
+</li>
+<li><p><strong>在完成i_agt和o_agt的声明后，在my_env的build_phase中对它们进行实例化后，需要指定各自的工作模式是active模式还是passive模式</strong>（my_env.sv）</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">`ifndef MY_ENV__SV</span><br><span class="line">`define MY_ENV__SV</span><br><span class="line"></span><br><span class="line">class my_env extends uvm_env;</span><br><span class="line"></span><br><span class="line">   my_agent  i_agt;</span><br><span class="line">   my_agent  o_agt;</span><br><span class="line">   </span><br><span class="line">   function new(string name = &quot;my_env&quot;, uvm_component parent);</span><br><span class="line">      super.new(name, parent);</span><br><span class="line">   endfunction</span><br><span class="line"></span><br><span class="line">   virtual function void build_phase(uvm_phase phase);</span><br><span class="line">      super.build_phase(phase);</span><br><span class="line">      i_agt = my_agent::type_id::create(&quot;i_agt&quot;, this);</span><br><span class="line">      o_agt = my_agent::type_id::create(&quot;o_agt&quot;, this);</span><br><span class="line">      i_agt.is_active = UVM_ACTIVE;</span><br><span class="line">      o_agt.is_active = UVM_PASSIVE;</span><br><span class="line">   endfunction</span><br><span class="line"></span><br><span class="line">   `uvm_component_utils(my_env)</span><br><span class="line">endclass</span><br><span class="line">`endif</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>现在，整课UVM树变为：</p>
+<img src="/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/image-20240430134946557.png" alt="image-20240430134946557" style="zoom: 67%;">
+
+<ul>
+<li><strong>只有uvm_component才能作为树的结点</strong>，像my_transaction这种使用uvm_object_utils宏实现的类是不能作为UVM树的结点的</li>
+<li><strong>UVM要求UVM树最晚在build_phase时段完成</strong>，一般都在build_phase中完成实例化</li>
+</ul>
+</li>
+<li><p>由于agent的加入，driver和monitor的层次结构改变了，在top_tb中使用config_db设置virtual my_if时要注意改变路径：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">initial begin</span><br><span class="line">   uvm_config_db#(virtual my_if)::set(null, &quot;uvm_test_top.i_agt.drv&quot;, &quot;vif&quot;, input_if);</span><br><span class="line">   uvm_config_db#(virtual my_if)::set(null, &quot;uvm_test_top.i_agt.mon&quot;, &quot;vif&quot;, input_if);</span><br><span class="line">   uvm_config_db#(virtual my_if)::set(null, &quot;uvm_test_top.o_agt.mon&quot;, &quot;vif&quot;, output_if);</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>仿真结果如下：</p>
+<p><img src="/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/image-20240430144920312.png" alt="image-20240430144920312"></p>
+<p><img src="/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/image-20240430144943654.png" alt="image-20240430144943654"></p>
+</li>
+</ul>
+<h2 id="5-加入reference-model"><a href="#5-加入reference-model" class="headerlink" title="5.加入reference model"></a>5.加入reference model</h2><ul>
+<li><p><strong>reference model的输出被scoreboard接收，用于和DUT的输出相比较</strong>。DUT如果很复杂，那么reference model也会相当复杂。本章的DUT很简单，所以reference model也很简单：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">`ifndef MY_MODEL__SV</span><br><span class="line">`define MY_MODEL__SV</span><br><span class="line"></span><br><span class="line">class my_model extends uvm_component;</span><br><span class="line">   </span><br><span class="line">   uvm_blocking_get_port #(my_transaction)  port;</span><br><span class="line">   uvm_analysis_port #(my_transaction)  ap;</span><br><span class="line"></span><br><span class="line">   extern function new(string name, uvm_component parent);</span><br><span class="line">   extern function void build_phase(uvm_phase phase);</span><br><span class="line">   extern virtual  task main_phase(uvm_phase phase);</span><br><span class="line"></span><br><span class="line">   `uvm_component_utils(my_model)</span><br><span class="line">endclass </span><br><span class="line"></span><br><span class="line">function my_model::new(string name, uvm_component parent);</span><br><span class="line">   super.new(name, parent);</span><br><span class="line">endfunction </span><br><span class="line"></span><br><span class="line">function void my_model::build_phase(uvm_phase phase);</span><br><span class="line">   super.build_phase(phase);</span><br><span class="line">   port = new(&quot;port&quot;, this);</span><br><span class="line">   ap = new(&quot;ap&quot;, this);</span><br><span class="line">endfunction</span><br><span class="line"></span><br><span class="line">task my_model::main_phase(uvm_phase phase);</span><br><span class="line">   my_transaction tr;</span><br><span class="line">   my_transaction new_tr;</span><br><span class="line">   super.main_phase(phase);</span><br><span class="line">   while(1) begin</span><br><span class="line">      port.get(tr);</span><br><span class="line">      new_tr = new(&quot;new_tr&quot;);</span><br><span class="line">      new_tr.my_copy(tr);</span><br><span class="line">      `uvm_info(&quot;my_model&quot;, &quot;get one transaction, copy and print it:&quot;, UVM_LOW)</span><br><span class="line">      new_tr.my_print();</span><br><span class="line">      ap.write(new_tr);</span><br><span class="line">   end</span><br><span class="line">endtask</span><br><span class="line">`endif</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>在my_model的main_phase中，只是单纯地复制一份从i_agt得到的tr，并传递给后级的scoreboard中</p>
+</li>
+<li><p>my_copy是一个在my_transaction中定义的函数（my_transaction.sv）:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">function void my_copy(my_transaction tr);</span><br><span class="line">   if(tr == null)</span><br><span class="line">      `uvm_fatal(&quot;my_transaction&quot;, &quot;tr is null!!!!&quot;)</span><br><span class="line">   dmac = tr.dmac;</span><br><span class="line">   smac = tr.smac;</span><br><span class="line">   ether_type = tr.ether_type;</span><br><span class="line">   pload = new[tr.pload.size()];</span><br><span class="line">   for(int i = 0; i &lt; pload.size(); i++) begin</span><br><span class="line">      pload[i] = tr.pload[i];</span><br><span class="line">   end</span><br><span class="line">   crc = tr.crc;</span><br><span class="line">endfunction</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>加入my_model后，整棵UVM树变成了：</p>
+<img src="/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/image-20240430152130099.png" alt="image-20240430152130099" style="zoom: 67%;">
+</li>
+<li><p><strong>my_model是从i_agt中得到my_transaction，并把my_transaction传递给my_scoreboard</strong></p>
+</li>
+<li><p>在UVM中，通常使用TLM（Transaction Level Modeling）实现component之间的transaction级别通信</p>
+</li>
+<li><p>在UVM的transaction级别的通信中，<strong>数据的发送</strong>有多种方式，其中一种是使用<strong>uvm_analysis_port</strong>，<strong>需要在my_monitor.sv中声明及实例化，并写入</strong>：</p>
+<ul>
+<li><p><strong>在monitor中的声明：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">uvm_analysis_port #(my_transaction)  ap;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>uvm_analysis_port是一个参数化的类，其参数就是这个analysis_port需要传递的数据类型，在本节中是my_transaction</li>
+</ul>
+</li>
+<li><p><strong>在monitor的build_phase中将其实例化：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">virtual function void build_phase(uvm_phase phase);</span><br><span class="line">...</span><br><span class="line">   ap = new(&quot;ap&quot;, this);</span><br><span class="line">endfunction</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>在monitor的main_phase中，当收集完一个transaction后，需要将其写入ap中：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">task my_monitor::main_phase(uvm_phase phase);</span><br><span class="line">   my_transaction tr;</span><br><span class="line">   while(1) begin</span><br><span class="line">      tr = new(&quot;tr&quot;);</span><br><span class="line">      collect_one_pkt(tr);</span><br><span class="line">      ap.write(tr);</span><br><span class="line">   end</span><br><span class="line">endtask</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>write是uvm_analysis_port的一个内建函数</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>UVM的transaction级别通信的<strong>数据接收</strong>方式也有多种，其中一种就是使用<strong>uvm_blocking_get_port</strong>。这也是一个参数化的类，其参数是要在其中传递的transaction的类型。<strong>需要在my_model.sv中声明及实例化，并发送</strong>：</p>
+<ul>
+<li><p><strong>在model中声明：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">uvm_blocking_get_port #(my_transaction)  port;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>在model的build_phase中将其实例化：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">function void my_model::build_phase(uvm_phase phase);</span><br><span class="line">   super.build_phase(phase);</span><br><span class="line">   port = new(&quot;port&quot;, this);</span><br><span class="line">   ...</span><br><span class="line">endfunction</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>在monitor的main_phase中，通过port.get任务来得到从i_agt的monitor中发出的transaction：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">task my_model::main_phase(uvm_phase phase);</span><br><span class="line">   my_transaction tr;</span><br><span class="line">   my_transaction new_tr;</span><br><span class="line">   super.main_phase(phase);</span><br><span class="line">   while(1) begin</span><br><span class="line">      port.get(tr);</span><br><span class="line">      new_tr = new(&quot;new_tr&quot;);</span><br><span class="line">      new_tr.my_copy(tr);</span><br><span class="line">      `uvm_info(&quot;my_model&quot;, &quot;get one transaction, copy and print it:&quot;, UVM_LOW)</span><br><span class="line">      new_tr.my_print();</span><br><span class="line">      ap.write(new_tr);</span><br><span class="line">   end</span><br><span class="line">endtask</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>在my_monitor和my_model中定义并实现了各自的端口之后，通信的功能并没有实现，<strong>还需要在my_env中使用fifo将两个端口联系在一起</strong></p>
+<ul>
+<li><p><strong>在my_env中定义一个fifo，并在build_phase中将其实例化：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">uvm_tlm_analysis_fifo #(my_transaction) agt_mdl_fifo;</span><br><span class="line">...</span><br><span class="line">virtual function void build_phase(uvm_phase phase);</span><br><span class="line">...</span><br><span class="line">   agt_mdl_fifo = new(&quot;agt_mdl_fifo&quot;, this);</span><br><span class="line">endfunction</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>之后，在connect_phase中将fifo分别与my_monitor中的analysis_port和my_model中的blocking_get_port相连：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">function void my_env::connect_phase(uvm_phase phase);</span><br><span class="line">   super.connect_phase(phase);</span><br><span class="line">   i_agt.ap.connect(agt_mdl_fifo.analysis_export);</span><br><span class="line">   mdl.port.connect(agt_mdl_fifo.blocking_get_export);</span><br><span class="line">endfunction</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>这里引入了<strong>connect_phase</strong>，与build_phase及main_phase类似，<strong>connect_phase也是UVM内建的一个phase，它在build_phase执行完成之后马上执行</strong>。但是与build_phase不同的是，它的执行顺序并不是从树根到树叶，而是从树叶到树根：<strong>先执行driver和monitor的connect_phase，再执行agent的connect_phase，最后执行env的connect_phase</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>在如上的连接中，用到了i_agt的一个成员变量ap，</strong></p>
+<ul>
+<li><p>它的定义与my_monitor中ap的<strong>定义</strong>完全一样：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">uvm_analysis_port #(my_transaction)  ap;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<ul>
+<li><p>与my_monitor中的ap不同的是，<strong>不需要对my_agent中的ap进行实例化，而只需要在my_agent的connect_phase中将monitor的值赋给它。换句话说，这相当于是一个指向my_monitor的ap的指针</strong></p>
+ <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">function void my_agent::connect_phase(uvm_phase phase);</span><br><span class="line">   super.connect_phase(phase);</span><br><span class="line">   ap = mon.ap;</span><br><span class="line">endfunction</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>仿真结果如下：</p>
+<p><img src="/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/image-20240430160945765.png" alt="image-20240430160945765"></p>
+<p><img src="/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/image-20240430161005072.png" alt="image-20240430161005072"></p>
+</li>
+</ul>
+<h2 id="6-加入scoreboard"><a href="#6-加入scoreboard" class="headerlink" title="6.加入scoreboard"></a>6.加入scoreboard</h2><ul>
+<li><p>在验证平台中加入reference model和monitor之后，最后一步是加入scoreboard，其代码如下：（my.scoreboard.sv）</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">`ifndef MY_SCOREBOARD__SV</span><br><span class="line">`define MY_SCOREBOARD__SV</span><br><span class="line">class my_scoreboard extends uvm_scoreboard;</span><br><span class="line">   my_transaction  expect_queue[$];</span><br><span class="line">   uvm_blocking_get_port #(my_transaction)  exp_port;</span><br><span class="line">   uvm_blocking_get_port #(my_transaction)  act_port;</span><br><span class="line">   `uvm_component_utils(my_scoreboard)</span><br><span class="line"></span><br><span class="line">   extern function new(string name, uvm_component parent = null);</span><br><span class="line">   extern virtual function void build_phase(uvm_phase phase);</span><br><span class="line">   extern virtual task main_phase(uvm_phase phase);</span><br><span class="line">endclass </span><br><span class="line"></span><br><span class="line">function my_scoreboard::new(string name, uvm_component parent = null);</span><br><span class="line">   super.new(name, parent);</span><br><span class="line">endfunction </span><br><span class="line"></span><br><span class="line">function void my_scoreboard::build_phase(uvm_phase phase);</span><br><span class="line">   super.build_phase(phase);</span><br><span class="line">   exp_port = new(&quot;exp_port&quot;, this);</span><br><span class="line">   act_port = new(&quot;act_port&quot;, this);</span><br><span class="line">endfunction </span><br><span class="line"></span><br><span class="line">task my_scoreboard::main_phase(uvm_phase phase);</span><br><span class="line">   my_transaction  get_expect,  get_actual, tmp_tran;</span><br><span class="line">   bit result;</span><br><span class="line"> </span><br><span class="line">   super.main_phase(phase);</span><br><span class="line">   fork </span><br><span class="line">      while (1) begin</span><br><span class="line">         exp_port.get(get_expect);</span><br><span class="line">         expect_queue.push_back(get_expect);</span><br><span class="line">      end</span><br><span class="line">      while (1) begin</span><br><span class="line">         act_port.get(get_actual);</span><br><span class="line">         if(expect_queue.size() &gt; 0) begin</span><br><span class="line">            tmp_tran = expect_queue.pop_front();</span><br><span class="line">            result = get_actual.my_compare(tmp_tran);</span><br><span class="line">            if(result) begin </span><br><span class="line">               `uvm_info(&quot;my_scoreboard&quot;, &quot;Compare SUCCESSFULLY&quot;, UVM_LOW);</span><br><span class="line">            end</span><br><span class="line">            else begin</span><br><span class="line">               `uvm_error(&quot;my_scoreboard&quot;, &quot;Compare FAILED&quot;);</span><br><span class="line">               $display(&quot;the expect pkt is&quot;);</span><br><span class="line">               tmp_tran.my_print();</span><br><span class="line">               $display(&quot;the actual pkt is&quot;);</span><br><span class="line">               get_actual.my_print();</span><br><span class="line">            end</span><br><span class="line">         end</span><br><span class="line">         else begin</span><br><span class="line">            `uvm_error(&quot;my_scoreboard&quot;, &quot;Received from DUT, while Expect Queue is empty&quot;);</span><br><span class="line">            $display(&quot;the unexpected pkt is&quot;);</span><br><span class="line">            get_actual.my_print();</span><br><span class="line">         end </span><br><span class="line">      end</span><br><span class="line">   join</span><br><span class="line">endtask</span><br><span class="line">`endif</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>my_scoreboard要比较的数据一是来源于reference model，二是来源于o_agt的monitor，前者通过exp_port获取，后者通过act_port获取</strong></li>
+<li>在main_phase中通过fork建立了两个进程：<ul>
+<li>一个进程处理exp_port的数据，当收到数据后，把数据放入expect_queue中</li>
+<li>另一个进程处理act_port的数据，这是DUT的输出数据</li>
+<li>当收集到这些数据后，从expect_queue中弹出之前从exp_port收到的数据，并调用my_transaction的my_compare函数</li>
+</ul>
+</li>
+<li>采用这种比较处理方式的前提是exp_port要比act_port先收到数据</li>
+<li>由于DUT处理数据需要延时，而reference model是基于高级语言的处理，一般不需要延时，因此可以保证exp_port的数据在act_port的数据之前到来</li>
+</ul>
+</li>
+<li><p>o_agt和act_port的ap的连接方式及reference model和exp_port的ap的连接方式与前一节类似（my_env.sv）</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">function void my_env::connect_phase(uvm_phase phase);</span><br><span class="line">   super.connect_phase(phase);</span><br><span class="line">   i_agt.ap.connect(agt_mdl_fifo.analysis_export);</span><br><span class="line">   mdl.port.connect(agt_mdl_fifo.blocking_get_export);</span><br><span class="line">   mdl.ap.connect(mdl_scb_fifo.analysis_export);</span><br><span class="line">   scb.exp_port.connect(mdl_scb_fifo.blocking_get_export);</span><br><span class="line">   o_agt.ap.connect(agt_scb_fifo.analysis_export);</span><br><span class="line">   scb.act_port.connect(agt_scb_fifo.blocking_get_export); </span><br><span class="line">endfunction</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>i_agt中monitor的transaction送给reference model，reference model处理后的transaction送给scoreboard的exp_port，o_agt中monitor的transaction送给scoreboard的act_port，最后比较exp_port与act_port这两个端口。</strong></li>
+</ul>
+</li>
+<li><p>完成my_scoreboard的定义后，也需要在my_env中将其实例化，此时，整棵UVM树为：</p>
+<img src="/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/image-20240430164929758.png" alt="image-20240430164929758" style="zoom: 67%;">
+</li>
+<li><p>仿真结果如下：</p>
+<p><img src="/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/image-20240430165343036.png" alt="image-20240430165343036"></p>
+<p><img src="/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/image-20240430165409392.png" alt="image-20240430165409392"></p>
+</li>
+</ul>
+<h2 id="7-加入field-automation机制"><a href="#7-加入field-automation机制" class="headerlink" title="7.加入field_automation机制"></a>7.加入field_automation机制</h2><ul>
+<li><p>通过field_automation可以实现自动调用一些函数，在my_transaction中：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">`ifndef MY_TRANSACTION__SV</span><br><span class="line">`define MY_TRANSACTION__SV</span><br><span class="line"></span><br><span class="line">class my_transaction extends uvm_sequence_item;</span><br><span class="line"></span><br><span class="line">   rand bit[47:0] dmac;</span><br><span class="line">   rand bit[47:0] smac;</span><br><span class="line">   rand bit[15:0] ether_type;</span><br><span class="line">   rand byte      pload[];</span><br><span class="line">   rand bit[31:0] crc;</span><br><span class="line"></span><br><span class="line">   constraint pload_cons&#123;</span><br><span class="line">      pload.size &gt;= 46;</span><br><span class="line">      pload.size &lt;= 1500;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   function bit[31:0] calc_crc();</span><br><span class="line">      return 32&#x27;h0;</span><br><span class="line">   endfunction</span><br><span class="line"></span><br><span class="line">   function void post_randomize();</span><br><span class="line">      crc = calc_crc;</span><br><span class="line">   endfunction</span><br><span class="line"></span><br><span class="line">   `uvm_object_utils_begin(my_transaction)</span><br><span class="line">      `uvm_field_int(dmac, UVM_ALL_ON)</span><br><span class="line">      `uvm_field_int(smac, UVM_ALL_ON)</span><br><span class="line">      `uvm_field_int(ether_type, UVM_ALL_ON)</span><br><span class="line">      `uvm_field_array_int(pload, UVM_ALL_ON)</span><br><span class="line">      `uvm_field_int(crc, UVM_ALL_ON)</span><br><span class="line">   `uvm_object_utils_end</span><br><span class="line"></span><br><span class="line">   function new(string name = &quot;my_transaction&quot;);</span><br><span class="line">      super.new();</span><br><span class="line">   endfunction</span><br><span class="line"></span><br><span class="line">endclass</span><br><span class="line">`endif</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>这里使用<code>uvm_object_utils_begin</code>和<code>uvm_object_utils_end</code>来实现my_transaction的factory注册，在这两个宏中，使用uvm_field宏注册所有字段。</li>
+<li>uvm_field系列宏随着transaction成员变量的不同而不同，如上面的定义中出现了针对bit类型的<code>uvm_field_int</code>及针对byte类型动态数组的uvm_field_array_int</li>
+<li><strong>当上述宏注册之后，可以直接调用copy、compare、print等函数</strong>，无需自己定义</li>
+</ul>
+</li>
+<li><p>引入field_automation机制的另外一大好处是简化了driver和monitor</p>
+</li>
+<li><p>my_driver.sv</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">task my_driver::drive_one_pkt(my_transaction tr);</span><br><span class="line">   byte unsigned     data_q[];</span><br><span class="line">   int  data_size;</span><br><span class="line">   </span><br><span class="line">   data_size = tr.pack_bytes(data_q) / 8; </span><br><span class="line">   `uvm_info(&quot;my_driver&quot;, &quot;begin to drive one pkt&quot;, UVM_LOW);</span><br><span class="line">   repeat(3) @(posedge vif.clk);</span><br><span class="line">   for ( int i = 0; i &lt; data_size; i++ ) begin</span><br><span class="line">      @(posedge vif.clk);</span><br><span class="line">      vif.valid &lt;= 1&#x27;b1;</span><br><span class="line">      vif.data &lt;= data_q[i]; </span><br><span class="line">   end</span><br><span class="line"></span><br><span class="line">   @(posedge vif.clk);</span><br><span class="line">   vif.valid &lt;= 1&#x27;b0;</span><br><span class="line">   `uvm_info(&quot;my_driver&quot;, &quot;end drive one pkt&quot;, UVM_LOW);</span><br><span class="line">endtask</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>pack_bytes</code>将tr中所有的字段变成了byte流放入data_q中，<strong>pack_bytes极大地减少了代码量，在把所有的字段变成byte流放入data_q中时，字段按照uvm_field系列书写的顺序排列</strong>。在上述代码中是先放入dmac，再依次放入smac、ether_type、pload、crc</li>
+</ul>
+</li>
+<li><p>my_monitor.sv</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">task my_monitor::collect_one_pkt(my_transaction tr);</span><br><span class="line">   byte unsigned data_q[$];</span><br><span class="line">   byte unsigned data_array[];</span><br><span class="line">   logic [7:0] data;</span><br><span class="line">   logic valid = 0;</span><br><span class="line">   int data_size;</span><br><span class="line">   </span><br><span class="line">   while(1) begin</span><br><span class="line">      @(posedge vif.clk);</span><br><span class="line">      if(vif.valid) break;</span><br><span class="line">   end</span><br><span class="line">   </span><br><span class="line">   `uvm_info(&quot;my_monitor&quot;, &quot;begin to collect one pkt&quot;, UVM_LOW);</span><br><span class="line">   while(vif.valid) begin</span><br><span class="line">      data_q.push_back(vif.data);</span><br><span class="line">      @(posedge vif.clk);</span><br><span class="line">   end</span><br><span class="line">   data_size  = data_q.size();   </span><br><span class="line">   data_array = new[data_size];</span><br><span class="line">   for ( int i = 0; i &lt; data_size; i++ ) begin</span><br><span class="line">      data_array[i] = data_q[i]; </span><br><span class="line">   end</span><br><span class="line">   tr.pload = new[data_size - 18]; //da sa, e_type, crc</span><br><span class="line">   data_size = tr.unpack_bytes(data_array) / 8; </span><br><span class="line">   `uvm_info(&quot;my_monitor&quot;, &quot;end collect one pkt&quot;, UVM_LOW);</span><br><span class="line">endtask</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>这里使用unpack_bytes函数将data_q中的byte流转换成tr中的各个字段</li>
+<li>在 Ethernet 数据包中，有一部分是以太网帧头（Ethernet Frame Header），其中包含了目的MAC地址（6字节）、源MAC地址（6字节）、以太网类型（2字节）和 CRC 校验码（4字节），共计18字节。那么包数量占data_size - 18个bytes，所以有这行代码<code>tr.pload = new[data_size - 18];</code> </li>
+</ul>
+</li>
+<li><p>仿真结果：</p>
+<p><img src="/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/image-20240430190504439.png" alt="image-20240430190504439"></p>
+<p><img src="/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/image-20240430190530419.png" alt="image-20240430190530419"></p>
+</li>
+</ul>
+<hr>
+<h1 id="UVM的终极大作：sequence"><a href="#UVM的终极大作：sequence" class="headerlink" title="UVM的终极大作：sequence"></a>UVM的终极大作：sequence</h1><h1 id="建造测试用例"><a href="#建造测试用例" class="headerlink" title="建造测试用例"></a>建造测试用例</h1><h1 id="附加知识点"><a href="#附加知识点" class="headerlink" title="附加知识点"></a>附加知识点</h1><ul>
 <li><p>modelsim下运行UVM仿真平台</p>
  <img src="/2024/04/23/UVM%E7%99%BD%E7%9A%AE%E4%B9%A6%E4%B9%8B%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84UVM%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0/image-20240428204545137.png" alt="image-20240428204545137" style="zoom:50%;">
 </li>
@@ -1031,8 +1336,8 @@
         <category>学习积累</category>
       </categories>
       <tags>
-        <tag>FPGA</tag>
         <tag>数字信号处理</tag>
+        <tag>FPGA</tag>
       </tags>
   </entry>
   <entry>
@@ -1664,8 +1969,8 @@
         <category>学习积累</category>
       </categories>
       <tags>
-        <tag>FPGA</tag>
         <tag>数字信号处理</tag>
+        <tag>FPGA</tag>
       </tags>
   </entry>
   <entry>
@@ -1763,8 +2068,8 @@
         <category>学习积累</category>
       </categories>
       <tags>
-        <tag>数字信号处理</tag>
         <tag>VLSI DSP</tag>
+        <tag>数字信号处理</tag>
       </tags>
   </entry>
   <entry>
@@ -1890,8 +2195,8 @@
         <category>学习积累</category>
       </categories>
       <tags>
-        <tag>数字信号处理</tag>
         <tag>VLSI DSP</tag>
+        <tag>数字信号处理</tag>
       </tags>
   </entry>
   <entry>
@@ -2151,8 +2456,8 @@
         <category>学习积累</category>
       </categories>
       <tags>
-        <tag>FPGA</tag>
         <tag>数字信号处理</tag>
+        <tag>FPGA</tag>
       </tags>
   </entry>
   <entry>
@@ -2593,8 +2898,8 @@ $$
         <category>学习积累</category>
       </categories>
       <tags>
-        <tag>数字信号处理</tag>
         <tag>VLSI DSP</tag>
+        <tag>数字信号处理</tag>
       </tags>
   </entry>
   <entry>
@@ -2842,8 +3147,8 @@ $$
         <category>学习积累</category>
       </categories>
       <tags>
-        <tag>FPGA</tag>
         <tag>数字信号处理</tag>
+        <tag>FPGA</tag>
       </tags>
   </entry>
   <entry>
@@ -3304,8 +3609,8 @@ $$
         <category>学习积累</category>
       </categories>
       <tags>
-        <tag>数字信号处理</tag>
         <tag>VLSI DSP</tag>
+        <tag>数字信号处理</tag>
       </tags>
   </entry>
   <entry>
@@ -4454,8 +4759,8 @@ $$
         <category>学习积累</category>
       </categories>
       <tags>
-        <tag>FPGA</tag>
         <tag>数字信号处理</tag>
+        <tag>FPGA</tag>
       </tags>
   </entry>
   <entry>
@@ -17402,8 +17707,165 @@ Epoch 5/5
       </categories>
       <tags>
         <tag>神经网络</tag>
-        <tag>深度学习</tag>
         <tag>TensorFlow</tag>
+        <tag>深度学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>TensorFlow实践之典型的卷积神经网路</title>
+    <url>/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%85%B8%E5%9E%8B%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/</url>
+    <content><![CDATA[<p>本节主要介绍了LeNet、VGGNet、GoogLeNet神经网络。其中，对LeNet模型进行了函数封装，对VGGNet进行了基本介绍，并着重介绍了GoogLeNet神经网络中1×1卷积核的作用。</p>
+<span id="more"></span>
+
+<h1 id="LeNet神经网络"><a href="#LeNet神经网络" class="headerlink" title="LeNet神经网络"></a>LeNet神经网络</h1><h2 id="1-网络结构"><a href="#1-网络结构" class="headerlink" title="1.网络结构"></a>1.网络结构</h2><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%85%B8%E5%9E%8B%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107140234908.png" alt="image-20221107140234908"></p>
+<h2 id="2-封装LeNet模型"><a href="#2-封装LeNet模型" class="headerlink" title="2.封装LeNet模型"></a>2.封装LeNet模型</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">LeNet</span>(<span class="params">input_shape,padding</span>):</span><br><span class="line">    model=tf.keras.Sequential()</span><br><span class="line">    <span class="comment">#添加卷积层1、池化层1</span></span><br><span class="line">    model.add(tf.keras.layers.Conv2D(<span class="number">6</span>,kernel_size=(<span class="number">5</span>,<span class="number">5</span>),padding=padding,activation=<span class="string">&quot;sigmoid&quot;</span>,input_shape=input_shape))</span><br><span class="line">    model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line">    <span class="comment">#添加卷积层2、池化层2</span></span><br><span class="line">    model.add(tf.keras.layers.Conv2D(<span class="number">16</span>,kernel_size=(<span class="number">5</span>,<span class="number">5</span>),padding=<span class="string">&quot;valid&quot;</span>,activation=<span class="string">&quot;sigmoid&quot;</span>))</span><br><span class="line">    model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line">    <span class="comment">#添加卷积层3</span></span><br><span class="line">    model.add(tf.keras.layers.Conv2D(<span class="number">120</span>,kernel_size=(<span class="number">5</span>,<span class="number">5</span>),padding=<span class="string">&quot;valid&quot;</span>,activation=<span class="string">&quot;sigmoid&quot;</span>))<span class="comment">#本层输出为形状为（1，1，120）</span></span><br><span class="line">    <span class="comment">#添加Flatten层，将数据拉直</span></span><br><span class="line">    model.add(tf.keras.layers.Flatten())</span><br><span class="line">    <span class="comment">#添加隐含层和输出层</span></span><br><span class="line">    model.add(tf.keras.layers.Dense(<span class="number">84</span>,activation=<span class="string">&quot;sigmoid&quot;</span>))</span><br><span class="line">    model.add(tf.keras.layers.Dense(<span class="number">10</span>,activation=<span class="string">&quot;softmax&quot;</span>))</span><br><span class="line">    <span class="keyword">return</span> model</span><br><span class="line"><span class="comment">#调用方法</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;model=LeNet((28,28,1),&quot;same&quot;)</span></span><br><span class="line"><span class="string">model=LeNet((32,32,1),&quot;valid&quot;)&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="3-实例：LeNet实现手写数字识别"><a href="#3-实例：LeNet实现手写数字识别" class="headerlink" title="3.实例：LeNet实现手写数字识别"></a>3.实例：LeNet实现手写数字识别</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#1.导入库</span></span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="comment">#2.加载数据</span></span><br><span class="line">mnist=tf.keras.datasets.mnist</span><br><span class="line">(train_x,train_y),(test_x,test_y)=mnist.load_data(path=<span class="string">&quot;D:\App_Data_File\Anaconda_data\jupyter\image\mnist.npz&quot;</span>)</span><br><span class="line"><span class="comment">#3.数据预处理:对属性进行归一化并转化为Tensor张量</span></span><br><span class="line">X_train,X_test=tf.cast(train_x/<span class="number">255.0</span>,tf.float32),tf.cast(test_x/<span class="number">255.0</span>,tf.float32)</span><br><span class="line">Y_train,Y_test=tf.cast(train_y,tf.int16),tf.cast(test_y,tf.int16)</span><br><span class="line">X_train=tf.reshape(X_train,[<span class="number">60000</span>,<span class="number">28</span>,<span class="number">28</span>,<span class="number">1</span>])</span><br><span class="line">X_test=tf.reshape(X_test,[<span class="number">10000</span>,<span class="number">28</span>,<span class="number">28</span>,<span class="number">1</span>])</span><br><span class="line"><span class="comment">#4.建立LeNet模型</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;model=tf.keras.Sequential()</span></span><br><span class="line"><span class="string">#添加卷积层1、池化层1</span></span><br><span class="line"><span class="string">model.add(tf.keras.layers.Conv2D(6,kernel_size=(5,5),padding=&quot;same&quot;,activation=&quot;sigmoid&quot;,input_shape=(28,28,1)))</span></span><br><span class="line"><span class="string">model.add(tf.keras.layers.MaxPool2D(pool_size=(2,2)))</span></span><br><span class="line"><span class="string">#添加卷积层2、池化层2</span></span><br><span class="line"><span class="string">model.add(tf.keras.layers.Conv2D(16,kernel_size=(5,5),padding=&quot;valid&quot;,activation=&quot;sigmoid&quot;))</span></span><br><span class="line"><span class="string">model.add(tf.keras.layers.MaxPool2D(pool_size=(2,2)))</span></span><br><span class="line"><span class="string">#添加卷积层3</span></span><br><span class="line"><span class="string">model.add(tf.keras.layers.Conv2D(120,kernel_size=(5,5),padding=&quot;valid&quot;,activation=&quot;sigmoid&quot;))</span></span><br><span class="line"><span class="string">#添加Flatten层，将数据拉直</span></span><br><span class="line"><span class="string">model.add(tf.keras.layers.Flatten())</span></span><br><span class="line"><span class="string">#添加隐含层和输出层</span></span><br><span class="line"><span class="string">model.add(tf.keras.layers.Dense(84,activation=&quot;sigmoid&quot;))</span></span><br><span class="line"><span class="string">model.add(tf.keras.layers.Dense(10,activation=&quot;softmax&quot;))&#x27;&#x27;&#x27;</span></span><br><span class="line">model=LeNet((<span class="number">28</span>,<span class="number">28</span>,<span class="number">1</span>),<span class="string">&quot;same&quot;</span>)</span><br><span class="line">model.summary()</span><br><span class="line"><span class="comment">#5.配置训练方法</span></span><br><span class="line">model.<span class="built_in">compile</span>(optimizer=<span class="string">&quot;adam&quot;</span>,loss=<span class="string">&quot;sparse_categorical_crossentropy&quot;</span>,metrics=[<span class="string">&quot;accuracy&quot;</span>])</span><br><span class="line"><span class="comment">#6.训练模型</span></span><br><span class="line">history=model.fit(X_train,Y_train,batch_size=<span class="number">64</span>,epochs=<span class="number">5</span>,validation_split=<span class="number">0.2</span>)</span><br><span class="line"><span class="comment">#7.评估模型</span></span><br><span class="line">model.evaluate(X_test,Y_test,verbose=<span class="number">2</span>)</span><br><span class="line"><span class="comment">#8.使用模型</span></span><br><span class="line"><span class="comment"># 下面再随机取出测试集中的任意10个数据进行识别</span></span><br><span class="line">plt.rcParams[<span class="string">&quot;font.sans-serif&quot;</span>]=<span class="string">&quot;SimHei&quot;</span></span><br><span class="line">plt.rcParams[<span class="string">&quot;axes.unicode_minus&quot;</span>]=<span class="literal">False</span></span><br><span class="line">plt.figure()</span><br><span class="line">plt.suptitle(<span class="string">&quot;随机取出测试集中的任意10个数据进行识别&quot;</span>, fontsize=<span class="number">20</span>, color=<span class="string">&quot;blue&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">    num = np.random.randint(<span class="number">1</span>, <span class="number">10000</span>)</span><br><span class="line">    plt.subplot(<span class="number">2</span>, <span class="number">5</span>, i+<span class="number">1</span>)</span><br><span class="line">    plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">    plt.imshow(test_x[num], cmap=<span class="string">&quot;gray&quot;</span>)</span><br><span class="line">    y_pred = np.argmax(model.predict(tf.reshape(X_test[num],(<span class="number">1</span>,<span class="number">28</span>,<span class="number">28</span>,<span class="number">1</span>))))</span><br><span class="line">    plt.title(<span class="string">&quot;y= &quot;</span>+<span class="built_in">str</span>(test_y[num]) + <span class="string">&quot;\n&quot;</span> + <span class="string">&quot;y_pred=&quot;</span> + <span class="built_in">str</span>(y_pred))</span><br><span class="line">plt.tight_layout(rect=[<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0.98</span>])</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<pre><code>Model: &quot;sequential_9&quot;
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+conv2d_27 (Conv2D)           (None, 28, 28, 6)         156       
+_________________________________________________________________
+max_pooling2d_18 (MaxPooling (None, 14, 14, 6)         0         
+_________________________________________________________________
+conv2d_28 (Conv2D)           (None, 10, 10, 16)        2416      
+_________________________________________________________________
+max_pooling2d_19 (MaxPooling (None, 5, 5, 16)          0         
+_________________________________________________________________
+conv2d_29 (Conv2D)           (None, 1, 1, 120)         48120     
+_________________________________________________________________
+flatten_9 (Flatten)          (None, 120)               0         
+_________________________________________________________________
+dense_18 (Dense)             (None, 84)                10164     
+_________________________________________________________________
+dense_19 (Dense)             (None, 10)                850       
+=================================================================
+Total params: 61,706
+Trainable params: 61,706
+Non-trainable params: 0
+_________________________________________________________________
+Epoch 1/5
+750/750 [==============================] - 23s 29ms/step - loss: 1.1872 - accuracy: 0.6143 - val_loss: 0.3047 - val_accuracy: 0.9153
+Epoch 2/5
+750/750 [==============================] - 22s 29ms/step - loss: 0.2160 - accuracy: 0.9393 - val_loss: 0.1392 - val_accuracy: 0.9581
+Epoch 3/5
+750/750 [==============================] - 22s 29ms/step - loss: 0.1238 - accuracy: 0.9627 - val_loss: 0.0956 - val_accuracy: 0.9721
+Epoch 4/5
+750/750 [==============================] - 21s 28ms/step - loss: 0.0919 - accuracy: 0.9717 - val_loss: 0.0836 - val_accuracy: 0.9755
+Epoch 5/5
+750/750 [==============================] - 21s 28ms/step - loss: 0.0759 - accuracy: 0.9766 - val_loss: 0.0788 - val_accuracy: 0.9761
+313/313 - 3s - loss: 0.0719 - accuracy: 0.9774</code></pre><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%85%B8%E5%9E%8B%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_4_1.png" alt="output_4_1"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#保存训练的模型参数</span></span><br><span class="line">model.save_weights(<span class="string">&quot;mnist_save_weights_LeNet.h5&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="AlexNet神经网络"><a href="#AlexNet神经网络" class="headerlink" title="AlexNet神经网络"></a>AlexNet神经网络</h1><ul>
+<li><p><strong>AlexNet网络结构</strong></p>
+<p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%85%B8%E5%9E%8B%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221111181303375.png" alt="image-20221111181303375"></p>
+<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%85%B8%E5%9E%8B%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221111181352031.png" alt="image-20221111181352031" style="zoom:50%;">
+</li>
+<li><p><strong>AlexNet创新点</strong></p>
+<ul>
+<li>使用ReLU激活函数：使网络训练收敛更快</li>
+<li>使用Dropout训练模型</li>
+<li>数据增强：增加了2048倍的数据量<ul>
+<li>原始图像256×256，随机截取224×224区域</li>
+<li>水平翻转的镜像</li>
+</ul>
+</li>
+<li>使用重叠最大池化：能够很好克服过拟合问题</li>
+<li>使用GPU加速训练过程</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="VGGNet神经网络"><a href="#VGGNet神经网络" class="headerlink" title="VGGNet神经网络"></a>VGGNet神经网络</h1><ul>
+<li>多个小卷积核级联加深网络结构<ul>
+<li>减少网络计算量</li>
+<li>增加网络的泛化能力和表达能力</li>
+</ul>
+</li>
+<li>先训练级别A的简单网络，再复用A网络的权重初始化复杂模型<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%85%B8%E5%9E%8B%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107140620259.png" alt="image-20221107140620259" style="zoom: 33%;">
+
+
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#VGG16模型的建立</span></span><br><span class="line">model=tf.keras.Sequential()</span><br><span class="line"><span class="comment">#添加卷积层1-2、池化层</span></span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">64</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu,input_shape=(<span class="number">224</span>,<span class="number">244</span>,<span class="number">3</span>)))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">64</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line"><span class="comment">#添加卷积层3-4、池化层</span></span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">128</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">128</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line"><span class="comment">#添加卷积层5-7、池化层</span></span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">256</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">256</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">256</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line"><span class="comment">#添加卷积层8-10、池化层</span></span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">512</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">512</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">512</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line"><span class="comment">#添加卷积层11-13、池化层</span></span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">512</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">512</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">512</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line"><span class="comment">#添加Flatten层，将数据拉直</span></span><br><span class="line">model.add(tf.keras.layers.Flatten())</span><br><span class="line"><span class="comment">#全连接层1，Dropout层</span></span><br><span class="line">model.add(tf.keras.layers.Dense(<span class="number">4096</span>,activation=<span class="string">&quot;relu&quot;</span>))</span><br><span class="line">model.add(tf.keras.layers.Dropout(<span class="number">0.5</span>))</span><br><span class="line"><span class="comment">#全连接层2，Dropout层</span></span><br><span class="line">model.add(tf.keras.layers.Dense(<span class="number">4096</span>,activation=<span class="string">&quot;relu&quot;</span>))</span><br><span class="line">model.add(tf.keras.layers.Dropout(<span class="number">0.5</span>))</span><br><span class="line"><span class="comment">#全连接层3（输出层）</span></span><br><span class="line">model.add(tf.keras.layers.Dense(<span class="number">1000</span>,activation=<span class="string">&quot;softmax&quot;</span>))</span><br><span class="line">model.summary()</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<pre><code>Model: &quot;sequential_14&quot;
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+conv2d_56 (Conv2D)           (None, 224, 244, 64)      1792      
+_________________________________________________________________
+conv2d_57 (Conv2D)           (None, 224, 244, 64)      36928     
+_________________________________________________________________
+max_pooling2d_32 (MaxPooling (None, 112, 122, 64)      0         
+_________________________________________________________________
+conv2d_58 (Conv2D)           (None, 112, 122, 128)     73856     
+_________________________________________________________________
+conv2d_59 (Conv2D)           (None, 112, 122, 128)     147584    
+_________________________________________________________________
+max_pooling2d_33 (MaxPooling (None, 56, 61, 128)       0         
+_________________________________________________________________
+conv2d_60 (Conv2D)           (None, 56, 61, 256)       295168    
+_________________________________________________________________
+conv2d_61 (Conv2D)           (None, 56, 61, 256)       590080    
+_________________________________________________________________
+conv2d_62 (Conv2D)           (None, 56, 61, 256)       590080    
+_________________________________________________________________
+max_pooling2d_34 (MaxPooling (None, 28, 30, 256)       0         
+_________________________________________________________________
+conv2d_63 (Conv2D)           (None, 28, 30, 512)       1180160   
+_________________________________________________________________
+conv2d_64 (Conv2D)           (None, 28, 30, 512)       2359808   
+_________________________________________________________________
+conv2d_65 (Conv2D)           (None, 28, 30, 512)       2359808   
+_________________________________________________________________
+max_pooling2d_35 (MaxPooling (None, 14, 15, 512)       0         
+_________________________________________________________________
+conv2d_66 (Conv2D)           (None, 14, 15, 512)       2359808   
+_________________________________________________________________
+conv2d_67 (Conv2D)           (None, 14, 15, 512)       2359808   
+_________________________________________________________________
+conv2d_68 (Conv2D)           (None, 14, 15, 512)       2359808   
+_________________________________________________________________
+max_pooling2d_36 (MaxPooling (None, 7, 7, 512)         0         
+_________________________________________________________________
+flatten_14 (Flatten)         (None, 25088)             0         
+_________________________________________________________________
+dense_30 (Dense)             (None, 4096)              102764544 
+_________________________________________________________________
+dropout_4 (Dropout)          (None, 4096)              0         
+_________________________________________________________________
+dense_31 (Dense)             (None, 4096)              16781312  
+_________________________________________________________________
+dropout_5 (Dropout)          (None, 4096)              0         
+_________________________________________________________________
+dense_32 (Dense)             (None, 1000)              4097000   
+=================================================================
+Total params: 138,357,544
+Trainable params: 138,357,544
+Non-trainable params: 0
+_________________________________________________________________</code></pre><hr>
+<h1 id="GoogLeNet神经网络"><a href="#GoogLeNet神经网络" class="headerlink" title="GoogLeNet神经网络"></a>GoogLeNet神经网络</h1><h2 id="1-Inception-Module的初代"><a href="#1-Inception-Module的初代" class="headerlink" title="1.Inception Module的初代"></a>1.Inception Module的初代</h2><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%85%B8%E5%9E%8B%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107140740258.png" alt="image-20221107140740258" style="zoom:50%;">
+
+<h2 id="2-1×1卷积核"><a href="#2-1×1卷积核" class="headerlink" title="2.1×1卷积核"></a>2.1×1卷积核</h2><ul>
+<li><p><strong>能够降维/升维，跨通道信息交流</strong></p>
+<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%85%B8%E5%9E%8B%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107140820217.png" alt="image-20221107140820217" style="zoom:50%;">
+</li>
+<li><p>个人对1×1，7与1×1×7，1的理解：前者表示有七个1×1的卷积核，其中每个卷积核都与图像去卷一卷，那么每个卷积核都会输出一个特征图，则一个会输出七个特征图；后者表示一个卷积核，这个卷积核的大小是1×1×7，可以理解为有七个通道，每个通道里都有1×1的一个小卷积核（也就是这7个所谓的小卷积核从不同维度共同组成一个整体的大卷积核，实际上还是只有一个卷积核），这7个小卷积核与前一层中7个对应通道的图像分别卷积，将其结果相加后，最终还是只会得到一个特征图。</p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>学习积累</category>
+      </categories>
+      <tags>
+        <tag>神经网络</tag>
+        <tag>TensorFlow</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -18037,165 +18499,8 @@ tf.Tensor(0.295599, shape=(), dtype=float32)</code></pre>]]></content>
         <category>学习积累</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>TensorFlow</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>TensorFlow实践之典型的卷积神经网路</title>
-    <url>/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%85%B8%E5%9E%8B%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/</url>
-    <content><![CDATA[<p>本节主要介绍了LeNet、VGGNet、GoogLeNet神经网络。其中，对LeNet模型进行了函数封装，对VGGNet进行了基本介绍，并着重介绍了GoogLeNet神经网络中1×1卷积核的作用。</p>
-<span id="more"></span>
-
-<h1 id="LeNet神经网络"><a href="#LeNet神经网络" class="headerlink" title="LeNet神经网络"></a>LeNet神经网络</h1><h2 id="1-网络结构"><a href="#1-网络结构" class="headerlink" title="1.网络结构"></a>1.网络结构</h2><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%85%B8%E5%9E%8B%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107140234908.png" alt="image-20221107140234908"></p>
-<h2 id="2-封装LeNet模型"><a href="#2-封装LeNet模型" class="headerlink" title="2.封装LeNet模型"></a>2.封装LeNet模型</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">LeNet</span>(<span class="params">input_shape,padding</span>):</span><br><span class="line">    model=tf.keras.Sequential()</span><br><span class="line">    <span class="comment">#添加卷积层1、池化层1</span></span><br><span class="line">    model.add(tf.keras.layers.Conv2D(<span class="number">6</span>,kernel_size=(<span class="number">5</span>,<span class="number">5</span>),padding=padding,activation=<span class="string">&quot;sigmoid&quot;</span>,input_shape=input_shape))</span><br><span class="line">    model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line">    <span class="comment">#添加卷积层2、池化层2</span></span><br><span class="line">    model.add(tf.keras.layers.Conv2D(<span class="number">16</span>,kernel_size=(<span class="number">5</span>,<span class="number">5</span>),padding=<span class="string">&quot;valid&quot;</span>,activation=<span class="string">&quot;sigmoid&quot;</span>))</span><br><span class="line">    model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line">    <span class="comment">#添加卷积层3</span></span><br><span class="line">    model.add(tf.keras.layers.Conv2D(<span class="number">120</span>,kernel_size=(<span class="number">5</span>,<span class="number">5</span>),padding=<span class="string">&quot;valid&quot;</span>,activation=<span class="string">&quot;sigmoid&quot;</span>))<span class="comment">#本层输出为形状为（1，1，120）</span></span><br><span class="line">    <span class="comment">#添加Flatten层，将数据拉直</span></span><br><span class="line">    model.add(tf.keras.layers.Flatten())</span><br><span class="line">    <span class="comment">#添加隐含层和输出层</span></span><br><span class="line">    model.add(tf.keras.layers.Dense(<span class="number">84</span>,activation=<span class="string">&quot;sigmoid&quot;</span>))</span><br><span class="line">    model.add(tf.keras.layers.Dense(<span class="number">10</span>,activation=<span class="string">&quot;softmax&quot;</span>))</span><br><span class="line">    <span class="keyword">return</span> model</span><br><span class="line"><span class="comment">#调用方法</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;model=LeNet((28,28,1),&quot;same&quot;)</span></span><br><span class="line"><span class="string">model=LeNet((32,32,1),&quot;valid&quot;)&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="3-实例：LeNet实现手写数字识别"><a href="#3-实例：LeNet实现手写数字识别" class="headerlink" title="3.实例：LeNet实现手写数字识别"></a>3.实例：LeNet实现手写数字识别</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#1.导入库</span></span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="comment">#2.加载数据</span></span><br><span class="line">mnist=tf.keras.datasets.mnist</span><br><span class="line">(train_x,train_y),(test_x,test_y)=mnist.load_data(path=<span class="string">&quot;D:\App_Data_File\Anaconda_data\jupyter\image\mnist.npz&quot;</span>)</span><br><span class="line"><span class="comment">#3.数据预处理:对属性进行归一化并转化为Tensor张量</span></span><br><span class="line">X_train,X_test=tf.cast(train_x/<span class="number">255.0</span>,tf.float32),tf.cast(test_x/<span class="number">255.0</span>,tf.float32)</span><br><span class="line">Y_train,Y_test=tf.cast(train_y,tf.int16),tf.cast(test_y,tf.int16)</span><br><span class="line">X_train=tf.reshape(X_train,[<span class="number">60000</span>,<span class="number">28</span>,<span class="number">28</span>,<span class="number">1</span>])</span><br><span class="line">X_test=tf.reshape(X_test,[<span class="number">10000</span>,<span class="number">28</span>,<span class="number">28</span>,<span class="number">1</span>])</span><br><span class="line"><span class="comment">#4.建立LeNet模型</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;model=tf.keras.Sequential()</span></span><br><span class="line"><span class="string">#添加卷积层1、池化层1</span></span><br><span class="line"><span class="string">model.add(tf.keras.layers.Conv2D(6,kernel_size=(5,5),padding=&quot;same&quot;,activation=&quot;sigmoid&quot;,input_shape=(28,28,1)))</span></span><br><span class="line"><span class="string">model.add(tf.keras.layers.MaxPool2D(pool_size=(2,2)))</span></span><br><span class="line"><span class="string">#添加卷积层2、池化层2</span></span><br><span class="line"><span class="string">model.add(tf.keras.layers.Conv2D(16,kernel_size=(5,5),padding=&quot;valid&quot;,activation=&quot;sigmoid&quot;))</span></span><br><span class="line"><span class="string">model.add(tf.keras.layers.MaxPool2D(pool_size=(2,2)))</span></span><br><span class="line"><span class="string">#添加卷积层3</span></span><br><span class="line"><span class="string">model.add(tf.keras.layers.Conv2D(120,kernel_size=(5,5),padding=&quot;valid&quot;,activation=&quot;sigmoid&quot;))</span></span><br><span class="line"><span class="string">#添加Flatten层，将数据拉直</span></span><br><span class="line"><span class="string">model.add(tf.keras.layers.Flatten())</span></span><br><span class="line"><span class="string">#添加隐含层和输出层</span></span><br><span class="line"><span class="string">model.add(tf.keras.layers.Dense(84,activation=&quot;sigmoid&quot;))</span></span><br><span class="line"><span class="string">model.add(tf.keras.layers.Dense(10,activation=&quot;softmax&quot;))&#x27;&#x27;&#x27;</span></span><br><span class="line">model=LeNet((<span class="number">28</span>,<span class="number">28</span>,<span class="number">1</span>),<span class="string">&quot;same&quot;</span>)</span><br><span class="line">model.summary()</span><br><span class="line"><span class="comment">#5.配置训练方法</span></span><br><span class="line">model.<span class="built_in">compile</span>(optimizer=<span class="string">&quot;adam&quot;</span>,loss=<span class="string">&quot;sparse_categorical_crossentropy&quot;</span>,metrics=[<span class="string">&quot;accuracy&quot;</span>])</span><br><span class="line"><span class="comment">#6.训练模型</span></span><br><span class="line">history=model.fit(X_train,Y_train,batch_size=<span class="number">64</span>,epochs=<span class="number">5</span>,validation_split=<span class="number">0.2</span>)</span><br><span class="line"><span class="comment">#7.评估模型</span></span><br><span class="line">model.evaluate(X_test,Y_test,verbose=<span class="number">2</span>)</span><br><span class="line"><span class="comment">#8.使用模型</span></span><br><span class="line"><span class="comment"># 下面再随机取出测试集中的任意10个数据进行识别</span></span><br><span class="line">plt.rcParams[<span class="string">&quot;font.sans-serif&quot;</span>]=<span class="string">&quot;SimHei&quot;</span></span><br><span class="line">plt.rcParams[<span class="string">&quot;axes.unicode_minus&quot;</span>]=<span class="literal">False</span></span><br><span class="line">plt.figure()</span><br><span class="line">plt.suptitle(<span class="string">&quot;随机取出测试集中的任意10个数据进行识别&quot;</span>, fontsize=<span class="number">20</span>, color=<span class="string">&quot;blue&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">    num = np.random.randint(<span class="number">1</span>, <span class="number">10000</span>)</span><br><span class="line">    plt.subplot(<span class="number">2</span>, <span class="number">5</span>, i+<span class="number">1</span>)</span><br><span class="line">    plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">    plt.imshow(test_x[num], cmap=<span class="string">&quot;gray&quot;</span>)</span><br><span class="line">    y_pred = np.argmax(model.predict(tf.reshape(X_test[num],(<span class="number">1</span>,<span class="number">28</span>,<span class="number">28</span>,<span class="number">1</span>))))</span><br><span class="line">    plt.title(<span class="string">&quot;y= &quot;</span>+<span class="built_in">str</span>(test_y[num]) + <span class="string">&quot;\n&quot;</span> + <span class="string">&quot;y_pred=&quot;</span> + <span class="built_in">str</span>(y_pred))</span><br><span class="line">plt.tight_layout(rect=[<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0.98</span>])</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-<p>结果如下：</p>
-<pre><code>Model: &quot;sequential_9&quot;
-_________________________________________________________________
-Layer (type)                 Output Shape              Param #   
-=================================================================
-conv2d_27 (Conv2D)           (None, 28, 28, 6)         156       
-_________________________________________________________________
-max_pooling2d_18 (MaxPooling (None, 14, 14, 6)         0         
-_________________________________________________________________
-conv2d_28 (Conv2D)           (None, 10, 10, 16)        2416      
-_________________________________________________________________
-max_pooling2d_19 (MaxPooling (None, 5, 5, 16)          0         
-_________________________________________________________________
-conv2d_29 (Conv2D)           (None, 1, 1, 120)         48120     
-_________________________________________________________________
-flatten_9 (Flatten)          (None, 120)               0         
-_________________________________________________________________
-dense_18 (Dense)             (None, 84)                10164     
-_________________________________________________________________
-dense_19 (Dense)             (None, 10)                850       
-=================================================================
-Total params: 61,706
-Trainable params: 61,706
-Non-trainable params: 0
-_________________________________________________________________
-Epoch 1/5
-750/750 [==============================] - 23s 29ms/step - loss: 1.1872 - accuracy: 0.6143 - val_loss: 0.3047 - val_accuracy: 0.9153
-Epoch 2/5
-750/750 [==============================] - 22s 29ms/step - loss: 0.2160 - accuracy: 0.9393 - val_loss: 0.1392 - val_accuracy: 0.9581
-Epoch 3/5
-750/750 [==============================] - 22s 29ms/step - loss: 0.1238 - accuracy: 0.9627 - val_loss: 0.0956 - val_accuracy: 0.9721
-Epoch 4/5
-750/750 [==============================] - 21s 28ms/step - loss: 0.0919 - accuracy: 0.9717 - val_loss: 0.0836 - val_accuracy: 0.9755
-Epoch 5/5
-750/750 [==============================] - 21s 28ms/step - loss: 0.0759 - accuracy: 0.9766 - val_loss: 0.0788 - val_accuracy: 0.9761
-313/313 - 3s - loss: 0.0719 - accuracy: 0.9774</code></pre><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%85%B8%E5%9E%8B%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_4_1.png" alt="output_4_1"></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#保存训练的模型参数</span></span><br><span class="line">model.save_weights(<span class="string">&quot;mnist_save_weights_LeNet.h5&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h1 id="AlexNet神经网络"><a href="#AlexNet神经网络" class="headerlink" title="AlexNet神经网络"></a>AlexNet神经网络</h1><ul>
-<li><p><strong>AlexNet网络结构</strong></p>
-<p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%85%B8%E5%9E%8B%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221111181303375.png" alt="image-20221111181303375"></p>
-<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%85%B8%E5%9E%8B%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221111181352031.png" alt="image-20221111181352031" style="zoom:50%;">
-</li>
-<li><p><strong>AlexNet创新点</strong></p>
-<ul>
-<li>使用ReLU激活函数：使网络训练收敛更快</li>
-<li>使用Dropout训练模型</li>
-<li>数据增强：增加了2048倍的数据量<ul>
-<li>原始图像256×256，随机截取224×224区域</li>
-<li>水平翻转的镜像</li>
-</ul>
-</li>
-<li>使用重叠最大池化：能够很好克服过拟合问题</li>
-<li>使用GPU加速训练过程</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h1 id="VGGNet神经网络"><a href="#VGGNet神经网络" class="headerlink" title="VGGNet神经网络"></a>VGGNet神经网络</h1><ul>
-<li>多个小卷积核级联加深网络结构<ul>
-<li>减少网络计算量</li>
-<li>增加网络的泛化能力和表达能力</li>
-</ul>
-</li>
-<li>先训练级别A的简单网络，再复用A网络的权重初始化复杂模型<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%85%B8%E5%9E%8B%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107140620259.png" alt="image-20221107140620259" style="zoom: 33%;">
-
-
-</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#VGG16模型的建立</span></span><br><span class="line">model=tf.keras.Sequential()</span><br><span class="line"><span class="comment">#添加卷积层1-2、池化层</span></span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">64</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu,input_shape=(<span class="number">224</span>,<span class="number">244</span>,<span class="number">3</span>)))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">64</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line"><span class="comment">#添加卷积层3-4、池化层</span></span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">128</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">128</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line"><span class="comment">#添加卷积层5-7、池化层</span></span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">256</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">256</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">256</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line"><span class="comment">#添加卷积层8-10、池化层</span></span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">512</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">512</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">512</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line"><span class="comment">#添加卷积层11-13、池化层</span></span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">512</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">512</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">512</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line">model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line"><span class="comment">#添加Flatten层，将数据拉直</span></span><br><span class="line">model.add(tf.keras.layers.Flatten())</span><br><span class="line"><span class="comment">#全连接层1，Dropout层</span></span><br><span class="line">model.add(tf.keras.layers.Dense(<span class="number">4096</span>,activation=<span class="string">&quot;relu&quot;</span>))</span><br><span class="line">model.add(tf.keras.layers.Dropout(<span class="number">0.5</span>))</span><br><span class="line"><span class="comment">#全连接层2，Dropout层</span></span><br><span class="line">model.add(tf.keras.layers.Dense(<span class="number">4096</span>,activation=<span class="string">&quot;relu&quot;</span>))</span><br><span class="line">model.add(tf.keras.layers.Dropout(<span class="number">0.5</span>))</span><br><span class="line"><span class="comment">#全连接层3（输出层）</span></span><br><span class="line">model.add(tf.keras.layers.Dense(<span class="number">1000</span>,activation=<span class="string">&quot;softmax&quot;</span>))</span><br><span class="line">model.summary()</span><br></pre></td></tr></table></figure>
-<p>结果如下：</p>
-<pre><code>Model: &quot;sequential_14&quot;
-_________________________________________________________________
-Layer (type)                 Output Shape              Param #   
-=================================================================
-conv2d_56 (Conv2D)           (None, 224, 244, 64)      1792      
-_________________________________________________________________
-conv2d_57 (Conv2D)           (None, 224, 244, 64)      36928     
-_________________________________________________________________
-max_pooling2d_32 (MaxPooling (None, 112, 122, 64)      0         
-_________________________________________________________________
-conv2d_58 (Conv2D)           (None, 112, 122, 128)     73856     
-_________________________________________________________________
-conv2d_59 (Conv2D)           (None, 112, 122, 128)     147584    
-_________________________________________________________________
-max_pooling2d_33 (MaxPooling (None, 56, 61, 128)       0         
-_________________________________________________________________
-conv2d_60 (Conv2D)           (None, 56, 61, 256)       295168    
-_________________________________________________________________
-conv2d_61 (Conv2D)           (None, 56, 61, 256)       590080    
-_________________________________________________________________
-conv2d_62 (Conv2D)           (None, 56, 61, 256)       590080    
-_________________________________________________________________
-max_pooling2d_34 (MaxPooling (None, 28, 30, 256)       0         
-_________________________________________________________________
-conv2d_63 (Conv2D)           (None, 28, 30, 512)       1180160   
-_________________________________________________________________
-conv2d_64 (Conv2D)           (None, 28, 30, 512)       2359808   
-_________________________________________________________________
-conv2d_65 (Conv2D)           (None, 28, 30, 512)       2359808   
-_________________________________________________________________
-max_pooling2d_35 (MaxPooling (None, 14, 15, 512)       0         
-_________________________________________________________________
-conv2d_66 (Conv2D)           (None, 14, 15, 512)       2359808   
-_________________________________________________________________
-conv2d_67 (Conv2D)           (None, 14, 15, 512)       2359808   
-_________________________________________________________________
-conv2d_68 (Conv2D)           (None, 14, 15, 512)       2359808   
-_________________________________________________________________
-max_pooling2d_36 (MaxPooling (None, 7, 7, 512)         0         
-_________________________________________________________________
-flatten_14 (Flatten)         (None, 25088)             0         
-_________________________________________________________________
-dense_30 (Dense)             (None, 4096)              102764544 
-_________________________________________________________________
-dropout_4 (Dropout)          (None, 4096)              0         
-_________________________________________________________________
-dense_31 (Dense)             (None, 4096)              16781312  
-_________________________________________________________________
-dropout_5 (Dropout)          (None, 4096)              0         
-_________________________________________________________________
-dense_32 (Dense)             (None, 1000)              4097000   
-=================================================================
-Total params: 138,357,544
-Trainable params: 138,357,544
-Non-trainable params: 0
-_________________________________________________________________</code></pre><hr>
-<h1 id="GoogLeNet神经网络"><a href="#GoogLeNet神经网络" class="headerlink" title="GoogLeNet神经网络"></a>GoogLeNet神经网络</h1><h2 id="1-Inception-Module的初代"><a href="#1-Inception-Module的初代" class="headerlink" title="1.Inception Module的初代"></a>1.Inception Module的初代</h2><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%85%B8%E5%9E%8B%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107140740258.png" alt="image-20221107140740258" style="zoom:50%;">
-
-<h2 id="2-1×1卷积核"><a href="#2-1×1卷积核" class="headerlink" title="2.1×1卷积核"></a>2.1×1卷积核</h2><ul>
-<li><p><strong>能够降维/升维，跨通道信息交流</strong></p>
-<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%85%B8%E5%9E%8B%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107140820217.png" alt="image-20221107140820217" style="zoom:50%;">
-</li>
-<li><p>个人对1×1，7与1×1×7，1的理解：前者表示有七个1×1的卷积核，其中每个卷积核都与图像去卷一卷，那么每个卷积核都会输出一个特征图，则一个会输出七个特征图；后者表示一个卷积核，这个卷积核的大小是1×1×7，可以理解为有七个通道，每个通道里都有1×1的一个小卷积核（也就是这7个所谓的小卷积核从不同维度共同组成一个整体的大卷积核，实际上还是只有一个卷积核），这7个小卷积核与前一层中7个对应通道的图像分别卷积，将其结果相加后，最终还是只会得到一个特征图。</p>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>学习积累</category>
-      </categories>
-      <tags>
-        <tag>神经网络</tag>
         <tag>深度学习</tag>
-        <tag>TensorFlow</tag>
       </tags>
   </entry>
   <entry>
@@ -18430,8 +18735,8 @@ Epoch 10/10
       </categories>
       <tags>
         <tag>神经网络</tag>
-        <tag>深度学习</tag>
         <tag>TensorFlow</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -19589,8 +19894,8 @@ i:2000,    Train Loss:17.118926,    Test Loss:19.456854</code></pre><p><img src=
         <category>学习积累</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>TensorFlow</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -20215,8 +20520,8 @@ i:2000,    Train Loss:17.118926,    Test Loss:19.456854</code></pre><p><img src=
         <category>学习积累</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>TensorFlow</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -20423,8 +20728,8 @@ i:2000,    Train Loss:17.118926,    Test Loss:19.456854</code></pre><p><img src=
         <category>学习积累</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>TensorFlow</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
