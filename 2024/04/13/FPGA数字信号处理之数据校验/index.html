@@ -49,8 +49,10 @@
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/04/13/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E6%8D%AE%E6%A0%A1%E9%AA%8C/image-20240414013031318.png">
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/04/13/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E6%8D%AE%E6%A0%A1%E9%AA%8C/image-20240414015743270.png">
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/04/13/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E6%8D%AE%E6%A0%A1%E9%AA%8C/image-20240414015820950.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/04/13/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E6%8D%AE%E6%A0%A1%E9%AA%8C/image-20240527130219680.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/04/13/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E6%8D%AE%E6%A0%A1%E9%AA%8C/image-20240527130518793.png">
 <meta property="article:published_time" content="2024-04-13T04:07:12.000Z">
-<meta property="article:modified_time" content="2024-04-15T18:16:32.615Z">
+<meta property="article:modified_time" content="2024-05-27T05:05:26.420Z">
 <meta property="article:author" content="ssy">
 <meta property="article:tag" content="数字信号处理">
 <meta property="article:tag" content="FPGA">
@@ -260,7 +262,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-04-16 02:16:32" itemprop="dateModified" datetime="2024-04-16T02:16:32+08:00">2024-04-16</time>
+                <time title="修改时间：2024-05-27 13:05:26" itemprop="dateModified" datetime="2024-05-27T13:05:26+08:00">2024-05-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -378,7 +380,7 @@
 </li>
 </ul>
 </li>
-<li><p><strong>伽罗瓦LFSR习惯采用“从左到右依次递减编号”电路</strong>（但在后续CRC应用中以我个人的理解使用的应该是依次递增编号的电路）</p>
+<li><p><strong>伽罗瓦LFSR习惯采用“从左到右依次递减编号”电路</strong></p>
 </li>
 </ul>
 <h2 id="2-串行CRC的实现"><a href="#2-串行CRC的实现" class="headerlink" title="2.串行CRC的实现"></a>2.串行CRC的实现</h2><ul>
@@ -457,7 +459,21 @@
 </ul>
 <hr>
 <h1 id="附加模块编写"><a href="#附加模块编写" class="headerlink" title="附加模块编写"></a>附加模块编写</h1><ul>
-<li>因为这里提到了LFSR寄存器，这里就补充计数器的编写，一个是常规的多功能计数器，一个是LFSR计数器</li>
+<li><p>因为这里提到了LFSR寄存器，这里就补充LFSR计数器的编写</p>
+<img src="/2024/04/13/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E6%8D%AE%E6%A0%A1%E9%AA%8C/image-20240527130219680.png" alt="image-20240527130219680" style="zoom:50%;">
+
+<ul>
+<li><p>源文件：</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> lfsr_counter_4bit(</span><br><span class="line">    <span class="keyword">input</span>   clk,</span><br><span class="line">    <span class="keyword">input</span>   rst_n,</span><br><span class="line">    <span class="keyword">input</span>   new_cntr_preset,    <span class="comment">//该信号拉高预设初值</span></span><br><span class="line">    <span class="keyword">output</span>  ctr_expired</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">reg</span> [<span class="number">3</span> : <span class="number">0</span>] lfsr_cnt, lfsr_cnt_nxt;</span><br><span class="line">    <span class="keyword">wire</span> [<span class="number">3</span> : <span class="number">0</span>] lfsr_cnt_xor;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">assign</span> lfsr_cnt_xor[<span class="number">0</span>] = lfsr_cnt[<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">assign</span> lfsr_cnt_xor[<span class="number">1</span>] = lfsr_cnt[<span class="number">2</span>];</span><br><span class="line">    <span class="keyword">assign</span> lfsr_cnt_xor[<span class="number">2</span>] = lfsr_cnt[<span class="number">3</span>] ^ lfsr_cnt[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">assign</span> lfsr_cnt_xor[<span class="number">3</span>] = lfsr_cnt[<span class="number">0</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">always</span> @(*) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>(new_cntr_preset) <span class="keyword">begin</span></span><br><span class="line">            lfsr_cnt_nxt = <span class="number">4&#x27;b1111</span>;</span><br><span class="line">        <span class="keyword">end</span>    </span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">            lfsr_cnt_nxt = lfsr_cnt_xor;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">negedge</span> rst_n) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>(~rst_n) <span class="keyword">begin</span></span><br><span class="line">            lfsr_cnt &lt;= <span class="number">4&#x27;b1111</span>;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">            lfsr_cnt &lt;= lfsr_cnt_nxt;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">assign</span> ctr_expired = (lfsr_cnt == <span class="number">4&#x27;b0111</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>testbench</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> lfsr_counter_tb;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">reg</span> clk             ;</span><br><span class="line">    <span class="keyword">reg</span> rst_n           ;</span><br><span class="line">    <span class="keyword">reg</span> new_cntr_preset ;</span><br><span class="line">    <span class="keyword">wire</span> ctr_expired    ; </span><br><span class="line"></span><br><span class="line">    lfsr_counter_4bit lfsr_counter_4bit_u1(</span><br><span class="line">        <span class="variable">.clk</span>             (clk             ),</span><br><span class="line">        <span class="variable">.rst_n</span>           (rst_n           ),</span><br><span class="line">        <span class="variable">.new_cntr_preset</span> (new_cntr_preset ),</span><br><span class="line">        <span class="variable">.ctr_expired</span>     (ctr_expired     )</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">always</span> #<span class="number">5</span> clk = ~clk;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">        clk = <span class="number">1</span>;</span><br><span class="line">        rst_n = <span class="number">0</span>;</span><br><span class="line">        new_cntr_preset = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        #<span class="number">21</span> rst_n = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>仿真结果：</p>
+<p><img src="/2024/04/13/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E6%8D%AE%E6%A0%A1%E9%AA%8C/image-20240527130518793.png" alt="image-20240527130518793"></p>
+</li>
+</ul>
+</li>
 </ul>
 
     </div>
@@ -591,7 +607,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">139</span>
+          <span class="site-state-item-count">140</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
