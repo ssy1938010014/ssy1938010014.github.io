@@ -291,6 +291,7 @@
       
         <p>本节介绍了MATLAB学习的一些矩阵处理相关的知识，包括通用与专用的特殊矩阵、矩阵变换、矩阵特征值与特征向量的求解、稀疏矩阵等。</p>
 <span id="more"></span>
+
 <h1 id="通用的特殊矩阵"><a href="#通用的特殊矩阵" class="headerlink" title="通用的特殊矩阵"></a>通用的特殊矩阵</h1><ul>
 <li>zeros函数：产生全0矩阵</li>
 <li>ones函数：产生全1矩阵</li>
@@ -304,95 +305,119 @@
 </ul>
 </li>
 </ul>
-<p><img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110112204278.png" alt="image-20221110112204278" style="zoom:50%;"></p>
+<img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110112204278.png" alt="image-20221110112204278" style="zoom:50%;">
+
 <hr>
 <h1 id="用于专门学科的特殊矩阵"><a href="#用于专门学科的特殊矩阵" class="headerlink" title="用于专门学科的特殊矩阵"></a>用于专门学科的特殊矩阵</h1><h2 id="1-魔方矩阵（Magic-Square）："><a href="#1-魔方矩阵（Magic-Square）：" class="headerlink" title="1.魔方矩阵（Magic Square）："></a>1.魔方矩阵（Magic Square）：</h2><ul>
 <li><code>magic(n)</code>产生一个特定的魔方阵</li>
 <li>n阶魔方阵由1，2，3，……n2共n2个整数组成，且每行、每列以及主、副对角线上各n各元素之和都相等</li>
 <li>n节魔方阵每行每列元素的和为(1+2+3+……+n2)/n=(n+n3)/2</li>
 </ul>
-<p><img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110113057250.png" alt="image-20221110113057250" style="zoom:50%;"></p>
-<h2 id="2-范德蒙矩阵：vander"><a href="#2-范德蒙矩阵：vander" class="headerlink" title="2.范德蒙矩阵：vander()"></a>2.范德蒙矩阵：<code>vander()</code></h2><p><img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110113551524.png" alt="image-20221110113551524" style="zoom:50%;"></p>
-<h2 id="3-希尔伯特矩阵：hilb-n"><a href="#3-希尔伯特矩阵：hilb-n" class="headerlink" title="3.希尔伯特矩阵：hilb(n)"></a>3.希尔伯特矩阵：<code>hilb(n)</code></h2><p><img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110113814471.png" alt="image-20221110113814471" style="zoom:50%;"></p>
-<h2 id="4-帕斯克矩阵：pascal-n"><a href="#4-帕斯克矩阵：pascal-n" class="headerlink" title="4.帕斯克矩阵：pascal(n)"></a>4.帕斯克矩阵：<code>pascal(n)</code></h2><p><img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110114348920.png" alt="image-20221110114348920" style="zoom:50%;"></p>
+<img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110113057250.png" alt="image-20221110113057250" style="zoom:50%;">
+
+<h2 id="2-范德蒙矩阵：vander"><a href="#2-范德蒙矩阵：vander" class="headerlink" title="2.范德蒙矩阵：vander()"></a>2.范德蒙矩阵：<code>vander()</code></h2><img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110113551524.png" alt="image-20221110113551524" style="zoom:50%;">
+
+<h2 id="3-希尔伯特矩阵：hilb-n"><a href="#3-希尔伯特矩阵：hilb-n" class="headerlink" title="3.希尔伯特矩阵：hilb(n)"></a>3.希尔伯特矩阵：<code>hilb(n)</code></h2><img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110113814471.png" alt="image-20221110113814471" style="zoom:50%;">
+
+<h2 id="4-帕斯克矩阵：pascal-n"><a href="#4-帕斯克矩阵：pascal-n" class="headerlink" title="4.帕斯克矩阵：pascal(n)"></a>4.帕斯克矩阵：<code>pascal(n)</code></h2><img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110114348920.png" alt="image-20221110114348920" style="zoom:50%;">
+
 <hr>
 <h1 id="矩阵变换"><a href="#矩阵变换" class="headerlink" title="矩阵变换"></a>矩阵变换</h1><h2 id="1-对角阵"><a href="#1-对角阵" class="headerlink" title="1.对角阵"></a>1.<strong>对角阵</strong></h2><ul>
 <li><p><code>diag(V)</code>：以向量V为主对角线元素，产生对角矩阵</p>
 </li>
 <li><p><code>diag(V,k)</code>：以向量V为第k条对角线元素，产生对角矩阵</p>
 </li>
-<li><code>diag(A,k)</code>：提取A中的第k条对角线元素，返回一个列向量</li>
+<li><p><code>diag(A,k)</code>：提取A中的第k条对角线元素，返回一个列向量</p>
+</li>
 </ul>
-<p><img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110122114206.png" alt="image-20221110122114206" style="zoom:50%;"></p>
+<img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110122114206.png" alt="image-20221110122114206" style="zoom:50%;">
+
 <ul>
 <li><p>例：将A的各列元素分别乘以对角阵的对角线元素</p>
-<p><img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110124600894.png" alt="image-20221110124600894" style="zoom:50%;"></p>
+<img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110124600894.png" alt="image-20221110124600894" style="zoom:50%;">
+
 </li>
 </ul>
 <h2 id="2-三角阵：下三角矩阵（triu）和上三角矩阵（tril）"><a href="#2-三角阵：下三角矩阵（triu）和上三角矩阵（tril）" class="headerlink" title="2.三角阵：下三角矩阵（triu）和上三角矩阵（tril）"></a>2.<strong>三角阵</strong>：下三角矩阵（triu）和上三角矩阵（tril）</h2><ul>
 <li><code>triu(A)</code>：提取矩阵A的主对角线及以上的元素</li>
 <li><code>triu(A,k)</code>：提取矩阵A的第k条对角线及以上的元素</li>
 </ul>
-<p><img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110123111461.png" alt="image-20221110123111461" style="zoom:50%;"></p>
-<p><img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110123310690.png" alt="image-20221110123310690" style="zoom:50%;"></p>
+<img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110123111461.png" alt="image-20221110123111461" style="zoom:50%;">
+
+<img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110123310690.png" alt="image-20221110123310690" style="zoom:50%;">
+
 <h2 id="3-矩阵转置"><a href="#3-矩阵转置" class="headerlink" title="3.矩阵转置"></a>3.<strong>矩阵转置</strong></h2><ul>
 <li>转置运算符：<code>.&#39;</code></li>
 <li>共轭转置：<code>&#39;</code> %它在转置的基础上还要取每个数的复共轭</li>
 </ul>
-<p><img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110123832562.png" alt="image-20221110123832562" style="zoom:50%;"></p>
+<img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110123832562.png" alt="image-20221110123832562" style="zoom:50%;">
+
 <h2 id="4-矩阵的旋转"><a href="#4-矩阵的旋转" class="headerlink" title="4.矩阵的旋转"></a>4.<strong>矩阵的旋转</strong></h2><ul>
 <li><code>rot90(A,k)</code></li>
 <li>将矩阵A逆时针方向旋转90°的k倍，当k为1时可省略</li>
 </ul>
-<p><img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110124224929.png" alt="image-20221110124224929" style="zoom:50%;"></p>
+<img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110124224929.png" alt="image-20221110124224929" style="zoom:50%;">
+
 <h2 id="5-矩阵的翻转"><a href="#5-矩阵的翻转" class="headerlink" title="5.矩阵的翻转"></a>5.<strong>矩阵的翻转</strong></h2><ul>
 <li><code>fliplr(A)</code>：左右翻转</li>
 <li><code>flipud(A)</code>：上下翻转</li>
 </ul>
-<p><img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110124830166.png" alt="image-20221110124830166" style="zoom:50%;"></p>
+<img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110124830166.png" alt="image-20221110124830166" style="zoom:50%;">
+
 <h2 id="6-矩阵的求逆"><a href="#6-矩阵的求逆" class="headerlink" title="6.矩阵的求逆"></a>6.<strong>矩阵的求逆</strong></h2><ul>
 <li><p><code>inv(A)</code></p>
 </li>
 <li><p>可以通过矩阵求逆的方法求解线性方程组</p>
-<p><img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110125422429.png" alt="image-20221110125422429" style="zoom:50%;"></p>
+<img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110125422429.png" alt="image-20221110125422429" style="zoom:50%;">
+
+
+
 </li>
 </ul>
 <hr>
 <h1 id="矩阵行列式求解"><a href="#矩阵行列式求解" class="headerlink" title="矩阵行列式求解"></a>矩阵行列式求解</h1><ul>
 <li><code>det(A)</code></li>
 </ul>
-<p><img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221122161052638.png" alt="image-20221122161052638" style="zoom:50%;"></p>
+<img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221122161052638.png" alt="image-20221122161052638" style="zoom:50%;">
+
 <hr>
 <h1 id="矩阵的特征值与特征向量"><a href="#矩阵的特征值与特征向量" class="headerlink" title="矩阵的特征值与特征向量"></a>矩阵的特征值与特征向量</h1><ul>
 <li>设A时n阶方阵，如果存在常数$\lambda$和n维非零列向量x，使得等式Ax=$\lambda$x成立，则称$\lambda$为A的特征值，x是对应特征值$\lambda$的特征向量</li>
 <li><code>E=eig(A)</code>：求矩阵A的全部特征值，构成向量E</li>
 <li><code>[X,D]=eig(A)</code>：求矩阵A的全部特征值，构成对角阵D，并产生矩阵X，X各列是相应的特性向量</li>
 </ul>
-<p><img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110143923535.png" alt="image-20221110143923535" style="zoom:50%;"></p>
+<img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110143923535.png" alt="image-20221110143923535" style="zoom:50%;">
+
 <hr>
 <h1 id="稀疏矩阵"><a href="#稀疏矩阵" class="headerlink" title="稀疏矩阵"></a>稀疏矩阵</h1><h2 id="1-无规则结构稀疏矩阵的产生"><a href="#1-无规则结构稀疏矩阵的产生" class="headerlink" title="1.无规则结构稀疏矩阵的产生"></a>1.无规则结构稀疏矩阵的产生</h2><ul>
 <li><code>A=sparse(S)</code>：将矩阵S转化为稀疏存储方式的矩阵A</li>
 <li><code>S=full(A)</code>：将矩阵A转化为完全存储方式的矩阵S</li>
 </ul>
-<p><img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110145416770.png" alt="image-20221110145416770" style="zoom:50%;"></p>
+<img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110145416770.png" alt="image-20221110145416770" style="zoom:50%;">
+
 <ul>
 <li><p><code>sparse(m,n)</code>：生成一个m×n的所有元素都是零的稀疏矩阵</p>
 </li>
 <li><p><code>sparse(i,j,S)</code>：i,j是存储元素的下标，S表示要存储的非零元素</p>
-<p><img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110145955079.png" alt="image-20221110145955079" style="zoom:50%;"></p>
+<img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110145955079.png" alt="image-20221110145955079" style="zoom:50%;">
+
 </li>
 </ul>
 <h2 id="2-带状稀疏矩阵的产生"><a href="#2-带状稀疏矩阵的产生" class="headerlink" title="2.带状稀疏矩阵的产生"></a>2.带状稀疏矩阵的产生</h2><ul>
 <li><p>其是指所有非零元素集中在对角线上的矩阵</p>
 </li>
 <li><p><code>[B,d]=spdiags(A)</code>：从带状稀疏矩阵A中提取全部非零对角线元素赋给矩阵B及其这些非零对角线的位置向量d</p>
-<p><img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110152245868.png" alt="image-20221110152245868" style="zoom:50%;"></p>
+<img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110152245868.png" alt="image-20221110152245868" style="zoom:50%;">
 </li>
 <li><p><code>A=spdiags(B,d,m,n)</code></p>
-<p><img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110153444565.png" alt="image-20221110153444565" style="zoom:50%;"></p>
+<img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110153444565.png" alt="image-20221110153444565" style="zoom:50%;">
 </li>
 <li><p><code>speye(m,n)</code>：返回m×n的稀疏存储的单位矩阵</p>
-<p><img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110153724671.png" alt="image-20221110153724671" style="zoom:50%;"></p>
+<img src="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/image-20221110153724671.png" alt="image-20221110153724671" style="zoom:50%;">
+
+
+
+
 </li>
 </ul>
 
