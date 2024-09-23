@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1/themes/blue/pace-theme-minimal.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"xn--ssy-lq6e63gg6fuu2d.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本节主要介绍了数字信号处理在FPGA硬件实现中，经常需要使用的IP核（基于vivado的开发环境）。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FPGA数字信号处理之典型IP核">
+<meta property="og:url" content="http://ssy的小天地.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/index.html">
+<meta property="og:site_name" content="ssy的小天地">
+<meta property="og:description" content="本节主要介绍了数字信号处理在FPGA硬件实现中，经常需要使用的IP核（基于vivado的开发环境）。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231012150732762.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231012144456111.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231012151357723.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231012153823359.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231012164231297.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231012164449327.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231012170057287.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231012170346016.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231012172524577.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231120165850569.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231120171253311.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231120171453447.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231120164947730.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231121155548381.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231121155927847.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231121160309324.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/untitled.bmp">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231121161030105.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231121205139577.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231024141407431.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231024142435510.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231024143541679.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231024232553967.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231024224042607.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231024224616096.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/sinwave_for_fft.bmp">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20240319191134297.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20240319192249585.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20240110125626654.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20240110125946346.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20240110130310317.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20240110132214936.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20240110135744248.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20240110135807426.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20240110135454794.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20240111151849763.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20240111152255385.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20240111152355346.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20240111153202181.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20240111153246240.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20240111153458045.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20240111153831859.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20240111154343389.png">
+<meta property="article:published_time" content="2023-10-10T02:07:12.000Z">
+<meta property="article:modified_time" content="2024-04-15T18:15:54.859Z">
+<meta property="article:author" content="ssy">
+<meta property="article:tag" content="FPGA">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231012150732762.png">
+
+<link rel="canonical" href="http://ssy的小天地.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>FPGA数字信号处理之典型IP核 | ssy的小天地</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+    <a target="_blank" rel="noopener" href="https://github.com/ssy1938010014" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ssy的小天地</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">愿汝如是 千金不换</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-works">
+
+    <a href="/works/" rel="section"><i class="fa fa-fw fa-sitemap"></i>文章</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ssy的小天地.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ssy.png">
+      <meta itemprop="name" content="ssy">
+      <meta itemprop="description" content="满怀希望 就会所向披靡">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ssy的小天地">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          FPGA数字信号处理之典型IP核
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+
+
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-10-10 10:07:12" itemprop="dateCreated datePublished" datetime="2023-10-10T10:07:12+08:00">2023-10-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-04-16 02:15:54" itemprop="dateModified" datetime="2024-04-16T02:15:54+08:00">2024-04-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%A7%AF%E7%B4%AF/" itemprop="url" rel="index"><span itemprop="name">学习积累</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本节主要介绍了数字信号处理在FPGA硬件实现中，经常需要使用的IP核（基于vivado的开发环境）。</p>
+<span id="more"></span>
+<h1 id="乘法器IP核的使用"><a href="#乘法器IP核的使用" class="headerlink" title="乘法器IP核的使用"></a>乘法器IP核的使用</h1><h2 id="1-IP核的相关配置"><a href="#1-IP核的相关配置" class="headerlink" title="1.IP核的相关配置"></a>1.IP核的相关配置</h2><p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231012150732762.png" alt="image-20231012150732762" style="zoom:50%;"></p>
+<p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231012144456111.png" alt="image-20231012144456111" style="zoom:50%;"></p>
+<p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231012151357723.png" alt="image-20231012151357723"></p>
+<h2 id="2-Testbench"><a href="#2-Testbench" class="headerlink" title="2.Testbench"></a>2.Testbench</h2><figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">`<span class="keyword">timescale</span> 1ns / 1ps</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">module</span> mulit_ip_tb();</span><br><span class="line">	<span class="comment">// Inputs</span></span><br><span class="line">	<span class="keyword">reg</span> clk;</span><br><span class="line">	<span class="keyword">reg</span> sclr;</span><br><span class="line">	<span class="keyword">reg</span> [<span class="number">17</span>:<span class="number">0</span>] a;</span><br><span class="line">	<span class="keyword">reg</span> [<span class="number">17</span>:<span class="number">0</span>] b;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Outputs</span></span><br><span class="line">	<span class="keyword">wire</span> [<span class="number">35</span>:<span class="number">0</span>] p;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Instantiate the Unit Under Test (UUT)</span></span><br><span class="line">	mult_gen_0 uut (</span><br><span class="line">		<span class="variable">.CLK</span>(clk), </span><br><span class="line">		<span class="variable">.SCLR</span>(sclr), </span><br><span class="line">		<span class="variable">.A</span>(a), </span><br><span class="line">		<span class="variable">.B</span>(b), </span><br><span class="line">		<span class="variable">.P</span>(p)</span><br><span class="line">	);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">		clk = <span class="number">0</span>;     <span class="comment">//设置时钟信号初始状态</span></span><br><span class="line">		sclr = <span class="number">1</span>;    <span class="comment">//上电后开始复位清零</span></span><br><span class="line">		a = <span class="number">0</span>;       <span class="comment">//设置输入信号的初始状态</span></span><br><span class="line">		b = <span class="number">0</span>;       <span class="comment">//设置输入信号的初始状态</span></span><br><span class="line">		#<span class="number">100</span>;        <span class="comment">//等待100ns</span></span><br><span class="line">		sclr = <span class="number">0</span>;    <span class="comment">//取消复位清零</span></span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line"> </span><br><span class="line">    <span class="comment">//生成周期为20ns，频率为50MHz的时钟信号</span></span><br><span class="line">    <span class="keyword">always</span> #<span class="number">10</span> clk &lt;= ~clk;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//生成两个输入信号a、b</span></span><br><span class="line">	<span class="keyword">always</span> @(<span class="keyword">posedge</span> clk) <span class="keyword">begin</span></span><br><span class="line">        a &lt;= a + <span class="number">10</span> ;</span><br><span class="line">		b &lt;= b + <span class="number">20</span>;</span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line">	</span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>结果如下：</p>
+<p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231012153823359.png" alt="image-20231012153823359"></p>
+</li>
+</ul>
+<hr>
+<h1 id="ROM-IP核的使用"><a href="#ROM-IP核的使用" class="headerlink" title="ROM IP核的使用"></a>ROM IP核的使用</h1><h2 id="1-IP核的相关配置-1"><a href="#1-IP核的相关配置-1" class="headerlink" title="1.IP核的相关配置"></a>1.IP核的相关配置</h2><p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231012164231297.png" alt="image-20231012164231297" style="zoom:50%;"></p>
+<p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231012164449327.png" alt="image-20231012164449327"></p>
+<p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231012170057287.png" alt="image-20231012170057287"></p>
+<p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231012170346016.png" alt="image-20231012170346016"></p>
+<h2 id="2-MATLAB代码"><a href="#2-MATLAB代码" class="headerlink" title="2.MATLAB代码"></a>2.MATLAB代码</h2><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">close all;</span><br><span class="line">clear all;</span><br><span class="line">clc;</span><br><span class="line"><span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span></span><br><span class="line"><span class="comment">%           参数定义</span></span><br><span class="line"><span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span></span><br><span class="line">fc=<span class="number">3e6</span>;         <span class="comment">% 信号频率</span></span><br><span class="line">fs=<span class="number">65e6</span>;        <span class="comment">% 采样频率</span></span><br><span class="line">L=<span class="number">1024</span>;          <span class="comment">% 采样点数</span></span><br><span class="line">ADC_bit=<span class="number">16</span>;     <span class="comment">% 采样位数</span></span><br><span class="line"></span><br><span class="line"><span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span></span><br><span class="line"><span class="comment">%              产生信号</span></span><br><span class="line"><span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span></span><br><span class="line">t=<span class="number">0</span>:<span class="number">1</span>/fs:(L<span class="number">-1</span>)/fs;</span><br><span class="line">noise=<span class="built_in">randn</span>(<span class="number">1</span>,<span class="built_in">length</span>(t));</span><br><span class="line">noise=<span class="number">0</span>;</span><br><span class="line">st=<span class="built_in">sin</span>(<span class="number">2</span>*<span class="built_in">pi</span>*fc*t)+noise;</span><br><span class="line">y=st/<span class="built_in">max</span>(<span class="built_in">abs</span>(st));                 <span class="comment">% 归一化</span></span><br><span class="line">yt=<span class="built_in">round</span>(y*(<span class="number">2</span>^(ADC_bit<span class="number">-1</span>)<span class="number">-1</span>));     <span class="comment">% 16bit量化</span></span><br><span class="line"><span class="built_in">figure</span>(<span class="number">1</span>);</span><br><span class="line"><span class="built_in">plot</span>(st);<span class="built_in">hold</span> on;</span><br><span class="line"><span class="built_in">figure</span>(<span class="number">2</span>);</span><br><span class="line"><span class="built_in">plot</span>(y);<span class="built_in">hold</span> on;</span><br><span class="line"><span class="built_in">figure</span>(<span class="number">3</span>);</span><br><span class="line"><span class="built_in">plot</span>(yt);<span class="built_in">hold</span> on;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span></span><br><span class="line"><span class="comment">%            MATLAB生成coe文件</span></span><br><span class="line"><span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span></span><br><span class="line"><span class="comment">% 在.coe文件中</span></span><br><span class="line"><span class="comment">% 第一行为定义数据格式, 2代表 ROM 的数据格式为二进制。</span></span><br><span class="line"><span class="comment">% 从第 3 行开始到第最后一行，是这个  L（数据长度为1024）* ADC_bit（16bit） 大小 ROM 的初始化数据。</span></span><br><span class="line"><span class="comment">% 第一行到倒数第二行的数字后面用逗号，最后一行数字结束用分号。</span></span><br><span class="line">fid=fopen(<span class="string">&#x27;data0.coe&#x27;</span>,<span class="string">&#x27;w&#x27;</span>); </span><br><span class="line">fprintf(fid,<span class="string">&#x27;Memory_Initialization_Radix = 2;\r\n&#x27;</span>); <span class="comment">% 二进制</span></span><br><span class="line">fprintf(fid,<span class="string">&#x27;Memory_Initialization_Vector = \r\n&#x27;</span>);</span><br><span class="line"><span class="keyword">for</span> p=<span class="number">1</span>:L</span><br><span class="line">    B_s=dec2bin(yt(p)+(yt(p)&lt;<span class="number">0</span>)*<span class="number">2</span>^ADC_bit,ADC_bit);<span class="comment">%十进制转二进制</span></span><br><span class="line">    <span class="keyword">for</span> q=<span class="number">1</span>:ADC_bit  <span class="comment">% 16位，依次判断这16位的数值</span></span><br><span class="line">        <span class="keyword">if</span> B_s(q)==<span class="string">&#x27;1&#x27;</span></span><br><span class="line">            data=<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            data=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        fprintf(fid,<span class="string">&#x27;%d&#x27;</span>,data);</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">%  下面if语句的目的</span></span><br><span class="line">    <span class="comment">%  每行数字后面用逗号(,)，最后一行数字结束用分号(;)</span></span><br><span class="line">    <span class="keyword">if</span> (p&lt;L)</span><br><span class="line">        fprintf(fid,<span class="string">&#x27;,\r\n&#x27;</span>); </span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        fprintf(fid,<span class="string">&#x27;;\r\n&#x27;</span>);    <span class="comment">% 分号(;)  结束标志位</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">   </span><br><span class="line"><span class="keyword">end</span></span><br><span class="line">fclose(fid);</span><br></pre></td></tr></table></figure>
+<h2 id="3-Testbench"><a href="#3-Testbench" class="headerlink" title="3.Testbench"></a>3.Testbench</h2><figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">`<span class="keyword">timescale</span> 1ns / 1ps</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">module</span> rom_ip_tb();</span><br><span class="line">    <span class="keyword">reg</span> sys_clk; <span class="comment">//50MHz时钟</span></span><br><span class="line">    <span class="keyword">reg</span> rst_n;   <span class="comment">//复位，低电平有效</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">wire</span> [<span class="number">15</span>:<span class="number">0</span>] rom_data; <span class="comment">//ROM读出数据  每个数据有16bit</span></span><br><span class="line">    <span class="keyword">reg</span>  [<span class="number">9</span>:<span class="number">0</span>]  rom_addr; <span class="comment">//ROM输入地址  1024个数据，需要2^10个地址</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">//产生ROM地址读取数据</span></span><br><span class="line">    <span class="keyword">always</span> @ (<span class="keyword">posedge</span> sys_clk <span class="keyword">or</span> <span class="keyword">negedge</span> rst_n)</span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>(!rst_n)</span><br><span class="line">            rom_addr &lt;= <span class="number">10&#x27;d0</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            rom_addr &lt;= rom_addr+<span class="number">1&#x27;b1</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//实例化ROM</span></span><br><span class="line">    blk_mem_gen_0 rom_ip_inst</span><br><span class="line">    (</span><br><span class="line">        <span class="variable">.clka</span> (sys_clk ),   <span class="comment">//inoput clka</span></span><br><span class="line">        <span class="variable">.addra</span> (rom_addr ), <span class="comment">//input [9:0] addra  1024个数据，需要2^10个地址</span></span><br><span class="line">        <span class="variable">.douta</span> (rom_data )  <span class="comment">//output [15:0] douta    </span></span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">        sys_clk = <span class="number">0</span>;</span><br><span class="line">        rst_n = <span class="number">0</span>;</span><br><span class="line">        #<span class="number">21</span> rst_n = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">always</span> #<span class="number">10</span> sys_clk = ~sys_clk;</span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>结果如下：</p>
+<p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231012172524577.png" alt="image-20231012172524577"></p>
+</li>
+<li><p>其实结构输出data数据与上升沿并不是齐平的，说明不能在上升沿结束立马得到数据，而是有一定延时</p>
+</li>
+</ul>
+<h2 id="4-Reference"><a href="#4-Reference" class="headerlink" title="4.Reference"></a>4.Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_46136963/article/details/118367784">Vivado ROM IP的生成和调用_ila waveform style_ML__LM的博客-CSDN博客</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/wordwarwordwar/article/details/82811449">Vivado中单端口和双端口RAM的区别-CSDN博客</a></li>
+<li><a target="_blank" rel="noopener" href="https://ica123.com/archives/22650">Vivado真双端口（TDP）RAM IP核的生成与配置详解 - 芯片天地 (ica123.com)</a></li>
+</ul>
+<hr>
+<h1 id="DDS-IP核的使用"><a href="#DDS-IP核的使用" class="headerlink" title="DDS IP核的使用"></a>DDS IP核的使用</h1><ul>
+<li><p>DDS的作用，产生正余弦波</p>
+</li>
+<li><p>其产生原理如下图，其通过在圆周上不断旋转，在y轴和x轴上的投影构成正余弦波：</p>
+<p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231120165850569.png" alt="image-20231120165850569" style="zoom: 80%;"></p>
+</li>
+<li><p>每个时钟周期旋转一格，当在一圈内旋转的格越多时（即把圆分成的份数越多时），精度越高，设格数为$2^B,B为bit数$，那么输出频率$f_{out}$为：</p>
+<script type="math/tex; mode=display">
+f_{out} = \frac{f_{clk}}{2^B}</script></li>
+<li><p>那么在时钟频率和bit数都确定时，如何调整输出频率呢？用通俗易懂的话来说，也就是：虽然圆被分成了很多份，但我读格子的时候，隔几格再读一个数，不就可以改变输出频率了么，设读数的间隔为$F_{cw}$，则输出频率$f_{out}$有：</p>
+<script type="math/tex; mode=display">
+f_{out}=F_{cw}\cdot \frac{f_{clk}}{2^B}</script><ul>
+<li>其实，$\frac{f_{clk}}{2^B}$就相当于数字频率分辨率（类比FFT的采样频率$f_s$）</li>
+</ul>
+</li>
+</ul>
+<h2 id="1-IP核的相关配置-2"><a href="#1-IP核的相关配置-2" class="headerlink" title="1.IP核的相关配置"></a>1.IP核的相关配置</h2><p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231120171253311.png" alt="image-20231120171253311" style="zoom: 33%;"></p>
+<p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231120171453447.png" alt="image-20231120171453447" style="zoom:33%;"></p>
+<h2 id="2-Testbench-1"><a href="#2-Testbench-1" class="headerlink" title="2.Testbench"></a>2.Testbench</h2><figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">`<span class="keyword">timescale</span> 1ms / 1ms </span><span class="comment">//这里这里仿真的尺度</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">module</span> DDS_ip_tb;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">reg</span> clk_100Hz;</span><br><span class="line">    <span class="keyword">wire</span> out_valid;</span><br><span class="line">    <span class="keyword">wire</span> [<span class="number">7</span>:<span class="number">0</span>] sin_data;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//产生2Hz的正弦信号</span></span><br><span class="line">    dds_compiler_0 u1(</span><br><span class="line">        <span class="variable">.aclk</span>(clk_100Hz),</span><br><span class="line">        <span class="variable">.s_axis_config_tvalid</span>(<span class="number">1&#x27;b1</span>),</span><br><span class="line">        <span class="variable">.s_axis_config_tdata</span>(<span class="number">16&#x27;d1311</span>),</span><br><span class="line">        <span class="variable">.m_axis_data_tvalid</span>(out_valid),</span><br><span class="line">        <span class="variable">.m_axis_data_tdata</span>(sin_data)</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">	<span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">		clk_100Hz = <span class="number">0</span>;</span><br><span class="line">		#<span class="number">100</span>;</span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line">   </span><br><span class="line">    <span class="keyword">always</span> #<span class="number">5</span> clk_100Hz &lt;= ~clk_100Hz;	</span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>结果如下：</p>
+<p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231120164947730.png" alt="image-20231120164947730"></p>
+</li>
+</ul>
+<hr>
+<h1 id="FIR-IP核的使用"><a href="#FIR-IP核的使用" class="headerlink" title="FIR IP核的使用"></a>FIR IP核的使用</h1><h2 id="1-IP核的相关配置-3"><a href="#1-IP核的相关配置-3" class="headerlink" title="1.IP核的相关配置"></a>1.IP核的相关配置</h2><p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231121155548381.png" alt="image-20231121155548381"></p>
+<p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231121155927847.png" alt="image-20231121155927847"></p>
+<p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231121160309324.png" alt="image-20231121160309324"></p>
+<h2 id="2-MATLAB代码-1"><a href="#2-MATLAB代码-1" class="headerlink" title="2.MATLAB代码"></a>2.MATLAB代码</h2><ul>
+<li>注意：下述代码中量化与在FIR滤波器设计这一节中提到的不一致，下述代码中直接乘以$2^{11}$，方便后续右移11将大小还原</li>
+<li>下述matlab代码主要用来求滤波系数，其实可以用matlab中<code>filterDesigner</code>可视化的GUI设计滤波器并导出coe系数文件</li>
+</ul>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">N=<span class="number">62</span>;                              <span class="comment">%滤波器长度</span></span><br><span class="line">fs=<span class="number">12.5</span>*<span class="number">10</span>^<span class="number">6</span>;                      <span class="comment">%采样频率</span></span><br><span class="line">fc=<span class="number">10</span>^<span class="number">6</span>;                           <span class="comment">%低通滤波器的3dB截止频率</span></span><br><span class="line"></span><br><span class="line"><span class="comment">%采用fir1函数设计FIR滤波器</span></span><br><span class="line">b=fir1(N<span class="number">-1</span>,fc*<span class="number">2</span>/fs);</span><br><span class="line"></span><br><span class="line"><span class="comment">%对滤波器系数进行量化</span></span><br><span class="line">B=<span class="number">12</span>;                              <span class="comment">%量化位宽为12比特</span></span><br><span class="line"><span class="comment">%Q_h=b/max(abs(b));                 %系数归一化处理</span></span><br><span class="line"><span class="comment">%Q_h=Q_h*(2^(B-1)-1);               %乘以B比特位宽的最大正整数</span></span><br><span class="line">Q_h=b*(<span class="number">2</span>^<span class="number">11</span>);               <span class="comment">%乘以B比特位宽的最大正整数</span></span><br><span class="line">Q_h12=<span class="built_in">round</span>(Q_h);                  <span class="comment">%四舍五入</span></span><br><span class="line"></span><br><span class="line">ma=<span class="built_in">max</span>(<span class="built_in">abs</span>(Q_h12))</span><br><span class="line"></span><br><span class="line"><span class="comment">%将生成的滤波器系数数据写入FPGA所需的COE文件中</span></span><br><span class="line">fid=fopen(<span class="string">&#x27;D:\App_Data_File\Vivado_data\Vivado_project\DSP_design\FIR_design\fir_coefficient.coe&#x27;</span>,<span class="string">&#x27;w&#x27;</span>);  <span class="comment">%新建并打开COE文件</span></span><br><span class="line">fprintf(fid,<span class="string">&#x27;radix = 10;\r\n&#x27;</span>);    <span class="comment">%写滤波器系数的进制</span></span><br><span class="line">fprintf(fid,<span class="string">&#x27;coefdata =\r\n&#x27;</span>);     <span class="comment">%写系数数据的标识</span></span><br><span class="line">fprintf(fid,<span class="string">&#x27;%8d\r\n&#x27;</span>,Q_h12);      <span class="comment">%写滤波器系数</span></span><br><span class="line">fprintf(fid,<span class="string">&#x27;;&#x27;</span>);                  <span class="comment">%写分号“;”</span></span><br><span class="line">fclose(fid);                       <span class="comment">%关闭COE文件</span></span><br><span class="line"></span><br><span class="line">m=sum(<span class="built_in">abs</span>(Q_h12))                  <span class="comment">%求滤波器系数绝对值之和</span></span><br><span class="line"></span><br><span class="line"><span class="comment">%求滤波器的幅频响应</span></span><br><span class="line">m_12=<span class="number">20</span>*<span class="built_in">log10</span>(<span class="built_in">abs</span>(fft(Q_h12,<span class="number">1024</span>)));</span><br><span class="line"> <span class="comment">%对幅频响应归一化处理</span></span><br><span class="line">m_12=m_12-<span class="built_in">max</span>(m_12); </span><br><span class="line"></span><br><span class="line"><span class="comment">%设置幅频响应的横坐标单位为MHz</span></span><br><span class="line">x_f=[<span class="number">0</span>:(fs/<span class="built_in">length</span>(m_12)):fs/<span class="number">2</span>]/<span class="number">10</span>^<span class="number">6</span>;</span><br><span class="line"><span class="comment">%只显示正频率部分的幅频响应</span></span><br><span class="line">m12=m_12(<span class="number">1</span>:<span class="built_in">length</span>(x_f));</span><br><span class="line"></span><br><span class="line"><span class="comment">%绘制幅频响应曲线</span></span><br><span class="line"><span class="built_in">plot</span>(x_f,m12);</span><br><span class="line">xlabel(<span class="string">&#x27;频率(MHz)&#x27;</span>);ylabel(<span class="string">&#x27;幅度(dB)&#x27;</span>);</span><br><span class="line"><span class="built_in">legend</span>(<span class="string">&#x27;12bit量化&#x27;</span>);</span><br><span class="line">grid on;</span><br></pre></td></tr></table></figure>
+<p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/untitled.bmp" alt="untitled" style="zoom: 67%;"></p>
+<h2 id="3-Testbench-1"><a href="#3-Testbench-1" class="headerlink" title="3.Testbench"></a>3.Testbench</h2><ul>
+<li><p>FIR_ip_design.v</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> FIR_ip_design(</span><br><span class="line">    <span class="keyword">input</span> rst,</span><br><span class="line">    <span class="keyword">input</span> clk_data,    <span class="comment">//12.5MHz</span></span><br><span class="line">	<span class="keyword">input</span> clk_fir,     <span class="comment">//50MHz</span></span><br><span class="line">    <span class="keyword">output</span> m_data_tvalid,</span><br><span class="line">    <span class="keyword">output</span> [<span class="number">19</span>:<span class="number">0</span>] dout,</span><br><span class="line">    <span class="keyword">output</span> [<span class="number">8</span>:<span class="number">0</span>] dout_normal</span><br><span class="line">    );</span><br><span class="line">   </span><br><span class="line">	<span class="keyword">wire</span> [<span class="number">7</span>:<span class="number">0</span>] xin;</span><br><span class="line">    <span class="keyword">wire</span> s_tready;</span><br><span class="line">    <span class="keyword">wire</span> <span class="keyword">signed</span> [<span class="number">23</span>:<span class="number">0</span>] m_tdata;</span><br><span class="line"></span><br><span class="line">    fir_ip_test_data u0 (</span><br><span class="line">       <span class="variable">.clk</span>(clk_data), </span><br><span class="line">       <span class="variable">.dout</span>(xin)</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    fir_compiler_0 u1 (</span><br><span class="line">      <span class="variable">.aclk</span>(clk_fir),  <span class="comment">// input clk</span></span><br><span class="line">      <span class="variable">.s_axis_data_tvalid</span>(<span class="number">1&#x27;b1</span>),         </span><br><span class="line">      <span class="variable">.s_axis_data_tready</span>(s_tready),         </span><br><span class="line">      <span class="variable">.s_axis_data_tdata</span>(xin),      <span class="comment">// input [7 : 0] din</span></span><br><span class="line">      <span class="variable">.m_axis_data_tvalid</span>(m_data_tvalid),</span><br><span class="line">      <span class="variable">.m_axis_data_tdata</span>(m_tdata)     <span class="comment">// output [23 : 0] dout,因为axi4总线的最小单位是8bit，所以自动补齐到24bit</span></span><br><span class="line">    );   </span><br><span class="line"></span><br><span class="line">    <span class="keyword">assign</span> dout = m_tdata[<span class="number">19</span>:<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">assign</span> dout_normal = dout[<span class="number">19</span>:<span class="number">11</span>];</span><br><span class="line">    </span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>fir_ip_test_data.v</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> fir_ip_test_data(</span><br><span class="line">    <span class="keyword">input</span> clk,                        <span class="comment">//系统时钟为12.5MHz</span></span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">reg</span> <span class="keyword">signed</span> [<span class="number">7</span>:<span class="number">0</span>] dout      <span class="comment">//输出为500kHz和2MHz的叠加信号</span></span><br><span class="line">    );</span><br><span class="line">   </span><br><span class="line">	<span class="keyword">wire</span> <span class="keyword">signed</span> [<span class="number">7</span>:<span class="number">0</span>] sin500k,sin2m; <span class="comment">//实际DDS ip核设置的是7bit，为了使modelsim仿真不报错，设置为8bit</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//生成500kHz的正弦信号</span></span><br><span class="line">	dds_for_fir_ip u1(</span><br><span class="line">	  <span class="variable">.aclk</span>(clk), </span><br><span class="line">	  <span class="variable">.s_axis_config_tvalid</span>(<span class="number">1&#x27;b1</span>), </span><br><span class="line">	  <span class="variable">.s_axis_config_tdata</span>(<span class="number">16&#x27;d2621</span>),</span><br><span class="line">      <span class="variable">.m_axis_data_tvalid</span>(),</span><br><span class="line">	  <span class="variable">.m_axis_data_tdata</span>(sin500k) </span><br><span class="line">    );</span><br><span class="line">	  </span><br><span class="line">	<span class="comment">//生成2MHz的正弦信号</span></span><br><span class="line">	dds_for_fir_ip u2 (</span><br><span class="line">	  <span class="variable">.aclk</span>(clk), </span><br><span class="line">	  <span class="variable">.s_axis_config_tvalid</span>(<span class="number">1&#x27;b1</span>), </span><br><span class="line">	  <span class="variable">.s_axis_config_tdata</span>(<span class="number">16&#x27;d10486</span>), </span><br><span class="line">      <span class="variable">.m_axis_data_tvalid</span>(),</span><br><span class="line">	  <span class="variable">.m_axis_data_tdata</span>(sin2m) </span><br><span class="line">    );</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//求和运算输出频率叠加信号</span></span><br><span class="line">	<span class="keyword">always</span> @(<span class="keyword">posedge</span> clk) <span class="keyword">begin</span></span><br><span class="line">	   dout &lt;= sin500k + sin2m;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>FIR_ip_tb.v</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> FIR_ip_tb;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Inputs</span></span><br><span class="line">	<span class="keyword">reg</span> rst;</span><br><span class="line">	<span class="keyword">reg</span> clk_data;</span><br><span class="line">	<span class="keyword">reg</span> clk_fir;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Outputs</span></span><br><span class="line">    <span class="keyword">wire</span> m_data_tvalid;</span><br><span class="line">	<span class="keyword">wire</span> [<span class="number">19</span>:<span class="number">0</span>] dout;</span><br><span class="line">	<span class="keyword">wire</span> [<span class="number">8</span>:<span class="number">0</span>] dout_normal;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Instantiate the Unit Under Test (UUT)</span></span><br><span class="line">	FIR_ip_design uut (</span><br><span class="line">		<span class="variable">.rst</span>(rst), </span><br><span class="line">		<span class="variable">.clk_data</span>(clk_data), </span><br><span class="line">		<span class="variable">.clk_fir</span>(clk_fir), </span><br><span class="line">        <span class="variable">.m_data_tvalid</span>(m_data_tvalid),</span><br><span class="line">		<span class="variable">.dout</span>(dout),</span><br><span class="line">		<span class="variable">.dout_normal</span>(dout_normal)</span><br><span class="line">	);</span><br><span class="line">   </span><br><span class="line">	<span class="keyword">reg</span> clk_100m;</span><br><span class="line">	<span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">		<span class="comment">// Initialize Inputs</span></span><br><span class="line">		rst = <span class="number">1</span>;</span><br><span class="line">		clk_data = <span class="number">0</span>;</span><br><span class="line">		clk_fir = <span class="number">0</span>;</span><br><span class="line">		clk_100m = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Wait 100 ns for global reset to finish</span></span><br><span class="line">		#<span class="number">100</span>;</span><br><span class="line">        rst = <span class="number">0</span>;  </span><br><span class="line">		<span class="comment">// Add stimulus here</span></span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line">	</span><br><span class="line">    <span class="keyword">always</span> #<span class="number">5</span> clk_100m &lt;= !clk_100m;  </span><br><span class="line">	</span><br><span class="line">	<span class="keyword">reg</span> [<span class="number">2</span>:<span class="number">0</span>] cn=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">always</span> @(<span class="keyword">posedge</span> clk_100m) <span class="keyword">begin</span></span><br><span class="line">        cn &lt;= cn + <span class="number">1</span>;</span><br><span class="line">        clk_fir &lt;= cn[<span class="number">0</span>];    <span class="comment">//50MHz</span></span><br><span class="line">        clk_data &lt;= cn[<span class="number">2</span>];   <span class="comment">//12.5MHz</span></span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>仿真结果如下：</p>
+<p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231121161030105.png" alt="image-20231121161030105"></p>
+<p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231121205139577.png" alt="image-20231121205139577"></p>
+</li>
+</ul>
+<h2 id="4-Reference-1"><a href="#4-Reference-1" class="headerlink" title="4.Reference"></a>4.Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/keilzc/article/details/104249702">Vivado FIR滤波器IP核实现_vivado的fir滤波器ip核用法-CSDN博客</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1rh41157xL/?spm_id_from=333.999.0.0&amp;vd_source=221b76534ba13cfad544149d75ce9b6c">Xilinx/ISE版 FPGA数字信号处理－完整的FIR核设计过程_哔哩哔哩_bilibili</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/Multiroad/article/details/126164902">基于xilinx-IP的FIR滤波器多通道实现_xilinx fir滤波-CSDN博客</a></li>
+</ul>
+<hr>
+<h1 id="FFT-IP核的使用"><a href="#FFT-IP核的使用" class="headerlink" title="FFT IP核的使用"></a>FFT IP核的使用</h1><h2 id="1-IP核的相关配置-4"><a href="#1-IP核的相关配置-4" class="headerlink" title="1.IP核的相关配置"></a>1.IP核的相关配置</h2><p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231024141407431.png" alt="image-20231024141407431" style="zoom:50%;"></p>
+<p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231024142435510.png" alt="image-20231024142435510" style="zoom:50%;"></p>
+<p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231024143541679.png" alt="image-20231024143541679" style="zoom:50%;"></p>
+<h2 id="2-MATLAB代码-2"><a href="#2-MATLAB代码-2" class="headerlink" title="2.MATLAB代码"></a>2.MATLAB代码</h2><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">close all;</span><br><span class="line">clear all;</span><br><span class="line">clc;</span><br><span class="line"><span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span></span><br><span class="line"><span class="comment">%           参数定义</span></span><br><span class="line"><span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span></span><br><span class="line">fs=<span class="number">100</span>;        <span class="comment">% 采样频率</span></span><br><span class="line">f1 = <span class="number">10</span>;       <span class="comment">% 信号频率</span></span><br><span class="line">f2 = <span class="number">30</span>;</span><br><span class="line">L=<span class="number">128</span>;         <span class="comment">% 采样点数</span></span><br><span class="line">ADC_bit=<span class="number">16</span>;    <span class="comment">% 采样点数据的位数</span></span><br><span class="line"></span><br><span class="line"><span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span></span><br><span class="line"><span class="comment">%              产生信号</span></span><br><span class="line"><span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span></span><br><span class="line">t=<span class="number">0</span>:<span class="number">1</span>/fs:(L<span class="number">-1</span>)/fs;</span><br><span class="line">s1 = <span class="built_in">cos</span>(<span class="number">2</span>*<span class="built_in">pi</span>*f1*t);    </span><br><span class="line">s2 = <span class="built_in">cos</span>(<span class="number">2</span>*<span class="built_in">pi</span>*f2*t);</span><br><span class="line">st = <span class="number">2</span> + s1 + s2;</span><br><span class="line">y=st/<span class="built_in">max</span>(<span class="built_in">abs</span>(st));                 <span class="comment">% 归一化</span></span><br><span class="line">yt=<span class="built_in">round</span>(y*(<span class="number">2</span>^(ADC_bit<span class="number">-1</span>)<span class="number">-1</span>));     <span class="comment">% 16bit量化</span></span><br><span class="line"><span class="built_in">figure</span>(<span class="number">1</span>);</span><br><span class="line"><span class="built_in">plot</span>(st);<span class="built_in">hold</span> on;</span><br><span class="line"><span class="built_in">figure</span>(<span class="number">2</span>);</span><br><span class="line"><span class="built_in">plot</span>(y);<span class="built_in">hold</span> on;</span><br><span class="line"><span class="built_in">figure</span>(<span class="number">3</span>);</span><br><span class="line"><span class="built_in">plot</span>(yt);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span></span><br><span class="line"><span class="comment">%            MATLAB生成TXT文件</span></span><br><span class="line"><span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%。</span></span><br><span class="line">fid=fopen(<span class="string">&#x27;D:\App_Data_File\Vivado_data\Vivado_project\Zynq7020_Project\FFT_ip\MATLABdata_before_fft.txt&#x27;</span>,<span class="string">&#x27;w&#x27;</span>); </span><br><span class="line"><span class="keyword">for</span> p=<span class="number">1</span>:L</span><br><span class="line">    B_s=dec2bin(yt(p)+(yt(p)&lt;<span class="number">0</span>)*<span class="number">2</span>^ADC_bit,ADC_bit);<span class="comment">%十进制转二进制</span></span><br><span class="line">    <span class="keyword">for</span> q=<span class="number">1</span>:ADC_bit  <span class="comment">% 16位，依次判断这16位的数值</span></span><br><span class="line">        <span class="keyword">if</span> B_s(q)==<span class="string">&#x27;1&#x27;</span></span><br><span class="line">            data=<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            data=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        fprintf(fid,<span class="string">&#x27;%d&#x27;</span>,data);</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (p&lt;L)</span><br><span class="line">        fprintf(fid,<span class="string">&#x27;\r\n&#x27;</span>); </span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">   </span><br><span class="line"><span class="keyword">end</span></span><br><span class="line">fclose(fid);</span><br><span class="line"></span><br><span class="line"><span class="built_in">figure</span>(<span class="number">4</span>);</span><br><span class="line">y = fft(yt,L);</span><br><span class="line">y = <span class="built_in">abs</span>(y);</span><br><span class="line">n = <span class="number">0</span>:(L<span class="number">-1</span>);</span><br><span class="line">f = n*fs/L;</span><br><span class="line"><span class="built_in">plot</span>(f,y);</span><br></pre></td></tr></table></figure>
+<h2 id="3-Testbench-2"><a href="#3-Testbench-2" class="headerlink" title="3.Testbench"></a>3.Testbench</h2><p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231024232553967.png" alt="image-20231024232553967" style="zoom:50%;"></p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">`<span class="keyword">timescale</span> 1ns / 1ps</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">module</span> fft_tb2;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">reg</span>  clk;</span><br><span class="line">    <span class="keyword">reg</span>  rst_n;</span><br><span class="line">    <span class="keyword">reg</span> [<span class="number">15</span>:<span class="number">0</span>] dati_in;</span><br><span class="line">    <span class="keyword">reg</span> [<span class="number">15</span>:<span class="number">0</span>] datq_in;</span><br><span class="line">    <span class="keyword">reg</span> [<span class="number">23</span>:<span class="number">0</span>]  dati_out;</span><br><span class="line">    <span class="keyword">reg</span> [<span class="number">23</span>:<span class="number">0</span>]  datq_out;</span><br><span class="line">    <span class="keyword">reg</span> [<span class="number">15</span>:<span class="number">0</span>]   dataI [<span class="number">127</span>:<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">reg</span> [<span class="number">47</span>:<span class="number">0</span>]  fft_abs;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">reg</span>  fft_s_data_tvalid;</span><br><span class="line">    <span class="keyword">wire</span>  [<span class="number">31</span>:<span class="number">0</span>] fft_s_data_tdata;</span><br><span class="line">    <span class="comment">//reg  fft_s_data_tlast;</span></span><br><span class="line">    <span class="keyword">wire</span> fft_s_config_tready;</span><br><span class="line">    <span class="keyword">wire</span>          fft_s_data_tready;</span><br><span class="line">    <span class="keyword">wire</span> [<span class="number">47</span>:<span class="number">0</span>] fft_m_data_tdata;</span><br><span class="line">    <span class="keyword">wire</span>          fft_m_data_tvalid;</span><br><span class="line">    <span class="keyword">wire</span>          fft_m_data_tlast;</span><br><span class="line">    <span class="keyword">wire</span> [<span class="number">7</span>:<span class="number">0</span>]    fft_m_data_tuser;</span><br><span class="line">    <span class="keyword">wire</span>          fft_event_frame_started;</span><br><span class="line">    <span class="keyword">wire</span>          fft_event_tlast_unexpected;</span><br><span class="line">    <span class="keyword">wire</span>          fft_event_tlast_missing;</span><br><span class="line">    <span class="keyword">wire</span>          fft_event_status_channel_halt;</span><br><span class="line">    <span class="keyword">wire</span>          fft_event_data_in_channel_halt;</span><br><span class="line">    <span class="keyword">wire</span>          fft_event_data_out_channel_halt;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">initial</span>  <span class="keyword">begin</span></span><br><span class="line">    clk=<span class="number">1</span>;</span><br><span class="line">    rst_n=<span class="number">0</span>;</span><br><span class="line">    <span class="comment">//fft_s_data_tlast=1&#x27;b0;</span></span><br><span class="line">    fft_s_data_tvalid=<span class="number">1&#x27;b0</span>;</span><br><span class="line">    dati_in=<span class="number">0</span>;</span><br><span class="line">    datq_in=<span class="number">0</span>;</span><br><span class="line">    dati_out=<span class="number">0</span>;</span><br><span class="line">    datq_out=<span class="number">0</span>;</span><br><span class="line">    fft_abs=<span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">$readmemb</span>(<span class="string">&quot;D:\\App_Data_File\\Vivado_data\\Vivado_project\\Zynq7020_Project\\FFT_ip\\MATLABdata_before_fft.txt&quot;</span>,dataI);</span><br><span class="line">    #<span class="number">100</span></span><br><span class="line">    rst_n=<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">always</span> #<span class="number">5</span>  clk=~clk;</span><br><span class="line">    <span class="keyword">reg</span>[<span class="number">7</span>:<span class="number">0</span>]  count=<span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span>  clk)  <span class="keyword">begin</span></span><br><span class="line">       <span class="keyword">if</span> (fft_s_data_tready) <span class="keyword">begin</span></span><br><span class="line">         <span class="keyword">if</span>(count==<span class="number">128</span>) <span class="keyword">begin</span></span><br><span class="line">           fft_s_data_tvalid=<span class="number">1&#x27;b0</span>;</span><br><span class="line">    	   	   <span class="comment">//fft_s_data_tlast=1&#x27;b0;</span></span><br><span class="line">    	   #<span class="number">10000</span></span><br><span class="line">           count=<span class="number">0</span>;</span><br><span class="line">         <span class="keyword">end</span></span><br><span class="line">    	 <span class="keyword">else</span> <span class="keyword">if</span>(count==<span class="number">127</span>)<span class="keyword">begin</span></span><br><span class="line">           dati_in&lt;= dataI[count];</span><br><span class="line">           datq_in&lt;=<span class="number">16&#x27;d0</span>;</span><br><span class="line">           fft_s_data_tvalid&lt;=<span class="number">1&#x27;b1</span>;</span><br><span class="line">    	   <span class="comment">//fft_s_data_tlast&lt;=1&#x27;b1;</span></span><br><span class="line">           count&lt;=count+<span class="number">1</span>;	 </span><br><span class="line">    	 <span class="keyword">end</span></span><br><span class="line">         <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">           dati_in&lt;= dataI[count];</span><br><span class="line">           datq_in&lt;=<span class="number">16&#x27;d0</span>;</span><br><span class="line">           fft_s_data_tvalid=<span class="number">1&#x27;b1</span>;</span><br><span class="line">           count&lt;=count+<span class="number">1</span>;</span><br><span class="line">    	   <span class="comment">//fft_s_data_tlast&lt;=1&#x27;b0;</span></span><br><span class="line">         <span class="keyword">end</span></span><br><span class="line">       <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">assign</span> fft_s_data_tdata = &#123;dati_in,datq_in&#125;; <span class="comment">//尤其注意这里</span></span><br><span class="line"></span><br><span class="line">    fft_test u_fft_test(</span><br><span class="line">    <span class="variable">.clk</span>(clk),</span><br><span class="line">    <span class="variable">.rst_n</span>(rst_n),</span><br><span class="line">    <span class="variable">.tvalid_i</span>(fft_s_data_tvalid),</span><br><span class="line">    <span class="variable">.tdata_i</span>(fft_s_data_tdata),</span><br><span class="line">    <span class="comment">//.fft_s_data_tlast(fft_s_data_tlast),</span></span><br><span class="line">    <span class="variable">.fft_s_config_tready</span>(fft_s_config_tready),</span><br><span class="line">    <span class="variable">.fft_s_data_tready</span>(fft_s_data_tready),</span><br><span class="line">    <span class="variable">.fft_m_data_tdata</span>(fft_m_data_tdata),</span><br><span class="line">    <span class="variable">.fft_m_data_tvalid</span>(fft_m_data_tvalid),</span><br><span class="line">    <span class="variable">.fft_m_data_tlast</span>(fft_m_data_tlast),</span><br><span class="line">    <span class="variable">.fft_m_data_tuser</span>(fft_m_data_tuser),</span><br><span class="line">    <span class="variable">.fft_event_frame_started</span>(fft_event_frame_started),</span><br><span class="line">    <span class="variable">.fft_event_tlast_unexpected</span>(fft_event_tlast_unexpected),</span><br><span class="line">    <span class="variable">.fft_event_tlast_missing</span>(fft_event_tlast_missing),</span><br><span class="line">    <span class="variable">.fft_event_status_channel_halt</span>(fft_event_status_channel_halt),</span><br><span class="line">    <span class="variable">.fft_event_data_in_channel_halt</span>(fft_event_data_in_channel_halt),</span><br><span class="line">    <span class="variable">.fft_event_data_out_channel_halt</span>(fft_event_data_out_channel_halt)</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> clk) <span class="keyword">begin</span></span><br><span class="line">      <span class="keyword">if</span>(fft_m_data_tvalid) <span class="keyword">begin</span></span><br><span class="line">        dati_out&lt;=fft_m_data_tdata[<span class="number">23</span>:<span class="number">0</span>];</span><br><span class="line">        datq_out&lt;=fft_m_data_tdata[<span class="number">47</span>:<span class="number">24</span>];    </span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> clk) <span class="keyword">begin</span></span><br><span class="line">      fft_abs&lt;=<span class="built_in">$signed</span>(dati_out)* <span class="built_in">$signed</span>(dati_out)+ <span class="built_in">$signed</span>(datq_out)* <span class="built_in">$signed</span>(datq_out);</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">`<span class="keyword">timescale</span> 1ns / 1ps</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">module</span> fft_test(</span><br><span class="line"><span class="keyword">input</span> clk,</span><br><span class="line"><span class="keyword">input</span> rst_n,</span><br><span class="line"><span class="keyword">input</span>  tvalid_i,</span><br><span class="line"><span class="keyword">input</span>  [<span class="number">31</span>:<span class="number">0</span>] tdata_i,</span><br><span class="line"><span class="comment">//input  fft_s_data_tlast,</span></span><br><span class="line"><span class="keyword">output</span> fft_s_config_tready,</span><br><span class="line"></span><br><span class="line"><span class="keyword">output</span>          fft_s_data_tready,</span><br><span class="line"><span class="keyword">output</span> [<span class="number">47</span>:<span class="number">0</span>] fft_m_data_tdata,</span><br><span class="line"><span class="keyword">output</span>          fft_m_data_tvalid,</span><br><span class="line"><span class="keyword">output</span>          fft_m_data_tlast,</span><br><span class="line"><span class="keyword">output</span> [<span class="number">7</span>:<span class="number">0</span>]    fft_m_data_tuser,</span><br><span class="line"><span class="keyword">output</span>          fft_event_frame_started,</span><br><span class="line"><span class="keyword">output</span>          fft_event_tlast_unexpected,</span><br><span class="line"><span class="keyword">output</span>          fft_event_tlast_missing,</span><br><span class="line"><span class="keyword">output</span>          fft_event_status_channel_halt,</span><br><span class="line"><span class="keyword">output</span>          fft_event_data_in_channel_halt,</span><br><span class="line"><span class="keyword">output</span>          fft_event_data_out_channel_halt</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">reg</span>  fft_s_data_tvalid=<span class="number">1&#x27;b0</span>;</span><br><span class="line"><span class="keyword">reg</span>  [<span class="number">31</span>:<span class="number">0</span>] fft_s_data_tdata=<span class="number">32&#x27;d0</span>;</span><br><span class="line"><span class="keyword">reg</span>  fft_s_data_tlast=<span class="number">1&#x27;b0</span>;</span><br><span class="line"><span class="keyword">reg</span>  [<span class="number">7</span>:<span class="number">0</span>]  count=<span class="number">8&#x27;d0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span>  clk)  <span class="keyword">begin</span></span><br><span class="line">  <span class="keyword">if</span>(!rst_n) <span class="keyword">begin</span></span><br><span class="line">    fft_s_data_tvalid&lt;=<span class="number">1&#x27;b0</span>;</span><br><span class="line">    fft_s_data_tdata&lt;=<span class="number">32&#x27;d0</span>;</span><br><span class="line">    fft_s_data_tlast&lt;=<span class="number">1&#x27;b0</span>;</span><br><span class="line">    count&lt;=<span class="number">8&#x27;d0</span>;</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (tvalid_i &amp;&amp; fft_s_data_tready) <span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">if</span>(count==<span class="number">127</span>)<span class="keyword">begin</span></span><br><span class="line">        fft_s_data_tvalid&lt;=<span class="number">1&#x27;b1</span>;</span><br><span class="line">	      fft_s_data_tlast&lt;=<span class="number">1&#x27;b1</span>;</span><br><span class="line">	      fft_s_data_tdata&lt;=tdata_i;</span><br><span class="line">        count&lt;=<span class="number">0</span>;	 </span><br><span class="line">	 <span class="keyword">end</span></span><br><span class="line">     <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">        fft_s_data_tvalid=<span class="number">1&#x27;b1</span>;</span><br><span class="line">        count&lt;=count+<span class="number">1</span>;</span><br><span class="line">	      fft_s_data_tlast&lt;=<span class="number">1&#x27;b0</span>;</span><br><span class="line">	      fft_s_data_tdata&lt;=tdata_i;</span><br><span class="line">     <span class="keyword">end</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">    fft_s_data_tvalid&lt;=<span class="number">1&#x27;b0</span>;</span><br><span class="line">	  fft_s_data_tlast&lt;=<span class="number">1&#x27;b0</span>;</span><br><span class="line">	  fft_s_data_tdata&lt;=fft_s_data_tdata;</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  xfft_0 u1_fft(</span><br><span class="line">    <span class="variable">.aclk</span>(clk),                                                <span class="comment">// input wire aclk</span></span><br><span class="line">    <span class="variable">.aresetn</span>(rst_n),                                           <span class="comment">// input wire aresetn</span></span><br><span class="line">    <span class="variable">.s_axis_config_tdata</span>(<span class="number">8&#x27;d1</span>),                                <span class="comment">// input wire [7 : 0] s_axis_config_tdata</span></span><br><span class="line">    <span class="variable">.s_axis_config_tvalid</span>(<span class="number">1&#x27;b1</span>),                               <span class="comment">// input wire s_axis_config_tvalid</span></span><br><span class="line">    <span class="variable">.s_axis_config_tready</span>(fft_s_config_tready),                <span class="comment">// output wire s_axis_config_tready</span></span><br><span class="line">    <span class="variable">.s_axis_data_tdata</span>(fft_s_data_tdata),                      <span class="comment">// input wire [31 : 0] s_axis_data_tdata</span></span><br><span class="line">    <span class="variable">.s_axis_data_tvalid</span>(fft_s_data_tvalid),                    <span class="comment">// input wire s_axis_data_tvalid</span></span><br><span class="line">    <span class="variable">.s_axis_data_tready</span>(fft_s_data_tready),                    <span class="comment">// output wire s_axis_data_tready</span></span><br><span class="line">    <span class="variable">.s_axis_data_tlast</span>(fft_s_data_tlast),                      <span class="comment">// input wire s_axis_data_tlast</span></span><br><span class="line">    <span class="variable">.m_axis_data_tdata</span>(fft_m_data_tdata),                      <span class="comment">// output wire [47 : 0] m_axis_data_tdata</span></span><br><span class="line">    <span class="variable">.m_axis_data_tuser</span>(fft_m_data_tuser),                      <span class="comment">// output wire [7 : 0] m_axis_data_tuser</span></span><br><span class="line">    <span class="variable">.m_axis_data_tvalid</span>(fft_m_data_tvalid),                    <span class="comment">// output wire m_axis_data_tvalid</span></span><br><span class="line">    <span class="variable">.m_axis_data_tready</span>(<span class="number">1&#x27;b1</span>),                                 <span class="comment">// input wire m_axis_data_tready</span></span><br><span class="line">    <span class="variable">.m_axis_data_tlast</span>(fft_m_data_tlast),                      <span class="comment">// output wire m_axis_data_tlast</span></span><br><span class="line">    <span class="variable">.event_frame_started</span>(fft_event_frame_started),                  <span class="comment">// output wire event_frame_started</span></span><br><span class="line">    <span class="variable">.event_tlast_unexpected</span>(fft_event_tlast_unexpected),            <span class="comment">// output wire event_tlast_unexpected</span></span><br><span class="line">    <span class="variable">.event_tlast_missing</span>(fft_event_tlast_missing),                  <span class="comment">// output wire event_tlast_missing</span></span><br><span class="line">    <span class="variable">.event_status_channel_halt</span>(fft_event_status_channel_halt),      <span class="comment">// output wire event_status_channel_halt</span></span><br><span class="line">    <span class="variable">.event_data_in_channel_halt</span>(fft_event_data_in_channel_halt),    <span class="comment">// output wire event_data_in_channel_halt</span></span><br><span class="line">    <span class="variable">.event_data_out_channel_halt</span>(fft_event_data_out_channel_halt)   <span class="comment">// output wire event_data_out_channel_halt</span></span><br><span class="line">  );</span><br><span class="line">  </span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>结果如下：</p>
+<p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231024224042607.png" alt="image-20231024224042607"></p>
+</li>
+<li><p>放大一点看结果的频谱图</p>
+<p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20231024224616096.png" alt="image-20231024224616096"></p>
+</li>
+<li><p>这里的结果和matlab中的一致：</p>
+<p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/sinwave_for_fft.bmp" alt="sinwave_for_fft"></p>
+</li>
+</ul>
+<h2 id="4-Reference-2"><a href="#4-Reference-2" class="headerlink" title="4.Reference"></a>4.Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_41594632/article/details/112689545">Vivado Xilinx FFT IP核v9.0 使用详解（附仿真实例）_vivado fft仿真-CSDN博客</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/637653195">vivado FFT ip核全解析。 - 知乎 (zhihu.com)</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_43622265/article/details/105905927">Vivado中FFT IP核的使用_vivado中fft核的用法-CSDN博客</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/yanchuan23/article/details/122512191">Vivado联合ModelSim仿真设置（附图步骤）_vivado modelsim_NemoYxc的博客-CSDN博客</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV18h4y1k7PZ/?spm_id_from=333.999.0.0&amp;vd_source=221b76534ba13cfad544149d75ce9b6c">VIVADO快速傅里叶变换FFT IP核详解（端口篇）_哔哩哔哩_bilibili</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1ah4y1k7A7/?spm_id_from=333.999.0.0&amp;vd_source=221b76534ba13cfad544149d75ce9b6c">VIVADO快速傅里叶变换FFT IP核详解（配置篇）_哔哩哔哩_bilibili</a></li>
+</ul>
+<hr>
+<h1 id="Cordic-IP核的使用"><a href="#Cordic-IP核的使用" class="headerlink" title="Cordic IP核的使用"></a>Cordic IP核的使用</h1><h2 id="1-IP核的相关配置-5"><a href="#1-IP核的相关配置-5" class="headerlink" title="1.IP核的相关配置"></a>1.IP核的相关配置</h2><p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20240319191134297.png" alt="image-20240319191134297"></p>
+<p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20240319192249585.png" alt="image-20240319192249585"></p>
+<h2 id="2-Testbench-2"><a href="#2-Testbench-2" class="headerlink" title="2.Testbench"></a>2.Testbench</h2><figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">`<span class="keyword">timescale</span> 1ns / 1ps</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">module</span> Cordic_ip_tb;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// square Parameters</span></span><br><span class="line">    <span class="keyword">parameter</span> PERIOD  = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// square Inputs</span></span><br><span class="line">    <span class="keyword">reg</span>   clk                                  = <span class="number">0</span> ;</span><br><span class="line">    <span class="keyword">reg</span>   rst_n                                = <span class="number">0</span> ;</span><br><span class="line">    <span class="keyword">reg</span>   data_in_valid                        = <span class="number">0</span> ;</span><br><span class="line">    <span class="keyword">reg</span>   [<span class="number">31</span>:<span class="number">0</span>]  data_in                      = <span class="number">0</span> ;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// square Outputs</span></span><br><span class="line">    <span class="keyword">wire</span>  data_out_valid                       ;</span><br><span class="line">    <span class="keyword">wire</span>  [<span class="number">15</span>:<span class="number">0</span>]  data_out                     ;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">initial</span></span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">forever</span> <span class="variable">#(PERIOD/2)</span>  clk=~clk;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">initial</span></span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">        #<span class="number">52</span> rst_n  =  <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    cordic_square square_U1(</span><br><span class="line">        <span class="variable">.aclk</span>(clk),</span><br><span class="line">        <span class="variable">.aresetn</span>(rst_n),</span><br><span class="line">        <span class="variable">.s_axis_cartesian_tvalid</span>(data_in_valid),</span><br><span class="line">        <span class="variable">.s_axis_cartesian_tdata</span>(data_in),       <span class="comment">//其实data_in最多31bit，VHL参考模板有误，还是得看IP核是如何设置的</span></span><br><span class="line">        <span class="variable">.m_axis_dout_tvalid</span>(data_out_valid),</span><br><span class="line">        <span class="variable">.m_axis_dout_tdata</span>(data_out)</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">reg</span>	[<span class="number">4</span>:<span class="number">0</span>]		cnt ;</span><br><span class="line">        </span><br><span class="line">    <span class="comment">//----------------------------------------------------------------------</span></span><br><span class="line">    <span class="keyword">always</span>@(<span class="keyword">posedge</span>	clk <span class="keyword">or</span> <span class="keyword">negedge</span>	rst_n)</span><br><span class="line">        <span class="keyword">begin</span></span><br><span class="line">            <span class="keyword">if</span>(!rst_n)</span><br><span class="line">                <span class="keyword">begin</span></span><br><span class="line">                    data_in_valid &lt;= <span class="number">0</span>;</span><br><span class="line">                    data_in &lt;= <span class="number">0</span>;</span><br><span class="line">                    cnt &lt;= <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line">            <span class="keyword">else</span>	<span class="keyword">if</span>(cnt &lt; <span class="number">10</span>)</span><br><span class="line">                <span class="keyword">begin</span></span><br><span class="line">                    data_in_valid &lt;= <span class="number">1</span>;</span><br><span class="line">                    data_in &lt;= &#123;<span class="built_in">$random</span>&#125; % &#123;<span class="number">8</span>&#123;<span class="number">1&#x27;b1</span>&#125;&#125;;</span><br><span class="line">                    cnt &lt;= cnt + <span class="number">1</span>;</span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                <span class="keyword">begin</span></span><br><span class="line">                    data_in_valid &lt;= <span class="number">0</span>;</span><br><span class="line">                    data_in &lt;= <span class="number">0</span>;</span><br><span class="line">                    cnt &lt;= cnt;</span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="comment">//----------------------------------------------------------------------</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="RF-Data-Converter-IP核的使用"><a href="#RF-Data-Converter-IP核的使用" class="headerlink" title="RF Data Converter IP核的使用"></a>RF Data Converter IP核的使用</h1><h2 id="1-IP核的相关配置-6"><a href="#1-IP核的相关配置-6" class="headerlink" title="1.IP核的相关配置"></a>1.IP核的相关配置</h2><p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20240110125626654.png" alt="image-20240110125626654"></p>
+<p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20240110125946346.png" alt="image-20240110125946346"></p>
+<p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20240110130310317.png" alt="image-20240110130310317"></p>
+<ul>
+<li><p>最终配置如下：</p>
+<p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20240110132214936.png" alt="image-20240110132214936"></p>
+</li>
+</ul>
+<h2 id="2-MATLAB代码-3"><a href="#2-MATLAB代码-3" class="headerlink" title="2.MATLAB代码"></a>2.MATLAB代码</h2><ul>
+<li><p>用来生成测试单频信号的数据</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">close all;</span><br><span class="line">clear all;</span><br><span class="line">clc;</span><br><span class="line"><span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span></span><br><span class="line"><span class="comment">%           参数定义</span></span><br><span class="line"><span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span></span><br><span class="line">fc=<span class="number">156.25e6</span>;         <span class="comment">% 信号频率</span></span><br><span class="line">fs=<span class="number">2.5e9</span>;        <span class="comment">% 采样频率</span></span><br><span class="line">L=<span class="number">16</span>;          <span class="comment">% 采样点数</span></span><br><span class="line">ADC_bit=<span class="number">16</span>;     <span class="comment">% 采样位数</span></span><br><span class="line"></span><br><span class="line"><span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span></span><br><span class="line"><span class="comment">%              产生信号</span></span><br><span class="line"><span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span></span><br><span class="line">t=<span class="number">0</span>:<span class="number">1</span>/fs:(L<span class="number">-1</span>)/fs;</span><br><span class="line">noise=<span class="built_in">randn</span>(<span class="number">1</span>,<span class="built_in">length</span>(t));</span><br><span class="line">noise=<span class="number">0</span>;</span><br><span class="line">st=<span class="built_in">sin</span>(<span class="number">2</span>*<span class="built_in">pi</span>*fc*t)+noise;</span><br><span class="line">y=st/<span class="built_in">max</span>(<span class="built_in">abs</span>(st));                 <span class="comment">% 归一化</span></span><br><span class="line">yt=<span class="built_in">round</span>(y*(<span class="number">2</span>^(ADC_bit<span class="number">-1</span>)<span class="number">-1</span>));     <span class="comment">% 16bit量化</span></span><br><span class="line"><span class="built_in">figure</span>(<span class="number">1</span>);</span><br><span class="line"><span class="built_in">plot</span>(st);</span><br><span class="line"><span class="built_in">figure</span>(<span class="number">2</span>);</span><br><span class="line"><span class="built_in">plot</span>(y);</span><br><span class="line"><span class="built_in">figure</span>(<span class="number">3</span>);</span><br><span class="line"><span class="built_in">plot</span>(yt);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span></span><br><span class="line"><span class="comment">%            MATLAB生成coe文件</span></span><br><span class="line"><span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span></span><br><span class="line"><span class="comment">% 在.coe文件中</span></span><br><span class="line"><span class="comment">% 第一行为定义数据格式, 2代表 ROM 的数据格式为二进制。</span></span><br><span class="line"><span class="comment">% 从第 3 行开始到第最后一行，是这个  L（数据长度为1024）* ADC_bit（16bit） 大小 ROM 的初始化数据。</span></span><br><span class="line"><span class="comment">% 第一行到倒数第二行的数字后面用逗号，最后一行数字结束用分号。</span></span><br><span class="line">fid=fopen(<span class="string">&#x27;sin156o25M.coe&#x27;</span>,<span class="string">&#x27;w&#x27;</span>); </span><br><span class="line">fprintf(fid,<span class="string">&#x27;Memory_Initialization_Radix = 2;\r\n&#x27;</span>); <span class="comment">% 二进制</span></span><br><span class="line">fprintf(fid,<span class="string">&#x27;Memory_Initialization_Vector = \r\n&#x27;</span>);</span><br><span class="line"><span class="keyword">for</span> p=<span class="number">1</span>:L</span><br><span class="line">    B_s=dec2bin(yt(p)+(yt(p)&lt;<span class="number">0</span>)*<span class="number">2</span>^ADC_bit,ADC_bit);<span class="comment">%十进制转二进制</span></span><br><span class="line">    <span class="keyword">for</span> q=<span class="number">1</span>:ADC_bit  <span class="comment">% 16位，依次判断这16位的数值</span></span><br><span class="line">        <span class="keyword">if</span> B_s(q)==<span class="string">&#x27;1&#x27;</span></span><br><span class="line">            data=<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            data=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        fprintf(fid,<span class="string">&#x27;%d&#x27;</span>,data);</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">%  下面if语句的目的</span></span><br><span class="line">    <span class="comment">%  每行数字后面用逗号(,)，最后一行数字结束用分号(;)</span></span><br><span class="line">    <span class="keyword">if</span> (p&lt;L)</span><br><span class="line">        fprintf(fid,<span class="string">&#x27;,\r\n&#x27;</span>); </span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        fprintf(fid,<span class="string">&#x27;;\r\n&#x27;</span>);    <span class="comment">% 分号(;)  结束标志位</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">   </span><br><span class="line"><span class="keyword">end</span></span><br><span class="line">fclose(fid);</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>MATLAB生成的波形：</p>
+<p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20240110135744248.png" alt="image-20240110135744248"></p>
+</li>
+<li><p>DAC结果：</p>
+<p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20240110135807426.png" alt="image-20240110135807426" style="zoom:80%;"></p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-Python代码"><a href="#3-Python代码" class="headerlink" title="3.Python代码"></a>3.Python代码</h2><ul>
+<li><p>用来处理经过ADC后的数据，画出波形</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">split_string</span>(<span class="params">input_str, chunk_size</span>):</span><br><span class="line">    <span class="keyword">return</span> [input_str[i:i + chunk_size] <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="built_in">len</span>(input_str), chunk_size)]</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line"></span><br><span class="line">    hex_num = []</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;/media/data/zhl/ila_data_20240108_215000.txt&#x27;</span>, <span class="string">&#x27;r&#x27;</span>) <span class="keyword">as</span> file:</span><br><span class="line">            <span class="keyword">for</span> line <span class="keyword">in</span> file:</span><br><span class="line">                number = line.strip()</span><br><span class="line">                hex_num.append(number)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">except</span> FileNotFoundError:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;文件不存在&#x27;</span>)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&#x27;异常:<span class="subst">&#123;e&#125;</span>&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;文件读取完毕&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># hex_num = np.array(hex_num)</span></span><br><span class="line"></span><br><span class="line">    int_num = []</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> hex_num:</span><br><span class="line">        <span class="comment"># 对每一行，先reshape为16*8的样子，然后再转换数据类型</span></span><br><span class="line">        temp = split_string(line, <span class="number">4</span>)</span><br><span class="line">        <span class="keyword">for</span> item <span class="keyword">in</span> temp:</span><br><span class="line">            int_num.append(<span class="built_in">int</span>(item, <span class="number">16</span>))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="built_in">len</span>(int_num)):</span><br><span class="line">        <span class="keyword">if</span> (int_num[i] &amp; <span class="number">0x8000</span>) == <span class="number">0x8000</span>:</span><br><span class="line">            <span class="comment"># 补码，取反加一</span></span><br><span class="line">            int_num[i] = -((int_num[i]-<span class="number">1</span>) ^ <span class="number">0xFFFF</span>)</span><br><span class="line"></span><br><span class="line">    width = <span class="number">2000</span></span><br><span class="line">    height = <span class="number">500</span></span><br><span class="line">    dpi = <span class="number">180</span></span><br><span class="line">    fig = plt.figure(figsize=(width/dpi, height/dpi), dpi=dpi)</span><br><span class="line">    plt.plot(int_num)</span><br><span class="line">    plt.tight_layout()</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;ok&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>ADC结果：</p>
+<p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20240110135454794.png" alt="image-20240110135454794"></p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="4-Reference-3"><a href="#4-Reference-3" class="headerlink" title="4.Reference"></a>4.Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_41445387/article/details/119615042">RFSoC应用笔记 - RF数据转换器 -02- IP配置指南_Vuko-wxh的博客-CSDN博客</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/lightninghenry/article/details/110421299">XILINX RFSoC全面解析（五）—— Zynq UItrascale+ RF Data Converter IP核详解_zynq ultrascal + rf data converter-CSDN博客</a></li>
+<li>特别感谢湟霖同学对本次调试的鼎力支持</li>
+</ul>
+<hr>
+<h1 id="FIFO-IP核的使用"><a href="#FIFO-IP核的使用" class="headerlink" title="FIFO IP核的使用"></a>FIFO IP核的使用</h1><h2 id="1-IP核的相关配置-7"><a href="#1-IP核的相关配置-7" class="headerlink" title="1.IP核的相关配置"></a>1.IP核的相关配置</h2><p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20240111151849763.png" alt="image-20240111151849763"></p>
+<p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20240111152255385.png" alt="image-20240111152255385"></p>
+<ul>
+<li>且对于Standard FIFO：实际位宽为255，对于First Word Fall Through：实际位宽为257</li>
+</ul>
+<p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20240111152355346.png" alt="image-20240111152355346"></p>
+<p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20240111153202181.png" alt="image-20240111153202181"></p>
+<h2 id="2-源代码"><a href="#2-源代码" class="headerlink" title="2.源代码"></a>2.源代码</h2><ul>
+<li><p>ip_fifo.v</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">`<span class="keyword">timescale</span> 1ns / 1ps</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">module</span> ip_fifo(</span><br><span class="line">    <span class="keyword">input</span>    sys_clk ,  <span class="comment">// 时钟信号</span></span><br><span class="line">    <span class="keyword">input</span>    sys_rst_n  <span class="comment">// 复位信号</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//wire define</span></span><br><span class="line">    <span class="keyword">wire</span>         fifo_wr_en         ;  <span class="comment">// FIFO写使能信号</span></span><br><span class="line">    <span class="keyword">wire</span>         fifo_rd_en         ;  <span class="comment">// FIFO读使能信号</span></span><br><span class="line">    <span class="keyword">wire</span>  [<span class="number">7</span>:<span class="number">0</span>]  fifo_din           ;  <span class="comment">// 写入到FIFO的数据</span></span><br><span class="line">    <span class="keyword">wire</span>  [<span class="number">7</span>:<span class="number">0</span>]  fifo_dout          ;  <span class="comment">// 从FIFO读出的数据</span></span><br><span class="line">    <span class="keyword">wire</span>         almost_full        ;  <span class="comment">// FIFO将满信号</span></span><br><span class="line">    <span class="keyword">wire</span>         almost_empty       ;  <span class="comment">// FIFO将空信号</span></span><br><span class="line">    <span class="keyword">wire</span>         fifo_full          ;  <span class="comment">// FIFO满信号</span></span><br><span class="line">    <span class="keyword">wire</span>         fifo_empty         ;  <span class="comment">// FIFO空信号</span></span><br><span class="line">    <span class="keyword">wire</span>  [<span class="number">7</span>:<span class="number">0</span>]  fifo_wr_data_count ;  <span class="comment">// FIFO写时钟域的数据计数</span></span><br><span class="line">    <span class="keyword">wire</span>  [<span class="number">7</span>:<span class="number">0</span>]  fifo_rd_data_count ;  <span class="comment">// FIFO读时钟域的数据计数</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//*****************************************************</span></span><br><span class="line">    <span class="comment">//**                    main code</span></span><br><span class="line">    <span class="comment">//*****************************************************</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//例化FIFO IP核</span></span><br><span class="line">    fifo_generator_0  fifo_ip_u1 (</span><br><span class="line">        <span class="variable">.wr_clk</span>        ( sys_clk            ),  <span class="comment">// input wire wr_clk</span></span><br><span class="line">        <span class="variable">.rd_clk</span>        ( sys_clk            ),  <span class="comment">// input wire rd_clk</span></span><br><span class="line"></span><br><span class="line">        <span class="variable">.wr_en</span>         ( fifo_wr_en         ),  <span class="comment">// input wire wr_en</span></span><br><span class="line">        <span class="variable">.rd_en</span>         ( fifo_rd_en         ),  <span class="comment">// input wire rd_en</span></span><br><span class="line"></span><br><span class="line">        <span class="variable">.din</span>           ( fifo_din           ),  <span class="comment">// input wire [7 : 0] din</span></span><br><span class="line">        <span class="variable">.dout</span>          ( fifo_dout          ),  <span class="comment">// output wire [7 : 0] dout</span></span><br><span class="line">        </span><br><span class="line">        <span class="variable">.almost_full</span>   (almost_full         ),  <span class="comment">// output wire almost_full</span></span><br><span class="line">        <span class="variable">.almost_empty</span>  (almost_empty        ),  <span class="comment">// output wire almost_empty</span></span><br><span class="line">        <span class="variable">.full</span>          ( fifo_full          ),  <span class="comment">// output wire full</span></span><br><span class="line">        <span class="variable">.empty</span>         ( fifo_empty         ),  <span class="comment">// output wire empty</span></span><br><span class="line"></span><br><span class="line">        <span class="variable">.wr_data_count</span> ( fifo_wr_data_count ),  <span class="comment">// output wire [7 : 0] wr_data_count	</span></span><br><span class="line">        <span class="variable">.rd_data_count</span> ( fifo_rd_data_count )   <span class="comment">// output wire [7 : 0] rd_data_count</span></span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="comment">//例化写FIFO模块</span></span><br><span class="line">    fifo_wr  u_fifo_wr(</span><br><span class="line">        <span class="variable">.clk</span>            ( sys_clk    ),   <span class="comment">// 写时钟</span></span><br><span class="line">        <span class="variable">.rst_n</span>          ( sys_rst_n  ),   <span class="comment">// 复位信号</span></span><br><span class="line"></span><br><span class="line">        <span class="variable">.fifo_wr_en</span>     ( fifo_wr_en )  , <span class="comment">// fifo写请求</span></span><br><span class="line">        <span class="variable">.fifo_wr_data</span>   ( fifo_din    ) , <span class="comment">// 写入FIFO的数据</span></span><br><span class="line">        <span class="variable">.almost_empty</span>   ( almost_empty ), <span class="comment">// fifo空信号</span></span><br><span class="line">        <span class="variable">.almost_full</span>    ( almost_full  )  <span class="comment">// fifo满信号</span></span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="comment">//例化读FIFO模块</span></span><br><span class="line">    fifo_rd  u_fifo_rd(</span><br><span class="line">        <span class="variable">.clk</span>          ( sys_clk    ),      <span class="comment">// 读时钟</span></span><br><span class="line">        <span class="variable">.rst_n</span>        ( sys_rst_n  ),      <span class="comment">// 复位信号</span></span><br><span class="line"></span><br><span class="line">        <span class="variable">.fifo_rd_en</span>   ( fifo_rd_en ),      <span class="comment">// fifo读请求</span></span><br><span class="line">        <span class="variable">.fifo_dout</span>    ( fifo_dout  ),      <span class="comment">// 从FIFO输出的数据</span></span><br><span class="line">        <span class="variable">.almost_empty</span> ( almost_empty ),    <span class="comment">// fifo空信号</span></span><br><span class="line">        <span class="variable">.almost_full</span>  ( almost_full  )     <span class="comment">// fifo满信号</span></span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span> </span><br></pre></td></tr></table></figure>
+</li>
+<li><p>fifo_wr.v</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">`<span class="keyword">timescale</span> 1ns / 1ps</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">module</span> fifo_wr(</span><br><span class="line">    <span class="comment">//mudule clock</span></span><br><span class="line">    <span class="keyword">input</span>                  clk    ,           <span class="comment">// 时钟信号</span></span><br><span class="line">    <span class="keyword">input</span>                  rst_n  ,           <span class="comment">// 复位信号</span></span><br><span class="line">    <span class="comment">//FIFO interface       </span></span><br><span class="line">    <span class="keyword">input</span>                  almost_empty,      <span class="comment">// FIFO将空信号</span></span><br><span class="line">    <span class="keyword">input</span>                  almost_full ,      <span class="comment">// FIFO将满信号</span></span><br><span class="line">	<span class="keyword">output</span>    <span class="keyword">reg</span>          fifo_wr_en ,       <span class="comment">// FIFO写使能</span></span><br><span class="line">    <span class="keyword">output</span>    <span class="keyword">reg</span>  [<span class="number">7</span>:<span class="number">0</span>]   fifo_wr_data       <span class="comment">// 写入FIFO的数据</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//reg define</span></span><br><span class="line">    <span class="keyword">reg</span>  [<span class="number">1</span>:<span class="number">0</span>]  state            ; <span class="comment">//动作状态</span></span><br><span class="line">    <span class="keyword">reg</span>  		almost_empty_d0  ;  <span class="comment">//almost_empty 延迟一拍</span></span><br><span class="line">    <span class="keyword">reg</span>  		almost_empty_syn ;  <span class="comment">//almost_empty 延迟两拍</span></span><br><span class="line">    <span class="keyword">reg</span>  [<span class="number">3</span>:<span class="number">0</span>]  dly_cnt          ; <span class="comment">//延迟计数器</span></span><br><span class="line">    <span class="comment">//*****************************************************</span></span><br><span class="line">    <span class="comment">//**                    main code</span></span><br><span class="line">    <span class="comment">//*****************************************************</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//因为 almost_empty 信号是属于FIFO读时钟域的</span></span><br><span class="line">    <span class="comment">//所以要将其同步到写时钟域中</span></span><br><span class="line">    <span class="keyword">always</span>@( <span class="keyword">posedge</span> clk ) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>( !rst_n ) <span class="keyword">begin</span></span><br><span class="line">            almost_empty_d0  &lt;= <span class="number">1&#x27;b0</span> ;</span><br><span class="line">            almost_empty_syn &lt;= <span class="number">1&#x27;b0</span> ;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">            almost_empty_d0  &lt;= almost_empty ;</span><br><span class="line">            almost_empty_syn &lt;= almost_empty_d0 ;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//向FIFO中写入数据</span></span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> clk ) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>(!rst_n) <span class="keyword">begin</span></span><br><span class="line">            fifo_wr_en   &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">            fifo_wr_data &lt;= <span class="number">8&#x27;d0</span>;</span><br><span class="line">            state        &lt;= <span class="number">2&#x27;d0</span>;</span><br><span class="line">            dly_cnt      &lt;= <span class="number">4&#x27;d0</span>;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">            <span class="keyword">case</span>(state)</span><br><span class="line">                <span class="number">2&#x27;d0</span>: <span class="keyword">begin</span> </span><br><span class="line">                    <span class="keyword">if</span>(almost_empty_syn) <span class="keyword">begin</span>  <span class="comment">//如果检测到FIFO将被读空</span></span><br><span class="line">                        state &lt;= <span class="number">2&#x27;d1</span>;        <span class="comment">//就进入延时状态</span></span><br><span class="line">                    <span class="keyword">end</span> </span><br><span class="line">                    <span class="keyword">else</span></span><br><span class="line">                        state &lt;= state;</span><br><span class="line">                <span class="keyword">end</span> </span><br><span class="line">                <span class="number">2&#x27;d1</span>: <span class="keyword">begin</span></span><br><span class="line">                    <span class="keyword">if</span>(dly_cnt == <span class="number">4&#x27;d10</span>) <span class="keyword">begin</span>  <span class="comment">//延时10拍</span></span><br><span class="line">                                                <span class="comment">//原因是FIFO IP核内部状态信号的更新存在延时</span></span><br><span class="line">                                                <span class="comment">//延迟10拍以等待状态信号更新完毕                   </span></span><br><span class="line">                        dly_cnt    &lt;= <span class="number">4&#x27;d0</span>;</span><br><span class="line">                        state      &lt;= <span class="number">2&#x27;d2</span>;     <span class="comment">//开始写操作</span></span><br><span class="line">                        fifo_wr_en &lt;= <span class="number">1&#x27;b1</span>;     <span class="comment">//打开写使能</span></span><br><span class="line">                    <span class="keyword">end</span></span><br><span class="line">                    <span class="keyword">else</span></span><br><span class="line">                        dly_cnt &lt;= dly_cnt + <span class="number">4&#x27;d1</span>;</span><br><span class="line">                <span class="keyword">end</span>             </span><br><span class="line">                <span class="number">2&#x27;d2</span>: <span class="keyword">begin</span></span><br><span class="line">                    <span class="keyword">if</span>(almost_full) <span class="keyword">begin</span>        <span class="comment">//等待FIFO将被写满</span></span><br><span class="line">                        fifo_wr_en   &lt;= <span class="number">1&#x27;b0</span>;  <span class="comment">//关闭写使能</span></span><br><span class="line">                        fifo_wr_data &lt;= <span class="number">8&#x27;d0</span>;</span><br><span class="line">                        state        &lt;= <span class="number">2&#x27;d0</span>;  <span class="comment">//回到第一个状态</span></span><br><span class="line">                    <span class="keyword">end</span></span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">begin</span>                 <span class="comment">//如果FIFO没有被写满</span></span><br><span class="line">                        fifo_wr_en   &lt;= <span class="number">1&#x27;b1</span>;  <span class="comment">//则持续打开写使能</span></span><br><span class="line">                        fifo_wr_data &lt;= fifo_wr_data + <span class="number">1&#x27;d1</span>;  <span class="comment">//且写数据值持续累加</span></span><br><span class="line">                    <span class="keyword">end</span></span><br><span class="line">                <span class="keyword">end</span> </span><br><span class="line">                <span class="keyword">default</span> : state &lt;= <span class="number">2&#x27;d0</span>;</span><br><span class="line">            <span class="keyword">endcase</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>fifo_rd.v</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> fifo_rd(</span><br><span class="line">    <span class="comment">//system clock</span></span><br><span class="line">    <span class="keyword">input</span>               clk ,        <span class="comment">// 时钟信号</span></span><br><span class="line">    <span class="keyword">input</span>               rst_n ,      <span class="comment">// 复位信号</span></span><br><span class="line">    <span class="comment">//FIFO interface</span></span><br><span class="line">    <span class="keyword">input</span>        [<span class="number">7</span>:<span class="number">0</span>]  fifo_dout ,  <span class="comment">// 从FIFO读出的数据</span></span><br><span class="line">    <span class="keyword">input</span>               almost_full ,<span class="comment">// FIFO将满信号</span></span><br><span class="line">    <span class="keyword">input</span>               almost_empty,<span class="comment">// FIFO将空信号</span></span><br><span class="line">    <span class="keyword">output</span>  <span class="keyword">reg</span>         fifo_rd_en   <span class="comment">// FIFO读使能</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//reg define</span></span><br><span class="line">    <span class="keyword">reg</span>  [<span class="number">1</span>:<span class="number">0</span>]  state           ;  <span class="comment">// 动作状态</span></span><br><span class="line">    <span class="keyword">reg</span>         almost_full_d0  ;  <span class="comment">// fifo_full 延迟一拍</span></span><br><span class="line">    <span class="keyword">reg</span>  		almost_full_syn ;  <span class="comment">// fifo_full 延迟两拍</span></span><br><span class="line">    <span class="keyword">reg</span>  [<span class="number">3</span>:<span class="number">0</span>]  dly_cnt         ;  <span class="comment">//延迟计数器</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//*****************************************************</span></span><br><span class="line">    <span class="comment">//**                    main code</span></span><br><span class="line">    <span class="comment">//*****************************************************</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//因为 fifo_full 信号是属于FIFO写时钟域的</span></span><br><span class="line">    <span class="comment">//所以要将其同步到读时钟域中</span></span><br><span class="line">    <span class="keyword">always</span>@( <span class="keyword">posedge</span> clk ) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>( !rst_n ) <span class="keyword">begin</span></span><br><span class="line">            almost_full_d0  &lt;= <span class="number">1&#x27;b0</span> ;</span><br><span class="line">            almost_full_syn &lt;= <span class="number">1&#x27;b0</span> ;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">            almost_full_d0  &lt;= almost_full ;</span><br><span class="line">            almost_full_syn &lt;= almost_full_d0 ;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//读出FIFO的数据</span></span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> clk ) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>(!rst_n) <span class="keyword">begin</span></span><br><span class="line">            fifo_rd_en &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">            state      &lt;= <span class="number">2&#x27;d0</span>;</span><br><span class="line">            dly_cnt    &lt;= <span class="number">4&#x27;d0</span>;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">            <span class="keyword">case</span>(state)</span><br><span class="line">                <span class="number">2&#x27;d0</span>: <span class="keyword">begin</span></span><br><span class="line">                    <span class="keyword">if</span>(almost_full_syn)      <span class="comment">//如果检测到FIFO将被写满</span></span><br><span class="line">                        state &lt;= <span class="number">2&#x27;d1</span>;       <span class="comment">//就进入延时状态</span></span><br><span class="line">                    <span class="keyword">else</span></span><br><span class="line">                        state &lt;= state;</span><br><span class="line">                <span class="keyword">end</span> </span><br><span class="line">                <span class="number">2&#x27;d1</span>: <span class="keyword">begin</span></span><br><span class="line">                    <span class="keyword">if</span>(dly_cnt == <span class="number">4&#x27;d10</span>) <span class="keyword">begin</span>  <span class="comment">//延时10拍</span></span><br><span class="line">                                                <span class="comment">//原因是FIFO IP核内部状态信号的更新存在延时</span></span><br><span class="line">                                                <span class="comment">//延迟10拍以等待状态信号更新完毕</span></span><br><span class="line">                        dly_cnt &lt;= <span class="number">4&#x27;d0</span>;</span><br><span class="line">                        state   &lt;= <span class="number">2&#x27;d2</span>;        <span class="comment">//开始读操作</span></span><br><span class="line">                    <span class="keyword">end</span></span><br><span class="line">                    <span class="keyword">else</span></span><br><span class="line">                        dly_cnt &lt;= dly_cnt + <span class="number">4&#x27;d1</span>;</span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line">                <span class="number">2&#x27;d2</span>: <span class="keyword">begin</span></span><br><span class="line">                    <span class="keyword">if</span>(almost_empty) <span class="keyword">begin</span>     <span class="comment">//等待FIFO将被读空</span></span><br><span class="line">                        fifo_rd_en &lt;= <span class="number">1&#x27;b0</span>;    <span class="comment">//关闭读使能</span></span><br><span class="line">                        state      &lt;= <span class="number">2&#x27;d0</span>;    <span class="comment">//回到第一个状态</span></span><br><span class="line">                    <span class="keyword">end</span></span><br><span class="line">                    <span class="keyword">else</span>                       <span class="comment">//如果FIFO没有被读空</span></span><br><span class="line">                        fifo_rd_en &lt;= <span class="number">1&#x27;b1</span>;    <span class="comment">//则持续打开读使能</span></span><br><span class="line">                <span class="keyword">end</span> </span><br><span class="line">                <span class="keyword">default</span> : state &lt;= <span class="number">2&#x27;d0</span>;</span><br><span class="line">            <span class="keyword">endcase</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>整体架构：</p>
+<p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20240111153246240.png" alt="image-20240111153246240" style="zoom:50%;"></p>
+</li>
+<li><p>Vivado中的RTL视图：</p>
+<p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20240111153458045.png" alt="image-20240111153458045"></p>
+</li>
+</ul>
+<h2 id="3-Testbench-3"><a href="#3-Testbench-3" class="headerlink" title="3.Testbench"></a>3.Testbench</h2><ul>
+<li><p>ip_fifo_tb.v</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">`<span class="keyword">timescale</span> 1ns / 1ps</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">module</span> ip_fifo_tb;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Inputs</span></span><br><span class="line">    <span class="keyword">reg</span> sys_clk;</span><br><span class="line">    <span class="keyword">reg</span> sys_rst_n;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Instantiate the Unit Under Test (UUT)</span></span><br><span class="line">    ip_fifo  u_ip_fifo (</span><br><span class="line">        <span class="variable">.sys_clk</span>         (sys_clk), </span><br><span class="line">        <span class="variable">.sys_rst_n</span>       (sys_rst_n)</span><br><span class="line">    );</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//Genarate the clk</span></span><br><span class="line">    <span class="keyword">parameter</span> PERIOD = <span class="number">20</span>;</span><br><span class="line">    <span class="keyword">always</span> <span class="keyword">begin</span></span><br><span class="line">        sys_clk = <span class="number">1&#x27;b0</span>;</span><br><span class="line">        <span class="variable">#(PERIOD/2)</span> sys_clk = <span class="number">1&#x27;b1</span>;</span><br><span class="line">        <span class="variable">#(PERIOD/2)</span>;</span><br><span class="line">    <span class="keyword">end</span>   </span><br><span class="line">   </span><br><span class="line">    <span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">        <span class="comment">// Initialize Inputs</span></span><br><span class="line">        sys_rst_n = <span class="number">0</span>;</span><br><span class="line">        <span class="comment">// Wait 100 ns for global reset to finish</span></span><br><span class="line">        #<span class="number">100</span>  ;</span><br><span class="line">        sys_rst_n = <span class="number">1</span>;</span><br><span class="line">        <span class="comment">// Add stimulus here</span></span><br><span class="line">        </span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>仿真结果：</p>
+<p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20240111153831859.png" alt="image-20240111153831859"></p>
+<p><img src="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/image-20240111154343389.png" alt="image-20240111154343389"></p>
+</li>
+</ul>
+<h2 id="4-Reference-4"><a href="#4-Reference-4" class="headerlink" title="4.Reference"></a>4.Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1P5411A7Dx?p=3&amp;vd_source=221b76534ba13cfad544149d75ce9b6c">27_实战篇：FIFO IP 核实验（第三讲：程序设计）_哔哩哔哩_bilibili</a></li>
+</ul>
+<hr>
+<h1 id="AXI-DMA-IP核的使用"><a href="#AXI-DMA-IP核的使用" class="headerlink" title="AXI DMA IP核的使用"></a>AXI DMA IP核的使用</h1>
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>欢迎来到ssy的世界</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/WeChaPay.jpg" alt="ssy 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>ssy
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://ssy的小天地.com/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/" title="FPGA数字信号处理之典型IP核">http://ssy的小天地.com/2023/10/10/FPGA数字信号处理之典型IP核/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/FPGA/" rel="tag"># FPGA</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/10/09/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E7%9A%84%E8%BF%90%E7%AE%97/" rel="prev" title="FPGA数字信号处理之数的运算">
+      <i class="fa fa-chevron-left"></i> FPGA数字信号处理之数的运算
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/" rel="next" title="TI AWR2243文档阅读之mmWave Radar Interface Control Document">
+      TI AWR2243文档阅读之mmWave Radar Interface Control Document <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B9%98%E6%B3%95%E5%99%A8IP%E6%A0%B8%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">1.</span> <span class="nav-text">乘法器IP核的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-IP%E6%A0%B8%E7%9A%84%E7%9B%B8%E5%85%B3%E9%85%8D%E7%BD%AE"><span class="nav-number">1.1.</span> <span class="nav-text">1.IP核的相关配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Testbench"><span class="nav-number">1.2.</span> <span class="nav-text">2.Testbench</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ROM-IP%E6%A0%B8%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">ROM IP核的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-IP%E6%A0%B8%E7%9A%84%E7%9B%B8%E5%85%B3%E9%85%8D%E7%BD%AE-1"><span class="nav-number">2.1.</span> <span class="nav-text">1.IP核的相关配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-MATLAB%E4%BB%A3%E7%A0%81"><span class="nav-number">2.2.</span> <span class="nav-text">2.MATLAB代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Testbench"><span class="nav-number">2.3.</span> <span class="nav-text">3.Testbench</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Reference"><span class="nav-number">2.4.</span> <span class="nav-text">4.Reference</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DDS-IP%E6%A0%B8%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">3.</span> <span class="nav-text">DDS IP核的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-IP%E6%A0%B8%E7%9A%84%E7%9B%B8%E5%85%B3%E9%85%8D%E7%BD%AE-2"><span class="nav-number">3.1.</span> <span class="nav-text">1.IP核的相关配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Testbench-1"><span class="nav-number">3.2.</span> <span class="nav-text">2.Testbench</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#FIR-IP%E6%A0%B8%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">4.</span> <span class="nav-text">FIR IP核的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-IP%E6%A0%B8%E7%9A%84%E7%9B%B8%E5%85%B3%E9%85%8D%E7%BD%AE-3"><span class="nav-number">4.1.</span> <span class="nav-text">1.IP核的相关配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-MATLAB%E4%BB%A3%E7%A0%81-1"><span class="nav-number">4.2.</span> <span class="nav-text">2.MATLAB代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Testbench-1"><span class="nav-number">4.3.</span> <span class="nav-text">3.Testbench</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Reference-1"><span class="nav-number">4.4.</span> <span class="nav-text">4.Reference</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#FFT-IP%E6%A0%B8%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">5.</span> <span class="nav-text">FFT IP核的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-IP%E6%A0%B8%E7%9A%84%E7%9B%B8%E5%85%B3%E9%85%8D%E7%BD%AE-4"><span class="nav-number">5.1.</span> <span class="nav-text">1.IP核的相关配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-MATLAB%E4%BB%A3%E7%A0%81-2"><span class="nav-number">5.2.</span> <span class="nav-text">2.MATLAB代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Testbench-2"><span class="nav-number">5.3.</span> <span class="nav-text">3.Testbench</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Reference-2"><span class="nav-number">5.4.</span> <span class="nav-text">4.Reference</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Cordic-IP%E6%A0%B8%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">6.</span> <span class="nav-text">Cordic IP核的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-IP%E6%A0%B8%E7%9A%84%E7%9B%B8%E5%85%B3%E9%85%8D%E7%BD%AE-5"><span class="nav-number">6.1.</span> <span class="nav-text">1.IP核的相关配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Testbench-2"><span class="nav-number">6.2.</span> <span class="nav-text">2.Testbench</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RF-Data-Converter-IP%E6%A0%B8%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">7.</span> <span class="nav-text">RF Data Converter IP核的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-IP%E6%A0%B8%E7%9A%84%E7%9B%B8%E5%85%B3%E9%85%8D%E7%BD%AE-6"><span class="nav-number">7.1.</span> <span class="nav-text">1.IP核的相关配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-MATLAB%E4%BB%A3%E7%A0%81-3"><span class="nav-number">7.2.</span> <span class="nav-text">2.MATLAB代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Python%E4%BB%A3%E7%A0%81"><span class="nav-number">7.3.</span> <span class="nav-text">3.Python代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Reference-3"><span class="nav-number">7.4.</span> <span class="nav-text">4.Reference</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#FIFO-IP%E6%A0%B8%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">8.</span> <span class="nav-text">FIFO IP核的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-IP%E6%A0%B8%E7%9A%84%E7%9B%B8%E5%85%B3%E9%85%8D%E7%BD%AE-7"><span class="nav-number">8.1.</span> <span class="nav-text">1.IP核的相关配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%BA%90%E4%BB%A3%E7%A0%81"><span class="nav-number">8.2.</span> <span class="nav-text">2.源代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Testbench-3"><span class="nav-number">8.3.</span> <span class="nav-text">3.Testbench</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Reference-4"><span class="nav-number">8.4.</span> <span class="nav-text">4.Reference</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#AXI-DMA-IP%E6%A0%B8%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">9.</span> <span class="nav-text">AXI DMA IP核的使用</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ssy"
+      src="/images/ssy.png">
+  <p class="site-author-name" itemprop="name">ssy</p>
+  <div class="site-description" itemprop="description">满怀希望 就会所向披靡</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">141</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">38</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ssy1938010014" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ssy1938010014" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://m.weibo.cn/u/5469432500?uid=5469432500&t=0&luicode=10000011&lfid=100103type=1&q=JIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" title="Weibo → https:&#x2F;&#x2F;m.weibo.cn&#x2F;u&#x2F;5469432500?uid&#x3D;5469432500&amp;t&#x3D;0&amp;luicode&#x3D;10000011&amp;lfid&#x3D;100103type%3D1%26q%3DJIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://ssy1938010014.github.io/" title="http:&#x2F;&#x2F;ssy1938010014.github.io" rel="noopener" target="_blank">ssy的小天地</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://y006.github.io/" title="http:&#x2F;&#x2F;y006.github.io" rel="noopener" target="_blank">邱院士的Blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://bengoooo.github.io/" title="http:&#x2F;&#x2F;BENgoooo.github.io" rel="noopener" target="_blank">赵总的Blog</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=1469041281&auto=1&height=66"></iframe>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ssy</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-ribbon@1/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+<script data-pjax>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  let url = element.dataset.target;
+  let pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  let pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  let fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+
+
+    <div id="pjax">
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+    </div>
+</body>
+</html>

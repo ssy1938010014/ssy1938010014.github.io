@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1/themes/blue/pace-theme-minimal.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"xn--ssy-lq6e63gg6fuu2d.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本文将分享一些信号处理中常见却难懂的小知识点，并推荐一些好的小文章">
+<meta property="og:type" content="article">
+<meta property="og:title" content="信号处理中的小知识点">
+<meta property="og:url" content="http://ssy的小天地.com/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/index.html">
+<meta property="og:site_name" content="ssy的小天地">
+<meta property="og:description" content="本文将分享一些信号处理中常见却难懂的小知识点，并推荐一些好的小文章">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230304010731421.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230304205220920.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230304205201292.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230304211946376.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230304212112985.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230304212232648.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230305000537489.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230305000725975.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230306003411595.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230306003525318.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/%E5%BF%AB%E6%97%B6%E9%97%B4%E4%B8%8E%E6%85%A2%E6%97%B6%E9%97%B4.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230307155947019.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230307160204467.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230307161446375.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230307163016808.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230307165135281.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230307164052191.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230310152736465.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/%E6%97%A0%E6%A0%87%E9%A2%98.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230310154416666.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/%E6%97%A0%E6%A0%87%E9%A2%98-1678435254317-2.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230310161741157.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/%E6%97%A0%E6%A0%87%E9%A2%98-1678437333685-4.png">
+<meta property="article:published_time" content="2023-03-03T02:07:12.000Z">
+<meta property="article:modified_time" content="2023-10-24T03:36:42.845Z">
+<meta property="article:author" content="ssy">
+<meta property="article:tag" content="信号处理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230304010731421.png">
+
+<link rel="canonical" href="http://ssy的小天地.com/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>信号处理中的小知识点 | ssy的小天地</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+    <a target="_blank" rel="noopener" href="https://github.com/ssy1938010014" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ssy的小天地</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">愿汝如是 千金不换</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-works">
+
+    <a href="/works/" rel="section"><i class="fa fa-fw fa-sitemap"></i>文章</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ssy的小天地.com/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ssy.png">
+      <meta itemprop="name" content="ssy">
+      <meta itemprop="description" content="满怀希望 就会所向披靡">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ssy的小天地">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          信号处理中的小知识点
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+
+
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-03-03 10:07:12" itemprop="dateCreated datePublished" datetime="2023-03-03T10:07:12+08:00">2023-03-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-10-24 11:36:42" itemprop="dateModified" datetime="2023-10-24T11:36:42+08:00">2023-10-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%A7%AF%E7%B4%AF/" itemprop="url" rel="index"><span itemprop="name">学习积累</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本文将分享一些信号处理中常见却难懂的小知识点，并推荐一些好的小文章</p>
+<span id="more"></span>
+<h1 id="FS、FT、DTFT、DFS、DFT"><a href="#FS、FT、DTFT、DFS、DFT" class="headerlink" title="FS、FT、DTFT、DFS、DFT"></a>FS、FT、DTFT、DFS、DFT</h1><ul>
+<li>$连续\Longleftrightarrow非周期$</li>
+<li>$离散\Longleftrightarrow周期$</li>
+<li><strong>时域的离散造成频域的延拓（周期性），因而频域的离散也会造成时域的延拓（周期性）</strong></li>
+</ul>
+<h2 id="1-FS"><a href="#1-FS" class="headerlink" title="1.FS"></a>1.FS</h2><ul>
+<li><p><strong>时域连续周期、频域离散非周期</strong></p>
+</li>
+<li><p>傅里叶级数的指数形式：</p>
+<script type="math/tex; mode=display">
+f(t)=\sum_{n=\infty}^\infty C_ne^{jnw_1t}</script><script type="math/tex; mode=display">
+C_n=\frac{1}{T}\int_0^Tf(t)e^{-jnw_1t}dt</script></li>
+</ul>
+<h2 id="2-FT"><a href="#2-FT" class="headerlink" title="2.FT"></a>2.FT</h2><ul>
+<li><p><strong>傅里叶变换的本质，即将一个信号拆分成不同频率的cos和sin分量的叠加。得到的是这些不同频率分量的幅值</strong></p>
+</li>
+<li><p><strong>时域连续非周期，频域连续非周期</strong></p>
+</li>
+<li><p>傅里叶变换的公式：</p>
+<script type="math/tex; mode=display">
+x(w)=\int_{-\infty}^{+\infty}x(t)e^{-jwt}dt</script><script type="math/tex; mode=display">
+逆变换:x(t)=\frac1{2\pi}\int_{-\infty}^{+\infty}x(w)e^{jwt}dw</script></li>
+</ul>
+<h2 id="3-DTFT"><a href="#3-DTFT" class="headerlink" title="3.DTFT"></a>3.DTFT</h2><ul>
+<li><p>一个<strong>N点离散时间序列的傅里叶变换（DTFT）的频谱是以（$2\pi$）为周期进行延拓的连续函数</strong></p>
+</li>
+<li><p><strong>时域离散非周期，频域连续周期</strong></p>
+</li>
+<li><p>离散时间傅里叶变换的公式：</p>
+<script type="math/tex; mode=display">
+x(e^{jw})=\sum_{n=-\infty}^{+\infty}x(n)e^{-jwn}</script><script type="math/tex; mode=display">
+逆变换:x(n)=\frac1{2\pi}\int_{2\pi}x(e^{jw})e^{jwn}dw</script></li>
+</ul>
+<h2 id="4-DFS"><a href="#4-DFS" class="headerlink" title="4.DFS"></a>4.DFS</h2><ul>
+<li><p><strong>当离散的信号为周期序列时，严格的讲，离散时间傅里叶变换是不存在的，因为它不满足信号序列绝对级数和收敛（绝对可和）这一傅里叶变换的充要条件</strong>，但是采用DFS这一分析工具仍然可以对其进行傅里叶分析</p>
+</li>
+<li><p><strong>时域离散周期，频域离散周期</strong></p>
+</li>
+<li><p>离散傅里叶级数的公式：</p>
+<script type="math/tex; mode=display">
+x(n)=\sum_{k=0}^{N-1}x(k)e^{j\frac{2\pi}{N}kn}</script><script type="math/tex; mode=display">
+x(k)=\frac1N\sum_{n=0}^{N-1}x(n)e^{-j\frac{2\pi}Nkn}\quad k=0\sim N-1</script></li>
+</ul>
+<h2 id="5-DFT"><a href="#5-DFT" class="headerlink" title="5.DFT"></a>5.DFT</h2><ul>
+<li><strong>DFT只是对一周期内的有限个离散频率的表示，所以它在频率上是离散的，就相当于DTFT变换成连续频谱后再对其采样</strong></li>
+<li><strong>DFT只是为了计算机处理方便，在频率域对DTFT进行的采样并截取主值而已</strong></li>
+<li><p><strong>一个N点离散时间信号可以用频域内一个N点序列来唯一确定，这就是DFT表达式所揭示的内容</strong></p>
+</li>
+<li><p><strong>DFT的本质是将离散的时域序列用有限个余弦波和正弦波合成。比如一个32点的时域序列，可以用17个余弦波和17个正弦波合成。17个余弦波的幅值就是频谱的实部，17个正弦波的幅值就是频谱的虚部</strong></p>
+</li>
+<li><p>离散傅里叶变换的公式：</p>
+<script type="math/tex; mode=display">
+x(k)=\sum_{n=0}^{N-1}x(n)e^{-j\frac{2\pi k}Nn} \quad k=0\sim N-1</script><script type="math/tex; mode=display">
+逆变换:x(n)=\frac1N\sum_{k=0}^{N-1}x(k)e^{j\frac{2\pi k}Nn}</script></li>
+</ul>
+<h2 id="6-不同变换之间的示意图"><a href="#6-不同变换之间的示意图" class="headerlink" title="6.不同变换之间的示意图"></a>6.不同变换之间的示意图</h2><p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230304010731421.png" alt="image-20230304010731421" style="zoom: 50%;"></p>
+<h2 id="7-Reference"><a href="#7-Reference" class="headerlink" title="7.Reference"></a>7.Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/guojun-junguo/p/10099489.html">FS，FT，DFS，DTFT，DFT，FFT的联系和区别 - 骏骏 - 博客园 (cnblogs.com)</a></li>
+<li><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/BitArt/archive/2012/11/24/2786390.html">一幅图弄清DFT与DTFT,DFS的关系 - BitArt - 博客园 (cnblogs.com)</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44618906/article/details/116379127">(深入理解DSP中的重要概念（FT、DTFT、DFT、DFS、ZT、FFT）_ft与dft的区别_IT说的博客-CSDN博客</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/137509394">如何理解DFT？ - 知乎 (zhihu.com)</a></p>
+</li>
+</ul>
+<hr>
+<h1 id="FFT"><a href="#FFT" class="headerlink" title="FFT"></a>FFT</h1><h2 id="1-频率分辨率"><a href="#1-频率分辨率" class="headerlink" title="1.频率分辨率"></a>1.频率分辨率</h2><ul>
+<li><p><strong>波形分辨率</strong>：由原始数据的时间长度决定</p>
+<script type="math/tex; mode=display">
+\Delta R_w=\frac1T</script></li>
+<li><p><strong>FFT分辨率</strong>：由采样频率和参与FFT的数据点数决定</p>
+<script type="math/tex; mode=display">
+\Delta R_{fft}=\frac{F_s}{N_{fft}}</script></li>
+</ul>
+<h2 id="2-FFT中的补零操作"><a href="#2-FFT中的补零操作" class="headerlink" title="2.FFT中的补零操作"></a>2.FFT中的补零操作</h2><ul>
+<li><p>补零相当于提高了FFT分辨率，但并不能提高波形分辨率，若不补零，那么波形分辨率与FFT分辨率是相等的</p>
+</li>
+<li><p><strong>进行zero padding只是增加了数据的长度，而不是原信号的长度。并不能增加频谱分辨率，只相当于频域插值</strong>，具体解释如下：</p>
+<p>本来信号是一个周期的余弦信号，如果补了9个周期长度的0，那么信号并不是10个周期的余弦信号，而是一个周期的余弦加一串0，补的0并没有带来新的信息。zero padding等价于频域的sinc函数内插，<strong>而这个sinc函数的形状（主瓣宽度）是由补0前的信号长度决定的</strong>，<strong>补0的作用只是细化了这个sinc函数，并没有改变其主瓣宽度</strong>。而频率分辨率的含义是两个频率不同的信号在频率上可分，也就要求它们不能落到一个sinc函数的主瓣上。所以，如果待分析的两个信号频率接近，而时域长度又较短，那么在频域上它们就落在一个sinc主瓣内了，补再多的0也是无济于事的。</p>
+</li>
+<li><p>补零前：</p>
+<p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230304205220920.png" alt="image-20230304205220920" style="zoom:50%;"></p>
+</li>
+<li><p>补零后：</p>
+<p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230304205201292.png" alt="image-20230304205201292" style="zoom:50%;"></p>
+</li>
+</ul>
+<h2 id="3-加窗与窗函数"><a href="#3-加窗与窗函数" class="headerlink" title="3.加窗与窗函数"></a>3.加窗与窗函数</h2><ul>
+<li><p>信号截断分为周期截断和非周期截断。<strong>周期截断</strong>是指截断后的信号为周期信号，而<strong>非周期截断</strong>是指截断后的信号不再是周期信号，哪怕原始信号本身是周期信号，周期信号最明显的特征是信号的起始和结束时刻的幅值相等，哪怕是一个周期</p>
+<ul>
+<li><p>周期截断：</p>
+<p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230304211946376.png" alt="image-20230304211946376" style="zoom:50%;"></p>
+</li>
+<li><p>非周期截断：</p>
+<p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230304212112985.png" alt="image-20230304212112985" style="zoom:50%;"></p>
+</li>
+</ul>
+</li>
+<li><p>由于信号的非周期截断，导致频谱在整个频带内发生了拖尾现象。这是非常严重的误差，称为<strong>泄漏</strong></p>
+</li>
+<li><p><strong>窗函数只能减少泄漏，不能消除泄漏</strong></p>
+<p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230304212232648.png" alt="image-20230304212232648" style="zoom: 50%;"></p>
+</li>
+<li><p><strong>窗函数的时域特征</strong>：加窗实质是用一个所谓的窗函数与原始的时域信号作乘积的过程（当然加窗也可以在频域进行，但时域更为普遍），使得相乘后的信号似乎更好地满足傅立叶变换的周期性要求。为了减少泄漏，用一个窗函数与原始周期信号相乘，得到加窗后的信号为周期信号，从而满足FFT变换的周期性要求</p>
+<p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230305000537489.png" alt="image-20230305000537489" style="zoom:50%;"></p>
+</li>
+<li><p><strong>窗函数的典型频谱特征</strong>：</p>
+<p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230305000725975.png" alt="image-20230305000725975" style="zoom:50%;"></p>
+<ul>
+<li><strong>主瓣宽度主要影响信号能量分布和频率分辨能力</strong>。频率的实际分辨能力为有效噪声带宽乘以频率分辨率，因此，主瓣越宽，有效噪声带宽越宽，在频率分辨率相同的情况下，频率的分辨能力越差</li>
+<li><strong>旁瓣高低及其衰减率影响能量泄漏程度（频谱拖尾效应）</strong>。旁瓣越高，说明能量泄漏越严重，衰减越慢，频谱拖尾越严重</li>
+</ul>
+</li>
+<li><p><strong>加窗函数的原则</strong>：</p>
+<ul>
+<li>加窗函数时，应使窗函数频谱的<strong>主瓣宽度应尽量窄</strong>，以获得高的频率分辨能力；<strong>旁瓣衰减应尽量大，以减少频谱拖尾</strong>，但通常都不能同时满足这两个要求</li>
+<li><strong>如果截断的信号仍为周期信号，则不存在泄漏，无须加窗，相当于加矩形窗</strong>。</li>
+<li>如果信号是随机信号或者未知信号，或者有多个频率分量，测试关注的是频率点而非能量大小，建议选择汉宁窗</li>
+<li>对于校准目的，则要求幅值精确，平顶窗是个不错的选择。</li>
+<li>如果同时要求幅值精度和频率精度，可选择凯塞窗。</li>
+<li>如果检测两个频率相近、幅值不同的信号，建议用布莱克曼窗。</li>
+<li>锤击法试验力信号加力窗，响应可加指数窗。</li>
+</ul>
+</li>
+</ul>
+<h2 id="4-Reference"><a href="#4-Reference" class="headerlink" title="4.Reference"></a>4.Reference</h2><ul>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/s09094031/article/details/105744720"> 一文读懂FFT，补零对FFT的影响_fft补零的作用_Li Kang的博客-CSDN博客</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/85863024">快速傅里叶变换(FFT)中为什么要“补零”？ - 知乎 (zhihu.com)</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/24318554">什么是窗函数? - 知乎 (zhihu.com)</a></p>
+</li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzI5NTM0MTQwNA==&amp;mid=2247484164&amp;idx=1&amp;sn=fdaf2164306a9ca4166c2aa8713cacc5&amp;scene=21#wechat_redirect">什么是泄漏？ (qq.com)</a></li>
+</ul>
+<hr>
+<h1 id="2D-FFT"><a href="#2D-FFT" class="headerlink" title="2D-FFT"></a>2D-FFT</h1><ul>
+<li><p><strong>二维傅里叶变换的意义在于：一个满足一定条件的二维信号可以表示为无数个x向正余弦函数与y向正余弦函数乘积（即二维正交基）的线性组合</strong></p>
+</li>
+<li><p>二维正交基：</p>
+<script type="math/tex; mode=display">
+cos(2\pi ux)cos(2\pi vy)\\
+cos(2\pi ux)sin(2\pi vy)\\
+sin(2\pi ux)cos(2\pi vy)\\
+sin(2\pi ux)sin(2\pi vy)</script></li>
+<li><p><strong>二维傅里叶变换具可分离性，即它可分离成两次一维傅里叶变换</strong></p>
+</li>
+</ul>
+<h2 id="1-计算流程"><a href="#1-计算流程" class="headerlink" title="1.计算流程"></a>1.计算流程</h2><ul>
+<li><p><strong>range-FFT</strong>：雷达处理接收天线接收回来的数据，对每一个接收回来的chirp做range-fft，然后range-fft处理后的数据按行存储到L3或DDR中，由于range-fft对应的频率与距离成正比，因此可以将x轴绘制为距离轴</p>
+<p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230306003411595.png" alt="image-20230306003411595"></p>
+</li>
+<li><p><strong>doppler-FFT</strong>：在执行完range-fft之后，要在chirp index方向上做doppler-fft，做doppler-fft的时候，要将数据从L3或DDR内存中取出，然后再执行doppler-fft，由于dopper-fft对应离散角频率与速度成正比，因此可以将y轴绘制为速度轴。</p>
+<p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230306003525318.png" alt="image-20230306003525318"></p>
+</li>
+<li><p>通俗理解：range-FFT就是很正常的FFT求频率，而doppler-FFT可以理解为在频率确定的情况下，将相位（range-FFT结果中复数的角度）当成是变量，对其求FFT则可得到所求频率，这里的频率实际上就是想得到的相位角</p>
+</li>
+<li><p><strong>对于雷达信号处理而言：速度维上所求的频率即为多普勒频率$f_d$</strong>，多普勒频率是由于速度$v$而导致的固定频率</p>
+<script type="math/tex; mode=display">
+\because \Delta\Phi=\frac{4\pi vT_c}{\lambda}</script><p>而$\Delta\Phi$其实又可以理解为：$\Delta\Phi$是由$f_d$造成的，因为多了$f_d$，导致在一个chirp周期$T_c$内，波形会多走$2\pi f_d T_c$弧度，即：</p>
+<script type="math/tex; mode=display">
+\Delta\Phi=2\pi f_dT_c</script><p>综合上述两式可以得到：</p>
+<script type="math/tex; mode=display">
+v=\frac{\lambda f_d}{2}</script><p><strong>而由速度维FFT计算得到的频率正是$f_d$，故知道$f_d$后则乘以系数$\frac{\lambda}{2}$即可得到对应速度，速度维FFT结果的频率间隔为：$\frac{1}{T_cN_{chirp}}$</strong></p>
+</li>
+<li><p><strong>只有一个frame中的全部chirp做了range-fft之后才可以执行doppler-fft，因此系统中必须有足够的存储器来存储执行range-fft之后的数据</strong></p>
+</li>
+</ul>
+<h2 id="2-快时间与慢时间"><a href="#2-快时间与慢时间" class="headerlink" title="2.快时间与慢时间"></a>2.快时间与慢时间</h2><p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/%E5%BF%AB%E6%97%B6%E9%97%B4%E4%B8%8E%E6%85%A2%E6%97%B6%E9%97%B4.png" alt="快时间与慢时间" style="zoom:50%;"></p>
+<h2 id="3-Reference"><a href="#3-Reference" class="headerlink" title="3.Reference"></a>3.Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/Xiao_Jie123/article/details/113071519"> Xiaojie雷达之路—-毫米波雷达基础知识—-一些系统设计的话题_doppler fft_XXXXiaojie的博客-CSDN博客</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/580489895">雷达信号处理之3D-FFT原理（附带MATLAB仿真程序） - 知乎 (zhihu.com)</a></li>
+</ul>
+<hr>
+<h1 id="数字域频率"><a href="#数字域频率" class="headerlink" title="数字域频率"></a>数字域频率</h1><ul>
+<li><p>数字域频率为：</p>
+<script type="math/tex; mode=display">
+w_0=\Omega_0T_s=\frac{\Omega_0}{f_s}=2\pi\frac{f_0}{f_s}=\frac{2\pi}{N}</script><script type="math/tex; mode=display">
+其中:\Omega_0为模拟角频率(rad/s),\quad w_0为数字角频率(rad)\\
+T_s为采样间隔(s),\quad f_s为采样频率(Hz),\quad f_0为模拟频率(Hz)\\
+N=T_0\times f_s,其中T_0为原始模拟信号的周期</script></li>
+<li><p>推导过程：</p>
+<ul>
+<li>连续时间正弦信号：$x_a(t)=cos(\Omega_0t+\phi)$</li>
+<li>令$t=nT$，$T$为采样间隔</li>
+<li>则$x_a(t)|_{t=nT}=cos(\Omega nT+\phi)=x_a(nT)$</li>
+<li>将$x_a(nT)$简记为$x(n)$</li>
+<li>$\Omega_0 T$记为$w_0$</li>
+<li>则离散时间正弦序列为：$x(n)=cos(w_0n+\phi)$</li>
+</ul>
+</li>
+<li><p>个人理解：数字域频率为在复频域上每个点转动的平均角度</p>
+</li>
+</ul>
+<hr>
+<h1 id="深入理解复数"><a href="#深入理解复数" class="headerlink" title="深入理解复数"></a>深入理解复数</h1><h2 id="1-复数的基本概念"><a href="#1-复数的基本概念" class="headerlink" title="1.复数的基本概念"></a>1.复数的基本概念</h2><p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230307155947019.png" alt="image-20230307155947019" style="zoom:50%;"></p>
+<script type="math/tex; mode=display">
+c=a+jb=Me^{j\phi}=M(cos\phi+jsin\phi)</script><ul>
+<li><p>将j看做是一个旋转因子：<strong>在复平面上任意数字乘以j，结果都是90度的逆时针旋转。乘以-j，就引起复平面上的90度顺时针旋转。</strong></p>
+</li>
+<li><p>将这个复平面扩展成一个三维图像：<strong>$e^{j2πf_0t}$的实部和虚部就是正弦和余弦投影</strong></p>
+<p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230307160204467.png" alt="image-20230307160204467" style="zoom:50%;"></p>
+</li>
+<li><p>欧拉等式：</p>
+<script type="math/tex; mode=display">
+cos(2\pi f_0 t)=\frac{e^{j2\pi f_0t}+e^{-j2\pi f_0 t}}{2}=\frac{e^{j2\pi f_0t}}{2}+\frac{e^{-j2\pi f_0t}}{2}</script><script type="math/tex; mode=display">
+sin(2\pi f_0 t)=\frac{e^{j2\pi f_0t}-e^{-j2\pi f_0 t}}{2j}=\frac{je^{-j2\pi f_0t}}{2}-\frac{je^{j2\pi f_0t}}{2}</script></li>
+</ul>
+<h2 id="2-复数的频域特性"><a href="#2-复数的频域特性" class="headerlink" title="2.复数的频域特性"></a>2.复数的频域特性</h2><ul>
+<li><p>在复平面与频率轴构成的三维图像中：$cos(2\pi f_0t)$与$sin(2\pi f_0t)$的频域特性</p>
+<p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230307161446375.png" alt="image-20230307161446375" style="zoom: 50%;"></p>
+</li>
+<li><p>$e^{j2\pi f_0t}=cos{(2\pi f_0t)+jsin(2\pi f_0t)}$的频域特性：</p>
+<p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230307163016808.png" alt="image-20230307163016808" style="zoom:50%;"></p>
+</li>
+<li><p>可以将正余弦波理解为从两个正交的通道中输入，即水平通道（实数方向）为输入的cos波，垂直通道（虚数方向）为输入的sin波，分别对这两个通道进行傅里叶变换，当对一个水平通道上的数乘以j时，则表示将数值逆时针旋转90°到垂直通道上</p>
+</li>
+<li><p><strong>一个时域信号乘以复指数$e^{j2πf_0t}$，该信号的频谱将被向上搬移$f_0$Hz，这个过程我们叫做正交混频（quadrature mixing）（也叫做复调制complex mixing）。同样，一个时域信号乘以$e^{-j2πf_0t}$，将把信号频谱向下搬移$f_0$Hz</strong>。</p>
+<p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230307165135281.png" alt="image-20230307165135281" style="zoom:50%;"></p>
+</li>
+<li><p><strong>实数的信号总是有正的和负的频谱分量，任何一个实数的信号，其同相（cos）频谱的正和负的频率分量总是以零频点为中心对称，同相（sin）分量的正和负的频率分量互为镜像</strong></p>
+<p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230307164052191.png" alt="image-20230307164052191" style="zoom:50%;"></p>
+</li>
+<li><p><strong>复数带宽是实数带宽的一半，其只保留正频部分</strong></p>
+</li>
+</ul>
+<h2 id="3-Reference-1"><a href="#3-Reference-1" class="headerlink" title="3.Reference"></a>3.Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/503472041">信号处理专业必读：是复数但并不复杂的正交信号（万字长文） - 知乎 (zhihu.com)</a></li>
+</ul>
+<hr>
+<h1 id="数字信号中的上采样和下采样"><a href="#数字信号中的上采样和下采样" class="headerlink" title="数字信号中的上采样和下采样"></a>数字信号中的上采样和下采样</h1><h2 id="1-插值"><a href="#1-插值" class="headerlink" title="1.插值"></a>1.插值</h2><ul>
+<li><p>长度为N的序列，在每两个点之间插入L个0后，其频域（带宽）相当于压缩为原来的$\frac1L$，并产生$\frac{f_s}{L}$（或者说是$\frac{2\pi}{L}$，因为对于DTFT，其$2\pi$位置对应$f_s$的位置）的周期延拓</p>
+<p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230310152736465.png" alt="image-20230310152736465" style="zoom:50%;"></p>
+</li>
+</ul>
+<h2 id="2-上采样"><a href="#2-上采样" class="headerlink" title="2.上采样"></a>2.上采样</h2><ul>
+<li><p>上采样我们又通常称之为过采样或信号插值，<strong>在频域上是对频谱进行了压缩</strong></p>
+</li>
+<li><p>上采样流程是先通过采样模块（<strong>在原序列x(n)的两个点之间插入L-1个0</strong>），再通过低通滤波器，其中低通滤波器主要功能是抗周期延拓。</p>
+<p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/%E6%97%A0%E6%A0%87%E9%A2%98.png" alt="无标题" style="zoom: 50%;"></p>
+</li>
+<li><p>上采样的具体过程：</p>
+<p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230310154416666.png" alt="image-20230310154416666" style="zoom:50%;"></p>
+</li>
+<li><p><strong>上采样后，可以得到长度为LN的信号序列</strong></p>
+</li>
+<li><p>这里的低通滤波器主要是为了对$x_L(n)$中的0点进行插值</p>
+</li>
+</ul>
+<h2 id="3-下采样"><a href="#3-下采样" class="headerlink" title="3.下采样"></a>3.下采样</h2><ul>
+<li><p>下采样我们又通常称之为欠采样或信号抽取，<strong>在频域上是对频谱进行了拓展</strong>，会产生频谱混叠现象</p>
+</li>
+<li><p>下采样流程是先通过低通滤波器，再通过采样模块（<strong>即在原序列x(n)中每隔M-1个点抽取一个点</strong>），其中低通滤波器主要功能是抗频谱混叠</p>
+<p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/%E6%97%A0%E6%A0%87%E9%A2%98-1678435254317-2.png" alt="无标题" style="zoom:50%;"></p>
+</li>
+<li><p>下采样的具体流程：</p>
+<p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230310161741157.png" alt="image-20230310161741157" style="zoom: 50%;"></p>
+</li>
+<li><p><strong>下采样后，可以得到长度为$\frac NM$的信号序列</strong></p>
+</li>
+<li><p>这里的低通滤波器主要是为了防止$\frac{f_s}{M}&lt;B$时，采样引起信号在频域上的混叠</p>
+</li>
+</ul>
+<h2 id="4-上采样与下采样混合"><a href="#4-上采样与下采样混合" class="headerlink" title="4.上采样与下采样混合"></a>4.上采样与下采样混合</h2><ul>
+<li><p><strong>上采样、下采样配合滤波器可将原采样点数$N$变换为原来的$\frac LM$倍</strong></p>
+<p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/%E6%97%A0%E6%A0%87%E9%A2%98-1678437333685-4.png" alt="无标题"></p>
+</li>
+</ul>
+<h2 id="5-Reference"><a href="#5-Reference" class="headerlink" title="5.Reference"></a>5.Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/ReCclay/article/details/122364182">数字信号中的上采样和下采样_信号上采样和下采样_ReCclay的博客-CSDN博客</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/544436706">通信系统各个基本步骤（编码-插值-上采样-上变频-下变频-低通滤波-下采样-匹配率波-译码） - 知乎 (zhihu.com)</a></li>
+</ul>
+<hr>
+<h1 id="脉冲压缩与去斜处理"><a href="#脉冲压缩与去斜处理" class="headerlink" title="脉冲压缩与去斜处理"></a>脉冲压缩与去斜处理</h1><h2 id="1-脉冲压缩"><a href="#1-脉冲压缩" class="headerlink" title="1.脉冲压缩"></a>1.脉冲压缩</h2><h2 id="2-去斜处理"><a href="#2-去斜处理" class="headerlink" title="2.去斜处理"></a>2.去斜处理</h2><h2 id="3-脉冲压缩与去斜处理的区别"><a href="#3-脉冲压缩与去斜处理的区别" class="headerlink" title="3.脉冲压缩与去斜处理的区别"></a>3.脉冲压缩与去斜处理的区别</h2><h2 id="4-Reference-1"><a href="#4-Reference-1" class="headerlink" title="4.Reference"></a>4.Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/Shen_KL/article/details/121064315">脉冲压缩与去斜处理的区别__Karen_的博客-CSDN博客</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/449869538">雷达信号处理技术——脉冲压缩 - 知乎 (zhihu.com)</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/567656893">雷达入门课系列文章（1）| 基于MATLAB的雷达信号处理实验教程 - 知乎 (zhihu.com)</a></li>
+</ul>
+<hr>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>欢迎来到ssy的世界</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/WeChaPay.jpg" alt="ssy 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>ssy
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://ssy的小天地.com/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/" title="信号处理中的小知识点">http://ssy的小天地.com/2023/03/03/信号处理中的小知识点/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86/" rel="tag"># 信号处理</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/02/18/C++%E4%B9%8B%E7%B1%BB%E5%92%8C%E5%8A%A8%E6%80%81%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" rel="prev" title="C++之类和动态内存分配">
+      <i class="fa fa-chevron-left"></i> C++之类和动态内存分配
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/03/28/Pytorch%E4%B9%8B%E7%BA%BF%E6%80%A7%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="next" title="Pytorch之线性神经网络">
+      Pytorch之线性神经网络 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#FS%E3%80%81FT%E3%80%81DTFT%E3%80%81DFS%E3%80%81DFT"><span class="nav-number">1.</span> <span class="nav-text">FS、FT、DTFT、DFS、DFT</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-FS"><span class="nav-number">1.1.</span> <span class="nav-text">1.FS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-FT"><span class="nav-number">1.2.</span> <span class="nav-text">2.FT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-DTFT"><span class="nav-number">1.3.</span> <span class="nav-text">3.DTFT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-DFS"><span class="nav-number">1.4.</span> <span class="nav-text">4.DFS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-DFT"><span class="nav-number">1.5.</span> <span class="nav-text">5.DFT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E4%B8%8D%E5%90%8C%E5%8F%98%E6%8D%A2%E4%B9%8B%E9%97%B4%E7%9A%84%E7%A4%BA%E6%84%8F%E5%9B%BE"><span class="nav-number">1.6.</span> <span class="nav-text">6.不同变换之间的示意图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-Reference"><span class="nav-number">1.7.</span> <span class="nav-text">7.Reference</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#FFT"><span class="nav-number">2.</span> <span class="nav-text">FFT</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E9%A2%91%E7%8E%87%E5%88%86%E8%BE%A8%E7%8E%87"><span class="nav-number">2.1.</span> <span class="nav-text">1.频率分辨率</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-FFT%E4%B8%AD%E7%9A%84%E8%A1%A5%E9%9B%B6%E6%93%8D%E4%BD%9C"><span class="nav-number">2.2.</span> <span class="nav-text">2.FFT中的补零操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%8A%A0%E7%AA%97%E4%B8%8E%E7%AA%97%E5%87%BD%E6%95%B0"><span class="nav-number">2.3.</span> <span class="nav-text">3.加窗与窗函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Reference"><span class="nav-number">2.4.</span> <span class="nav-text">4.Reference</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2D-FFT"><span class="nav-number">3.</span> <span class="nav-text">2D-FFT</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E8%AE%A1%E7%AE%97%E6%B5%81%E7%A8%8B"><span class="nav-number">3.1.</span> <span class="nav-text">1.计算流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%BF%AB%E6%97%B6%E9%97%B4%E4%B8%8E%E6%85%A2%E6%97%B6%E9%97%B4"><span class="nav-number">3.2.</span> <span class="nav-text">2.快时间与慢时间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Reference"><span class="nav-number">3.3.</span> <span class="nav-text">3.Reference</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E5%AD%97%E5%9F%9F%E9%A2%91%E7%8E%87"><span class="nav-number">4.</span> <span class="nav-text">数字域频率</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E5%A4%8D%E6%95%B0"><span class="nav-number">5.</span> <span class="nav-text">深入理解复数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%A4%8D%E6%95%B0%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">5.1.</span> <span class="nav-text">1.复数的基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%A4%8D%E6%95%B0%E7%9A%84%E9%A2%91%E5%9F%9F%E7%89%B9%E6%80%A7"><span class="nav-number">5.2.</span> <span class="nav-text">2.复数的频域特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Reference-1"><span class="nav-number">5.3.</span> <span class="nav-text">3.Reference</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E4%B8%AD%E7%9A%84%E4%B8%8A%E9%87%87%E6%A0%B7%E5%92%8C%E4%B8%8B%E9%87%87%E6%A0%B7"><span class="nav-number">6.</span> <span class="nav-text">数字信号中的上采样和下采样</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%8F%92%E5%80%BC"><span class="nav-number">6.1.</span> <span class="nav-text">1.插值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%B8%8A%E9%87%87%E6%A0%B7"><span class="nav-number">6.2.</span> <span class="nav-text">2.上采样</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E4%B8%8B%E9%87%87%E6%A0%B7"><span class="nav-number">6.3.</span> <span class="nav-text">3.下采样</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E4%B8%8A%E9%87%87%E6%A0%B7%E4%B8%8E%E4%B8%8B%E9%87%87%E6%A0%B7%E6%B7%B7%E5%90%88"><span class="nav-number">6.4.</span> <span class="nav-text">4.上采样与下采样混合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Reference"><span class="nav-number">6.5.</span> <span class="nav-text">5.Reference</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%84%89%E5%86%B2%E5%8E%8B%E7%BC%A9%E4%B8%8E%E5%8E%BB%E6%96%9C%E5%A4%84%E7%90%86"><span class="nav-number">7.</span> <span class="nav-text">脉冲压缩与去斜处理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E8%84%89%E5%86%B2%E5%8E%8B%E7%BC%A9"><span class="nav-number">7.1.</span> <span class="nav-text">1.脉冲压缩</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%8E%BB%E6%96%9C%E5%A4%84%E7%90%86"><span class="nav-number">7.2.</span> <span class="nav-text">2.去斜处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E8%84%89%E5%86%B2%E5%8E%8B%E7%BC%A9%E4%B8%8E%E5%8E%BB%E6%96%9C%E5%A4%84%E7%90%86%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">7.3.</span> <span class="nav-text">3.脉冲压缩与去斜处理的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Reference-1"><span class="nav-number">7.4.</span> <span class="nav-text">4.Reference</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ssy"
+      src="/images/ssy.png">
+  <p class="site-author-name" itemprop="name">ssy</p>
+  <div class="site-description" itemprop="description">满怀希望 就会所向披靡</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">141</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">38</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ssy1938010014" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ssy1938010014" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://m.weibo.cn/u/5469432500?uid=5469432500&t=0&luicode=10000011&lfid=100103type=1&q=JIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" title="Weibo → https:&#x2F;&#x2F;m.weibo.cn&#x2F;u&#x2F;5469432500?uid&#x3D;5469432500&amp;t&#x3D;0&amp;luicode&#x3D;10000011&amp;lfid&#x3D;100103type%3D1%26q%3DJIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://ssy1938010014.github.io/" title="http:&#x2F;&#x2F;ssy1938010014.github.io" rel="noopener" target="_blank">ssy的小天地</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://y006.github.io/" title="http:&#x2F;&#x2F;y006.github.io" rel="noopener" target="_blank">邱院士的Blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://bengoooo.github.io/" title="http:&#x2F;&#x2F;BENgoooo.github.io" rel="noopener" target="_blank">赵总的Blog</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=1469041281&auto=1&height=66"></iframe>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ssy</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-ribbon@1/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+<script data-pjax>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  let url = element.dataset.target;
+  let pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  let pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  let fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+
+
+    <div id="pjax">
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+    </div>
+</body>
+</html>

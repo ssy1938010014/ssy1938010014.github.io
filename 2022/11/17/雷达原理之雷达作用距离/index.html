@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1/themes/blue/pace-theme-minimal.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"xn--ssy-lq6e63gg6fuu2d.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本节主要介绍了雷达作用距离的影响因素，包括最小可检测信号、脉冲积累、目标截面积、系统损耗等，以及不同形式的雷达方程。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="雷达原理之雷达作用距离">
+<meta property="og:url" content="http://ssy的小天地.com/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/index.html">
+<meta property="og:site_name" content="ssy的小天地">
+<meta property="og:description" content="本节主要介绍了雷达作用距离的影响因素，包括最小可检测信号、脉冲积累、目标截面积、系统损耗等，以及不同形式的雷达方程。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221116111811248.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117123419319.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117132424244.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117133259094.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117135803233.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117140919695.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117142137024.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117143230577.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117144032083.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117145159096.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117145636457.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117145706008.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117145803515.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117150113658.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117150319069.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117152651762.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117155108154.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117160249854.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117161856482.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117163047100.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117164629008.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20230914181346262.png">
+<meta property="article:published_time" content="2022-11-17T03:07:12.000Z">
+<meta property="article:modified_time" content="2023-10-15T05:44:40.812Z">
+<meta property="article:author" content="ssy">
+<meta property="article:tag" content="雷达原理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221116111811248.png">
+
+<link rel="canonical" href="http://ssy的小天地.com/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>雷达原理之雷达作用距离 | ssy的小天地</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+    <a target="_blank" rel="noopener" href="https://github.com/ssy1938010014" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ssy的小天地</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">愿汝如是 千金不换</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-works">
+
+    <a href="/works/" rel="section"><i class="fa fa-fw fa-sitemap"></i>文章</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ssy的小天地.com/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ssy.png">
+      <meta itemprop="name" content="ssy">
+      <meta itemprop="description" content="满怀希望 就会所向披靡">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ssy的小天地">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          雷达原理之雷达作用距离
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+
+
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-11-17 11:07:12" itemprop="dateCreated datePublished" datetime="2022-11-17T11:07:12+08:00">2022-11-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-10-15 13:44:40" itemprop="dateModified" datetime="2023-10-15T13:44:40+08:00">2023-10-15</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%A7%AF%E7%B4%AF/" itemprop="url" rel="index"><span itemprop="name">学习积累</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本节主要介绍了雷达作用距离的影响因素，包括最小可检测信号、脉冲积累、目标截面积、系统损耗等，以及不同形式的雷达方程。</p>
+<span id="more"></span>
+<h1 id="雷达方程"><a href="#雷达方程" class="headerlink" title="雷达方程"></a>雷达方程</h1><h2 id="1-基本雷达方程"><a href="#1-基本雷达方程" class="headerlink" title="1.基本雷达方程"></a>1.基本雷达方程</h2><ul>
+<li><p>雷达基本方程，也叫做最大作用距离方程</p>
+<p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221116111811248.png" alt="image-20221116111811248" style="zoom:50%;"></p>
+</li>
+<li><p>$P_t$：雷达发射机发射信号的功率</p>
+</li>
+<li><p>$G_t$：发射天线增益，这里假设目标与雷达天线的连线正好穿过天线方向图最大增益处</p>
+</li>
+<li><p>$G_r$：接收天线增益，若天线为收发共用，有$G_r$=$G_t$</p>
+</li>
+<li><p>$\sigma$：表示目标的雷达截面积（RCS），<strong>其反映入射电磁波照射到目标上之后发射回来的电磁波的大小</strong>。隐身飞机就是将 σ 做的很小。当雷达电磁波照射到目标上之后，反射回来的电磁波功率很弱，就达到了目标对雷达隐身的目的。</p>
+</li>
+<li><p>$S_{imin}$表示接收手机灵敏度，即最小可检测信号</p>
+</li>
+<li><p>假设电磁波反射回来之后，经过接收天线主瓣最大值（接收天线方向图最大增益为$G_r$），接收机接收到的信号功率就等于反射回来的信号功率乘以接收天线的有效面积$A_r$。此时，接收机能否检测到信号跟$S_{imin}$有关。</p>
+</li>
+<li><p>如果满足，$P_r≥S_{imin}$，雷达就可以探测到目标</p>
+</li>
+</ul>
+<h2 id="2-方程公式推导"><a href="#2-方程公式推导" class="headerlink" title="2.方程公式推导"></a>2.方程公式推导</h2><ul>
+<li><p>到达目标的入射功率密度为:</p>
+<script type="math/tex; mode=display">
+\frac{P_tG_t}{4\pi R^2}</script></li>
+<li><p>目标反射回来的功率为：</p>
+<script type="math/tex; mode=display">
+\frac{P_tG_t\sigma}{4\pi R^2}</script></li>
+<li><p>假设接收天线的有效面积为$A_r$：</p>
+<script type="math/tex; mode=display">
+\frac{P_tG_t\sigma}{4\pi R^2}\times\frac{A_r}{4\pi R^2}</script></li>
+<li><p>由于<strong>$A_r$与$G_r$的关系</strong>为：</p>
+<script type="math/tex; mode=display">
+G_r=\frac{4\pi A_r}{\lambda^2}</script></li>
+<li><p>故最终接收到的功率为：</p>
+<script type="math/tex; mode=display">
+P_r=\frac{P_tG_tG_r\lambda^2\sigma}{(4\pi)^3R^4}</script></li>
+<li><p><strong>而当$P_r$=$S_{simin}$时，R就取得最大值</strong>：</p>
+<script type="math/tex; mode=display">
+R_{max}=[\frac{P_tG_tG_r\lambda^2\sigma}{(4\pi)^3S_{simin}}]^{1/4}</script><ul>
+<li><p>若雷达的检测门限设置为最小输出信噪比$(SNR)_{omin}$，则最小可检测信号功率为：</p>
+<script type="math/tex; mode=display">
+S_{min} = kT_0 BF(SNR)_{omin}(W)</script></li>
+<li><p><strong>将上式代入雷达方程$R_{max}$，并用$L$表示雷达各部分的功耗</strong>（用L表示损耗而加在雷达方程的分母中，<strong>L是大于1的值</strong>。损耗L包括许多比较容易确定的值，诸如波导传输损耗、接收机失配损耗、天线波束形状损耗等，损耗L中还包括一些不易估计的值，例如操纵员损耗、设备工作不完善损耗等，这些因素要根据经验和实验测定来估计），<strong>可得到</strong>：</p>
+<script type="math/tex; mode=display">
+R_{max}=[\frac{P_tG_tG_r\lambda^2\sigma}{(4\pi)^3kT_0 BFL(SNR)_{omin}}]^{1/4}</script></li>
+</ul>
+</li>
+<li><p><strong>一般情况下，可近似认为带宽为时宽的倒数</strong>，即$B\approx \frac{1}{\tau}$</p>
+</li>
+</ul>
+<h2 id="3-单基地雷达方程"><a href="#3-单基地雷达方程" class="headerlink" title="3.单基地雷达方程"></a>3.单基地雷达方程</h2><ul>
+<li><p><strong>理想无损耗</strong>、<strong>自由空间传播</strong>的<strong>单基地</strong>雷达方程，且假设信号从天线方向图最大增益处发射、接收</p>
+<script type="math/tex; mode=display">
+P_r=\frac{P_tG_t}{4\pi R^2}\times\sigma\times\frac{A_r}{4\pi R^2}</script></li>
+<li><p>收发不同天线：</p>
+<script type="math/tex; mode=display">
+R_{max}=[\frac{P_tG_tG_r\lambda^2\sigma}{(4\pi)^3S_{simin}}]^{1/4}</script></li>
+<li><p>收发天线共用：</p>
+<script type="math/tex; mode=display">
+R_{max}=[\frac{P_tG_r^2\lambda^2\sigma}{(4\pi)^3S_{simin}}]^{1/4}</script></li>
+</ul>
+<h1 id="目标的散射截面积-RCS"><a href="#目标的散射截面积-RCS" class="headerlink" title="目标的散射截面积(RCS)"></a>目标的散射截面积(RCS)</h1><ul>
+<li>定义式</li>
+</ul>
+<script type="math/tex; mode=display">
+\sigma=\frac{P_2}{S_1}</script><ul>
+<li><p>其中，$P_2$为散射总功率，$S_1$为入射功率密度</p>
+</li>
+<li><p>$P_2=4\pi\times返回接收机每单位立体角内的回波功率$</p>
+<p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117123419319.png" alt="image-20221117123419319" style="zoom: 33%;"></p>
+</li>
+<li><p><strong>测量</strong>：</p>
+<ul>
+<li><p>标准截面积$\sigma_0$满足：</p>
+<script type="math/tex; mode=display">
+P_{ro}=k\frac{\sigma_0}{R_0^4}</script></li>
+<li><p>若未知目标处于R处，测$P_r$：</p>
+<script type="math/tex; mode=display">
+P_r=k\frac{\sigma}{R_0^4}</script></li>
+<li><p>将上式两式相比，可以得到$\sigma$：</p>
+<script type="math/tex; mode=display">
+\sigma=\frac{P_r}{P_{r0}}\cdot\frac{R^4}{R_0^4}\cdot\sigma_0</script></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="最小可检测信号"><a href="#最小可检测信号" class="headerlink" title="最小可检测信号"></a>最小可检测信号</h1><h2 id="1-最小可检测信号与信噪比"><a href="#1-最小可检测信号与信噪比" class="headerlink" title="1.最小可检测信号与信噪比"></a>1.最小可检测信号与信噪比</h2><ul>
+<li><p>如果只有信号而没有噪声，任何微弱信号在理论上都可以经过任意放大之后被检测到，因此，雷达检测能力实际上取决于信号噪声比</p>
+</li>
+<li><p>$S_{imin}=kT_0BFM$，其中<strong>M又称为检测因子$D_0$​</strong>。<strong>定义为接收机匹配滤波器输出端（检波器输入端）测量的信号噪声功率比</strong></p>
+<script type="math/tex; mode=display">
+M=(\frac{S}{N})_{omin}</script></li>
+<li><p>将$S_{imin}$带入雷达方程，得到：</p>
+<script type="math/tex; mode=display">
+R_{max}=[\frac{P_tG_tG_r\lambda^2\sigma}{(4\pi)^3kT_0BFD_0}]^{1/4}</script></li>
+</ul>
+<h2 id="2-门限检测"><a href="#2-门限检测" class="headerlink" title="2.门限检测"></a>2.门限检测</h2><ul>
+<li><p>由于噪声的存在，判断信号是否出现就成了一个统计问题，必须根据某种统计检测标准进行判断</p>
+</li>
+<li><p><strong>奈曼-皮尔逊准则</strong>：要求在给定信噪比条件下，<strong>满足一定虚警概率$P_{fa}$时的发现概率$P_d$ 最大。</strong></p>
+</li>
+<li>接收检测系统首先在中频部分对<strong>单个脉冲信号进行匹配滤波</strong>，接着进行检波，通常是在n个脉冲积累后再检测，将积累输出与某一门限电压进行比较，若输出包络超过门限，则认为有目标存在，否则认为没有目标，这就是<strong>检测门限</strong>。</li>
+<li>门限检测是一种统计检测，由于信号叠加有噪声，因而总输出是一个随机量。在输出端根据输出振幅是否超过门限来判断有无目标存在，可能出现以下四种情况:<ul>
+<li>无目标时：<ul>
+<li>$V\ge V_T$：判断为有目标，此时称为虚警，则有虚警概率$P_{fa}$</li>
+<li>$V&lt;V_T$：判断为无目标，此时称为正确不发现，则有正确不发现概率$P_{an}=1-P_a$</li>
+</ul>
+</li>
+<li>有目标时：<ul>
+<li>$V\ge V_T$：判断为有目标，此时称为正确发现，则有发现概率$P_{d}$</li>
+<li>$V&lt;V_T$：判断为无目标，此时称为漏报，则有漏报概率$P_{la}=1-P_d$</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-检测性能与信噪比"><a href="#3-检测性能与信噪比" class="headerlink" title="3.检测性能与信噪比"></a>3.检测性能与信噪比</h2><h3 id="3-1-虚警概率"><a href="#3-1-虚警概率" class="headerlink" title="3.1 虚警概率"></a>3.1 虚警概率</h3><ul>
+<li><p>$P_{fa}=\int_{V_T}^\infty w(x|无目标)dx$，其中高斯噪声的包络服从瑞利分布$w(x|无目标)=\frac{x}{\sigma^2}e^{-\frac{x^2}{2\sigma^2}}$</p>
+</li>
+<li><p>则$P_{fa}=e^{-\frac{V_T^2}{2\sigma}}$，$\sigma$为噪声的均方根值，</p>
+</li>
+<li><p>虚警时间与虚警概率的关系</p>
+<p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117132424244.png" alt="image-20221117132424244" style="zoom:50%;"></p>
+</li>
+<li><p>虚警数：$n_f=\frac{1}{P_{fa}}$，出现一次虚警所需要的次数</p>
+</li>
+</ul>
+<h3 id="3-2-发现概率"><a href="#3-2-发现概率" class="headerlink" title="3.2 发现概率"></a>3.2 发现概率</h3><ul>
+<li><p>$P_{fa}=\int_{V_T}^\infty w(x|有目标)dx$</p>
+</li>
+<li><p>此时有目标，$w(x|有目标)$服从广义瑞利分布，通过查表查找</p>
+<p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117133259094.png" alt="image-20221117133259094" style="zoom: 33%;"></p>
+</li>
+</ul>
+<hr>
+<h1 id="脉冲积累对作用距离的改善"><a href="#脉冲积累对作用距离的改善" class="headerlink" title="脉冲积累对作用距离的改善"></a>脉冲积累对作用距离的改善</h1><h2 id="1-相参积累"><a href="#1-相参积累" class="headerlink" title="1.相参积累"></a>1.相参积累</h2><ul>
+<li><p>假设$ω$为天线扫描角速度。$\frac{θ_{0.5}}{ω}$ 为扫过3dB带宽所需时间，在此时间接收机都能接收到回波信号。</p>
+</li>
+<li><p>则能接收到的脉冲积累个数为：</p>
+<script type="math/tex; mode=display">
+w=\frac{\theta_{0.5}}{w}f_r</script></li>
+<li><p>单个脉冲回波信号：其功率为$A^2$，噪声功率为$\sigma^2$</p>
+<script type="math/tex; mode=display">
+Acos(2\pi f_0+\phi_0)</script></li>
+<li><p>$M$个脉冲相参积累（$\phi$相同）后：其功率为$M^2A^2$，噪声功率为$M\sigma^2$</p>
+<script type="math/tex; mode=display">
+MAcos(2\pi f_0t+\phi_0)</script></li>
+<li><p>故相参后信号噪声比为：</p>
+<script type="math/tex; mode=display">
+\frac{M^2A^2}{M\sigma^2}=M\frac{A^2}{\sigma^2}</script></li>
+<li><p><strong>则相参积累后，信噪比扩大了M倍</strong></p>
+</li>
+<li><p><strong>定义$D_0(M)$：M个脉冲积累之后，每一个脉冲所需的信噪比</strong></p>
+<script type="math/tex; mode=display">
+D_0(M)=\frac{D_0(1)}{M}</script><p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117135803233.png" alt="image-20221117135803233" style="zoom: 33%;"></p>
+</li>
+<li><p><strong>相参积累后，最大作用距离变为</strong>：</p>
+<script type="math/tex; mode=display">
+R_{max}'=R_{max}\sqrt[4]M</script></li>
+</ul>
+<h2 id="2-非相参积累"><a href="#2-非相参积累" class="headerlink" title="2.非相参积累"></a>2.非相参积累</h2><ul>
+<li>每个回波脉冲的初始相位$\phi$是有变化的。所以，积累之后幅度不能增加 M 倍</li>
+<li>通过查表得方式查找$D_0(M)$</li>
+</ul>
+<h2 id="3-脉冲积累数的确定"><a href="#3-脉冲积累数的确定" class="headerlink" title="3.脉冲积累数的确定"></a>3.脉冲积累数的确定</h2><p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117140919695.png" alt="image-20221117140919695" style="zoom: 33%;"></p>
+<hr>
+<h1 id="目标截面积及其起伏特性"><a href="#目标截面积及其起伏特性" class="headerlink" title="目标截面积及其起伏特性"></a>目标截面积及其起伏特性</h1><h2 id="1-点目标"><a href="#1-点目标" class="headerlink" title="1.点目标"></a>1.点目标</h2><h3 id="1-1-距离分辨率"><a href="#1-1-距离分辨率" class="headerlink" title="1.1 距离分辨率"></a>1.1 距离分辨率</h3><ul>
+<li>距离分辨率用于描述雷达分别探测出相邻目标的能力</li>
+<li>如果两个目标的间距至少为$\frac{C\tau}{2}$，那么当脉冲后沿撞上第一个目标时，这个脉冲的前沿才开始从第二个目标返回将产生两个分开的返回脉冲。当两个目标的间距小于$\frac{C\tau}{2}$时，返回的脉冲将包括两个目标的回波（即未分辨的回波)。</li>
+<li>则$距离分辨率=\frac{C\tau}{2}$</li>
+</ul>
+<h3 id="1-2-角度分辨率"><a href="#1-2-角度分辨率" class="headerlink" title="1.2 角度分辨率"></a>1.2 角度分辨率</h3><ul>
+<li>角度分辨率是由天线的波束宽度决定的</li>
+<li>即使两个散射体位于同一距离的不同方位，只要它们都在天线的主瓣内，它们都会被同时照射到，它们的回波也会同时被雷达接收</li>
+<li>采用天线的3dB波束宽度作为主瓣宽度，这样位于波束3dB边缘的两个点散射体就定义了雷达的角度分辨率</li>
+</ul>
+<h3 id="1-3-雷达三维分辨单元"><a href="#1-3-雷达三维分辨单元" class="headerlink" title="1.3 雷达三维分辨单元"></a>1.3 雷达三维分辨单元</h3><ul>
+<li>如果两个目标同时落在同一个距离单元，也在同一个角度单元，雷达就无法区分这两个目标，我们就把距离单元和角度单元构成的一个三维单元称为雷达三维分辨单元$\Delta V$</li>
+</ul>
+<p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117142137024.png" alt="image-20221117142137024" style="zoom:33%;"></p>
+<ul>
+<li>如果目标体积满足：$V&lt;ΔV$，就称之为<strong>点目标</strong>。</li>
+</ul>
+<h3 id="1-4-点目标横截面积与波长的关系"><a href="#1-4-点目标横截面积与波长的关系" class="headerlink" title="1.4 点目标横截面积与波长的关系"></a>1.4 点目标横截面积与波长的关系</h3><ul>
+<li><p>最理想的点目标是一个各向同性的球体。设$r$为各向同性球体的半径。</p>
+</li>
+<li><p>当雷达照射球体时，分为三种情况：</p>
+<ul>
+<li>瑞利区：$λ&gt;&gt;2πr，σ∝λ−4$</li>
+<li>振荡区：$λ≈2πr，σ在πr^2附近振荡$</li>
+<li>光学区：$λ≤2πr，σ≈πr^2$</li>
+</ul>
+<p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117143230577.png" alt="image-20221117143230577" style="zoom: 33%;"></p>
+</li>
+<li><p>我们希望点目标处于光学区。实际上大多数目标都处在光学区</p>
+</li>
+</ul>
+<h2 id="2-简单形状目标的雷达截面积"><a href="#2-简单形状目标的雷达截面积" class="headerlink" title="2.简单形状目标的雷达截面积"></a>2.简单形状目标的雷达截面积</h2><ul>
+<li>几何形状比较简单的目标，如球体、圆板、锥体等，它们的雷达截面积可以计算出来</li>
+</ul>
+<h2 id="3-复杂目标的雷达截面积"><a href="#3-复杂目标的雷达截面积" class="headerlink" title="3.复杂目标的雷达截面积"></a>3.复杂目标的雷达截面积</h2><ul>
+<li>复杂目标是指雷达实际要探测的各种目标，如飞机、舰船、地物等</li>
+<li>复杂目标的雷达截面积是不仅是视角的函数（也就是说雷达从不同方向照射目标，目标的雷达截面积会发生变化），同时也随频率、波长、极化等变化。通常雷达工作时，精确的目标姿态及视角是不知道的，因为目标运动时视角随时间变化。因此，最好是用统计的概念来描述雷达截面积。</li>
+</ul>
+<p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117144032083.png" alt="image-20221117144032083" style="zoom: 33%;"></p>
+<h2 id="4-目标反射特性与极化"><a href="#4-目标反射特性与极化" class="headerlink" title="4.目标反射特性与极化"></a>4.目标反射特性与极化</h2><ul>
+<li><strong>极化</strong>：用来描述电场的方向。当电场的方向是垂直时，该电磁波被说成是垂直极化；当电场的方向是水平时，该电磁波被说成是水平极化。</li>
+<li>当波被<strong>反射</strong>时，被反射波的极化不仅取决于入射波的极化，还取决于反射体的结构。事实上，雷达回波的极化可被用于辅助辨别目标的类型。</li>
+</ul>
+<h3 id="4-1-线极化（水平极化、垂直极化）"><a href="#4-1-线极化（水平极化、垂直极化）" class="headerlink" title="4.1 线极化（水平极化、垂直极化）"></a>4.1 线极化（水平极化、垂直极化）</h3><ul>
+<li><p>将照射电场分解为$E_H^T,E_V^T$，接收电场分解为$E_H^R,E_V^R$，有：</p>
+<p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117145159096.png" alt="image-20221117145159096" style="zoom:33%;"></p>
+<ul>
+<li><strong>散射矩阵</strong>：反映目标本身的散射特性。即目标对于照射它的电场变为接收电场，目标对于极化的影响。</li>
+<li>$α_{HH}$表示水平极化入射场产生水平极化散射场的散射系数</li>
+<li>$α_{HV}$表示水平极化入射场产生垂直极化散射场的散射系数</li>
+<li>$α_{VH}$表示垂直极化入射场产生水平极化散射场的散射系数</li>
+<li>$α_{VV}$表示垂直极化入射场产生垂直极化散射场的散射系数</li>
+</ul>
+</li>
+<li><p>特殊形体目标的散射矩阵</p>
+<ul>
+<li><p>各项同性的球体</p>
+<p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117145636457.png" alt="image-20221117145636457" style="zoom: 50%;"></p>
+</li>
+<li><p>相对于入射方向对称的物体</p>
+<p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117145706008.png" alt="image-20221117145706008" style="zoom:50%;"></p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-2-圆极化（左旋、右旋）"><a href="#4-2-圆极化（左旋、右旋）" class="headerlink" title="4.2 圆极化（左旋、右旋）"></a>4.2 圆极化（左旋、右旋）</h3><ul>
+<li>$E_R^T，E_L^T$分别表示发射场中的右旋和左旋圆极化成分， $E_R^S，E_L^S$分别表示散射场中右旋和左旋圆极化成分。</li>
+</ul>
+<p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117145803515.png" alt="image-20221117145803515" style="zoom:50%;"></p>
+<ul>
+<li><p>相对于入射方向对称的物体</p>
+<p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117150113658.png" alt="image-20221117150113658" style="zoom:50%;"></p>
+</li>
+</ul>
+<h2 id="5-目标起伏对检测性能的影响"><a href="#5-目标起伏对检测性能的影响" class="headerlink" title="5.目标起伏对检测性能的影响"></a>5.目标起伏对检测性能的影响</h2><ul>
+<li><p>目标雷达截面积的大小对雷达检测性能有直接的关系，在工程计算中常把截面积视为常量。实际上，处于运动状态的目标，视角一直在变化，截面积随之产生起伏。</p>
+</li>
+<li><p>目标起伏模型</p>
+<p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117150319069.png" alt="image-20221117150319069" style="zoom:33%;"></p>
+<ul>
+<li><p>扫描间：指的是同一个周期内的M个回波间是有相关性的，不同周期扫描间的回波是没有相关性的。说明目标本身起伏特性的变化比较慢</p>
+</li>
+<li><p>脉冲间：指的是同一个扫描周期内的M个回波间不具有相关性，说明目标本身起伏特性的变化很快</p>
+</li>
+<li><p><strong>由于目标起伏引起检测困难，$D_0$增加</strong></p>
+<p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117152651762.png" alt="image-20221117152651762" style="zoom:33%;"></p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="雷达方程的几种形式"><a href="#雷达方程的几种形式" class="headerlink" title="雷达方程的几种形式"></a>雷达方程的几种形式</h1><h2 id="1-二次雷达方程"><a href="#1-二次雷达方程" class="headerlink" title="1.二次雷达方程"></a>1.二次雷达方程</h2><p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117155108154.png" alt="image-20221117155108154" style="zoom: 33%;"></p>
+<ul>
+<li><p>雷达发射信号，应答器接收</p>
+<script type="math/tex; mode=display">
+P_r'=\frac{P_tG_t}{4\pi R_1^2}A_r'=\frac{P_tG_t\lambda^2G_r'}{(4\pi)^2R_1^2}</script><p>则：</p>
+<script type="math/tex; mode=display">
+R_{1max}=[\frac{P_tG_tG_r'\lambda^2}{(4\pi)^2S_{imin}'}]^{1/2}</script></li>
+<li><p>应答器发射信号，雷达接收</p>
+<script type="math/tex; mode=display">
+R_{2max}=[\frac{P_t'G_t'G_r\lambda^2}{(4\pi)^2S_{imin}}]^{1/2}</script></li>
+<li><p>则$R_{max}$：</p>
+<script type="math/tex; mode=display">
+R_{max}=\lbrace R_{1max},R_{2max}\rbrace</script></li>
+</ul>
+<h2 id="2-双基地雷达方程"><a href="#2-双基地雷达方程" class="headerlink" title="2.双基地雷达方程"></a>2.双基地雷达方程</h2><p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117160249854.png" alt="image-20221117160249854" style="zoom: 50%;"></p>
+<ul>
+<li>根据基本雷达方程有：<script type="math/tex; mode=display">
+P_r=\frac{P_tG_t}{4\pi R_t^2}\cdot\sigma\cdot\frac{A_r}{4\pi R_r^2}=\frac{P_tG_tG_r\lambda^2\sigma}{(4\pi)^3R_t^2R_r^2}</script></li>
+</ul>
+<script type="math/tex; mode=display">
+则:R_{max}=R_tR_r=[\frac{P_tG_tG_r\lambda^2\sigma}{(4\pi)^3S_{imin}}]^{1/2}</script><ul>
+<li><p>限制条件：</p>
+<script type="math/tex; mode=display">
+R_t+Rr\ge R_b</script><script type="math/tex; mode=display">
+|R_t-R_r|\le R_b</script></li>
+</ul>
+<h2 id="3-用信号能量表示的雷达方程"><a href="#3-用信号能量表示的雷达方程" class="headerlink" title="3.用信号能量表示的雷达方程"></a>3.用信号能量表示的雷达方程</h2><script type="math/tex; mode=display">
+R_{max}=[\frac{EG_t^2\lambda^2\sigma}{(4\pi)^3kT_0FD_0C_B}]^{1/4}</script><script type="math/tex; mode=display">
+其中，C_B是失配损失，E=P_t\tau</script><h2 id="4-干扰情况下的雷达方程"><a href="#4-干扰情况下的雷达方程" class="headerlink" title="4.干扰情况下的雷达方程"></a>4.干扰情况下的雷达方程</h2><h3 id="4-1-有源干扰（干扰机）"><a href="#4-1-有源干扰（干扰机）" class="headerlink" title="4.1 有源干扰（干扰机）"></a>4.1 有源干扰（干扰机）</h3><p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117161856482.png" alt="image-20221117161856482" style="zoom:50%;"></p>
+<ul>
+<li><p>雷达要想检测到目标，必须满足：<strong>信号功率/（噪声功率+干扰功率）&gt; 某个门限</strong>，即$\frac{P_{rs}}{P_{rj}}\ge A$（忽略噪声功率）</p>
+</li>
+<li><p>雷达接收到的目标回波信号功率$P_{rs}$：</p>
+<script type="math/tex; mode=display">
+P_{rs}=\frac{P_tG_tG_r\lambda^2\sigma}{(4\pi)^3R^4L}</script></li>
+<li><p>雷达接收到的干扰信号功率$P_{rj}$：</p>
+<p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117163047100.png" alt="image-20221117163047100" style="zoom:33%;"></p>
+<script type="math/tex; mode=display">
+P_{rj}=\frac{P_jG_jA_r'}{4\pi R_j^2}\times\frac{\Delta f_r}{\Delta f_j}</script><script type="math/tex; mode=display">
+其中:G_r'=\frac{4\pi A_r'}{\lambda^2}=G_rF(\theta)</script></li>
+<li><p>当$\frac{P_{rs}}{P_{rj}}=A$时，作用距离最大，有：</p>
+<script type="math/tex; mode=display">
+R_{max}=[\frac{P_tG_tG_r\sigma R_j^2\Delta f_j}{4\pi P_jG_jG_r'\Delta f_rAL}]^{1/4}</script></li>
+<li><p><strong>自卫干扰：将干扰机放到目标上</strong></p>
+<ul>
+<li>$R_j=R,G_r’=G_r$</li>
+<li>$R_{max}=[\frac{P_tG_t\sigma\Delta f_j}{4\pi P_jG_j\Delta f_rAL}]^{1/4}$</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-2-无源干扰（箔条干扰）"><a href="#4-2-无源干扰（箔条干扰）" class="headerlink" title="4.2 无源干扰（箔条干扰）"></a>4.2 无源干扰（箔条干扰）</h3><p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20221117164629008.png" alt="image-20221117164629008" style="zoom: 33%;"></p>
+<hr>
+<h1 id="雷达基本方程的Python实现"><a href="#雷达基本方程的Python实现" class="headerlink" title="雷达基本方程的Python实现"></a>雷达基本方程的Python实现</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt </span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">radar_basic_eq</span>(<span class="params">pt, freq, G, sigma, b, NF, L, snr</span>):</span><br><span class="line">    c = <span class="number">3.0e8</span> <span class="comment">#光速</span></span><br><span class="line">    t0 = <span class="number">290</span></span><br><span class="line">    lambda1 = c/freq</span><br><span class="line"></span><br><span class="line">    num1 = <span class="number">10</span> * np.log10(pt * <span class="number">1.0e3</span> * lambda1 ** <span class="number">2</span>) + <span class="number">2</span> * G +sigma</span><br><span class="line">    num2 = <span class="number">10</span> * np.log10((<span class="number">4.0</span> * np.pi) ** <span class="number">3</span> * (<span class="number">1.38e-23</span>) * t0 * b) + NF + L</span><br><span class="line">    range_db = num1 * np.ones((<span class="number">1</span>, <span class="built_in">len</span>(snr))) - num2 - snr <span class="comment">#shape = (3, 1)*(1, 100) - (100, )</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> range_db</span><br><span class="line"></span><br><span class="line">pt = <span class="number">1500</span> <span class="comment">#峰值功率</span></span><br><span class="line">freq = <span class="number">5.6e9</span> <span class="comment">#频率</span></span><br><span class="line">G = <span class="number">45</span> <span class="comment">#天线增益</span></span><br><span class="line">sigma = np.array([-<span class="number">10</span>, <span class="number">0</span>, <span class="number">10</span>]) <span class="comment">#目标截面积</span></span><br><span class="line">sigma = sigma.reshape(<span class="built_in">len</span>(sigma), <span class="number">1</span>)</span><br><span class="line">b = <span class="number">5.0e+6</span> <span class="comment">#宽带</span></span><br><span class="line">NF = <span class="number">3</span> <span class="comment">#噪声系数</span></span><br><span class="line">L = <span class="number">4</span> <span class="comment">#雷达损耗</span></span><br><span class="line">snr = np.linspace(<span class="number">10</span>, <span class="number">60</span>, <span class="number">100</span>) <span class="comment">#信噪比</span></span><br><span class="line"></span><br><span class="line">range_db = radar_basic_eq(pt, freq, G, sigma, b, NF, L, snr)</span><br><span class="line">range_km = <span class="number">10</span> ** (range_db / <span class="number">40</span>)</span><br><span class="line"></span><br><span class="line">fig = plt.figure()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(sigma.size):</span><br><span class="line">    plt.scatter(snr, range_km[i] / <span class="number">1000</span>, label=<span class="string">f&quot;sigma = <span class="subst">&#123;sigma[i][<span class="number">0</span>]&#125;</span>&quot;</span>) <span class="comment">#range用km表示</span></span><br><span class="line">plt.xlabel(<span class="string">&quot;SNR in dB&quot;</span>,fontsize=<span class="number">12</span>)</span><br><span class="line">plt.ylabel(<span class="string">&quot;Range in km&quot;</span>,fontsize=<span class="number">12</span>)</span><br><span class="line"><span class="comment"># plt.xlim(10, 60)</span></span><br><span class="line"><span class="comment"># plt.ylim(20, 100)</span></span><br><span class="line">plt.title(<span class="string">&quot;Radar Equation&quot;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>结果如下（最小输出信噪比与雷达作用距离之间的关系）：</p>
+<p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/image-20230914181346262.png" alt="image-20230914181346262" style="zoom: 33%;"></p>
+<hr>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/174829860">五，雷达作用距离 - 知乎 (zhihu.com)</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>欢迎来到ssy的世界</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/WeChaPay.jpg" alt="ssy 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>ssy
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://ssy的小天地.com/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB/" title="雷达原理之雷达作用距离">http://ssy的小天地.com/2022/11/17/雷达原理之雷达作用距离/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86/" rel="tag"># 雷达原理</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E7%BB%88%E7%AB%AF%E6%98%BE%E7%A4%BA%E5%99%A8/" rel="prev" title="雷达原理之雷达终端显示器">
+      <i class="fa fa-chevron-left"></i> 雷达原理之雷达终端显示器
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%B7%9D%E7%A6%BB%E6%B5%8B%E9%87%8F/" rel="next" title="雷达原理之目标距离测量">
+      雷达原理之目标距离测量 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9B%B7%E8%BE%BE%E6%96%B9%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">雷达方程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%9F%BA%E6%9C%AC%E9%9B%B7%E8%BE%BE%E6%96%B9%E7%A8%8B"><span class="nav-number">1.1.</span> <span class="nav-text">1.基本雷达方程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%96%B9%E7%A8%8B%E5%85%AC%E5%BC%8F%E6%8E%A8%E5%AF%BC"><span class="nav-number">1.2.</span> <span class="nav-text">2.方程公式推导</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%8D%95%E5%9F%BA%E5%9C%B0%E9%9B%B7%E8%BE%BE%E6%96%B9%E7%A8%8B"><span class="nav-number">1.3.</span> <span class="nav-text">3.单基地雷达方程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9B%AE%E6%A0%87%E7%9A%84%E6%95%A3%E5%B0%84%E6%88%AA%E9%9D%A2%E7%A7%AF-RCS"><span class="nav-number">2.</span> <span class="nav-text">目标的散射截面积(RCS)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%80%E5%B0%8F%E5%8F%AF%E6%A3%80%E6%B5%8B%E4%BF%A1%E5%8F%B7"><span class="nav-number">3.</span> <span class="nav-text">最小可检测信号</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%9C%80%E5%B0%8F%E5%8F%AF%E6%A3%80%E6%B5%8B%E4%BF%A1%E5%8F%B7%E4%B8%8E%E4%BF%A1%E5%99%AA%E6%AF%94"><span class="nav-number">3.1.</span> <span class="nav-text">1.最小可检测信号与信噪比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E9%97%A8%E9%99%90%E6%A3%80%E6%B5%8B"><span class="nav-number">3.2.</span> <span class="nav-text">2.门限检测</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%A3%80%E6%B5%8B%E6%80%A7%E8%83%BD%E4%B8%8E%E4%BF%A1%E5%99%AA%E6%AF%94"><span class="nav-number">3.3.</span> <span class="nav-text">3.检测性能与信噪比</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E8%99%9A%E8%AD%A6%E6%A6%82%E7%8E%87"><span class="nav-number">3.3.1.</span> <span class="nav-text">3.1 虚警概率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E5%8F%91%E7%8E%B0%E6%A6%82%E7%8E%87"><span class="nav-number">3.3.2.</span> <span class="nav-text">3.2 发现概率</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%84%89%E5%86%B2%E7%A7%AF%E7%B4%AF%E5%AF%B9%E4%BD%9C%E7%94%A8%E8%B7%9D%E7%A6%BB%E7%9A%84%E6%94%B9%E5%96%84"><span class="nav-number">4.</span> <span class="nav-text">脉冲积累对作用距离的改善</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%9B%B8%E5%8F%82%E7%A7%AF%E7%B4%AF"><span class="nav-number">4.1.</span> <span class="nav-text">1.相参积累</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E9%9D%9E%E7%9B%B8%E5%8F%82%E7%A7%AF%E7%B4%AF"><span class="nav-number">4.2.</span> <span class="nav-text">2.非相参积累</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E8%84%89%E5%86%B2%E7%A7%AF%E7%B4%AF%E6%95%B0%E7%9A%84%E7%A1%AE%E5%AE%9A"><span class="nav-number">4.3.</span> <span class="nav-text">3.脉冲积累数的确定</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9B%AE%E6%A0%87%E6%88%AA%E9%9D%A2%E7%A7%AF%E5%8F%8A%E5%85%B6%E8%B5%B7%E4%BC%8F%E7%89%B9%E6%80%A7"><span class="nav-number">5.</span> <span class="nav-text">目标截面积及其起伏特性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%82%B9%E7%9B%AE%E6%A0%87"><span class="nav-number">5.1.</span> <span class="nav-text">1.点目标</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E8%B7%9D%E7%A6%BB%E5%88%86%E8%BE%A8%E7%8E%87"><span class="nav-number">5.1.1.</span> <span class="nav-text">1.1 距离分辨率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E8%A7%92%E5%BA%A6%E5%88%86%E8%BE%A8%E7%8E%87"><span class="nav-number">5.1.2.</span> <span class="nav-text">1.2 角度分辨率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E9%9B%B7%E8%BE%BE%E4%B8%89%E7%BB%B4%E5%88%86%E8%BE%A8%E5%8D%95%E5%85%83"><span class="nav-number">5.1.3.</span> <span class="nav-text">1.3 雷达三维分辨单元</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-%E7%82%B9%E7%9B%AE%E6%A0%87%E6%A8%AA%E6%88%AA%E9%9D%A2%E7%A7%AF%E4%B8%8E%E6%B3%A2%E9%95%BF%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">5.1.4.</span> <span class="nav-text">1.4 点目标横截面积与波长的关系</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E7%AE%80%E5%8D%95%E5%BD%A2%E7%8A%B6%E7%9B%AE%E6%A0%87%E7%9A%84%E9%9B%B7%E8%BE%BE%E6%88%AA%E9%9D%A2%E7%A7%AF"><span class="nav-number">5.2.</span> <span class="nav-text">2.简单形状目标的雷达截面积</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%A4%8D%E6%9D%82%E7%9B%AE%E6%A0%87%E7%9A%84%E9%9B%B7%E8%BE%BE%E6%88%AA%E9%9D%A2%E7%A7%AF"><span class="nav-number">5.3.</span> <span class="nav-text">3.复杂目标的雷达截面积</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E7%9B%AE%E6%A0%87%E5%8F%8D%E5%B0%84%E7%89%B9%E6%80%A7%E4%B8%8E%E6%9E%81%E5%8C%96"><span class="nav-number">5.4.</span> <span class="nav-text">4.目标反射特性与极化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E7%BA%BF%E6%9E%81%E5%8C%96%EF%BC%88%E6%B0%B4%E5%B9%B3%E6%9E%81%E5%8C%96%E3%80%81%E5%9E%82%E7%9B%B4%E6%9E%81%E5%8C%96%EF%BC%89"><span class="nav-number">5.4.1.</span> <span class="nav-text">4.1 线极化（水平极化、垂直极化）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E5%9C%86%E6%9E%81%E5%8C%96%EF%BC%88%E5%B7%A6%E6%97%8B%E3%80%81%E5%8F%B3%E6%97%8B%EF%BC%89"><span class="nav-number">5.4.2.</span> <span class="nav-text">4.2 圆极化（左旋、右旋）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E7%9B%AE%E6%A0%87%E8%B5%B7%E4%BC%8F%E5%AF%B9%E6%A3%80%E6%B5%8B%E6%80%A7%E8%83%BD%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="nav-number">5.5.</span> <span class="nav-text">5.目标起伏对检测性能的影响</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9B%B7%E8%BE%BE%E6%96%B9%E7%A8%8B%E7%9A%84%E5%87%A0%E7%A7%8D%E5%BD%A2%E5%BC%8F"><span class="nav-number">6.</span> <span class="nav-text">雷达方程的几种形式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BA%8C%E6%AC%A1%E9%9B%B7%E8%BE%BE%E6%96%B9%E7%A8%8B"><span class="nav-number">6.1.</span> <span class="nav-text">1.二次雷达方程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%8F%8C%E5%9F%BA%E5%9C%B0%E9%9B%B7%E8%BE%BE%E6%96%B9%E7%A8%8B"><span class="nav-number">6.2.</span> <span class="nav-text">2.双基地雷达方程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E7%94%A8%E4%BF%A1%E5%8F%B7%E8%83%BD%E9%87%8F%E8%A1%A8%E7%A4%BA%E7%9A%84%E9%9B%B7%E8%BE%BE%E6%96%B9%E7%A8%8B"><span class="nav-number">6.3.</span> <span class="nav-text">3.用信号能量表示的雷达方程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%B9%B2%E6%89%B0%E6%83%85%E5%86%B5%E4%B8%8B%E7%9A%84%E9%9B%B7%E8%BE%BE%E6%96%B9%E7%A8%8B"><span class="nav-number">6.4.</span> <span class="nav-text">4.干扰情况下的雷达方程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E6%9C%89%E6%BA%90%E5%B9%B2%E6%89%B0%EF%BC%88%E5%B9%B2%E6%89%B0%E6%9C%BA%EF%BC%89"><span class="nav-number">6.4.1.</span> <span class="nav-text">4.1 有源干扰（干扰机）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E6%97%A0%E6%BA%90%E5%B9%B2%E6%89%B0%EF%BC%88%E7%AE%94%E6%9D%A1%E5%B9%B2%E6%89%B0%EF%BC%89"><span class="nav-number">6.4.2.</span> <span class="nav-text">4.2 无源干扰（箔条干扰）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9B%B7%E8%BE%BE%E5%9F%BA%E6%9C%AC%E6%96%B9%E7%A8%8B%E7%9A%84Python%E5%AE%9E%E7%8E%B0"><span class="nav-number">7.</span> <span class="nav-text">雷达基本方程的Python实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">8.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ssy"
+      src="/images/ssy.png">
+  <p class="site-author-name" itemprop="name">ssy</p>
+  <div class="site-description" itemprop="description">满怀希望 就会所向披靡</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">141</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">38</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ssy1938010014" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ssy1938010014" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://m.weibo.cn/u/5469432500?uid=5469432500&t=0&luicode=10000011&lfid=100103type=1&q=JIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" title="Weibo → https:&#x2F;&#x2F;m.weibo.cn&#x2F;u&#x2F;5469432500?uid&#x3D;5469432500&amp;t&#x3D;0&amp;luicode&#x3D;10000011&amp;lfid&#x3D;100103type%3D1%26q%3DJIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://ssy1938010014.github.io/" title="http:&#x2F;&#x2F;ssy1938010014.github.io" rel="noopener" target="_blank">ssy的小天地</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://y006.github.io/" title="http:&#x2F;&#x2F;y006.github.io" rel="noopener" target="_blank">邱院士的Blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://bengoooo.github.io/" title="http:&#x2F;&#x2F;BENgoooo.github.io" rel="noopener" target="_blank">赵总的Blog</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=1469041281&auto=1&height=66"></iframe>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ssy</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-ribbon@1/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+<script data-pjax>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  let url = element.dataset.target;
+  let pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  let pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  let fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+
+
+    <div id="pjax">
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+    </div>
+</body>
+</html>

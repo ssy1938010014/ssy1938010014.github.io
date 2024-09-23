@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1/themes/blue/pace-theme-minimal.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"xn--ssy-lq6e63gg6fuu2d.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本节主要介绍了如何借助petalinux工具构建一个linux基础xi’ton">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FPGA系统设计之PetaLinux">
+<meta property="og:url" content="http://ssy的小天地.com/2024/05/23/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BPetaLinux/index.html">
+<meta property="og:site_name" content="ssy的小天地">
+<meta property="og:description" content="本节主要介绍了如何借助petalinux工具构建一个linux基础xi’ton">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/05/23/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BPetaLinux/image-20240523225506173.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/05/23/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BPetaLinux/image-20240523233634446.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/05/23/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BPetaLinux/image-20240523235315369.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/05/23/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BPetaLinux/image-20240525234421768.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/05/23/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BPetaLinux/image-20240525234519979.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/05/23/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BPetaLinux/image-20240525234709743.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/05/23/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BPetaLinux/image-20240525235112745.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/05/23/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BPetaLinux/41fe3b867d47ec49074d304edb61c3b.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/05/23/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BPetaLinux/c91351d7859a679d230fcc43c8d8429.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/05/23/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BPetaLinux/82d576196ce055c432159f337a7c537.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/05/23/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BPetaLinux/e2294b82cdc9b0340ead0f34c1602fa.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/05/23/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BPetaLinux/1b6b65a480c4303750b04d7a219f3e8.png">
+<meta property="article:published_time" content="2024-05-23T04:07:12.000Z">
+<meta property="article:modified_time" content="2024-07-12T03:57:21.937Z">
+<meta property="article:author" content="ssy">
+<meta property="article:tag" content="FPGA">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/05/23/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BPetaLinux/image-20240523225506173.png">
+
+<link rel="canonical" href="http://ssy的小天地.com/2024/05/23/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BPetaLinux/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>FPGA系统设计之PetaLinux | ssy的小天地</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+    <a target="_blank" rel="noopener" href="https://github.com/ssy1938010014" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ssy的小天地</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">愿汝如是 千金不换</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-works">
+
+    <a href="/works/" rel="section"><i class="fa fa-fw fa-sitemap"></i>文章</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ssy的小天地.com/2024/05/23/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BPetaLinux/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ssy.png">
+      <meta itemprop="name" content="ssy">
+      <meta itemprop="description" content="满怀希望 就会所向披靡">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ssy的小天地">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          FPGA系统设计之PetaLinux
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+
+
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-05-23 12:07:12" itemprop="dateCreated datePublished" datetime="2024-05-23T12:07:12+08:00">2024-05-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-07-12 11:57:21" itemprop="dateModified" datetime="2024-07-12T11:57:21+08:00">2024-07-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%A7%AF%E7%B4%AF/" itemprop="url" rel="index"><span itemprop="name">学习积累</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本节主要介绍了如何借助petalinux工具构建一个linux基础xi’ton</p>
+<span id="more"></span>
+<h1 id="PetaLinux基本介绍"><a href="#PetaLinux基本介绍" class="headerlink" title="PetaLinux基本介绍"></a>PetaLinux基本介绍</h1><ul>
+<li><p>PetaLinux工具可简化赛灵思器件上的嵌入式Linux开发</p>
+</li>
+<li><p>PetaLinux工具只需要7条命令即可简化基于Linux的产品开发</p>
+<p><img src="/2024/05/23/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BPetaLinux/image-20240523225506173.png" alt="image-20240523225506173" style="zoom: 67%;"></p>
+<ul>
+<li>我也是第一次接触操作系统，不太清楚PetaLinux具体的工作是啥，但上面这幅图就很形象，它能帮我们完成Linux操作系统搭建的一系列步骤，然后我们就可以更多的关注实际应用开发本身</li>
+</ul>
+</li>
+<li><p>具体参考Xilinx官方介绍视频：<a target="_blank" rel="noopener" href="https://china.xilinx.com/video/hardware/xilinx-embedded-linux-build-flows-petalinux-tools.html">赛灵思嵌入式 Linux 构建流程：PetaLinux 工具（中文字幕） (xilinx.com)</a></p>
+</li>
+</ul>
+<hr>
+<h1 id="PetaLinux安装"><a href="#PetaLinux安装" class="headerlink" title="PetaLinux安装"></a>PetaLinux安装</h1><ul>
+<li><p>应该可以在xilinx的官网上找到安装包，我直接在同门那拷贝了一份（如果有找不到的可以邮箱私信我取）</p>
+</li>
+<li><p>直接chmod 777 ./petalinux-v2023.1-05012318-installer.run进行安装，但是可能会缺少依赖的库，报啥错就对应安装对应的库</p>
+</li>
+<li><p>安装后可以输入echo $PETALINUX，如果出现安装路径，则说明安装正确</p>
+<p><img src="/2024/05/23/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BPetaLinux/image-20240523233634446.png" alt="image-20240523233634446"></p>
+</li>
+</ul>
+<hr>
+<h1 id="PetaLinux的七条命令"><a href="#PetaLinux的七条命令" class="headerlink" title="PetaLinux的七条命令"></a>PetaLinux的七条命令</h1><ul>
+<li><p><strong>petalinux-create可创建对象并将其包含到PetaLinux工程中，包括PetaLinux工程本身、应用以及模块</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">petalinux-create --type project --template &lt;PLATFORM&gt; --name &lt;PROJECT_NAME&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>参数如下：<ul>
+<li>—template <PLATFORM> <ul>
+<li>zynqMP (UltraScale+™ MPSoC)</li>
+<li>zynq (Zynq-7000 器件)</li>
+<li>microblaze (MicroBlaze™ CPU)</li>
+</ul>
+</PLATFORM></li>
+<li>—name <PROJECT_NAME> - 您正在构建的工程名称。</PROJECT_NAME></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>petalinux-config工具允许在工程级别或工程组件级别进行自定义，它还可提供工作空间用于安装软件补丁</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">petalinux-config --get-hw-description=&lt;path-to-directory-containinghardware description-file&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>利用 petalinux-config 命令导入硬件描述， 按如下要求提供含有 .hdf/.dsa 文件的目录路径</strong>  </li>
+</ul>
+</li>
+<li><p>petalinux-build工具可构建整个嵌入式Linux系统，也可构建Linux系统的指定组件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">petalinux-build</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>petalinux-boot工具用于加载并启动PetaLinux镜像，包括利用实体板上的JTAG或借助系统的QEMU模型</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">petalinux-package --boot --fsbl &lt;FSBL image&gt; --fpga &lt;FPGA bitstream&gt; --u-boot</span><br></pre></td></tr></table></figure>
+<ul>
+<li>按照上面的步骤生成 .BIN 格式的启动镜像  </li>
+</ul>
+</li>
+<li><p>petalinux-package工具可将PetaLinux工具封装为适合部署的格式</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">petalinux-package --image -c kernel --format uImage</span><br></pre></td></tr></table></figure>
+<ul>
+<li>如果想使用 uImage，请使用 petalinux-package —image  </li>
+</ul>
+</li>
+<li><p>petalinux-util工具支持您访问GDB等各种实用工具</p>
+</li>
+<li><p>petalinux-upgrade工具可执行次要版本升级以使用最新系统软件组件</p>
+<p><img src="/2024/05/23/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BPetaLinux/image-20240523235315369.png" alt="image-20240523235315369" style="zoom:50%;"></p>
+<ul>
+<li>图中绿色标注均为可选命令</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="PetaLinux搭建一个基础的Linux系统"><a href="#PetaLinux搭建一个基础的Linux系统" class="headerlink" title="PetaLinux搭建一个基础的Linux系统"></a>PetaLinux搭建一个基础的Linux系统</h1><ul>
+<li><p>具体步骤如下：<strong>但需要注意的是在create完成一个petalinux的project后，一定cd到对应project文件夹下执行后续操作</strong></p>
+<p><img src="/2024/05/23/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BPetaLinux/image-20240525234421768.png" alt="image-20240525234421768"></p>
+<p><img src="/2024/05/23/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BPetaLinux/image-20240525234519979.png" alt="image-20240525234519979"></p>
+<p><img src="/2024/05/23/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BPetaLinux/image-20240525234709743.png" alt="image-20240525234709743"></p>
+</li>
+<li><p>接下来将生成的文件拷贝至sd卡中</p>
+<p><img src="/2024/05/23/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BPetaLinux/image-20240525235112745.png" alt="image-20240525235112745"></p>
+<ul>
+<li><p>这里需要用到虚拟机，因为服务器上是看不到sd卡的分区的</p>
+</li>
+<li><p>SD 中将 RootFS （rootfs.tar.gz）加载到 ext4 分区， 所有其他启动镜像（boot.scr、BOOT.BIIN、image.ub）加载到 FAT32 分区</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">ssy@ssy-virtual-machine:~$ cd /mnt/</span><br><span class="line">ssy@ssy-virtual-machine:/mnt$ ls</span><br><span class="line">BOOT  hgfs  RootFS</span><br><span class="line">ssy@ssy-virtual-machine:/mnt$ sudo mount /dev/sdb1 BOOT/</span><br><span class="line">ssy@ssy-virtual-machine:/mnt$ sudo mount /dev/sdb2 RootFS/</span><br><span class="line">ssy@ssy-virtual-machine:/mnt$ cd BOOT/</span><br><span class="line">ssy@ssy-virtual-machine:/mnt/BOOT$ ls</span><br><span class="line">ssy@ssy-virtual-machine:/mnt/BOOT$ cd ..</span><br><span class="line">ssy@ssy-virtual-machine:/mnt$ cd BOOT/</span><br><span class="line">ssy@ssy-virtual-machine:/mnt/BOOT$ sudo cp ~/BOOT.BIN .</span><br><span class="line">ssy@ssy-virtual-machine:/mnt/BOOT$ sudo cp ~/boot.scr .</span><br><span class="line">ssy@ssy-virtual-machine:/mnt/BOOT$ sudo cp ~/image.ub .</span><br><span class="line">ssy@ssy-virtual-machine:/mnt/BOOT$ sync</span><br><span class="line">ssy@ssy-virtual-machine:/mnt/BOOT$ cd ..</span><br><span class="line">ssy@ssy-virtual-machine:/mnt$ cd RootFS/</span><br><span class="line">ssy@ssy-virtual-machine:/mnt/RootFS$ ls</span><br><span class="line">lost+found</span><br><span class="line">ssy@ssy-virtual-machine:/mnt/RootFS$ sudo rm -rf *</span><br><span class="line">ssy@ssy-virtual-machine:/mnt/RootFS$ ls -l</span><br><span class="line">total 0</span><br><span class="line">ssy@ssy-virtual-machine:/mnt/RootFS$ sudo tar -xzvf ~/rootfs.tar.gz </span><br><span class="line">ssy@ssy-virtual-machine:/mnt/RootFS$ sync</span><br><span class="line">ssy@ssy-virtual-machine:/mnt/RootFS$ cd ..</span><br><span class="line">ssy@ssy-virtual-machine:/mnt$ sudo umount /dev/sdb*</span><br><span class="line">umount: /dev/sdb: not mounted.</span><br><span class="line">ssy@ssy-virtual-machine:/mnt$ sudo umount /dev/sdb*</span><br><span class="line">umount: /dev/sdb: not mounted.</span><br><span class="line">umount: /dev/sdb1: not mounted.</span><br><span class="line">umount: /dev/sdb2: not mounted.</span><br><span class="line">ssy@ssy-virtual-machine:/mnt$ sudo umount /dev/sdb*</span><br><span class="line">umount: /dev/sdb: not mounted.</span><br><span class="line">umount: /dev/sdb1: not mounted.</span><br><span class="line">umount: /dev/sdb2: not mounted.</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="搭建Petalinux后代码下载"><a href="#搭建Petalinux后代码下载" class="headerlink" title="搭建Petalinux后代码下载"></a>搭建Petalinux后代码下载</h1><ul>
+<li><p>这里发现了一个bug，那就是如果把每个vivado工程都生成bit流，然后运行petalinux那几条命令，如果直接将文件下载到sd卡中，有可能会导致系统卡死（反正我当时加了个dma系统直接卡死了）</p>
+</li>
+<li><p>解决办法：用空工程（ps的最小系统）利用petalinux搭建操作系统，然后进入到操作系统后，直接把bitstream在线加载到系统中（2024.06.24更新<strong>：直接弄一个空工程在线下载比特流能进系统但可能操作不了ps端，所以如果是ps部分或ps与pl部分交互部分的bd有修改，那么直接用.xsa重新创建一个petalinux，如果只修改了pl，则可以在线更新bit流</strong>）</p>
+<ul>
+<li><p>将bit文件打包成bit.bin文件（假设你的bit文件名称是mybit.bit，新建一个xxx.bif，内容如下）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">all:&#123;</span><br><span class="line"> mybit.bit</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在服务器上使用命令行 <code>bootgen -image xxx.bif -arch zynqmp -process_bitstream bin</code>，这样就可以得到mybit.bit.bin文件，接着将该文件下载到自己电脑上</li>
+</ul>
+</li>
+<li><p>打开板子进入系统</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ifconfig eth0 xxx.xxx.xxx.xxx</span><br></pre></td></tr></table></figure>
+<ul>
+<li>这个xxx.xxx.xxx.xxx是你给板子的IP地址，用来给你的电脑和板子之间进行通信</li>
+<li>找一条网线，分别连接板子和你的电脑</li>
+<li>然后你的电脑的网口IP更改成xxx.xxx.xxx.1，保证和板子的IP在同一个网段</li>
+</ul>
+</li>
+<li><p>之后用远程工具，SSH登录xxx.xxx.xxx.xxx，也就是板子的IP，远程使用板子上的命令行，这时候可以用SSH把文件传到板子上。</p>
+</li>
+<li><p>最后用如下命令将bit流下载到板子中</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo fpgautil -b xxx.bit.bin -f Full</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>其实后面执行编译好的xxx.o文件也是同样的扒拉文件到板子操作系统上的流程。注意要添加权限</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo chmod +x ./xxx.o</span><br><span class="line">sudo ./xxx.o</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h1 id="附加知识点"><a href="#附加知识点" class="headerlink" title="附加知识点"></a>附加知识点</h1><ul>
+<li><p>如何在虚拟机上对sd卡分盘</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line">mzmylhz@ubuntu:/mnt$ sudo umount /dev/sdb*</span><br><span class="line">mzmylhz@ubuntu:/mnt$ sudo fdisk /dev/sdb</span><br><span class="line"></span><br><span class="line">Welcome to fdisk (util-linux 2.34).</span><br><span class="line">Changes will remain in memory only, until you decide to write them.</span><br><span class="line">Be careful before using the write command.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Command (m for help): p</span><br><span class="line">Disk /dev/sdb: 119.38 GiB, 128177930240 bytes, 250347520 sectors</span><br><span class="line">Disk model: Storage Device  </span><br><span class="line">Units: sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 512 bytes</span><br><span class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span><br><span class="line">Disklabel type: dos</span><br><span class="line">Disk identifier: 0x7245180a</span><br><span class="line"></span><br><span class="line">Device     Boot    Start       End   Sectors   Size Id Type</span><br><span class="line">/dev/sdb1           2048  11111240  11109193   5.3G 83 Linux</span><br><span class="line">/dev/sdb2       11112448 250347519 239235072 114.1G 83 Linux</span><br><span class="line"></span><br><span class="line">Command (m for help): d</span><br><span class="line">Partition number (1,2, default 2): </span><br><span class="line"></span><br><span class="line">Partition 2 has been deleted.</span><br><span class="line"></span><br><span class="line">Command (m for help): </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Command (m for help): d</span><br><span class="line"></span><br><span class="line">Selected partition 1</span><br><span class="line">Partition 1 has been deleted.</span><br><span class="line"></span><br><span class="line">Command (m for help): </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Command (m for help): p</span><br><span class="line"></span><br><span class="line">Disk /dev/sdb: 119.38 GiB, 128177930240 bytes, 250347520 sectors</span><br><span class="line">Disk model: Storage Device  </span><br><span class="line">Units: sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 512 bytes</span><br><span class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span><br><span class="line">Disklabel type: dos</span><br><span class="line">Disk identifier: 0x7245180a</span><br><span class="line"></span><br><span class="line">Command (m for help): n</span><br><span class="line">Partition type</span><br><span class="line">   p   primary (0 primary, 0 extended, 4 free)</span><br><span class="line">   e   extended (container for logical partitions)</span><br><span class="line">Select (default p): p</span><br><span class="line">Partition number (1-4, default 1):  </span><br><span class="line">First sector (2048-250347519, default 2048): </span><br><span class="line">Last sector, +/-sectors or +/-size&#123;K,M,G,T,P&#125; (2048-250347519, default 250347519): 11111240</span><br><span class="line"></span><br><span class="line">Created a new partition 1 of type &#x27;Linux&#x27; and of size 5.3 GiB.</span><br><span class="line">Partition #1 contains a vfat signature.</span><br><span class="line"></span><br><span class="line">Do you want to remove the signature? [Y]es/[N]o: y</span><br><span class="line"></span><br><span class="line">The signature will be removed by a write command.</span><br><span class="line"></span><br><span class="line">Command (m for help): n</span><br><span class="line">Partition type</span><br><span class="line">   p   primary (1 primary, 0 extended, 3 free)</span><br><span class="line">   e   extended (container for logical partitions)</span><br><span class="line">Select (default p): p</span><br><span class="line">Partition number (2-4, default 2): </span><br><span class="line">First sector (11111241-250347519, default 11112448): </span><br><span class="line">Last sector, +/-sectors or +/-size&#123;K,M,G,T,P&#125; (11112448-250347519, default 250347519): </span><br><span class="line"></span><br><span class="line">Created a new partition 2 of type &#x27;Linux&#x27; and of size 114.1 GiB.</span><br><span class="line">Partition #2 contains a ext4 signature.</span><br><span class="line"></span><br><span class="line">Do you want to remove the signature? [Y]es/[N]o: y</span><br><span class="line"></span><br><span class="line">The signature will be removed by a write command.</span><br><span class="line"></span><br><span class="line">Command (m for help): w</span><br><span class="line">The partition table has been altered.</span><br><span class="line">Calling ioctl() to re-read partition table.</span><br><span class="line">Syncing disks.</span><br><span class="line"></span><br><span class="line">mzmylhz@ubuntu:/mnt$ sudo mkfs.fat /dev/sdb1</span><br><span class="line">mkfs.fat 4.1 (2017-01-24)</span><br><span class="line">mzmylhz@ubuntu:/mnt$ sudo mkfs.ext4 /dev/sdb2</span><br><span class="line">mke2fs 1.45.5 (07-Jan-2020)</span><br><span class="line">Creating filesystem with 29904384 4k blocks and 7479296 inodes</span><br><span class="line">Filesystem UUID: 3b09766c-cc62-4cba-a6fa-a72be0b39f82</span><br><span class="line">Superblock backups stored on blocks: </span><br><span class="line">	32768, 98304, 163840, 229376, 294912, 819200, 884736, 1605632, 2654208, </span><br><span class="line">	4096000, 7962624, 11239424, 20480000, 23887872</span><br><span class="line"></span><br><span class="line">Allocating group tables: done                            </span><br><span class="line">Writing inode tables: done                            </span><br><span class="line">Creating journal (131072 blocks): done</span><br><span class="line">Writing superblocks and filesystem accounting information: done</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>VScode连接远程服务器：<a target="_blank" rel="noopener" href="https://blog.csdn.net/zhaxun/article/details/120568402">vscode连接远程服务器（傻瓜式教学）-CSDN博客</a></p>
+</li>
+<li><p>在系统上编译因为文件是CPP报错（如下原因就是petalinux系统默认是C文件，需要在petalinux-config中将C++的包添加进去）解决办法：</p>
+<p><img src="/2024/05/23/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BPetaLinux/41fe3b867d47ec49074d304edb61c3b.png" alt="41fe3b867d47ec49074d304edb61c3b"></p>
+<ul>
+<li><p>解决办法：petalinux-config -c rootfs</p>
+<p> <img src="/2024/05/23/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BPetaLinux/c91351d7859a679d230fcc43c8d8429.png" alt="c91351d7859a679d230fcc43c8d8429" style="zoom:50%;"><img src="/2024/05/23/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BPetaLinux/82d576196ce055c432159f337a7c537.png" alt="82d576196ce055c432159f337a7c537" style="zoom: 36%;"></p>
+<p> <img src="/2024/05/23/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BPetaLinux/e2294b82cdc9b0340ead0f34c1602fa.png" alt="e2294b82cdc9b0340ead0f34c1602fa" style="zoom:40%;"> <img src="/2024/05/23/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BPetaLinux/1b6b65a480c4303750b04d7a219f3e8.png" alt="1b6b65a480c4303750b04d7a219f3e8" style="zoom:40%;"></p>
+</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>欢迎来到ssy的世界</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/WeChaPay.jpg" alt="ssy 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>ssy
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://ssy的小天地.com/2024/05/23/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BPetaLinux/" title="FPGA系统设计之PetaLinux">http://ssy的小天地.com/2024/05/23/FPGA系统设计之PetaLinux/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/FPGA/" rel="tag"># FPGA</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/05/17/Verilog%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/" rel="prev" title="Verilog之易错易忘知识点">
+      <i class="fa fa-chevron-left"></i> Verilog之易错易忘知识点
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2024/05/29/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E7%BC%96%E8%A7%A3%E7%A0%81/" rel="next" title="FPGA数字信号处理之编解码">
+      FPGA数字信号处理之编解码 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#PetaLinux%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">PetaLinux基本介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PetaLinux%E5%AE%89%E8%A3%85"><span class="nav-number">2.</span> <span class="nav-text">PetaLinux安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PetaLinux%E7%9A%84%E4%B8%83%E6%9D%A1%E5%91%BD%E4%BB%A4"><span class="nav-number">3.</span> <span class="nav-text">PetaLinux的七条命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PetaLinux%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E5%9F%BA%E7%A1%80%E7%9A%84Linux%E7%B3%BB%E7%BB%9F"><span class="nav-number">4.</span> <span class="nav-text">PetaLinux搭建一个基础的Linux系统</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%90%AD%E5%BB%BAPetalinux%E5%90%8E%E4%BB%A3%E7%A0%81%E4%B8%8B%E8%BD%BD"><span class="nav-number">5.</span> <span class="nav-text">搭建Petalinux后代码下载</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%8A%A0%E7%9F%A5%E8%AF%86%E7%82%B9"><span class="nav-number">6.</span> <span class="nav-text">附加知识点</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ssy"
+      src="/images/ssy.png">
+  <p class="site-author-name" itemprop="name">ssy</p>
+  <div class="site-description" itemprop="description">满怀希望 就会所向披靡</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">141</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">38</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ssy1938010014" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ssy1938010014" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://m.weibo.cn/u/5469432500?uid=5469432500&t=0&luicode=10000011&lfid=100103type=1&q=JIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" title="Weibo → https:&#x2F;&#x2F;m.weibo.cn&#x2F;u&#x2F;5469432500?uid&#x3D;5469432500&amp;t&#x3D;0&amp;luicode&#x3D;10000011&amp;lfid&#x3D;100103type%3D1%26q%3DJIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://ssy1938010014.github.io/" title="http:&#x2F;&#x2F;ssy1938010014.github.io" rel="noopener" target="_blank">ssy的小天地</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://y006.github.io/" title="http:&#x2F;&#x2F;y006.github.io" rel="noopener" target="_blank">邱院士的Blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://bengoooo.github.io/" title="http:&#x2F;&#x2F;BENgoooo.github.io" rel="noopener" target="_blank">赵总的Blog</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=1469041281&auto=1&height=66"></iframe>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ssy</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-ribbon@1/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+<script data-pjax>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  let url = element.dataset.target;
+  let pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  let pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  let fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+
+
+    <div id="pjax">
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+    </div>
+</body>
+</html>

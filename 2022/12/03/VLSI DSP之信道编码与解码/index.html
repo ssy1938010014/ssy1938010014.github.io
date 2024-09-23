@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1/themes/blue/pace-theme-minimal.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"xn--ssy-lq6e63gg6fuu2d.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本节主要介绍了线性分组码、循环码、卷积码的编码与译码。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VLSI DSP之信道编码与解码">
+<meta property="og:url" content="http://ssy的小天地.com/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/index.html">
+<meta property="og:site_name" content="ssy的小天地">
+<meta property="og:description" content="本节主要介绍了线性分组码、循环码、卷积码的编码与译码。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203192909916.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203194014922.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203200415291.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203201029350.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203210713180.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203210109047.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203210539296.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203210634566.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203214504458.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203214832804.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203215510012.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203215745265.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203215959010.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203220026425.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221205154422965.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221205162501011.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221205162650768.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221205163334403.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221205163513133.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221205163635185.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221205180444265.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221206010526855.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221208141239867.png">
+<meta property="article:published_time" content="2022-12-03T02:07:12.000Z">
+<meta property="article:modified_time" content="2022-12-09T11:55:04.169Z">
+<meta property="article:author" content="ssy">
+<meta property="article:tag" content="VLSI">
+<meta property="article:tag" content="DSP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203192909916.png">
+
+<link rel="canonical" href="http://ssy的小天地.com/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>VLSI DSP之信道编码与解码 | ssy的小天地</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+    <a target="_blank" rel="noopener" href="https://github.com/ssy1938010014" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ssy的小天地</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">愿汝如是 千金不换</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-works">
+
+    <a href="/works/" rel="section"><i class="fa fa-fw fa-sitemap"></i>文章</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ssy的小天地.com/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ssy.png">
+      <meta itemprop="name" content="ssy">
+      <meta itemprop="description" content="满怀希望 就会所向披靡">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ssy的小天地">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          VLSI DSP之信道编码与解码
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+
+
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-12-03 10:07:12" itemprop="dateCreated datePublished" datetime="2022-12-03T10:07:12+08:00">2022-12-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-12-09 19:55:04" itemprop="dateModified" datetime="2022-12-09T19:55:04+08:00">2022-12-09</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%A7%AF%E7%B4%AF/" itemprop="url" rel="index"><span itemprop="name">学习积累</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本节主要介绍了线性分组码、循环码、卷积码的编码与译码。</p>
+<span id="more"></span>
+<h1 id="信道编码的基本概念"><a href="#信道编码的基本概念" class="headerlink" title="信道编码的基本概念"></a>信道编码的基本概念</h1><ul>
+<li><p>信道编码的<strong>目的</strong>：提高信号传输的可靠性</p>
+</li>
+<li><p>信道编码的<strong>方法</strong>：增加冗余比特，以发现或纠正错误</p>
+</li>
+<li><p>信道编码的<strong>实质</strong>：在信息码中增加一定数量的多余码元（称为监督码元），是它们满足一定的约束关系</p>
+<ul>
+<li>发送端将信息码元和监督码元共同组成一个由信道传输的码字</li>
+<li>一旦传输过程中发生错误，则信息码元和监督码元间的约束关系被破坏</li>
+<li>在接收端按既定的规则校验这种约束关系，从而可达到发现和纠正错误的目的</li>
+</ul>
+</li>
+<li><p>信道编码的<strong>分类</strong>：</p>
+<ul>
+<li>线性与非线性码：<ul>
+<li>线性码：信息码与监督码之间的关系为线性关系</li>
+<li>非线性码：信息码与监督码之间的关系为非线性关系</li>
+</ul>
+</li>
+<li>分组码与卷积码：<ul>
+<li>分组码：信息码与监督码以组为单位建立关系</li>
+<li>卷积码：监督码与本组和前面码组中的信息码有关</li>
+</ul>
+</li>
+<li>系统码与非系统码：<ul>
+<li>系统码：编码后码组中信息码保持原图样顺序不变</li>
+<li>非系统码：编码后码组中原信息码原图样发生变化</li>
+</ul>
+</li>
+</ul>
+<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203192909916.png" alt="image-20221203192909916" style="zoom: 50%;"></p>
+</li>
+<li><p><strong>误码的主要形式</strong>：</p>
+<ul>
+<li>随机错误：误码的位置随机（误码间无关联），随机误码主要由白噪声引起</li>
+<li>突发错误：误码成串出现，主要由强脉冲及雷电等突发的强干扰引起的</li>
+<li>混合错误：以上两种误码及产生原因的组合</li>
+</ul>
+</li>
+<li><p><strong>编码效率与冗余度</strong>：</p>
+<ul>
+<li>假设分组码的长度为n，其中信息位为k，相应的监督位为n-k</li>
+</ul>
+<script type="math/tex; mode=display">
+编码效率=\frac kn</script><ul>
+<li>编码效率越高，意味着冗余度越低</li>
+</ul>
+</li>
+<li><p><strong>基本术语</strong>：</p>
+<ul>
+<li>码重W：码组/码字中非零码元的数目</li>
+<li>码距d(Hamming距)：两码组/码字中对应码元位置上取值不同的个数称为码组/码字间的距离，简称码距</li>
+<li>最小码距$d_{min}$：准用码组/码字空间中任意两码组间的最小距离</li>
+</ul>
+</li>
+<li><p><strong>一般情况下，编码后，在同样的</strong>$\frac {E_b}{N_0}$<strong>下，编码后系统有更好的性能</strong></p>
+<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203194014922.png" alt="image-20221203194014922" style="zoom: 50%;"></p>
+</li>
+</ul>
+<hr>
+<h1 id="线性分组码"><a href="#线性分组码" class="headerlink" title="线性分组码"></a>线性分组码</h1><ul>
+<li><p>定义：</p>
+<ul>
+<li>把信源输出的k位信息序列，通过编码器产生r个监督位，输出长为n=k+r的码字，所得码字的全体，称为(n,k)线性分组码</li>
+<li>码组中的信息位与监督位之间的关系由线性方程确定</li>
+</ul>
+<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203200415291.png" alt="image-20221203200415291" style="zoom: 33%;"></p>
+<script type="math/tex; mode=display">
+\begin{cases}
+\begin{aligned}
+p_1=m_1\oplus m_3\\
+p_2=m_1\oplus m_2\\
+p_3=m_2\oplus m_3
+\end{aligned}
+\end{cases}</script></li>
+<li><p><strong>生成矩阵</strong>：从(n,k)线性分组码中任取k个线性无关的码字，按行的形式写出矩阵G，则称该线性分组码为生成矩阵</p>
+<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203201029350.png" alt="image-20221203201029350" style="zoom: 50%;"></p>
+</li>
+<li><p><strong>通过</strong>$U=mG$<strong>(m为输入信息）便能计算出编码后的码字</strong>$U$</p>
+<script type="math/tex; mode=display">
+若生成矩阵G= \begin{pmatrix}
+1 & 1 & 0 & 1 & 0 & 0\\
+0 & 1 & 1 & 0 & 1 & 0\\
+1 & 0 & 1 & 0 & 0 & 1
+\end{pmatrix}=\begin{pmatrix}
+V_1\\
+V_2\\
+V_3
+\end{pmatrix}</script><script type="math/tex; mode=display">
+若输入信息m=\begin{pmatrix}
+1&1&0
+\end{pmatrix}</script><script type="math/tex; mode=display">
+则:U=m\cdot G=\begin{pmatrix}
+1&1&0
+\end{pmatrix}\begin{pmatrix}
+V_1\\
+V_2\\
+V_3
+\end{pmatrix}=1\cdot V_1+1\cdot V_2+0\cdot V_3\\=
+\begin{pmatrix}
+1&1&0&1&0&0
+\end{pmatrix}+\begin{pmatrix}
+0&1&1&0&1&0
+\end{pmatrix}+\begin{pmatrix}
+ 0&0&0&0&0&0
+\end{pmatrix}=\begin{pmatrix}
+1&0&1&1&1&0
+\end{pmatrix}</script></li>
+<li><p><strong>监督矩阵</strong>：</p>
+<script type="math/tex; mode=display">
+若(n,k)线性分组码的生成矩阵G形如:\\
+G=(P|I_k)\\
+其中G为k\times n阶矩阵,I_k是k阶单位阵，P为k\times (n-k)阶子阵\\
+则其对应的监督矩阵为:\\
+H=(I_{(n-k)}|P^T)\\
+其中H为(n-k)\times n阶矩阵</script></li>
+<li><p>在无误码存在的条件下，存在如下约束关系：</p>
+<script type="math/tex; mode=display">
+GH^T=[0]</script></li>
+<li><p><strong>伴随式</strong>：</p>
+<script type="math/tex; mode=display">
+S=rH^T\\
+其中:r为接收码字</script></li>
+<li><p>$(n,k)$<strong>线性分组码的译码方法</strong>：</p>
+<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203210713180.png" alt="image-20221203210713180" style="zoom:50%;"></p>
+<ul>
+<li><p>由$eH^T(e为错误图样)$构建伴随式错误图样查询表</p>
+<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203210109047.png" alt="image-20221203210109047" style="zoom:50%;"></p>
+</li>
+<li><p>例：</p>
+<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203210539296.png" alt="image-20221203210539296" style="zoom:33%;"></p>
+<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203210634566.png" alt="image-20221203210634566" style="zoom: 33%;"></p>
+</li>
+</ul>
+</li>
+<li><p><strong>线性分组码的检错与纠错能力</strong>：任意一个$(n,k)$分组码，若要在任何码字内：</p>
+<ul>
+<li>能检测e个随机错误，则要求最小Hamming距离$d\ge e+1$</li>
+<li>能纠正t个随机错误，则要求$d\ge 2t+1$</li>
+<li>能纠正t个随机错误，同时检测出$e(\ge t)$个错误，则要求$d\ge t+e+1$</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="循环码"><a href="#循环码" class="headerlink" title="循环码"></a>循环码</h1><ul>
+<li><p>定义：码长为n，信息位为k的$(n,k)$线性分组码，若具有下列属性：</p>
+<script type="math/tex; mode=display">
+如果U=[u_0,u_1,u_2,\cdots,u_{n-1}]是子空间S的一个码字，经过i次循环移位得到:\\
+U^{(i)}=[u_{n-i},u_{n-i+1},\cdots,u_{n-1},u_0,u_1,\cdots,u_{n-i-1}]也是S中的一个码字(i\ge 0)\\
+这种具有循环移位特点的码被称为循环码</script></li>
+<li><p><strong>生成多项式</strong>$g(x)$<strong>与码字多项式</strong>$U(x)$<strong>存在约束关系</strong>：</p>
+<script type="math/tex; mode=display">
+U(x)\; mod\; g(x)=0</script><ul>
+<li><p>例：</p>
+<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203214504458.png" alt="image-20221203214504458" style="zoom: 33%;"></p>
+<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203214832804.png" alt="image-20221203214832804" style="zoom: 33%;"></p>
+</li>
+</ul>
+</li>
+<li><p><strong>伴随式</strong>：伴随式可以由$r(x)$对生成多项式$g(x)$取模计算得到：</p>
+<script type="math/tex; mode=display">
+S(x)=r(x)\;mod\;g(x)=[U(x)+e(x)]\;mod\;g(x)=e(x)\;mod\;g(x)\\
+其中:e(x)为错误图样</script></li>
+<li><p><strong>译码方法</strong>：</p>
+<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203215510012.png" alt="image-20221203215510012" style="zoom:50%;"></p>
+<ul>
+<li><p>构建伴随式查询表：</p>
+<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203215745265.png" alt="image-20221203215745265" style="zoom: 33%;"></p>
+</li>
+<li><p>例：</p>
+<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203215959010.png" alt="image-20221203215959010" style="zoom: 33%;"></p>
+<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203220026425.png" alt="image-20221203220026425" style="zoom:33%;"></p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="卷积码的基本概念"><a href="#卷积码的基本概念" class="headerlink" title="卷积码的基本概念"></a>卷积码的基本概念</h1><ul>
+<li><p>卷积码：通过将输入信息序列与编码器做卷积运算，将k位信息编成n比特，此n比特不仅与当前k位信息有关，还与前面(m-1)段的信息有关</p>
+<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221205154422965.png" alt="image-20221205154422965" style="zoom:33%;"></p>
+</li>
+<li><p>卷积码$(n,k,m)$的参数：</p>
+<ul>
+<li>$k$：输入比特信息</li>
+<li>$n$：输出码字</li>
+<li>$m$：约束长度，即移位寄存器的级数</li>
+<li>$R$：码率，表示传输信息的有效性$R=\frac kn$</li>
+</ul>
+</li>
+</ul>
+<h2 id="1-卷积码的编码方法—冲击响应"><a href="#1-卷积码的编码方法—冲击响应" class="headerlink" title="1.卷积码的编码方法—冲击响应"></a>1.卷积码的编码方法—冲击响应</h2><ul>
+<li><p>假设为卷积码$(2,1,3)$，即输入1bit，输出2bit，移位寄存器的个数为3</p>
+</li>
+<li><p>输入”1”时对应的输出序列为：<code>11 10 11</code></p>
+<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221205162501011.png" alt="image-20221205162501011" style="zoom: 50%;"></p>
+</li>
+<li><p>则当输入序列为m=101时对应的输出可按照输入的线性叠加方式得到：<code>11 10 00 10 11</code></p>
+<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221205162650768.png" alt="image-20221205162650768" style="zoom: 50%;"></p>
+</li>
+</ul>
+<h2 id="2-卷积码的编码方法—状态描述和状态图"><a href="#2-卷积码的编码方法—状态描述和状态图" class="headerlink" title="2.卷积码的编码方法—状态描述和状态图"></a>2.卷积码的编码方法—状态描述和状态图</h2><ul>
+<li><p>可以用当前输入和之前（m-1）个输入来预测输出</p>
+</li>
+<li><p>卷积编码器中，状态共有$2^{m-1}$个</p>
+</li>
+<li><p>$(2,1,3)$卷积码的编码方法</p>
+<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221205163334403.png" alt="image-20221205163334403" style="zoom:50%;"></p>
+</li>
+<li><p>$(2,1,3)$卷积编码的状态图</p>
+<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221205163513133.png" alt="image-20221205163513133" style="zoom:50%;"></p>
+</li>
+<li><p>网格图分析——</p>
+<ul>
+<li><strong>输入中最后2bit是补零操作，是为了让状态寄存器器能恢复成初始状态（X00），不影响下一次序列的输入</strong></li>
+</ul>
+<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221205163635185.png" alt="image-20221205163635185"></p>
+</li>
+</ul>
+<hr>
+<h1 id="卷积码的译码方法—维特比译码"><a href="#卷积码的译码方法—维特比译码" class="headerlink" title="卷积码的译码方法—维特比译码"></a>卷积码的译码方法—维特比译码</h1><ul>
+<li><p>维特比译码是基于动态规划的方法：</p>
+<ul>
+<li>动态规划思想：当前最优路径=上一步最优路径+当前组合</li>
+<li>维特比译码思想：译码器每接收一段，就计算比较判决</li>
+</ul>
+</li>
+<li><p><strong>分支度量</strong>：某时刻输出子码与接收子码之间的汉明距离</p>
+<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221205180444265.png" alt="image-20221205180444265" style="zoom:50%;"></p>
+</li>
+<li><p><strong>路径度量</strong>：</p>
+<ul>
+<li>该路径输出序列与接收序列之间的汉明距离，是分支度量的和</li>
+<li>则上述的路径度量=0+0+0+0+1+0+1=2</li>
+</ul>
+</li>
+<li><p><strong>维特比译码步骤</strong>：</p>
+<ul>
+<li>计算到达当前节点的分支度量</li>
+<li>取出到达上一节点对应的路径度量</li>
+<li>相加得到两个新路径度量，比较，选择汉明距离较小者，被称为幸存路径</li>
+<li>具体解释可见：<a target="_blank" rel="noopener" href="https://www.icourse163.org/learn/SJTU-1449270161?tid=1463620444#/learn/content?type=detail&amp;id=1241732491&amp;cid=1264287105&amp;replay=true">VLSI数字通信原理与设计_中国大学MOOC(慕课) (icourse163.org)</a></li>
+</ul>
+<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221206010526855.png" alt="image-20221206010526855" style="zoom: 33%;"></p>
+</li>
+<li><p><strong>维特比译码的特点</strong>：</p>
+<ul>
+<li>维特比算法是最大似然译码算法</li>
+<li>运算量和存储量与状态数$2^{km}$呈线性关系</li>
+<li>运算量和存储量与码长L呈线性关系</li>
+</ul>
+</li>
+<li><p>截尾译码：</p>
+<ul>
+<li><p>分段译码，降低复杂度</p>
+</li>
+<li><p>译码深度h，其中m-1为编码器记忆深度</p>
+<script type="math/tex; mode=display">
+h=(5\sim10)(m-1)</script></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="卷积码的性能"><a href="#卷积码的性能" class="headerlink" title="卷积码的性能"></a>卷积码的性能</h1><ul>
+<li><p><strong>自由距离</strong>$d_f$<strong>的确定</strong>：</p>
+<ul>
+<li>卷积码属于线性码，所以任意两个码序列按位模二加仍然是一个许用码，而它的重量（1的个数）就等于这两个码序列之间的汉明距离</li>
+<li>只要在所有的码序列中找到最小重量的许用码，它的重量就是卷积码的最小汉明距离</li>
+<li>任意许用码序列的重量又等于它与全0码之间的汉明距离</li>
+<li>只要在格图上找到一条离全零距离最近的、从0状态出发又回到0状态的非全0路径，那么这条路径所代表的码序列的重量就等于自由距离</li>
+</ul>
+<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221208141239867.png" alt="image-20221208141239867" style="zoom:50%;"></p>
+<ul>
+<li>则上述中重量最小的路径为：$S_0\xrightarrow{11}S_1\xrightarrow{10}S_2\xrightarrow{11}S_0$<script type="math/tex; mode=display">
+d_f=5</script></li>
+</ul>
+</li>
+<li><p>在译码深度长度内，可以纠正$\lfloor\frac{(d_f-1)}{2}\rfloor$个随机错误</p>
+</li>
+<li><p><strong>卷积码的编码增益</strong>：</p>
+<ul>
+<li>编码增益$dB=[\frac{E_b}{N_0}dB]_{未编码}-[\frac{E_b}{N_0}dB]_{编码}$</li>
+<li>硬件判决编码增益$dB:10log_{10}(\frac{Rd_f}{2})$</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>欢迎来到ssy的世界</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/WeChaPay.jpg" alt="ssy 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>ssy
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://ssy的小天地.com/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/" title="VLSI DSP之信道编码与解码">http://ssy的小天地.com/2022/12/03/VLSI DSP之信道编码与解码/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/VLSI/" rel="tag"># VLSI</a>
+              <a href="/tags/DSP/" rel="tag"># DSP</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/12/02/VLSI%20DSP%E4%B9%8B%E5%B8%A6%E9%80%9A%E8%B0%83%E5%88%B6%E4%B8%8E%E8%A7%A3%E8%B0%83/" rel="prev" title="VLSI DSP之带通调制与解调">
+      <i class="fa fa-chevron-left"></i> VLSI DSP之带通调制与解调
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/12/03/C++%E4%B9%8B%E5%BE%AA%E7%8E%AF/" rel="next" title="C++之循环">
+      C++之循环 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">信道编码的基本概念</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7%E5%88%86%E7%BB%84%E7%A0%81"><span class="nav-number">2.</span> <span class="nav-text">线性分组码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BE%AA%E7%8E%AF%E7%A0%81"><span class="nav-number">3.</span> <span class="nav-text">循环码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8D%B7%E7%A7%AF%E7%A0%81%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">4.</span> <span class="nav-text">卷积码的基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%8D%B7%E7%A7%AF%E7%A0%81%E7%9A%84%E7%BC%96%E7%A0%81%E6%96%B9%E6%B3%95%E2%80%94%E5%86%B2%E5%87%BB%E5%93%8D%E5%BA%94"><span class="nav-number">4.1.</span> <span class="nav-text">1.卷积码的编码方法—冲击响应</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%8D%B7%E7%A7%AF%E7%A0%81%E7%9A%84%E7%BC%96%E7%A0%81%E6%96%B9%E6%B3%95%E2%80%94%E7%8A%B6%E6%80%81%E6%8F%8F%E8%BF%B0%E5%92%8C%E7%8A%B6%E6%80%81%E5%9B%BE"><span class="nav-number">4.2.</span> <span class="nav-text">2.卷积码的编码方法—状态描述和状态图</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8D%B7%E7%A7%AF%E7%A0%81%E7%9A%84%E8%AF%91%E7%A0%81%E6%96%B9%E6%B3%95%E2%80%94%E7%BB%B4%E7%89%B9%E6%AF%94%E8%AF%91%E7%A0%81"><span class="nav-number">5.</span> <span class="nav-text">卷积码的译码方法—维特比译码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8D%B7%E7%A7%AF%E7%A0%81%E7%9A%84%E6%80%A7%E8%83%BD"><span class="nav-number">6.</span> <span class="nav-text">卷积码的性能</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ssy"
+      src="/images/ssy.png">
+  <p class="site-author-name" itemprop="name">ssy</p>
+  <div class="site-description" itemprop="description">满怀希望 就会所向披靡</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">141</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">38</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ssy1938010014" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ssy1938010014" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://m.weibo.cn/u/5469432500?uid=5469432500&t=0&luicode=10000011&lfid=100103type=1&q=JIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" title="Weibo → https:&#x2F;&#x2F;m.weibo.cn&#x2F;u&#x2F;5469432500?uid&#x3D;5469432500&amp;t&#x3D;0&amp;luicode&#x3D;10000011&amp;lfid&#x3D;100103type%3D1%26q%3DJIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://ssy1938010014.github.io/" title="http:&#x2F;&#x2F;ssy1938010014.github.io" rel="noopener" target="_blank">ssy的小天地</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://y006.github.io/" title="http:&#x2F;&#x2F;y006.github.io" rel="noopener" target="_blank">邱院士的Blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://bengoooo.github.io/" title="http:&#x2F;&#x2F;BENgoooo.github.io" rel="noopener" target="_blank">赵总的Blog</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=1469041281&auto=1&height=66"></iframe>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ssy</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-ribbon@1/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+<script data-pjax>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  let url = element.dataset.target;
+  let pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  let pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  let fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+
+
+    <div id="pjax">
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+    </div>
+</body>
+</html>

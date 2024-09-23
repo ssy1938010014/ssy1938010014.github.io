@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1/themes/blue/pace-theme-minimal.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"xn--ssy-lq6e63gg6fuu2d.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本节主要介绍了同步FIFO与异步FIFO的工作原理与硬件设计的关键，并列举了示例代码。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FPGA数字信号处理之FIFO">
+<meta property="og:url" content="http://ssy的小天地.com/2023/12/24/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIFO/index.html">
+<meta property="og:site_name" content="ssy的小天地">
+<meta property="og:description" content="本节主要介绍了同步FIFO与异步FIFO的工作原理与硬件设计的关键，并列举了示例代码。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/12/24/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIFO/image-20231224020051443.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/12/24/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIFO/image-20231224020354679.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/12/24/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIFO/image-20231224020607825.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/12/24/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIFO/image-20231227105716607.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/12/24/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIFO/image-20231227111508593.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/12/24/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIFO/image-20231226145844212.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/12/24/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIFO/image-20231227115142508.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/12/24/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIFO/image-20231227122308994.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/12/24/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIFO/image-20231227122645638.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/12/24/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIFO/image-20231227122919471.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/12/24/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIFO/image-20231227123629433.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/12/24/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIFO/image-20231227123723989.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/12/24/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIFO/image-20231227124012465.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/12/24/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIFO/image-20231226163350937.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/12/24/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIFO/image-20231226163304427.png">
+<meta property="article:published_time" content="2023-12-24T02:07:12.000Z">
+<meta property="article:modified_time" content="2024-04-25T12:18:34.332Z">
+<meta property="article:author" content="ssy">
+<meta property="article:tag" content="FPGA">
+<meta property="article:tag" content="数字信号处理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/12/24/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIFO/image-20231224020051443.png">
+
+<link rel="canonical" href="http://ssy的小天地.com/2023/12/24/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIFO/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>FPGA数字信号处理之FIFO | ssy的小天地</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+    <a target="_blank" rel="noopener" href="https://github.com/ssy1938010014" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ssy的小天地</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">愿汝如是 千金不换</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-works">
+
+    <a href="/works/" rel="section"><i class="fa fa-fw fa-sitemap"></i>文章</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ssy的小天地.com/2023/12/24/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIFO/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ssy.png">
+      <meta itemprop="name" content="ssy">
+      <meta itemprop="description" content="满怀希望 就会所向披靡">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ssy的小天地">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          FPGA数字信号处理之FIFO
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+
+
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-12-24 10:07:12" itemprop="dateCreated datePublished" datetime="2023-12-24T10:07:12+08:00">2023-12-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-04-25 20:18:34" itemprop="dateModified" datetime="2024-04-25T20:18:34+08:00">2024-04-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%A7%AF%E7%B4%AF/" itemprop="url" rel="index"><span itemprop="name">学习积累</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本节主要介绍了同步FIFO与异步FIFO的工作原理与硬件设计的关键，并列举了示例代码。</p>
+<span id="more"></span>
+<h1 id="FIFO概述"><a href="#FIFO概述" class="headerlink" title="FIFO概述"></a>FIFO概述</h1><ul>
+<li><p>FIFO（First In First Out），是一种<strong>先进先出的数据缓存器</strong>。其<strong>不可寻址</strong>，只能顺序写入、顺序读出，数据地址由内部读写地址自动加1完成（这里注意与RAM的区分：RAM支持外部给定地址读写数据），通常硬件上<strong>实现的是循环队列</strong></p>
+</li>
+<li><p><strong>FIFO的功能</strong>：FIFO是速率匹配中的一个<strong>缓冲环节</strong>，一般用于连接两个速率不同的数据通路</p>
+<p><img src="/2023/12/24/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIFO/image-20231224020051443.png" alt="image-20231224020051443" style="zoom: 67%;"></p>
+</li>
+<li><p><strong>FIFO分类</strong>：</p>
+<ul>
+<li><strong>同步FIFO</strong>：<ul>
+<li><strong>特点</strong>：数据写入FIFO的时钟和数据读出FIFO的时钟是<strong>同步</strong>的</li>
+<li><strong>作用</strong>：作为交互数据的缓冲，相当于一个buffer</li>
+</ul>
+</li>
+<li><strong>异步FIFO</strong>：<ul>
+<li><strong>特点</strong>：数据写入FIFO的时钟和数据读出FIFO的时钟是<strong>异步</strong>的</li>
+<li><strong>作用</strong>：实现数据在不同时钟域之间进行传递，或作为不同数据宽度的数据接口（比如写的数据是8个bit，读出的数据是16bit，或者写的是16个bit，读出的数据是8个bit）</li>
+</ul>
+</li>
+</ul>
+<p><img src="/2023/12/24/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIFO/image-20231224020354679.png" alt="image-20231224020354679" style="zoom:50%;"></p>
+</li>
+<li><p><strong>FIFO深度与宽度</strong>：</p>
+<ul>
+<li>FIFO宽度：用fifo_data_size表示，也就是<strong>FIFO存储的每个数据宽度</strong></li>
+<li>FIFO深度：用fifo_addr_size表示，也就是<strong>能存储多少个数据</strong></li>
+</ul>
+<p><img src="/2023/12/24/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIFO/image-20231224020607825.png" alt="image-20231224020607825" style="zoom:50%;"></p>
+</li>
+<li><p><strong>FIFO中相关信号</strong>：</p>
+<ul>
+<li>时钟、复位：clk，rst_n_i</li>
+<li>读使能（读控制）：rd_en_i</li>
+<li>写使能（写控制）：wr_en_i</li>
+<li>满信号（满标志）：full，当FIFO中的数据满（或接近满），不再能进行数据的写入</li>
+<li>空信号（空标志）：empty，当FIFO为空（或接近空），不再能进行数据的读出</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="同步FIFO"><a href="#同步FIFO" class="headerlink" title="同步FIFO"></a>同步FIFO</h1><h2 id="1-设计关键"><a href="#1-设计关键" class="headerlink" title="1.设计关键"></a>1.设计关键</h2><ul>
+<li><p><strong>“空”和“满”信号的判断</strong>：</p>
+<ul>
+<li><p>首先来看一个正常循环FIFO的空满信号判断流程：</p>
+<p><img src="/2023/12/24/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIFO/image-20231227105716607.png" alt="image-20231227105716607"></p>
+</li>
+<li><p>由上图可以总结出：</p>
+<ul>
+<li><strong>当读指针追上写指针时，FIFO为空</strong></li>
+<li><strong>当写指针追上读指针时，FIFO为满</strong></li>
+</ul>
+</li>
+<li><p>由于FIFO空和满状态时，读写指针都指向相同位置，那么如何较好的判断究竟是空还是满呢？<strong>答案是：将地址指针扩展1bit</strong></p>
+<ul>
+<li>在深度为8的FIFO中，需要3bit的读写指针来分别指示读写地址3’b000-3’b111这8个地址。若将地址指针扩展1bit，则变成4bit的地址，而地址表示区间则变成了4’b0000-4’b1111。假设不看最高位的话，后面3位的表示区间仍然是3’b000-3’b111，也就意味着最高位可以拿来作为指示位。<br><img src="/2023/12/24/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIFO/image-20231227111508593.png" alt="image-20231227111508593"></li>
+<li>由上图可以总结出：<ul>
+<li><strong>读写指针相同，FIFO为空状态</strong></li>
+<li><strong>读写指针最高位相反，其他位相同，FIFO为满状态</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-源代码"><a href="#2-源代码" class="headerlink" title="2.源代码"></a>2.源代码</h2><ul>
+<li><p>sync_fifo.v</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> sync_fifo #(</span><br><span class="line">    <span class="keyword">parameter</span> DEPTH = <span class="number">8</span>,</span><br><span class="line">    <span class="keyword">parameter</span> WIDTH = <span class="number">8</span></span><br><span class="line">) (</span><br><span class="line">    <span class="keyword">input</span> <span class="keyword">wire</span> clk,</span><br><span class="line">    <span class="keyword">input</span> <span class="keyword">wire</span> rst_n,</span><br><span class="line"></span><br><span class="line">    <span class="keyword">input</span> <span class="keyword">wire</span>             i_wen,</span><br><span class="line">    <span class="keyword">input</span> <span class="keyword">wire</span> [WIDTH-<span class="number">1</span>:<span class="number">0</span>] i_wdata,</span><br><span class="line"></span><br><span class="line">    <span class="keyword">input</span>  <span class="keyword">wire</span>             i_ren,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">reg</span> [WIDTH-<span class="number">1</span>:<span class="number">0</span>] o_rdata,</span><br><span class="line"></span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">wire</span> o_empty,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">wire</span> o_full</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">parameter</span> ADDR_WIDTH = <span class="built_in">$clog2</span>(DEPTH);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">reg</span> [WIDTH-<span class="number">1</span>:<span class="number">0</span>] mem[DEPTH-<span class="number">1</span>:<span class="number">0</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">reg</span> [ADDR_WIDTH:<span class="number">0</span>] wptr, wptr_next;</span><br><span class="line">    <span class="keyword">reg</span> [ADDR_WIDTH:<span class="number">0</span>] rptr, rptr_next;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">negedge</span> rst_n) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span> (!rst_n) <span class="keyword">begin</span></span><br><span class="line">            wptr &lt;= &#123;ADDR_WIDTH&#123;<span class="number">1&#x27;b0</span>&#125;&#125;;</span><br><span class="line">            rptr &lt;= &#123;ADDR_WIDTH&#123;<span class="number">1&#x27;b0</span>&#125;&#125;;</span><br><span class="line">        <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">            wptr &lt;= wptr_next;</span><br><span class="line">            rptr &lt;= rptr_next;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">always</span> @(*) <span class="keyword">begin</span></span><br><span class="line">        wptr_next = wptr;</span><br><span class="line">        rptr_next = rptr;</span><br><span class="line">        <span class="keyword">if</span> (i_wen &amp;&amp; !o_full) <span class="keyword">begin</span></span><br><span class="line">            wptr_next = wptr + <span class="number">1&#x27;b1</span>;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">if</span> (i_ren &amp;&amp; !o_empty) <span class="keyword">begin</span></span><br><span class="line">            rptr_next = rptr + <span class="number">1&#x27;b1</span>;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">integer</span> i;</span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">negedge</span> rst_n) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span> (!rst_n) <span class="keyword">begin</span></span><br><span class="line">            <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; DEPTH; i = i + <span class="number">1</span>) <span class="keyword">begin</span></span><br><span class="line">                mem[i] &lt;= <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">if</span> (i_wen &amp;&amp; !o_full) <span class="keyword">begin</span></span><br><span class="line">            mem[wptr[ADDR_WIDTH-<span class="number">1</span>:<span class="number">0</span>]] &lt;= i_wdata;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">negedge</span> rst_n) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span> (!rst_n) <span class="keyword">begin</span></span><br><span class="line">            o_rdata &lt;= <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">if</span> (i_ren &amp;&amp; !o_empty) <span class="keyword">begin</span></span><br><span class="line">            o_rdata &lt;= mem[rptr[ADDR_WIDTH-<span class="number">1</span>:<span class="number">0</span>]];</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">assign</span> o_empty = wptr == rptr;</span><br><span class="line">    <span class="keyword">assign</span> o_full  = wptr == &#123;~rptr[ADDR_WIDTH], rptr[ADDR_WIDTH-<span class="number">1</span>:<span class="number">0</span>]&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="3-Testbench"><a href="#3-Testbench" class="headerlink" title="3.Testbench"></a>3.Testbench</h2><ul>
+<li><p>sync_fifo_tb.v</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">`<span class="keyword">timescale</span> 1ns/1ns	</span><span class="comment">//时间单位/精度</span></span><br><span class="line"> </span><br><span class="line"><span class="comment">//------------&lt;模块及端口声明&gt;----------------------------------------</span></span><br><span class="line"><span class="keyword">module</span> sync_fifo_tb();</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">parameter</span>   DATA_WIDTH = <span class="number">8</span>  ;		<span class="comment">//FIFO位宽</span></span><br><span class="line">    <span class="keyword">parameter</span>   DATA_DEPTH = <span class="number">8</span> ;		<span class="comment">//FIFO深度</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">reg</span>									clk		;</span><br><span class="line">    <span class="keyword">reg</span>									rst_n	;</span><br><span class="line">    <span class="keyword">reg</span>		[DATA_WIDTH-<span class="number">1</span>:<span class="number">0</span>]			data_in	;</span><br><span class="line">    <span class="keyword">reg</span>									rd_en	;</span><br><span class="line">    <span class="keyword">reg</span>									wr_en	;</span><br><span class="line">                            </span><br><span class="line">    <span class="keyword">wire</span>	[DATA_WIDTH-<span class="number">1</span>:<span class="number">0</span>]			data_out;	</span><br><span class="line">    <span class="keyword">wire</span>								empty	;	</span><br><span class="line">    <span class="keyword">wire</span>								full	;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    <span class="comment">//------------&lt;例化被测试模块&gt;----------------------------------------</span></span><br><span class="line">    sync_fifo</span><br><span class="line">    #(</span><br><span class="line">        <span class="variable">.DEPTH</span>	(DATA_WIDTH),			<span class="comment">//FIFO位宽</span></span><br><span class="line">        <span class="variable">.WIDTH</span>	(DATA_DEPTH)			<span class="comment">//FIFO深度</span></span><br><span class="line">    )</span><br><span class="line">    sync_fifo_ptr_inst(</span><br><span class="line">        <span class="variable">.clk</span>		(clk		),</span><br><span class="line">        <span class="variable">.rst_n</span>		(rst_n		),</span><br><span class="line">        <span class="variable">.i_wdata</span>	(data_in	),</span><br><span class="line">        <span class="variable">.i_ren</span>		(rd_en		),</span><br><span class="line">        <span class="variable">.i_wen</span>		(wr_en		),</span><br><span class="line">                    </span><br><span class="line">        <span class="variable">.o_rdata</span>	(data_out	),	</span><br><span class="line">        <span class="variable">.o_empty</span>	(empty		),	</span><br><span class="line">        <span class="variable">.o_full</span>		(full		)</span><br><span class="line">    );</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//------------&lt;设置初始测试条件&gt;----------------------------------------</span></span><br><span class="line">    <span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">        clk = <span class="number">1&#x27;b0</span>;					<span class="comment">//初始时钟为0</span></span><br><span class="line">        rst_n &lt;= <span class="number">1&#x27;b0</span>;				<span class="comment">//初始复位</span></span><br><span class="line">        data_in &lt;= <span class="number">&#x27;d0</span>;</span><br><span class="line">        wr_en &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">        rd_en &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">    <span class="comment">//重复8次写操作，让FIFO写满 	</span></span><br><span class="line">        <span class="keyword">repeat</span>(<span class="number">8</span>) <span class="keyword">begin</span></span><br><span class="line">            @(<span class="keyword">negedge</span> clk)<span class="keyword">begin</span></span><br><span class="line">                rst_n &lt;= <span class="number">1&#x27;b1</span>;		</span><br><span class="line">                wr_en &lt;= <span class="number">1&#x27;b1</span>;</span><br><span class="line">                data_in &lt;= <span class="built_in">$random</span>;	<span class="comment">//生成8位随机数</span></span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="comment">//重复8次读操作，让FIFO读空 	</span></span><br><span class="line">        <span class="keyword">repeat</span>(<span class="number">8</span>) <span class="keyword">begin</span></span><br><span class="line">            @(<span class="keyword">negedge</span> clk)<span class="keyword">begin</span>		</span><br><span class="line">                wr_en &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">                rd_en &lt;= <span class="number">1&#x27;d1</span>;</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="comment">//重复4次写操作，写入4个随机数据	</span></span><br><span class="line">        <span class="keyword">repeat</span>(<span class="number">4</span>) <span class="keyword">begin</span></span><br><span class="line">            @(<span class="keyword">negedge</span> clk)<span class="keyword">begin</span>		</span><br><span class="line">                wr_en &lt;= <span class="number">1&#x27;b1</span>;</span><br><span class="line">                data_in &lt;= <span class="built_in">$random</span>;	<span class="comment">//生成8位随机数</span></span><br><span class="line">                rd_en &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="comment">//持续同时对FIFO读写，写入数据为随机数据	</span></span><br><span class="line">        <span class="keyword">forever</span> <span class="keyword">begin</span></span><br><span class="line">            @(<span class="keyword">negedge</span> clk)<span class="keyword">begin</span>		</span><br><span class="line">                wr_en &lt;= <span class="number">1&#x27;b1</span>;</span><br><span class="line">                data_in &lt;= <span class="built_in">$random</span>;	<span class="comment">//生成8位随机数</span></span><br><span class="line">                rd_en &lt;= <span class="number">1&#x27;b1</span>;</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="comment">//------------&lt;设置时钟&gt;----------------------------------------------</span></span><br><span class="line">    <span class="keyword">always</span> #<span class="number">10</span> clk = ~clk;			<span class="comment">//系统时钟周期20ns</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>结果如下：</p>
+<p><img src="/2023/12/24/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIFO/image-20231226145844212.png" alt="image-20231226145844212">    </p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="异步FIFO"><a href="#异步FIFO" class="headerlink" title="异步FIFO"></a>异步FIFO</h1><h2 id="1-设计关键-1"><a href="#1-设计关键-1" class="headerlink" title="1.设计关键"></a>1.设计关键</h2><ul>
+<li><p><strong>“空”和“满”信号的判断：</strong></p>
+<ul>
+<li><p>异步FIFO也可以用同步FIFO的方式去判断空满状态，但是！！！，异步FIFO存在跨时钟域的问题，它存在亚阈值问题，如果仍然使用二进制编码方式的话，会大大增加出现亚阈值状态的概率</p>
+</li>
+<li><p>首先，先解释为什么跨时钟域容易出现亚阈值问题（亚阈值问题就是数据不满足触发器的建立时间和保持时间，在时钟跳变沿时采集到了一个不稳定的状态，详情见Reference）</p>
+<p><img src="/2023/12/24/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIFO/image-20231227115142508.png" alt="image-20231227115142508"></p>
+</li>
+<li><p>二进制的7（0111）跳转到8（1000），4位都会发生变化，所以发生亚稳态的概率就比较大，那么我们如何减少发生亚稳态的概率呢？<strong>答案是：用格雷码</strong></p>
+<ul>
+<li><p>格雷码是相邻数字之间只有1个bit的变化，那么就会大大减少亚稳态发生的概率</p>
+</li>
+<li><p>二进制与格雷码的转化：<strong>二进制码右移一位^二进制码=格雷码</strong>（^代表异或）</p>
+</li>
+<li><p>如何用格雷码判断空满：</p>
+<ul>
+<li><p><strong>当最高位和次高位相同，其余位相同认为是读空</strong></p>
+</li>
+<li><p><strong>当最高位和次高位不同，其余位相同认为是写满</strong></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>跨时钟域的同步问题</strong>：因为读指针与写指针是受不同时钟控制的，所以它们之间的比较，需要先同步到一个时钟下（<strong>这里的同步都是指使用2个（或者3个，但此类情况不多）FF（触发器）来进行同步（俗称“打两拍”）</strong>，我的理解是用这两拍的时间先锁存一个指针，然后再将这个指针与经过了2拍之后的另一个指针比较）</p>
+<ul>
+<li><p><strong>“写满”的判断：需要将读指针同步到写时钟域，再与写指针判断</strong></p>
+<ul>
+<li><p>假设本来是这样的：</p>
+<p><img src="/2023/12/24/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIFO/image-20231227122308994.png" alt="image-20231227122308994"></p>
+</li>
+<li><p>如果在2拍（<strong>写时钟下</strong>）时间内，写指针从0010写到0111，此时写指针和读指针（延时两拍后的，并非真实读指针）指向同一地址，FIFO为满</p>
+<p><img src="/2023/12/24/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIFO/image-20231227122645638.png" alt="image-20231227122645638"></p>
+</li>
+<li><p>但其实在这段时间内，可能真实读指针已经读出了数据，所以此时存在“<strong>虚满</strong>”状态</p>
+<p><img src="/2023/12/24/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIFO/image-20231227122919471.png" alt="image-20231227122919471"></p>
+</li>
+</ul>
+</li>
+<li><p><strong>“读空”的判断：需要将写指针同步到读时钟域，再与读指针判断</strong></p>
+<ul>
+<li><p>假设本来是这样的：</p>
+<p><img src="/2023/12/24/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIFO/image-20231227123629433.png" alt="image-20231227123629433"></p>
+</li>
+<li><p>如果在2拍（<strong>读时钟下</strong>）时间内，读指针从0010读到0111再到1000，此时写指针和读指针（延时两拍后的，并非真实写指针）指向同一地址，FIFO为空</p>
+<p><img src="/2023/12/24/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIFO/image-20231227123723989.png" alt="image-20231227123723989"></p>
+</li>
+<li><p>但其实在这段时间内，可能真实写指针已经写入了数据，所以此时存在“<strong>虚空</strong>”状态</p>
+<p><img src="/2023/12/24/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIFO/image-20231227124012465.png" alt="image-20231227124012465"></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-源代码-1"><a href="#2-源代码-1" class="headerlink" title="2.源代码"></a>2.源代码</h2><ul>
+<li><p>async_fifo.v</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">`<span class="keyword">timescale</span> 1ns / 1ps</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//异步FIFO</span></span><br><span class="line"><span class="keyword">module</span>	async_fifo</span><br><span class="line">    #(</span><br><span class="line">        <span class="keyword">parameter</span>   DATA_WIDTH = <span class="number">&#x27;d8</span>  ,								<span class="comment">//FIFO位宽</span></span><br><span class="line">        <span class="keyword">parameter</span>   DATA_DEPTH = <span class="number">&#x27;d16</span> 								<span class="comment">//FIFO深度</span></span><br><span class="line">    )		</span><br><span class="line">    (		</span><br><span class="line">    <span class="comment">//写数据		</span></span><br><span class="line">        <span class="keyword">input</span>							wr_clk		,				<span class="comment">//写时钟</span></span><br><span class="line">        <span class="keyword">input</span>							wr_rst_n	,       		<span class="comment">//低电平有效的写复位信号</span></span><br><span class="line">        <span class="keyword">input</span>							wr_en		,       		<span class="comment">//写使能信号，高电平有效	</span></span><br><span class="line">        <span class="keyword">input</span>	[DATA_WIDTH-<span class="number">1</span>:<span class="number">0</span>]		data_in		,       		<span class="comment">//写入的数据</span></span><br><span class="line">    <span class="comment">//读数据			</span></span><br><span class="line">        <span class="keyword">input</span>							rd_clk		,				<span class="comment">//读时钟</span></span><br><span class="line">        <span class="keyword">input</span>							rd_rst_n	,       		<span class="comment">//低电平有效的读复位信号</span></span><br><span class="line">        <span class="keyword">input</span>							rd_en		,				<span class="comment">//读使能信号，高电平有效						                                        </span></span><br><span class="line">        <span class="keyword">output</span>	<span class="keyword">reg</span>	[DATA_WIDTH-<span class="number">1</span>:<span class="number">0</span>]	data_out	,				<span class="comment">//输出的数据</span></span><br><span class="line">    <span class="comment">//状态标志					</span></span><br><span class="line">        <span class="keyword">output</span>							empty		,				<span class="comment">//空标志，高电平表示当前FIFO已被写满</span></span><br><span class="line">        <span class="keyword">output</span>							full		    			<span class="comment">//满标志，高电平表示当前FIFO已被读空</span></span><br><span class="line">    );                                                              </span><br><span class="line">    </span><br><span class="line">    <span class="comment">//reg define</span></span><br><span class="line">    <span class="comment">//用二维数组实现RAM</span></span><br><span class="line">    <span class="keyword">reg</span> [DATA_WIDTH - <span class="number">1</span> : <span class="number">0</span>]			fifo_buffer[DATA_DEPTH - <span class="number">1</span> : <span class="number">0</span>];</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">reg</span> [<span class="built_in">$clog2</span>(DATA_DEPTH) : <span class="number">0</span>]		wr_ptr;						<span class="comment">//写地址指针，二进制</span></span><br><span class="line">    <span class="keyword">reg</span> [<span class="built_in">$clog2</span>(DATA_DEPTH) : <span class="number">0</span>]		rd_ptr;						<span class="comment">//读地址指针，二进制</span></span><br><span class="line">    <span class="keyword">reg</span>	[<span class="built_in">$clog2</span>(DATA_DEPTH) : <span class="number">0</span>]		rd_ptr_g_d1;				<span class="comment">//读指针格雷码在写时钟域下同步1拍</span></span><br><span class="line">    <span class="keyword">reg</span>	[<span class="built_in">$clog2</span>(DATA_DEPTH) : <span class="number">0</span>]		rd_ptr_g_d2;				<span class="comment">//读指针格雷码在写时钟域下同步2拍</span></span><br><span class="line">    <span class="keyword">reg</span>	[<span class="built_in">$clog2</span>(DATA_DEPTH) : <span class="number">0</span>]		wr_ptr_g_d1;				<span class="comment">//写指针格雷码在读时钟域下同步1拍</span></span><br><span class="line">    <span class="keyword">reg</span>	[<span class="built_in">$clog2</span>(DATA_DEPTH) : <span class="number">0</span>]		wr_ptr_g_d2;				<span class="comment">//写指针格雷码在读时钟域下同步2拍</span></span><br><span class="line">        </span><br><span class="line">    <span class="comment">//wire define</span></span><br><span class="line">    <span class="keyword">wire</span> [<span class="built_in">$clog2</span>(DATA_DEPTH) : <span class="number">0</span>]		wr_ptr_g;					<span class="comment">//写地址指针，格雷码</span></span><br><span class="line">    <span class="keyword">wire</span> [<span class="built_in">$clog2</span>(DATA_DEPTH) : <span class="number">0</span>]		rd_ptr_g;					<span class="comment">//读地址指针，格雷码</span></span><br><span class="line">    <span class="keyword">wire</span> [<span class="built_in">$clog2</span>(DATA_DEPTH) - <span class="number">1</span> : <span class="number">0</span>]	wr_ptr_true;				<span class="comment">//真实写地址指针，作为写ram的地址</span></span><br><span class="line">    <span class="keyword">wire</span> [<span class="built_in">$clog2</span>(DATA_DEPTH) - <span class="number">1</span> : <span class="number">0</span>]	rd_ptr_true;				<span class="comment">//真实读地址指针，作为读ram的地址</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">//地址指针从二进制转换成格雷码</span></span><br><span class="line">    <span class="keyword">assign</span> 	wr_ptr_g = wr_ptr ^ (wr_ptr &gt;&gt; <span class="number">1</span>);					</span><br><span class="line">    <span class="keyword">assign</span> 	rd_ptr_g = rd_ptr ^ (rd_ptr &gt;&gt; <span class="number">1</span>);</span><br><span class="line">    <span class="comment">//读写RAM地址赋值</span></span><br><span class="line">    <span class="keyword">assign</span>	wr_ptr_true = wr_ptr [<span class="built_in">$clog2</span>(DATA_DEPTH) - <span class="number">1</span> : <span class="number">0</span>];		<span class="comment">//写RAM地址等于写指针的低DATA_DEPTH位(去除最高位)</span></span><br><span class="line">    <span class="keyword">assign</span>	rd_ptr_true = rd_ptr [<span class="built_in">$clog2</span>(DATA_DEPTH) - <span class="number">1</span> : <span class="number">0</span>];		<span class="comment">//读RAM地址等于读指针的低DATA_DEPTH位(去除最高位)</span></span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    <span class="comment">//写操作,更新写地址</span></span><br><span class="line">    <span class="keyword">always</span> @ (<span class="keyword">posedge</span> wr_clk <span class="keyword">or</span> <span class="keyword">negedge</span> wr_rst_n) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span> (!wr_rst_n)</span><br><span class="line">            wr_ptr &lt;= <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (!full &amp;&amp; wr_en)<span class="keyword">begin</span>								<span class="comment">//写使能有效且非满</span></span><br><span class="line">            wr_ptr &lt;= wr_ptr + <span class="number">1&#x27;d1</span>;</span><br><span class="line">            fifo_buffer[wr_ptr_true] &lt;= data_in;</span><br><span class="line">        <span class="keyword">end</span>	</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="comment">//将读指针的格雷码同步到写时钟域，来判断是否写满</span></span><br><span class="line">    <span class="keyword">always</span> @ (<span class="keyword">posedge</span> wr_clk <span class="keyword">or</span> <span class="keyword">negedge</span> wr_rst_n) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span> (!wr_rst_n)<span class="keyword">begin</span></span><br><span class="line">            rd_ptr_g_d1 &lt;= <span class="number">0</span>;										<span class="comment">//寄存1拍</span></span><br><span class="line">            rd_ptr_g_d2 &lt;= <span class="number">0</span>;										<span class="comment">//寄存2拍</span></span><br><span class="line">        <span class="keyword">end</span>				</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">begin</span>												</span><br><span class="line">            rd_ptr_g_d1 &lt;= rd_ptr_g;								<span class="comment">//寄存1拍</span></span><br><span class="line">            rd_ptr_g_d2 &lt;= rd_ptr_g_d1;								<span class="comment">//寄存2拍</span></span><br><span class="line">        <span class="keyword">end</span>	</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="comment">//读操作,更新读地址</span></span><br><span class="line">    <span class="keyword">always</span> @ (<span class="keyword">posedge</span> rd_clk <span class="keyword">or</span> <span class="keyword">negedge</span> rd_rst_n) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span> (!rd_rst_n)</span><br><span class="line">            rd_ptr &lt;= <span class="number">&#x27;d0</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (rd_en &amp;&amp; !empty)<span class="keyword">begin</span>								<span class="comment">//读使能有效且非空</span></span><br><span class="line">            data_out &lt;= fifo_buffer[rd_ptr_true];</span><br><span class="line">            rd_ptr &lt;= rd_ptr + <span class="number">1&#x27;d1</span>;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="comment">//将写指针的格雷码同步到读时钟域，来判断是否读空</span></span><br><span class="line">    <span class="keyword">always</span> @ (<span class="keyword">posedge</span> rd_clk <span class="keyword">or</span> <span class="keyword">negedge</span> rd_rst_n) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span> (!rd_rst_n)<span class="keyword">begin</span></span><br><span class="line">            wr_ptr_g_d1 &lt;= <span class="number">0</span>;										<span class="comment">//寄存1拍</span></span><br><span class="line">            wr_ptr_g_d2 &lt;= <span class="number">0</span>;										<span class="comment">//寄存2拍</span></span><br><span class="line">        <span class="keyword">end</span>				</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">begin</span>												</span><br><span class="line">            wr_ptr_g_d1 &lt;= wr_ptr_g;								<span class="comment">//寄存1拍</span></span><br><span class="line">            wr_ptr_g_d2 &lt;= wr_ptr_g_d1;								<span class="comment">//寄存2拍		</span></span><br><span class="line">        <span class="keyword">end</span>	</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="comment">//更新指示信号</span></span><br><span class="line">    <span class="comment">//当所有位相等时，读指针追到到了写指针，FIFO被读空</span></span><br><span class="line">    <span class="keyword">assign</span>	empty = ( wr_ptr_g_d2 == rd_ptr_g ) ? <span class="number">1&#x27;b1</span> : <span class="number">1&#x27;b0</span>;</span><br><span class="line">    <span class="comment">//当高位相反且其他位相等时，写指针超过读指针一圈，FIFO被写满</span></span><br><span class="line">    <span class="comment">//同步后的读指针格雷码高两位取反，再拼接上余下位</span></span><br><span class="line">    <span class="keyword">assign</span>	full  = ( wr_ptr_g == &#123; ~(rd_ptr_g_d2[<span class="built_in">$clog2</span>(DATA_DEPTH) : <span class="built_in">$clog2</span>(DATA_DEPTH) - <span class="number">1</span>])</span><br><span class="line">                    ,rd_ptr_g_d2[<span class="built_in">$clog2</span>(DATA_DEPTH) - <span class="number">2</span> : <span class="number">0</span>]&#125;)? <span class="number">1&#x27;b1</span> : <span class="number">1&#x27;b0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="3-Testbench-1"><a href="#3-Testbench-1" class="headerlink" title="3.Testbench"></a>3.Testbench</h2><ul>
+<li><p>async_fifo_tb.v</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">`<span class="keyword">timescale</span> 1ns / 1ns</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">module</span> async_fifo_tb;</span><br><span class="line">    <span class="keyword">parameter</span>   DATA_WIDTH = <span class="number">8</span>  ;		<span class="comment">//FIFO位宽</span></span><br><span class="line">    <span class="keyword">parameter</span>   DATA_DEPTH = <span class="number">8</span> ;		<span class="comment">//FIFO深度</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">reg</span>							wr_clk		;				<span class="comment">//写时钟</span></span><br><span class="line">    <span class="keyword">reg</span>							wr_rst_n	;       		<span class="comment">//低电平有效的写复位信号</span></span><br><span class="line">    <span class="keyword">reg</span>							wr_en		;       		<span class="comment">//写使能信号，高电平有效	</span></span><br><span class="line">    <span class="keyword">reg</span>	[DATA_WIDTH-<span class="number">1</span>:<span class="number">0</span>]		data_in		;       		<span class="comment">//写入的数据</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">reg</span>							rd_clk		;				<span class="comment">//读时钟</span></span><br><span class="line">    <span class="keyword">reg</span>							rd_rst_n	;       		<span class="comment">//低电平有效的读复位信号</span></span><br><span class="line">    <span class="keyword">reg</span>							rd_en		;				<span class="comment">//读使能信号，高电平有效						                                        </span></span><br><span class="line">    <span class="keyword">wire</span>[DATA_WIDTH-<span class="number">1</span>:<span class="number">0</span>]		data_out	;				<span class="comment">//输出的数据					</span></span><br><span class="line">    <span class="keyword">wire</span>						empty		;				<span class="comment">//空标志，高电平表示当前FIFO已被写满</span></span><br><span class="line">    <span class="keyword">wire</span>						full		;               <span class="comment">//满标志，高电平表示当前FIFO已被读空</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">//------------&lt;例化被测试模块&gt;----------------------------------------</span></span><br><span class="line">    async_fifo</span><br><span class="line">    #(</span><br><span class="line">        <span class="variable">.DATA_WIDTH</span>	(DATA_WIDTH),			<span class="comment">//FIFO位宽</span></span><br><span class="line">        <span class="variable">.DATA_DEPTH</span>	(DATA_DEPTH)			<span class="comment">//FIFO深度</span></span><br><span class="line">    )</span><br><span class="line">    async_fifo_inst(</span><br><span class="line">        <span class="variable">.wr_clk</span>		(wr_clk		),</span><br><span class="line">        <span class="variable">.wr_rst_n</span>	(wr_rst_n	),</span><br><span class="line">        <span class="variable">.wr_en</span>		(wr_en		),</span><br><span class="line">        <span class="variable">.data_in</span>	(data_in	),	</span><br><span class="line">        <span class="variable">.rd_clk</span>		(rd_clk		),               </span><br><span class="line">        <span class="variable">.rd_rst_n</span>	(rd_rst_n	),	</span><br><span class="line">        <span class="variable">.rd_en</span>		(rd_en		),	</span><br><span class="line">        <span class="variable">.data_out</span>	(data_out	),</span><br><span class="line">        </span><br><span class="line">        <span class="variable">.empty</span>		(empty		),		</span><br><span class="line">        <span class="variable">.full</span>		(full		)</span><br><span class="line">    );</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//------------&lt;设置初始测试条件&gt;----------------------------------------</span></span><br><span class="line">    <span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">        rd_clk = <span class="number">1&#x27;b0</span>;					<span class="comment">//初始时钟为0</span></span><br><span class="line">        wr_clk = <span class="number">1&#x27;b0</span>;					<span class="comment">//初始时钟为0</span></span><br><span class="line">        wr_rst_n &lt;= <span class="number">1&#x27;b0</span>;				<span class="comment">//初始复位</span></span><br><span class="line">        rd_rst_n &lt;= <span class="number">1&#x27;b0</span>;				<span class="comment">//初始复位</span></span><br><span class="line">        wr_en &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">        rd_en &lt;= <span class="number">1&#x27;b0</span>;	</span><br><span class="line">        data_in &lt;= <span class="number">&#x27;d0</span>;</span><br><span class="line">        #<span class="number">5</span></span><br><span class="line">        wr_rst_n &lt;= <span class="number">1&#x27;b1</span>;				</span><br><span class="line">        rd_rst_n &lt;= <span class="number">1&#x27;b1</span>;					</span><br><span class="line">    <span class="comment">//重复8次写操作，让FIFO写满 	</span></span><br><span class="line">        <span class="keyword">repeat</span>(<span class="number">8</span>) <span class="keyword">begin</span></span><br><span class="line">            @(<span class="keyword">negedge</span> wr_clk)<span class="keyword">begin</span>		</span><br><span class="line">                wr_en &lt;= <span class="number">1&#x27;b1</span>;</span><br><span class="line">                data_in &lt;= <span class="built_in">$random</span>;	<span class="comment">//生成8位随机数</span></span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="comment">//拉低写使能	</span></span><br><span class="line">        @(<span class="keyword">negedge</span> wr_clk)	wr_en &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">        </span><br><span class="line">    <span class="comment">//重复8次读操作，让FIFO读空 	</span></span><br><span class="line">        <span class="keyword">repeat</span>(<span class="number">8</span>) <span class="keyword">begin</span></span><br><span class="line">            @(<span class="keyword">negedge</span> rd_clk)rd_en &lt;= <span class="number">1&#x27;d1</span>;		</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="comment">//拉低读使能</span></span><br><span class="line">        @(<span class="keyword">negedge</span> rd_clk)rd_en &lt;= <span class="number">1&#x27;d0</span>;		</span><br><span class="line">    <span class="comment">//重复4次写操作，写入4个随机数据	</span></span><br><span class="line">        <span class="keyword">repeat</span>(<span class="number">4</span>) <span class="keyword">begin</span></span><br><span class="line">            @(<span class="keyword">negedge</span> wr_clk)<span class="keyword">begin</span>		</span><br><span class="line">                wr_en &lt;= <span class="number">1&#x27;b1</span>;</span><br><span class="line">                data_in &lt;= <span class="built_in">$random</span>;	<span class="comment">//生成8位随机数</span></span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="comment">//持续同时对FIFO读</span></span><br><span class="line">        @(<span class="keyword">negedge</span> rd_clk)rd_en &lt;= <span class="number">1&#x27;b1</span>;</span><br><span class="line">    <span class="comment">//持续同时对FIFO写，写入数据为随机数据	</span></span><br><span class="line">        <span class="keyword">forever</span> <span class="keyword">begin</span></span><br><span class="line">            @(<span class="keyword">negedge</span> wr_clk)<span class="keyword">begin</span>		</span><br><span class="line">                wr_en &lt;= <span class="number">1&#x27;b1</span>;</span><br><span class="line">                data_in &lt;= <span class="built_in">$random</span>;	<span class="comment">//生成8位随机数</span></span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">end</span>	</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">//------------&lt;设置时钟&gt;----------------------------------------------</span></span><br><span class="line">    <span class="keyword">always</span> #<span class="number">10</span> rd_clk = ~rd_clk;			<span class="comment">//读时钟周期20ns</span></span><br><span class="line">    <span class="keyword">always</span> #<span class="number">20</span> wr_clk = ~wr_clk;			<span class="comment">//写时钟周期40ns</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>结果如下：</p>
+<ul>
+<li><p>整体结果：</p>
+<p><img src="/2023/12/24/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIFO/image-20231226163350937.png" alt="image-20231226163350937"></p>
+</li>
+<li><p>细节展示：</p>
+<p><img src="/2023/12/24/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIFO/image-20231226163304427.png" alt="image-20231226163304427"></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1n841177Z7/?spm_id_from=333.1007.top_right_bar_window_history.content.click&amp;vd_source=221b76534ba13cfad544149d75ce9b6c">FIFO概述_哔哩哔哩_bilibili</a>（FIFO的基本概念）</li>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV12Y4y1T7xn/?spm_id_from=333.337.search-card.all.click&amp;vd_source=221b76534ba13cfad544149d75ce9b6c">新新新手Icer练习（五）：同步+异步FIFO的实现_哔哩哔哩_bilibili</a>（同步与异步FIFO原理性的介绍）</li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/wuzhikaidetb/article/details/121136040?ops_request_misc=%7B%22request%5Fid%22%3A%22170356087316800184160647%22%2C%22scm%22%3A%2220140713.130102334.pc%5Fblog.%22%7D&amp;request_id=170356087316800184160647&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~blog~first_rank_ecpm_v1~rank_v31_ecpm-2-121136040-null-null.nonecase&amp;utm_term=FIFO&amp;spm=1018.2226.3001.4450">同步FIFO的两种Verilog设计方法（计数器法、高位扩展法）_fifo同时读写计数器-CSDN博客</a>（同步FIFO解释得很清楚）</li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/wuzhikaidetb/article/details/121152844?ops_request_misc=%7B%22request%5Fid%22%3A%22170357118716800211598390%22%2C%22scm%22%3A%2220140713.130102334.pc%5Fblog.%22%7D&amp;request_id=170357118716800211598390&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~blog~first_rank_ecpm_v1~rank_v31_ecpm-1-121152844-null-null.nonecase&amp;utm_term=FIFO&amp;spm=1018.2226.3001.4450">＜FPGA＞异步FIFO的Verilg实现方法_fpga fifo verilog-CSDN博客</a>（异步FIFO也解释得比较清楚，但跨时钟域那可能会难以理解，得自己边画图或者和仿真结果理解）</li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/wuzhikaidetb/article/details/119619162#:~:text=单比特信号从慢速时钟域同步到快速时钟域需要使用打两拍的方式消除亚稳态。 第一级寄存器产生亚稳态并经过自身后可以稳定输出的概率为 70%~80%左右，第二级寄存,器可以稳定输出的概率为 99%左右，后面再多加寄存器的级数改善效果就不明显了，所以 数据进来后一般选择打两拍即可。">FPGA设计的“打拍（寄存）”和“亚稳态” 到底是什么？_fpga打拍的作用-CSDN博客</a>（亚稳态问题的解释）</li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/wuzhikaidetb/article/details/123570799?ops_request_misc=%7B%22request%5Fid%22%3A%22170364997616800222874540%22%2C%22scm%22%3A%2220140713.130102334.pc%5Fblog.%22%7D&amp;request_id=170364997616800222874540&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~blog~first_rank_ecpm_v1~rank_v31_ecpm-3-123570799-null-null.nonecase&amp;utm_term=FIFO&amp;spm=1018.2226.3001.4450">关于异步FIFO设计，这7点你必须要搞清楚_异步fifo设计要素-CSDN博客</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>欢迎来到ssy的世界</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/WeChaPay.jpg" alt="ssy 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>ssy
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://ssy的小天地.com/2023/12/24/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIFO/" title="FPGA数字信号处理之FIFO">http://ssy的小天地.com/2023/12/24/FPGA数字信号处理之FIFO/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/FPGA/" rel="tag"># FPGA</a>
+              <a href="/tags/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86/" rel="tag"># 数字信号处理</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/12/18/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E8%84%89%E5%8A%A8%E9%98%B5%E5%88%97/" rel="prev" title="FPGA数字信号处理之脉动阵列">
+      <i class="fa fa-chevron-left"></i> FPGA数字信号处理之脉动阵列
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2024/01/10/Verilog%E4%B9%8B%E8%BF%9B%E9%98%B6%E7%BA%A7%E5%88%B7%E9%A2%98/" rel="next" title="Verilog之进阶级刷题">
+      Verilog之进阶级刷题 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#FIFO%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">FIFO概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8C%E6%AD%A5FIFO"><span class="nav-number">2.</span> <span class="nav-text">同步FIFO</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E8%AE%BE%E8%AE%A1%E5%85%B3%E9%94%AE"><span class="nav-number">2.1.</span> <span class="nav-text">1.设计关键</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%BA%90%E4%BB%A3%E7%A0%81"><span class="nav-number">2.2.</span> <span class="nav-text">2.源代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Testbench"><span class="nav-number">2.3.</span> <span class="nav-text">3.Testbench</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5FIFO"><span class="nav-number">3.</span> <span class="nav-text">异步FIFO</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E8%AE%BE%E8%AE%A1%E5%85%B3%E9%94%AE-1"><span class="nav-number">3.1.</span> <span class="nav-text">1.设计关键</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%BA%90%E4%BB%A3%E7%A0%81-1"><span class="nav-number">3.2.</span> <span class="nav-text">2.源代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Testbench-1"><span class="nav-number">3.3.</span> <span class="nav-text">3.Testbench</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ssy"
+      src="/images/ssy.png">
+  <p class="site-author-name" itemprop="name">ssy</p>
+  <div class="site-description" itemprop="description">满怀希望 就会所向披靡</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">141</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">38</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ssy1938010014" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ssy1938010014" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://m.weibo.cn/u/5469432500?uid=5469432500&t=0&luicode=10000011&lfid=100103type=1&q=JIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" title="Weibo → https:&#x2F;&#x2F;m.weibo.cn&#x2F;u&#x2F;5469432500?uid&#x3D;5469432500&amp;t&#x3D;0&amp;luicode&#x3D;10000011&amp;lfid&#x3D;100103type%3D1%26q%3DJIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://ssy1938010014.github.io/" title="http:&#x2F;&#x2F;ssy1938010014.github.io" rel="noopener" target="_blank">ssy的小天地</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://y006.github.io/" title="http:&#x2F;&#x2F;y006.github.io" rel="noopener" target="_blank">邱院士的Blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://bengoooo.github.io/" title="http:&#x2F;&#x2F;BENgoooo.github.io" rel="noopener" target="_blank">赵总的Blog</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=1469041281&auto=1&height=66"></iframe>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ssy</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-ribbon@1/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+<script data-pjax>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  let url = element.dataset.target;
+  let pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  let pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  let fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+
+
+    <div id="pjax">
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+    </div>
+</body>
+</html>

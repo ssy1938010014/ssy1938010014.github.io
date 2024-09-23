@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1/themes/blue/pace-theme-minimal.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"xn--ssy-lq6e63gg6fuu2d.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="这里记录着小沈在学习神经网络与深度学习之TensorFlow实践课程中，遇到的两个比较重要又有意思的库：科学计算库NumPy和数据可视化库Matplotlib。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TensorFlow实践之NumPy与Matplotlib库">
+<meta property="og:url" content="http://ssy的小天地.com/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/index.html">
+<meta property="og:site_name" content="ssy的小天地">
+<meta property="og:description" content="这里记录着小沈在学习神经网络与深度学习之TensorFlow实践课程中，遇到的两个比较重要又有意思的库：科学计算库NumPy和数据可视化库Matplotlib。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027163211507.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027164257343.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027165415344.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027170734415.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027172312521.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027184800827.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027201249163.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027201731666.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027202136524.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027203826317.png">
+<meta property="og:image" content="https://private.codecogs.com/gif.latex?l_%7B2%7D">
+<meta property="og:image" content="https://private.codecogs.com/gif.latex?%5Csqrt%7Bx_%7B1%7D%5E%7B2%7D%20&plus;%20x_%7B2%7D%5E%7B2%7D%20&plus;%20...%20&plus;%20x_%7Bn%7D%5E%7B2%7D%7D">
+<meta property="og:image" content="https://private.codecogs.com/gif.latex?l_%7B2%7D">
+<meta property="og:image" content="https://private.codecogs.com/gif.latex?l_%7B1%7D">
+<meta property="og:image" content="https://private.codecogs.com/gif.latex?%5Cleft%20%7C%20x_%7B1%7D%20%5Cright%20%7C%20&plus;%20%5Cleft%20%7C%20x_%7B2%7D%20%5Cright%20%7C%20&plus;%20...%20&plus;%20%5Cleft%20%7C%20x_%7Bn%7D%20%5Cright%20%7C">
+<meta property="og:image" content="https://private.codecogs.com/gif.latex?l_%7B%5Cinfty%7D">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/right.gif">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221112001803738.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027204146469.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027210417266.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027212847784.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027232725582.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027233213784.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027233501687.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027233727329.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027233904919.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027234054706.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221028000516819.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221028111408749.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221028111737941.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221028111234270.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221028113312696.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221028115614661.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221028120441204.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221028120530479.png">
+<meta property="article:published_time" content="2022-10-28T12:07:12.000Z">
+<meta property="article:modified_time" content="2023-09-12T17:41:15.767Z">
+<meta property="article:author" content="ssy">
+<meta property="article:tag" content="TensorFlow">
+<meta property="article:tag" content="深度学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027163211507.png">
+
+<link rel="canonical" href="http://ssy的小天地.com/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>TensorFlow实践之NumPy与Matplotlib库 | ssy的小天地</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+    <a target="_blank" rel="noopener" href="https://github.com/ssy1938010014" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ssy的小天地</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">愿汝如是 千金不换</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-works">
+
+    <a href="/works/" rel="section"><i class="fa fa-fw fa-sitemap"></i>文章</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ssy的小天地.com/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ssy.png">
+      <meta itemprop="name" content="ssy">
+      <meta itemprop="description" content="满怀希望 就会所向披靡">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ssy的小天地">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          TensorFlow实践之NumPy与Matplotlib库
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+
+
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-10-28 20:07:12" itemprop="dateCreated datePublished" datetime="2022-10-28T20:07:12+08:00">2022-10-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-09-13 01:41:15" itemprop="dateModified" datetime="2023-09-13T01:41:15+08:00">2023-09-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%A7%AF%E7%B4%AF/" itemprop="url" rel="index"><span itemprop="name">学习积累</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>这里记录着小沈在学习神经网络与深度学习之TensorFlow实践课程中，遇到的两个比较重要又有意思的库：科学计算库NumPy和数据可视化库Matplotlib。</p>
+<span id="more"></span>
+<h1 id="NumPy科学计算库"><a href="#NumPy科学计算库" class="headerlink" title="NumPy科学计算库"></a>NumPy科学计算库</h1><ul>
+<li>提供了<strong>多维数组、矩阵</strong>的常规操作和一些高效的科学计算函数</li>
+<li>底层运算用过C语言实现，<strong>处理速度快，效率高</strong>，适用于<strong>大规模多维数组</strong></li>
+<li>可以<strong>直接完成数组和矩阵运算</strong>，无需循环</li>
+</ul>
+<h2 id="1-多维数组的基本概念"><a href="#1-多维数组的基本概念" class="headerlink" title="1.多维数组的基本概念"></a>1.多维数组的基本概念</h2><ul>
+<li><p>形状（shape）：是一个元组，描述数组的维度（<strong>元组中有几个数就代表几维</strong>），以及各个维度的长度</p>
+</li>
+<li><p>长度（length）：某个维度中的元素个数</p>
+<p><img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027163211507.png" alt="image-20221027163211507" style="zoom:33%;"></p>
+</li>
+</ul>
+<h2 id="2-NumPy数组的创建及其属性"><a href="#2-NumPy数组的创建及其属性" class="headerlink" title="2.NumPy数组的创建及其属性"></a>2.NumPy数组的创建及其属性</h2><h3 id="2-1-创建数组：array-列表-元组"><a href="#2-1-创建数组：array-列表-元组" class="headerlink" title="2.1 创建数组：array([列表]/(元组))"></a>2.1 创建数组：<code>array([列表]/(元组))</code></h3><ul>
+<li><p><strong>一维数组的创建与索引</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np </span><br><span class="line"><span class="comment">#一维数组的创建</span></span><br><span class="line">a=np.array([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>])</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">type</span>(a),<span class="string">&quot; &quot;</span>,a)</span><br><span class="line"><span class="comment">#一维数组的索引，同序列</span></span><br><span class="line"><span class="built_in">print</span>(a[<span class="number">0</span>:<span class="number">2</span>])</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<p><img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027164257343.png" alt="image-20221027164257343" style="zoom: 67%;"></p>
+</li>
+<li><p><strong>二维数组的创建与索引</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np </span><br><span class="line"><span class="comment">#二维数组的创建</span></span><br><span class="line">b=np.array([[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">0</span>],[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">0</span>],[<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">0</span>]])</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;The array is:\n&quot;</span>,b)</span><br><span class="line"><span class="comment">#二维数组的索引</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;The index is:&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(b[<span class="number">0</span>])</span><br><span class="line"><span class="built_in">print</span>(b[<span class="number">1</span>])</span><br><span class="line"><span class="built_in">print</span>(b[<span class="number">2</span>])</span><br><span class="line"><span class="built_in">print</span>(b[<span class="number">2</span>][<span class="number">1</span>])<span class="comment">#还可以用print(b[2,1])这样的索引方式</span></span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<p><img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027165415344.png" alt="image-20221027165415344" style="zoom:67%;"></p>
+</li>
+<li><p><strong>三维数组的创建与索引</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="comment">#三维数组的创建</span></span><br><span class="line">c=np.array([[[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>],[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>],[<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">0</span>]],[[<span class="number">11</span>,<span class="number">12</span>,<span class="number">13</span>,<span class="number">14</span>],[<span class="number">12</span>,<span class="number">13</span>,<span class="number">15</span>,<span class="number">16</span>],[<span class="number">16</span>,<span class="number">17</span>,<span class="number">18</span>,<span class="number">19</span>]]])</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;The array is:\n&quot;</span>,c,<span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line"><span class="comment">#三维数组的索引</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;The index is:&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(c[<span class="number">0</span>])</span><br><span class="line"><span class="built_in">print</span>(c[<span class="number">0</span>][<span class="number">0</span>])</span><br><span class="line"><span class="built_in">print</span>(c[<span class="number">0</span>][<span class="number">0</span>][<span class="number">0</span>])</span><br><span class="line"><span class="built_in">print</span>(c[<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>])</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<p><img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027170734415.png" alt="image-20221027170734415" style="zoom: 67%;"></p>
+</li>
+</ul>
+<h3 id="2-2-数组的属性"><a href="#2-2-数组的属性" class="headerlink" title="2.2 数组的属性"></a>2.2 数组的属性</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ndim</td>
+<td>数组的维数</td>
+</tr>
+<tr>
+<td>shape</td>
+<td>数组的形状</td>
+</tr>
+<tr>
+<td>size</td>
+<td>数组元素的总个数</td>
+</tr>
+<tr>
+<td>dtype</td>
+<td>数组中元素的数据类型</td>
+</tr>
+<tr>
+<td>itemsize</td>
+<td>数组中每个元素的字节</td>
+</tr>
+</tbody>
+</table>
+</div>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="comment">#三维数组的创建</span></span><br><span class="line">c=np.array([[[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>],[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>],[<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">0</span>]],[[<span class="number">11</span>,<span class="number">12</span>,<span class="number">13</span>,<span class="number">14</span>],[<span class="number">12</span>,<span class="number">13</span>,<span class="number">15</span>,<span class="number">16</span>],[<span class="number">16</span>,<span class="number">17</span>,<span class="number">18</span>,<span class="number">19</span>]]])</span><br><span class="line"><span class="comment">#三维数组的属性</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;三维数组的属性：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;数组维度：&quot;</span>,c.ndim)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;数组形状：&quot;</span>,c.shape)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;数组元素总个数：&quot;</span>,c.size)</span><br><span class="line"><span class="built_in">print</span>(<span class="number">20</span>*<span class="string">&quot;-&quot;</span>)</span><br><span class="line"><span class="comment">#二维数组的属性</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;二维数组的属性：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;数组维度：&quot;</span>,c[<span class="number">0</span>].ndim)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;数组形状：&quot;</span>,c[<span class="number">0</span>].shape)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;数组元素总个数：&quot;</span>,c[<span class="number">0</span>].size)</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<p><img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027172312521.png" alt="image-20221027172312521" style="zoom:67%;"></p>
+<h3 id="2-3创建特殊的数组"><a href="#2-3创建特殊的数组" class="headerlink" title="2.3创建特殊的数组"></a>2.3创建特殊的数组</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>np.arange(起始数字,结束数字,步长,dtype=数据类型)</td>
+<td>创建数字序列数组，默认数据类型为int32</td>
+</tr>
+<tr>
+<td>np.ones(shape,dtye=数据类型)</td>
+<td>创建全1数组，默认数据类型为float64</td>
+</tr>
+<tr>
+<td>np.zeros(shape,dtye=数据类型)</td>
+<td>创建全0数组，默认数据类型为float64</td>
+</tr>
+<tr>
+<td>np.eye(shape)</td>
+<td>创建单位矩阵，默认数据类型为float64</td>
+</tr>
+<tr>
+<td>np.linspace(start,stop,num=50)</td>
+<td>创建等差数列，默认数据类型为float64</td>
+</tr>
+<tr>
+<td>np.logspace(start,stop,num=50,base=10)</td>
+<td>创建等比数列，默认数据类型为float64，<strong>修改基数时一定要加base=</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="comment">#创建数字序列</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;此数字序列是：\n&quot;</span>,np.arange(<span class="number">1</span>,<span class="number">10</span>,<span class="number">2</span>))</span><br><span class="line"><span class="built_in">print</span>(np.arange(<span class="number">1</span>,<span class="number">10</span>,<span class="number">2</span>).dtype)</span><br><span class="line"><span class="built_in">print</span>(<span class="number">50</span>*<span class="string">&#x27;-&#x27;</span>)</span><br><span class="line"><span class="comment">#创建全1数组</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;此全1数组是：\n&quot;</span>,np.ones((<span class="number">2</span>,<span class="number">3</span>)))</span><br><span class="line"><span class="built_in">print</span>(np.ones((<span class="number">2</span>,<span class="number">3</span>)).dtype)</span><br><span class="line"><span class="built_in">print</span>(<span class="number">50</span>*<span class="string">&#x27;-&#x27;</span>)</span><br><span class="line"><span class="comment">#创建单位矩阵</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;此单位矩阵是：\n&quot;</span>,np.eye(<span class="number">3</span>,<span class="number">3</span>))</span><br><span class="line"><span class="built_in">print</span>(np.eye(<span class="number">3</span>,<span class="number">3</span>).dtype)</span><br><span class="line"><span class="built_in">print</span>(<span class="number">50</span>*<span class="string">&#x27;-&#x27;</span>)</span><br><span class="line"><span class="comment">#创建等差数列</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;此等差数列是：&quot;</span>,np.linspace(<span class="number">1</span>,<span class="number">10</span>,<span class="number">10</span>))</span><br><span class="line"><span class="built_in">print</span>(np.linspace(<span class="number">1</span>,<span class="number">10</span>,<span class="number">10</span>).dtype)</span><br><span class="line"><span class="built_in">print</span>(<span class="number">50</span>*<span class="string">&#x27;-&#x27;</span>)</span><br><span class="line"><span class="comment">#创建等比数列：开始的数为base^start,结束的数为base^stop,num表示总共生成几个数</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;此等比数列是：&quot;</span>,np.logspace(<span class="number">1</span>,<span class="number">5</span>,<span class="number">5</span>,base=<span class="number">2</span>))</span><br><span class="line"><span class="built_in">print</span>(np.logspace(<span class="number">1</span>,<span class="number">5</span>,<span class="number">5</span>,base=<span class="number">2</span>).dtype)</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<p><img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027184800827.png" alt="image-20221027184800827" style="zoom:67%;"></p>
+<h2 id="3-数组运算"><a href="#3-数组运算" class="headerlink" title="3.数组运算"></a>3.数组运算</h2><ul>
+<li><h3 id="改变数组的函数"><a href="#改变数组的函数" class="headerlink" title="改变数组的函数"></a>改变数组的函数</h3><p>| 函数              | 功能描述                              |<br>| ————————- | ——————————————————- |<br>| np.reshape(shape) | 不改变当前数组，按照shape创建新的数组 |<br>| np.resize(shape)  | 改变当前数组，按照shape创建数组       |</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#创建数组，并按照shape创建新的数组</span></span><br><span class="line">b=np.arange(<span class="number">12</span>)</span><br><span class="line"><span class="built_in">print</span>(b)</span><br><span class="line"><span class="built_in">print</span>(b.reshape(<span class="number">3</span>,<span class="number">4</span>))</span><br><span class="line"><span class="built_in">print</span>(b) <span class="comment">#执行reshape语句后原数组并未被改变</span></span><br><span class="line"><span class="built_in">print</span>(<span class="number">40</span>*<span class="string">&quot;-&quot;</span>)</span><br><span class="line"><span class="comment">#创建数组，并改变数组形状</span></span><br><span class="line">b.resize(<span class="number">3</span>,<span class="number">4</span>)</span><br><span class="line"><span class="built_in">print</span>(b) <span class="comment">#由结果，很明显数组被改变了</span></span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<p><img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027201249163.png" alt="image-20221027201249163" style="zoom: 67%;"></p>
+</li>
+<li><h3 id="数组与数组之间常见运算"><a href="#数组与数组之间常见运算" class="headerlink" title="数组与数组之间常见运算"></a>数组与数组之间常见运算</h3><ul>
+<li><p><strong>加法运算</strong>：一维数组可以和多维数组相加，相加时会将一维数组扩展至多维</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">a=np.array([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>])</span><br><span class="line">b=np.array([[<span class="number">0</span>,<span class="number">8</span>,<span class="number">67</span>,<span class="number">5</span>],[<span class="number">3</span>,<span class="number">456</span>,<span class="number">7</span>,<span class="number">3</span>],[<span class="number">4</span>,<span class="number">68</span>,<span class="number">1</span>,<span class="number">9</span>]])</span><br><span class="line"><span class="built_in">print</span>(a+b)</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<p><img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027201731666.png" alt="image-20221027201731666" style="zoom:67%;"></p>
+</li>
+<li><p><strong>幂运算</strong>：<code>array**2</code>#对数组中的每个元素求n次方</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">b=np.arange(<span class="number">12</span>).reshape(<span class="number">3</span>,<span class="number">4</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;The array b is:\n&quot;</span>,b)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;The b**2 is:\n&quot;</span>,b**<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<p><img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027202136524.png" alt="image-20221027202136524" style="zoom:67%;"></p>
+</li>
+<li><p><strong>矩阵运算：转置和求逆</strong></p>
+<ul>
+<li>矩阵转置：<code>np.transpose()</code></li>
+<li>矩阵求逆：<code>np.linalg.inv()</code></li>
+<li>矩阵相乘：<code>np.matmul()</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><h3 id="数组中元素的计算"><a href="#数组中元素的计算" class="headerlink" title="数组中元素的计算"></a>数组中元素的计算</h3><ul>
+<li><p><strong>常见的数组间元素的计算函数</strong></p>
+<p>| 函数      | 功能描述                   |<br>| ————- | ————————————— |<br>| np.sum()  | 计算所有元素的和           |<br>| np.prod() | 计算所有元素的乘积         |<br>| np.diff() | 计算数组相邻元素之间的差值 |<br>| np.sqrt() | 计算各元素的平方根         |<br>| np.exp()  | 计算各元素的指数值         |<br>| np.abs()  | 取各元素的绝对值           |</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="built_in">print</span>(c)</span><br><span class="line">c=np.array([[<span class="number">3</span>,<span class="number">7</span>,<span class="number">5</span>,<span class="number">4</span>],[<span class="number">48</span>,<span class="number">47</span>,<span class="number">3</span>,<span class="number">28</span>]])</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;The diff:\n&quot;</span>,np.diff(c))</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<p><img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027203826317.png" alt="image-20221027203826317" style="zoom:67%;"></p>
+</li>
+<li><p><code>np.linalg.norm(x, ord=None, axis=None, keepdims=False)</code></p>
+<ul>
+<li><p><strong>ord</strong></p>
+<p>| 参数       | 说明                                                         | 计算方法                                                     |<br>| ————— | —————————————————————————————— | —————————————————————————————— |<br>| 默认       | 二范数：<img src="https://private.codecogs.com/gif.latex?l_%7B2%7D" alt="l_{2}"> | <img src="https://private.codecogs.com/gif.latex?%5Csqrt%7Bx_%7B1%7D%5E%7B2%7D%20&plus;%20x_%7B2%7D%5E%7B2%7D%20&plus;%20...%20&plus;%20x_%7Bn%7D%5E%7B2%7D%7D" alt="\sqrt{x_{1}^{2} + x_{2}^{2} + ... + x_{n}^{2}}"> |<br>| ord=2      | 二范数：<img src="https://private.codecogs.com/gif.latex?l_%7B2%7D" alt="l_{2}"> | 同上                                                         |<br>| ord=1      | 一范数：<img src="https://private.codecogs.com/gif.latex?l_%7B1%7D" alt="l_{1}"> | <img src="https://private.codecogs.com/gif.latex?%5Cleft%20%7C%20x_%7B1%7D%20%5Cright%20%7C%20&plus;%20%5Cleft%20%7C%20x_%7B2%7D%20%5Cright%20%7C%20&plus;%20...%20&plus;%20%5Cleft%20%7C%20x_%7Bn%7D%20%5Cright%20%7C" alt="\left \| x_{1} \right \| + \left \| x_{2} \right \| + ... + \left \| x_{n} \right \|"> |<br>| ord=np.inf | 无穷范数：<img src="https://private.codecogs.com/gif.latex?l_%7B%5Cinfty%7D" alt="l_{\infty}"> | <img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/right.gif" alt="MAX \left \| x_{i} \right \|"> |</p>
+</li>
+<li><p>axis表示在某个轴上求值</p>
+</li>
+<li><p><strong>keeptime=True表示结果保留x的维度特性</strong>，若keeptime=False将会减少一个维度</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">x = np.array([</span><br><span class="line">    [<span class="number">0</span>, <span class="number">3</span>, <span class="number">4</span>],</span><br><span class="line">    [<span class="number">1</span>, <span class="number">6</span>, <span class="number">4</span>]])</span><br><span class="line">x1 = np.linalg.norm(x,axis=<span class="number">1</span>,keepdims=<span class="literal">True</span>)</span><br><span class="line"><span class="built_in">print</span>(x1)</span><br><span class="line"><span class="built_in">print</span>(<span class="number">25</span>*<span class="string">&#x27;-&#x27;</span>)</span><br><span class="line">x2 = np.linalg.norm(x,axis=<span class="number">1</span>,keepdims=<span class="literal">False</span>)</span><br><span class="line"><span class="built_in">print</span>(x2)</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<p><img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221112001803738.png" alt="image-20221112001803738" style="zoom: 67%;"></p>
+</li>
+<li><p><strong>关于轴（axes）与秩（rank）控制的运算</strong></p>
+<ul>
+<li><p>轴（axes）：数组中的每一个维度被称为一个轴</p>
+</li>
+<li><p>秩（rank）：轴的个数：<strong>对于二维数组rank=2；三维数组rank=3</strong></p>
+<p><img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027204146469.png" alt="image-20221027204146469" style="zoom: 25%;"></p>
+</li>
+<li><p><strong>通过控制axes实现数组内的加法运算</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">c=np.arange(<span class="number">24</span>).reshape(<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;The array is:\n&quot;</span>,c,<span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(np.<span class="built_in">sum</span>(c,axis=<span class="number">0</span>))</span><br><span class="line"><span class="built_in">print</span>(<span class="number">40</span>*<span class="string">&quot;-&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(np.<span class="built_in">sum</span>(c,axis=<span class="number">1</span>))</span><br><span class="line"><span class="built_in">print</span>(<span class="number">40</span>*<span class="string">&quot;-&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(np.<span class="built_in">sum</span>(c,axis=<span class="number">2</span>))</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<p><img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027210417266.png" alt="image-20221027210417266" style="zoom: 50%;"></p>
+</li>
+<li><p><strong>数组堆叠运算</strong>：<code>np.stack((数组1,数组2,……),axis)</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="comment">#一维数组的堆叠</span></span><br><span class="line">x=np.array([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>])</span><br><span class="line">y=np.array([<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>])</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;一维数组的堆叠：&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Axis=0:&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(np.stack((x,y),axis=<span class="number">0</span>))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Axis=1:&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(np.stack((x,y),axis=<span class="number">1</span>))</span><br><span class="line"><span class="built_in">print</span>(<span class="number">30</span>*<span class="string">&quot;-&quot;</span>)</span><br><span class="line"><span class="comment">#二维数组的堆叠</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;二维数组的堆叠：&quot;</span>)</span><br><span class="line">m=np.array([[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>],[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>],[<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>]])</span><br><span class="line">    n=np.array([[<span class="number">10</span>,<span class="number">20</span>,<span class="number">30</span>,<span class="number">10</span>],[<span class="number">40</span>,<span class="number">50</span>,<span class="number">60</span>,<span class="number">10</span>],[<span class="number">70</span>,<span class="number">80</span>,<span class="number">90</span>,<span class="number">10</span>]])</span><br><span class="line">    a0=np.stack((m,n),axis=<span class="number">0</span>)</span><br><span class="line">    a1=np.stack((m,n),axis=<span class="number">1</span>)</span><br><span class="line">    a2=np.stack((m,n),axis=<span class="number">2</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;The shape is:&quot;</span>,a0.shape)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;The array is:\n&quot;</span>,a0)</span><br><span class="line">    <span class="built_in">print</span>(<span class="number">30</span>*<span class="string">&quot;*&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;The shape is:&quot;</span>,a1.shape)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;The array is:\n&quot;</span>,a1)</span><br><span class="line"><span class="built_in">print</span>(<span class="number">30</span>*<span class="string">&quot;*&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;The shape is:&quot;</span>,a2.shape)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;The array is:\n&quot;</span>,a2)</span><br><span class="line"><span class="built_in">print</span>(<span class="number">30</span>*<span class="string">&quot;*&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<p><img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027212847784.png" alt="image-20221027212847784" style="zoom: 50%;"></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="4-矩阵"><a href="#4-矩阵" class="headerlink" title="4.矩阵"></a>4.矩阵</h2><ul>
+<li><h3 id="矩阵生成"><a href="#矩阵生成" class="headerlink" title="矩阵生成"></a>矩阵生成</h3><ul>
+<li><code>np.matrix(字符串/列表/元组/数组)</code></li>
+<li><code>np.mat(字符串/列表/元组/数组)</code></li>
+</ul>
+</li>
+<li><h3 id="矩阵对象的属性"><a href="#矩阵对象的属性" class="headerlink" title="矩阵对象的属性"></a>矩阵对象的属性</h3><p>| 属性   | 说明           |<br>| ——— | ——————— |<br>| .ndim  | 矩阵的维数     |<br>| .shape | 矩阵的形状     |<br>| .size  | 矩阵的元素个数 |<br>| .dtype | 元素的数据类型 |</p>
+</li>
+<li><h3 id="矩阵运算"><a href="#矩阵运算" class="headerlink" title="矩阵运算"></a>矩阵运算</h3><ul>
+<li><p><strong>矩阵相乘</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">a1=np.mat([[<span class="number">0</span>,<span class="number">1</span>],[<span class="number">2</span>,<span class="number">3</span>]])</span><br><span class="line">a2=np.mat([[<span class="number">1</span>,<span class="number">1</span>],[<span class="number">2</span>,<span class="number">0</span>]])</span><br><span class="line"><span class="built_in">print</span>(a1*a2)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>转置、求逆</strong></p>
+<ul>
+<li><code>矩阵转置：matrix.T</code></li>
+<li><code>矩阵求逆：matrix.I</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="5-随机数模块"><a href="#5-随机数模块" class="headerlink" title="5.随机数模块"></a>5.随机数模块</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>功能描述</th>
+<th>返回值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>np.random.rand(d0,d1,……,dn)</td>
+<td>元素在[0:1)区间均匀分布的数组,(d0,d1,dn)表示形状(shape)</td>
+<td>浮点数</td>
+</tr>
+<tr>
+<td>np.random.uniform(low,hige,size)</td>
+<td>元素在[low,hige)区间均匀分布的数组</td>
+<td>浮点数</td>
+</tr>
+<tr>
+<td>np.random.randint(low,hige,size)</td>
+<td>元素在[low,hige)区间均匀分布的数组</td>
+<td>整数</td>
+</tr>
+<tr>
+<td>np.random.randn(d0,d1,……,dn)</td>
+<td>产生标准正态分布的数组</td>
+<td>浮点数</td>
+</tr>
+<tr>
+<td>np.random.normal(loc,scale,size)</td>
+<td>产生正态分布的数组，loc表示均值，scale表示方差</td>
+<td>浮点数</td>
+</tr>
+<tr>
+<td>np.random.seed()</td>
+<td>随机种子，设置随机种子相同时，产生的随机数相同，默认为系统时间</td>
+<td></td>
+</tr>
+<tr>
+<td>np.random.shuffle(序列)</td>
+<td>打乱数组第一个维度的顺序</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+<h1 id="Matplotlib数据可视化"><a href="#Matplotlib数据可视化" class="headerlink" title="Matplotlib数据可视化"></a>Matplotlib数据可视化</h1><ul>
+<li>绘制图表的第三方库，可以快速方便地生成高质量的图表</li>
+</ul>
+<h2 id="1-Matplotlib绘图基础"><a href="#1-Matplotlib绘图基础" class="headerlink" title="1.Matplotlib绘图基础"></a>1.Matplotlib绘图基础</h2><p>本文均讨论Matplotlib中二维图标的绘制，故引入：<code>import matplotlib.pyplot as plt</code></p>
+<ul>
+<li><p><strong>figure对象</strong>：<code>figure(num,figsize,dpi,facecolor,edgecolor,frameon)</code></p>
+<p>| 特征      | 描述                              |<br>| ————- | ————————————————- |<br>| num       | 图形编号或名称，取值为数字/字符串 |<br>| figsize   | 绘制对象的宽和高，单位为英寸      |<br>| dpi       | 绘制对象的分辨率，缺省值为80      |<br>| facecolor | 背景颜色                          |<br>| edgecolor | 边框颜色                          |<br>| linewidth | 边框宽度                          |<br>| frameon   | 表示是否显示边框                  |</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">fig = plt.figure(</span><br><span class="line">    num=<span class="number">10</span>,</span><br><span class="line">    figsize=(<span class="number">3</span>,<span class="number">2</span>), <span class="comment"># 指定画布大小，(宽度，高度)，单位为英寸</span></span><br><span class="line">    dpi=<span class="number">80</span>, <span class="comment"># 指定绘图对象的分辨率，即每英寸多少个像素，</span></span><br><span class="line">    facecolor=<span class="string">&#x27;yellow&#x27;</span>, <span class="comment"># 背景颜色</span></span><br><span class="line">    edgecolor=<span class="string">&#x27;blue&#x27;</span>, <span class="comment">#边框颜色</span></span><br><span class="line">    linewidth=<span class="number">4.0</span>, <span class="comment"># 边框宽度</span></span><br><span class="line">    frameon=<span class="literal">True</span>,</span><br><span class="line">)</span><br><span class="line">plt.plot()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<p><img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027232725582.png" alt="image-20221027232725582" style="zoom:67%;"></p>
+</li>
+<li><p><strong>划分子图</strong>：<code>subplot(行数，列数，子图序号)</code></p>
+<p><img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027233213784.png" alt="image-20221027233213784" style="zoom: 25%;"></p>
+</li>
+<li><p><strong>设置中文字体</strong>：<code>plt.rcParams[&quot;font.sans-serif&quot;]=&quot;SimHei&quot;</code></p>
+<p><img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027233501687.png" alt="image-20221027233501687" style="zoom: 50%;"></p>
+</li>
+<li><p><strong>添加标题</strong>：</p>
+<ul>
+<li><p>添加全局标题：<code>suptitle(标题文字)</code></p>
+<p><img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027233727329.png" alt="image-20221027233727329" style="zoom: 33%;"></p>
+</li>
+<li><p>添加子标题：<code>title(标题文字)</code></p>
+<p><img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027233904919.png" alt="image-20221027233904919" style="zoom:33%;"></p>
+</li>
+</ul>
+</li>
+<li><p><strong>自动调整子图间隔</strong>：<code>tight_layout()</code></p>
+<p><img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221027234054706.png" alt="image-20221027234054706" style="zoom:33%;"></p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="comment">#设置中文字体</span></span><br><span class="line">plt.rcParams[<span class="string">&quot;font.sans-serif&quot;</span>]=<span class="string">&quot;SimHei&quot;</span></span><br><span class="line"><span class="comment">#画布设置</span></span><br><span class="line">fig=plt.figure(facecolor=<span class="string">&quot;lightgrey&quot;</span>)</span><br><span class="line"><span class="comment">#划分子图并设置其标题</span></span><br><span class="line">plt.subplot(<span class="number">2</span>,<span class="number">2</span>,<span class="number">1</span>)</span><br><span class="line">plt.title(<span class="string">&quot;子标题1&quot;</span>)</span><br><span class="line">plt.subplot(<span class="number">2</span>,<span class="number">2</span>,<span class="number">2</span>)</span><br><span class="line">plt.title(<span class="string">&quot;子标题2&quot;</span>,loc=<span class="string">&quot;left&quot;</span>,color=<span class="string">&quot;b&quot;</span>)</span><br><span class="line">plt.subplot(<span class="number">2</span>,<span class="number">2</span>,<span class="number">3</span>)</span><br><span class="line">myfontdict=&#123;<span class="string">&quot;fontsize&quot;</span>:<span class="number">12</span>,<span class="string">&quot;color&quot;</span>:<span class="string">&quot;g&quot;</span>,<span class="string">&quot;rotation&quot;</span>:<span class="number">30</span>&#125;<span class="comment">#参数字典的使用</span></span><br><span class="line">plt.title(<span class="string">&quot;子标题3&quot;</span>,fontdict=myfontdict)</span><br><span class="line">plt.subplot(<span class="number">2</span>,<span class="number">2</span>,<span class="number">4</span>)</span><br><span class="line">plt.title(<span class="string">&quot;子标题4&quot;</span>,color=<span class="string">&quot;white&quot;</span>,backgroundcolor=<span class="string">&quot;black&quot;</span>)</span><br><span class="line"><span class="comment">#设置全局标题</span></span><br><span class="line">plt.suptitle(<span class="string">&quot;全局标题&quot;</span>,fontsize=<span class="number">20</span>,color=<span class="string">&quot;red&quot;</span>,backgroundcolor=<span class="string">&quot;yellow&quot;</span>)</span><br><span class="line"><span class="comment">#调整子图间隔</span></span><br><span class="line">plt.tight_layout(rect=[<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0.98</span>])</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>  结果如下：</p>
+<p><img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221028000516819.png" alt="image-20221028000516819" style="zoom: 50%;"></p>
+<h2 id="2-散点图"><a href="#2-散点图" class="headerlink" title="2.散点图"></a>2.散点图</h2><ul>
+<li><p><strong>绘制散点图</strong>：<code>scatter(x,y,scale,color,marker,label)</code></p>
+<p>| 参数   | 说明          | 默认值    |<br>| ——— | ——————- | ————- |<br>| x      | 数据点的x坐标 | 不可省略  |<br>| y      | 数据点的y坐标 | 不可省略  |<br>| scale  | 数据点的大小  | 36        |<br>| color  | 数据点的颜色  | 浅蓝      |<br>| marker | 数据点的样式  | ‘o’(圆点) |<br>| label  | 图列文字      |           |</p>
+<ul>
+<li><p>marker相关参数：</p>
+<p><img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221028111408749.png" alt="image-20221028111408749" style="zoom: 33%;"></p>
+</li>
+<li><p>使用<code>plt.legend(loc,fontsize)</code>显示图例</p>
+<p><img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221028111737941.png" alt="image-20221028111737941" style="zoom: 50%;"></p>
+</li>
+</ul>
+</li>
+<li><p><strong>在指定位置添加文字</strong>：<code>text(x,y,s,fontsize,color)</code></p>
+<p>| 参数     | 说明        | 默认值   |<br>| ———— | —————- | ———— |<br>| x        | 文字的x坐标 | 不可省略 |<br>| y        | 文字的y坐标 | 不可省略 |<br>| s        | 显示的文字  | 不可省略 |<br>| fontsize | 文字的大小  | 12       |<br>| color    | 文字的颜色  | 黑色     |</p>
+</li>
+<li><p><strong>坐标轴设置</strong></p>
+<p>| 函数                         | 说明               |<br>| —————————————— | ————————— |<br>| xlabel(x,y,s,fontszie,color) | 设置x轴标签        |<br>| ylabel(x,y,s,fontszie,color) | 设置y轴标签        |<br>| xlim(xmin,xmax)              | 设置x轴坐标的范围  |<br>| ylim(ymin,ymax)              | 设置y轴坐标的范围  |<br>| tick_params(labelsize)       | 设置刻度文字的字号 |</p>
+</li>
+<li><p><strong>当设置字体为中文，坐标系中有负数，则做此设置</strong>：</p>
+<p><code>plt.rcParams[&quot;axes.unicode_minus&quot;]=False</code></p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="comment">#设置中文字体</span></span><br><span class="line">plt.rcParams[<span class="string">&quot;font.sans-serif&quot;</span>]=<span class="string">&quot;SimHei&quot;</span></span><br><span class="line">plt.rcParams[<span class="string">&quot;axes.unicode_minus&quot;</span>]=<span class="literal">False</span></span><br><span class="line"><span class="comment">#随机生成散点图数据：正态分布与均匀分布</span></span><br><span class="line">n=<span class="number">1024</span></span><br><span class="line">x1=np.random.normal(<span class="number">0</span>,<span class="number">1</span>,n)</span><br><span class="line">y1=np.random.normal(<span class="number">0</span>,<span class="number">1</span>,n)</span><br><span class="line">x2=np.random.uniform(-<span class="number">4</span>,<span class="number">4</span>,n)</span><br><span class="line">y2=np.random.uniform(-<span class="number">4</span>,<span class="number">4</span>,n)</span><br><span class="line"><span class="comment">#绘制散点图</span></span><br><span class="line">plt.scatter(x1,y1,color=<span class="string">&quot;blue&quot;</span>,marker=<span class="string">&quot;*&quot;</span>,label=<span class="string">&quot;正态分布&quot;</span>)</span><br><span class="line">plt.scatter(x2,y2,color=<span class="string">&quot;yellow&quot;</span>,marker=<span class="string">&quot;o&quot;</span>,label=<span class="string">&quot;均匀分布&quot;</span>)</span><br><span class="line"><span class="comment">#设置标题</span></span><br><span class="line">plt.title(<span class="string">&quot;标准分布&quot;</span>,fontsize=<span class="number">20</span>)</span><br><span class="line"><span class="comment">#设置坐标轴范围</span></span><br><span class="line">plt.xlim(-<span class="number">4</span>,<span class="number">4</span>)</span><br><span class="line">plt.ylim(-<span class="number">4</span>,<span class="number">4</span>)</span><br><span class="line"><span class="comment">#设置坐标轴标签</span></span><br><span class="line">plt.xlabel(<span class="string">&quot;横坐标x&quot;</span>,fontsize=<span class="number">14</span>)</span><br><span class="line">plt.ylabel(<span class="string">&quot;纵坐标y&quot;</span>,fontsize=<span class="number">14</span>)</span><br><span class="line"><span class="comment">#设置文本</span></span><br><span class="line">plt.text(-<span class="number">3.8</span>,<span class="number">3</span>,<span class="string">&quot;均 值：0 标准差：1\n均匀分布:[-4:4]&quot;</span>)</span><br><span class="line"><span class="comment">#设置图例</span></span><br><span class="line">plt.legend()</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<p><img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221028111234270.png" alt="image-20221028111234270" style="zoom:50%;"></p>
+<h2 id="3-折线图"><a href="#3-折线图" class="headerlink" title="3.折线图"></a>3.折线图</h2><p><code>plt.plot(x,y,color,marker,label,linewidth,markersize)</code></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>x</td>
+<td>数据点的x坐标</td>
+<td>0,1,2,……</td>
+</tr>
+<tr>
+<td>y</td>
+<td>数据点的y坐标</td>
+<td>不可缺省</td>
+</tr>
+<tr>
+<td>color</td>
+<td>数据点的颜色</td>
+<td></td>
+</tr>
+<tr>
+<td>marker</td>
+<td>数据点的样式</td>
+<td>‘o’（圆点）</td>
+</tr>
+<tr>
+<td>label</td>
+<td>图例文字</td>
+<td></td>
+</tr>
+<tr>
+<td>linewidth</td>
+<td>折线的宽度</td>
+<td></td>
+</tr>
+<tr>
+<td>markersize</td>
+<td>数据点的大小</td>
+</tr>
+</tbody>
+</table>
+</div>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="comment">#设置中文字体</span></span><br><span class="line">plt.rcParams[<span class="string">&quot;font.sans-serif&quot;</span>]=<span class="string">&quot;SimHei&quot;</span></span><br><span class="line"><span class="comment">#随机生成数据点</span></span><br><span class="line">n=<span class="number">24</span></span><br><span class="line">y1=np.random.randint(<span class="number">27</span>,<span class="number">37</span>,n)</span><br><span class="line">y2=np.random.randint(<span class="number">40</span>,<span class="number">60</span>,n)</span><br><span class="line"><span class="comment">#绘图</span></span><br><span class="line">plt.plot(y1,label=<span class="string">&quot;温度&quot;</span>)</span><br><span class="line">plt.plot(y2,label=<span class="string">&quot;湿度&quot;</span>)</span><br><span class="line"><span class="comment">#设置坐标轴</span></span><br><span class="line">plt.xlim(<span class="number">0</span>,<span class="number">23</span>)</span><br><span class="line">plt.ylim(<span class="number">20</span>,<span class="number">70</span>)</span><br><span class="line">plt.xlabel(<span class="string">&quot;小时&quot;</span>,fontsize=<span class="number">12</span>)</span><br><span class="line">plt.ylabel(<span class="string">&quot;测量值&quot;</span>,fontsize=<span class="number">12</span>)</span><br><span class="line"><span class="comment">#设置标题</span></span><br><span class="line">plt.title(<span class="string">&quot;24小时温度湿度统计&quot;</span>,fontsize=<span class="number">16</span>)</span><br><span class="line"><span class="comment">#设置图例</span></span><br><span class="line">plt.legend()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<p><img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221028113312696.png" alt="image-20221028113312696" style="zoom: 50%;"></p>
+<h2 id="4-柱状图"><a href="#4-柱状图" class="headerlink" title="4.柱状图"></a>4.柱状图</h2><p><code>bar(left,height,width,facecolor,edgecolor,label)</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="comment">#设置中文字体</span></span><br><span class="line">plt.rcParams[<span class="string">&quot;font.sans-serif&quot;</span>]=<span class="string">&quot;SimHei&quot;</span></span><br><span class="line">plt.rcParams[<span class="string">&quot;axes.unicode_minus&quot;</span>]=<span class="literal">False</span></span><br><span class="line"><span class="comment">#设置数据</span></span><br><span class="line">y1=[<span class="number">32</span>,<span class="number">25</span>,<span class="number">16</span>,<span class="number">30</span>,<span class="number">24</span>,<span class="number">45</span>,<span class="number">40</span>,<span class="number">33</span>,<span class="number">28</span>,<span class="number">17</span>,<span class="number">24</span>,<span class="number">20</span>]</span><br><span class="line">y2=[-<span class="number">23</span>,-<span class="number">35</span>,-<span class="number">26</span>,-<span class="number">35</span>,-<span class="number">45</span>,-<span class="number">43</span>,-<span class="number">35</span>,-<span class="number">32</span>,-<span class="number">23</span>,-<span class="number">17</span>,-<span class="number">22</span>,-<span class="number">28</span>]</span><br><span class="line"><span class="comment">#绘图</span></span><br><span class="line">plt.bar(<span class="built_in">range</span>(<span class="built_in">len</span>(y1)),y1,width=<span class="number">0.8</span>,facecolor=<span class="string">&quot;green&quot;</span>,edgecolor=<span class="string">&quot;white&quot;</span>,label=<span class="string">&quot;统计量1&quot;</span>)</span><br><span class="line">plt.bar(<span class="built_in">range</span>(<span class="built_in">len</span>(y2)),y2,width=<span class="number">0.8</span>,facecolor=<span class="string">&quot;red&quot;</span>,edgecolor=<span class="string">&quot;white&quot;</span>,label=<span class="string">&quot;统计量2&quot;</span>)</span><br><span class="line"><span class="comment">#设置标题</span></span><br><span class="line">plt.title(<span class="string">&quot;柱状图&quot;</span>,fontsize=<span class="number">20</span>)</span><br><span class="line"><span class="comment">#添加图例</span></span><br><span class="line">plt.legend()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<p><img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221028115614661.png" alt="image-20221028115614661" style="zoom: 50%;"></p>
+<hr>
+<h1 id="实例分析：波士顿房价数据集可视化"><a href="#实例分析：波士顿房价数据集可视化" class="headerlink" title="实例分析：波士顿房价数据集可视化"></a>实例分析：波士顿房价数据集可视化</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line">boston_housing = tf.keras.datasets.boston_housing</span><br><span class="line"><span class="comment">#x表示房屋的属性值，y表示房价</span></span><br><span class="line">(train_x,train_y),(test_x,test_y)=boston_housing.load_data(test_split=<span class="number">0</span>)<span class="comment">#其中test_split为设置测试组数据所占比例，默认为0.2</span></span><br><span class="line"><span class="comment">#打印训练与测试数据的长度</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;The train:&quot;</span>,<span class="built_in">len</span>(train_x))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;The test:&quot;</span>,<span class="built_in">len</span>(test_x))</span><br><span class="line"><span class="comment">#打印测试数据的数据类型</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">type</span>(train_x))</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">type</span>(train_y))</span><br><span class="line"><span class="comment">#打印测试数据的维度与形状</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Dim of train_x:&quot;</span>,train_x.ndim)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Shape of train_x:&quot;</span>,train_x.shape)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Dim of train_y:&quot;</span>,train_y.ndim)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Shape of train_y:&quot;</span>,train_y.shape)</span><br><span class="line"><span class="comment">#输出train_x中的前5行数据</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;The train_x[0:5] is:\n&quot;</span>,train_x[<span class="number">0</span>:<span class="number">5</span>])</span><br><span class="line"><span class="comment">#取出train_x中某一列的数据</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;The train_x[:,5] is:\n&quot;</span>,train_x[:,<span class="number">5</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">#绘制各个属性与房价的关系</span></span><br><span class="line"><span class="comment">#设置运行时参数</span></span><br><span class="line">plt.rcParams[<span class="string">&quot;font.sans-serif&quot;</span>]=[<span class="string">&quot;SimHei&quot;</span>]</span><br><span class="line">plt.rcParams[<span class="string">&quot;axes.unicode_minus&quot;</span>]=<span class="literal">False</span></span><br><span class="line"><span class="comment">#子图的标题</span></span><br><span class="line">titles=[<span class="string">&quot;CRIM&quot;</span>,<span class="string">&quot;ZN&quot;</span>,<span class="string">&quot;INDUS&quot;</span>,<span class="string">&quot;CHAS&quot;</span>,<span class="string">&quot;NOX&quot;</span>,<span class="string">&quot;RM&quot;</span>,<span class="string">&quot;AGE&quot;</span>,<span class="string">&quot;DIS&quot;</span>,<span class="string">&quot;RAD&quot;</span>,<span class="string">&quot;TAX&quot;</span>,<span class="string">&quot;PTRATIO&quot;</span>,<span class="string">&quot;B-1000&quot;</span>,<span class="string">&quot;LSTAT&quot;</span>,<span class="string">&quot;MEDV&quot;</span>]</span><br><span class="line"><span class="comment">#设置绘图尺寸</span></span><br><span class="line">plt.figure(figsize=(<span class="number">12</span>,<span class="number">12</span>))</span><br><span class="line"><span class="comment">#通过循环绘制散点图</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">13</span>):</span><br><span class="line">    plt.subplot(<span class="number">4</span>,<span class="number">4</span>,(i+<span class="number">1</span>))</span><br><span class="line">    plt.scatter(train_x[:,i],train_y)</span><br><span class="line">    plt.xlabel(titles[i])</span><br><span class="line">    plt.ylabel(<span class="string">&quot;Price($1000&#x27;s)&quot;</span>)</span><br><span class="line">    plt.title(<span class="built_in">str</span>(i+<span class="number">1</span>)+<span class="string">&quot;.&quot;</span>+titles[i]+<span class="string">&quot; - Price&quot;</span>)</span><br><span class="line"><span class="comment">#调整子图间隔</span></span><br><span class="line">plt.tight_layout()</span><br><span class="line"><span class="comment">#设置全局标题</span></span><br><span class="line">plt.suptitle(<span class="string">&quot;各个属性与房价的关系&quot;</span>,x=<span class="number">0.5</span>,y=<span class="number">1.02</span>,fontsize=<span class="number">20</span>)</span><br><span class="line"><span class="comment">#显示绘图</span></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>部分结果如下：</p>
+<p><img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221028120441204.png" alt="image-20221028120441204" style="zoom: 67%;"></p>
+<p><img src="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/image-20221028120530479.png" alt="image-20221028120530479"></p>
+<hr>
+<h1 id="附：相关网站"><a href="#附：相关网站" class="headerlink" title="附：相关网站"></a>附：相关网站</h1><ul>
+<li>Matplotlib官网：<a target="_blank" rel="noopener" href="https://matplotlib.org">https://matplotlib.org</a></li>
+<li>Gallery页面：<a target="_blank" rel="noopener" href="https://matplotlib.org/gallery.html">https://matplotlib.org/gallery.html</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>欢迎来到ssy的世界</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/WeChaPay.jpg" alt="ssy 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>ssy
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://ssy的小天地.com/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8BNumPy%E4%B8%8EMatplotlib%E5%BA%93/" title="TensorFlow实践之NumPy与Matplotlib库">http://ssy的小天地.com/2022/10/28/TensorFlow实践之NumPy与Matplotlib库/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/TensorFlow/" rel="tag"># TensorFlow</a>
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"># 深度学习</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/10/28/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/" rel="prev" title="TensorFlow实践之数字图像处理基础">
+      <i class="fa fa-chevron-left"></i> TensorFlow实践之数字图像处理基础
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/11/01/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%E9%97%AE%E9%A2%98/" rel="next" title="TensorFlow实践之线性回归问题">
+      TensorFlow实践之线性回归问题 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#NumPy%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97%E5%BA%93"><span class="nav-number">1.</span> <span class="nav-text">NumPy科学计算库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%A4%9A%E7%BB%B4%E6%95%B0%E7%BB%84%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">1.1.</span> <span class="nav-text">1.多维数组的基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-NumPy%E6%95%B0%E7%BB%84%E7%9A%84%E5%88%9B%E5%BB%BA%E5%8F%8A%E5%85%B6%E5%B1%9E%E6%80%A7"><span class="nav-number">1.2.</span> <span class="nav-text">2.NumPy数组的创建及其属性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%88%9B%E5%BB%BA%E6%95%B0%E7%BB%84%EF%BC%9Aarray-%E5%88%97%E8%A1%A8-%E5%85%83%E7%BB%84"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 创建数组：array([列表]&#x2F;(元组))</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E6%95%B0%E7%BB%84%E7%9A%84%E5%B1%9E%E6%80%A7"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 数组的属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3%E5%88%9B%E5%BB%BA%E7%89%B9%E6%AE%8A%E7%9A%84%E6%95%B0%E7%BB%84"><span class="nav-number">1.2.3.</span> <span class="nav-text">2.3创建特殊的数组</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%95%B0%E7%BB%84%E8%BF%90%E7%AE%97"><span class="nav-number">1.3.</span> <span class="nav-text">3.数组运算</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%B9%E5%8F%98%E6%95%B0%E7%BB%84%E7%9A%84%E5%87%BD%E6%95%B0"><span class="nav-number">1.3.1.</span> <span class="nav-text">改变数组的函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E7%BB%84%E4%B8%8E%E6%95%B0%E7%BB%84%E4%B9%8B%E9%97%B4%E5%B8%B8%E8%A7%81%E8%BF%90%E7%AE%97"><span class="nav-number">1.3.2.</span> <span class="nav-text">数组与数组之间常见运算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E7%BB%84%E4%B8%AD%E5%85%83%E7%B4%A0%E7%9A%84%E8%AE%A1%E7%AE%97"><span class="nav-number">1.3.3.</span> <span class="nav-text">数组中元素的计算</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E7%9F%A9%E9%98%B5"><span class="nav-number">1.4.</span> <span class="nav-text">4.矩阵</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A9%E9%98%B5%E7%94%9F%E6%88%90"><span class="nav-number">1.4.1.</span> <span class="nav-text">矩阵生成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A9%E9%98%B5%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%B1%9E%E6%80%A7"><span class="nav-number">1.4.2.</span> <span class="nav-text">矩阵对象的属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A9%E9%98%B5%E8%BF%90%E7%AE%97"><span class="nav-number">1.4.3.</span> <span class="nav-text">矩阵运算</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E9%9A%8F%E6%9C%BA%E6%95%B0%E6%A8%A1%E5%9D%97"><span class="nav-number">1.5.</span> <span class="nav-text">5.随机数模块</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Matplotlib%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96"><span class="nav-number">2.</span> <span class="nav-text">Matplotlib数据可视化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Matplotlib%E7%BB%98%E5%9B%BE%E5%9F%BA%E7%A1%80"><span class="nav-number">2.1.</span> <span class="nav-text">1.Matplotlib绘图基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%95%A3%E7%82%B9%E5%9B%BE"><span class="nav-number">2.2.</span> <span class="nav-text">2.散点图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%8A%98%E7%BA%BF%E5%9B%BE"><span class="nav-number">2.3.</span> <span class="nav-text">3.折线图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E6%9F%B1%E7%8A%B6%E5%9B%BE"><span class="nav-number">2.4.</span> <span class="nav-text">4.柱状图</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E5%88%86%E6%9E%90%EF%BC%9A%E6%B3%A2%E5%A3%AB%E9%A1%BF%E6%88%BF%E4%BB%B7%E6%95%B0%E6%8D%AE%E9%9B%86%E5%8F%AF%E8%A7%86%E5%8C%96"><span class="nav-number">3.</span> <span class="nav-text">实例分析：波士顿房价数据集可视化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%EF%BC%9A%E7%9B%B8%E5%85%B3%E7%BD%91%E7%AB%99"><span class="nav-number">4.</span> <span class="nav-text">附：相关网站</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ssy"
+      src="/images/ssy.png">
+  <p class="site-author-name" itemprop="name">ssy</p>
+  <div class="site-description" itemprop="description">满怀希望 就会所向披靡</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">141</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">38</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ssy1938010014" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ssy1938010014" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://m.weibo.cn/u/5469432500?uid=5469432500&t=0&luicode=10000011&lfid=100103type=1&q=JIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" title="Weibo → https:&#x2F;&#x2F;m.weibo.cn&#x2F;u&#x2F;5469432500?uid&#x3D;5469432500&amp;t&#x3D;0&amp;luicode&#x3D;10000011&amp;lfid&#x3D;100103type%3D1%26q%3DJIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://ssy1938010014.github.io/" title="http:&#x2F;&#x2F;ssy1938010014.github.io" rel="noopener" target="_blank">ssy的小天地</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://y006.github.io/" title="http:&#x2F;&#x2F;y006.github.io" rel="noopener" target="_blank">邱院士的Blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://bengoooo.github.io/" title="http:&#x2F;&#x2F;BENgoooo.github.io" rel="noopener" target="_blank">赵总的Blog</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=1469041281&auto=1&height=66"></iframe>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ssy</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-ribbon@1/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+<script data-pjax>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  let url = element.dataset.target;
+  let pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  let pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  let fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+
+
+    <div id="pjax">
+  
+
+  
+
+  
+
+    </div>
+</body>
+</html>

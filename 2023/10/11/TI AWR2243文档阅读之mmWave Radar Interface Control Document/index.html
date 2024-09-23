@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1/themes/blue/pace-theme-minimal.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"xn--ssy-lq6e63gg6fuu2d.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本节是针对TI官方提供的接口配置的文档进行了阅读，并分析了文档中主要将了哪些模块">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TI AWR2243文档阅读之mmWave Radar Interface Control Document">
+<meta property="og:url" content="http://ssy的小天地.com/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/index.html">
+<meta property="og:site_name" content="ssy的小天地">
+<meta property="og:description" content="本节是针对TI官方提供的接口配置的文档进行了阅读，并分析了文档中主要将了哪些模块">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011111915637.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011112118308.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011112832510.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011113216065.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011114532160.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011114948954.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011115938961.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011120249098.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011120448016.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011123354989.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011124344497.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011125353204.png">
+<meta property="article:published_time" content="2023-10-11T02:07:12.000Z">
+<meta property="article:modified_time" content="2023-10-16T13:55:29.567Z">
+<meta property="article:author" content="ssy">
+<meta property="article:tag" content="TI">
+<meta property="article:tag" content="AWR2243">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011111915637.png">
+
+<link rel="canonical" href="http://ssy的小天地.com/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>TI AWR2243文档阅读之mmWave Radar Interface Control Document | ssy的小天地</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+    <a target="_blank" rel="noopener" href="https://github.com/ssy1938010014" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ssy的小天地</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">愿汝如是 千金不换</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-works">
+
+    <a href="/works/" rel="section"><i class="fa fa-fw fa-sitemap"></i>文章</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ssy的小天地.com/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ssy.png">
+      <meta itemprop="name" content="ssy">
+      <meta itemprop="description" content="满怀希望 就会所向披靡">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ssy的小天地">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          TI AWR2243文档阅读之mmWave Radar Interface Control Document
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+
+
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-10-11 10:07:12" itemprop="dateCreated datePublished" datetime="2023-10-11T10:07:12+08:00">2023-10-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-10-16 21:55:29" itemprop="dateModified" datetime="2023-10-16T21:55:29+08:00">2023-10-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%A7%AF%E7%B4%AF/" itemprop="url" rel="index"><span itemprop="name">学习积累</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本节是针对TI官方提供的接口配置的文档进行了阅读，并分析了文档中主要将了哪些模块</p>
+<span id="more"></span>
+<h1 id="TI毫米波雷达传感器通信的基础"><a href="#TI毫米波雷达传感器通信的基础" class="headerlink" title="TI毫米波雷达传感器通信的基础"></a>TI毫米波雷达传感器通信的基础</h1><h2 id="1-通信的基本结构"><a href="#1-通信的基本结构" class="headerlink" title="1.通信的基本结构"></a>1.通信的基本结构</h2><h3 id="1-1-SPI"><a href="#1-1-SPI" class="headerlink" title="1.1 SPI"></a>1.1 SPI</h3><ul>
+<li>AWR2243 / xWR6243雷达设备通过SPI接口与外部主机处理器通信。<strong>通过SPI向AWR2243 / xWR6243设备发送命令</strong>，从外部主机处理器对雷达设备进行配置和控制。</li>
+<li>SPI这个接口是同步的。该接口包括4路信号( SPICCLK、SPICS、Data In and Data Out)</li>
+</ul>
+<h3 id="1-2-Mailbox"><a href="#1-2-Mailbox" class="headerlink" title="1.2 Mailbox"></a>1.2 Mailbox</h3><ul>
+<li><p>这个应该是MSS与BSS的通信接口，但目前并不清楚AW2243中MSS是哪个部分（因为一直以为MSS是指MCU部分，但AWR2243并没有内部处理器）</p>
+<p><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011111915637.png" alt="image-20231011111915637" style="zoom: 50%;"></p>
+</li>
+</ul>
+<h2 id="2-雷达信号结构（MailboxRadar-Message-Structure）"><a href="#2-雷达信号结构（MailboxRadar-Message-Structure）" class="headerlink" title="2.雷达信号结构（MailboxRadar Message Structure）"></a>2.雷达信号结构（MailboxRadar Message Structure）</h2><ul>
+<li><p>Radar Message Structure应该就是雷达传感器与外界通信时，彼此遵循的一种信号格式</p>
+<p><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011112118308.png" alt="image-20231011112118308" style="zoom:50%;"></p>
+</li>
+</ul>
+<h3 id="2-1-SYNC"><a href="#2-1-SYNC" class="headerlink" title="2.1 SYNC"></a>2.1 SYNC</h3><ul>
+<li><p>消息的起始位，标志着消息的开始</p>
+<p><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011112832510.png" alt="image-20231011112832510" style="zoom:50%;"></p>
+</li>
+</ul>
+<h3 id="2-2-MSGHDR"><a href="#2-2-MSGHDR" class="headerlink" title="2.2 MSGHDR"></a>2.2 MSGHDR</h3><h4 id="2-2-1-OPCODE"><a href="#2-2-1-OPCODE" class="headerlink" title="2.2.1 OPCODE"></a>2.2.1 OPCODE</h4><p><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011113216065.png" alt="image-20231011113216065" style="zoom:50%;"></p>
+<ul>
+<li>MSGID尚未完全研究清楚，应该是一些更细节的分类，比如是错误响应，静态参数设置命令之类的</li>
+</ul>
+<h4 id="2-2-2-LENGTH"><a href="#2-2-2-LENGTH" class="headerlink" title="2.2.2 LENGTH"></a>2.2.2 LENGTH</h4><ul>
+<li><p>就是message header+message data+CRC的长度</p>
+</li>
+<li><p>LENGTH的最小长度为12byte，最大长度为252byte（因为LEN最多有12bit，那么最多表示$2^{12}$个数，就正好等于$256\times 8$，即256byte，其实应该是可以表示256byte的长度的，可能是为了LENGTH+SYNC正好是256byte吧，就限制LENGTH最大为252byte吧）</p>
+<p><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011114532160.png" alt="image-20231011114532160" style="zoom:50%;"></p>
+</li>
+<li><p>LENGTH-CRC的长度必须是4byte的倍数</p>
+</li>
+</ul>
+<h4 id="2-2-3-FLAGS"><a href="#2-2-3-FLAGS" class="headerlink" title="2.2.3 FLAGS"></a>2.2.3 FLAGS</h4><ul>
+<li><p>FLAGS用于控制雷达设备与外部主机之间的通信</p>
+<p><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011114948954.png" alt="image-20231011114948954" style="zoom:50%;"></p>
+</li>
+</ul>
+<h4 id="2-2-4-REMCHUNKS"><a href="#2-2-4-REMCHUNKS" class="headerlink" title="2.2.4 REMCHUNKS"></a>2.2.4 REMCHUNKS</h4><ul>
+<li>如果消息长度大于256byte，则将其分割成多个小于256字节的块(chunk)。 当该字段非零时，该字段指示预期的剩余块的数量。</li>
+</ul>
+<h4 id="2-2-5-NSBC"><a href="#2-2-5-NSBC" class="headerlink" title="2.2.5 NSBC"></a>2.2.5 NSBC</h4><ul>
+<li><p>通常会将一条消息分成多个子块（sub block）传输（请注意block和chunk的区别，一个是把message分为好几个小段，一个是message太大了，才分成一些个块）</p>
+<p><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011115938961.png" alt="image-20231011115938961" style="zoom:50%;"></p>
+</li>
+</ul>
+<h4 id="2-2-6-CHKSUM"><a href="#2-2-6-CHKSUM" class="headerlink" title="2.2.6 CHKSUM"></a>2.2.6 CHKSUM</h4><ul>
+<li>对MSGHDR消息头的16bit校验信号</li>
+</ul>
+<h4 id="2-2-7-MSGDATA"><a href="#2-2-7-MSGDATA" class="headerlink" title="2.2.7 MSGDATA"></a>2.2.7 MSGDATA</h4><p><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011120249098.png" alt="image-20231011120249098" style="zoom:50%;"></p>
+<h4 id="2-2-8-CRC"><a href="#2-2-8-CRC" class="headerlink" title="2.2.8 CRC"></a>2.2.8 CRC</h4><ul>
+<li><p>应该也是一种校验方式吧，是根据MSGHDR 和 MSGDATA 中的所有字节计算</p>
+<p><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011120448016.png" alt="image-20231011120448016" style="zoom:50%;"></p>
+</li>
+</ul>
+<hr>
+<h1 id="通信协议"><a href="#通信协议" class="headerlink" title="通信协议"></a>通信协议</h1><h2 id="1-雷达通信的基本协议"><a href="#1-雷达通信的基本协议" class="headerlink" title="1.雷达通信的基本协议"></a>1.雷达通信的基本协议</h2><ul>
+<li>主机向雷达设备发送消息请求确认。 主机为雷达设备的响应设置 1 ms 的超时时间</li>
+<li>雷达设备检查 CHKSUM 字段的消息头有效性，检查 MSGDATA 字段的正确性，还计算消息的 CRC 并将其与接收到的 CRC 进行比较。<ul>
+<li>如果计算出的 CHKSUM 与接收到的 CHKSUM 不匹配，则雷达设备不会发送任何响应。 发送器将超时并最终重新发送命令并设置RETRY标志</li>
+<li>如果 CRC 匹配且所有参数均有效/正确，则雷达设备向主机发送 ACK </li>
+<li>如果 CRC 匹配，但消息中的任何参数无效/不正确，则雷达设备向主机发送 ERROR 响应 </li>
+<li>如果 CRC 不匹配，雷达设备将向主机发送 NACK 响应</li>
+</ul>
+</li>
+<li>在接收到ACK后，主机可以向雷达设备发送下一个命令</li>
+<li>如果主机在超时时间内收到来自雷达设备的 NACK，它将再次发送消息，则在没有RETRY FLAG set的情况下再次发送消息。</li>
+<li>如果主机在超时期间内没有收到雷达设备的任何响应，则它发送与RETRY FLAG set相同的命令。</li>
+</ul>
+<h2 id="2-通信顺序"><a href="#2-通信顺序" class="headerlink" title="2.通信顺序"></a>2.通信顺序</h2><h3 id="2-1-Command-Response-Sequence-Host"><a href="#2-1-Command-Response-Sequence-Host" class="headerlink" title="2.1 Command/Response Sequence (Host)"></a>2.1 Command/Response Sequence (Host)</h3><ol>
+<li>Host prepares the message</li>
+<li>Host writes the message to the communication channel and starts Retry Timer (∼1 ms) </li>
+<li>Host then waits for HOST IRQ high Interrupt <ul>
+<li>If IRQ is received, go to Step 4 </li>
+<li>If Retry Time expires, Enable Retry Flag and go to Step 2 </li>
+</ul>
+</li>
+<li>Host writes CNYS (SYNC word = 0x5678 0x8765) and Dummy bytes (0xFFFF 0xFFFF 0xFFFF 0xFFFF 0xFFFF 0xFFFF) on communication channel </li>
+<li>Host waits for low on Host IRQ line<ul>
+<li>If Host IRQ line is low, go to Step 6 </li>
+<li>If Retry Time expires, Flag Error </li>
+</ul>
+</li>
+<li>Host reads the header from communication channel </li>
+<li>Host checks the validity of header (verify checksum) <ul>
+<li>If header is valid, parse the header and go to Step 8</li>
+<li>If header is invalid, ignore the header and reports to error to Application </li>
+</ul>
+</li>
+<li>Host reads the payload from communication channel </li>
+<li>Host checks the validity of the message (verify CRC) <ul>
+<li>If message is valid, process the message </li>
+<li>If message is invalid, go to Step 2 with new sequence number</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li>其实感觉这个通信顺序（是先发送命令再接收数据吗？）跟通信协议有些区别，比如step2主机发送message中真实data是什么样子，step7主机读取数据的时候，为什么header校验失败就直接发送error了，不应该是CRC失败才发送error么？先存疑在这</li>
+</ul>
+<h3 id="2-2-Bootup-Asynchronous-Event"><a href="#2-2-Bootup-Asynchronous-Event" class="headerlink" title="2.2 Bootup/ Asynchronous Event"></a>2.2 Bootup/ Asynchronous Event</h3><ul>
+<li><p>这玩意还不太懂</p>
+<p><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011123354989.png" alt="image-20231011123354989" style="zoom: 80%;"></p>
+</li>
+</ul>
+<h3 id="2-3-SPI时序（Command-Response）"><a href="#2-3-SPI时序（Command-Response）" class="headerlink" title="2.3 SPI时序（Command/Response）"></a>2.3 SPI时序（Command/Response）</h3><p><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011124344497.png" alt="image-20231011124344497"></p>
+<hr>
+<h1 id="雷达接口信息详细描述"><a href="#雷达接口信息详细描述" class="headerlink" title="雷达接口信息详细描述"></a>雷达接口信息详细描述</h1><ul>
+<li><p>本部分介绍了与雷达收发信机通信所使用的所有雷达接口消息</p>
+<p><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011125353204.png" alt="image-20231011125353204" style="zoom:50%;"></p>
+</li>
+<li><p>这一节只能做一个大致总结，要用的时候还得再查接口手册</p>
+</li>
+</ul>
+<h2 id="1-AWR-ACK-MSG"><a href="#1-AWR-ACK-MSG" class="headerlink" title="1. AWR_ACK_MSG"></a>1. AWR_ACK_MSG</h2><ul>
+<li>CRC校验成功时发送此信号</li>
+<li>这里有个问题是此信号的MSGID是多少？</li>
+</ul>
+<h2 id="2-AWR-NACK-MSG"><a href="#2-AWR-NACK-MSG" class="headerlink" title="2. AWR_NACK_MSG"></a>2. AWR_NACK_MSG</h2><ul>
+<li>CRC校验失败时发送此信号</li>
+</ul>
+<h2 id="3-AWR-ERROR-MSG"><a href="#3-AWR-ERROR-MSG" class="headerlink" title="3. AWR_ERROR_MSG"></a>3. AWR_ERROR_MSG</h2><ul>
+<li>在发现主机命令有误时发送此信号</li>
+<li>这个信号的数据有1个block：<strong>AWR_RESP_ERROR_SB</strong></li>
+</ul>
+<h2 id="4-AWR-RF-STATIC-CONF-SET-MSG"><a href="#4-AWR-RF-STATIC-CONF-SET-MSG" class="headerlink" title="4. AWR_RF_STATIC_CONF_SET_MSG"></a>4. AWR_RF_STATIC_CONF_SET_MSG</h2><ul>
+<li>静态设置，在雷达收发机功率循环之后必须配置一次（说实话，并没有很懂这里）</li>
+<li>这个信号的数据有13个block：<ul>
+<li><strong>AWR_CHAN_CONF_SET_SB</strong>：选择是否级联，以及选择级联后的相关配置</li>
+<li><strong>AWR_ADCOUT_CONF_SET_SB</strong>：ADC输出的数据格式，以及ADC的采样模式（Real、Complex 1x、Complex 2x、Pseudo Real）</li>
+<li><strong>AWR_LOWPOWERMODE_CONF_SET_SB</strong>：是否通过降低某些IF模拟模块的偏置电流来降低功率</li>
+<li><strong>AWR_DYNAMICPOWERSAVE_CONF_SET_SB</strong>：是否选用省电模式</li>
+<li><strong>AWR_HIGHSPEEDINTFCLK_CONF_SET_SB</strong>：关于高速接口时钟速率，这与以LVDS或CSI2格式将ADC数据从AWR设备发送到主机有关。</li>
+<li><strong>AWR_RF_DEVICE_CFG_SB</strong>：在BSS中配置异步事件的方向</li>
+<li><strong>AWR_RF_RADAR_MISC_CTL_SB</strong>：移相器和高级帧的设置等的使能信号与其他RF配置（其他的部分没看懂是个啥配置）</li>
+<li><strong>AWR_CAL_MON_FREQUENCY_LIMITS_SB</strong>：已经弃用了，别管</li>
+<li><strong>AWR_RF_INIT_CALIBRATION_CONF_SB</strong>：配置设备执行开机时间校准</li>
+<li><strong>AWR_CAL_MON_FREQUENCY_TX_POWER_LIMITS_ SB</strong>：为每个TX设置射频频率传输限制以及TX功率限制</li>
+<li><strong>AWR_CAL_DATA_RESTORE_SB</strong>：应该是用来存储AWR_CAL_ DATA_SAVE_SB里面的RF校准数据（也没有太明白）</li>
+<li><strong>AWR_PHASE_SHIFTER_CAL_DATA_RESTORE_SB</strong>：应该是用来存储AWR_PHASE_ SHIFTER_CAL_DATA_SAVE_SB里面移相器的校准数据（也没有太明白）</li>
+<li><strong>AWR_APLL_SYNTH_BW_CONTROL_SB</strong>：这是 AWR2243 和 xWR6x43 中新增的一项功能。此子块用于控制 APLL 和合成器的带宽。</li>
+</ul>
+</li>
+</ul>
+<h2 id="5-AWR-RF-STATIC-CONF-GET-MSG"><a href="#5-AWR-RF-STATIC-CONF-GET-MSG" class="headerlink" title="5. AWR_RF_STATIC_CONF_GET_MSG"></a>5. AWR_RF_STATIC_CONF_GET_MSG</h2><ul>
+<li><p>应该是主机读取从机的动态配置相关数据的</p>
+</li>
+<li><p>这个信号的数据有2个block：</p>
+<ul>
+<li><strong>AWR_CAL_DATA_SAVE_SB</strong>：该子模块从设备读取校准数据，稍后可以使用AWR_CAL_DATA_RESTORE_SB命令注入这些数据。（校准数据的总大小为 672 字节，由于 SPI 限制，已将其分成 3 个块 （校准数据的总大小为 672 字节，由于 SPI 限制，已将其分成 3 个块（NUM_CHUNKS），每个块 224 字节。主机应从雷达设备接收所有这 3 个块，以后主机只能将相关数据存储在非易失性存储器中。）</li>
+<li><strong>AWR_PHASE_SHIFTER_CAL_DATA_SAVE_SB</strong>：该子模块从器件读取移相器的校准数据，稍后可以使用AWR_PHASE_SHIFTER_CAL_DATA_RESTORE_SB命令注入这些数据。</li>
+</ul>
+</li>
+</ul>
+<h2 id="6-AWR-RF-INIT-MSG"><a href="#6-AWR-RF-INIT-MSG" class="headerlink" title="6. AWR_RF_INIT_MSG"></a>6. AWR_RF_INIT_MSG</h2><ul>
+<li>RF初始化消息，执行雷达收发器的启动时间校准。</li>
+<li>这个信号的数据有1个block：<ul>
+<li><strong>AWR_RF_INIT_SB</strong>：BSS处理器在收到此子模块时被唤醒，RF模拟和数字基带部分被初始化。</li>
+</ul>
+</li>
+</ul>
+<h2 id="7-AWR-RF-DYNAMIC-CONF-SET-MSG"><a href="#7-AWR-RF-DYNAMIC-CONF-SET-MSG" class="headerlink" title="7. AWR_RF_DYNAMIC_CONF_SET_MSG"></a>7. AWR_RF_DYNAMIC_CONF_SET_MSG</h2><h2 id="8-AWR-RF-DYNAMIC-CONF-GET-MSG"><a href="#8-AWR-RF-DYNAMIC-CONF-GET-MSG" class="headerlink" title="8. AWR_RF_DYNAMIC_CONF_GET_MSG"></a>8. AWR_RF_DYNAMIC_CONF_GET_MSG</h2><h2 id="9-AWR-RF-FRAME-TRIG-MSG"><a href="#9-AWR-RF-FRAME-TRIG-MSG" class="headerlink" title="9. AWR_RF_FRAME_TRIG_MSG"></a>9. AWR_RF_FRAME_TRIG_MSG</h2><ul>
+<li>雷达收发器启动波形的帧触发消息</li>
+<li>这个信号的数据有1个block：<ul>
+<li><strong>AWR_FRAMESTARTSTOP_CONF_SB</strong>：此子块启动或停止帧的传输</li>
+</ul>
+</li>
+</ul>
+<h2 id="10-AWR-RF-ADVANCED-FEATURES-CONF-SET-MSG"><a href="#10-AWR-RF-ADVANCED-FEATURES-CONF-SET-MSG" class="headerlink" title="10. AWR_RF_ADVANCED_FEATURES_ CONF_SET_MSG"></a>10. AWR_RF_ADVANCED_FEATURES_ CONF_SET_MSG</h2><ul>
+<li>一些高级配置</li>
+<li>此接口仅适用于xWR6243 设备</li>
+<li>这个信号的数据有3个block：<ul>
+<li><strong>AWR_BPM_COMMON_CONF_SET_SB</strong>：此处定义了 BPM 模式的来源</li>
+<li><strong>AWR_BPM_CHIRP_CONF_SET_SB</strong>：此子模块定义与每个TX中的BPM（二进制相位调制）功能相关的静态配置</li>
+<li><strong>AWR_POWER_SAVE_MODE_CONF_SET_SB</strong>：定义了省电的模式</li>
+</ul>
+</li>
+</ul>
+<h2 id="11-AWR-RF-MONITORING-CONF-SET-MSG"><a href="#11-AWR-RF-MONITORING-CONF-SET-MSG" class="headerlink" title="11. AWR_RF_MONITORING_CONF_SET_MSG"></a>11. AWR_RF_MONITORING_CONF_SET_MSG</h2><ul>
+<li>这个信号的数据有31个block：<ul>
+<li><strong>WR_MONITOR_RF_DIG_LATENTFAULT_CONF_SB</strong>：启动监控功能以及选择测试模式（但没懂）</li>
+<li><strong>AWR_MONITOR_RF_DIG_PERIODIC_CONF_SB</strong>：启用的监控功能会定期执行，并根据报告模式发送报告。</li>
+<li><strong>AWR_MONITOR_ANALOG_ENABLES_CONF_SB</strong>：</li>
+</ul>
+</li>
+</ul>
+<h2 id="12-AWR-RF-STATUS-GET-MSG"><a href="#12-AWR-RF-STATUS-GET-MSG" class="headerlink" title="12. AWR_RF_STATUS_GET_MSG"></a>12. AWR_RF_STATUS_GET_MSG</h2><ul>
+<li><p>获取有关响应的状态信息</p>
+</li>
+<li><p>这个信号的数据有5个block：</p>
+<ul>
+<li><strong>AWR_RF_VERSION_GET_SB</strong>：读取射频硬件和固件版本</li>
+<li><strong>AWR_RF_CPUFAULT_STATUS_GET_SB</strong>：提供射频 BSS CPU 故障信息</li>
+<li><strong>AWR_RF_ESMFAULT_STATUS_GET_SB</strong>：提供有关其他RF子系统故障的信息</li>
+<li><strong>AWR_RF_DIEID_GET_SB</strong>：有关器件芯片 ID 的信息</li>
+<li><strong>AWR_RF_BOOTUPBIST_STATUS_GET_SB</strong>：提供有关启动自检状态的信息</li>
+</ul>
+</li>
+</ul>
+<h2 id="13-AWR-RF-MONITORING-REPORT-GET-MSG"><a href="#13-AWR-RF-MONITORING-REPORT-GET-MSG" class="headerlink" title="13. AWR_RF_MONITORING_REPORT_GET_ MSG"></a>13. AWR_RF_MONITORING_REPORT_GET_ MSG</h2><ul>
+<li>DFE 统计报告来自雷达收发器的 GET 消息（这个真一点没看懂）</li>
+<li>这个信号的数据有1个block：<ul>
+<li><strong>AWR_RF_DFE_STATISTICS_REPORT_GET_SB</strong>：</li>
+</ul>
+</li>
+</ul>
+<h2 id="14-AWR-RF-MISC-CONF-SET-MSG"><a href="#14-AWR-RF-MISC-CONF-SET-MSG" class="headerlink" title="14. AWR_RF_MISC_CONF_SET_MSG"></a>14. AWR_RF_MISC_CONF_SET_MSG</h2><ul>
+<li><p>雷达收发器的其他配置消息子块</p>
+</li>
+<li><p>这个信号的数据有7个block：</p>
+<ul>
+<li><strong>AWR_RF_TEST_SOURCE_CONFIG_SET_SB</strong>：此子块用于配置 BSS 的测试源</li>
+<li><strong>AWR_RF_TEST_SOURCE_ENABLE_SET_SB</strong>：此子块用于启用BSS的测试源</li>
+<li><strong>AWR_RF_LDO_BYPASS_SB</strong>：此子模块启用 BSS 中的 LDO 旁路选项</li>
+<li><strong>AWR_RF_PALOOPBACK_CFG_SB</strong>：此子块为所有已启用的配置文件启用/禁用 PA 环回。这用于调试 TX 和 RX 链是否正常工作</li>
+<li><strong>AWR_RF_PSLOOPBACK_CFG_SB</strong>：此子块为所有已启用的配置文件启用/禁用 PS（移相器）环回。这用于调试 TX（在 PA 之前）和 RX 链。</li>
+<li><strong>AWR_RF_IFLOOPBACK_CFG_SB</strong>：此子块为所有已启用的配置文件启用/禁用 IF 环回。这用于调试 RX IF 链。</li>
+<li><strong>AWR_RF_GPADC_CFG_SET_SB</strong>：此子模块启用外部输入的 GPADC 读取（仅在 xWR1642/xWR1843/xWR6843/AWR2243/xWR6243 中可用）</li>
+</ul>
+</li>
+</ul>
+<h2 id="15-AWR-RF-MISC-CONF-GET-MSG"><a href="#15-AWR-RF-MISC-CONF-GET-MSG" class="headerlink" title="15. AWR_RF_MISC_CONF_GET_MSG"></a>15. AWR_RF_MISC_CONF_GET_MSG</h2><ul>
+<li>这个信号的数据有1个block：<ul>
+<li><strong>AWR_RF_TEMPERATURE_GET_SB</strong>：此子模块提供设备温度传感器信息</li>
+</ul>
+</li>
+</ul>
+<h2 id="16-AWR-RF-ASYNC-EVENT-MSG1"><a href="#16-AWR-RF-ASYNC-EVENT-MSG1" class="headerlink" title="16. AWR_RF_ASYNC_EVENT_MSG1"></a>16. AWR_RF_ASYNC_EVENT_MSG1</h2><ul>
+<li>AWR_RF_ASYNC_EVENT_MSG1消息由雷达收发器发送到主机。此消息表示设备内发生了特定事件。</li>
+<li>这个信号的数据有22个block：<ul>
+<li><strong>AWR_AE_RF_CPUFAULT_SB</strong>：此子块指示 BIST SS 的 CPU 故障状态</li>
+<li><strong>AWR_AE_RF_ESMFAULT_SB</strong>：此子块指示 BIST SS 中任何其他故障的状态</li>
+<li><strong>AWR_AE_RF_INITCALIBSTATUS_SB</strong>：此子块表示RF BISTSS的初始校准已完成</li>
+<li><strong>AWR_AE_RF_MONITOR_TYPE_TRIGGER_DONE_SB</strong>：此子块指示，触发的监视器类型是通过执行完成的，Host 可以使用此信号触发下一个类型的监视器。</li>
+<li><strong>AWR_AE_RF_FRAME_TRIGGER_RDY_SB</strong>：此子块表示从设备现在已准备好接收帧触发的外部同步，这并不表示在硬件触发模式下帧的物理触发。在 SW 触发模式下，此异步事件表示帧由 SW 触发。</li>
+<li><strong>AWR_AE_RF_GPADC_RESULT_DATA_SB</strong>：此子块表示 GPADC 测量已完成，并且还包含每个启用通道的测量数据。可以忽略未启用的通道的数据。</li>
+<li><strong>AWR_FRAME_END_AE_SB</strong>：此子块表示帧的结束</li>
+<li><strong>AWR_ANALOGFAULT_AE_SB</strong>：该子模块指示模拟电源故障或LDO短路情况。一旦检测到故障，则无法恢复该功能，需要重新启动传感器。</li>
+<li><strong>AWR_CAL_MON_TIMING_FAIL_REPORT_AE_SB</strong>：此子块指示与校准或监控相关的任何定时故障</li>
+<li><strong>AWR_RUN_TIME_CALIB_SUMMARY_REPORT_AE_ SB</strong>：如果在AWR_RUN_TIME_CALIBRATION_CONF_AND_TRIGGER_SB中启用了校准报告，则此子块指示校准状态（一次或运行时间）</li>
+<li><strong>AWR_MONITOR_RF_DIG_LATENTFAULT_REPORT_ AE_SB</strong>：该异步事件包含潜在故障的数字监控状态（没懂）</li>
+<li><strong>AWR_MONITOR_REPORT_HEADER_AE_SB</strong>：报告标题包含所有已启用监视器的通用信息，例如当前 FTTI 编号和当前温度。</li>
+<li><strong>AWR_MONITOR_RF_DIG_PERIODIC_REPORT_AE_ SB</strong>：该异步事件定期发送，以指示定期数字监控测试的状态。（没懂一点）</li>
+<li><strong>AWR_MONITOR_TEMPERATURE_REPORT_AE_SB</strong>：此 API 是 AWR 设备发送到主机的监控报告 API，包含各种射频模拟和数字模块附近的测量温度</li>
+<li><strong>AWR_MONITOR_RX_GAIN_PHASE_REPORT_AE_SB</strong>：此子模块是AWR设备发送到主机的监控报告，包含测量的RX增益和相位值，环回功率和噪声功率。主机可以使用噪声功率来检测是否存在干扰。</li>
+<li><strong>AWR_MONITOR_RX_NOISE_FIGURE_REPORT_AE_ SB</strong>：此 API 是 AWR 设备发送到主机的监控报告 API，其中包含与配置文件的完整 IF 频段对应的测量 RX 噪声系数值。</li>
+<li><strong>AWR_MONITOR_RX_IFSTAGE_REPORT_AE_SB</strong>：此 API 是 AWR 设备发送到主机的监控报告 API，其中包含给定 IF 频率下测得的 RX IF 滤波器衰减值。</li>
+<li><strong>AWR_MONITOR_TX0_POWER_REPORT_AE_SB</strong>：此 API 是 AWR 设备发送到主机的监控报告 API，其中包含显式监控线性调频期间测得的 TX0 功率值。</li>
+<li><strong>AWR_MONITOR_TX1_POWER_REPORT_AE_SB</strong>：此 API 是 AWR 设备发送到主机的监控报告 API，其中包含显式监控线性调频期间测得的 TX1 功率值。</li>
+<li><strong>AWR_MONITOR_TX2_POWER_REPORT_AE_SB</strong>：此 API 是 AWR 设备发送到主机的监控报告 API，其中包含显式监控线性调频期间测得的 TX2 功率值。</li>
+<li><strong>AWR_MONITOR_TX0_BALLBREAK_REPORT_AE_SB</strong>：该API是AWR设备发送到主机的监控报告API，包含测量的TX反射系数的幅度值，用于检测TX ball break。</li>
+<li><strong>AWR_MONITOR_TX1_BALLBREAK_REPORT_AE_SB</strong>：此 API 是 AWR 设备发送到主机的监控报告 API，其中包含测量的 TX 反射系数的幅度值，用于检测TX ball break。（感觉这个跟TX0配置一样，不懂它们之间有个啥区别）</li>
+</ul>
+</li>
+</ul>
+<h2 id="17-AWR-RF-ASYNC-EVENT-MSG2"><a href="#17-AWR-RF-ASYNC-EVENT-MSG2" class="headerlink" title="17. AWR_RF_ASYNC_EVENT_MSG2"></a>17. AWR_RF_ASYNC_EVENT_MSG2</h2><ul>
+<li>AWR_RF_ASYNC_EVENT_MSG2消息由雷达收发器发送到主机。此消息表示设备内发生了特定事件。</li>
+<li>这个信号的数据有17个block：<ul>
+<li><strong>AWR_MONITOR_TX2_BALLBREAK_REPORT_AE_SB</strong>：此 API 是 AWR 设备发送到主机的监控报告 API，其中包含测量的 TX 反射系数的幅度值，用于检测TX ball break。（感觉这个跟TX0配置一样，不懂它们之间有个啥区别）</li>
+<li><strong>AWR_MONITOR_TX_GAIN_PHASE_MISMATCH_ REPORT_AE_SB</strong>：此 API 是 AWR 设备发送到主机的监控报告 API，其中包含显式监控线性调频期间测得的 TX 增益和相位失配值。</li>
+<li><strong>AWR_MONITOR_TX0_PHASE_SHIFTER_REPORT_AE_ SB</strong>：此 API 是 AWR 设备发送到主机的监控报告 API，其中包含测量的 TX0 相位值、幅度值和噪声功率。</li>
+<li><strong>AWR_MONITOR_TX1_PHASE_SHIFTER_REPORT_AE_ SB</strong>：此 API 是 AWR 设备发送到主机的监控报告 API，其中包含测量的 TX1 相位值、幅度值和噪声功率。</li>
+<li><strong>AWR_MONITOR_TX2_PHASE_SHIFTER_REPORT_AE_ SB</strong>：此 API 是 AWR 设备发送到主机的监控报告 API，其中包含测量的 TX2 相位值、幅度值和噪声功率。</li>
+<li><strong>AWR_MONITOR_SYNTHESIZER_FREQUENCY_ REPORT_AE_SB</strong>：该 API 是 AWR 设备发送到主机的监控报告 API，其中包含与线性调频期间测量的频率误差相关的信息。</li>
+<li><strong>AWR_MONITOR_EXTERNAL_ANALOG_SIGNALS_ REPORT_AE_SB</strong>：此 API 是 AWR 设备发送到主机的监控报告 API，其中包含使用 GPADC 测量的外部信号电压值。</li>
+<li><strong>AWR_MONITOR_TX0_INTERNAL_ANALOG_SIGNALS_ REPORT_AE_SB</strong>：此 API 是 AWR 设备发送到主机的监控报告 API，包含有关内部 TX0内部模拟信号的信息，包括 Tx 移相器 DAC 监控报告。</li>
+<li><strong>AWR_MONITOR_TX1_INTERNAL_ANALOG_SIGNALS_ REPORT_AE_SB</strong>：此 API 是 AWR 设备发送到主机的监控报告 API，包含有关内部 TX1内部模拟信号的信息，包括 Tx 移相器 DAC 监控报告。</li>
+<li><strong>AWR_MONITOR_TX2_INTERNAL_ANALOG_ SIGNALS_REPORT_AE_SB</strong>：此 API 是 AWR 设备发送到主机的监控报告 API，其中包含有关内部 TX2 内部模拟信号的信息。</li>
+<li><strong>AWR_MONITOR_RX_INTERNAL_ANALOG_ SIGNALS_REPORT_AE_SB</strong>：此 API 是 AWR 设备发送到主机的监控报告 API，其中包含有关内部 RX 内部模拟信号的信息。</li>
+<li><strong>AWR_MONITOR_PMCLKLO_INTERNAL_ANALOG_ SIGNALS_REPORT_AE_SB</strong>：此 API 是 AWR 设备发送到主机的监控报告 API，其中包含有关内部 PM、CLK 和 LO 子系统的内部模拟信号以及级联设备中 20GHz 同步输入/输出功率的信息。</li>
+<li><strong>AWR_MONITOR_GPADC_INTERNAL_ANALOG_ SIGNALS_REPORT_AE_SB</strong>：此 API 是 AWR 设备发送到主机的监控报告 API，其中包含有关已启用测量的 GPADC 输入直流信号的测量值的信息。</li>
+<li><strong>AWR_MONITOR_PLL_CONTROL_VOLTAGE_ REPORT_AE_SB</strong>：此 API 是 AWR 设备发送到主机的监控报告 API，其中包含显式监控线性调频期间测得的 PLL 控制电压值。</li>
+<li><strong>AWR_MONITOR_DUAL_CLOCK_COMP_REPORT_ AE_SB</strong>：此 API 是 AWR 设备发送到主机的监控报告 API，其中包含有关相对频率测量的信息。</li>
+<li><strong>AWR_MONITOR_RX_MIXER_IN_POWER_REPORT_ AE_SB</strong>：此 API 是 AWR 设备发送到主机的监控报告 API，其中包含测量的 RX 混频器输入电压摆幅值。</li>
+<li><strong>AWR_MONITOR_SYNTHESIZER_FREQUENCY_ NONLIVE_REPORT_AE_SB</strong>：这是 AWR2243/xWR6243 器件新增的一项功能。此 API 是设备发送到主机的非实时监控报告 SB，其中包含与两个配置文件配置的监控线性调频期间测量的频率错误相关的信息。</li>
+</ul>
+</li>
+</ul>
+<h2 id="18-AWR-DEV-RFPOWERUP-MSG"><a href="#18-AWR-DEV-RFPOWERUP-MSG" class="headerlink" title="18. AWR_DEV_RFPOWERUP_MSG"></a>18. AWR_DEV_RFPOWERUP_MSG</h2><h2 id="19-AWR-DEV-CONF-SET-MSG"><a href="#19-AWR-DEV-CONF-SET-MSG" class="headerlink" title="19. AWR_DEV_CONF_SET_MSG"></a>19. AWR_DEV_CONF_SET_MSG</h2><h2 id="20-AWR-DEV-CONF-GET-MSG"><a href="#20-AWR-DEV-CONF-GET-MSG" class="headerlink" title="20. AWR_DEV_CONF_GET_MSG"></a>20. AWR_DEV_CONF_GET_MSG</h2><h2 id="21-AWR-DEV-FILE-DOWNLOAD-MSG"><a href="#21-AWR-DEV-FILE-DOWNLOAD-MSG" class="headerlink" title="21. AWR_DEV_FILE_DOWNLOAD_MSG"></a>21. AWR_DEV_FILE_DOWNLOAD_MSG</h2><h2 id="22-AWR-DEV-FRAME-CONFIG-APPLY-MSG"><a href="#22-AWR-DEV-FRAME-CONFIG-APPLY-MSG" class="headerlink" title="22. AWR_DEV_FRAME_CONFIG_APPLY_MSG"></a>22. AWR_DEV_FRAME_CONFIG_APPLY_MSG</h2><h2 id="23-AWR-DEV-STATUS-GET-MSG"><a href="#23-AWR-DEV-STATUS-GET-MSG" class="headerlink" title="23. AWR_DEV_STATUS_GET_MSG"></a>23. AWR_DEV_STATUS_GET_MSG</h2><h2 id="24-AWR-DEV-ASYNC-EVENT-MSG"><a href="#24-AWR-DEV-ASYNC-EVENT-MSG" class="headerlink" title="24. AWR_DEV_ASYNC_EVENT_MSG"></a>24. AWR_DEV_ASYNC_EVENT_MSG</h2><hr>
+<h1 id="API的编程顺序"><a href="#API的编程顺序" class="headerlink" title="API的编程顺序"></a>API的编程顺序</h1>
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>欢迎来到ssy的世界</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/WeChaPay.jpg" alt="ssy 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>ssy
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://ssy的小天地.com/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/" title="TI AWR2243文档阅读之mmWave Radar Interface Control Document">http://ssy的小天地.com/2023/10/11/TI AWR2243文档阅读之mmWave Radar Interface Control Document/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/TI/" rel="tag"># TI</a>
+              <a href="/tags/AWR2243/" rel="tag"># AWR2243</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/10/10/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%85%B8%E5%9E%8BIP%E6%A0%B8/" rel="prev" title="FPGA数字信号处理之典型IP核">
+      <i class="fa fa-chevron-left"></i> FPGA数字信号处理之典型IP核
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BProgramming%20Chirp%20Parameters%20in%20TI%20Radar%20Devices/" rel="next" title="TI AWR2243文档阅读之Programming Chirp Parameters in TI Radar Devices">
+      TI AWR2243文档阅读之Programming Chirp Parameters in TI Radar Devices <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TI%E6%AF%AB%E7%B1%B3%E6%B3%A2%E9%9B%B7%E8%BE%BE%E4%BC%A0%E6%84%9F%E5%99%A8%E9%80%9A%E4%BF%A1%E7%9A%84%E5%9F%BA%E7%A1%80"><span class="nav-number">1.</span> <span class="nav-text">TI毫米波雷达传感器通信的基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E9%80%9A%E4%BF%A1%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84"><span class="nav-number">1.1.</span> <span class="nav-text">1.通信的基本结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-SPI"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1 SPI</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-Mailbox"><span class="nav-number">1.1.2.</span> <span class="nav-text">1.2 Mailbox</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E9%9B%B7%E8%BE%BE%E4%BF%A1%E5%8F%B7%E7%BB%93%E6%9E%84%EF%BC%88MailboxRadar-Message-Structure%EF%BC%89"><span class="nav-number">1.2.</span> <span class="nav-text">2.雷达信号结构（MailboxRadar Message Structure）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-SYNC"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 SYNC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-MSGHDR"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 MSGHDR</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-1-OPCODE"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">2.2.1 OPCODE</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-2-LENGTH"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">2.2.2 LENGTH</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-3-FLAGS"><span class="nav-number">1.2.2.3.</span> <span class="nav-text">2.2.3 FLAGS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-4-REMCHUNKS"><span class="nav-number">1.2.2.4.</span> <span class="nav-text">2.2.4 REMCHUNKS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-5-NSBC"><span class="nav-number">1.2.2.5.</span> <span class="nav-text">2.2.5 NSBC</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-6-CHKSUM"><span class="nav-number">1.2.2.6.</span> <span class="nav-text">2.2.6 CHKSUM</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-7-MSGDATA"><span class="nav-number">1.2.2.7.</span> <span class="nav-text">2.2.7 MSGDATA</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-8-CRC"><span class="nav-number">1.2.2.8.</span> <span class="nav-text">2.2.8 CRC</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE"><span class="nav-number">2.</span> <span class="nav-text">通信协议</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E9%9B%B7%E8%BE%BE%E9%80%9A%E4%BF%A1%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8D%8F%E8%AE%AE"><span class="nav-number">2.1.</span> <span class="nav-text">1.雷达通信的基本协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E9%80%9A%E4%BF%A1%E9%A1%BA%E5%BA%8F"><span class="nav-number">2.2.</span> <span class="nav-text">2.通信顺序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-Command-Response-Sequence-Host"><span class="nav-number">2.2.1.</span> <span class="nav-text">2.1 Command&#x2F;Response Sequence (Host)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-Bootup-Asynchronous-Event"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.2 Bootup&#x2F; Asynchronous Event</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-SPI%E6%97%B6%E5%BA%8F%EF%BC%88Command-Response%EF%BC%89"><span class="nav-number">2.2.3.</span> <span class="nav-text">2.3 SPI时序（Command&#x2F;Response）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9B%B7%E8%BE%BE%E6%8E%A5%E5%8F%A3%E4%BF%A1%E6%81%AF%E8%AF%A6%E7%BB%86%E6%8F%8F%E8%BF%B0"><span class="nav-number">3.</span> <span class="nav-text">雷达接口信息详细描述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-AWR-ACK-MSG"><span class="nav-number">3.1.</span> <span class="nav-text">1. AWR_ACK_MSG</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-AWR-NACK-MSG"><span class="nav-number">3.2.</span> <span class="nav-text">2. AWR_NACK_MSG</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-AWR-ERROR-MSG"><span class="nav-number">3.3.</span> <span class="nav-text">3. AWR_ERROR_MSG</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-AWR-RF-STATIC-CONF-SET-MSG"><span class="nav-number">3.4.</span> <span class="nav-text">4. AWR_RF_STATIC_CONF_SET_MSG</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-AWR-RF-STATIC-CONF-GET-MSG"><span class="nav-number">3.5.</span> <span class="nav-text">5. AWR_RF_STATIC_CONF_GET_MSG</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-AWR-RF-INIT-MSG"><span class="nav-number">3.6.</span> <span class="nav-text">6. AWR_RF_INIT_MSG</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-AWR-RF-DYNAMIC-CONF-SET-MSG"><span class="nav-number">3.7.</span> <span class="nav-text">7. AWR_RF_DYNAMIC_CONF_SET_MSG</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-AWR-RF-DYNAMIC-CONF-GET-MSG"><span class="nav-number">3.8.</span> <span class="nav-text">8. AWR_RF_DYNAMIC_CONF_GET_MSG</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-AWR-RF-FRAME-TRIG-MSG"><span class="nav-number">3.9.</span> <span class="nav-text">9. AWR_RF_FRAME_TRIG_MSG</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-AWR-RF-ADVANCED-FEATURES-CONF-SET-MSG"><span class="nav-number">3.10.</span> <span class="nav-text">10. AWR_RF_ADVANCED_FEATURES_ CONF_SET_MSG</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#11-AWR-RF-MONITORING-CONF-SET-MSG"><span class="nav-number">3.11.</span> <span class="nav-text">11. AWR_RF_MONITORING_CONF_SET_MSG</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#12-AWR-RF-STATUS-GET-MSG"><span class="nav-number">3.12.</span> <span class="nav-text">12. AWR_RF_STATUS_GET_MSG</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#13-AWR-RF-MONITORING-REPORT-GET-MSG"><span class="nav-number">3.13.</span> <span class="nav-text">13. AWR_RF_MONITORING_REPORT_GET_ MSG</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#14-AWR-RF-MISC-CONF-SET-MSG"><span class="nav-number">3.14.</span> <span class="nav-text">14. AWR_RF_MISC_CONF_SET_MSG</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#15-AWR-RF-MISC-CONF-GET-MSG"><span class="nav-number">3.15.</span> <span class="nav-text">15. AWR_RF_MISC_CONF_GET_MSG</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#16-AWR-RF-ASYNC-EVENT-MSG1"><span class="nav-number">3.16.</span> <span class="nav-text">16. AWR_RF_ASYNC_EVENT_MSG1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#17-AWR-RF-ASYNC-EVENT-MSG2"><span class="nav-number">3.17.</span> <span class="nav-text">17. AWR_RF_ASYNC_EVENT_MSG2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#18-AWR-DEV-RFPOWERUP-MSG"><span class="nav-number">3.18.</span> <span class="nav-text">18. AWR_DEV_RFPOWERUP_MSG</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#19-AWR-DEV-CONF-SET-MSG"><span class="nav-number">3.19.</span> <span class="nav-text">19. AWR_DEV_CONF_SET_MSG</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#20-AWR-DEV-CONF-GET-MSG"><span class="nav-number">3.20.</span> <span class="nav-text">20. AWR_DEV_CONF_GET_MSG</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#21-AWR-DEV-FILE-DOWNLOAD-MSG"><span class="nav-number">3.21.</span> <span class="nav-text">21. AWR_DEV_FILE_DOWNLOAD_MSG</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#22-AWR-DEV-FRAME-CONFIG-APPLY-MSG"><span class="nav-number">3.22.</span> <span class="nav-text">22. AWR_DEV_FRAME_CONFIG_APPLY_MSG</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#23-AWR-DEV-STATUS-GET-MSG"><span class="nav-number">3.23.</span> <span class="nav-text">23. AWR_DEV_STATUS_GET_MSG</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#24-AWR-DEV-ASYNC-EVENT-MSG"><span class="nav-number">3.24.</span> <span class="nav-text">24. AWR_DEV_ASYNC_EVENT_MSG</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#API%E7%9A%84%E7%BC%96%E7%A8%8B%E9%A1%BA%E5%BA%8F"><span class="nav-number">4.</span> <span class="nav-text">API的编程顺序</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ssy"
+      src="/images/ssy.png">
+  <p class="site-author-name" itemprop="name">ssy</p>
+  <div class="site-description" itemprop="description">满怀希望 就会所向披靡</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">141</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">38</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ssy1938010014" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ssy1938010014" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://m.weibo.cn/u/5469432500?uid=5469432500&t=0&luicode=10000011&lfid=100103type=1&q=JIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" title="Weibo → https:&#x2F;&#x2F;m.weibo.cn&#x2F;u&#x2F;5469432500?uid&#x3D;5469432500&amp;t&#x3D;0&amp;luicode&#x3D;10000011&amp;lfid&#x3D;100103type%3D1%26q%3DJIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://ssy1938010014.github.io/" title="http:&#x2F;&#x2F;ssy1938010014.github.io" rel="noopener" target="_blank">ssy的小天地</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://y006.github.io/" title="http:&#x2F;&#x2F;y006.github.io" rel="noopener" target="_blank">邱院士的Blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://bengoooo.github.io/" title="http:&#x2F;&#x2F;BENgoooo.github.io" rel="noopener" target="_blank">赵总的Blog</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=1469041281&auto=1&height=66"></iframe>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ssy</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-ribbon@1/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+<script data-pjax>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  let url = element.dataset.target;
+  let pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  let pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  let fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+
+
+    <div id="pjax">
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+    </div>
+</body>
+</html>

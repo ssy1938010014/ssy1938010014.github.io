@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1/themes/blue/pace-theme-minimal.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"xn--ssy-lq6e63gg6fuu2d.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本节主要介绍了FIR滤波器的并行与串行verilog实现，及其量化方法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FPGA数字信号处理之FIR滤波器">
+<meta property="og:url" content="http://ssy的小天地.com/2023/11/20/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIR%E6%BB%A4%E6%B3%A2%E5%99%A8/index.html">
+<meta property="og:site_name" content="ssy的小天地">
+<meta property="og:description" content="本节主要介绍了FIR滤波器的并行与串行verilog实现，及其量化方法。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/20/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIR%E6%BB%A4%E6%B3%A2%E5%99%A8/image-20231120181039172.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/20/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIR%E6%BB%A4%E6%B3%A2%E5%99%A8/Snipaste_2023-11-20_17-51-29.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/20/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIR%E6%BB%A4%E6%B3%A2%E5%99%A8/untitled.bmp">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/20/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIR%E6%BB%A4%E6%B3%A2%E5%99%A8/image-20231120213503803.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/20/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIR%E6%BB%A4%E6%B3%A2%E5%99%A8/Snipaste_2023-11-20_21-08-07.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/20/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIR%E6%BB%A4%E6%B3%A2%E5%99%A8/image-20231121135956807.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/20/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIR%E6%BB%A4%E6%B3%A2%E5%99%A8/image-20231121141829792.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/20/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIR%E6%BB%A4%E6%B3%A2%E5%99%A8/image-20231121141755650.png">
+<meta property="article:published_time" content="2023-11-20T04:07:12.000Z">
+<meta property="article:modified_time" content="2024-04-15T18:14:44.563Z">
+<meta property="article:author" content="ssy">
+<meta property="article:tag" content="数字信号处理">
+<meta property="article:tag" content="VLSI DSP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/20/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIR%E6%BB%A4%E6%B3%A2%E5%99%A8/image-20231120181039172.png">
+
+<link rel="canonical" href="http://ssy的小天地.com/2023/11/20/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIR%E6%BB%A4%E6%B3%A2%E5%99%A8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>FPGA数字信号处理之FIR滤波器 | ssy的小天地</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+    <a target="_blank" rel="noopener" href="https://github.com/ssy1938010014" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ssy的小天地</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">愿汝如是 千金不换</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-works">
+
+    <a href="/works/" rel="section"><i class="fa fa-fw fa-sitemap"></i>文章</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ssy的小天地.com/2023/11/20/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIR%E6%BB%A4%E6%B3%A2%E5%99%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ssy.png">
+      <meta itemprop="name" content="ssy">
+      <meta itemprop="description" content="满怀希望 就会所向披靡">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ssy的小天地">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          FPGA数字信号处理之FIR滤波器
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+
+
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-11-20 12:07:12" itemprop="dateCreated datePublished" datetime="2023-11-20T12:07:12+08:00">2023-11-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-04-16 02:14:44" itemprop="dateModified" datetime="2024-04-16T02:14:44+08:00">2024-04-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%A7%AF%E7%B4%AF/" itemprop="url" rel="index"><span itemprop="name">学习积累</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本节主要介绍了FIR滤波器的并行与串行verilog实现，及其量化方法。</p>
+<span id="more"></span>
+<h1 id="FIR滤波器设计原理"><a href="#FIR滤波器设计原理" class="headerlink" title="FIR滤波器设计原理"></a>FIR滤波器设计原理</h1><ul>
+<li>详情见：(<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1se411V7Ek/?spm_id_from=333.999.0.0&amp;vd_source=221b76534ba13cfad544149d75ce9b6c">https://www.bilibili.com/video/BV1se411V7Ek/?spm_id_from=333.999.0.0&amp;vd_source=221b76534ba13cfad544149d75ce9b6c</a>)</li>
+<li>线性相位造成延时的解释：<a target="_blank" rel="noopener" href="https://blog.csdn.net/yhy0428/article/details/123308149">MATLAB中FIR滤波器的时延溢出问题详解：线性相位对信号造成的时延溢出及其消除方法，以及fir1等函数的使用_fir函数是怎么用_TechYin的博客-CSDN博客</a></li>
+<li>关于相位与延时的关系这里解释的很好：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Wg411e7Dg/?spm_id_from=333.1007.top_right_bar_window_history.content.click&amp;vd_source=221b76534ba13cfad544149d75ce9b6c">【数字信号处理】15.2 线性相位FIR数字滤波器的特性_哔哩哔哩_bilibili</a></li>
+</ul>
+<hr>
+<h1 id="FIR滤波器的硬件实现"><a href="#FIR滤波器的硬件实现" class="headerlink" title="FIR滤波器的硬件实现"></a>FIR滤波器的硬件实现</h1><h2 id="1-基于累加器的FIR滤波器设计"><a href="#1-基于累加器的FIR滤波器设计" class="headerlink" title="1.基于累加器的FIR滤波器设计"></a>1.基于累加器的FIR滤波器设计</h2><ul>
+<li><p>以4阶FIR滤波器为例，采用FPGA实现累加器组成的FIR滤波器电路，有：</p>
+<script type="math/tex; mode=display">
+y(n) = x(n) + x(n-1) + x(n-2) + x(n-3) + x(n-4)\\
+h(n) = \{1,1,1,1,1\}</script></li>
+<li><p>其中，$x(n)=sin(40\pi t) + sin(4\pi t)$，其分别对应$20Hz$和$2Hz$，设采样频率为$f_s = 100Hz$，其也就是FPGA的系统时钟</p>
+</li>
+<li><p>FPGA设计的系统框图如下：</p>
+<p><img src="/2023/11/20/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIR%E6%BB%A4%E6%B3%A2%E5%99%A8/image-20231120181039172.png" alt="image-20231120181039172" style="zoom: 67%;"></p>
+</li>
+</ul>
+<h2 id="2-源文件"><a href="#2-源文件" class="headerlink" title="2.源文件"></a>2.源文件</h2><ul>
+<li><p>accumulator_fir.v</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> accumulator_fir(</span><br><span class="line">    <span class="keyword">input</span> clk,                  <span class="comment">//系统时钟，100Hz</span></span><br><span class="line">    <span class="keyword">input</span> <span class="keyword">signed</span> [<span class="number">8</span>:<span class="number">0</span>] xin,     <span class="comment">//输入数据</span></span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">signed</span> [<span class="number">11</span>:<span class="number">0</span>] yout   <span class="comment">//滤波输出数据</span></span><br><span class="line">    );</span><br><span class="line">    </span><br><span class="line">	<span class="comment">//产生4级触发器输出信号，相当于4级延时后的信号</span></span><br><span class="line">    <span class="keyword">reg</span> <span class="keyword">signed</span> [<span class="number">8</span>:<span class="number">0</span>] x1,x2,x3,x4;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">always</span> @(<span class="keyword">posedge</span> clk) <span class="keyword">begin</span></span><br><span class="line">		 x1 &lt;= xin;</span><br><span class="line">		 x2 &lt;= x1;</span><br><span class="line">		 x3 &lt;= x2;</span><br><span class="line">		 x4 &lt;= x3;</span><br><span class="line">	 <span class="keyword">end</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">//对连续5个输入数据进行累加，完成滤波输出	 </span></span><br><span class="line">	<span class="keyword">assign</span> yout = xin + x1 + x2 + x3 + x4; </span><br><span class="line">	</span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>fir_test_data.v</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> fir_test_data(</span><br><span class="line">    <span class="keyword">input</span> clk,</span><br><span class="line">    <span class="keyword">output</span> out_valid_sin2Hz,</span><br><span class="line">    <span class="keyword">output</span> out_valid_sin20Hz,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">reg</span> <span class="keyword">signed</span> [<span class="number">8</span>:<span class="number">0</span>] dout</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">wire</span> <span class="keyword">signed</span> [<span class="number">7</span>:<span class="number">0</span>] sin_data_2Hz;</span><br><span class="line">    <span class="keyword">wire</span> <span class="keyword">signed</span> [<span class="number">7</span>:<span class="number">0</span>] sin_data_20Hz; <span class="comment">//注意这边一定要定义成有符号数，或者手动补充最高位</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//产生2Hz的正弦信号</span></span><br><span class="line">    dds_compiler_0 u1(</span><br><span class="line">        <span class="variable">.aclk</span>(clk),</span><br><span class="line">        <span class="variable">.s_axis_config_tvalid</span>(<span class="number">1&#x27;b1</span>),</span><br><span class="line">        <span class="variable">.s_axis_config_tdata</span>(<span class="number">16&#x27;d1311</span>),</span><br><span class="line">        <span class="variable">.m_axis_data_tvalid</span>(out_valid_sin2Hz),</span><br><span class="line">        <span class="variable">.m_axis_data_tdata</span>(sin_data_2Hz)</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="comment">//产生20Hz的正弦信号</span></span><br><span class="line">    dds_compiler_0 u2(</span><br><span class="line">        <span class="variable">.aclk</span>(clk),</span><br><span class="line">        <span class="variable">.s_axis_config_tvalid</span>(<span class="number">1&#x27;b1</span>),</span><br><span class="line">        <span class="variable">.s_axis_config_tdata</span>(<span class="number">16&#x27;d13107</span>),</span><br><span class="line">        <span class="variable">.m_axis_data_tvalid</span>(out_valid_sin20Hz),</span><br><span class="line">        <span class="variable">.m_axis_data_tdata</span>(sin_data_20Hz)</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> clk) <span class="keyword">begin</span></span><br><span class="line">        dout &lt;= sin_data_2Hz + sin_data_20Hz;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>FIR_accumulator_design.v</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> FIR_accumulator_design(</span><br><span class="line">    <span class="keyword">input</span> clk,</span><br><span class="line">    <span class="keyword">output</span> out_valid_sin2Hz,</span><br><span class="line">    <span class="keyword">output</span> out_valid_sin20Hz,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">signed</span> [<span class="number">11</span>:<span class="number">0</span>] yout</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">	<span class="keyword">wire</span> <span class="keyword">signed</span> [<span class="number">8</span>:<span class="number">0</span>] xin;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//频率叠加信号生成模块</span></span><br><span class="line">    fir_test_data u1(</span><br><span class="line">        <span class="variable">.clk</span>(clk),</span><br><span class="line">        <span class="variable">.out_valid_sin2Hz</span>(out_valid_sin2Hz),</span><br><span class="line">        <span class="variable">.out_valid_sin20Hz</span>(out_valid_sin20Hz),</span><br><span class="line">        <span class="variable">.dout</span>(xin)</span><br><span class="line">    );</span><br><span class="line">		</span><br><span class="line">    <span class="comment">//叠加器构成的FIR滤波模块</span></span><br><span class="line">    accumulator_fir u2(</span><br><span class="line">        <span class="variable">.clk</span>(clk), </span><br><span class="line">        <span class="variable">.xin</span>(xin), </span><br><span class="line">        <span class="variable">.yout</span>(yout)</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="3-Testbench"><a href="#3-Testbench" class="headerlink" title="3.Testbench"></a>3.Testbench</h2><figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">`<span class="keyword">timescale</span> 1ms / 1ms</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">module</span> FIR_accumulator_tb;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">reg</span> clk_100Hz;</span><br><span class="line">    <span class="keyword">wire</span> out_valid_sin2Hz;</span><br><span class="line">    <span class="keyword">wire</span> out_valid_sin20Hz;</span><br><span class="line">    <span class="keyword">wire</span> <span class="keyword">signed</span> [<span class="number">11</span>:<span class="number">0</span>] yout;</span><br><span class="line"></span><br><span class="line">    FIR_accumulator_design u1(</span><br><span class="line">        <span class="variable">.clk</span>(clk_100Hz),</span><br><span class="line">        <span class="variable">.out_valid_sin2Hz</span>(out_valid_sin2Hz),</span><br><span class="line">        <span class="variable">.out_valid_sin20Hz</span>(out_valid_sin20Hz),</span><br><span class="line">        <span class="variable">.yout</span>(yout)</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">	<span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">		clk_100Hz = <span class="number">0</span>;</span><br><span class="line">		#<span class="number">100</span>;</span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line">   </span><br><span class="line">    <span class="keyword">always</span> #<span class="number">5</span> clk_100Hz &lt;= ~clk_100Hz;	</span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>仿真结果：</p>
+<p><img src="/2023/11/20/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIR%E6%BB%A4%E6%B3%A2%E5%99%A8/Snipaste_2023-11-20_17-51-29.png" alt="Snipaste_2023-11-20_17-51-29"></p>
+</li>
+</ul>
+<hr>
+<h1 id="FIR系数的量化方法"><a href="#FIR系数的量化方法" class="headerlink" title="FIR系数的量化方法"></a>FIR系数的量化方法</h1><h2 id="1-量化原则"><a href="#1-量化原则" class="headerlink" title="1.量化原则"></a>1.量化原则</h2><ul>
+<li>归一化处理$\rightarrow $乘以$2^{B-1}-1$$\rightarrow$四舍五入取整（实际设计可能稍有出入，不除以绝对值，方便后期还原，详情见IP核那一节）<ul>
+<li>若量化位宽为$B$bit，那么乘以$2^{B-1}-1$的原因是有符号数的范围是-$2^{B-1}\sim 2^{B-1}-1$</li>
+</ul>
+</li>
+<li><strong>输出与输入相比，需要增加的位宽：所有系数的绝对值之和$&lt;2^{B_{pad}}$，$B_{pad}$为增加的位宽</strong></li>
+</ul>
+<h2 id="2-MATLAB代码"><a href="#2-MATLAB代码" class="headerlink" title="2.MATLAB代码"></a>2.MATLAB代码</h2><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">N=<span class="number">16</span>;      <span class="comment">%滤波器长度</span></span><br><span class="line">fs=<span class="number">2000</span>;   <span class="comment">%采样频率</span></span><br><span class="line">fc=<span class="number">200</span>;    <span class="comment">%低通滤波器的3dB截止频率</span></span><br><span class="line"></span><br><span class="line"><span class="comment">%生成窗函数</span></span><br><span class="line">window=blackman(N)&#x27;;</span><br><span class="line"></span><br><span class="line"><span class="comment">%采用fir1函数设计FIR滤波器</span></span><br><span class="line">b=fir1(N<span class="number">-1</span>,fc*<span class="number">2</span>/fs,window);</span><br><span class="line"></span><br><span class="line"><span class="comment">%对滤波器系数进行量化</span></span><br><span class="line">B=<span class="number">8</span>;                   <span class="comment">%量化位宽为8比特</span></span><br><span class="line">Q_h=b/<span class="built_in">max</span>(<span class="built_in">abs</span>(b));     <span class="comment">%系数归一化处理</span></span><br><span class="line">Q_h=Q_h*(<span class="number">2</span>^(B<span class="number">-1</span>)<span class="number">-1</span>);   <span class="comment">%乘以B比特位宽的最大正整数</span></span><br><span class="line">Q_h8=<span class="built_in">round</span>(Q_h);       <span class="comment">%四舍五入</span></span><br><span class="line"></span><br><span class="line">B=<span class="number">12</span>;                  <span class="comment">%量化位宽为12比特</span></span><br><span class="line">Q_h=b/<span class="built_in">max</span>(<span class="built_in">abs</span>(b));     <span class="comment">%系数归一化处理</span></span><br><span class="line">Q_h=Q_h*(<span class="number">2</span>^(B<span class="number">-1</span>)<span class="number">-1</span>);   <span class="comment">%乘以B比特位宽的最大正整数</span></span><br><span class="line">Q_h12=<span class="built_in">round</span>(Q_h)       <span class="comment">%四舍五入</span></span><br><span class="line"></span><br><span class="line">abs_sum=sum(<span class="built_in">abs</span>(Q_h12))</span><br><span class="line"></span><br><span class="line"><span class="comment">%求滤波器的幅频响应</span></span><br><span class="line">m_b=<span class="number">20</span>*<span class="built_in">log10</span>(<span class="built_in">abs</span>(fft(b,<span class="number">1024</span>)));</span><br><span class="line">m_8=<span class="number">20</span>*<span class="built_in">log10</span>(<span class="built_in">abs</span>(fft(Q_h8,<span class="number">1024</span>)));</span><br><span class="line">m_12=<span class="number">20</span>*<span class="built_in">log10</span>(<span class="built_in">abs</span>(fft(Q_h12,<span class="number">1024</span>)));</span><br><span class="line"><span class="comment">%对幅频响应归一化处理</span></span><br><span class="line">m_b=m_b-<span class="built_in">max</span>(m_b);</span><br><span class="line">m_8=m_8-<span class="built_in">max</span>(m_8);      </span><br><span class="line">m_12=m_12-<span class="built_in">max</span>(m_12);</span><br><span class="line"></span><br><span class="line"><span class="comment">%设置幅频响应的横坐标单位为Hz</span></span><br><span class="line">x_f=[<span class="number">0</span>:(fs/<span class="built_in">length</span>(m_b)):fs/<span class="number">2</span>];</span><br><span class="line"><span class="comment">%只显示正频率部分的幅频响应</span></span><br><span class="line">mb=m_b(<span class="number">1</span>:<span class="built_in">length</span>(x_f));</span><br><span class="line">m8=m_8(<span class="number">1</span>:<span class="built_in">length</span>(x_f));</span><br><span class="line">m12=m_12(<span class="number">1</span>:<span class="built_in">length</span>(x_f));</span><br><span class="line"></span><br><span class="line"><span class="comment">%绘制幅频响应曲线</span></span><br><span class="line"><span class="built_in">plot</span>(x_f,mb,<span class="string">&#x27;-&#x27;</span>,x_f,m8,<span class="string">&#x27;--&#x27;</span>,x_f,m12,<span class="string">&#x27;-.&#x27;</span>);</span><br><span class="line">xlabel(<span class="string">&#x27;频率(Hz)&#x27;</span>);ylabel(<span class="string">&#x27;幅度(dB)&#x27;</span>);</span><br><span class="line"><span class="built_in">legend</span>(<span class="string">&#x27;未量化&#x27;</span>,<span class="string">&#x27;8bit量化&#x27;</span>,<span class="string">&#x27;12bit量化&#x27;</span>);</span><br><span class="line">grid on;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>不同量化位宽对应$h(n)$幅频特性的比较：</p>
+<p><img src="/2023/11/20/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIR%E6%BB%A4%E6%B3%A2%E5%99%A8/untitled.bmp" alt="untitled"></p>
+</li>
+</ul>
+<hr>
+<h1 id="并行FIR滤波的硬件实现"><a href="#并行FIR滤波的硬件实现" class="headerlink" title="并行FIR滤波的硬件实现"></a>并行FIR滤波的硬件实现</h1><h2 id="1-基于并行FIR滤波器的设计"><a href="#1-基于并行FIR滤波器的设计" class="headerlink" title="1.基于并行FIR滤波器的设计"></a>1.基于并行FIR滤波器的设计</h2><ul>
+<li><p>由于经matlab中fir1函数设计的滤波器，都具有线性相位，且$h(n)$的系数是对称的，即$h(k)=h(n-k)$，那么对于此对称结构，有如下实现框图：</p>
+<p><img src="/2023/11/20/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIR%E6%BB%A4%E6%B3%A2%E5%99%A8/image-20231120213503803.png" alt="image-20231120213503803" style="zoom:50%;"></p>
+</li>
+<li><p>全并行处理：<strong>时钟频率与数据速率相同</strong></p>
+</li>
+</ul>
+<h2 id="2-源文件-1"><a href="#2-源文件-1" class="headerlink" title="2.源文件"></a>2.源文件</h2><ul>
+<li><p>FirParallel.v</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> FirParallel(</span><br><span class="line">    <span class="keyword">input</span> clk,                      <span class="comment">//系统时钟：2 000 Hz</span></span><br><span class="line">    <span class="keyword">input</span> <span class="keyword">signed</span> [<span class="number">7</span>:<span class="number">0</span>] Xin,         <span class="comment">//输入数据</span></span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">reg</span> <span class="keyword">signed</span> [<span class="number">21</span>:<span class="number">0</span>] Yout   <span class="comment">//输出数据</span></span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">	<span class="comment">//将数据存入移位寄存器Xin_Reg中</span></span><br><span class="line">	<span class="keyword">reg</span> <span class="keyword">signed</span> [<span class="number">7</span>:<span class="number">0</span>] Xin_Reg[<span class="number">15</span>:<span class="number">0</span>];</span><br><span class="line">	<span class="keyword">always</span> @(<span class="keyword">posedge</span> clk)</span><br><span class="line">	   <span class="keyword">begin</span></span><br><span class="line">		   Xin_Reg[<span class="number">0</span>]  &lt;= Xin;</span><br><span class="line"> 		   Xin_Reg[<span class="number">1</span>]  &lt;= Xin_Reg[<span class="number">0</span>];</span><br><span class="line">		   Xin_Reg[<span class="number">2</span>]  &lt;= Xin_Reg[<span class="number">1</span>];</span><br><span class="line"> 		   Xin_Reg[<span class="number">3</span>]  &lt;= Xin_Reg[<span class="number">2</span>];</span><br><span class="line">		   Xin_Reg[<span class="number">4</span>]  &lt;= Xin_Reg[<span class="number">3</span>];</span><br><span class="line"> 		   Xin_Reg[<span class="number">5</span>]  &lt;= Xin_Reg[<span class="number">4</span>];</span><br><span class="line">		   Xin_Reg[<span class="number">6</span>]  &lt;= Xin_Reg[<span class="number">5</span>];</span><br><span class="line"> 		   Xin_Reg[<span class="number">7</span>]  &lt;= Xin_Reg[<span class="number">6</span>];</span><br><span class="line"> 		   Xin_Reg[<span class="number">8</span>]  &lt;= Xin_Reg[<span class="number">7</span>];</span><br><span class="line">		   Xin_Reg[<span class="number">9</span>]  &lt;= Xin_Reg[<span class="number">8</span>];</span><br><span class="line"> 		   Xin_Reg[<span class="number">10</span>] &lt;= Xin_Reg[<span class="number">9</span>];</span><br><span class="line">		   Xin_Reg[<span class="number">11</span>] &lt;= Xin_Reg[<span class="number">10</span>];</span><br><span class="line"> 		   Xin_Reg[<span class="number">12</span>] &lt;= Xin_Reg[<span class="number">11</span>];</span><br><span class="line">		   Xin_Reg[<span class="number">13</span>] &lt;= Xin_Reg[<span class="number">12</span>];</span><br><span class="line"> 		   Xin_Reg[<span class="number">14</span>] &lt;= Xin_Reg[<span class="number">13</span>];</span><br><span class="line"> 		   Xin_Reg[<span class="number">15</span>] &lt;= Xin_Reg[<span class="number">14</span>];</span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//采用8个双输入加法器，完成对称系数相加</span></span><br><span class="line">	<span class="comment">//两个8比特数据相加，需要用9比特数据存储数据</span></span><br><span class="line">	<span class="keyword">reg</span> <span class="keyword">signed</span> [<span class="number">8</span>:<span class="number">0</span>] Xin_Add [<span class="number">7</span>:<span class="number">0</span>];</span><br><span class="line">	<span class="keyword">always</span> @(<span class="keyword">posedge</span> clk)</span><br><span class="line">	   <span class="keyword">begin</span></span><br><span class="line">         Xin_Add[<span class="number">0</span>] = Xin_Reg[<span class="number">0</span>] + Xin_Reg[<span class="number">15</span>];</span><br><span class="line">         Xin_Add[<span class="number">1</span>] = Xin_Reg[<span class="number">1</span>] + Xin_Reg[<span class="number">14</span>];</span><br><span class="line">         Xin_Add[<span class="number">2</span>] = Xin_Reg[<span class="number">2</span>] + Xin_Reg[<span class="number">13</span>];</span><br><span class="line">         Xin_Add[<span class="number">3</span>] = Xin_Reg[<span class="number">3</span>] + Xin_Reg[<span class="number">12</span>];</span><br><span class="line">         Xin_Add[<span class="number">4</span>] = Xin_Reg[<span class="number">4</span>] + Xin_Reg[<span class="number">11</span>];</span><br><span class="line">         Xin_Add[<span class="number">5</span>] = Xin_Reg[<span class="number">5</span>] + Xin_Reg[<span class="number">10</span>];</span><br><span class="line">         Xin_Add[<span class="number">6</span>] = Xin_Reg[<span class="number">6</span>] + Xin_Reg[<span class="number">9</span>];</span><br><span class="line">         Xin_Add[<span class="number">7</span>] = Xin_Reg[<span class="number">7</span>] + Xin_Reg[<span class="number">8</span>];</span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line">		</span><br><span class="line">	<span class="comment">//实例化8个有符号数乘法器IP核mult</span></span><br><span class="line">	<span class="comment">//2级流水线延时输出</span></span><br><span class="line">	<span class="keyword">wire</span> <span class="keyword">signed</span> [<span class="number">20</span>:<span class="number">0</span>] Mout [<span class="number">7</span>:<span class="number">0</span>];  </span><br><span class="line">	mult	u0 (</span><br><span class="line">		<span class="variable">.CLK</span> (clk),</span><br><span class="line">		<span class="variable">.A</span> (Xin_Add[<span class="number">0</span>]),       </span><br><span class="line">		<span class="variable">.B</span> (<span class="number">12&#x27;d0</span>),       </span><br><span class="line">		<span class="variable">.P</span> (Mout[<span class="number">0</span>]));    </span><br><span class="line"></span><br><span class="line">	mult	u1 (</span><br><span class="line">		<span class="variable">.CLK</span> (clk),</span><br><span class="line">		<span class="variable">.A</span> (Xin_Add[<span class="number">1</span>]),       </span><br><span class="line">		<span class="variable">.B</span> (-<span class="number">12&#x27;d7</span>),       </span><br><span class="line">		<span class="variable">.P</span> (Mout[<span class="number">1</span>]));  </span><br><span class="line"></span><br><span class="line">	mult	u2 (</span><br><span class="line">		<span class="variable">.CLK</span> (clk),</span><br><span class="line">		<span class="variable">.A</span> (Xin_Add[<span class="number">2</span>]),       </span><br><span class="line">		<span class="variable">.B</span> (-<span class="number">12&#x27;d15</span>),       </span><br><span class="line">		<span class="variable">.P</span> (Mout[<span class="number">2</span>]));  </span><br><span class="line">		</span><br><span class="line">	mult	u3 (</span><br><span class="line">		<span class="variable">.CLK</span> (clk),</span><br><span class="line">		<span class="variable">.A</span> (Xin_Add[<span class="number">3</span>]),       </span><br><span class="line">		<span class="variable">.B</span> (<span class="number">12&#x27;d46</span>),       </span><br><span class="line">		<span class="variable">.P</span> (Mout[<span class="number">3</span>]));  		</span><br><span class="line"></span><br><span class="line">	mult	u4 (</span><br><span class="line">		<span class="variable">.CLK</span> (clk),</span><br><span class="line">		<span class="variable">.A</span> (Xin_Add[<span class="number">4</span>]),       </span><br><span class="line">		<span class="variable">.B</span> (<span class="number">12&#x27;d307</span>),       </span><br><span class="line">		<span class="variable">.P</span> (Mout[<span class="number">4</span>]));    </span><br><span class="line"></span><br><span class="line">	mult	u5 (</span><br><span class="line">		<span class="variable">.CLK</span> (clk),</span><br><span class="line">		<span class="variable">.A</span> (Xin_Add[<span class="number">5</span>]),       </span><br><span class="line">		<span class="variable">.B</span> (<span class="number">12&#x27;d850</span>),       </span><br><span class="line">		<span class="variable">.P</span> (Mout[<span class="number">5</span>]));  </span><br><span class="line"></span><br><span class="line">	mult	u6 (</span><br><span class="line">		<span class="variable">.CLK</span> (clk),</span><br><span class="line">		<span class="variable">.A</span> (Xin_Add[<span class="number">6</span>]),       </span><br><span class="line">		<span class="variable">.B</span> (<span class="number">12&#x27;d1545</span>),       </span><br><span class="line">		<span class="variable">.P</span> (Mout[<span class="number">6</span>]));  </span><br><span class="line">		</span><br><span class="line">	mult	u7 (</span><br><span class="line">		<span class="variable">.CLK</span> (clk),</span><br><span class="line">		<span class="variable">.A</span> (Xin_Add[<span class="number">7</span>]),       </span><br><span class="line">		<span class="variable">.B</span> (<span class="number">12&#x27;d2047</span>),       </span><br><span class="line">		<span class="variable">.P</span> (Mout[<span class="number">7</span>]));  </span><br><span class="line"></span><br><span class="line">	<span class="comment">//采用2级流水线完成8输入加法运算</span></span><br><span class="line">    <span class="keyword">reg</span> <span class="keyword">signed</span> [<span class="number">20</span>:<span class="number">0</span>] sum1,sum2;	</span><br><span class="line">	<span class="keyword">always</span> @(<span class="keyword">posedge</span> clk) <span class="keyword">begin</span></span><br><span class="line">		sum1 &lt;= Mout[<span class="number">0</span>]+Mout[<span class="number">1</span>]+Mout[<span class="number">2</span>]+Mout[<span class="number">3</span>];</span><br><span class="line">		sum2 &lt;= Mout[<span class="number">4</span>]+Mout[<span class="number">5</span>]+Mout[<span class="number">6</span>]+Mout[<span class="number">7</span>];</span><br><span class="line">		Yout &lt;= sum1 + sum2;</span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line">		</span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>FirParallel_test_data.v</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> FirParallel_test_data(</span><br><span class="line">    <span class="keyword">input</span> clk,                  <span class="comment">//2000Hz</span></span><br><span class="line">    <span class="keyword">output</span> out_valid_sin100Hz,</span><br><span class="line">    <span class="keyword">output</span> out_valid_sin500Hz,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">reg</span> <span class="keyword">signed</span> [<span class="number">7</span>:<span class="number">0</span>] dout</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">wire</span> <span class="keyword">signed</span> [<span class="number">7</span>:<span class="number">0</span>] sin_data_100Hz; <span class="comment">//这里在如果用7bit在modelsim中仿真会报错，但在vivado中仿真不会报错</span></span><br><span class="line">    <span class="keyword">wire</span> <span class="keyword">signed</span> [<span class="number">7</span>:<span class="number">0</span>] sin_data_500Hz; <span class="comment">//实际上ip核中例化的是7bit</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//产生100Hz的正弦信号</span></span><br><span class="line">    dds_for_FirParallel u1(</span><br><span class="line">        <span class="variable">.aclk</span>(clk),</span><br><span class="line">        <span class="variable">.s_axis_config_tvalid</span>(<span class="number">1&#x27;b1</span>),</span><br><span class="line">        <span class="variable">.s_axis_config_tdata</span>(<span class="number">16&#x27;d3277</span>),</span><br><span class="line">        <span class="variable">.m_axis_data_tvalid</span>(out_valid_sin100Hz),</span><br><span class="line">        <span class="variable">.m_axis_data_tdata</span>(sin_data_100Hz)</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="comment">//产生500Hz的正弦信号</span></span><br><span class="line">    dds_for_FirParallel u2(</span><br><span class="line">        <span class="variable">.aclk</span>(clk),</span><br><span class="line">        <span class="variable">.s_axis_config_tvalid</span>(<span class="number">1&#x27;b1</span>),</span><br><span class="line">        <span class="variable">.s_axis_config_tdata</span>(<span class="number">16&#x27;d16384</span>),</span><br><span class="line">        <span class="variable">.m_axis_data_tvalid</span>(out_valid_sin500Hz),</span><br><span class="line">        <span class="variable">.m_axis_data_tdata</span>(sin_data_500Hz)</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> clk) <span class="keyword">begin</span></span><br><span class="line">        dout &lt;= sin_data_100Hz + sin_data_500Hz;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>FirParallel_design.v</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> FirParallel_design(</span><br><span class="line">    <span class="keyword">input</span> clk,</span><br><span class="line">    <span class="keyword">output</span> out_valid_sin100Hz,</span><br><span class="line">    <span class="keyword">output</span> out_valid_sin500Hz,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">signed</span> [<span class="number">21</span>:<span class="number">0</span>] yout</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">	<span class="keyword">wire</span> <span class="keyword">signed</span> [<span class="number">7</span>:<span class="number">0</span>] xin;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//频率叠加信号生成模块</span></span><br><span class="line">    FirParallel_test_data u1(</span><br><span class="line">        <span class="variable">.clk</span>(clk),</span><br><span class="line">        <span class="variable">.out_valid_sin100Hz</span>(out_valid_sin100Hz),</span><br><span class="line">        <span class="variable">.out_valid_sin500Hz</span>(out_valid_sin500Hz),</span><br><span class="line">        <span class="variable">.dout</span>(xin)</span><br><span class="line">    );</span><br><span class="line">		</span><br><span class="line">    <span class="comment">//并行线性相位FIR滤波模块</span></span><br><span class="line">    FirParallel u2(</span><br><span class="line">        <span class="variable">.clk</span>(clk), </span><br><span class="line">        <span class="variable">.Xin</span>(xin), </span><br><span class="line">        <span class="variable">.Yout</span>(yout)</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="3-Testbench-1"><a href="#3-Testbench-1" class="headerlink" title="3.Testbench"></a>3.Testbench</h2><figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> FirParallel_design_tb;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">reg</span> clk;</span><br><span class="line">    <span class="keyword">wire</span> out_valid_sin100Hz;</span><br><span class="line">    <span class="keyword">wire</span> out_valid_sin500Hz;</span><br><span class="line">    <span class="keyword">wire</span> <span class="keyword">signed</span> [<span class="number">21</span>:<span class="number">0</span>] yout;</span><br><span class="line"></span><br><span class="line">    FirParallel_design u1(</span><br><span class="line">        <span class="variable">.clk</span>(clk),</span><br><span class="line">        <span class="variable">.out_valid_sin100Hz</span>(out_valid_sin100Hz),</span><br><span class="line">        <span class="variable">.out_valid_sin500Hz</span>(out_valid_sin500Hz),</span><br><span class="line">        <span class="variable">.yout</span>(yout)</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">	<span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">		clk = <span class="number">0</span>;</span><br><span class="line">		#<span class="number">100</span>;</span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line">   </span><br><span class="line">    <span class="keyword">always</span> #<span class="number">250000</span> clk &lt;= ~clk;	 <span class="comment">//产生2000Hz的系统时钟</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>结果如下：</p>
+<p><img src="/2023/11/20/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIR%E6%BB%A4%E6%B3%A2%E5%99%A8/Snipaste_2023-11-20_21-08-07.png" alt="Snipaste_2023-11-20_21-08-07"></p>
+</li>
+</ul>
+<hr>
+<h1 id="串行FIR滤波器的硬件实现"><a href="#串行FIR滤波器的硬件实现" class="headerlink" title="串行FIR滤波器的硬件实现*"></a>串行FIR滤波器的硬件实现*</h1><h2 id="1-基于串行结构的FIR滤波器设计"><a href="#1-基于串行结构的FIR滤波器设计" class="headerlink" title="1.基于串行结构的FIR滤波器设计"></a>1.基于串行结构的FIR滤波器设计</h2><ul>
+<li><p>核心思想：速度换面积</p>
+</li>
+<li><p>与并行FIR滤波器一致，实现16个抽头系数的低通滤波器，那么，滤波器的时钟速率是数据速率的8倍，因为此时只有一个乘法器，完成一次乘加运算，需要8个时钟周期，而进来的16个输入数据，需要在这8个时钟周期之内保持不变，所以数据时钟是滤波器时钟周期的8倍，那么对应频率就是：<strong>时钟频率是数据频率的8倍</strong></p>
+</li>
+<li><p>FPGA设计的系统框图如下：</p>
+<p><img src="/2023/11/20/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIR%E6%BB%A4%E6%B3%A2%E5%99%A8/image-20231121135956807.png" alt="image-20231121135956807"></p>
+</li>
+<li><p>下述代码中有一段用<strong>for循环实现移位操作</strong>值得指出，个人认为很精彩：</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//将数据存入移位寄存器Xin_Reg中</span></span><br><span class="line"><span class="keyword">reg</span> [<span class="number">7</span>:<span class="number">0</span>] Xin_Reg[<span class="number">15</span>:<span class="number">0</span>];</span><br><span class="line"><span class="keyword">reg</span> [<span class="number">3</span>:<span class="number">0</span>] i,j; </span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">posedge</span> rst) <span class="keyword">begin</span></span><br><span class="line">	<span class="keyword">if</span> (rst) <span class="keyword">begin</span> </span><br><span class="line">		<span class="comment">//初始化寄存器值为0</span></span><br><span class="line">		<span class="keyword">for</span> (i=<span class="number">0</span>; i&lt;<span class="number">15</span>; i=i+<span class="number">1</span>)</span><br><span class="line">			 Xin_Reg[i]&lt;=<span class="number">8&#x27;d0</span>;</span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">	    <span class="keyword">if</span> (count==<span class="number">7</span>) <span class="keyword">begin</span></span><br><span class="line">			<span class="comment">//Xin_Reg[0] &lt;= Xin;     //写在for循环前面和后面结果一致，都可以</span></span><br><span class="line">		    <span class="keyword">for</span> (j=<span class="number">0</span>; j&lt;<span class="number">15</span>; j=j+<span class="number">1</span>)</span><br><span class="line">			   Xin_Reg[j+<span class="number">1</span>] &lt;= Xin_Reg[j];</span><br><span class="line">			Xin_Reg[<span class="number">0</span>] &lt;= Xin;</span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line">   <span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="2-源文件-2"><a href="#2-源文件-2" class="headerlink" title="2.源文件"></a>2.源文件</h2><ul>
+<li><p>FirFullSerial.v</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> FirFullSerial(</span><br><span class="line">	<span class="keyword">input</span>		rst,                      <span class="comment">//复位信号，高电平有效</span></span><br><span class="line">	<span class="keyword">input</span>		clk,                      <span class="comment">//FPGA系统时钟，频率为16kHz</span></span><br><span class="line">	<span class="keyword">input</span>	 <span class="keyword">signed</span> [<span class="number">7</span>:<span class="number">0</span>]	Xin,          <span class="comment">//数据输入频率为2khZ</span></span><br><span class="line">	<span class="keyword">output</span> <span class="keyword">reg</span> <span class="keyword">signed</span> [<span class="number">21</span>:<span class="number">0</span>] Yout);    <span class="comment">//滤波后的输出数据</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">reg</span>  <span class="keyword">signed</span> [<span class="number">11</span>:<span class="number">0</span>] coe;            <span class="comment">//滤波器为12比特量化数据</span></span><br><span class="line">	<span class="keyword">wire</span> <span class="keyword">signed</span> [<span class="number">8</span>:<span class="number">0</span>] add_s;           <span class="comment">//输入为8比特量化数据，两个对称系数相加需要9比特存储</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//实例化有符号数加法器IP核,对输入数据进行1位符号位扩展，输出结果为9比特数据</span></span><br><span class="line">	<span class="comment">//无流水线延时</span></span><br><span class="line">	<span class="keyword">reg</span> <span class="keyword">signed</span> [<span class="number">8</span>:<span class="number">0</span>] add_a;</span><br><span class="line">	<span class="keyword">reg</span> <span class="keyword">signed</span> [<span class="number">8</span>:<span class="number">0</span>] add_b;</span><br><span class="line">	adder u2 (</span><br><span class="line">		<span class="variable">.A</span> (add_a),</span><br><span class="line">		<span class="variable">.B</span> (add_b),</span><br><span class="line">		<span class="variable">.S</span> (add_s));	</span><br><span class="line">		</span><br><span class="line">	<span class="comment">//3位计数器，计数周期为8，为输入数据速率</span></span><br><span class="line">	<span class="keyword">reg</span> [<span class="number">2</span>:<span class="number">0</span>] count = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">always</span> @(<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">posedge</span> rst)</span><br><span class="line">		<span class="keyword">if</span> (rst)</span><br><span class="line">			count &lt;= <span class="number">3&#x27;d0</span>;</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">			count &lt;= count + <span class="number">1</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//将数据存入移位寄存器Xin_Reg中</span></span><br><span class="line">	<span class="keyword">reg</span> [<span class="number">7</span>:<span class="number">0</span>] Xin_Reg[<span class="number">15</span>:<span class="number">0</span>];</span><br><span class="line">	<span class="keyword">reg</span> [<span class="number">3</span>:<span class="number">0</span>] i,j; </span><br><span class="line">	<span class="keyword">always</span> @(<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">posedge</span> rst) <span class="keyword">begin</span></span><br><span class="line">		<span class="keyword">if</span> (rst) <span class="keyword">begin</span> </span><br><span class="line">			<span class="comment">//初始化寄存器值为0</span></span><br><span class="line">			<span class="keyword">for</span> (i=<span class="number">0</span>; i&lt;<span class="number">15</span>; i=i+<span class="number">1</span>)</span><br><span class="line">				 Xin_Reg[i]&lt;=<span class="number">8&#x27;d0</span>;</span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">		    <span class="keyword">if</span> (count==<span class="number">7</span>) <span class="keyword">begin</span></span><br><span class="line">				<span class="comment">//Xin_Reg[0] &lt;= Xin;     //写在for循环前面和后面结果一致，都可以</span></span><br><span class="line">			    <span class="keyword">for</span> (j=<span class="number">0</span>; j&lt;<span class="number">15</span>; j=j+<span class="number">1</span>)</span><br><span class="line">				   Xin_Reg[j+<span class="number">1</span>] &lt;= Xin_Reg[j];</span><br><span class="line">				Xin_Reg[<span class="number">0</span>] &lt;= Xin;</span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//将对称系数的输入数据相加，同时将对应的滤波器系数送入乘法器</span></span><br><span class="line">	<span class="comment">//为了保证加法运算不溢出，输入输出数据均扩展为9比特。</span></span><br><span class="line">	<span class="comment">//需要注意的是，下面程序只使用了一个加法器</span></span><br><span class="line">	<span class="keyword">always</span> @(<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">posedge</span> rst) <span class="keyword">begin</span></span><br><span class="line">		<span class="keyword">if</span> (rst) <span class="keyword">begin</span></span><br><span class="line">		    add_a &lt;= <span class="number">13&#x27;d0</span>;</span><br><span class="line">			add_b &lt;= <span class="number">13&#x27;d0</span>;</span><br><span class="line">			coe &lt;= <span class="number">12&#x27;d0</span>;</span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">			<span class="keyword">if</span> (count==<span class="number">3&#x27;d0</span>) <span class="keyword">begin</span></span><br><span class="line">			    add_a &lt;= &#123;Xin_Reg[<span class="number">0</span>][<span class="number">7</span>],Xin_Reg[<span class="number">0</span>]&#125;;</span><br><span class="line">			    add_b &lt;= &#123;Xin_Reg[<span class="number">15</span>][<span class="number">7</span>],Xin_Reg[<span class="number">15</span>]&#125;;</span><br><span class="line">				coe &lt;= <span class="number">12&#x27;d0</span>;<span class="comment">//c0</span></span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">			<span class="keyword">else</span> <span class="keyword">if</span> (count==<span class="number">3&#x27;d1</span>) <span class="keyword">begin</span></span><br><span class="line">				add_a &lt;= &#123;Xin_Reg[<span class="number">1</span>][<span class="number">7</span>],Xin_Reg[<span class="number">1</span>]&#125;;</span><br><span class="line">				add_b &lt;= &#123;Xin_Reg[<span class="number">14</span>][<span class="number">7</span>],Xin_Reg[<span class="number">14</span>]&#125;;					</span><br><span class="line">				coe &lt;= -<span class="number">12&#x27;d7</span>; <span class="comment">//c1</span></span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">			<span class="keyword">else</span> <span class="keyword">if</span> (count==<span class="number">3&#x27;d2</span>) <span class="keyword">begin</span></span><br><span class="line">				add_a &lt;= &#123;Xin_Reg[<span class="number">2</span>][<span class="number">7</span>],Xin_Reg[<span class="number">2</span>]&#125;;</span><br><span class="line">				add_b &lt;= &#123;Xin_Reg[<span class="number">13</span>][<span class="number">7</span>],Xin_Reg[<span class="number">13</span>]&#125;;						</span><br><span class="line">				coe &lt;= -<span class="number">12&#x27;d15</span>; <span class="comment">//c2</span></span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">			<span class="keyword">else</span> <span class="keyword">if</span> (count==<span class="number">3&#x27;d3</span>) <span class="keyword">begin</span></span><br><span class="line">				add_a &lt;= &#123;Xin_Reg[<span class="number">3</span>][<span class="number">7</span>],Xin_Reg[<span class="number">3</span>]&#125;;</span><br><span class="line">				add_b &lt;= &#123;Xin_Reg[<span class="number">12</span>][<span class="number">7</span>],Xin_Reg[<span class="number">12</span>]&#125;;</span><br><span class="line">				coe &lt;= <span class="number">12&#x27;d46</span>; <span class="comment">//c3</span></span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">			<span class="keyword">else</span> <span class="keyword">if</span> (count==<span class="number">3&#x27;d4</span>) <span class="keyword">begin</span></span><br><span class="line">				add_a &lt;= &#123;Xin_Reg[<span class="number">4</span>][<span class="number">7</span>],Xin_Reg[<span class="number">4</span>]&#125;;</span><br><span class="line">				add_b &lt;= &#123;Xin_Reg[<span class="number">11</span>][<span class="number">7</span>],Xin_Reg[<span class="number">11</span>]&#125;;						</span><br><span class="line">				coe &lt;= <span class="number">12&#x27;d307</span>; <span class="comment">//c4</span></span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">			<span class="keyword">else</span> <span class="keyword">if</span> (count==<span class="number">3&#x27;d5</span>) <span class="keyword">begin</span></span><br><span class="line">				add_a &lt;= &#123;Xin_Reg[<span class="number">5</span>][<span class="number">7</span>],Xin_Reg[<span class="number">5</span>]&#125;;</span><br><span class="line">				add_b &lt;= &#123;Xin_Reg[<span class="number">10</span>][<span class="number">7</span>],Xin_Reg[<span class="number">10</span>]&#125;;				</span><br><span class="line">				coe &lt;= <span class="number">12&#x27;d850</span>; <span class="comment">//c5</span></span><br><span class="line">			<span class="keyword">end</span>					</span><br><span class="line">			<span class="keyword">else</span> <span class="keyword">if</span> (count==<span class="number">3&#x27;d6</span>) <span class="keyword">begin</span></span><br><span class="line">				add_a &lt;= &#123;Xin_Reg[<span class="number">6</span>][<span class="number">7</span>],Xin_Reg[<span class="number">6</span>]&#125;;</span><br><span class="line">				add_b &lt;= &#123;Xin_Reg[<span class="number">9</span>][<span class="number">7</span>],Xin_Reg[<span class="number">9</span>]&#125;;						</span><br><span class="line">				coe &lt;= <span class="number">12&#x27;d1545</span>; <span class="comment">//c6</span></span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">			<span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">				add_a &lt;= &#123;Xin_Reg[<span class="number">7</span>][<span class="number">7</span>],Xin_Reg[<span class="number">7</span>]&#125;;</span><br><span class="line">				add_b &lt;= &#123;Xin_Reg[<span class="number">8</span>][<span class="number">7</span>],Xin_Reg[<span class="number">8</span>]&#125;;						</span><br><span class="line">				coe &lt;= <span class="number">12&#x27;d2047</span>; <span class="comment">//c7</span></span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//以8倍数据速率调用乘法器IP核，由于滤波器长度为16，系数具有对称性，故可在一个数据</span></span><br><span class="line">	<span class="comment">//周期内完成所有8个滤波器系数与数据的乘法运算</span></span><br><span class="line">	<span class="comment">//实例化有符号数乘法器IP核mult</span></span><br><span class="line">	<span class="comment">//1级流水线延时输出</span></span><br><span class="line">	<span class="keyword">wire</span> <span class="keyword">signed</span> [<span class="number">20</span>:<span class="number">0</span>] Mout;  </span><br><span class="line">	mult2 u11 (</span><br><span class="line">		<span class="variable">.clk</span> (clk),</span><br><span class="line">		<span class="variable">.a</span> (add_s),</span><br><span class="line">		<span class="variable">.b</span> (coe),</span><br><span class="line">		<span class="variable">.p</span> (Mout)</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">	<span class="comment">//对滤波器系数与输入数据的乘法结果进行累加，并输出滤波后的数据</span></span><br><span class="line">	<span class="comment">//考虑到乘法器及累加器的延时，需要计数器为2时对累加器清零，同时输出滤波器结果数据。</span></span><br><span class="line">	<span class="comment">//类似的时延长度一方面可通过精确计算获取，但更好的方法是通过行为仿真查看</span></span><br><span class="line">	<span class="keyword">reg</span> <span class="keyword">signed</span> [<span class="number">21</span>:<span class="number">0</span>] sum;</span><br><span class="line">	<span class="keyword">always</span> @(<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">posedge</span> rst) <span class="keyword">begin</span></span><br><span class="line">		<span class="keyword">if</span> (rst) <span class="keyword">begin</span> </span><br><span class="line">			sum &lt;= <span class="number">22&#x27;d0</span>; </span><br><span class="line">			Yout &lt;= <span class="number">22&#x27;d0</span>;</span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">			<span class="keyword">if</span> (count == <span class="number">2</span>) <span class="keyword">begin</span></span><br><span class="line">				 Yout &lt;= sum;<span class="comment">//count==2时完成了8次乘累加</span></span><br><span class="line">				 sum &lt;= Mout;<span class="comment">//count==3时得到第一个乘数</span></span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">			    sum &lt;= sum + Mout;  <span class="comment">//1级延时</span></span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>FirFullSerial_design.v</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> FirFullSerial_design(</span><br><span class="line">    <span class="keyword">input</span> rst,</span><br><span class="line">    <span class="keyword">input</span> clk_data,    <span class="comment">//2kHz</span></span><br><span class="line">	<span class="keyword">input</span> clk_fir,     <span class="comment">//16kHz</span></span><br><span class="line">    <span class="keyword">output</span> [<span class="number">21</span>:<span class="number">0</span>] dout</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">	<span class="keyword">wire</span> [<span class="number">7</span>:<span class="number">0</span>] xin;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//频率叠加信号生成模块</span></span><br><span class="line">    FirParallel_test_data u1(</span><br><span class="line">        <span class="variable">.clk</span>(clk_data),</span><br><span class="line">        <span class="variable">.out_valid_sin100Hz</span>(),</span><br><span class="line">        <span class="variable">.out_valid_sin500Hz</span>(),</span><br><span class="line">        <span class="variable">.dout</span>(xin)</span><br><span class="line">    );</span><br><span class="line">		</span><br><span class="line">    <span class="comment">//串行FIR滤波模块</span></span><br><span class="line">    FirFullSerial u2(</span><br><span class="line">        <span class="variable">.clk</span>(clk_fir), </span><br><span class="line">        <span class="variable">.rst</span>(rst),</span><br><span class="line">        <span class="variable">.Xin</span>(xin), </span><br><span class="line">        <span class="variable">.Yout</span>(dout)</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="3-Testbench-2"><a href="#3-Testbench-2" class="headerlink" title="3.Testbench"></a>3.Testbench</h2><figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> FirFullSerial_tb;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Inputs</span></span><br><span class="line">	<span class="keyword">reg</span> rst;</span><br><span class="line">	<span class="keyword">reg</span> clk_data;</span><br><span class="line">	<span class="keyword">reg</span> clk_fir;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Outputs</span></span><br><span class="line">	<span class="keyword">wire</span> [<span class="number">21</span>:<span class="number">0</span>] dout;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Instantiate the Unit Under Test (UUT)</span></span><br><span class="line">	FirFullSerial_design uut (</span><br><span class="line">		<span class="variable">.rst</span>(rst), </span><br><span class="line">		<span class="variable">.clk_data</span>(clk_data), </span><br><span class="line">		<span class="variable">.clk_fir</span>(clk_fir), </span><br><span class="line">		<span class="variable">.dout</span>(dout)</span><br><span class="line">	);</span><br><span class="line">   </span><br><span class="line">	<span class="keyword">reg</span> clk_32k;</span><br><span class="line">	<span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">		<span class="comment">// Initialize Inputs</span></span><br><span class="line">		rst = <span class="number">1</span>;</span><br><span class="line">		clk_data = <span class="number">0</span>;</span><br><span class="line">		clk_fir = <span class="number">0</span>;</span><br><span class="line">		clk_32k = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Wait 100 ns for global reset to finish</span></span><br><span class="line">		#<span class="number">80000</span>;</span><br><span class="line">        rst = <span class="number">0</span>;  </span><br><span class="line">		<span class="comment">// Add stimulus here</span></span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//生成32kHz的时钟频率</span></span><br><span class="line">    <span class="keyword">always</span> #<span class="number">15625</span> clk_32k &lt;= !clk_32k;  </span><br><span class="line">	</span><br><span class="line">	<span class="keyword">reg</span> [<span class="number">3</span>:<span class="number">0</span>] cn=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">always</span> @(<span class="keyword">posedge</span> clk_32k) <span class="keyword">begin</span></span><br><span class="line">		cn &lt;= cn + <span class="number">1</span>;</span><br><span class="line">	    clk_fir &lt;= cn[<span class="number">0</span>];    <span class="comment">//16kHz</span></span><br><span class="line">		clk_data &lt;= cn[<span class="number">3</span>];   <span class="comment">//2kHz</span></span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>结果如下：</p>
+<p><img src="/2023/11/20/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIR%E6%BB%A4%E6%B3%A2%E5%99%A8/image-20231121141829792.png" alt="image-20231121141829792"></p>
+<p><img src="/2023/11/20/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIR%E6%BB%A4%E6%B3%A2%E5%99%A8/image-20231121141755650.png" alt="image-20231121141755650"></p>
+</li>
+</ul>
+<hr>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1xo4y1L7Ha/?spm_id_from=333.788&amp;vd_source=221b76534ba13cfad544149d75ce9b6c">Xilinx/ISE版 FPGA数字信号处理设计-并行结构FIR滤波器设计_哔哩哔哩_bilibili</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>欢迎来到ssy的世界</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/WeChaPay.jpg" alt="ssy 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>ssy
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://ssy的小天地.com/2023/11/20/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFIR%E6%BB%A4%E6%B3%A2%E5%99%A8/" title="FPGA数字信号处理之FIR滤波器">http://ssy的小天地.com/2023/11/20/FPGA数字信号处理之FIR滤波器/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86/" rel="tag"># 数字信号处理</a>
+              <a href="/tags/VLSI-DSP/" rel="tag"># VLSI DSP</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/11/12/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BCORDIC%E7%AE%97%E6%B3%95%E6%B1%82%E6%AD%A3%E4%BD%99%E5%BC%A6%E5%80%BC%E4%B8%8E%E6%A8%A1%E5%80%BC/" rel="prev" title="FPGA数字信号处理之CORDIC算法求正余弦值与模值">
+      <i class="fa fa-chevron-left"></i> FPGA数字信号处理之CORDIC算法求正余弦值与模值
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/12/18/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E8%84%89%E5%8A%A8%E9%98%B5%E5%88%97/" rel="next" title="FPGA数字信号处理之脉动阵列">
+      FPGA数字信号处理之脉动阵列 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#FIR%E6%BB%A4%E6%B3%A2%E5%99%A8%E8%AE%BE%E8%AE%A1%E5%8E%9F%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">FIR滤波器设计原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#FIR%E6%BB%A4%E6%B3%A2%E5%99%A8%E7%9A%84%E7%A1%AC%E4%BB%B6%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.</span> <span class="nav-text">FIR滤波器的硬件实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%9F%BA%E4%BA%8E%E7%B4%AF%E5%8A%A0%E5%99%A8%E7%9A%84FIR%E6%BB%A4%E6%B3%A2%E5%99%A8%E8%AE%BE%E8%AE%A1"><span class="nav-number">2.1.</span> <span class="nav-text">1.基于累加器的FIR滤波器设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%BA%90%E6%96%87%E4%BB%B6"><span class="nav-number">2.2.</span> <span class="nav-text">2.源文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Testbench"><span class="nav-number">2.3.</span> <span class="nav-text">3.Testbench</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#FIR%E7%B3%BB%E6%95%B0%E7%9A%84%E9%87%8F%E5%8C%96%E6%96%B9%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">FIR系数的量化方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E9%87%8F%E5%8C%96%E5%8E%9F%E5%88%99"><span class="nav-number">3.1.</span> <span class="nav-text">1.量化原则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-MATLAB%E4%BB%A3%E7%A0%81"><span class="nav-number">3.2.</span> <span class="nav-text">2.MATLAB代码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B9%B6%E8%A1%8CFIR%E6%BB%A4%E6%B3%A2%E7%9A%84%E7%A1%AC%E4%BB%B6%E5%AE%9E%E7%8E%B0"><span class="nav-number">4.</span> <span class="nav-text">并行FIR滤波的硬件实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%9F%BA%E4%BA%8E%E5%B9%B6%E8%A1%8CFIR%E6%BB%A4%E6%B3%A2%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1"><span class="nav-number">4.1.</span> <span class="nav-text">1.基于并行FIR滤波器的设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%BA%90%E6%96%87%E4%BB%B6-1"><span class="nav-number">4.2.</span> <span class="nav-text">2.源文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Testbench-1"><span class="nav-number">4.3.</span> <span class="nav-text">3.Testbench</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%B2%E8%A1%8CFIR%E6%BB%A4%E6%B3%A2%E5%99%A8%E7%9A%84%E7%A1%AC%E4%BB%B6%E5%AE%9E%E7%8E%B0"><span class="nav-number">5.</span> <span class="nav-text">串行FIR滤波器的硬件实现*</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%9F%BA%E4%BA%8E%E4%B8%B2%E8%A1%8C%E7%BB%93%E6%9E%84%E7%9A%84FIR%E6%BB%A4%E6%B3%A2%E5%99%A8%E8%AE%BE%E8%AE%A1"><span class="nav-number">5.1.</span> <span class="nav-text">1.基于串行结构的FIR滤波器设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%BA%90%E6%96%87%E4%BB%B6-2"><span class="nav-number">5.2.</span> <span class="nav-text">2.源文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Testbench-2"><span class="nav-number">5.3.</span> <span class="nav-text">3.Testbench</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">6.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ssy"
+      src="/images/ssy.png">
+  <p class="site-author-name" itemprop="name">ssy</p>
+  <div class="site-description" itemprop="description">满怀希望 就会所向披靡</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">141</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">38</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ssy1938010014" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ssy1938010014" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://m.weibo.cn/u/5469432500?uid=5469432500&t=0&luicode=10000011&lfid=100103type=1&q=JIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" title="Weibo → https:&#x2F;&#x2F;m.weibo.cn&#x2F;u&#x2F;5469432500?uid&#x3D;5469432500&amp;t&#x3D;0&amp;luicode&#x3D;10000011&amp;lfid&#x3D;100103type%3D1%26q%3DJIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://ssy1938010014.github.io/" title="http:&#x2F;&#x2F;ssy1938010014.github.io" rel="noopener" target="_blank">ssy的小天地</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://y006.github.io/" title="http:&#x2F;&#x2F;y006.github.io" rel="noopener" target="_blank">邱院士的Blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://bengoooo.github.io/" title="http:&#x2F;&#x2F;BENgoooo.github.io" rel="noopener" target="_blank">赵总的Blog</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=1469041281&auto=1&height=66"></iframe>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ssy</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-ribbon@1/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+<script data-pjax>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  let url = element.dataset.target;
+  let pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  let pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  let fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+
+
+    <div id="pjax">
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+    </div>
+</body>
+</html>
