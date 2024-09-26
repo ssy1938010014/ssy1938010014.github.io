@@ -274,6 +274,7 @@
       
         <p>本节主要介绍了VLSI DSP中展开这一方法的基本概念与性质。</p>
 <span id="more"></span>
+
 <h1 id="展开的基本概念"><a href="#展开的基本概念" class="headerlink" title="展开的基本概念"></a>展开的基本概念</h1><ul>
 <li><p>展开：是一种转换技术，它产生一个新的程序来描述原有程序的多次迭代，J称为展开因子，表示迭代次数</p>
 <p><img src="/2022/11/24/VLSI%20DSP%E4%B9%8B%E5%B1%95%E5%BC%80/image-20221124153356266.png" alt="image-20221124153356266"></p>
@@ -298,20 +299,24 @@
 <ul>
 <li><p>对原始DFG中的每个节点U，画J个节点$U_0,U1,\cdots,U_{J-1}$</p>
 </li>
-<li><p>对原始DFG中的每个延时为w的边$U\rightarrow V$，画延时为：</p>
-<script type="math/tex; mode=display">
-W_{new}=\lfloor \frac{(i+w)}{J} \rfloor的J个边U_i\rightarrow V_{(i+w)\%J}(i=0,1,\cdots,J-1)</script></li>
+<li><p>对原始DFG中的每个延时为w的边$U\rightarrow V$，画延时为：<br>$$<br>W_{new}=\lfloor \frac{(i+w)}{J} \rfloor的J个边U_i\rightarrow V_{(i+w)\%J}(i=0,1,\cdots,J-1)<br>$$</p>
+</li>
 </ul>
 </li>
 </ul>
 </li>
 <li><p>例：3阶展开</p>
-<p><img src="/2022/11/24/VLSI%20DSP%E4%B9%8B%E5%B1%95%E5%BC%80/image-20221124162001562.png" alt="image-20221124162001562" style="zoom: 33%;"></p>
+<img src="/2022/11/24/VLSI%20DSP%E4%B9%8B%E5%B1%95%E5%BC%80/image-20221124162001562.png" alt="image-20221124162001562" style="zoom: 33%;">
+
+
 </li>
 </ul>
-<p><img src="/2022/11/24/VLSI%20DSP%E4%B9%8B%E5%B1%95%E5%BC%80/image-20221124160629482.png" alt="image-20221124160629482" style="zoom: 33%;"></p>
-<p><img src="/2022/11/24/VLSI%20DSP%E4%B9%8B%E5%B1%95%E5%BC%80/image-20221124160847869.png" alt="image-20221124160847869" style="zoom: 50%;"></p>
-<p><img src="/2022/11/24/VLSI%20DSP%E4%B9%8B%E5%B1%95%E5%BC%80/image-20221124161717499.png" alt="image-20221124161717499" style="zoom:50%;"></p>
+<img src="/2022/11/24/VLSI%20DSP%E4%B9%8B%E5%B1%95%E5%BC%80/image-20221124160629482.png" alt="image-20221124160629482" style="zoom: 33%;">
+
+<img src="/2022/11/24/VLSI%20DSP%E4%B9%8B%E5%B1%95%E5%BC%80/image-20221124160847869.png" alt="image-20221124160847869" style="zoom: 50%;">
+
+<img src="/2022/11/24/VLSI%20DSP%E4%B9%8B%E5%B1%95%E5%BC%80/image-20221124161717499.png" alt="image-20221124161717499" style="zoom:50%;">
+
 <hr>
 <h1 id="展开的基本性质"><a href="#展开的基本性质" class="headerlink" title="展开的基本性质"></a>展开的基本性质</h1><ul>
 <li><p>展开保留原DFG中各边的优先约束</p>
@@ -331,35 +336,32 @@ W_{new}=\lfloor \frac{(i+w)}{J} \rfloor的J个边U_i\rightarrow V_{(i+w)\%J}(i=0
 </ul>
 </li>
 <li><p>例：</p>
-<p><img src="/2022/11/24/VLSI%20DSP%E4%B9%8B%E5%B1%95%E5%BC%80/image-20221124165812147.png" alt="image-20221124165812147" style="zoom: 33%;"></p>
-<p><img src="/2022/11/24/VLSI%20DSP%E4%B9%8B%E5%B1%95%E5%BC%80/image-20221124165945249.png" alt="image-20221124165945249" style="zoom: 33%;"></p>
+<img src="/2022/11/24/VLSI%20DSP%E4%B9%8B%E5%B1%95%E5%BC%80/image-20221124165812147.png" alt="image-20221124165812147" style="zoom: 33%;">
+
+<img src="/2022/11/24/VLSI%20DSP%E4%B9%8B%E5%B1%95%E5%BC%80/image-20221124165945249.png" alt="image-20221124165945249" style="zoom: 33%;">
 </li>
 <li><p><strong>提高采样速度，让采样周期逼近原始环路的迭代边界（展开后的关键路径等于迭代边界），实现性能极限</strong></p>
 <ul>
 <li><p>情况1：原始DFG中存在节点的计算时间$T_U&gt;T_{\infty}$</p>
 <ul>
-<li>此时：<script type="math/tex; mode=display">
-J=\lceil \frac{T_U}{T_\infty}\rceil</script></li>
+<li>此时：<br>$$<br>J=\lceil \frac{T_U}{T_\infty}\rceil<br>$$</li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
-<pre><code>&lt;img src=&quot;VLSI%20DSP%E4%B9%8B%E5%B1%95%E5%BC%80/image-20221124172334012.png&quot; alt=&quot;image-20221124172334012&quot; style=&quot;zoom: 33%;&quot; /&gt;
-</code></pre><ul>
+<pre><code>&lt;img src=&quot;VLSI%20DSP%E4%B9%8B%E5%B1%95%E5%BC%80/image-20221124172334012.png&quot; alt=&quot;image-20221124172334012&quot; style=&quot;zoom: 33%;&quot; /&gt;</code></pre><ul>
 <li><p>情况2：迭代边界$T_{\infty}$不是整数</p>
 <ul>
-<li>此时：<script type="math/tex; mode=display">
-J=\frac{w_l}{gcd(T_l,w_l)},T_l为环路的执行时间，w_l为环路的延时</script></li>
+<li>此时：<br>$$<br>J=\frac{w_l}{gcd(T_l,w_l)},T_l为环路的执行时间，w_l为环路的延时<br>$$</li>
 </ul>
-<p><img src="/2022/11/24/VLSI%20DSP%E4%B9%8B%E5%B1%95%E5%BC%80/image-20221124172952295.png" alt="image-20221124172952295" style="zoom:33%;"></p>
+<img src="/2022/11/24/VLSI%20DSP%E4%B9%8B%E5%B1%95%E5%BC%80/image-20221124172952295.png" alt="image-20221124172952295" style="zoom:33%;">
 </li>
 <li><p>情况3：最长的节点计算时间大于迭代边界$T_{\infty}$，同时$T_{\infty}$也不是整数（情况1、2的混合）</p>
 <ul>
-<li><p>此时：</p>
-<script type="math/tex; mode=display">
-J\times T_{\infty}=整数</script><script type="math/tex; mode=display">
-J\times T_{\infty}\ge T_u</script><p>通过满足上述不等式求得最小的$J$</p>
+<li><p>此时：<br>$$<br>J\times T_{\infty}=整数<br>$$</p>
+<p>$$<br>J\times T_{\infty}\ge T_u<br>$$</p>
+<p>通过满足上述不等式求得最小的$J$</p>
 </li>
 </ul>
 </li>
