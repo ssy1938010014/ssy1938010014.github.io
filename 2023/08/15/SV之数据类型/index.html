@@ -270,33 +270,18 @@
       
         <p>本节主要介绍了SystemVerilog中的基本数据类型以及自定义数据类型</p>
 <span id="more"></span>
+
 <h1 id="基本数据类型"><a href="#基本数据类型" class="headerlink" title="基本数据类型"></a>基本数据类型</h1><ul>
 <li><p>SystemVerilog中的信号同时具有类型和数据类型</p>
 </li>
-<li><p><strong>类型</strong>表示信号是<strong>线网</strong>还是<strong>变量</strong>：</p>
-<script type="math/tex; mode=display">
-类型\begin{cases}
-变量(var)：可以用连续赋值或者过程赋值\\
-线网(wire)：只能用于连续赋值语句(assign)\\
-\end{cases}\\</script></li>
-<li><p><strong>数据类型</strong>表示变量和线网的值是<strong>二值逻辑</strong>还是<strong>四值逻辑</strong></p>
-<script type="math/tex; mode=display">
-数据类型\begin{cases}
-四值逻辑：1、0、x、z\\
-二值逻辑：1、0\\
-\end{cases}\\</script></li>
-<li><p>常见的二值逻辑与四值逻辑如下：</p>
-<script type="math/tex; mode=display">
-\begin{cases}
-四值逻辑类型：logic、integer、reg、net-type(wire、tri)\\
-二值逻辑类型：bit、byte、shortint、int、longint\\
-\end{cases}\\</script></li>
-<li><p>有符号类型与无符号类型的划分如下：</p>
-<script type="math/tex; mode=display">
-\begin{cases}
-有符号类型：byte(8bit)、shortint(16bit)、int(32bit)、longint(64bit)、integer\\
-无符号类型：bit、logic、reg、net-type(wire、tri)\\
-\end{cases}\\</script></li>
+<li><p><strong>类型</strong>表示信号是<strong>线网</strong>还是<strong>变量</strong>：<br>$$<br>类型\begin{cases}<br>变量(var)：可以用连续赋值或者过程赋值\<br>线网(wire)：只能用于连续赋值语句(assign)\<br>\end{cases}\<br>$$</p>
+</li>
+<li><p><strong>数据类型</strong>表示变量和线网的值是<strong>二值逻辑</strong>还是<strong>四值逻辑</strong><br>$$<br>数据类型\begin{cases}<br>四值逻辑：1、0、x、z\<br>二值逻辑：1、0\<br>\end{cases}\<br>$$</p>
+</li>
+<li><p>常见的二值逻辑与四值逻辑如下：<br>$$<br>\begin{cases}<br>四值逻辑类型：logic、integer、reg、net-type(wire、tri)\<br>二值逻辑类型：bit、byte、shortint、int、longint\<br>\end{cases}\<br>$$</p>
+</li>
+<li><p>有符号类型与无符号类型的划分如下：<br>$$<br>\begin{cases}<br>有符号类型：byte(8bit)、shortint(16bit)、int(32bit)、longint(64bit)、integer\<br>无符号类型：bit、logic、reg、net-type(wire、tri)\<br>\end{cases}\<br>$$</p>
+</li>
 <li><p>可以在有符号类型后添加<code>unsigned</code>来表示无符号类型，如：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">byte unsigned //等同于bit[7:0],表示的数值范围是[0, 255]</span><br></pre></td></tr></table></figure>
 </li>
@@ -325,6 +310,7 @@
 </li>
 <li><p><strong>通过<code>enum</code>来创建枚举类型</strong>：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">enum &#123;red, green, blue&#125; RGB</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li><p>默认的枚举类型是int，在未赋值情况下默认第一个数为0</p>
 </li>
@@ -343,6 +329,7 @@
 </li>
 <li><p><strong>通过<code>struct</code>来创建结构体类型</strong></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">struct&#123;</span><br><span class="line">	int a, b;</span><br><span class="line">	opcode_t opcode;</span><br><span class="line">	logic [23: 0] address;</span><br><span class="line">	bit error;</span><br><span class="line">&#125; Instruction_Word;</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li><p>类似于枚举类型，结构体类型也可以伴随着typedef来实现自定义结构体类型</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">typedef struct&#123;</span><br><span class="line">	int a, b;</span><br><span class="line">	opcode_t opcode;</span><br><span class="line">	logic [23: 0] address;</span><br><span class="line">	bit error;</span><br><span class="line">&#125; instruction_Word_t;</span><br><span class="line">instruction_Word_t IW;</span><br></pre></td></tr></table></figure>
@@ -354,6 +341,7 @@
 </li>
 <li><p>也可以通过<code>&#39;</code>和<code>&#123;&#125;</code>整体赋初值</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">IW = &#x27;&#123;100, 3, 8&#x27;hFF, 0&#125;; //位置对应赋值</span><br><span class="line">IW = &#x27;&#123;address:0, opcode:8&#x27;hFF, a:100, b:5&#125;; //名字索引赋值</span><br></pre></td></tr></table></figure>
+
 </li>
 </ul>
 </li>
@@ -379,6 +367,7 @@
 </li>
 <li><p><code>str.&#123;atoi(), atohex(), atooct(), atobin()&#125;</code> //将字符串转变为十进制、十六进制、八进制或者二进制数据</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">str = &quot;123&quot;;</span><br><span class="line">int i = str.atoi(); //将”123“转化为整数123</span><br></pre></td></tr></table></figure>
+
 </li>
 </ul>
 </li>
