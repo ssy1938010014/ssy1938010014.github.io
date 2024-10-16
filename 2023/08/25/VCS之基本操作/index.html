@@ -290,23 +290,19 @@
       
         <p>本文主要介绍了Synopsys仿真工具VCS的基本使用，包括如何编译与仿真，makefile文件的编写、以及代码覆盖率</p>
 <span id="more"></span>
-
 <h1 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h1><h2 id="1-源代码"><a href="#1-源代码" class="headerlink" title="1.源代码"></a>1.源代码</h2><ul>
 <li><p>counter.sv</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">`timescale  1ns/1ps</span><br><span class="line"></span><br><span class="line">module counter(</span><br><span class="line">    input clk,</span><br><span class="line">    input rst,</span><br><span class="line">    output logic [5:0] count</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">always @(posedge clk or negedge rst) begin</span><br><span class="line">    if(!rst)</span><br><span class="line">        count &lt;= 0;</span><br><span class="line">    else </span><br><span class="line">        count &lt;= count + 6&#x27;b1;</span><br><span class="line">end</span><br><span class="line"></span><br><span class="line">endmodule</span><br></pre></td></tr></table></figure>
-
 </li>
 </ul>
 <h2 id="2-Testbench"><a href="#2-Testbench" class="headerlink" title="2.Testbench"></a>2.Testbench</h2><ul>
 <li><p>counter_tb.sv</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">`timescale  1ns/1ps</span><br><span class="line"></span><br><span class="line">module counter_tb();</span><br><span class="line">    </span><br><span class="line">    logic clk;</span><br><span class="line">    logic rst;</span><br><span class="line">    wire [5:0] count;</span><br><span class="line"></span><br><span class="line">    counter u1(clk, rst, count);</span><br><span class="line"></span><br><span class="line">    always #(5) begin</span><br><span class="line">        clk = ~clk;</span><br><span class="line">    end</span><br><span class="line"></span><br><span class="line">    initial begin</span><br><span class="line">        clk = 0;</span><br><span class="line">        rst = 0;</span><br><span class="line"></span><br><span class="line">        #20;</span><br><span class="line">        rst = 1;</span><br><span class="line">        #50;</span><br><span class="line">        if(count != 5)</span><br><span class="line">            $display(&quot;Failure 1: the counter should be 5 but it is %d&quot;, count);</span><br><span class="line">        else</span><br><span class="line">            $display(&quot;You gotta the right result! It is five!&quot;);</span><br><span class="line">        $finish;</span><br><span class="line">    end</span><br><span class="line"></span><br><span class="line">endmodule</span><br></pre></td></tr></table></figure>
-
 </li>
 </ul>
 <h2 id="3-filelist"><a href="#3-filelist" class="headerlink" title="3.filelist"></a>3.filelist</h2><ul>
 <li><p>filelist.f：将需要编译的文件都放在这个文件夹下</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./counter.sv</span><br><span class="line">./counter_tb.sv</span><br></pre></td></tr></table></figure>
-
 </li>
 </ul>
 <h2 id="4-Makefile"><a href="#4-Makefile" class="headerlink" title="4.Makefile"></a>4.Makefile</h2><ul>
@@ -339,16 +335,16 @@
 <li><p>调用<code>$vcdpluson()</code>记录仿真过程中的波形</p>
 <ul>
 <li><p><code>$vcdpluson()</code> 或者<code>$vcdpluson(0, counter_tb)</code>记录counter_tb及其所有子模块的波形</p>
-<img src="/2023/08/25/VCS%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/image-20230826183314771.png" alt="image-20230826183314771" style="zoom:67%;">
+<p><img src="/2023/08/25/VCS%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/image-20230826183314771.png" alt="image-20230826183314771" style="zoom:67%;"></p>
 </li>
 <li><p><code>$vcdpluson(1, counter_tb)</code> 只记录counter_tb层的波形</p>
-<img src="/2023/08/25/VCS%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/image-20230826183552241.png" alt="image-20230826183552241" style="zoom:67%;">
+<p><img src="/2023/08/25/VCS%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/image-20230826183552241.png" alt="image-20230826183552241" style="zoom:67%;"></p>
 </li>
 <li><p><code>$vcdpluson(2, counter_tb)</code> 记录 counter_tb层及其下一子层的波形</p>
-<img src="/2023/08/25/VCS%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/image-20230826201418663.png" alt="image-20230826201418663" style="zoom: 67%;">
+<p><img src="/2023/08/25/VCS%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/image-20230826201418663.png" alt="image-20230826201418663" style="zoom: 67%;"></p>
 </li>
 <li><p><code>$vcdpluson(counter, counter_tb);</code>也可以通过打出模块名的方式记录波形</p>
-<img src="/2023/08/25/VCS%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/image-20230826202001555.png" alt="image-20230826202001555" style="zoom:67%;">
+<p><img src="/2023/08/25/VCS%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/image-20230826202001555.png" alt="image-20230826202001555" style="zoom:67%;"></p>
 </li>
 </ul>
 </li>
@@ -377,13 +373,11 @@
 <ul>
 <li>src.txt</li>
 </ul>
-<img src="/2023/08/25/VCS%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/image-20230826213100490.png" alt="image-20230826213100490" style="zoom:50%;">
-
+<p><img src="/2023/08/25/VCS%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/image-20230826213100490.png" alt="image-20230826213100490" style="zoom:50%;"></p>
 <ul>
 <li>打印相关信息</li>
 </ul>
-<img src="/2023/08/25/VCS%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/image-20230826211349689.png" alt="image-20230826211349689" style="zoom:50%;">
-
+<p><img src="/2023/08/25/VCS%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/image-20230826211349689.png" alt="image-20230826211349689" style="zoom:50%;"></p>
 <ul>
 <li>下图说明通过readmem读取的数据未保存至vpd文件中</li>
 </ul>
@@ -393,7 +387,6 @@
 <ul>
 <li><p>若在Testbench中加上<code>$vcdplusmemon()</code>，则能将数据保存至vpd文件中</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//dump vpd file</span><br><span class="line"> initial begin</span><br><span class="line"> `ifdef DUMP_VPD</span><br><span class="line">     //$vcdpluson();</span><br><span class="line">     $vcdpluson(1, counter_tb); //only save 1-layer wave message</span><br><span class="line">     $vcdplusmemon();</span><br><span class="line"> `endif</span><br><span class="line"> end</span><br></pre></td></tr></table></figure>
-
 <ul>
 <li>此时读取的数据被保存至vpd文件中</li>
 </ul>
@@ -414,8 +407,7 @@
 <li><p>结果如下：</p>
 </li>
 </ul>
-<img src="/2023/08/25/VCS%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/image-20230826214450732.png" alt="image-20230826214450732" style="zoom: 50%;">
-
+<p><img src="/2023/08/25/VCS%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/image-20230826214450732.png" alt="image-20230826214450732" style="zoom: 50%;"></p>
 </li>
 </ul>
 <h2 id="4-gui界面"><a href="#4-gui界面" class="headerlink" title="4.gui界面"></a>4.gui界面</h2><ul>
@@ -423,14 +415,10 @@
 </ul>
 <hr>
 <h1 id="代码覆盖率"><a href="#代码覆盖率" class="headerlink" title="代码覆盖率"></a>代码覆盖率</h1><ul>
-<li><p>Line coverage：行覆盖率，是否每一行都执行并且代码是完整的。例：缺少else，default；但这不一定是错误，可能故意为之；二次检查</p>
-</li>
-<li><p>Toggle coverage：检查电路的每个节点是否都有 0 -&gt; 1 和 1 -&gt; 0 的跳变，但x-&gt;1,x-&gt;0不会检测，这种检查通常会使仿真变慢很多</p>
-</li>
-<li><p>Condition coverage：条件覆盖率：代码中有if语句，实际可能出现某种情况，但程序没有覆盖</p>
-</li>
-<li><p>FSM coverage：检测状态与状态之间是否都有跳转</p>
-</li>
+<li>Line coverage：行覆盖率，是否每一行都执行并且代码是完整的。例：缺少else，default；但这不一定是错误，可能故意为之；二次检查</li>
+<li>Toggle coverage：检查电路的每个节点是否都有 0 -&gt; 1 和 1 -&gt; 0 的跳变，但x-&gt;1,x-&gt;0不会检测，这种检查通常会使仿真变慢很多</li>
+<li>Condition coverage：条件覆盖率：代码中有if语句，实际可能出现某种情况，但程序没有覆盖</li>
+<li>FSM coverage：检测状态与状态之间是否都有跳转</li>
 <li><p>path coverage：在always语句块和initial语句块中，有时会使用 if … else 和 case 语句，在电路结构上便会产生一系列的数据路径，检查这些路径的覆盖情况</p>
 </li>
 <li><p><strong>Makefile</strong></p>
@@ -443,23 +431,18 @@
 <li><p>还可以通过<strong>网页查看覆盖率报告</strong>：</p>
 </li>
 </ul>
-<img src="/2023/08/25/VCS%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/image-20230829165217506.png" alt="image-20230829165217506" style="zoom:50%;">
-
-<img src="/2023/08/25/VCS%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/image-20230829165441850.png" alt="image-20230829165441850" style="zoom:50%;">
-
-<img src="/2023/08/25/VCS%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/image-20230829165531692.png" alt="image-20230829165531692" style="zoom: 50%;">
-
+<p><img src="/2023/08/25/VCS%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/image-20230829165217506.png" alt="image-20230829165217506" style="zoom:50%;"></p>
+<p><img src="/2023/08/25/VCS%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/image-20230829165441850.png" alt="image-20230829165441850" style="zoom:50%;"></p>
+<p><img src="/2023/08/25/VCS%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/image-20230829165531692.png" alt="image-20230829165531692" style="zoom: 50%;"></p>
 <ul>
 <li><p><strong>屏蔽覆盖率</strong>：</p>
 <ul>
 <li><p>针对某段code屏蔽覆盖率报告但不屏蔽综合：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//VCS coverage off</span><br><span class="line">initial begin</span><br><span class="line">  $display(&quot;Hello Verilog! \t&quot;,`__FILE__,`__LINE__);</span><br><span class="line">end</span><br><span class="line">//VCS coverage on</span><br></pre></td></tr></table></figure>
-
-<img src="/2023/08/25/VCS%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/image-20230829170245507.png" alt="image-20230829170245507" style="zoom: 67%;">
+<p><img src="/2023/08/25/VCS%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/image-20230829170245507.png" alt="image-20230829170245507" style="zoom: 67%;"></p>
 </li>
 <li><p>针对某段code屏蔽覆盖率报告且屏蔽综合：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//synopsys translate_off</span><br><span class="line">initial begin</span><br><span class="line">  $display(&quot;Hello Verilog! \t&quot;,`__FILE__,`__LINE__);</span><br><span class="line">end</span><br><span class="line">//synopsys translate_on</span><br></pre></td></tr></table></figure>
-
 </li>
 </ul>
 </li>
@@ -469,7 +452,7 @@
 <li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/127335447">VCS入门教程(一) - 知乎 (zhihu.com)</a></li>
 <li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/129034106">VCS入门教程(二) - 知乎 (zhihu.com)</a></li>
 <li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/143164198">VCS入门教程(三) - 知乎 (zhihu.com)</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1oF411Y7hh?p=6&vd_source=221b76534ba13cfad544149d75ce9b6c">【降噪版】6 Fast Gate-level verification_哔哩哔哩_bilibili</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1oF411Y7hh?p=6&amp;vd_source=221b76534ba13cfad544149d75ce9b6c">【降噪版】6 Fast Gate-level verification_哔哩哔哩_bilibili</a></li>
 </ul>
 
     </div>
