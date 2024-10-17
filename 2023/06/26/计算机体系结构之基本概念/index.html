@@ -273,7 +273,6 @@
       
         <p>本节主要介绍了存储程序计算机、Amdahl定律、CPU的性能计算</p>
 <span id="more"></span>
-
 <h1 id="存储程序计算机"><a href="#存储程序计算机" class="headerlink" title="存储程序计算机"></a>存储程序计算机</h1><ul>
 <li><p>存储程序计算机：</p>
 <ul>
@@ -290,15 +289,16 @@
 </ul>
 </li>
 <li><p>存储程序机器的结构：</p>
-<img src="/2023/06/26/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20230626231440573.png" alt="image-20230626231440573" style="zoom: 25%;">
+<p><img src="/2023/06/26/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20230626231440573.png" alt="image-20230626231440573" style="zoom: 25%;"></p>
 </li>
 <li><p><strong>运算器与控制器以及寄存器组一起构成CPU</strong></p>
 </li>
 </ul>
 <hr>
 <h1 id="Amdahl定律"><a href="#Amdahl定律" class="headerlink" title="Amdahl定律"></a>Amdahl定律</h1><ul>
-<li><p>假设我们对机器（部件）进行某种改进，那么机器系统（部件）的加速比就是：<br>$$<br>系统加速比=\frac{系统性能<em>{改进后}}{系统性能</em>{改进前}}=\frac{总执行时间<em>{改进前}}{总执行时间</em>{改进后}}<br>$$</p>
-<ul>
+<li><p>假设我们对机器（部件）进行某种改进，那么机器系统（部件）的加速比就是：</p>
+<script type="math/tex; mode=display">
+系统加速比=\frac{系统性能_{改进后}}{系统性能_{改进前}}=\frac{总执行时间_{改进前}}{总执行时间_{改进后}}</script><ul>
 <li>系统加速比告知改进后的机器比改进前快多少</li>
 </ul>
 </li>
@@ -307,12 +307,14 @@
 <li>可改进比例：可改进部分在原系统计算时间中所占的比例，它总是小于等于1的：$\frac{T_1}{T_0}$</li>
 <li>部件加速比：可改进部分改进以后的性能提高，一般情况下它是大于1的：$\frac{T_1}{T_2}$</li>
 </ul>
-<img src="/2023/06/26/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20230626232435362.png" alt="image-20230626232435362" style="zoom: 33%;">
+<p><img src="/2023/06/26/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20230626232435362.png" alt="image-20230626232435362" style="zoom: 33%;"></p>
 </li>
-<li><p>Amdahl的系统执行时间：部件改进后，系统的总执行时间等于不可改进部分的执行时间加上可改进部分改进后的执行时间，即：<br>$$<br>总执行时间<em>{改进后}=(1-可改进比例)\times总执行时间</em>{执行前}+\frac{可改进比例\times总执行时间<em>{改进前}}{部件加速比}\=总执行时间</em>{改进前}\times[(1-可改进比例)+\frac{可改进比例}{部件加速比}]<br>$$</p>
-</li>
-<li><p>故Amdahl的系统加速比：<br>$$<br>系统加速比=\frac{总执行时间<em>{改进前}}{总执行时间</em>{改进后}}=\frac{1}{(1-可改进比例)+\frac{可改进比例}{部件加速比}}<br>$$</p>
-</li>
+<li><p>Amdahl的系统执行时间：部件改进后，系统的总执行时间等于不可改进部分的执行时间加上可改进部分改进后的执行时间，即：</p>
+<script type="math/tex; mode=display">
+总执行时间_{改进后}=(1-可改进比例)\times总执行时间_{执行前}+\frac{可改进比例\times总执行时间_{改进前}}{部件加速比}\\=总执行时间_{改进前}\times[(1-可改进比例)+\frac{可改进比例}{部件加速比}]</script></li>
+<li><p>故Amdahl的系统加速比：</p>
+<script type="math/tex; mode=display">
+系统加速比=\frac{总执行时间_{改进前}}{总执行时间_{改进后}}=\frac{1}{(1-可改进比例)+\frac{可改进比例}{部件加速比}}</script></li>
 <li><p>Amdahl定律的观点</p>
 <ul>
 <li>性能增加的递减规则：仅仅对计算机中的一部分做性能改进，则改进越多，系统获得的效果越小</li>
@@ -327,13 +329,18 @@
 </li>
 <li><p>每条指令执行所需要的时钟周期数<strong>CPI</strong></p>
 </li>
-<li><p>每条指令执行所需要的平均时钟周期数：<br>$$<br>CPI=\frac{CLK}{IC}<br>$$</p>
-<ul>
+<li><p>每条指令执行所需要的平均时钟周期数：</p>
+<script type="math/tex; mode=display">
+CPI=\frac{CLK}{IC}</script><ul>
 <li>$CLK$表示总共的周期数</li>
 </ul>
 </li>
-<li><p>假设计算机系统由$n$种指令，其中第$i$种指令的处理周期数为$CPI_i$，在程序中第$i$种指令出现的次数为$IC_i$<br>$$<br>T_{CPU}=\frac{CLK}{f}\<br>CLK=\sum(IC_i\times CPI_i)\<br>T_{CPU}=\frac{\sum(IC_i\times CPI_i)}{f}=\sum(IC_i\times CPI_i)\times T_{CLK}\<br>=\frac{\sum(IC_i\times CPI_i)}{IC}=\sum[(\frac{IC_i}{IC})\times CPI_i]<br>$$</p>
-</li>
+<li><p>假设计算机系统由$n$种指令，其中第$i$种指令的处理周期数为$CPI_i$，在程序中第$i$种指令出现的次数为$IC_i$</p>
+<script type="math/tex; mode=display">
+T_{CPU}=\frac{CLK}{f}\\
+CLK=\sum(IC_i\times CPI_i)\\
+T_{CPU}=\frac{\sum(IC_i\times CPI_i)}{f}=\sum(IC_i\times CPI_i)\times T_{CLK}\\
+=\frac{\sum(IC_i\times CPI_i)}{IC}=\sum[(\frac{IC_i}{IC})\times CPI_i]</script></li>
 </ul>
 
     </div>
