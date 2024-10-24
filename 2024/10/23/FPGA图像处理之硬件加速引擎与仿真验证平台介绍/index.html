@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1/themes/blue/pace-theme-minimal.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"xn--ssy-lq6e63gg6fuu2d.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本节主要介绍了FPGA图像处理的准备知识，包括什么是硬件加速引擎？如何用脚本的方式运行modelsim？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FPGA图像处理之硬件加速引擎与仿真验证平台介绍">
+<meta property="og:url" content="http://ssy的小天地.com/2024/10/23/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F%E5%BC%95%E6%93%8E%E4%B8%8E%E4%BB%BF%E7%9C%9F%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0%E4%BB%8B%E7%BB%8D/index.html">
+<meta property="og:site_name" content="ssy的小天地">
+<meta property="og:description" content="本节主要介绍了FPGA图像处理的准备知识，包括什么是硬件加速引擎？如何用脚本的方式运行modelsim？">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/10/23/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F%E5%BC%95%E6%93%8E%E4%B8%8E%E4%BB%BF%E7%9C%9F%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0%E4%BB%8B%E7%BB%8D/image-20241023202415398.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/10/23/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F%E5%BC%95%E6%93%8E%E4%B8%8E%E4%BB%BF%E7%9C%9F%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0%E4%BB%8B%E7%BB%8D/image-20241023202438046.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/10/23/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F%E5%BC%95%E6%93%8E%E4%B8%8E%E4%BB%BF%E7%9C%9F%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0%E4%BB%8B%E7%BB%8D/image-20241023202940395.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/10/23/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F%E5%BC%95%E6%93%8E%E4%B8%8E%E4%BB%BF%E7%9C%9F%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0%E4%BB%8B%E7%BB%8D/image-20241023203153070.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/10/23/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F%E5%BC%95%E6%93%8E%E4%B8%8E%E4%BB%BF%E7%9C%9F%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0%E4%BB%8B%E7%BB%8D/image-20241024161137421.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/10/23/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F%E5%BC%95%E6%93%8E%E4%B8%8E%E4%BB%BF%E7%9C%9F%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0%E4%BB%8B%E7%BB%8D/image-20241024161048062.png">
+<meta property="article:published_time" content="2024-10-23T04:07:12.000Z">
+<meta property="article:modified_time" content="2024-10-24T08:15:40.526Z">
+<meta property="article:author" content="ssy">
+<meta property="article:tag" content="FPGA">
+<meta property="article:tag" content="图像处理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/10/23/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F%E5%BC%95%E6%93%8E%E4%B8%8E%E4%BB%BF%E7%9C%9F%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0%E4%BB%8B%E7%BB%8D/image-20241023202415398.png">
+
+<link rel="canonical" href="http://ssy的小天地.com/2024/10/23/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F%E5%BC%95%E6%93%8E%E4%B8%8E%E4%BB%BF%E7%9C%9F%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0%E4%BB%8B%E7%BB%8D/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>FPGA图像处理之硬件加速引擎与仿真验证平台介绍 | ssy的小天地</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+    <a target="_blank" rel="noopener" href="https://github.com/ssy1938010014" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ssy的小天地</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">愿汝如是 千金不换</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-works">
+
+    <a href="/works/" rel="section"><i class="fa fa-fw fa-sitemap"></i>文章</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ssy的小天地.com/2024/10/23/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F%E5%BC%95%E6%93%8E%E4%B8%8E%E4%BB%BF%E7%9C%9F%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0%E4%BB%8B%E7%BB%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ssy.png">
+      <meta itemprop="name" content="ssy">
+      <meta itemprop="description" content="满怀希望 就会所向披靡">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ssy的小天地">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          FPGA图像处理之硬件加速引擎与仿真验证平台介绍
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+
+
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-10-23 12:07:12" itemprop="dateCreated datePublished" datetime="2024-10-23T12:07:12+08:00">2024-10-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-10-24 16:15:40" itemprop="dateModified" datetime="2024-10-24T16:15:40+08:00">2024-10-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%A7%AF%E7%B4%AF/" itemprop="url" rel="index"><span itemprop="name">学习积累</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本节主要介绍了FPGA图像处理的准备知识，包括什么是硬件加速引擎？如何用脚本的方式运行modelsim？</p>
+<span id="more"></span>
+
+<h1 id="CPU体系结构简介"><a href="#CPU体系结构简介" class="headerlink" title="CPU体系结构简介"></a>CPU体系结构简介</h1><ul>
+<li><p>冯诺依曼体系结构CPU，是一种<strong>将程序指令和数据合并在一起</strong>的存储器结构。该结构中程序指令和数据共用一条总线，通过时分复用的方式进行读写操作，结构相对简单，总线面积较小，但缺点是效率低，无法同时取程序指令和数据，成为执行的瓶颈。</p>
+<p><img src="/2024/10/23/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F%E5%BC%95%E6%93%8E%E4%B8%8E%E4%BB%BF%E7%9C%9F%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0%E4%BB%8B%E7%BB%8D/image-20241023202415398.png" alt="image-20241023202415398"></p>
+</li>
+<li><p>哈佛结构是一种<strong>将程序指令和数据分开</strong>的存储器结构。该结构由于程序指令和数据存储在两个独立的存储器，各自有独立的访问总线，因此提供了更大的存储器带宽，减轻了程序运行时访问内存的瓶颈。但相应的也需要独立的存储器，以及更大的总线面积。</p>
+<p><img src="/2024/10/23/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F%E5%BC%95%E6%93%8E%E4%B8%8E%E4%BB%BF%E7%9C%9F%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0%E4%BB%8B%E7%BB%8D/image-20241023202438046.png" alt="image-20241023202438046"></p>
+</li>
+<li><p>改进的哈佛结构，<strong>指令和数据还是一起存储在主存储器中，但CPU有额外的指令存储器和数据存储器</strong>。在主存储器带宽足够的前提下，使CPU可以同时取指令和数据</p>
+<p><img src="/2024/10/23/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F%E5%BC%95%E6%93%8E%E4%B8%8E%E4%BB%BF%E7%9C%9F%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0%E4%BB%8B%E7%BB%8D/image-20241023202940395.png" alt="image-20241023202940395"></p>
+</li>
+</ul>
+<hr>
+<h1 id="什么是硬件加速引擎"><a href="#什么是硬件加速引擎" class="headerlink" title="什么是硬件加速引擎"></a>什么是硬件加速引擎</h1><ul>
+<li><p>如果将某些复杂耗时的计算，采用专用芯片实现，完成计算后，将结果返回给CPU，这样就实现了专用的加速引擎。</p>
+</li>
+<li><p>硬件加速引擎也称为硬件加速器，<strong>其原理是采用专用的加速芯片/模块，替换CPU完成复杂耗时的大算力操作，其过程不需要或者仅少量需要CPU的参与</strong>。</p>
+</li>
+<li><p>典型的硬件加速引擎有GPU（图形运算单元）、DSP、ISP（图像信号处理器）、NPU（神经网络处理器）</p>
+<p><img src="/2024/10/23/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F%E5%BC%95%E6%93%8E%E4%B8%8E%E4%BB%BF%E7%9C%9F%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0%E4%BB%8B%E7%BB%8D/image-20241023203153070.png" alt="image-20241023203153070"></p>
+</li>
+</ul>
+<hr>
+<h1 id="FPGA软件仿真环境介绍"><a href="#FPGA软件仿真环境介绍" class="headerlink" title="FPGA软件仿真环境介绍"></a>FPGA软件仿真环境介绍</h1><h2 id="1-filelist常见写法"><a href="#1-filelist常见写法" class="headerlink" title="1.filelist常见写法"></a>1.filelist常见写法</h2><ul>
+<li><p><code>+define+&lt;define_name&gt;</code></p>
+<ul>
+<li>相当于在filelist.f中的每个文件都加入了`define define_name</li>
+</ul>
+</li>
+<li><p><code>+incdir+&lt;dir_path&gt;</code></p>
+<ul>
+<li>filelist中每个文件中的include都会在dir_path路径下搜索</li>
+</ul>
+</li>
+<li><p>库文件的搜索</p>
+<ul>
+<li><p>添加某个目录下的多个文件到库文件（告诉工具在指定的目录下搜索以 <code>.v</code> 为扩展名的 Verilog 文件）</p>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-y /home/yuxiang/proj/sim_libs/unisims+libext+.v</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>添加一个文件中的多个module到库文件</p>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-v /home/yuxiang/proj/tsmc_lib/tsmc13.v</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-do脚本"><a href="#2-do脚本" class="headerlink" title="2.do脚本"></a>2.do脚本</h2><figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#run.do文件中#代表注释</span></span><br><span class="line"></span><br><span class="line">transcript <span class="keyword">file</span> new_transcript_file.log  <span class="comment">;# 设置新的 transcript 文件名</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#退出当前仿真功能</span></span><br><span class="line">quit -sim</span><br><span class="line"><span class="comment">#清除命令行显示信息</span></span><br><span class="line"><span class="comment">#.main clear</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#vlib为创建库</span></span><br><span class="line">vlib	./lib/</span><br><span class="line">vlib	./lib/Sim_work/</span><br><span class="line"><span class="comment">#映射逻辑库名，将逻辑库名映射库路径</span></span><br><span class="line">vmap	sim_file ./lib/Sim_work/</span><br><span class="line"></span><br><span class="line"><span class="comment">#vlog -work代表编译到指定的库文件中</span></span><br><span class="line">vlog	-work sim_file -f ../filelist.f</span><br><span class="line"></span><br><span class="line"><span class="comment">#vsim为启动仿真</span></span><br><span class="line"><span class="comment">#-t 运行仿真的时间精度是ns</span></span><br><span class="line"><span class="comment">#-L 是链接库关键字</span></span><br><span class="line">vsim	-t ns  -voptargs=+acc -L sim_file sim_file.tb_mealy</span><br><span class="line"></span><br><span class="line"><span class="comment">#用虚拟信号表示状态信息</span></span><br><span class="line">virtual	type &#123;</span><br><span class="line">&#123;<span class="number">01</span> S1&#125;</span><br><span class="line">&#123;<span class="number">02</span> S2&#125;</span><br><span class="line">&#123;<span class="number">04</span> S3&#125;</span><br><span class="line">&#123;<span class="number">08</span> S4&#125;</span><br><span class="line">&#123;<span class="number">10</span> S5&#125;</span><br><span class="line">&#123;<span class="number">20</span> S6&#125;</span><br><span class="line">&#125; vir_new_signal</span><br><span class="line"></span><br><span class="line"><span class="comment">#add wave用来添加波形</span></span><br><span class="line"><span class="comment">#-divider用来分组</span></span><br><span class="line">add wave	-divider &#123;tb_mealy_1&#125;</span><br><span class="line">add wave	tb_mealy/*</span><br><span class="line">add wave	-divider &#123;mealy&#125;</span><br><span class="line"><span class="comment">#顶层/例化的名字/* 其中*号是通配符，匹配所有信号</span></span><br><span class="line">add wave	tb_mealy/mealy_inst/*</span><br><span class="line"><span class="comment">#创建一个vir_new_signal 类型的信号，也就是把Currt_st进行类型转换</span></span><br><span class="line">virtual	function &#123;(vir_new_signal)tb_mealy/mealy_inst/Curr_st&#125; new_state</span><br><span class="line">add wave  -color red	tb_mealy/mealy_inst/new_state</span><br><span class="line"></span><br><span class="line">run <span class="number">1</span>us</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>仿真平台文件架构：</p>
+<img src="/2024/10/23/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F%E5%BC%95%E6%93%8E%E4%B8%8E%E4%BB%BF%E7%9C%9F%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0%E4%BB%8B%E7%BB%8D/image-20241024161137421.png" alt="image-20241024161137421" style="zoom:80%;">
+
+<img src="/2024/10/23/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F%E5%BC%95%E6%93%8E%E4%B8%8E%E4%BB%BF%E7%9C%9F%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0%E4%BB%8B%E7%BB%8D/image-20241024161048062.png" alt="image-20241024161048062" style="zoom:80%;">
+</li>
+<li><p><strong>run.do文件中要注意：因为run_do.bat中把路径切换至sim_log，所以在run.do中用到文件路径的地方，记得当前是在sim_log目录下的。</strong></p>
+</li>
+</ul>
+<h2 id="2-批量处理脚本"><a href="#2-批量处理脚本" class="headerlink" title="2.批量处理脚本"></a>2.批量处理脚本</h2><ul>
+<li><p><strong>run_do.bat</strong></p>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">@echo off</span><br><span class="line">title %<span class="keyword">cd</span>%</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> exist sim_log (</span><br><span class="line">    rem 删除所有子文件夹</span><br><span class="line">    <span class="keyword">for</span> /d %%d in (sim_log\*) do (</span><br><span class="line">        rd /s /q <span class="string">&quot;%%d&quot;</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    rem 删除除了以.wlf和.do为后缀以外的文件</span><br><span class="line">    <span class="keyword">for</span> %%f in (sim_log\*) do (</span><br><span class="line">        <span class="keyword">if</span> /I not <span class="string">&quot;%%~xf&quot;</span>==<span class="string">&quot;.wlf&quot;</span> <span class="keyword">if</span> /I not <span class="string">&quot;%%~xf&quot;</span>==<span class="string">&quot;.do&quot;</span> (</span><br><span class="line">            del /q <span class="string">&quot;%%f&quot;</span></span><br><span class="line">        )</span><br><span class="line">    )</span><br><span class="line">) else (</span><br><span class="line">    rem 如果需要重新创建 sim_log 文件夹</span><br><span class="line">    md sim_log</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">cd</span> ./sim_log</span><br><span class="line"></span><br><span class="line">vsim -do ../run.do</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>read_wave.bat</strong></p>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@echo off</span><br><span class="line">title %<span class="keyword">cd</span>%</span><br><span class="line"><span class="keyword">cd</span> ./sim_log</span><br><span class="line">vsim -view vsim2.wlf -do wave.do</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<hr>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>欢迎来到ssy的世界</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/WeChaPay.jpg" alt="ssy 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>ssy
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://ssy的小天地.com/2024/10/23/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F%E5%BC%95%E6%93%8E%E4%B8%8E%E4%BB%BF%E7%9C%9F%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0%E4%BB%8B%E7%BB%8D/" title="FPGA图像处理之硬件加速引擎与仿真验证平台介绍">http://ssy的小天地.com/2024/10/23/FPGA图像处理之硬件加速引擎与仿真验证平台介绍/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/FPGA/" rel="tag"># FPGA</a>
+              <a href="/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/" rel="tag"># 图像处理</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/10/15/QT%E4%B9%8B%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1/" rel="prev" title="QT之网络通信">
+      <i class="fa fa-chevron-left"></i> QT之网络通信
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CPU%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">CPU体系结构简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F%E5%BC%95%E6%93%8E"><span class="nav-number">2.</span> <span class="nav-text">什么是硬件加速引擎</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#FPGA%E8%BD%AF%E4%BB%B6%E4%BB%BF%E7%9C%9F%E7%8E%AF%E5%A2%83%E4%BB%8B%E7%BB%8D"><span class="nav-number">3.</span> <span class="nav-text">FPGA软件仿真环境介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-filelist%E5%B8%B8%E8%A7%81%E5%86%99%E6%B3%95"><span class="nav-number">3.1.</span> <span class="nav-text">1.filelist常见写法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-do%E8%84%9A%E6%9C%AC"><span class="nav-number">3.2.</span> <span class="nav-text">2.do脚本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%89%B9%E9%87%8F%E5%A4%84%E7%90%86%E8%84%9A%E6%9C%AC"><span class="nav-number">3.3.</span> <span class="nav-text">2.批量处理脚本</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ssy"
+      src="/images/ssy.png">
+  <p class="site-author-name" itemprop="name">ssy</p>
+  <div class="site-description" itemprop="description">满怀希望 就会所向披靡</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">145</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ssy1938010014" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ssy1938010014" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://m.weibo.cn/u/5469432500?uid=5469432500&t=0&luicode=10000011&lfid=100103type=1&q=JIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" title="Weibo → https:&#x2F;&#x2F;m.weibo.cn&#x2F;u&#x2F;5469432500?uid&#x3D;5469432500&amp;t&#x3D;0&amp;luicode&#x3D;10000011&amp;lfid&#x3D;100103type%3D1%26q%3DJIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://ssy1938010014.github.io/" title="http:&#x2F;&#x2F;ssy1938010014.github.io" rel="noopener" target="_blank">ssy的小天地</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://y006.github.io/" title="http:&#x2F;&#x2F;y006.github.io" rel="noopener" target="_blank">邱院士的Blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://bengoooo.github.io/" title="http:&#x2F;&#x2F;BENgoooo.github.io" rel="noopener" target="_blank">赵总的Blog</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=1469041281&auto=1&height=66"></iframe>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ssy</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-ribbon@1/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+<script data-pjax>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  let url = element.dataset.target;
+  let pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  let pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  let fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+
+
+    <div id="pjax">
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+    </div>
+</body>
+</html>

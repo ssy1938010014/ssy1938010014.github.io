@@ -295,6 +295,7 @@
       
         <p>本节主要介绍了线性分组码、循环码、卷积码的编码与译码。</p>
 <span id="more"></span>
+
 <h1 id="信道编码的基本概念"><a href="#信道编码的基本概念" class="headerlink" title="信道编码的基本概念"></a>信道编码的基本概念</h1><ul>
 <li><p>信道编码的<strong>目的</strong>：提高信号传输的可靠性</p>
 </li>
@@ -325,7 +326,7 @@
 </ul>
 </li>
 </ul>
-<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203192909916.png" alt="image-20221203192909916" style="zoom: 50%;"></p>
+<img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203192909916.png" alt="image-20221203192909916" style="zoom: 50%;">
 </li>
 <li><p><strong>误码的主要形式</strong>：</p>
 <ul>
@@ -338,8 +339,8 @@
 <ul>
 <li>假设分组码的长度为n，其中信息位为k，相应的监督位为n-k</li>
 </ul>
-<script type="math/tex; mode=display">
-编码效率=\frac kn</script><ul>
+<p>$$<br>编码效率=\frac kn<br>$$</p>
+<ul>
 <li>编码效率越高，意味着冗余度越低</li>
 </ul>
 </li>
@@ -351,7 +352,8 @@
 </ul>
 </li>
 <li><p><strong>一般情况下，编码后，在同样的</strong>$\frac {E_b}{N_0}$<strong>下，编码后系统有更好的性能</strong></p>
-<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203194014922.png" alt="image-20221203194014922" style="zoom: 50%;"></p>
+<img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203194014922.png" alt="image-20221203194014922" style="zoom: 50%;">
+
 </li>
 </ul>
 <hr>
@@ -361,72 +363,41 @@
 <li>把信源输出的k位信息序列，通过编码器产生r个监督位，输出长为n=k+r的码字，所得码字的全体，称为(n,k)线性分组码</li>
 <li>码组中的信息位与监督位之间的关系由线性方程确定</li>
 </ul>
-<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203200415291.png" alt="image-20221203200415291" style="zoom: 33%;"></p>
-<script type="math/tex; mode=display">
+<img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203200415291.png" alt="image-20221203200415291" style="zoom: 33%;">
+$$
 \begin{cases}
 \begin{aligned}
 p_1=m_1\oplus m_3\\
 p_2=m_1\oplus m_2\\
 p_3=m_2\oplus m_3
 \end{aligned}
-\end{cases}</script></li>
-<li><p><strong>生成矩阵</strong>：从(n,k)线性分组码中任取k个线性无关的码字，按行的形式写出矩阵G，则称该线性分组码为生成矩阵</p>
-<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203201029350.png" alt="image-20221203201029350" style="zoom: 50%;"></p>
+\end{cases}
+$$
 </li>
-<li><p><strong>通过</strong>$U=mG$<strong>(m为输入信息）便能计算出编码后的码字</strong>$U$</p>
-<script type="math/tex; mode=display">
-若生成矩阵G= \begin{pmatrix}
-1 & 1 & 0 & 1 & 0 & 0\\
-0 & 1 & 1 & 0 & 1 & 0\\
-1 & 0 & 1 & 0 & 0 & 1
-\end{pmatrix}=\begin{pmatrix}
-V_1\\
-V_2\\
-V_3
-\end{pmatrix}</script><script type="math/tex; mode=display">
-若输入信息m=\begin{pmatrix}
-1&1&0
-\end{pmatrix}</script><script type="math/tex; mode=display">
-则:U=m\cdot G=\begin{pmatrix}
-1&1&0
-\end{pmatrix}\begin{pmatrix}
-V_1\\
-V_2\\
-V_3
-\end{pmatrix}=1\cdot V_1+1\cdot V_2+0\cdot V_3\\=
-\begin{pmatrix}
-1&1&0&1&0&0
-\end{pmatrix}+\begin{pmatrix}
-0&1&1&0&1&0
-\end{pmatrix}+\begin{pmatrix}
- 0&0&0&0&0&0
-\end{pmatrix}=\begin{pmatrix}
-1&0&1&1&1&0
-\end{pmatrix}</script></li>
-<li><p><strong>监督矩阵</strong>：</p>
-<script type="math/tex; mode=display">
-若(n,k)线性分组码的生成矩阵G形如:\\
-G=(P|I_k)\\
-其中G为k\times n阶矩阵,I_k是k阶单位阵，P为k\times (n-k)阶子阵\\
-则其对应的监督矩阵为:\\
-H=(I_{(n-k)}|P^T)\\
-其中H为(n-k)\times n阶矩阵</script></li>
-<li><p>在无误码存在的条件下，存在如下约束关系：</p>
-<script type="math/tex; mode=display">
-GH^T=[0]</script></li>
-<li><p><strong>伴随式</strong>：</p>
-<script type="math/tex; mode=display">
-S=rH^T\\
-其中:r为接收码字</script></li>
+<li><p><strong>生成矩阵</strong>：从(n,k)线性分组码中任取k个线性无关的码字，按行的形式写出矩阵G，则称该线性分组码为生成矩阵</p>
+<img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203201029350.png" alt="image-20221203201029350" style="zoom: 50%;">
+</li>
+<li><p><strong>通过</strong>$U=mG$<strong>(m为输入信息）便能计算出编码后的码字</strong>$U$<br>$$<br>若生成矩阵G= \begin{pmatrix}<br>1 &amp; 1 &amp; 0 &amp; 1 &amp; 0 &amp; 0\<br>0 &amp; 1 &amp; 1 &amp; 0 &amp; 1 &amp; 0\<br>1 &amp; 0 &amp; 1 &amp; 0 &amp; 0 &amp; 1<br>\end{pmatrix}=\begin{pmatrix}<br>V_1\<br>V_2\<br>V_3<br>\end{pmatrix}<br>$$</p>
+<p>$$<br>若输入信息m=\begin{pmatrix}<br>1&amp;1&amp;0<br>\end{pmatrix}<br>$$</p>
+<p>$$<br>则:U=m\cdot G=\begin{pmatrix}<br>1&amp;1&amp;0<br>\end{pmatrix}\begin{pmatrix}<br>V_1\<br>V_2\<br>V_3<br>\end{pmatrix}=1\cdot V_1+1\cdot V_2+0\cdot V_3\=<br>\begin{pmatrix}<br>1&amp;1&amp;0&amp;1&amp;0&amp;0<br>\end{pmatrix}+\begin{pmatrix}<br>0&amp;1&amp;1&amp;0&amp;1&amp;0<br>\end{pmatrix}+\begin{pmatrix}<br> 0&amp;0&amp;0&amp;0&amp;0&amp;0<br>\end{pmatrix}=\begin{pmatrix}<br>1&amp;0&amp;1&amp;1&amp;1&amp;0<br>\end{pmatrix}<br>$$</p>
+</li>
+<li><p><strong>监督矩阵</strong>：<br>$$<br>若(n,k)线性分组码的生成矩阵G形如:\<br>G=(P|I_k)\<br>其中G为k\times n阶矩阵,I_k是k阶单位阵，P为k\times (n-k)阶子阵\<br>则其对应的监督矩阵为:\<br>H=(I_{(n-k)}|P^T)\<br>其中H为(n-k)\times n阶矩阵<br>$$</p>
+</li>
+<li><p>在无误码存在的条件下，存在如下约束关系：<br>$$<br>GH^T=[0]<br>$$</p>
+</li>
+<li><p><strong>伴随式</strong>：<br>$$<br>S=rH^T\<br>其中:r为接收码字<br>$$</p>
+</li>
 <li><p>$(n,k)$<strong>线性分组码的译码方法</strong>：</p>
-<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203210713180.png" alt="image-20221203210713180" style="zoom:50%;"></p>
+<img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203210713180.png" alt="image-20221203210713180" style="zoom:50%;">
+
 <ul>
 <li><p>由$eH^T(e为错误图样)$构建伴随式错误图样查询表</p>
-<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203210109047.png" alt="image-20221203210109047" style="zoom:50%;"></p>
+<img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203210109047.png" alt="image-20221203210109047" style="zoom:50%;">
 </li>
 <li><p>例：</p>
-<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203210539296.png" alt="image-20221203210539296" style="zoom:33%;"></p>
-<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203210634566.png" alt="image-20221203210634566" style="zoom: 33%;"></p>
+<img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203210539296.png" alt="image-20221203210539296" style="zoom:33%;">
+
+<img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203210634566.png" alt="image-20221203210634566" style="zoom: 33%;">
 </li>
 </ul>
 </li>
@@ -440,33 +411,31 @@ S=rH^T\\
 </ul>
 <hr>
 <h1 id="循环码"><a href="#循环码" class="headerlink" title="循环码"></a>循环码</h1><ul>
-<li><p>定义：码长为n，信息位为k的$(n,k)$线性分组码，若具有下列属性：</p>
-<script type="math/tex; mode=display">
-如果U=[u_0,u_1,u_2,\cdots,u_{n-1}]是子空间S的一个码字，经过i次循环移位得到:\\
-U^{(i)}=[u_{n-i},u_{n-i+1},\cdots,u_{n-1},u_0,u_1,\cdots,u_{n-i-1}]也是S中的一个码字(i\ge 0)\\
-这种具有循环移位特点的码被称为循环码</script></li>
-<li><p><strong>生成多项式</strong>$g(x)$<strong>与码字多项式</strong>$U(x)$<strong>存在约束关系</strong>：</p>
-<script type="math/tex; mode=display">
-U(x)\; mod\; g(x)=0</script><ul>
+<li><p>定义：码长为n，信息位为k的$(n,k)$线性分组码，若具有下列属性：<br>$$<br>如果U=[u_0,u_1,u_2,\cdots,u_{n-1}]是子空间S的一个码字，经过i次循环移位得到:\<br>U^{(i)}=[u_{n-i},u_{n-i+1},\cdots,u_{n-1},u_0,u_1,\cdots,u_{n-i-1}]也是S中的一个码字(i\ge 0)\<br>这种具有循环移位特点的码被称为循环码<br>$$</p>
+</li>
+<li><p><strong>生成多项式</strong>$g(x)$<strong>与码字多项式</strong>$U(x)$<strong>存在约束关系</strong>：<br>$$<br>U(x); mod; g(x)=0<br>$$</p>
+<ul>
 <li><p>例：</p>
-<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203214504458.png" alt="image-20221203214504458" style="zoom: 33%;"></p>
-<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203214832804.png" alt="image-20221203214832804" style="zoom: 33%;"></p>
+<img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203214504458.png" alt="image-20221203214504458" style="zoom: 33%;">
+
+<img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203214832804.png" alt="image-20221203214832804" style="zoom: 33%;">
 </li>
 </ul>
 </li>
-<li><p><strong>伴随式</strong>：伴随式可以由$r(x)$对生成多项式$g(x)$取模计算得到：</p>
-<script type="math/tex; mode=display">
-S(x)=r(x)\;mod\;g(x)=[U(x)+e(x)]\;mod\;g(x)=e(x)\;mod\;g(x)\\
-其中:e(x)为错误图样</script></li>
+<li><p><strong>伴随式</strong>：伴随式可以由$r(x)$对生成多项式$g(x)$取模计算得到：<br>$$<br>S(x)=r(x);mod;g(x)=[U(x)+e(x)];mod;g(x)=e(x);mod;g(x)\<br>其中:e(x)为错误图样<br>$$</p>
+</li>
 <li><p><strong>译码方法</strong>：</p>
-<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203215510012.png" alt="image-20221203215510012" style="zoom:50%;"></p>
+<img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203215510012.png" alt="image-20221203215510012" style="zoom:50%;">
+
 <ul>
 <li><p>构建伴随式查询表：</p>
-<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203215745265.png" alt="image-20221203215745265" style="zoom: 33%;"></p>
+<img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203215745265.png" alt="image-20221203215745265" style="zoom: 33%;">
 </li>
 <li><p>例：</p>
-<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203215959010.png" alt="image-20221203215959010" style="zoom: 33%;"></p>
-<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203220026425.png" alt="image-20221203220026425" style="zoom:33%;"></p>
+<img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203215959010.png" alt="image-20221203215959010" style="zoom: 33%;">
+
+<img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221203220026425.png" alt="image-20221203220026425" style="zoom:33%;">
+
 </li>
 </ul>
 </li>
@@ -474,7 +443,7 @@ S(x)=r(x)\;mod\;g(x)=[U(x)+e(x)]\;mod\;g(x)=e(x)\;mod\;g(x)\\
 <hr>
 <h1 id="卷积码的基本概念"><a href="#卷积码的基本概念" class="headerlink" title="卷积码的基本概念"></a>卷积码的基本概念</h1><ul>
 <li><p>卷积码：通过将输入信息序列与编码器做卷积运算，将k位信息编成n比特，此n比特不仅与当前k位信息有关，还与前面(m-1)段的信息有关</p>
-<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221205154422965.png" alt="image-20221205154422965" style="zoom:33%;"></p>
+<img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221205154422965.png" alt="image-20221205154422965" style="zoom:33%;">
 </li>
 <li><p>卷积码$(n,k,m)$的参数：</p>
 <ul>
@@ -489,10 +458,11 @@ S(x)=r(x)\;mod\;g(x)=[U(x)+e(x)]\;mod\;g(x)=e(x)\;mod\;g(x)\\
 <li><p>假设为卷积码$(2,1,3)$，即输入1bit，输出2bit，移位寄存器的个数为3</p>
 </li>
 <li><p>输入”1”时对应的输出序列为：<code>11 10 11</code></p>
-<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221205162501011.png" alt="image-20221205162501011" style="zoom: 50%;"></p>
+<img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221205162501011.png" alt="image-20221205162501011" style="zoom: 50%;">
 </li>
 <li><p>则当输入序列为m=101时对应的输出可按照输入的线性叠加方式得到：<code>11 10 00 10 11</code></p>
-<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221205162650768.png" alt="image-20221205162650768" style="zoom: 50%;"></p>
+<img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221205162650768.png" alt="image-20221205162650768" style="zoom: 50%;">
+
 </li>
 </ul>
 <h2 id="2-卷积码的编码方法—状态描述和状态图"><a href="#2-卷积码的编码方法—状态描述和状态图" class="headerlink" title="2.卷积码的编码方法—状态描述和状态图"></a>2.卷积码的编码方法—状态描述和状态图</h2><ul>
@@ -501,10 +471,10 @@ S(x)=r(x)\;mod\;g(x)=[U(x)+e(x)]\;mod\;g(x)=e(x)\;mod\;g(x)\\
 <li><p>卷积编码器中，状态共有$2^{m-1}$个</p>
 </li>
 <li><p>$(2,1,3)$卷积码的编码方法</p>
-<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221205163334403.png" alt="image-20221205163334403" style="zoom:50%;"></p>
+<img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221205163334403.png" alt="image-20221205163334403" style="zoom:50%;">
 </li>
 <li><p>$(2,1,3)$卷积编码的状态图</p>
-<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221205163513133.png" alt="image-20221205163513133" style="zoom:50%;"></p>
+<img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221205163513133.png" alt="image-20221205163513133" style="zoom:50%;">
 </li>
 <li><p>网格图分析——</p>
 <ul>
@@ -522,7 +492,7 @@ S(x)=r(x)\;mod\;g(x)=[U(x)+e(x)]\;mod\;g(x)=e(x)\;mod\;g(x)\\
 </ul>
 </li>
 <li><p><strong>分支度量</strong>：某时刻输出子码与接收子码之间的汉明距离</p>
-<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221205180444265.png" alt="image-20221205180444265" style="zoom:50%;"></p>
+<img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221205180444265.png" alt="image-20221205180444265" style="zoom:50%;">
 </li>
 <li><p><strong>路径度量</strong>：</p>
 <ul>
@@ -535,9 +505,9 @@ S(x)=r(x)\;mod\;g(x)=[U(x)+e(x)]\;mod\;g(x)=e(x)\;mod\;g(x)\\
 <li>计算到达当前节点的分支度量</li>
 <li>取出到达上一节点对应的路径度量</li>
 <li>相加得到两个新路径度量，比较，选择汉明距离较小者，被称为幸存路径</li>
-<li>具体解释可见：<a target="_blank" rel="noopener" href="https://www.icourse163.org/learn/SJTU-1449270161?tid=1463620444#/learn/content?type=detail&amp;id=1241732491&amp;cid=1264287105&amp;replay=true">VLSI数字通信原理与设计_中国大学MOOC(慕课) (icourse163.org)</a></li>
+<li>具体解释可见：<a target="_blank" rel="noopener" href="https://www.icourse163.org/learn/SJTU-1449270161?tid=1463620444#/learn/content?type=detail&id=1241732491&cid=1264287105&replay=true">VLSI数字通信原理与设计_中国大学MOOC(慕课) (icourse163.org)</a></li>
 </ul>
-<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221206010526855.png" alt="image-20221206010526855" style="zoom: 33%;"></p>
+<img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221206010526855.png" alt="image-20221206010526855" style="zoom: 33%;">
 </li>
 <li><p><strong>维特比译码的特点</strong>：</p>
 <ul>
@@ -550,9 +520,8 @@ S(x)=r(x)\;mod\;g(x)=[U(x)+e(x)]\;mod\;g(x)=e(x)\;mod\;g(x)\\
 <ul>
 <li><p>分段译码，降低复杂度</p>
 </li>
-<li><p>译码深度h，其中m-1为编码器记忆深度</p>
-<script type="math/tex; mode=display">
-h=(5\sim10)(m-1)</script></li>
+<li><p>译码深度h，其中m-1为编码器记忆深度<br>$$<br>h=(5\sim10)(m-1)<br>$$</p>
+</li>
 </ul>
 </li>
 </ul>
@@ -565,17 +534,17 @@ h=(5\sim10)(m-1)</script></li>
 <li>任意许用码序列的重量又等于它与全0码之间的汉明距离</li>
 <li>只要在格图上找到一条离全零距离最近的、从0状态出发又回到0状态的非全0路径，那么这条路径所代表的码序列的重量就等于自由距离</li>
 </ul>
-<p><img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221208141239867.png" alt="image-20221208141239867" style="zoom:50%;"></p>
+<img src="/2022/12/03/VLSI%20DSP%E4%B9%8B%E4%BF%A1%E9%81%93%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81/image-20221208141239867.png" alt="image-20221208141239867" style="zoom:50%;">
+
 <ul>
-<li>则上述中重量最小的路径为：$S_0\xrightarrow{11}S_1\xrightarrow{10}S_2\xrightarrow{11}S_0$<script type="math/tex; mode=display">
-d_f=5</script></li>
+<li>则上述中重量最小的路径为：$S_0\xrightarrow{11}S_1\xrightarrow{10}S_2\xrightarrow{11}S_0$<br>$$<br>d_f=5<br>$$</li>
 </ul>
 </li>
 <li><p>在译码深度长度内，可以纠正$\lfloor\frac{(d_f-1)}{2}\rfloor$个随机错误</p>
 </li>
 <li><p><strong>卷积码的编码增益</strong>：</p>
 <ul>
-<li>编码增益$dB=[\frac{E_b}{N_0}dB]_{未编码}-[\frac{E_b}{N_0}dB]_{编码}$</li>
+<li>编码增益$dB=[\frac{E_b}{N_0}dB]<em>{未编码}-[\frac{E_b}{N_0}dB]</em>{编码}$</li>
 <li>硬件判决编码增益$dB:10log_{10}(\frac{Rd_f}{2})$</li>
 </ul>
 </li>
@@ -712,7 +681,7 @@ d_f=5</script></li>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">144</span>
+          <span class="site-state-item-count">145</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -725,7 +694,7 @@ d_f=5</script></li>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-count">40</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

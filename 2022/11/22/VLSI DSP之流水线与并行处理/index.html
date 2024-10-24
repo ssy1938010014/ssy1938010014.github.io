@@ -274,20 +274,21 @@
       
         <p>本节主要介绍了VLSI DSP中的流水线与并行处理技术，以提高处理效率或降低功耗。</p>
 <span id="more"></span>
+
 <h1 id="并行处理技术"><a href="#并行处理技术" class="headerlink" title="并行处理技术"></a>并行处理技术</h1><ul>
 <li><p>以三抽头的滤波器为例：$y(n)=b_0x(n)+b_1x(n-1)+b_2x(n-2)$</p>
-<p><img src="/2022/11/22/VLSI%20DSP%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E4%B8%8E%E5%B9%B6%E8%A1%8C%E5%A4%84%E7%90%86/image-20221122112136499.png" alt="image-20221122112136499" style="zoom:50%;"></p>
+<img src="/2022/11/22/VLSI%20DSP%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E4%B8%8E%E5%B9%B6%E8%A1%8C%E5%A4%84%E7%90%86/image-20221122112136499.png" alt="image-20221122112136499" style="zoom:50%;">
+
 <ul>
 <li>在下一个时钟周期计算$y(n+1)=b_0x(n+1)+b_1x(n)+b_2x(n-1)$</li>
 </ul>
 </li>
-<li><p>三抽头滤波器的两级并行：用$2k$代替上面两式中的$n$</p>
-<script type="math/tex; mode=display">
-y(2k)=b_0x(2k)+b_1x(2k-1)+b_2x(2k-2)</script><script type="math/tex; mode=display">
-y(2k+1)=b_0x(2k+1)+b_1x(2k)+b_2x(2k-1)</script><p><img src="/2022/11/22/VLSI%20DSP%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E4%B8%8E%E5%B9%B6%E8%A1%8C%E5%A4%84%E7%90%86/image-20221122113600626.png" alt="image-20221122113600626" style="zoom: 50%;"></p>
+<li><p>三抽头滤波器的两级并行：用$2k$代替上面两式中的$n$<br>$$<br>y(2k)=b_0x(2k)+b_1x(2k-1)+b_2x(2k-2)<br>$$</p>
+<p>$$<br>y(2k+1)=b_0x(2k+1)+b_1x(2k)+b_2x(2k-1)<br>$$</p>
+<img src="/2022/11/22/VLSI%20DSP%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E4%B8%8E%E5%B9%B6%E8%A1%8C%E5%A4%84%E7%90%86/image-20221122113600626.png" alt="image-20221122113600626" style="zoom: 50%;">
 </li>
 <li><p>三抽头滤波器的三级并行：</p>
-<p><img src="/2022/11/22/VLSI%20DSP%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E4%B8%8E%E5%B9%B6%E8%A1%8C%E5%A4%84%E7%90%86/image-20221122113651121.png" alt="image-20221122113651121" style="zoom: 50%;"></p>
+<img src="/2022/11/22/VLSI%20DSP%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E4%B8%8E%E5%B9%B6%E8%A1%8C%E5%A4%84%E7%90%86/image-20221122113651121.png" alt="image-20221122113651121" style="zoom: 50%;">
 </li>
 <li><p><strong>并行处理技术的特点</strong>：</p>
 <ul>
@@ -301,17 +302,17 @@ y(2k+1)=b_0x(2k+1)+b_1x(2k)+b_2x(2k-1)</script><p><img src="/2022/11/22/VLSI%20D
 <hr>
 <h1 id="流水线技术"><a href="#流水线技术" class="headerlink" title="流水线技术"></a>流水线技术</h1><ul>
 <li><p><strong>技术关键</strong>：通过在数据通路中插入寄存器，减少关键路径长度，从而提高时钟频率</p>
-<p><img src="/2022/11/22/VLSI%20DSP%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E4%B8%8E%E5%B9%B6%E8%A1%8C%E5%A4%84%E7%90%86/image-20221122114600063.png" alt="image-20221122114600063" style="zoom: 33%;"></p>
+<img src="/2022/11/22/VLSI%20DSP%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E4%B8%8E%E5%B9%B6%E8%A1%8C%E5%A4%84%E7%90%86/image-20221122114600063.png" alt="image-20221122114600063" style="zoom: 33%;">
 </li>
 <li><p><strong>割集与前馈割集</strong>：</p>
 <ul>
 <li>割集：是图的一组边，若从图中移走这些边，则图被拆分为互不相连的两个子图或孤立节点</li>
 <li>前馈割集：数据沿割集所有同向移动，即割出来的边要么都是输入边要么都是输出边</li>
 </ul>
-<p><img src="/2022/11/22/VLSI%20DSP%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E4%B8%8E%E5%B9%B6%E8%A1%8C%E5%A4%84%E7%90%86/image-20221122121628662.png" alt="image-20221122121628662" style="zoom: 67%;"></p>
+<img src="/2022/11/22/VLSI%20DSP%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E4%B8%8E%E5%B9%B6%E8%A1%8C%E5%A4%84%E7%90%86/image-20221122121628662.png" alt="image-20221122121628662" style="zoom: 67%;">
 </li>
 <li><p><strong>流水线技术是在前馈割集所有边插入寄存器，减少关键路径</strong></p>
-<p><img src="/2022/11/22/VLSI%20DSP%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E4%B8%8E%E5%B9%B6%E8%A1%8C%E5%A4%84%E7%90%86/image-20221122122236342.png" alt="image-20221122122236342" style="zoom:50%;"></p>
+<img src="/2022/11/22/VLSI%20DSP%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E4%B8%8E%E5%B9%B6%E8%A1%8C%E5%A4%84%E7%90%86/image-20221122122236342.png" alt="image-20221122122236342" style="zoom:50%;">
 </li>
 <li><p><strong>流水线的优缺点</strong>：</p>
 <ul>
@@ -323,7 +324,8 @@ y(2k+1)=b_0x(2k+1)+b_1x(2k)+b_2x(2k-1)</script><p><img src="/2022/11/22/VLSI%20D
 </li>
 </ul>
 <hr>
-<h1 id="流水线技术降低功耗"><a href="#流水线技术降低功耗" class="headerlink" title="流水线技术降低功耗"></a>流水线技术降低功耗</h1><p><img src="/2022/11/22/VLSI%20DSP%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E4%B8%8E%E5%B9%B6%E8%A1%8C%E5%A4%84%E7%90%86/image-20221122144527682.png" alt="image-20221122144527682" style="zoom:50%;"></p>
+<h1 id="流水线技术降低功耗"><a href="#流水线技术降低功耗" class="headerlink" title="流水线技术降低功耗"></a>流水线技术降低功耗</h1><img src="/2022/11/22/VLSI%20DSP%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E4%B8%8E%E5%B9%B6%E8%A1%8C%E5%A4%84%E7%90%86/image-20221122144527682.png" alt="image-20221122144527682" style="zoom:50%;">
+
 <ul>
 <li><p>流水线技术斩断了原始系统的有效关键路径，也相当于分解了原始系统的有效关键路径充电电容。约定以下符号：</p>
 </li>
@@ -341,30 +343,25 @@ y(2k+1)=b_0x(2k+1)+b_1x(2k)+b_2x(2k-1)</script><p><img src="/2022/11/22/VLSI%20D
 </li>
 <li><p>由于“理想”M级流水线的插入，使得$C_{n-charge}=\frac{C_{o-charge}}M$</p>
 </li>
-<li><p>传输延时公式中的充放电电容变小，而我们又不需要改变传输延时$T_{pd}$（$f=\frac1{max(T_{pd})}$）那么肯定能带来工作电压的减小，新旧电路传播延时相等</p>
-<script type="math/tex; mode=display">
-T_{pd}=\frac{C_{o-charge}V_0}{k( V_0-V_t)^2}</script><script type="math/tex; mode=display">
-T_{pd}'=\frac{\frac{C_{o-charge}}{M}\beta V_0}{k(\beta V_0-V_t)^2}</script></li>
-<li><p>有$T_{pd}=T_{pd}’$，则：</p>
-<script type="math/tex; mode=display">
-\beta (V_0-V_t)^2=M(\beta V_0-V_t)^2</script></li>
-<li><p>通过上式可以求出$\beta$，进而改变工作电压从而降低电路功耗，此时的电路功耗为（总电容不变，时钟频率也不变）：</p>
-<script type="math/tex; mode=display">
-P_n=C_{total}(\beta V_0)^2f=\beta^2C_{total}V_0^2f=\beta^2P_0</script></li>
+<li><p>传输延时公式中的充放电电容变小，而我们又不需要改变传输延时$T_{pd}$（$f=\frac1{max(T_{pd})}$）那么肯定能带来工作电压的减小，新旧电路传播延时相等<br>$$<br>T_{pd}=\frac{C_{o-charge}V_0}{k( V_0-V_t)^2}<br>$$</p>
+<p>$$<br>T_{pd}’=\frac{\frac{C_{o-charge}}{M}\beta V_0}{k(\beta V_0-V_t)^2}<br>$$</p>
+</li>
+<li><p>有$T_{pd}=T_{pd}’$，则：<br>$$<br>\beta (V_0-V_t)^2=M(\beta V_0-V_t)^2<br>$$</p>
+</li>
+<li><p>通过上式可以求出$\beta$，进而改变工作电压从而降低电路功耗，此时的电路功耗为（总电容不变，时钟频率也不变）：<br>$$<br>P_n=C_{total}(\beta V_0)^2f=\beta^2C_{total}V_0^2f=\beta^2P_0<br>$$</p>
+</li>
 </ul>
 <hr>
-<h1 id="并行处理技术降低功耗"><a href="#并行处理技术降低功耗" class="headerlink" title="并行处理技术降低功耗"></a>并行处理技术降低功耗</h1><p><img src="/2022/11/22/VLSI%20DSP%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E4%B8%8E%E5%B9%B6%E8%A1%8C%E5%A4%84%E7%90%86/image-20221122152129260.png" alt="image-20221122152129260" style="zoom: 50%;"></p>
+<h1 id="并行处理技术降低功耗"><a href="#并行处理技术降低功耗" class="headerlink" title="并行处理技术降低功耗"></a>并行处理技术降低功耗</h1><img src="/2022/11/22/VLSI%20DSP%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E4%B8%8E%E5%B9%B6%E8%A1%8C%E5%A4%84%E7%90%86/image-20221122152129260.png" alt="image-20221122152129260" style="zoom: 50%;">
+
 <ul>
-<li><p>为保持原来的采样速率不变，L级并行处理系统的时钟周期增加为$LT_{seq}$，则电源电压可以降低到$\beta V_0$</p>
-<script type="math/tex; mode=display">
-原时钟周期:T_{seq}=\frac{C_{charge}V_0}{k(V_0-V_t)^2}</script><script type="math/tex; mode=display">
-新时钟周期:T_{seq}'=\frac{C_{charge}\beta V_0}{k(\beta V_0-V_t)^2}</script></li>
-<li><p>有：$T_{seq}’=NT_{seq}$，则：</p>
-<script type="math/tex; mode=display">
-N(\beta V_0-V_t)^2=\beta(V_0-V_t)^2</script></li>
-<li><p>则新的电路功耗为（总电容变为原来的N倍，时钟频率变为原来的1/N）：</p>
-<script type="math/tex; mode=display">
-P_n=NC_{total}(\beta V_0)^2\frac fN=C_{total}(\beta V_0)^2f=\beta^2P_0</script></li>
+<li><p>为保持原来的采样速率不变，L级并行处理系统的时钟周期增加为$LT_{seq}$，则电源电压可以降低到$\beta V_0$<br>$$<br>原时钟周期:T_{seq}=\frac{C_{charge}V_0}{k(V_0-V_t)^2}<br>$$</p>
+<p>$$<br>新时钟周期:T_{seq}’=\frac{C_{charge}\beta V_0}{k(\beta V_0-V_t)^2}<br>$$</p>
+</li>
+<li><p>有：$T_{seq}’=NT_{seq}$，则：<br>$$<br>N(\beta V_0-V_t)^2=\beta(V_0-V_t)^2<br>$$</p>
+</li>
+<li><p>则新的电路功耗为（总电容变为原来的N倍，时钟频率变为原来的1/N）：<br>$$<br>P_n=NC_{total}(\beta V_0)^2\frac fN=C_{total}(\beta V_0)^2f=\beta^2P_0<br>$$</p>
+</li>
 <li><p><strong>可以看到，</strong>$M$<strong>级流水线和</strong>$L$<strong>级并行处理的采用在不改变原始时序电路性能的情况下有相同的功耗降低能力</strong></p>
 </li>
 </ul>
@@ -500,7 +497,7 @@ P_n=NC_{total}(\beta V_0)^2\frac fN=C_{total}(\beta V_0)^2f=\beta^2P_0</script><
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">144</span>
+          <span class="site-state-item-count">145</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -513,7 +510,7 @@ P_n=NC_{total}(\beta V_0)^2\frac fN=C_{total}(\beta V_0)^2f=\beta^2P_0</script><
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-count">40</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

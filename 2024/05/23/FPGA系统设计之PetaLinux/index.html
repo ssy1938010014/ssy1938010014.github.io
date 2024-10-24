@@ -283,11 +283,13 @@
       
         <p>本节主要介绍了如何借助petalinux工具构建一个linux基础系统</p>
 <span id="more"></span>
+
 <h1 id="PetaLinux基本介绍"><a href="#PetaLinux基本介绍" class="headerlink" title="PetaLinux基本介绍"></a>PetaLinux基本介绍</h1><ul>
 <li><p>PetaLinux工具可简化赛灵思器件上的嵌入式Linux开发</p>
 </li>
 <li><p>PetaLinux工具只需要7条命令即可简化基于Linux的产品开发</p>
-<p><img src="/2024/05/23/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BPetaLinux/image-20240523225506173.png" alt="image-20240523225506173" style="zoom: 67%;"></p>
+<img src="/2024/05/23/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BPetaLinux/image-20240523225506173.png" alt="image-20240523225506173" style="zoom: 67%;">
+
 <ul>
 <li>我也是第一次接触操作系统，不太清楚PetaLinux具体的工作是啥，但上面这幅图就很形象，它能帮我们完成Linux操作系统搭建的一系列步骤，然后我们就可以更多的关注实际应用开发本身</li>
 </ul>
@@ -309,21 +311,23 @@
 <h1 id="PetaLinux的七条命令"><a href="#PetaLinux的七条命令" class="headerlink" title="PetaLinux的七条命令"></a>PetaLinux的七条命令</h1><ul>
 <li><p><strong>petalinux-create可创建对象并将其包含到PetaLinux工程中，包括PetaLinux工程本身、应用以及模块</strong></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">petalinux-create --type project --template &lt;PLATFORM&gt; --name &lt;PROJECT_NAME&gt;</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>参数如下：<ul>
-<li>—template <PLATFORM> <ul>
+<li>–template <PLATFORM> <ul>
 <li>zynqMP (UltraScale+™ MPSoC)</li>
 <li>zynq (Zynq-7000 器件)</li>
 <li>microblaze (MicroBlaze™ CPU)</li>
 </ul>
 </PLATFORM></li>
-<li>—name <PROJECT_NAME> - 您正在构建的工程名称。</PROJECT_NAME></li>
+<li>–name <PROJECT_NAME> - 您正在构建的工程名称。</PROJECT_NAME></li>
 </ul>
 </li>
 </ul>
 </li>
 <li><p>petalinux-config工具允许在工程级别或工程组件级别进行自定义，它还可提供工作空间用于安装软件补丁</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">petalinux-config --get-hw-description=&lt;path-to-directory-containinghardware description-file&gt;</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li><strong>利用 petalinux-config 命令导入硬件描述， 按如下要求提供含有 .hdf/.dsa 文件的目录路径</strong>  </li>
 </ul>
@@ -333,20 +337,23 @@
 </li>
 <li><p>petalinux-boot工具用于加载并启动PetaLinux镜像，包括利用实体板上的JTAG或借助系统的QEMU模型</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">petalinux-package --boot --fsbl &lt;FSBL image&gt; --fpga &lt;FPGA bitstream&gt; --u-boot</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>按照上面的步骤生成 .BIN 格式的启动镜像  </li>
 </ul>
 </li>
 <li><p>petalinux-package工具可将PetaLinux工具封装为适合部署的格式</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">petalinux-package --image -c kernel --format uImage</span><br></pre></td></tr></table></figure>
+
 <ul>
-<li>如果想使用 uImage，请使用 petalinux-package —image  </li>
+<li>如果想使用 uImage，请使用 petalinux-package –image  </li>
 </ul>
 </li>
 <li><p>petalinux-util工具支持您访问GDB等各种实用工具</p>
 </li>
 <li><p>petalinux-upgrade工具可执行次要版本升级以使用最新系统软件组件</p>
-<p><img src="/2024/05/23/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BPetaLinux/image-20240523235315369.png" alt="image-20240523235315369" style="zoom:50%;"></p>
+<img src="/2024/05/23/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BPetaLinux/image-20240523235315369.png" alt="image-20240523235315369" style="zoom:50%;">
+
 <ul>
 <li>图中绿色标注均为可选命令</li>
 </ul>
@@ -366,6 +373,8 @@
 </li>
 <li><p>SD 中将 RootFS （rootfs.tar.gz）加载到 ext4 分区， 所有其他启动镜像（boot.scr、BOOT.BIIN、image.ub）加载到 FAT32 分区</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">ssy@ssy-virtual-machine:~$ cd /mnt/</span><br><span class="line">ssy@ssy-virtual-machine:/mnt$ ls</span><br><span class="line">BOOT  hgfs  RootFS</span><br><span class="line">ssy@ssy-virtual-machine:/mnt$ sudo mount /dev/sdb1 BOOT/</span><br><span class="line">ssy@ssy-virtual-machine:/mnt$ sudo mount /dev/sdb2 RootFS/</span><br><span class="line">ssy@ssy-virtual-machine:/mnt$ cd BOOT/</span><br><span class="line">ssy@ssy-virtual-machine:/mnt/BOOT$ ls</span><br><span class="line">ssy@ssy-virtual-machine:/mnt/BOOT$ cd ..</span><br><span class="line">ssy@ssy-virtual-machine:/mnt$ cd BOOT/</span><br><span class="line">ssy@ssy-virtual-machine:/mnt/BOOT$ sudo cp ~/BOOT.BIN .</span><br><span class="line">ssy@ssy-virtual-machine:/mnt/BOOT$ sudo cp ~/boot.scr .</span><br><span class="line">ssy@ssy-virtual-machine:/mnt/BOOT$ sudo cp ~/image.ub .</span><br><span class="line">ssy@ssy-virtual-machine:/mnt/BOOT$ sync</span><br><span class="line">ssy@ssy-virtual-machine:/mnt/BOOT$ cd ..</span><br><span class="line">ssy@ssy-virtual-machine:/mnt$ cd RootFS/</span><br><span class="line">ssy@ssy-virtual-machine:/mnt/RootFS$ ls</span><br><span class="line">lost+found</span><br><span class="line">ssy@ssy-virtual-machine:/mnt/RootFS$ sudo rm -rf *</span><br><span class="line">ssy@ssy-virtual-machine:/mnt/RootFS$ ls -l</span><br><span class="line">total 0</span><br><span class="line">ssy@ssy-virtual-machine:/mnt/RootFS$ sudo tar -xzvf ~/rootfs.tar.gz </span><br><span class="line">ssy@ssy-virtual-machine:/mnt/RootFS$ sync</span><br><span class="line">ssy@ssy-virtual-machine:/mnt/RootFS$ cd ..</span><br><span class="line">ssy@ssy-virtual-machine:/mnt$ sudo umount /dev/sdb*</span><br><span class="line">umount: /dev/sdb: not mounted.</span><br><span class="line">ssy@ssy-virtual-machine:/mnt$ sudo umount /dev/sdb*</span><br><span class="line">umount: /dev/sdb: not mounted.</span><br><span class="line">umount: /dev/sdb1: not mounted.</span><br><span class="line">umount: /dev/sdb2: not mounted.</span><br><span class="line">ssy@ssy-virtual-machine:/mnt$ sudo umount /dev/sdb*</span><br><span class="line">umount: /dev/sdb: not mounted.</span><br><span class="line">umount: /dev/sdb1: not mounted.</span><br><span class="line">umount: /dev/sdb2: not mounted.</span><br></pre></td></tr></table></figure>
+
+
 </li>
 </ul>
 </li>
@@ -378,12 +387,14 @@
 <ul>
 <li><p>将bit文件打包成bit.bin文件（假设你的bit文件名称是mybit.bit，新建一个xxx.bif，内容如下）</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">all:&#123;</span><br><span class="line"> mybit.bit</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>在服务器上使用命令行 <code>bootgen -image xxx.bif -arch zynqmp -process_bitstream bin</code>，这样就可以得到mybit.bit.bin文件，接着将该文件下载到自己电脑上</li>
 </ul>
 </li>
 <li><p>打开板子进入系统</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ifconfig eth0 xxx.xxx.xxx.xxx</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>这个xxx.xxx.xxx.xxx是你给板子的IP地址，用来给你的电脑和板子之间进行通信</li>
 <li>找一条网线，分别连接板子和你的电脑</li>
@@ -399,6 +410,7 @@
 </li>
 <li><p>其实后面执行编译好的xxx.o文件也是同样的扒拉文件到板子操作系统上的流程。注意要添加权限</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo chmod +x ./xxx.o</span><br><span class="line">sudo ./xxx.o</span><br></pre></td></tr></table></figure>
+
 </li>
 </ul>
 <hr>
@@ -549,7 +561,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">144</span>
+          <span class="site-state-item-count">145</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -562,7 +574,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-count">40</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

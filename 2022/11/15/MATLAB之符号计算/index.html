@@ -281,6 +281,7 @@
       
         <p>本节主要介绍了MATLAB中符号对象的建立与相关运算，包括微积分、级数、方程求解。</p>
 <span id="more"></span>
+
 <h1 id="符号对象"><a href="#符号对象" class="headerlink" title="符号对象"></a>符号对象</h1><h2 id="1-符号对象的建立"><a href="#1-符号对象的建立" class="headerlink" title="1.符号对象的建立"></a>1.符号对象的建立</h2><ul>
 <li><p><code>符合对象名=sym(A)</code></p>
 <ul>
@@ -289,13 +290,15 @@
 <li><p>A也可以是一个变量名，这时符号对象为一个符号变量</p>
 </li>
 </ul>
-<p><img src="/2022/11/15/MATLAB%E4%B9%8B%E7%AC%A6%E5%8F%B7%E8%AE%A1%E7%AE%97/image-20221115134631714.png" alt="image-20221115134631714" style="zoom:50%;"></p>
+<img src="/2022/11/15/MATLAB%E4%B9%8B%E7%AC%A6%E5%8F%B7%E8%AE%A1%E7%AE%97/image-20221115134631714.png" alt="image-20221115134631714" style="zoom:50%;">
+
 <ul>
 <li>由结果可以看出符号计算的结果是一个精确的数学表达式，数值计算的结果是一个数值</li>
 </ul>
 </li>
 <li><p><code>syms 符号变量名1 符号变量名2 …… 符号变量名n</code> %一次定义多个符号变量</p>
-<p><img src="/2022/11/15/MATLAB%E4%B9%8B%E7%AC%A6%E5%8F%B7%E8%AE%A1%E7%AE%97/image-20221115140157221.png" alt="image-20221115140157221" style="zoom:50%;"></p>
+<img src="/2022/11/15/MATLAB%E4%B9%8B%E7%AC%A6%E5%8F%B7%E8%AE%A1%E7%AE%97/image-20221115140157221.png" alt="image-20221115140157221" style="zoom:50%;">
+
 </li>
 </ul>
 <h2 id="2-符号对象的运算"><a href="#2-符号对象的运算" class="headerlink" title="2.符号对象的运算"></a>2.符号对象的运算</h2><ul>
@@ -308,7 +311,7 @@
 <li><code>assume(condition)</code> %指定变量满足条件condition</li>
 <li><code>assume(expr,set)</code> %指定表达式expr属于集合set</li>
 </ul>
-<p><img src="/2022/11/15/MATLAB%E4%B9%8B%E7%AC%A6%E5%8F%B7%E8%AE%A1%E7%AE%97/image-20221115141223254.png" alt="image-20221115141223254" style="zoom:50%;"></p>
+<img src="/2022/11/15/MATLAB%E4%B9%8B%E7%AC%A6%E5%8F%B7%E8%AE%A1%E7%AE%97/image-20221115141223254.png" alt="image-20221115141223254" style="zoom:50%;">
 </li>
 <li><p><strong>逻辑运算</strong>：<code>&amp;、|、~</code></p>
 </li>
@@ -318,7 +321,7 @@
 <li><code>expand(s)</code>：对符号表达式s进行展开</li>
 <li><code>collect(s)</code>：对符号表达式s合并同类项</li>
 </ul>
-<p><img src="/2022/11/15/MATLAB%E4%B9%8B%E7%AC%A6%E5%8F%B7%E8%AE%A1%E7%AE%97/image-20221115142555549.png" alt="image-20221115142555549" style="zoom:50%;"></p>
+<img src="/2022/11/15/MATLAB%E4%B9%8B%E7%AC%A6%E5%8F%B7%E8%AE%A1%E7%AE%97/image-20221115142555549.png" alt="image-20221115142555549" style="zoom:50%;">
 </li>
 <li><p><strong>其他运算</strong></p>
 <ul>
@@ -331,24 +334,27 @@
 </ul>
 </li>
 </ul>
-<p><img src="/2022/11/15/MATLAB%E4%B9%8B%E7%AC%A6%E5%8F%B7%E8%AE%A1%E7%AE%97/image-20221115143306302.png" alt="image-20221115143306302" style="zoom:50%;"></p>
+<img src="/2022/11/15/MATLAB%E4%B9%8B%E7%AC%A6%E5%8F%B7%E8%AE%A1%E7%AE%97/image-20221115143306302.png" alt="image-20221115143306302" style="zoom:50%;">
+
 </li>
 </ul>
 <hr>
 <h1 id="符号微积分"><a href="#符号微积分" class="headerlink" title="符号微积分"></a>符号微积分</h1><h2 id="1-符号函数的极限"><a href="#1-符号函数的极限" class="headerlink" title="1.符号函数的极限"></a>1.符号函数的极限</h2><ul>
 <li><code>limit(f,x,a)</code> %求函数f关于变量x在a点的极限</li>
 </ul>
-<p><img src="/2022/11/15/MATLAB%E4%B9%8B%E7%AC%A6%E5%8F%B7%E8%AE%A1%E7%AE%97/image-20221115145834940.png" alt="image-20221115145834940" style="zoom:50%;"></p>
+<img src="/2022/11/15/MATLAB%E4%B9%8B%E7%AC%A6%E5%8F%B7%E8%AE%A1%E7%AE%97/image-20221115145834940.png" alt="image-20221115145834940" style="zoom:50%;">
+
 <h2 id="2-符号函数的导数"><a href="#2-符号函数的导数" class="headerlink" title="2.符号函数的导数"></a>2.符号函数的导数</h2><ul>
 <li><code>diff(f,x,n)</code> %求函数f关于变量x的n阶导数，n的默认值是1</li>
 </ul>
-<p><img src="/2022/11/15/MATLAB%E4%B9%8B%E7%AC%A6%E5%8F%B7%E8%AE%A1%E7%AE%97/image-20221115150254742.png" alt="image-20221115150254742" style="zoom:50%;"></p>
+<img src="/2022/11/15/MATLAB%E4%B9%8B%E7%AC%A6%E5%8F%B7%E8%AE%A1%E7%AE%97/image-20221115150254742.png" alt="image-20221115150254742" style="zoom:50%;">
+
 <h2 id="3-符号函数的积分"><a href="#3-符号函数的积分" class="headerlink" title="3.符号函数的积分"></a>3.符号函数的积分</h2><ul>
 <li><p><strong>不定积分</strong></p>
 <ul>
 <li><code>int(f,x)</code> %即求函数f对变量x的不定积分</li>
 </ul>
-<p><img src="/2022/11/15/MATLAB%E4%B9%8B%E7%AC%A6%E5%8F%B7%E8%AE%A1%E7%AE%97/image-20221115150645038.png" alt="image-20221115150645038" style="zoom:50%;"></p>
+<img src="/2022/11/15/MATLAB%E4%B9%8B%E7%AC%A6%E5%8F%B7%E8%AE%A1%E7%AE%97/image-20221115150645038.png" alt="image-20221115150645038" style="zoom:50%;">
 </li>
 <li><p><strong>定积分</strong></p>
 <ul>
@@ -356,7 +362,8 @@
 <li>a,b分别表示定积分的下限和上限</li>
 <li>a,b中有一个符号表达式时，函数返回一个符号函数</li>
 </ul>
-<p><img src="/2022/11/15/MATLAB%E4%B9%8B%E7%AC%A6%E5%8F%B7%E8%AE%A1%E7%AE%97/image-20221115151126251.png" alt="image-20221115151126251" style="zoom:50%;"></p>
+<img src="/2022/11/15/MATLAB%E4%B9%8B%E7%AC%A6%E5%8F%B7%E8%AE%A1%E7%AE%97/image-20221115151126251.png" alt="image-20221115151126251" style="zoom:50%;">
+
 </li>
 </ul>
 <hr>
@@ -366,22 +373,44 @@
 <li>v是求和变量</li>
 <li>n、m时是求和变量v的初值和末值</li>
 </ul>
-<p><img src="/2022/11/15/MATLAB%E4%B9%8B%E7%AC%A6%E5%8F%B7%E8%AE%A1%E7%AE%97/image-20221115153036188.png" alt="image-20221115153036188" style="zoom:50%;"></p>
+<img src="/2022/11/15/MATLAB%E4%B9%8B%E7%AC%A6%E5%8F%B7%E8%AE%A1%E7%AE%97/image-20221115153036188.png" alt="image-20221115153036188" style="zoom:50%;">
+
 <h2 id="2-泰勒级数"><a href="#2-泰勒级数" class="headerlink" title="2.泰勒级数"></a>2.泰勒级数</h2><ul>
 <li><p><code>taylor(f,v,a,Name,Value)</code></p>
 </li>
 <li><p>函数f按变量v在a点展开为泰勒级数</p>
 </li>
 <li><p>Name为选项名，Value为选项值</p>
-<p>| Name             | Value                                                    |<br>| ———————— | ———————————————————————————— |<br>| ‘ExpansionPoint’ | 指定展开点，默认为0                                      |<br>| ‘Order’          | 指定截断参数，默认为6，即展开式的最高阶为5               |<br>| ‘OrderMode’      | 指定展开式采用绝对阶’Absolute’（默认）或相对阶’Relative’ |</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>‘ExpansionPoint’</td>
+<td>指定展开点，默认为0</td>
+</tr>
+<tr>
+<td>‘Order’</td>
+<td>指定截断参数，默认为6，即展开式的最高阶为5</td>
+</tr>
+<tr>
+<td>‘OrderMode’</td>
+<td>指定展开式采用绝对阶’Absolute’（默认）或相对阶’Relative’</td>
+</tr>
+</tbody></table>
 </li>
 </ul>
-<p><img src="/2022/11/15/MATLAB%E4%B9%8B%E7%AC%A6%E5%8F%B7%E8%AE%A1%E7%AE%97/image-20221115154034943.png" alt="image-20221115154034943" style="zoom:50%;"></p>
+<img src="/2022/11/15/MATLAB%E4%B9%8B%E7%AC%A6%E5%8F%B7%E8%AE%A1%E7%AE%97/image-20221115154034943.png" alt="image-20221115154034943" style="zoom:50%;">
+
 <hr>
 <h1 id="符号方程求解"><a href="#符号方程求解" class="headerlink" title="符号方程求解"></a>符号方程求解</h1><h2 id="1-代数方程符号求解"><a href="#1-代数方程符号求解" class="headerlink" title="1.代数方程符号求解"></a>1.代数方程符号求解</h2><ul>
 <li><code>solve(s,v)</code> %求解符号表达式s的代数方程，求解变量为v</li>
 </ul>
-<p><img src="/2022/11/15/MATLAB%E4%B9%8B%E7%AC%A6%E5%8F%B7%E8%AE%A1%E7%AE%97/image-20221115155943524.png" alt="image-20221115155943524" style="zoom:50%;"></p>
+<img src="/2022/11/15/MATLAB%E4%B9%8B%E7%AC%A6%E5%8F%B7%E8%AE%A1%E7%AE%97/image-20221115155943524.png" alt="image-20221115155943524" style="zoom:50%;">
+
 <ul>
 <li>solve函数求解方程不一定准确</li>
 </ul>
@@ -392,7 +421,8 @@
 <li>若没有给出初始条件c，则求方程的通解</li>
 </ul>
 <p>例1：</p>
-<p><img src="/2022/11/15/MATLAB%E4%B9%8B%E7%AC%A6%E5%8F%B7%E8%AE%A1%E7%AE%97/image-20221115162155578.png" alt="image-20221115162155578" style="zoom:33%;"></p>
+<img src="/2022/11/15/MATLAB%E4%B9%8B%E7%AC%A6%E5%8F%B7%E8%AE%A1%E7%AE%97/image-20221115162155578.png" alt="image-20221115162155578" style="zoom:33%;">
+
 <p><img src="/2022/11/15/MATLAB%E4%B9%8B%E7%AC%A6%E5%8F%B7%E8%AE%A1%E7%AE%97/image-20221115162301125.png" alt="image-20221115162301125"></p>
 <p>例2：</p>
 <p><img src="/2022/11/15/MATLAB%E4%B9%8B%E7%AC%A6%E5%8F%B7%E8%AE%A1%E7%AE%97/image-20221115162421769.png" alt="image-20221115162421769"></p>
@@ -528,7 +558,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">144</span>
+          <span class="site-state-item-count">145</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -541,7 +571,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-count">40</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

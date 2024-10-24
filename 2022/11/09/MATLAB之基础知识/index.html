@@ -299,12 +299,13 @@
       
         <p>本节介绍了MATLAB学习的一些基础知识，包括数值类型、矩阵的创建以及相关运算、字符串处理等。</p>
 <span id="more"></span>
+
 <h1 id="MATLAB数据类型"><a href="#MATLAB数据类型" class="headerlink" title="MATLAB数据类型"></a>MATLAB数据类型</h1><ul>
 <li><p>MATLAB中数值数据默认double类型</p>
-<p><img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109122902166.png" alt="image-20221109122902166" style="zoom: 67%;"></p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109122902166.png" alt="image-20221109122902166" style="zoom: 67%;">
 </li>
 <li><p>single()函数：将其他类型的数据转化为单精度型</p>
-<p><img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109123220743.png" alt="image-20221109123220743" style="zoom: 67%;"></p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109123220743.png" alt="image-20221109123220743" style="zoom: 67%;">
 </li>
 <li><p>double()函数：将其他类型的数据转化为双精度型</p>
 </li>
@@ -324,10 +325,10 @@
 <hr>
 <h1 id="常用数学函数"><a href="#常用数学函数" class="headerlink" title="常用数学函数"></a>常用数学函数</h1><ul>
 <li><p>三角函数：有以弧度为单位的函数和以角度为单位的函数，如果是以角度为单位的函数就在函数名后面加“d”</p>
-<p><img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109141448904.png" alt="image-20221109141448904" style="zoom:50%;"></p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109141448904.png" alt="image-20221109141448904" style="zoom:50%;">
 </li>
 <li><p>abs函数可以求实数的绝对值、复数的模、字符串的ASCII码值</p>
-<p><img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109141745974.png" alt="image-20221109141745974" style="zoom:50%;"></p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109141745974.png" alt="image-20221109141745974" style="zoom:50%;">
 </li>
 <li><p><strong>用于取整的函数有fix、floor、ceil、round</strong></p>
 <ul>
@@ -336,13 +337,14 @@
 <li>floor函数是向下取整，取小于等于这个数的第一个整数</li>
 <li>fix函数是舍去小数取整</li>
 </ul>
-<p><img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109142322591.png" alt="image-20221109142322591" style="zoom:50%;"></p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109142322591.png" alt="image-20221109142322591" style="zoom:50%;">
 </li>
 <li><p>isprime()函数判断是否为素数：若是则返回1，否则返回0</p>
-<p><img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109142852414.png" alt="image-20221109142852414" style="zoom:50%;"></p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109142852414.png" alt="image-20221109142852414" style="zoom:50%;">
 </li>
 <li><p>perms()函数可以用来计算全排列</p>
-<p><img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221120125607598.png" alt="image-20221120125607598" style="zoom:50%;"></p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221120125607598.png" alt="image-20221120125607598" style="zoom:50%;">
+
 </li>
 </ul>
 <hr>
@@ -351,15 +353,17 @@
 </li>
 <li><p>load命令：装入内存变量文件</p>
 <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">save mydata a x</span><br><span class="line">load mydata</span><br></pre></td></tr></table></figure>
+
 </li>
 </ul>
 <hr>
 <h1 id="MATLAB矩阵的表示"><a href="#MATLAB矩阵的表示" class="headerlink" title="MATLAB矩阵的表示"></a>MATLAB矩阵的表示</h1><h2 id="1-基本矩阵的建立"><a href="#1-基本矩阵的建立" class="headerlink" title="1.基本矩阵的建立"></a>1.基本矩阵的建立</h2><ul>
 <li><p><strong>利用直接输入法建立矩阵</strong>：将矩阵的元素用<strong>中括号</strong>括起来，按矩阵行的顺序输入各元素，同一行的各元素之间<strong>用逗号或空格</strong>分隔，不同行的元素之间用<strong>分号</strong>分隔</p>
-<p><img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109144556051.png" alt="image-20221109144556051" style="zoom:50%;"></p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109144556051.png" alt="image-20221109144556051" style="zoom:50%;">
 </li>
 <li><p><strong>利用已建好的矩阵建立更大的矩阵</strong>：一个大矩阵可以由已经建立好的小矩阵拼接而成</p>
-<p><img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109144914092.png" alt="image-20221109144914092" style="zoom:50%;"></p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109144914092.png" alt="image-20221109144914092" style="zoom:50%;">
+
 </li>
 </ul>
 <h2 id="2-行向量的建立"><a href="#2-行向量的建立" class="headerlink" title="2.行向量的建立"></a>2.行向量的建立</h2><ul>
@@ -369,43 +373,47 @@
 <li>其中，<strong>e1为初始值，e2为步长，e3为终止值</strong></li>
 <li>如果省略步长e2，则步长为1</li>
 </ul>
-<p><img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109145523588.png" alt="image-20221109145523588" style="zoom:50%;"></p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109145523588.png" alt="image-20221109145523588" style="zoom:50%;">
 </li>
 <li><p>使用linspace()函数</p>
 <ul>
 <li><code>linspace(a,b,n)</code></li>
 <li>其中，a为第一个元素，b为最后一个元素，n为元素总个数</li>
 </ul>
-<p><img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109145746394.png" alt="image-20221109145746394" style="zoom:50%;"></p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109145746394.png" alt="image-20221109145746394" style="zoom:50%;">
+
 </li>
 </ul>
 <h2 id="3-结构矩阵的建立"><a href="#3-结构矩阵的建立" class="headerlink" title="3.结构矩阵的建立"></a>3.结构矩阵的建立</h2><ul>
 <li><p>结构矩阵.成员名=表达式</p>
 <p><img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109150859310.png" alt="image-20221109150859310"></p>
 <p>结果如下：</p>
-<p><img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109150953705.png" alt="image-20221109150953705" style="zoom: 67%;"></p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109150953705.png" alt="image-20221109150953705" style="zoom: 67%;">
+
 </li>
 </ul>
 <h2 id="4-单元矩阵的建立"><a href="#4-单元矩阵的建立" class="headerlink" title="4.单元矩阵的建立"></a>4.单元矩阵的建立</h2><ul>
 <li><p>建立单元矩阵和基本矩阵相似，只是单元矩阵元素用<strong>大括号</strong>括起来</p>
 </li>
 <li><p>其允许输入不同数据类型的数据</p>
-<p><img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109151403981.png" alt="image-20221109151403981" style="zoom:50%;"></p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109151403981.png" alt="image-20221109151403981" style="zoom:50%;">
+
 </li>
 </ul>
 <hr>
 <h1 id="矩阵元素的引用"><a href="#矩阵元素的引用" class="headerlink" title="矩阵元素的引用"></a>矩阵元素的引用</h1><ul>
 <li><p>通过下标来引用矩阵的元素，若下标超过矩阵大小，将用0填充</p>
-<p><img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109152801772.png" alt="image-20221109152801772" style="zoom:50%;"></p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109152801772.png" alt="image-20221109152801772" style="zoom:50%;">
 </li>
 <li><p>通过序号来引用：矩阵中的元素按列存储</p>
-<p><img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109153206104.png" alt="image-20221109153206104" style="zoom:50%;"></p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109153206104.png" alt="image-20221109153206104" style="zoom:50%;">
 </li>
 <li><p><strong>矩阵元素的删除</strong>：通过对元素赋予[]从而删除元素</p>
-<p><img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109154021265.png" alt="image-20221109154021265" style="zoom:50%;"></p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109154021265.png" alt="image-20221109154021265" style="zoom:50%;">
 </li>
 <li><p><strong>改变矩阵的形状</strong>：<code>reshape(A,m,n)</code>，在矩阵总元素保持不变得前提下，将矩阵A重新排成m×n的二维矩阵</p>
-<p><img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109155627818.png" alt="image-20221109155627818" style="zoom:50%;"></p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109155627818.png" alt="image-20221109155627818" style="zoom:50%;">
+
 </li>
 </ul>
 <hr>
@@ -423,41 +431,43 @@
 <li><p>.*表示两个矩阵中对应元素相乘</p>
 </li>
 </ul>
-<p><img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109162421397.png" alt="image-20221109162421397" style="zoom:50%;"></p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109162421397.png" alt="image-20221109162421397" style="zoom:50%;">
 </li>
 <li><p>逻辑运算符：&amp;、|、~</p>
 </li>
 <li><p>实例：水仙花数是指各位数字的立方之和等于该数本身的三位正整数，求全部水仙花数</p>
-<p><img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109163246893.png" alt="image-20221109163246893" style="zoom:50%;"></p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109163246893.png" alt="image-20221109163246893" style="zoom:50%;">
+
 </li>
 </ul>
 <hr>
 <h1 id="字符串处理"><a href="#字符串处理" class="headerlink" title="字符串处理"></a>字符串处理</h1><h2 id="1-字符串的表示"><a href="#1-字符串的表示" class="headerlink" title="1.字符串的表示"></a>1.字符串的表示</h2><ul>
 <li><p>在MATLAB中，字符串是用单引号括起来的字符序列</p>
-<p><img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109164858570.png" alt="image-20221109164858570" style="zoom:50%;"></p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109164858570.png" alt="image-20221109164858570" style="zoom:50%;">
 </li>
 <li><p>若字符串中的字符含有单引号，则该单引号字符要用两个单引号来表示</p>
-<p><img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109165035761.png" alt="image-20221109165035761" style="zoom:50%;"></p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109165035761.png" alt="image-20221109165035761" style="zoom:50%;">
 </li>
 <li><p>建立多行字符串，形成字符串矩阵</p>
-<p><img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109165516169.png" alt="image-20221109165516169" style="zoom:50%;"></p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109165516169.png" alt="image-20221109165516169" style="zoom:50%;">
+
 </li>
 </ul>
 <h2 id="2-字符串的操作"><a href="#2-字符串的操作" class="headerlink" title="2.字符串的操作"></a>2.字符串的操作</h2><ul>
 <li><p><code>eval(s)</code> %表示执行字符串中的内容</p>
-<p><img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109165804919.png" alt="image-20221109165804919" style="zoom:50%;"></p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109165804919.png" alt="image-20221109165804919" style="zoom:50%;">
 </li>
 <li><p>字符串与数值之间的转换</p>
 <ul>
 <li><code>abs</code>与<code>double</code>函数都可以用来获取字符串矩阵所对应的ASCII码数值矩阵</li>
 <li><code>char</code>函数可以把ASCII码矩阵转化为字符串矩阵</li>
 </ul>
-<p><img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109170131759.png" alt="image-20221109170131759" style="zoom:50%;"></p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109170131759.png" alt="image-20221109170131759" style="zoom:50%;">
 </li>
 <li><p>字符串的比较</p>
 <ul>
 <li><p>关系运算符比较：两个字符串中的元素分别比较</p>
-<p><img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109170323450.png" alt="image-20221109170323450" style="zoom:50%;"></p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109170323450.png" alt="image-20221109170323450" style="zoom:50%;">
 </li>
 <li><p>字符串比较函数</p>
 <ul>
@@ -466,7 +476,7 @@
 <li><code>strcmpi(s1,s2)</code>：在忽略字母大小写前提下，比较字符串s1和s2是否相等，如果相等，返回结果1，否则返回0</li>
 <li><code>strcmpi(s1,s2)</code>：在忽略字母大小写前提下，比较字符串s1和s2中前n个字符串是否相等，如果相等，返回结果1，否则返回0     </li>
 </ul>
-<p><img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109172205320.png" alt="image-20221109172205320" style="zoom:50%;"></p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109172205320.png" alt="image-20221109172205320" style="zoom:50%;">
 </li>
 </ul>
 </li>
@@ -475,7 +485,7 @@
 <li><code>findstr(s1,s2)</code>：返回短字符串在长字符串中的开始位置</li>
 <li><code>strrep(s1,s2,s3)</code>：将字符串s1中的所有子字符串s2替换为字符串s3</li>
 </ul>
-<p><img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109172940944.png" alt="image-20221109172940944" style="zoom:50%;"></p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109172940944.png" alt="image-20221109172940944" style="zoom:50%;">
 </li>
 </ul>
 
@@ -532,8 +542,8 @@
       <i class="fa fa-chevron-left"></i> TensorFlow实践之人工神经网路
     </a></div>
       <div class="post-nav-item">
-    <a href="/2022/11/10/%E6%9C%AC%E7%A7%91%E8%AF%BE%E7%A8%8B%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0%E9%87%8D%E7%82%B9/" rel="next" title="小沈同学本科期末复习宝典">
-      小沈同学本科期末复习宝典 <i class="fa fa-chevron-right"></i>
+    <a href="/2022/11/10/%E6%9C%AC%E7%A7%91%E8%AF%BE%E7%A8%8B%E8%AE%BE%E8%AE%A1/" rel="next" title="小沈同学的本科课程设计">
+      小沈同学的本科课程设计 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -609,7 +619,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">144</span>
+          <span class="site-state-item-count">145</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -622,7 +632,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-count">40</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

@@ -290,6 +290,7 @@
       
         <p>本节主要介绍了用TI的AWR2243级联板采集数据的基本配置流程，后续可能会更新一些如何设置参数的内容（目前没时间弄这块，可能要等比较久~）</p>
 <span id="more"></span>
+
 <h1 id="MIMO数据采集流程"><a href="#MIMO数据采集流程" class="headerlink" title="MIMO数据采集流程"></a>MIMO数据采集流程</h1><ul>
 <li>对于AWR2243级联板，需要通过TDA2XX配置与采集数据，因为TDA2XX可以通过有限局域网（Ethernet）实现GUI到级联设备的通信</li>
 <li>使用mmWaveStudio GUI的主要功能是：<ul>
@@ -316,26 +317,28 @@
 <p><img src="/2023/10/23/AWR2243%E7%BA%A7%E8%81%94%E6%9D%BF%E4%B9%8BMIMO%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E5%A4%84%E7%90%86%E5%8F%8A%E5%85%B6%E5%8E%9F%E7%90%86/image-20231023191631813.png" alt="image-20231023191631813"></p>
 </li>
 <li><p>连接12V、5A的电源线</p>
-<p><img src="/2023/10/23/AWR2243%E7%BA%A7%E8%81%94%E6%9D%BF%E4%B9%8BMIMO%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E5%A4%84%E7%90%86%E5%8F%8A%E5%85%B6%E5%8E%9F%E7%90%86/image-20231023191305156.png" alt="image-20231023191305156" style="zoom: 33%;"></p>
+<img src="/2023/10/23/AWR2243%E7%BA%A7%E8%81%94%E6%9D%BF%E4%B9%8BMIMO%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E5%A4%84%E7%90%86%E5%8F%8A%E5%85%B6%E5%8E%9F%E7%90%86/image-20231023191305156.png" alt="image-20231023191305156" style="zoom: 33%;">
+
 </li>
 </ul>
 <h2 id="2-AWR2243级联板的配置"><a href="#2-AWR2243级联板的配置" class="headerlink" title="2.AWR2243级联板的配置"></a>2.AWR2243级联板的配置</h2><ul>
 <li><p><strong>打开mmwaveStudio，首先设置“Radar System”为“Cascade”，并点击“Set Up TDAxx Capture Card”连接TDA采集板</strong></p>
-<p><img src="/2023/10/23/AWR2243%E7%BA%A7%E8%81%94%E6%9D%BF%E4%B9%8BMIMO%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E5%A4%84%E7%90%86%E5%8F%8A%E5%85%B6%E5%8E%9F%E7%90%86/image-20231023191953646.png" alt="image-20231023191953646" style="zoom: 33%;"></p>
+<img src="/2023/10/23/AWR2243%E7%BA%A7%E8%81%94%E6%9D%BF%E4%B9%8BMIMO%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E5%A4%84%E7%90%86%E5%8F%8A%E5%85%B6%E5%8E%9F%E7%90%86/image-20231023191953646.png" alt="image-20231023191953646" style="zoom: 33%;">
 </li>
 <li><p><strong>通过IP地址连接TDA2xx：</strong></p>
-<p><img src="/2023/10/23/AWR2243%E7%BA%A7%E8%81%94%E6%9D%BF%E4%B9%8BMIMO%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E5%A4%84%E7%90%86%E5%8F%8A%E5%85%B6%E5%8E%9F%E7%90%86/image-20231023192156327.png" alt="image-20231023192156327" style="zoom:50%;"></p>
+<img src="/2023/10/23/AWR2243%E7%BA%A7%E8%81%94%E6%9D%BF%E4%B9%8BMIMO%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E5%A4%84%E7%90%86%E5%8F%8A%E5%85%B6%E5%8E%9F%E7%90%86/image-20231023192156327.png" alt="image-20231023192156327" style="zoom:50%;">
 </li>
 <li><p><strong>烧录配置文件：</strong></p>
 <ul>
 <li><p>配置文件位于：</p>
-<p><img src="/2023/10/23/AWR2243%E7%BA%A7%E8%81%94%E6%9D%BF%E4%B9%8BMIMO%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E5%A4%84%E7%90%86%E5%8F%8A%E5%85%B6%E5%8E%9F%E7%90%86/image-20231023192553884.png" alt="image-20231023192553884" style="zoom:50%;"></p>
+<img src="/2023/10/23/AWR2243%E7%BA%A7%E8%81%94%E6%9D%BF%E4%B9%8BMIMO%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E5%A4%84%E7%90%86%E5%8F%8A%E5%85%B6%E5%8E%9F%E7%90%86/image-20231023192553884.png" alt="image-20231023192553884" style="zoom:50%;">
 </li>
 <li><p>打开此配置文件，需要修改Meta固件（说实话，不太懂这个Meta固件跟MSS和BSS固件有个啥区别）的位置</p>
 <ul>
 <li>Meta固件位置：</li>
 </ul>
-<p><img src="/2023/10/23/AWR2243%E7%BA%A7%E8%81%94%E6%9D%BF%E4%B9%8BMIMO%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E5%A4%84%E7%90%86%E5%8F%8A%E5%85%B6%E5%8E%9F%E7%90%86/image-20231023192340311.png" alt="image-20231023192340311" style="zoom:50%;"></p>
+<img src="/2023/10/23/AWR2243%E7%BA%A7%E8%81%94%E6%9D%BF%E4%B9%8BMIMO%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E5%A4%84%E7%90%86%E5%8F%8A%E5%85%B6%E5%8E%9F%E7%90%86/image-20231023192340311.png" alt="image-20231023192340311" style="zoom:50%;">
+
 <ul>
 <li><p>即：</p>
 <p><img src="/2023/10/23/AWR2243%E7%BA%A7%E8%81%94%E6%9D%BF%E4%B9%8BMIMO%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E5%A4%84%E7%90%86%E5%8F%8A%E5%85%B6%E5%8E%9F%E7%90%86/image-20231023192832419.png" alt="image-20231023192832419"></p>
@@ -359,24 +362,25 @@
 <p><img src="/2023/10/23/AWR2243%E7%BA%A7%E8%81%94%E6%9D%BF%E4%B9%8BMIMO%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E5%A4%84%E7%90%86%E5%8F%8A%E5%85%B6%E5%8E%9F%E7%90%86/image-20231023194620997.png" alt="image-20231023194620997"></p>
 </li>
 <li><p>最终数据会保存在：</p>
-<p><img src="/2023/10/23/AWR2243%E7%BA%A7%E8%81%94%E6%9D%BF%E4%B9%8BMIMO%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E5%A4%84%E7%90%86%E5%8F%8A%E5%85%B6%E5%8E%9F%E7%90%86/image-20231023194706280.png" alt="image-20231023194706280" style="zoom:50%;"></p>
+<img src="/2023/10/23/AWR2243%E7%BA%A7%E8%81%94%E6%9D%BF%E4%B9%8BMIMO%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E5%A4%84%E7%90%86%E5%8F%8A%E5%85%B6%E5%8E%9F%E7%90%86/image-20231023194706280.png" alt="image-20231023194706280" style="zoom:50%;">
+
 </li>
 </ul>
 <h2 id="4-AWR2243级联板的数据处理"><a href="#4-AWR2243级联板的数据处理" class="headerlink" title="4.AWR2243级联板的数据处理"></a>4.AWR2243级联板的数据处理</h2><ul>
 <li><p>利用官方提供的处理代码进行数据处理，matlab代码位置如下：</p>
-<p><img src="/2023/10/23/AWR2243%E7%BA%A7%E8%81%94%E6%9D%BF%E4%B9%8BMIMO%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E5%A4%84%E7%90%86%E5%8F%8A%E5%85%B6%E5%8E%9F%E7%90%86/image-20231023195133839.png" alt="image-20231023195133839" style="zoom: 50%;"></p>
+<img src="/2023/10/23/AWR2243%E7%BA%A7%E8%81%94%E6%9D%BF%E4%B9%8BMIMO%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E5%A4%84%E7%90%86%E5%8F%8A%E5%85%B6%E5%8E%9F%E7%90%86/image-20231023195133839.png" alt="image-20231023195133839" style="zoom: 50%;">
 </li>
 <li><p><strong>首先在系统设置中添加环境变量</strong>：</p>
-<p><img src="/2023/10/23/AWR2243%E7%BA%A7%E8%81%94%E6%9D%BF%E4%B9%8BMIMO%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E5%A4%84%E7%90%86%E5%8F%8A%E5%85%B6%E5%8E%9F%E7%90%86/image-20231023195337381.png" alt="image-20231023195337381" style="zoom: 50%;"></p>
+<img src="/2023/10/23/AWR2243%E7%BA%A7%E8%81%94%E6%9D%BF%E4%B9%8BMIMO%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E5%A4%84%E7%90%86%E5%8F%8A%E5%85%B6%E5%8E%9F%E7%90%86/image-20231023195337381.png" alt="image-20231023195337381" style="zoom: 50%;">
 </li>
 <li><p>其次，<strong>运行 “add_paths.m”</strong> <strong>文件，将路径添加至Matlab</strong></p>
-<p><img src="/2023/10/23/AWR2243%E7%BA%A7%E8%81%94%E6%9D%BF%E4%B9%8BMIMO%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E5%A4%84%E7%90%86%E5%8F%8A%E5%85%B6%E5%8E%9F%E7%90%86/image-20231023195820659.png" alt="image-20231023195820659" style="zoom: 50%;"></p>
+<img src="/2023/10/23/AWR2243%E7%BA%A7%E8%81%94%E6%9D%BF%E4%B9%8BMIMO%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E5%A4%84%E7%90%86%E5%8F%8A%E5%85%B6%E5%8E%9F%E7%90%86/image-20231023195820659.png" alt="image-20231023195820659" style="zoom: 50%;">
 </li>
 <li><p>修改<strong>4chip_cascade_MIMO_example\main\cascade\input文件夹里面的testlist.txt文件</strong></p>
 <p><img src="/2023/10/23/AWR2243%E7%BA%A7%E8%81%94%E6%9D%BF%E4%B9%8BMIMO%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E5%A4%84%E7%90%86%E5%8F%8A%E5%85%B6%E5%8E%9F%E7%90%86/image-20231023200039762.png" alt="image-20231023200039762"></p>
 </li>
 <li><p>运行<strong>Cascade_MIMO_signalProcessing.m</strong></p>
-<p><img src="/2023/10/23/AWR2243%E7%BA%A7%E8%81%94%E6%9D%BF%E4%B9%8BMIMO%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E5%A4%84%E7%90%86%E5%8F%8A%E5%85%B6%E5%8E%9F%E7%90%86/image-20231023200849679.png" alt="image-20231023200849679" style="zoom:33%;"></p>
+<img src="/2023/10/23/AWR2243%E7%BA%A7%E8%81%94%E6%9D%BF%E4%B9%8BMIMO%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E5%A4%84%E7%90%86%E5%8F%8A%E5%85%B6%E5%8E%9F%E7%90%86/image-20231023200849679.png" alt="image-20231023200849679" style="zoom:33%;">
 </li>
 <li><p>最终MATLAB中会显示一个可视化结果：</p>
 <p><img src="/2023/10/23/AWR2243%E7%BA%A7%E8%81%94%E6%9D%BF%E4%B9%8BMIMO%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E5%A4%84%E7%90%86%E5%8F%8A%E5%85%B6%E5%8E%9F%E7%90%86/AWR2243_test1.jpg" alt="AWR2243_test1"></p>
@@ -518,7 +522,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">144</span>
+          <span class="site-state-item-count">145</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -531,7 +535,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-count">40</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

@@ -268,6 +268,7 @@
       
         <p>本节主要介绍了MATLAB中基本的文件操作方法，包括文本文件的读写、二进制文件的读写、数据文件定位等。</p>
 <span id="more"></span>
+
 <h1 id="文件打开与关闭"><a href="#文件打开与关闭" class="headerlink" title="文件打开与关闭"></a>文件打开与关闭</h1><h2 id="1-fopen函数"><a href="#1-fopen函数" class="headerlink" title="1.fopen函数"></a>1.fopen函数</h2><ul>
 <li><code>fid=fopen(filename,permission)</code></li>
 <li>filename为待操作的文件名</li>
@@ -328,6 +329,7 @@
 <li><code>count=fwrite(fid,A,precision)</code></li>
 </ul>
 <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%计算y=exp(x)sinx，其中x∈[0,2π]。将x、y写入二进制文件&quot;模拟数据.dat”。</span></span><br><span class="line">fid=fopen(<span class="string">&#x27;模拟数据.dat&#x27;</span>,<span class="string">&#x27;w&#x27;</span>);</span><br><span class="line">x=<span class="built_in">linspace</span>(<span class="number">0</span>,<span class="number">2</span>*<span class="built_in">pi</span>,<span class="number">100</span>);</span><br><span class="line">y=<span class="built_in">exp</span>(x).*<span class="built_in">sin</span>(x);</span><br><span class="line">count=fwrite(fid, [x; y], <span class="string">&#x27;double&#x27;</span>);</span><br><span class="line">fclose(fid);</span><br></pre></td></tr></table></figure>
+
 <hr>
 <h1 id="数据文件定位"><a href="#数据文件定位" class="headerlink" title="数据文件定位"></a>数据文件定位</h1><h2 id="1-fseek函数"><a href="#1-fseek函数" class="headerlink" title="1.fseek函数"></a>1.fseek函数</h2><ul>
 <li><code>fseek(fid,offset,origin)</code></li>
@@ -483,7 +485,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">144</span>
+          <span class="site-state-item-count">145</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -496,7 +498,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-count">40</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
