@@ -272,6 +272,7 @@
       
         <p>C++之类和动态内存分配……</p>
 <span id="more"></span>
+
 <h1 id="动态内存与类"><a href="#动态内存与类" class="headerlink" title="动态内存与类"></a>动态内存与类</h1><ul>
 <li><p>stringbad.h</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> __STRINGBAD_H__</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> __STRINGBAD_H__</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">StringBad</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">private</span>:</span><br><span class="line">		<span class="type">char</span> *str;</span><br><span class="line">		<span class="type">int</span> len;</span><br><span class="line">		<span class="type">static</span> <span class="type">int</span> num_strings;<span class="comment">//不能对static变量在类定义中直接赋值，否则会报错，const除外</span></span><br><span class="line">	<span class="keyword">public</span>:</span><br><span class="line">		<span class="built_in">StringBad</span>(<span class="type">const</span> <span class="type">char</span> *s);</span><br><span class="line">		<span class="built_in">StringBad</span>();</span><br><span class="line">		~<span class="built_in">StringBad</span>();</span><br><span class="line">		<span class="keyword">friend</span> ostream &amp;<span class="keyword">operator</span>&lt;&lt;(ostream &amp;os, <span class="type">const</span> StringBad &amp;st);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
@@ -287,8 +288,10 @@
 </li>
 <li><p>不能对static变量在类定义中直接赋值，否则会报错，static const类型除外。其通常在类的声明cpp文件中赋初始值一次</p>
 </li>
-<li><code>callme2(headline2)</code>中使用直接赋值的方式相当于将<code>StringBad sb=headline2</code>，而这条语句会触发类的自动类型转换，即会调用符合条件的构造函数，但不存在符合条件的构造函数（符合条件的构造函数为<code>StringBad(const StringBad &amp;)</code>）</li>
-<li>而当使用一个对象来初始化另一个对象时，编译器将自动生成上述构造函数，故实际只存在三个指针，但删除时却需要删除四个指针，故会发生报错</li>
+<li><p><code>callme2(headline2)</code>中使用直接赋值的方式相当于将<code>StringBad sb=headline2</code>，而这条语句会触发类的自动类型转换，即会调用符合条件的构造函数，但不存在符合条件的构造函数（符合条件的构造函数为<code>StringBad(const StringBad &amp;)</code>）</p>
+</li>
+<li><p>而当使用一个对象来初始化另一个对象时，编译器将自动生成上述构造函数，故实际只存在三个指针，但删除时却需要删除四个指针，故会发生报错</p>
+</li>
 </ul>
 <hr>
 
@@ -422,7 +425,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-count">149</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

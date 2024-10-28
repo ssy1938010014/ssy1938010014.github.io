@@ -289,15 +289,15 @@
       
         <p>本节从离散傅里叶变换的深入理解说起，介绍了FFT的基本原理，其中包括基2、基4的按时间抽选FFT算法和按频率抽取FFT算法</p>
 <span id="more"></span>
+
 <h1 id="从DFT说起"><a href="#从DFT说起" class="headerlink" title="从DFT说起"></a>从DFT说起</h1><ul>
-<li><p>DFT的基本公式：</p>
-<script type="math/tex; mode=display">
-X(k)=\sum_{n=0}^{N-1}x(n)W_N^{nk},k=0,1,...,N-1</script><script type="math/tex; mode=display">
-W_N^{nk}=e^{-j\frac{2\pi}{N}nk}</script></li>
+<li><p>DFT的基本公式：<br>$$<br>X(k)=\sum_{n=0}^{N-1}x(n)W_N^{nk},k=0,1,…,N-1<br>$$</p>
+<p>$$<br>W_N^{nk}=e^{-j\frac{2\pi}{N}nk}<br>$$</p>
+</li>
 <li><p>看这个公式里面有个$\frac{2\pi}{N}$，有没有觉得很熟悉，哦没错，它其实就是数字角频率$w_0$（这个在我的其他笔记中有提到<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/03/03/信号处理中的小知识点/">信号处理中的小知识点 | ssy的小天地 (ssy1938010014.github.io)</a>）</p>
 <ul>
 <li><p>那么该如何理解它呢？正如在之前笔记中提到的，它代表在复数平面内每个点转过的角度</p>
-<p><img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231103170339511.png" alt="image-20231103170339511" style="zoom:50%;"></p>
+<img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231103170339511.png" alt="image-20231103170339511" style="zoom:50%;">
 </li>
 <li><p>图中标出的$\theta$，其实就是数字角频率$w_0$，在对一个正弦波抽样后，得到的点，其实就没有时间的概念了，只是我们自己心里清楚，点与点之间的时间间隔是$T_s$（采样间隔）</p>
 </li>
@@ -311,28 +311,29 @@ W_N^{nk}=e^{-j\frac{2\pi}{N}nk}</script></li>
 <ul>
 <li><p>首先，假设$x(n)=cos(\frac{2\pi}{N}n)$，$x(k)$就等于$k$确定情况下，$n=0\sim N-1$个$x(n)$对应的点与旋转因子中$e^{-j\frac{2\pi}{N}n},n=0\sim N-1$对应元素相乘（例如$x(0)\times e^{-j\frac{2\pi}{N}\cdot 0\cdot k},x(1)\times e^{-j\frac{2\pi}{N}\cdot 1\cdot k},x(2)\times e^{-j\frac{2\pi}{N}\cdot 2\cdot k},…$）。简单来说，这一步骤就是：<strong>在$k$（也就是某一频率）下，求信号对这一频率幅频特性曲线的贡献（这么说可能不太规范，通俗来讲，就是如果信号中含有这个频率，那么它的幅频特性曲线中，这个频率对应的幅度就会格外高，也就是说这一步就是在求这个幅度到底有多高）</strong></p>
 </li>
-<li><p>此时，你会发现，有个离谱的事情发生了$x(n)$是个$cos$，$e^{j\frac{2\pi}{N}n}$是个复数，这咋乘，就现在，我发现了欧拉的伟大，应用欧拉公式，有：</p>
-<script type="math/tex; mode=display">
-cos(\frac{2\pi}{N}n)=\frac{e^{j\frac{2\pi}{N}n}+e^{-j\frac{2\pi}{N}n}}{2}</script></li>
+<li><p>此时，你会发现，有个离谱的事情发生了$x(n)$是个$cos$，$e^{j\frac{2\pi}{N}n}$是个复数，这咋乘，就现在，我发现了欧拉的伟大，应用欧拉公式，有：<br>$$<br>cos(\frac{2\pi}{N}n)=\frac{e^{j\frac{2\pi}{N}n}+e^{-j\frac{2\pi}{N}n}}{2}<br>$$</p>
+</li>
 <li><p>现在是不是cos就能和复数相乘了，为了便于解释，假设$N=8$，那么$e^{j\frac{2\pi}{N}n}$在复平面上的8个点（图1）为：</p>
-<p><img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/Snipaste_2023-11-04_02-41-55.png" alt="Snipaste_2023-11-04_02-41-55" style="zoom:50%;"></p>
+<img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/Snipaste_2023-11-04_02-41-55.png" alt="Snipaste_2023-11-04_02-41-55" style="zoom:50%;">
 </li>
 <li><p>$e^{-j\frac{2\pi}{N}n}$在复平面上的8个点（图2）为：</p>
-<p><img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/Snipaste_2023-11-04_02-43-08.png" alt="Snipaste_2023-11-04_02-43-08" style="zoom:50%;"></p>
+<img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/Snipaste_2023-11-04_02-43-08.png" alt="Snipaste_2023-11-04_02-43-08" style="zoom:50%;">
 </li>
 <li><p>当$k=1$时，$W_N^{n}=e^{-j\frac{2\pi}{N}n}$，其在复平面上的8个点（图3）为：</p>
-<p><img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/Snipaste_2023-11-04_02-43-08-1699037281630-3.png" alt="Snipaste_2023-11-04_02-43-08" style="zoom:50%;"></p>
+<img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/Snipaste_2023-11-04_02-43-08-1699037281630-3.png" alt="Snipaste_2023-11-04_02-43-08" style="zoom:50%;">
+
 <ul>
 <li><p>图1中8个复数乘以图3中对应的复数（例如图1中n=1的复数乘以图3中n=1中的复数，图1中n=2的复数乘以图3中n=2中的复数），显然，每个点对点的相乘，其均是模值相乘，由于角度相反，那么相乘后相位为0，最终这8个点对点相乘求和的结果就是8，可视化示意图如下：</p>
-<p><img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104030201498.png" alt="image-20231104030201498" style="zoom:50%;"></p>
+<img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104030201498.png" alt="image-20231104030201498" style="zoom:50%;">
 </li>
 <li><p>同样，图2中8个复数乘以图3中对应的复数，每个点对点结果是模值相乘，旋转角变为原来两倍，对结果求和后，最终为0</p>
-<p><img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104031359017.png" alt="image-20231104031359017" style="zoom:50%;"></p>
+<img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104031359017.png" alt="image-20231104031359017" style="zoom:50%;">
 </li>
 </ul>
 </li>
 <li><p>其实，$W_N^{nk}=e^{-j\frac{2\pi}{N}nk}$就是将复平面均匀分成8份，由$nk$决定，具体对应是八份中的哪一份，当$k=2$时，$nk$为$0,2,4,6,8,10,12,14$，由于8个点就转了一圈，即周期时8，那么$nk$实际对应的是$0,2,4,6,0,2,4,6$，其可视化示意如下（图4）：</p>
-<p><img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104153953253.png" alt="image-20231104153953253" style="zoom:50%;"></p>
+<img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104153953253.png" alt="image-20231104153953253" style="zoom:50%;">
+
 <ul>
 <li>将图1与图4中n相同的点对应相乘，根据模值相乘，角度相加的原则，最终矢量相加的结果为0，图2乘以图4的结果也为0</li>
 </ul>
@@ -350,7 +351,7 @@ cos(\frac{2\pi}{N}n)=\frac{e^{j\frac{2\pi}{N}n}+e^{-j\frac{2\pi}{N}n}}{2}</scrip
 <li><p>下面解释DFT的共轭对称性，即$X(k)=X^*(N-k)$</p>
 <ul>
 <li><p>那么我们来讨论$k=7$的情况，$W_N^{7n}=e^{-j\frac{2\pi}{N}n\cdot7}$，其在复平面上的8个点（图5）为：</p>
-<p><img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104163326522.png" alt="image-20231104163326522" style="zoom:50%;"></p>
+<img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104163326522.png" alt="image-20231104163326522" style="zoom:50%;">
 </li>
 <li><p>不难发现，$k=7$时的情况刚好和$k=1$的情况是反过来的，<strong>此时是$e^{-j\frac{2\pi}{N}n}$乘以$W_N^{nk}$有值（且也为$\frac{A\times N}{2}$），$e^{j\frac{2\pi}{N}n}$乘以$W_N^{nk}$为0，所以频谱中还会在$k=7$时再出现一个峰值</strong></p>
 </li>
@@ -365,49 +366,31 @@ cos(\frac{2\pi}{N}n)=\frac{e^{j\frac{2\pi}{N}n}+e^{-j\frac{2\pi}{N}n}}{2}</scrip
 <h1 id="按时间抽选FFT算法"><a href="#按时间抽选FFT算法" class="headerlink" title="按时间抽选FFT算法"></a>按时间抽选FFT算法</h1><h2 id="1-基2-FFT算法"><a href="#1-基2-FFT算法" class="headerlink" title="1.基2-FFT算法"></a>1.基2-FFT算法</h2><ul>
 <li><p>设序列$x(n)$点数为$N=2^L$，$L$为正整数</p>
 </li>
-<li><p>将序列$x(n)$<strong>按$n$的奇偶分为</strong>以下两组：</p>
-<script type="math/tex; mode=display">
-偶序列:x(2r)=x_1(r),r=0,1,...,\frac N2-1</script><script type="math/tex; mode=display">
-奇序列:x(2r+1)=x_2(r),r=0,1,...,\frac N2-1</script></li>
-<li><p>则其$N$点FFT为：</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-X(k) &= \sum_{n=0}^{N-1}x(n)W_N^{nk}\\
-&=\sum_{n=0}^{\frac N2-1}x(2r)W_N^{2rk}+\sum_{n=0}^{\frac N2-1}x(2r+1)W_N^{(2r+1)k}\\
-&=\sum_{n=0}^{\frac N2-1}x_1(r)W_N^{2rk}+\sum_{n=0}^{\frac N2-1}x_2(r)W_N^{(2r+1)k}\\
-&=\sum_{n=0}^{\frac N2-1}x_1(r)W_{\frac N2}^{rk}+W_N^k\sum_{n=0}^{\frac N2-1}x_2(r)W_{\frac N2}^{2rk}\\
-&= X_1(k)+W_N^kX_2(k)
-\end{aligned}</script><ul>
+<li><p>将序列$x(n)$<strong>按$n$的奇偶分为</strong>以下两组：<br>$$<br>偶序列:x(2r)=x_1(r),r=0,1,…,\frac N2-1<br>$$</p>
+<p>$$<br>奇序列:x(2r+1)=x_2(r),r=0,1,…,\frac N2-1<br>$$</p>
+</li>
+<li><p>则其$N$点FFT为：<br>$$<br>\begin{aligned}<br>X(k) &amp;= \sum_{n=0}^{N-1}x(n)W_N^{nk}\<br>&amp;=\sum_{n=0}^{\frac N2-1}x(2r)W_N^{2rk}+\sum_{n=0}^{\frac N2-1}x(2r+1)W_N^{(2r+1)k}\<br>&amp;=\sum_{n=0}^{\frac N2-1}x_1(r)W_N^{2rk}+\sum_{n=0}^{\frac N2-1}x_2(r)W_N^{(2r+1)k}\<br>&amp;=\sum_{n=0}^{\frac N2-1}x_1(r)W_{\frac N2}^{rk}+W_N^k\sum_{n=0}^{\frac N2-1}x_2(r)W_{\frac N2}^{2rk}\<br>&amp;= X_1(k)+W_N^kX_2(k)<br>\end{aligned}<br>$$</p>
+<ul>
 <li>其中有用到旋转因子的约分性$W_N^m=W_{\frac N2}^{\frac m2}$</li>
 <li><strong>且$X_1(k)$和$X_2(k)$分别是$x_1(r)$和$x_2(r)$的$\frac N2$点DFT</strong></li>
 </ul>
 </li>
-<li><p>对于$X(k+\frac N2)$，有：</p>
-<script type="math/tex; mode=display">
-X(k+\frac N2) = X_1(k+\frac N2)+W_N^{k+\frac N2}X_2(k+\frac N2)\\</script><ul>
-<li><p>我们知道，频谱也是有周期的，以N（参与傅里叶变换的点数）个点为周期，对于DFT只是取了最中心的一个周期，而$X_1(k)$和$X_2(k)$都是$\frac N2$点DFT，故：</p>
-<script type="math/tex; mode=display">
-X_1(k)=X_1(k+\frac N2)</script><script type="math/tex; mode=display">
-X_2(k)=X_2(k+\frac N2)</script></li>
-<li><p>根据旋转因子的性质有：</p>
-<script type="math/tex; mode=display">
-W_N^{(k+\frac N2)}=W_N^k\cdot W_N^{\frac N2}=-W_N^k</script><ul>
+<li><p>对于$X(k+\frac N2)$，有：<br>$$<br>X(k+\frac N2) = X_1(k+\frac N2)+W_N^{k+\frac N2}X_2(k+\frac N2)\<br>$$</p>
+<ul>
+<li><p>我们知道，频谱也是有周期的，以N（参与傅里叶变换的点数）个点为周期，对于DFT只是取了最中心的一个周期，而$X_1(k)$和$X_2(k)$都是$\frac N2$点DFT，故：<br>$$<br>X_1(k)=X_1(k+\frac N2)<br>$$</p>
+<p>$$<br>X_2(k)=X_2(k+\frac N2)<br>$$</p>
+</li>
+<li><p>根据旋转因子的性质有：<br>$$<br>W_N^{(k+\frac N2)}=W_N^k\cdot W_N^{\frac N2}=-W_N^k<br>$$</p>
+<ul>
 <li>因为$W_N^{\frac N2}=-1$</li>
 </ul>
 </li>
-<li><p>所以，最终$X(k+\frac N2)$的结果为：</p>
-<script type="math/tex; mode=display">
-X(k+\frac N2) = X_1(k)-W_N^kX_2(k)</script></li>
+<li><p>所以，最终$X(k+\frac N2)$的结果为：<br>$$<br>X(k+\frac N2) = X_1(k)-W_N^kX_2(k)<br>$$</p>
+</li>
 </ul>
 </li>
-<li><p><strong>整理上述推导，可以得到：</strong></p>
-<script type="math/tex; mode=display">
-\begin{cases}
-\begin{aligned}
-X(k) &= X_1(k)+W_N^kX_2(k)\\
-X(k+\frac N2) &= X_1(k)-W_N^kX_2(k)
-\end{aligned}
-\end{cases},k=0,1,...,\frac N2-1</script><ul>
+<li><p><strong>整理上述推导，可以得到：</strong><br>$$<br>\begin{cases}<br>\begin{aligned}<br>X(k) &amp;= X_1(k)+W_N^kX_2(k)\<br>X(k+\frac N2) &amp;= X_1(k)-W_N^kX_2(k)<br>\end{aligned}<br>\end{cases},k=0,1,…,\frac N2-1<br>$$</p>
+<ul>
 <li>这个式子画成信号流图就是一个蝶形变换，每求一个点的频谱，都需要知道对应偶序列的一个点和奇序列的一个点</li>
 </ul>
 </li>
@@ -418,14 +401,17 @@ X(k+\frac N2) &= X_1(k)-W_N^kX_2(k)
 <li><p>将$X_1(k)$对应的序列又分为偶序列和奇序列，$X_2(k)$对应的序列又分为偶序列和奇序列</p>
 </li>
 <li><p>一直这么分解下去，直到时域上只有两个点，2点DFT（这也称为蝶形变换）我们还是很容易得到的，即：</p>
-<p><img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104184905802.png" alt="image-20231104184905802" style="zoom:80%;"></p>
-<script type="math/tex; mode=display">
-X(0)=x(0)+x(1)</script><script type="math/tex; mode=display">
-X(1)=x(0)-x(1)</script></li>
+<img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104184905802.png" alt="image-20231104184905802" style="zoom:80%;">
+$$
+X(0)=x(0)+x(1)
+$$
+
+<p>$$<br>X(1)=x(0)-x(1)<br>$$</p>
+</li>
 <li><p>得到这两个点的DFT，我们就得到了4个点偶序列和奇序列的DFT，进而可以求出4个点的DFT，以此类推，从而可以求出更高点数的DFT</p>
 </li>
 <li><p>也就是说，我们对时域序列进行偶序列和奇序列分类，再对这个偶序列进行偶序列和奇序列分类，对这个奇序列进行偶序列和奇序列分类，分到最后时域上的序列两两一组，然后依次往下求蝶形变换，就可以得到最终N个序列的DFT结果，举一个8点FFT的例子，先画一个时域上两两分组的示意图：</p>
-<p><img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104191548459.png" alt="image-20231104191548459" style="zoom:50%;"></p>
+<img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104191548459.png" alt="image-20231104191548459" style="zoom:50%;">
 </li>
 <li><p>一个标准的8点基2-FFT流图如下：</p>
 <p><img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104191810967.png" alt="image-20231104191810967"></p>
@@ -434,7 +420,8 @@ X(1)=x(0)-x(1)</script></li>
 </li>
 <li><p>所以简单概括来说，<strong>基2-FFT算法是，计算一个N点DFT时，先需要计算两个$\frac N2$点DFT，然后对每个$\frac N2$点DFT，继续往下划分，还需要计算2个$\frac N4$点DFT（总共这一层就有4个$\frac N4$点DFT结果），直至最后分解到$\frac N{2^k}$（$k$表示第k次分解）=2时（容易通过这个等式得到$k=log_2^{\frac N2}$），我们就能迅速计算出第$k$次分解后$2^k$个2点DFT的结果（这里单纯用数学归纳法都能计算出第$k$次分解后需要计算的DFT个数为$2^k$），之后我们就可以反推回去，得到$N$点DFT的结果</strong></p>
 </li>
-<li><strong>N点基2-FFT的计算量</strong>：<ul>
+<li><p><strong>N点基2-FFT的计算量</strong>：</p>
+<ul>
 <li>蝶形级数：$M=log_2^N$</li>
 <li>每级的蝶形数量：$\frac N2$</li>
 <li>每个蝶形的计算量：<ul>
@@ -453,53 +440,31 @@ X(1)=x(0)-x(1)</script></li>
 <h2 id="2-基4-FFT算法"><a href="#2-基4-FFT算法" class="headerlink" title="2.基4-FFT算法"></a>2.基4-FFT算法</h2><ul>
 <li><p>设序列$x(n)$点数为$N=4^L$，$L$为正整数</p>
 </li>
-<li><p>将$N=4^L$分为以下4组：</p>
-<script type="math/tex; mode=display">
-\begin{cases}
-\begin{aligned}
-x(4r) &= x_1(r)\\
-x(4r+1) &= x_1(r)\\
-x(4r+2) &= x_1(r)\\
-x(4r+3) &= x_1(r)
-\end{aligned}
-\end{cases},r=0,1,...,\frac N4 -1</script></li>
-<li><p>则其$N$点DFT为：</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-X(k)&=\sum_{n=0}^{N-1}x(n)W_N^{nk}\\
-&= \sum_{r=0}^{\frac N4-1}x(4r)W_N^{4rk}+\sum_{r=0}^{\frac N4-1}x(4r+1)W_N^{(4r+1)k}+\sum_{r=0}^{\frac N4-1}x(4r+2)W_N^{(4r+2)k}+\sum_{r=0}^{\frac N4-1}x(4r+3)W_N^{(4r+3)k}\\
-&= \sum_{r=0}^{\frac N4-1}x_1(r)W_{\frac N4}^{rk}+W_N^k\sum_{r=0}^{\frac N4-1}x_2(r)W_{\frac N4}^{rk}+W_N^{2k}\sum_{r=0}^{\frac N4-1}x_3(r)W_{\frac N4}^{rk}+W_{\frac N4}^{3k}\sum_{r=0}^{\frac N4-1}x_4(r)W_{\frac N4}^{rk}\\
-&= X_1(k)+W_N^kX_2(k)+W_N^{2k}X_3(k)+W_N^{3k}X_4(k)
-\end{aligned}</script><ul>
+<li><p>将$N=4^L$分为以下4组：<br>$$<br>\begin{cases}<br>\begin{aligned}<br>x(4r) &amp;= x_1(r)\<br>x(4r+1) &amp;= x_1(r)\<br>x(4r+2) &amp;= x_1(r)\<br>x(4r+3) &amp;= x_1(r)<br>\end{aligned}<br>\end{cases},r=0,1,…,\frac N4 -1<br>$$</p>
+</li>
+<li><p>则其$N$点DFT为：<br>$$<br>\begin{aligned}<br>X(k)&amp;=\sum_{n=0}^{N-1}x(n)W_N^{nk}\<br>&amp;= \sum_{r=0}^{\frac N4-1}x(4r)W_N^{4rk}+\sum_{r=0}^{\frac N4-1}x(4r+1)W_N^{(4r+1)k}+\sum_{r=0}^{\frac N4-1}x(4r+2)W_N^{(4r+2)k}+\sum_{r=0}^{\frac N4-1}x(4r+3)W_N^{(4r+3)k}\<br>&amp;= \sum_{r=0}^{\frac N4-1}x_1(r)W_{\frac N4}^{rk}+W_N^k\sum_{r=0}^{\frac N4-1}x_2(r)W_{\frac N4}^{rk}+W_N^{2k}\sum_{r=0}^{\frac N4-1}x_3(r)W_{\frac N4}^{rk}+W_{\frac N4}^{3k}\sum_{r=0}^{\frac N4-1}x_4(r)W_{\frac N4}^{rk}\<br>&amp;= X_1(k)+W_N^kX_2(k)+W_N^{2k}X_3(k)+W_N^{3k}X_4(k)<br>\end{aligned}<br>$$</p>
+<ul>
 <li>其中$X_1(k),X_2(k),X_3(k),X_4(k)$分别是$x_1(r),x_2(r),x_3(r),x_4(r)$的$\frac N4$点DFT</li>
 </ul>
 </li>
-<li><p>由于$W_N^k$有以下性质：</p>
-<script type="math/tex; mode=display">
-W_N^{(k+\frac N4)}=W_N^{\frac N4}W_N^k=-jW_N^k</script><script type="math/tex; mode=display">
-W_N^{(k+\frac N2)}=W_N^{\frac N2}W_N^k=-W_N^k</script><script type="math/tex; mode=display">
-W_N^{(k+\frac {3N}4)}=W_N^{\frac {3N}4}W_N^k= jW_N^k</script></li>
-<li><p>故有：</p>
-<script type="math/tex; mode=display">
-\begin{cases}
-\begin{aligned}
-X(k) &= X_1(k)+W_N^kX_2(k)+W_N^{2k}X_3(k)+W_N^{3k}X_4(k)\\
-X(k+\frac N4) &= X_1(k)-jW_N^kX_2(k)-W_N^{2k}X_3(k)+jW_N^{3k}X_4(k)\\
-X(k+\frac N2) &= X_1(k)-W_N^kX_2(k)+W_N^{2k}X_3(k)-W_N^{3k}X_4(k)\\
-X(k+\frac {3k}{4}) &= X_1(k)+jW_N^kX_2(k)-W_N^{2k}X_3(k)-jW_N^{3k}X_4(k)
-\end{aligned}
-\end{cases},k=0,1,...,\frac N4 -1</script></li>
+<li><p>由于$W_N^k$有以下性质：<br>$$<br>W_N^{(k+\frac N4)}=W_N^{\frac N4}W_N^k=-jW_N^k<br>$$</p>
+<p>$$<br>W_N^{(k+\frac N2)}=W_N^{\frac N2}W_N^k=-W_N^k<br>$$</p>
+<p>$$<br>W_N^{(k+\frac {3N}4)}=W_N^{\frac {3N}4}W_N^k= jW_N^k<br>$$</p>
+</li>
+<li><p>故有：<br>$$<br>\begin{cases}<br>\begin{aligned}<br>X(k) &amp;= X_1(k)+W_N^kX_2(k)+W_N^{2k}X_3(k)+W_N^{3k}X_4(k)\<br>X(k+\frac N4) &amp;= X_1(k)-jW_N^kX_2(k)-W_N^{2k}X_3(k)+jW_N^{3k}X_4(k)\<br>X(k+\frac N2) &amp;= X_1(k)-W_N^kX_2(k)+W_N^{2k}X_3(k)-W_N^{3k}X_4(k)\<br>X(k+\frac {3k}{4}) &amp;= X_1(k)+jW_N^kX_2(k)-W_N^{2k}X_3(k)-jW_N^{3k}X_4(k)<br>\end{aligned}<br>\end{cases},k=0,1,…,\frac N4 -1<br>$$</p>
+</li>
 <li><p>与之基2类似，计算一个N点DFT时，先需要计算4个$\frac N4$点DFT，然后对每个$\frac N4$点DFT，继续往下划分，还需要计算4个$\frac{N}{16}$点DFT（总共这一层就有16个$\frac N{16}$点DFT结果），直至最后分解到$\frac N{4^k}$=4时（容易通过这个等式得到$k=log_4^{\frac N4}$），我们就能比较容易计算出第$k$次分解后$4^k$个4点DFT的结果（这里单纯用数学归纳法都能计算出第$k$次分解后需要计算的DFT个数为$4^k$），之后我们就可以反推回去，得到$N$点DFT的结果（只是这里反推时乘以的旋转因子与基2时不太一样，<strong>这里的蝶形运算是以4个点为基本单位</strong>）。</p>
 <ul>
 <li>以16点FFT为例，其运算过程的可视化示意图如下：（如果是64点FFT，就把下面这个图看成一个整体，复制粘贴4份分析）</li>
 </ul>
-<p><img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104205651274.png" alt="image-20231104205651274" style="zoom:50%;"></p>
+<img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104205651274.png" alt="image-20231104205651274" style="zoom:50%;">
+
 <ul>
 <li><p>图中第一层的4点DFT的算法和基2FF算法计算4点FFT一样</p>
-<p><img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104205958813.png" alt="image-20231104205958813" style="zoom: 67%;"></p>
+<img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104205958813.png" alt="image-20231104205958813" style="zoom: 67%;">
 </li>
 <li><p>将两幅图合起来理解就是：</p>
-<p><img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104210238454.png" alt="image-20231104210238454" style="zoom: 67%;"></p>
+<img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104210238454.png" alt="image-20231104210238454" style="zoom: 67%;">
 </li>
 <li><p>一个标准的16点基4-FFT流程图如下：</p>
 <p><img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104210134227.png" alt="image-20231104210134227"></p>
@@ -527,65 +492,34 @@ X(k+\frac {3k}{4}) &= X_1(k)+jW_N^kX_2(k)-W_N^{2k}X_3(k)-jW_N^{3k}X_4(k)
 <h1 id="按频率抽选FFT算法"><a href="#按频率抽选FFT算法" class="headerlink" title="按频率抽选FFT算法"></a>按频率抽选FFT算法</h1><h2 id="1-基2-FFT算法-1"><a href="#1-基2-FFT算法-1" class="headerlink" title="1.基2-FFT算法"></a>1.基2-FFT算法</h2><ul>
 <li><p>设序列$x(n)$点数为$N=2^L$，$L$为正整数</p>
 </li>
-<li><p>将序列<strong>按$n$的顺序分为前后两组</strong>，其$N$点DFT为：</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-X(k)&=\sum_{n=0}^{N-1}x(n)W_N^{nk}\\
-&=\sum_{n=0}^{\frac N2-1}x(n)W_N^{nk}+\sum_{n=\frac N2}^{N-1}x(n)W_N^{nk}\\
-&= \sum_{n=0}^{\frac N2 -1}x(n)W_N^{nk}+\sum_{n=0}^{\frac N2-1}x(n+\frac N2)W_N^{(n+\frac N2)k}\\
-&= \sum_{n=0}^{\frac N2-1}[x(n)+x(n+\frac N2)W_N^{\frac N2k}]W_N^{nk}\\
-&= \sum_{n=0}^{\frac N2-1}[x(n)+(-1)^kx(n+\frac N2)]W_N^{nk}
-\end{aligned}</script></li>
-<li><p><strong>按$k$的奇偶可将$X(k)$分为两部分</strong>：</p>
-<script type="math/tex; mode=display">
-\begin{cases}
-\begin{aligned}
-k &= 2r\\
-k &= 2r+1
-\end{aligned}
-\end{cases},k=0,1,...,\frac N2-1</script></li>
-<li><p>则有：</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-X(2r)&=\sum_{n=0}^{\frac N2 -1}[x(n)+x(n+\frac N2)]W_N^{2nr}\\
-&=\sum_{n=0}^{\frac N2 -1}[x(n)+x(n+\frac N2)]W_{\frac N2}^{nr}
-\end{aligned}</script><script type="math/tex; mode=display">
-\begin{aligned}
-X(2r+1)&=\sum_{n=0}^{\frac N2 -1}[x(n)-x(n+\frac N2)]W_N^{n(2r+1)}\\
-&=\sum_{n=0}^{\frac N2 -1}[x(n)-x(n+\frac N2)]W_N^nW_{\frac N2}^{nr}
-\end{aligned}</script><ul>
-<li>令：<script type="math/tex; mode=display">
-\begin{cases}
-\begin{aligned}
-x_1(n)&=x(n)+x(n+\frac N2)\\
-x_2(n)&=[x(n)-x(n+\frac N2)]W_N^n
-\end{aligned}
-\end{cases},n=0,1,...,\frac N2-1</script></li>
+<li><p>将序列<strong>按$n$的顺序分为前后两组</strong>，其$N$点DFT为：<br>$$<br>\begin{aligned}<br>X(k)&amp;=\sum_{n=0}^{N-1}x(n)W_N^{nk}\<br>&amp;=\sum_{n=0}^{\frac N2-1}x(n)W_N^{nk}+\sum_{n=\frac N2}^{N-1}x(n)W_N^{nk}\<br>&amp;= \sum_{n=0}^{\frac N2 -1}x(n)W_N^{nk}+\sum_{n=0}^{\frac N2-1}x(n+\frac N2)W_N^{(n+\frac N2)k}\<br>&amp;= \sum_{n=0}^{\frac N2-1}[x(n)+x(n+\frac N2)W_N^{\frac N2k}]W_N^{nk}\<br>&amp;= \sum_{n=0}^{\frac N2-1}[x(n)+(-1)^kx(n+\frac N2)]W_N^{nk}<br>\end{aligned}<br>$$</p>
+</li>
+<li><p><strong>按$k$的奇偶可将$X(k)$分为两部分</strong>：<br>$$<br>\begin{cases}<br>\begin{aligned}<br>k &amp;= 2r\<br>k &amp;= 2r+1<br>\end{aligned}<br>\end{cases},k=0,1,…,\frac N2-1<br>$$</p>
+</li>
+<li><p>则有：<br>$$<br>\begin{aligned}<br>X(2r)&amp;=\sum_{n=0}^{\frac N2 -1}[x(n)+x(n+\frac N2)]W_N^{2nr}\<br>&amp;=\sum_{n=0}^{\frac N2 -1}[x(n)+x(n+\frac N2)]W_{\frac N2}^{nr}<br>\end{aligned}<br>$$</p>
+<p>$$<br>\begin{aligned}<br>X(2r+1)&amp;=\sum_{n=0}^{\frac N2 -1}[x(n)-x(n+\frac N2)]W_N^{n(2r+1)}\<br>&amp;=\sum_{n=0}^{\frac N2 -1}[x(n)-x(n+\frac N2)]W_N^nW_{\frac N2}^{nr}<br>\end{aligned}<br>$$</p>
+<ul>
+<li>令：<br>$$<br>\begin{cases}<br>\begin{aligned}<br>x_1(n)&amp;=x(n)+x(n+\frac N2)\<br>x_2(n)&amp;=[x(n)-x(n+\frac N2)]W_N^n<br>\end{aligned}<br>\end{cases},n=0,1,…,\frac N2-1<br>$$</li>
 </ul>
 </li>
-<li><p>则得到：</p>
-<script type="math/tex; mode=display">
-\begin{cases}
-\begin{aligned}
-X(2r)&=\sum_{n=0}^{\frac N2-1}x_1(n)W_{\frac N2}^{nr}\\
-X(2r+1)&=\sum_{n=0}^{\frac N2-1}x_2(n)W_{\frac N2}^{nr}
-\end{aligned}
-\end{cases},r=0,1,...,\frac N2-1</script><ul>
+<li><p>则得到：<br>$$<br>\begin{cases}<br>\begin{aligned}<br>X(2r)&amp;=\sum_{n=0}^{\frac N2-1}x_1(n)W_{\frac N2}^{nr}\<br>X(2r+1)&amp;=\sum_{n=0}^{\frac N2-1}x_2(n)W_{\frac N2}^{nr}<br>\end{aligned}<br>\end{cases},r=0,1,…,\frac N2-1<br>$$</p>
+<ul>
 <li>仔细观察$\sum_{n=0}^{\frac N2-1}x_1(n)W_{\frac N2}^{nr}$这玩意不就是$x_1(n)$的$\frac N2$的DFT么</li>
 </ul>
 </li>
-<li><p><strong>简而言之，有：</strong></p>
-<script type="math/tex; mode=display">
-X(k)的偶序列:X(2r)=DFT[x_1(n)]</script><script type="math/tex; mode=display">
-X(k)的奇序列:X(2r+1)=DFT[x_2(n)]</script></li>
+<li><p><strong>简而言之，有：</strong><br>$$<br>X(k)的偶序列:X(2r)=DFT[x_1(n)]<br>$$</p>
+<p>$$<br>X(k)的奇序列:X(2r+1)=DFT[x_2(n)]<br>$$</p>
+</li>
 <li><p>也就是$X(k)$的偶序列只跟$x_1(n)$（与时域序列对半分有关）的傅里叶变换有关，$X(k)$的奇序列只跟$x_2(n)$（与时域序列对半分有关）的傅里叶变换有关，那么问题的关键在于首先要知道$x_1(n)$和$x_2(n)$是啥，如果能将$x_1(n)$和$x_2(n)$继续往下分，使得最后只剩下两个点，那么做2点DFT就可以得到$X(k)$中2个点的DFT</p>
 <ul>
 <li>以8点FFT为例，整个运算过程的可视化示意图如下：</li>
 </ul>
-<p><img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231105133359626.png" alt="image-20231105133359626" style="zoom:50%;"></p>
+<img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231105133359626.png" alt="image-20231105133359626" style="zoom:50%;">
+
 <ul>
 <li><p>下面是一个按频率抽选运算的完整的8点FFT流图：</p>
-<p><img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231105133621770.png" alt="image-20231105133621770" style="zoom:80%;"></p>
+<img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231105133621770.png" alt="image-20231105133621770" style="zoom:80%;">
+
 </li>
 </ul>
 </li>
@@ -593,85 +527,35 @@ X(k)的奇序列:X(2r+1)=DFT[x_2(n)]</script></li>
 <h2 id="2-基4-FFT算法-1"><a href="#2-基4-FFT算法-1" class="headerlink" title="2.基4-FFT算法"></a>2.基4-FFT算法</h2><ul>
 <li><p>设序列$x(n)$点数为$N=4^L$，$L$为正整数</p>
 </li>
-<li><p>将<strong>序列$x(n)$按$n$的顺序分为前后4组</strong>，其N点DFT为：</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-X(k)&=\sum_{n=0}^{N-1}x(n)W_N^{nk}+\sum_{n=0}^{\frac N4-1}x(n)W_N^{nk}+\sum_{n=\frac N2}^{\frac {3N}4-1}x(n)W_N^{nk}+\sum_{n=\frac {3N}4}^{N-1}x(n)W_N^{nk}\\
-&=\sum_{n=0}^{\frac N4-1}x(n)W_N^{nk}+\sum_{n=0}^{\frac N4-1}x(n+\frac N4)W_N^{(n+\frac N4)k}+\sum_{n=0}^{\frac N4-1}x(n+\frac N2)W_N^{(n+\frac N2)k}+\sum_{n=0}^{\frac N4-1}x(n+\frac {3N}4)W_N^{(n+\frac {3N}4)k}\\
-&=\sum_{n=0}^{\frac N4-1}[x(n)+x(n+\frac N4)W_N^{\frac N4 k}+x(n+\frac N2)W_N^{\frac N2k}+x(n+\frac {3N}4)W_N^{\frac{3N}4k}]W_N^{nk}\\
-&=\sum_{n=0}^{\frac N4-1}[x(n)+(-j)^kx(n+\frac N4)+(-1)^kx(n+\frac N2)+j^kx(n+\frac {3N}4)]W_N^{nk}
-\end{aligned}</script></li>
-<li><p><strong>按$k$将$X(k)$分为4部分</strong>：</p>
-<script type="math/tex; mode=display">
-\begin{cases}
-\begin{aligned}
-k &= 4r\\
-k &= 4r+1\\
-k &= 4r+2\\
-k &= 4r+3
-\end{aligned}
-\end{cases},r=0,1,...,\frac N4-1</script></li>
-<li><p>则有：</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-X(4r)&=\sum_{n=0}^{\frac N4-1}[x(n)+x(n+\frac N4)+x(n+\frac N2)+x(n+\frac {3N}4)]W_N^{4nr}\\
-&=\sum_{n=0}^{\frac N4-1}[x(n)+x(n+\frac N4)+x(n+\frac N2)+x(n+\frac {3N}4)]W_{\frac N4}^{nr}
-\end{aligned}</script><script type="math/tex; mode=display">
-\begin{aligned}
-X(4r+1)&=\sum_{n=0}^{\frac N4-1}[x(n)-jx(n+\frac N4)-x(n+\frac N2)+x(n+\frac {3N}4)]W_N^{n(4r+1)}\\
-&=\sum_{n=0}^{\frac N4-1}[x(n)-jx(n+\frac N4)-x(n+\frac N2)+x(n+\frac {3N}4)]W_N^nW_{\frac N4}^{nr}
-\end{aligned}</script><script type="math/tex; mode=display">
-\begin{aligned}
-X(4r+2)&=\sum_{n=0}^{\frac N4-1}[x(n)-x(n+\frac N4)+x(n+\frac N2)-x(n+\frac {3N}4)]W_N^{n(4r+2)}\\
-&=\sum_{n=0}^{\frac N4-1}[x(n)-x(n+\frac N4)+x(n+\frac N2)-x(n+\frac {3N}4)]W_N^{2n}W_{\frac N4}^{nr}
-\end{aligned}</script><script type="math/tex; mode=display">
-\begin{aligned}
-X(4r+3)&=\sum_{n=0}^{\frac N4-1}[x(n)+jx(n+\frac N4)-x(n+\frac N2)-jx(n+\frac {3N}4)]W_N^{n(4r+3)}\\
-&=\sum_{n=0}^{\frac N4-1}[x(n)+jx(n+\frac N4)-x(n+\frac N2)-jx(n+\frac {3N}4)]W_N^{3n}W_{\frac N4}^{nr}
-\end{aligned}</script><ul>
-<li>令：<script type="math/tex; mode=display">
-\begin{cases}
-\begin{aligned}
-x_1(n)&=x(n)+x(n+\frac N4)+x(n+\frac N2)+x(n+\frac {3N}4)\\
-x_2(n)&=[x(n)-jx(n+\frac N4)-x(n+\frac N2)+x(n+\frac {3N}4)]W_N^n\\
-x_3(n)&=[x(n)-x(n+\frac N4)+x(n+\frac N2)-x(n+\frac {3N}4)]W_N^{2n}\\
-x_4(n)&=[x(n)+jx(n+\frac N4)-x(n+\frac N2)-jx(n+\frac {3N}4)]W_N^{3n}
-\end{aligned}
-\end{cases},n=0,1,...,\frac N4-1</script></li>
+<li><p>将<strong>序列$x(n)$按$n$的顺序分为前后4组</strong>，其N点DFT为：<br>$$<br>\begin{aligned}<br>X(k)&amp;=\sum_{n=0}^{N-1}x(n)W_N^{nk}+\sum_{n=0}^{\frac N4-1}x(n)W_N^{nk}+\sum_{n=\frac N2}^{\frac {3N}4-1}x(n)W_N^{nk}+\sum_{n=\frac {3N}4}^{N-1}x(n)W_N^{nk}\<br>&amp;=\sum_{n=0}^{\frac N4-1}x(n)W_N^{nk}+\sum_{n=0}^{\frac N4-1}x(n+\frac N4)W_N^{(n+\frac N4)k}+\sum_{n=0}^{\frac N4-1}x(n+\frac N2)W_N^{(n+\frac N2)k}+\sum_{n=0}^{\frac N4-1}x(n+\frac {3N}4)W_N^{(n+\frac {3N}4)k}\<br>&amp;=\sum_{n=0}^{\frac N4-1}[x(n)+x(n+\frac N4)W_N^{\frac N4 k}+x(n+\frac N2)W_N^{\frac N2k}+x(n+\frac {3N}4)W_N^{\frac{3N}4k}]W_N^{nk}\<br>&amp;=\sum_{n=0}^{\frac N4-1}[x(n)+(-j)^kx(n+\frac N4)+(-1)^kx(n+\frac N2)+j^kx(n+\frac {3N}4)]W_N^{nk}<br>\end{aligned}<br>$$</p>
+</li>
+<li><p><strong>按$k$将$X(k)$分为4部分</strong>：<br>$$<br>\begin{cases}<br>\begin{aligned}<br>k &amp;= 4r\<br>k &amp;= 4r+1\<br>k &amp;= 4r+2\<br>k &amp;= 4r+3<br>\end{aligned}<br>\end{cases},r=0,1,…,\frac N4-1<br>$$</p>
+</li>
+<li><p>则有：<br>$$<br>\begin{aligned}<br>X(4r)&amp;=\sum_{n=0}^{\frac N4-1}[x(n)+x(n+\frac N4)+x(n+\frac N2)+x(n+\frac {3N}4)]W_N^{4nr}\<br>&amp;=\sum_{n=0}^{\frac N4-1}[x(n)+x(n+\frac N4)+x(n+\frac N2)+x(n+\frac {3N}4)]W_{\frac N4}^{nr}<br>\end{aligned}<br>$$</p>
+<p>$$<br>\begin{aligned}<br>X(4r+1)&amp;=\sum_{n=0}^{\frac N4-1}[x(n)-jx(n+\frac N4)-x(n+\frac N2)+x(n+\frac {3N}4)]W_N^{n(4r+1)}\<br>&amp;=\sum_{n=0}^{\frac N4-1}[x(n)-jx(n+\frac N4)-x(n+\frac N2)+x(n+\frac {3N}4)]W_N^nW_{\frac N4}^{nr}<br>\end{aligned}<br>$$</p>
+<p>$$<br>\begin{aligned}<br>X(4r+2)&amp;=\sum_{n=0}^{\frac N4-1}[x(n)-x(n+\frac N4)+x(n+\frac N2)-x(n+\frac {3N}4)]W_N^{n(4r+2)}\<br>&amp;=\sum_{n=0}^{\frac N4-1}[x(n)-x(n+\frac N4)+x(n+\frac N2)-x(n+\frac {3N}4)]W_N^{2n}W_{\frac N4}^{nr}<br>\end{aligned}<br>$$</p>
+<p>$$<br>\begin{aligned}<br>X(4r+3)&amp;=\sum_{n=0}^{\frac N4-1}[x(n)+jx(n+\frac N4)-x(n+\frac N2)-jx(n+\frac {3N}4)]W_N^{n(4r+3)}\<br>&amp;=\sum_{n=0}^{\frac N4-1}[x(n)+jx(n+\frac N4)-x(n+\frac N2)-jx(n+\frac {3N}4)]W_N^{3n}W_{\frac N4}^{nr}<br>\end{aligned}<br>$$</p>
+<ul>
+<li>令：<br>$$<br>\begin{cases}<br>\begin{aligned}<br>x_1(n)&amp;=x(n)+x(n+\frac N4)+x(n+\frac N2)+x(n+\frac {3N}4)\<br>x_2(n)&amp;=[x(n)-jx(n+\frac N4)-x(n+\frac N2)+x(n+\frac {3N}4)]W_N^n\<br>x_3(n)&amp;=[x(n)-x(n+\frac N4)+x(n+\frac N2)-x(n+\frac {3N}4)]W_N^{2n}\<br>x_4(n)&amp;=[x(n)+jx(n+\frac N4)-x(n+\frac N2)-jx(n+\frac {3N}4)]W_N^{3n}<br>\end{aligned}<br>\end{cases},n=0,1,…,\frac N4-1<br>$$</li>
 </ul>
 </li>
-<li><p>则得到：</p>
-<script type="math/tex; mode=display">
-\begin{cases}
-\begin{aligned}
-X(4r)&=\sum_{n=0}^{\frac N4 -1}x_1(n)W_{\frac N4}^{nr}\\
-X(4r+1)&=\sum_{n=0}^{\frac N4 -1}x_2(n)W_{\frac N4}^{nr}\\
-X(4r+2)&=\sum_{n=0}^{\frac N4 -1}x_3(n)W_{\frac N4}^{nr}\\
-X(4r+3)&=\sum_{n=0}^{\frac N4 -1}x_4(n)W_{\frac N4}^{nr}
-\end{aligned}
-\end{cases},r=0,1,...,\frac N4-1</script></li>
-<li><p>简而言之，有：</p>
-<script type="math/tex; mode=display">
-\begin{cases}
-\begin{aligned}
-X(4r)&=DFT[x_1(n)]\\
-X(4r+1)&=DFT[x_2(n)]\\
-X(4r+2)&=DFT[x_3(n)]\\
-X(4r+3)&=DFT[x_4(n)]
-\end{aligned}
-\end{cases}</script></li>
+<li><p>则得到：<br>$$<br>\begin{cases}<br>\begin{aligned}<br>X(4r)&amp;=\sum_{n=0}^{\frac N4 -1}x_1(n)W_{\frac N4}^{nr}\<br>X(4r+1)&amp;=\sum_{n=0}^{\frac N4 -1}x_2(n)W_{\frac N4}^{nr}\<br>X(4r+2)&amp;=\sum_{n=0}^{\frac N4 -1}x_3(n)W_{\frac N4}^{nr}\<br>X(4r+3)&amp;=\sum_{n=0}^{\frac N4 -1}x_4(n)W_{\frac N4}^{nr}<br>\end{aligned}<br>\end{cases},r=0,1,…,\frac N4-1<br>$$</p>
+</li>
+<li><p>简而言之，有：<br>$$<br>\begin{cases}<br>\begin{aligned}<br>X(4r)&amp;=DFT[x_1(n)]\<br>X(4r+1)&amp;=DFT[x_2(n)]\<br>X(4r+2)&amp;=DFT[x_3(n)]\<br>X(4r+3)&amp;=DFT[x_4(n)]<br>\end{aligned}<br>\end{cases}<br>$$</p>
+</li>
 <li><p><strong>这样我们就把一个N点DFT按$k$的抽取分解为了4个$\frac N4$点DFT</strong></p>
 </li>
 <li><p>下面是一个按频率抽选运算的16点FFT流图：</p>
-<p><img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231105141302313.png" alt="image-20231105141302313" style="zoom: 67%;"></p>
+<img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231105141302313.png" alt="image-20231105141302313" style="zoom: 67%;">
+
 </li>
 </ul>
 <hr>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
-<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Hu411r7xR/?spm_id_from=333.788&amp;vd_source=221b76534ba13cfad544149d75ce9b6c">快速傅里叶变换FFT_哔哩哔哩_bilibili</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Hu411r7xR/?spm_id_from=333.788&vd_source=221b76534ba13cfad544149d75ce9b6c">快速傅里叶变换FFT_哔哩哔哩_bilibili</a></li>
 <li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/lanlancky/p/17102834.html">基2和基4FFT - luckylan - 博客园 (cnblogs.com)</a></li>
 <li><a target="_blank" rel="noopener" href="https://blog.csdn.net/bleauchat/article/details/88031656">基2与基4时分FFT算法浅析及其比较_基4fft-CSDN博客</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1E8411A7tK/?spm_id_from=333.1007.top_right_bar_window_history.content.click&amp;vd_source=221b76534ba13cfad544149d75ce9b6c">FPGA数字信号处理之基2FFT的verilog实现_2_哔哩哔哩_bilibili</a>（可以参考这个视频中的代码理解，但我觉得他在进行蝶形运算时并没有进行并行处理）</li>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1E8411A7tK/?spm_id_from=333.1007.top_right_bar_window_history.content.click&vd_source=221b76534ba13cfad544149d75ce9b6c">FPGA数字信号处理之基2FFT的verilog实现<em>2</em>哔哩哔哩_bilibili</a>（可以参考这个视频中的代码理解，但我觉得他在进行蝶形运算时并没有进行并行处理）</li>
 </ul>
 
     </div>
@@ -804,7 +688,7 @@ X(4r+3)&=DFT[x_4(n)]
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-count">149</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

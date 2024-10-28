@@ -292,6 +292,7 @@
       
         <p>本节主要介绍了雷达原理中的基本概念，包括雷达的基本组成，目标参数的测量等。</p>
 <span id="more"></span>
+
 <h1 id="雷达的基本组成"><a href="#雷达的基本组成" class="headerlink" title="雷达的基本组成"></a>雷达的基本组成</h1><h2 id="1-天线"><a href="#1-天线" class="headerlink" title="1.天线"></a>1.天线</h2><ul>
 <li>发射信号并接收回波</li>
 </ul>
@@ -306,10 +307,12 @@
 <li>$f_0$表示信号频率，即单位周期内波的个数，有$f_0=\frac{1}{T}$</li>
 <li>$f_0$与波长$\lambda$的关系：$\lambda f_0=C（光速）$</li>
 </ul>
-<p><img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115111416164.png" alt="image-20221115111416164" style="zoom: 33%;"></p>
+<img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115111416164.png" alt="image-20221115111416164" style="zoom: 33%;">
+
 </li>
 </ul>
-<h3 id="2-2-脉冲信号"><a href="#2-2-脉冲信号" class="headerlink" title="2.2 脉冲信号"></a>2.2 脉冲信号</h3><p><img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115111529539.png" alt="image-20221115111529539" style="zoom: 33%;"></p>
+<h3 id="2-2-脉冲信号"><a href="#2-2-脉冲信号" class="headerlink" title="2.2 脉冲信号"></a>2.2 脉冲信号</h3><img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115111529539.png" alt="image-20221115111529539" style="zoom: 33%;">
+
 <ul>
 <li>$\tau$是脉冲宽度</li>
 <li>$T_r$是脉冲重复周期，则脉冲重复频率$f_r=\frac{1}{T_r}$</li>
@@ -322,18 +325,21 @@
 <h3 id="3-1-射频信号"><a href="#3-1-射频信号" class="headerlink" title="3.1 射频信号"></a>3.1 射频信号</h3><ul>
 <li>$t_r$为时延差</li>
 </ul>
-<p><img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115112439681.png" alt="image-20221115112439681" style="zoom: 33%;"></p>
+<img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115112439681.png" alt="image-20221115112439681" style="zoom: 33%;">
+
 <h3 id="3-2-中频信号"><a href="#3-2-中频信号" class="headerlink" title="3.2 中频信号"></a>3.2 中频信号</h3><ul>
 <li>接收机收到的是射频信号，频率本来就比较高，如果直接在射频上进行采样，根据奈奎斯特采样定理，采样频率需要大于信号频率的两倍，才能将采样后的信号无失真的还原回去。直接在射频上进行采样，成本就会很高，所以就需要对射频信号进行混频处理，变到中频，这样对采样率的要求就降低了</li>
 </ul>
-<p><img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115112905427.png" alt="image-20221115112905427" style="zoom: 33%;"></p>
+<img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115112905427.png" alt="image-20221115112905427" style="zoom: 33%;">
+
 <ul>
 <li>从图中可知，中频信号，频率虽然变低了，但是包络还是原来的包络</li>
 </ul>
 <h3 id="3-3-视频信号"><a href="#3-3-视频信号" class="headerlink" title="3.3 视频信号"></a>3.3 视频信号</h3><ul>
 <li>中频信号经过包络检波就能得到视频信号</li>
 </ul>
-<p><img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115113038131.png" alt="image-20221115113038131" style="zoom: 33%;"></p>
+<img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115113038131.png" alt="image-20221115113038131" style="zoom: 33%;">
+
 <h2 id="4-信号处理机"><a href="#4-信号处理机" class="headerlink" title="4.信号处理机"></a>4.信号处理机</h2><ul>
 <li>提取目标的各种信息</li>
 </ul>
@@ -348,7 +354,8 @@
 <h1 id="简单的目标距离测量"><a href="#简单的目标距离测量" class="headerlink" title="简单的目标距离测量"></a>简单的目标距离测量</h1><ul>
 <li>$2R=Ct_r\Rightarrow R=\frac{Ct_r}{2}$ </li>
 </ul>
-<p><img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115112757492.png" alt="image-20221115112757492" style="zoom:50%;"></p>
+<img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115112757492.png" alt="image-20221115112757492" style="zoom:50%;">
+
 <hr>
 <h1 id="多普勒效率与速度测量"><a href="#多普勒效率与速度测量" class="headerlink" title="多普勒效率与速度测量"></a>多普勒效率与速度测量</h1><ul>
 <li>测速原理：利用多普勒效应</li>
@@ -376,7 +383,7 @@
 <li><p>径向速度：$V_r=Vcos\theta$</p>
 </li>
 <li><p>则当雷达发射信号到达目标时的距离为：$R=R_0-V_rt$</p>
-<p><img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115115632640.png" alt="image-20221115115632640" style="zoom:25%;"></p>
+<img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115115632640.png" alt="image-20221115115632640" style="zoom:25%;">
 </li>
 <li><p>则回波信号为：$S_r(t)=kS_t(t-t_r)=kAcos(2\pi f_0(t-\frac{2(R_0-V_rt)}{C})+\phi)$</p>
 </li>
@@ -403,20 +410,17 @@
 </li>
 <li><p>假设脉冲前沿到达目标与后沿到达目标的时间间隔为$\Delta t$，在$\Delta t$时间内目标移动脉冲内的距离为$d = v_r \Delta t$</p>
 </li>
-<li><p>由于脉冲以光速传播，后沿已经移动的距离是$c\tau - d$，那么：</p>
-<script type="math/tex; mode=display">
-c\tau = c\Delta t + v_r\Delta t</script><script type="math/tex; mode=display">
-c\tau' = c\Delta t - v_r\Delta t</script></li>
-<li><p>由上式可得到反射脉冲宽度$\tau’$和入射脉冲宽度$\tau$之间的关系为：</p>
-<script type="math/tex; mode=display">
-\tau' = \frac{c-v_r}{c+v_r}\tau</script><ul>
+<li><p>由于脉冲以光速传播，后沿已经移动的距离是$c\tau - d$，那么：<br>$$<br>c\tau = c\Delta t + v_r\Delta t<br>$$</p>
+<p>$$<br>c\tau’ = c\Delta t - v_r\Delta t<br>$$</p>
+</li>
+<li><p>由上式可得到反射脉冲宽度$\tau’$和入射脉冲宽度$\tau$之间的关系为：<br>$$<br>\tau’ = \frac{c-v_r}{c+v_r}\tau<br>$$</p>
+<ul>
 <li><p>式中，$\frac{c-v_r}{c+v_r}$通常称为时间扩展因子</p>
 </li>
 <li><p>若$v_r = 0$，则$\tau’ = \tau$</p>
 </li>
-<li><p>同理可计算，当目标以速度$v_r$远离雷达时，反射和入射脉冲宽度之间的关系为：</p>
-<script type="math/tex; mode=display">
-\tau' = \frac{c+ v_r}{c - v_r}\tau</script></li>
+<li><p>同理可计算，当目标以速度$v_r$远离雷达时，反射和入射脉冲宽度之间的关系为：<br>$$<br>\tau’ = \frac{c+ v_r}{c - v_r}\tau<br>$$</p>
+</li>
 </ul>
 </li>
 </ul>
@@ -424,30 +428,26 @@ c\tau' = c\Delta t - v_r\Delta t</script></li>
 </li>
 <li><p><strong>多普勒频率的推导</strong>：</p>
 <ul>
-<li><p>假设两个入射脉冲的重复频率（PRF）为$f_r$，脉冲1的前沿到达目标以后，脉冲2的前沿要花$\Delta t$时间到达目标，电波传播的距离为$(\frac{c}{f_r}-d)$，且脉冲2前沿在$\Delta t$时间的迟延距离$d = v_r\Delta t$，则</p>
-<script type="math/tex; mode=display">
-\frac{c}{f_r}-d = \frac{c}{f_r}-v_r\Delta t = c\Delta t</script></li>
-<li><p>经化简得：</p>
-<script type="math/tex; mode=display">
-\Delta t = \frac{c/f_r}{c+v_r}</script><script type="math/tex; mode=display">
-d = v_r\Delta t = \frac{v_rc/f_r}{c + v_r}</script><p><img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20230914095946418.png" alt="image-20230914095946418"></p>
+<li><p>假设两个入射脉冲的重复频率（PRF）为$f_r$，脉冲1的前沿到达目标以后，脉冲2的前沿要花$\Delta t$时间到达目标，电波传播的距离为$(\frac{c}{f_r}-d)$，且脉冲2前沿在$\Delta t$时间的迟延距离$d = v_r\Delta t$，则<br>$$<br>\frac{c}{f_r}-d = \frac{c}{f_r}-v_r\Delta t = c\Delta t<br>$$</p>
+</li>
+<li><p>经化简得：<br>$$<br>\Delta t = \frac{c/f_r}{c+v_r}<br>$$</p>
+<p>$$<br>d = v_r\Delta t = \frac{v_rc/f_r}{c + v_r}<br>$$</p>
+<p><img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20230914095946418.png" alt="image-20230914095946418"></p>
 </li>
 <li><p>反射脉冲间隔$T_r’$所对应的波程为$s-d$（下图是关于为什么反射脉冲间隔为s-d的个人见解），其中$s = c\Delta t$，则回波脉冲的重复频率$f_r’ = \frac{1}{T_r’}$，且：</p>
-<p><img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/287a82878c8955c70a57b081fde66d8.jpg" alt="287a82878c8955c70a57b081fde66d8" style="zoom: 33%;"></p>
-<script type="math/tex; mode=display">
-s-d =\frac{c}{f_r'}=\Delta t-\frac{v_rc/f_r}{c+v_r}</script></li>
-<li><p>由此得到回波脉冲的PRF与入射脉冲的PRF之间的关系为：</p>
-<script type="math/tex; mode=display">
-f_r' = \frac{c + v_r}{c-v_r}f_r</script></li>
-<li><p>由于周期的数量不变，反射信号的频率也以相同的因子上升，回波信号的载频$f_0’$与入射信号的载频$f_0$之间的关系为：</p>
-<script type="math/tex; mode=display">
-f_0' = \frac{c+v_r}{c-v_r}f_0</script></li>
-<li><p>多普勒频率定义为回波信号的载频$f_0’$与入射信号的载频$f_0$之差，即：</p>
-<script type="math/tex; mode=display">
-f_d = f_0'-f_0 = \frac{c+v_r}{c-v_r}f_0-f_0 = \frac{2v_r}{c-v_r}f_0</script></li>
-<li><p>由于$v_r&lt;&lt;c$，则波长$\lambda = c/f_0$，则：</p>
-<script type="math/tex; mode=display">
-f_d\approx \frac{2v_r}{c}f_0 = \frac{2v_r}{\lambda}</script></li>
+<img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/287a82878c8955c70a57b081fde66d8.jpg" alt="287a82878c8955c70a57b081fde66d8" style="zoom: 33%;">
+$$
+s-d =\frac{c}{f_r'}=\Delta t-\frac{v_rc/f_r}{c+v_r}
+$$
+</li>
+<li><p>由此得到回波脉冲的PRF与入射脉冲的PRF之间的关系为：<br>$$<br>f_r’ = \frac{c + v_r}{c-v_r}f_r<br>$$</p>
+</li>
+<li><p>由于周期的数量不变，反射信号的频率也以相同的因子上升，回波信号的载频$f_0’$与入射信号的载频$f_0$之间的关系为：<br>$$<br>f_0’ = \frac{c+v_r}{c-v_r}f_0<br>$$</p>
+</li>
+<li><p>多普勒频率定义为回波信号的载频$f_0’$与入射信号的载频$f_0$之差，即：<br>$$<br>f_d = f_0’-f_0 = \frac{c+v_r}{c-v_r}f_0-f_0 = \frac{2v_r}{c-v_r}f_0<br>$$</p>
+</li>
+<li><p>由于$v_r&lt;&lt;c$，则波长$\lambda = c/f_0$，则：<br>$$<br>f_d\approx \frac{2v_r}{c}f_0 = \frac{2v_r}{\lambda}<br>$$</p>
+</li>
 </ul>
 </li>
 <li><p><strong>影响多普勒频率的因素</strong>：</p>
@@ -455,9 +455,8 @@ f_d\approx \frac{2v_r}{c}f_0 = \frac{2v_r}{\lambda}</script></li>
 <li><p>多普勒频率和<strong>雷达视线与目标运动方向之间的夹角</strong>有关</p>
 <p><img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20230914102012510.png" alt="image-20230914102012510"></p>
 </li>
-<li><p>对于双基地雷达，若目标的运动方向相对于雷达视线的方位和仰角分别为$\theta_a$和$\theta_e$，则目标回波的多普勒频率为：</p>
-<script type="math/tex; mode=display">
-f_d = \frac{2v_t}{\lambda}cos\theta=\frac{2v_t}{\lambda}cos\theta_ecos\theta_a</script><ul>
+<li><p>对于双基地雷达，若目标的运动方向相对于雷达视线的方位和仰角分别为$\theta_a$和$\theta_e$，则目标回波的多普勒频率为：<br>$$<br>f_d = \frac{2v_t}{\lambda}cos\theta=\frac{2v_t}{\lambda}cos\theta_ecos\theta_a<br>$$</p>
+<ul>
 <li>式中，$cos\theta = cos\theta_ecos\theta_a$，目标速度$v_t$投影到雷达实现的径向速度为$v_r = v_t cos\theta=v_tcos\theta_ecos\theta_a$</li>
 </ul>
 <p><img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20230914102628116.png" alt="image-20230914102628116"></p>
@@ -471,10 +470,13 @@ f_d = \frac{2v_t}{\lambda}cos\theta=\frac{2v_t}{\lambda}cos\theta_ecos\theta_a</
 <li>定义：发射或接收系统中，经设计用于辐射和接收电磁波的部分</li>
 </ul>
 <h2 id="1-天线的基本功能"><a href="#1-天线的基本功能" class="headerlink" title="1.天线的基本功能"></a>1.天线的基本功能</h2><ul>
-<li>用于发射时，将高频电流（或导波）能量转化为无线电波并按照预定的分布传送到空间</li>
-<li>用于接收时，将空间传来的无线电波能量转化为高频电流（或导波）能量</li>
+<li><p>用于发射时，将高频电流（或导波）能量转化为无线电波并按照预定的分布传送到空间</p>
+</li>
+<li><p>用于接收时，将空间传来的无线电波能量转化为高频电流（或导波）能量</p>
+</li>
 <li><p>因此，天线可认为是导波和辐射波的变换转置，是一个能量转换器件</p>
-<p><img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20230914144959366.png" alt="image-20230914144959366" style="zoom:50%;"></p>
+<img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20230914144959366.png" alt="image-20230914144959366" style="zoom:50%;">
+
 </li>
 </ul>
 <h2 id="2-天线的主要性能指标"><a href="#2-天线的主要性能指标" class="headerlink" title="2.天线的主要性能指标"></a>2.天线的主要性能指标</h2><h3 id="2-1-天线效率"><a href="#2-1-天线效率" class="headerlink" title="2.1 天线效率"></a>2.1 天线效率</h3><ul>
@@ -483,21 +485,18 @@ f_d = \frac{2v_t}{\lambda}cos\theta=\frac{2v_t}{\lambda}cos\theta_ecos\theta_a</
 <li>$\eta$是反射系数</li>
 <li>这是由于天线和传输线之间的失配而产生的，完全匹配时，$P_{in} = P_{P_G}$</li>
 </ul>
-<p><img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20230914145639644.png" alt="image-20230914145639644" style="zoom:50%;"></p>
+<img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20230914145639644.png" alt="image-20230914145639644" style="zoom:50%;">
 </li>
-<li><p>天线的效率定义为：</p>
-<script type="math/tex; mode=display">
-\eta_A = \frac{P_{\sum}}{P_{in}} = \frac{P_{\sum}}{P_{\sum}+P_{loss}}</script><ul>
+<li><p>天线的效率定义为：<br>$$<br>\eta_A = \frac{P_{\sum}}{P_{in}} = \frac{P_{\sum}}{P_{\sum}+P_{loss}}<br>$$</p>
+<ul>
 <li><p>$P_{loss}$表示损耗功率，它是由天线的铜耗、介质损耗、加载元件的损耗以及接地损耗等造成的</p>
 </li>
-<li><p>假设这一部分功率为一电阻所吸收，称此电阻为损耗电阻，记为$R_{loss}$，则：</p>
-<script type="math/tex; mode=display">
-R_{loss} = \frac{2P_{loss}}{I_{A}^{2}}</script></li>
+<li><p>假设这一部分功率为一电阻所吸收，称此电阻为损耗电阻，记为$R_{loss}$，则：<br>$$<br>R_{loss} = \frac{2P_{loss}}{I_{A}^{2}}<br>$$</p>
+</li>
 <li><p>式中$I_A$式天线上某点的电流，则$R_{loss}$是归算于此电流的损耗电阻</p>
 </li>
-<li><p>若天线阻抗为$R_{\sum}$，上式也可表示为：</p>
-<script type="math/tex; mode=display">
-\eta_A = \frac{R_{\sum}}{R_{\sum}+R_{loss}}</script></li>
+<li><p>若天线阻抗为$R_{\sum}$，上式也可表示为：<br>$$<br>\eta_A = \frac{R_{\sum}}{R_{\sum}+R_{loss}}<br>$$</p>
+</li>
 </ul>
 </li>
 </ul>
@@ -505,7 +504,8 @@ R_{loss} = \frac{2P_{loss}}{I_{A}^{2}}</script></li>
 <li><p><strong>天线的方向性</strong>是指天线向一定方向辐射电磁波的能力。对于接收天线而言，方向性表示天线对不同方向传来的电磁波具有不同的接收能力。天线的方向性通常用方向图来表示</p>
 <ul>
 <li><p>如果把天<strong>线在各方向辐射的强度</strong>用从原点出发的矢量来表示，则连接全部矢量端点所形成的曲面就是<strong>天线的方向图</strong></p>
-<p><img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115121354695.png" alt="image-20221115121354695" style="zoom:33%;"></p>
+<img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115121354695.png" alt="image-20221115121354695" style="zoom:33%;">
+
 <ul>
 <li><p>$P_t$：发射机功率</p>
 </li>
@@ -523,13 +523,15 @@ R_{loss} = \frac{2P_{loss}}{I_{A}^{2}}</script></li>
 <ul>
 <li>直角坐标系表示的方向图</li>
 </ul>
-<p><img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/v2-a77998f30d31deaf70b623b4286e5da2_r.jpg" alt="img" style="zoom:50%;"></p>
+<img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/v2-a77998f30d31deaf70b623b4286e5da2_r.jpg" alt="img" style="zoom:50%;">
+
 <ul>
 <li><p>极坐标系表示的方向图</p>
-<p><img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/v2-279a4d9436e14aec4a071e4a8bbf36a4_r.jpg" alt="img" style="zoom:50%;"></p>
+<img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/v2-279a4d9436e14aec4a071e4a8bbf36a4_r.jpg" alt="img" style="zoom:50%;">
 </li>
 <li><p>球坐标系表示的3D方向图</p>
-<p><img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/v2-4b96d474dc1b06970c0911ce5732b54d_r.jpg" alt="img" style="zoom:50%;"></p>
+<img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/v2-4b96d474dc1b06970c0911ce5732b54d_r.jpg" alt="img" style="zoom:50%;">
+
 </li>
 </ul>
 </li>
@@ -541,14 +543,9 @@ R_{loss} = \frac{2P_{loss}}{I_{A}^{2}}</script></li>
 </li>
 <li><p>定义为主瓣功率下降到波束中央 1/2 功率处的宽度</p>
 </li>
-<li><p>波束宽度用$\theta_{3dB}$或者$\theta_{0.5}$表示</p>
-<script type="math/tex; mode=display">
-\begin{cases}
-\begin{aligned}
-20log_{10}^\frac{\sqrt 2}{2} &= -3dB\\
-10log_{10}^\frac{1}{2} &= -3dB
-\end{aligned}
-\end{cases}</script><p><img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115123347246.png" alt="image-20221115123347246" style="zoom: 33%;"></p>
+<li><p>波束宽度用$\theta_{3dB}$或者$\theta_{0.5}$表示<br>$$<br>\begin{cases}<br>\begin{aligned}<br>20log_{10}^\frac{\sqrt 2}{2} &amp;= -3dB\<br>10log_{10}^\frac{1}{2} &amp;= -3dB<br>\end{aligned}<br>\end{cases}<br>$$</p>
+<img src="/2022/11/15/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20221115123347246.png" alt="image-20221115123347246" style="zoom: 33%;">
+
 </li>
 </ul>
 <hr>
@@ -556,7 +553,42 @@ R_{loss} = \frac{2P_{loss}}{I_{A}^{2}}</script></li>
 <li><p>常用的工作频率：220MHz~35GHz</p>
 </li>
 <li><p>又分为若干个波段：</p>
-<p>| 波段名称  | 频率          |<br>| ————- | ——————- |<br>| L         | 1000~2000MHz  |<br>| S         | 2000~4000MHz  |<br>| C         | 4000~8000MHz  |<br>| X         | 8000~12000MHz |<br>| K$\mu$    | 1.2~18GHz     |<br>| K         | 18~27GHZ      |<br>| K$\alpha$ | 27~40GHz      |</p>
+<table>
+<thead>
+<tr>
+<th>波段名称</th>
+<th>频率</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>L</td>
+<td>1000~2000MHz</td>
+</tr>
+<tr>
+<td>S</td>
+<td>2000~4000MHz</td>
+</tr>
+<tr>
+<td>C</td>
+<td>4000~8000MHz</td>
+</tr>
+<tr>
+<td>X</td>
+<td>8000~12000MHz</td>
+</tr>
+<tr>
+<td>K$\mu$</td>
+<td>1.2~18GHz</td>
+</tr>
+<tr>
+<td>K</td>
+<td>18~27GHZ</td>
+</tr>
+<tr>
+<td>K$\alpha$</td>
+<td>27~40GHz</td>
+</tr>
+</tbody></table>
 </li>
 </ul>
 <hr>
@@ -564,7 +596,6 @@ R_{loss} = \frac{2P_{loss}}{I_{A}^{2}}</script></li>
 <li>1000yd=3000ft=0.914km≈0.6mile</li>
 <li>1海里=1.853km</li>
 </ul>
-<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -577,8 +608,7 @@ R_{loss} = \frac{2P_{loss}}{I_{A}^{2}}</script></li>
 <th>$p$</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>$10^3$</td>
 <td>$10^6$</td>
 <td>$10^9$</td>
@@ -587,9 +617,7 @@ R_{loss} = \frac{2P_{loss}}{I_{A}^{2}}</script></li>
 <td>$10^{-9}$</td>
 <td>$10^{-12}$</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <hr>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
 <li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/149757466">一，雷达原理-基础知识1 - 知乎 (zhihu.com)</a></li>
@@ -727,7 +755,7 @@ R_{loss} = \frac{2P_{loss}}{I_{A}^{2}}</script></li>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-count">149</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

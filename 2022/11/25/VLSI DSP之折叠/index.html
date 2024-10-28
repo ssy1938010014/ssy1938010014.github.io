@@ -284,6 +284,7 @@
       
         <p>本节主要介绍了VLSI DSP中折叠的基本概念、折叠变换的基本方法（折叠方程）、寄存器最小化技术以及折叠结构的寄存器最小化技术的步骤。</p>
 <span id="more"></span>
+
 <h1 id="折叠的基本概念"><a href="#折叠的基本概念" class="headerlink" title="折叠的基本概念"></a>折叠的基本概念</h1><ul>
 <li><strong>折叠</strong>：把多个相同运算操作，通过时分复用在单个功能单元上执行，达到资源共享</li>
 <li><strong>折叠的目的</strong>：减小功能单元数目，从而减少面积</li>
@@ -299,18 +300,19 @@
 <li><p>节点$U、V$在硬件中调度执行的时间划分，$0 \sim N-1$</p>
 </li>
 <li><p>$u、v$是时间分割的顺序标号，节点$U、V$按此顺序被调度执行</p>
-<p><img src="/2022/11/25/VLSI%20DSP%E4%B9%8B%E6%8A%98%E5%8F%A0/image-20221125150018589.png" alt="image-20221125150018589" style="zoom:50%;"></p>
+<img src="/2022/11/25/VLSI%20DSP%E4%B9%8B%E6%8A%98%E5%8F%A0/image-20221125150018589.png" alt="image-20221125150018589" style="zoom:50%;">
 </li>
 <li><p><strong>折叠集</strong>：执行相同运算功能操作的有序集</p>
 <ul>
 <li>折叠集中包含N个元素，表示N个运算，其中的一些可能是空运算</li>
 <li>折叠集中处于第$j(0,1,\cdots,N-1)$个位置的运算，其在第$j$个时间段执行</li>
 </ul>
-<p><img src="/2022/11/25/VLSI%20DSP%E4%B9%8B%E6%8A%98%E5%8F%A0/image-20221125153228205.png" alt="image-20221125153228205" style="zoom: 33%;"></p>
+<img src="/2022/11/25/VLSI%20DSP%E4%B9%8B%E6%8A%98%E5%8F%A0/image-20221125153228205.png" alt="image-20221125153228205" style="zoom: 33%;">
+
 </li>
 </ul>
-<h2 id="2-折叠方程"><a href="#2-折叠方程" class="headerlink" title="2.折叠方程"></a>2.折叠方程</h2><script type="math/tex; mode=display">
-D_F(U\rightarrow V)=Nw(e)-P_u+v-u</script><ul>
+<h2 id="2-折叠方程"><a href="#2-折叠方程" class="headerlink" title="2.折叠方程"></a>2.折叠方程</h2><p>$$<br>D_F(U\rightarrow V)=Nw(e)-P_u+v-u<br>$$</p>
+<ul>
 <li>$D_F(U\rightarrow V)$表示有向边$U\rightarrow V$的折叠延时</li>
 <li>$N$为折叠因子</li>
 <li>$w(e)$为$U\rightarrow V$本来的延时数目、</li>
@@ -332,23 +334,23 @@ D_F(U\rightarrow V)=Nw(e)-P_u+v-u</script><ul>
 <li>$S1=\{4,2,3,1\}$：加法运算由同一个硬件加法器执行</li>
 <li>$S2=\{5,8,6,7\}$：乘法运算由同一个硬件乘法器执行</li>
 </ul>
-<p><img src="/2022/11/25/VLSI%20DSP%E4%B9%8B%E6%8A%98%E5%8F%A0/image-20221125161428708.png" alt="image-20221125161428708" style="zoom:50%;"></p>
+<img src="/2022/11/25/VLSI%20DSP%E4%B9%8B%E6%8A%98%E5%8F%A0/image-20221125161428708.png" alt="image-20221125161428708" style="zoom:50%;">
 </li>
-<li><p>根据折叠方程计算所有边的折叠延时</p>
-<script type="math/tex; mode=display">
-D_F(1\rightarrow 2)=4\times 1-1+1-3=1</script><script type="math/tex; mode=display">
-D_F(1\rightarrow 5)=4\times 1-1+0-3=0</script><script type="math/tex; mode=display">
-D_F(1\rightarrow 6)=4\times 1-1+2-3=2</script><script type="math/tex; mode=display">
-D_F(1\rightarrow 7)=4\times1 -1+3-3=3</script><script type="math/tex; mode=display">
-D_F(1\rightarrow 8)=4\times 2-1+1-3=5</script><script type="math/tex; mode=display">
-D_F(3\rightarrow 1)=4\times 0-1+3-2=0</script><script type="math/tex; mode=display">
-D_F(4\rightarrow 2)=4\times 0-1+1-0=0</script><script type="math/tex; mode=display">
-D_F(5\rightarrow 3)=4\times 0-2+2-0=0</script><script type="math/tex; mode=display">
-D_F(6\rightarrow 4)=4\times 1-2+0-2=0</script><script type="math/tex; mode=display">
-D_F(7\rightarrow 3)=4\times 1-2+2-3=1</script><script type="math/tex; mode=display">
-D_F(8\rightarrow 4)=4\times 1-2+0-1=1</script></li>
+<li><p>根据折叠方程计算所有边的折叠延时<br>$$<br>D_F(1\rightarrow 2)=4\times 1-1+1-3=1<br>$$</p>
+<p>$$<br>D_F(1\rightarrow 5)=4\times 1-1+0-3=0<br>$$</p>
+<p>$$<br>D_F(1\rightarrow 6)=4\times 1-1+2-3=2<br>$$</p>
+<p>$$<br>D_F(1\rightarrow 7)=4\times1 -1+3-3=3<br>$$</p>
+<p>$$<br>D_F(1\rightarrow 8)=4\times 2-1+1-3=5<br>$$</p>
+<p>$$<br>D_F(3\rightarrow 1)=4\times 0-1+3-2=0<br>$$</p>
+<p>$$<br>D_F(4\rightarrow 2)=4\times 0-1+1-0=0<br>$$</p>
+<p>$$<br>D_F(5\rightarrow 3)=4\times 0-2+2-0=0<br>$$</p>
+<p>$$<br>D_F(6\rightarrow 4)=4\times 1-2+0-2=0<br>$$</p>
+<p>$$<br>D_F(7\rightarrow 3)=4\times 1-2+2-3=1<br>$$</p>
+<p>$$<br>D_F(8\rightarrow 4)=4\times 1-2+0-1=1<br>$$</p>
+</li>
 <li><p>画折叠结构：先画出基本的运算单元，然后一个节点一个节点的看其输入边的折叠延时{}中表示调用时间</p>
-<p><img src="/2022/11/25/VLSI%20DSP%E4%B9%8B%E6%8A%98%E5%8F%A0/image-20221125162417873.png" alt="image-20221125162417873" style="zoom:50%;"></p>
+<img src="/2022/11/25/VLSI%20DSP%E4%B9%8B%E6%8A%98%E5%8F%A0/image-20221125162417873.png" alt="image-20221125162417873" style="zoom:50%;">
+
 </li>
 </ul>
 </li>
@@ -361,16 +363,18 @@ D_F(8\rightarrow 4)=4\times 1-2+0-1=1</script></li>
 <h2 id="2-线性寿命图"><a href="#2-线性寿命图" class="headerlink" title="2.线性寿命图"></a>2.线性寿命图</h2><ul>
 <li>不将变量产生的时钟周期算入激活中</li>
 </ul>
-<p><img src="/2022/11/25/VLSI%20DSP%E4%B9%8B%E6%8A%98%E5%8F%A0/image-20221125164234733.png" alt="image-20221125164234733" style="zoom: 33%;"></p>
+<img src="/2022/11/25/VLSI%20DSP%E4%B9%8B%E6%8A%98%E5%8F%A0/image-20221125164234733.png" alt="image-20221125164234733" style="zoom: 33%;">
+
 <ul>
 <li><p>DSP程序通常为周期性的，在考虑迭代时：</p>
-<p><img src="/2022/11/25/VLSI%20DSP%E4%B9%8B%E6%8A%98%E5%8F%A0/image-20221125164515049.png" alt="image-20221125164515049" style="zoom: 33%;"></p>
+<img src="/2022/11/25/VLSI%20DSP%E4%B9%8B%E6%8A%98%E5%8F%A0/image-20221125164515049.png" alt="image-20221125164515049" style="zoom: 33%;">
 </li>
 <li><p>可以仅考虑首次迭代计算出最大激活变量数：</p>
 <ul>
 <li>因为此时迭代周期N=6，则从第6个时钟周期开始对原有激活数依次加上迭代的激活数直到与上一次数据无重合</li>
 </ul>
-<p><img src="/2022/11/25/VLSI%20DSP%E4%B9%8B%E6%8A%98%E5%8F%A0/image-20221125164641750.png" alt="image-20221125164641750" style="zoom:33%;"></p>
+<img src="/2022/11/25/VLSI%20DSP%E4%B9%8B%E6%8A%98%E5%8F%A0/image-20221125164641750.png" alt="image-20221125164641750" style="zoom:33%;">
+
 </li>
 </ul>
 <h2 id="3-寿命表"><a href="#3-寿命表" class="headerlink" title="3.寿命表"></a>3.寿命表</h2><ul>
@@ -391,11 +395,13 @@ D_F(8\rightarrow 4)=4\times 1-2+0-1=1</script></li>
 <li>按逐级前项移位的方式进行数据的传播，直至数据被用到输出端</li>
 <li>$R1、R2、R3、R4$表示四个寄存器</li>
 </ul>
-<p><img src="/2022/11/25/VLSI%20DSP%E4%B9%8B%E6%8A%98%E5%8F%A0/image-20221125171058471.png" alt="image-20221125171058471" style="zoom:50%;"></p>
+<img src="/2022/11/25/VLSI%20DSP%E4%B9%8B%E6%8A%98%E5%8F%A0/image-20221125171058471.png" alt="image-20221125171058471" style="zoom:50%;">
+
 <ul>
 <li>通过上述寄存器分配表可以得到折叠后的架构为：</li>
 </ul>
-<p><img src="/2022/11/25/VLSI%20DSP%E4%B9%8B%E6%8A%98%E5%8F%A0/image-20221125173030231.png" alt="image-20221125173030231" style="zoom:50%;"></p>
+<img src="/2022/11/25/VLSI%20DSP%E4%B9%8B%E6%8A%98%E5%8F%A0/image-20221125173030231.png" alt="image-20221125173030231" style="zoom:50%;">
+
 <hr>
 <h1 id="折叠结构的寄存器最小化"><a href="#折叠结构的寄存器最小化" class="headerlink" title="折叠结构的寄存器最小化"></a>折叠结构的寄存器最小化</h1><ul>
 <li><strong>当折叠延迟存在负数时，按以下六个步骤完成折叠架构的寄存器最小化设计</strong>：<ul>
@@ -408,20 +414,25 @@ D_F(8\rightarrow 4)=4\times 1-2+0-1=1</script></li>
 </ul>
 </li>
 </ul>
-<p><img src="/2022/11/25/VLSI%20DSP%E4%B9%8B%E6%8A%98%E5%8F%A0/image-20221125174927346.png" alt="image-20221125174927346" style="zoom:50%;"></p>
+<img src="/2022/11/25/VLSI%20DSP%E4%B9%8B%E6%8A%98%E5%8F%A0/image-20221125174927346.png" alt="image-20221125174927346" style="zoom:50%;">
+
 <h2 id="1-进行折叠的重定时"><a href="#1-进行折叠的重定时" class="headerlink" title="1.进行折叠的重定时"></a>1.进行折叠的重定时</h2><p><img src="/2022/11/25/VLSI%20DSP%E4%B9%8B%E6%8A%98%E5%8F%A0/image-20221125175024284.png" alt="image-20221125175024284"></p>
-<h2 id="2-写出折叠方程"><a href="#2-写出折叠方程" class="headerlink" title="2.写出折叠方程"></a>2.写出折叠方程</h2><p><img src="/2022/11/25/VLSI%20DSP%E4%B9%8B%E6%8A%98%E5%8F%A0/image-20221125175059168.png" alt="image-20221125175059168" style="zoom:50%;"></p>
+<h2 id="2-写出折叠方程"><a href="#2-写出折叠方程" class="headerlink" title="2.写出折叠方程"></a>2.写出折叠方程</h2><img src="/2022/11/25/VLSI%20DSP%E4%B9%8B%E6%8A%98%E5%8F%A0/image-20221125175059168.png" alt="image-20221125175059168" style="zoom:50%;">
+
 <h2 id="3-用折叠方程构造寿命表"><a href="#3-用折叠方程构造寿命表" class="headerlink" title="3.用折叠方程构造寿命表"></a>3.用折叠方程构造寿命表</h2><ul>
 <li>$T_{output}=T_{input}+max\{D_F(U\rightarrow V)\}$</li>
 <li>$T_{input}=u+P_u(流水线级数)$</li>
 <li>寿命：$T_{input}\sim T_{output}$</li>
 </ul>
-<p><img src="/2022/11/25/VLSI%20DSP%E4%B9%8B%E6%8A%98%E5%8F%A0/image-20221125175419249.png" alt="image-20221125175419249" style="zoom:50%;"></p>
+<img src="/2022/11/25/VLSI%20DSP%E4%B9%8B%E6%8A%98%E5%8F%A0/image-20221125175419249.png" alt="image-20221125175419249" style="zoom:50%;">
+
 <h2 id="4-画出寿命图并确定所需寄存器数"><a href="#4-画出寿命图并确定所需寄存器数" class="headerlink" title="4.画出寿命图并确定所需寄存器数"></a>4.画出寿命图并确定所需寄存器数</h2><ul>
 <li>则所需最小寄存器数为2</li>
 </ul>
-<p><img src="/2022/11/25/VLSI%20DSP%E4%B9%8B%E6%8A%98%E5%8F%A0/image-20221125180022852.png" alt="image-20221125180022852" style="zoom:50%;"></p>
-<h2 id="5-进行前向-后向寄存器分配"><a href="#5-进行前向-后向寄存器分配" class="headerlink" title="5.进行前向-后向寄存器分配"></a>5.进行前向-后向寄存器分配</h2><p><img src="/2022/11/25/VLSI%20DSP%E4%B9%8B%E6%8A%98%E5%8F%A0/image-20221125180827165.png" alt="image-20221125180827165" style="zoom:50%;"></p>
+<img src="/2022/11/25/VLSI%20DSP%E4%B9%8B%E6%8A%98%E5%8F%A0/image-20221125180022852.png" alt="image-20221125180022852" style="zoom:50%;">
+
+<h2 id="5-进行前向-后向寄存器分配"><a href="#5-进行前向-后向寄存器分配" class="headerlink" title="5.进行前向-后向寄存器分配"></a>5.进行前向-后向寄存器分配</h2><img src="/2022/11/25/VLSI%20DSP%E4%B9%8B%E6%8A%98%E5%8F%A0/image-20221125180827165.png" alt="image-20221125180827165" style="zoom:50%;">
+
 <h2 id="6-画出最小寄存器数的折叠架构"><a href="#6-画出最小寄存器数的折叠架构" class="headerlink" title="6.画出最小寄存器数的折叠架构"></a>6.画出最小寄存器数的折叠架构</h2><p><img src="/2022/11/25/VLSI%20DSP%E4%B9%8B%E6%8A%98%E5%8F%A0/image-20221125181444059.png" alt="image-20221125181444059"></p>
 
     </div>
@@ -555,7 +566,7 @@ D_F(8\rightarrow 4)=4\times 1-2+0-1=1</script></li>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-count">149</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

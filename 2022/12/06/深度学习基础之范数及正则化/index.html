@@ -270,20 +270,18 @@
       
         <p>本节主要介绍了R方的计算步骤、范数以及正则化。</p>
 <span id="more"></span>
+
 <h1 id="R方的计算步骤"><a href="#R方的计算步骤" class="headerlink" title="R方的计算步骤"></a>R方的计算步骤</h1><ul>
 <li><p>R方可以用于评估回归模型对现实数据的拟合程度</p>
 </li>
 <li><p>设$y_i$是测试集第$i$个样本的价格，$\bar y$是真实价格的均值，$f(x_i)$是模型对第$i$个样本的预测价格，$n$是样本数量，则$R$方的计算步骤为：</p>
 <ul>
-<li><p>计算残差平方和$SS_{res}$：</p>
-<script type="math/tex; mode=display">
-SS_{res}=\sum_{i=1}^n(y_i-f(x_i))^2</script></li>
-<li><p>计算样本总离差平方和$SS_{tss}$：</p>
-<script type="math/tex; mode=display">
-SS_{tss}=\sum_{i=1}^n(y_i-\bar y)^2</script></li>
-<li><p>最后得到$R$方：</p>
-<script type="math/tex; mode=display">
-R^2=1-\frac{SS_{res}}{SS_{tss}}</script></li>
+<li><p>计算残差平方和$SS_{res}$：<br>$$<br>SS_{res}=\sum_{i=1}^n(y_i-f(x_i))^2<br>$$</p>
+</li>
+<li><p>计算样本总离差平方和$SS_{tss}$：<br>$$<br>SS_{tss}=\sum_{i=1}^n(y_i-\bar y)^2<br>$$</p>
+</li>
+<li><p>最后得到$R$方：<br>$$<br>R^2=1-\frac{SS_{res}}{SS_{tss}}<br>$$</p>
+</li>
 </ul>
 </li>
 <li><p>$R$方的取值越大，说明模型的效果越好</p>
@@ -291,44 +289,34 @@ R^2=1-\frac{SS_{res}}{SS_{tss}}</script></li>
 </ul>
 <hr>
 <h1 id="范数"><a href="#范数" class="headerlink" title="范数"></a>范数</h1><h2 id="1-向量范数"><a href="#1-向量范数" class="headerlink" title="1.向量范数"></a>1.向量范数</h2><ul>
-<li><p>L1-范数：即向量与元素绝对值之和</p>
-<script type="math/tex; mode=display">
-||x||_1=\sum_{i=1}^N|x_i|</script></li>
-<li><p>L2-范数：即向量元素绝对值的平方和再开方</p>
-<script type="math/tex; mode=display">
-||x||_2=(\sum_{i=1}^N|x_i|^2)^{\frac12}</script></li>
-<li><p>$\infty$-范数：即所有向量元素绝对值中的最大值</p>
-<script type="math/tex; mode=display">
-||x||_{\infty}=\mathop{max}_i|x_i|</script></li>
-<li><p>$-\infty$-范数：即所有向量元素绝对值中的最小值</p>
-<script type="math/tex; mode=display">
-||x||_{-\infty}=\mathop{min}_i|x_i|</script></li>
-<li><p>$p$-范数：即向量元素绝对值的$p$次方和的$\frac1p$次幂</p>
-<script type="math/tex; mode=display">
-||x||_p=(\sum_{i=1}^N|x_i|^p)^{\frac1p}</script></li>
+<li><p>L1-范数：即向量与元素绝对值之和<br>$$<br>||x||<em>1=\sum</em>{i=1}^N|x_i|<br>$$</p>
+</li>
+<li><p>L2-范数：即向量元素绝对值的平方和再开方<br>$$<br>||x||<em>2=(\sum</em>{i=1}^N|x_i|^2)^{\frac12}<br>$$</p>
+</li>
+<li><p>$\infty$-范数：即所有向量元素绝对值中的最大值<br>$$<br>||x||_{\infty}=\mathop{max}_i|x_i|<br>$$</p>
+</li>
+<li><p>$-\infty$-范数：即所有向量元素绝对值中的最小值<br>$$<br>||x||_{-\infty}=\mathop{min}_i|x_i|<br>$$</p>
+</li>
+<li><p>$p$-范数：即向量元素绝对值的$p$次方和的$\frac1p$次幂<br>$$<br>||x||<em>p=(\sum</em>{i=1}^N|x_i|^p)^{\frac1p}<br>$$</p>
+</li>
 </ul>
 <h2 id="2-矩阵范数"><a href="#2-矩阵范数" class="headerlink" title="2.矩阵范数"></a>2.矩阵范数</h2><p>假设矩阵A为$m\cdot n$，即m行n列</p>
 <ul>
-<li><p>L1-范数：即矩阵的所有列元素绝对值之和的最大值</p>
-<script type="math/tex; mode=display">
-||A||_1=\mathop{max}_j\sum_{i=1}^m|a_{ij}|</script></li>
-<li><p>L2-范数：即$A^TA$矩阵的最大特征值开平方</p>
-<script type="math/tex; mode=display">
-||A||_2=\sqrt{\lambda_1},\lambda_1为A^TA的最大特征值</script></li>
-<li><p>$\infty$-范数：即矩阵的所有行向量元素绝对值之和的最大值</p>
-<script type="math/tex; mode=display">
-||A||_{\infty}=\mathop{max}_i\sum_{j=1}^n|a_{ij}|</script></li>
-<li><p>F-范数：即矩阵元素绝对值的平方和再开平方</p>
-<script type="math/tex; mode=display">
-||A||_F=(\sum_{i=1}^m\sum_{j=1}^n|a_{ij}|^2)^{\frac12}</script></li>
+<li><p>L1-范数：即矩阵的所有列元素绝对值之和的最大值<br>$$<br>||A||<em>1=\mathop{max}_j\sum</em>{i=1}^m|a_{ij}|<br>$$</p>
+</li>
+<li><p>L2-范数：即$A^TA$矩阵的最大特征值开平方<br>$$<br>||A||_2=\sqrt{\lambda_1},\lambda_1为A^TA的最大特征值<br>$$</p>
+</li>
+<li><p>$\infty$-范数：即矩阵的所有行向量元素绝对值之和的最大值<br>$$<br>||A||<em>{\infty}=\mathop{max}_i\sum</em>{j=1}^n|a_{ij}|<br>$$</p>
+</li>
+<li><p>F-范数：即矩阵元素绝对值的平方和再开平方<br>$$<br>||A||<em>F=(\sum</em>{i=1}^m\sum_{j=1}^n|a_{ij}|^2)^{\frac12}<br>$$</p>
+</li>
 </ul>
 <hr>
 <h1 id="线性回归的正则化"><a href="#线性回归的正则化" class="headerlink" title="线性回归的正则化"></a>线性回归的正则化</h1><ul>
 <li><p>其目的是应用过拟合</p>
 </li>
-<li><p>在原有损失函数中加入正则化项：</p>
-<script type="math/tex; mode=display">
-J(\theta)=\frac1{2m}[\sum_{i=1}^m(h_\theta(x^{(i)})-y^{(i)})^2+\alpha\sum_{j=1}^n\theta_j^2]</script></li>
+<li><p>在原有损失函数中加入正则化项：<br>$$<br>J(\theta)=\frac1{2m}[\sum_{i=1}^m(h_\theta(x^{(i)})-y^{(i)})^2+\alpha\sum_{j=1}^n\theta_j^2]<br>$$</p>
+</li>
 <li><p>其中$\alpha$是正则化参数</p>
 </li>
 <li><p>可以通过交叉验证的方式设置调整超参数$\alpha$</p>
@@ -466,7 +454,7 @@ J(\theta)=\frac1{2m}[\sum_{i=1}^m(h_\theta(x^{(i)})-y^{(i)})^2+\alpha\sum_{j=1}^
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-count">149</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

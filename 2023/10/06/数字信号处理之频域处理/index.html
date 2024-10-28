@@ -283,29 +283,31 @@
       
         <p>本节主要介绍了数字信号处理中的一些频域上的处理，包括低通带通采样定理，DTFT、DFS、DFT。</p>
 <span id="more"></span>
+
 <h1 id="带通采样定理"><a href="#带通采样定理" class="headerlink" title="带通采样定理"></a>带通采样定理</h1><ul>
 <li><p><strong>采样是频谱的左右搬移（以采样频率$f_s$左右搬移）</strong></p>
 </li>
 <li><p>那么对于一个$f_L\sim f_H$的窄带信号采样，有：</p>
-<p><img src="/2023/10/06/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E9%A2%91%E5%9F%9F%E5%A4%84%E7%90%86/image-20231006214111761.png" alt="image-20231006214111761" style="zoom: 67%;"></p>
+<img src="/2023/10/06/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E9%A2%91%E5%9F%9F%E5%A4%84%E7%90%86/image-20231006214111761.png" alt="image-20231006214111761" style="zoom: 67%;">
+
 <ul>
 <li><p>只有当频谱不发生交叠时，才能完全恢复出时域信号</p>
 </li>
-<li><p>那么需满足如下条件：</p>
-<script type="math/tex; mode=display">
-f_L\ge -f_L+(k-1)f_s</script><script type="math/tex; mode=display">
-f_H\le -f_H+kf_s</script></li>
-<li><p>整合上述两式可得到：</p>
-<script type="math/tex; mode=display">
-\frac{2f_H}{k}\le f_s \le \frac{2f_L}{k-1}</script><script type="math/tex; mode=display">
-1\le k\le int[\frac{f_H}{B}],B=f_L-f_H</script></li>
+<li><p>那么需满足如下条件：<br>$$<br>f_L\ge -f_L+(k-1)f_s<br>$$</p>
+<p>$$<br>f_H\le -f_H+kf_s<br>$$</p>
+</li>
+<li><p>整合上述两式可得到：<br>$$<br>\frac{2f_H}{k}\le f_s \le \frac{2f_L}{k-1}<br>$$</p>
+<p>$$<br>1\le k\le int[\frac{f_H}{B}],B=f_L-f_H<br>$$</p>
+</li>
 </ul>
 </li>
 <li><p>用一个matlab示例程序来演示带通采样频率的取值</p>
 <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">clc;                      <span class="comment">%清屏</span></span><br><span class="line">clear all;                <span class="comment">%清变量</span></span><br><span class="line"></span><br><span class="line">fL=<span class="number">60</span>;</span><br><span class="line">fH=<span class="number">69</span>;</span><br><span class="line">B=fH-fL;</span><br><span class="line">k=<span class="number">1</span>:(fH/B);</span><br><span class="line">fs_min=<span class="number">2</span>*fH./k</span><br><span class="line">fs_max=<span class="number">2</span>*fL./(k<span class="number">-1</span>)</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li><p>结果如下：</p>
-<p><img src="/2023/10/06/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E9%A2%91%E5%9F%9F%E5%A4%84%E7%90%86/image-20231006215453694.png" alt="image-20231006215453694" style="zoom:50%;"></p>
+<img src="/2023/10/06/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E9%A2%91%E5%9F%9F%E5%A4%84%E7%90%86/image-20231006215453694.png" alt="image-20231006215453694" style="zoom:50%;">
+
 </li>
 </ul>
 </li>
@@ -316,16 +318,15 @@ f_H\le -f_H+kf_s</script></li>
 </li>
 <li><p>用一个matlab程序示例来理解</p>
 <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">clc;                      <span class="comment">%清屏</span></span><br><span class="line">clear all;                <span class="comment">%清变量</span></span><br><span class="line"></span><br><span class="line">N=<span class="number">70</span>;                     <span class="comment">%数据长度</span></span><br><span class="line">fs=<span class="number">64000</span>;                 <span class="comment">%采样频率</span></span><br><span class="line">f0=<span class="number">67000</span>;</span><br><span class="line">f1=<span class="number">3000</span>;</span><br><span class="line"></span><br><span class="line">t=<span class="number">0</span>:(N<span class="number">-1</span>);</span><br><span class="line">t=t/fs;                   <span class="comment">%时间序列</span></span><br><span class="line"></span><br><span class="line">s0=<span class="built_in">sin</span>(<span class="number">2</span>*<span class="built_in">pi</span>*f0*t);</span><br><span class="line">s1=<span class="built_in">sin</span>(<span class="number">2</span>*<span class="built_in">pi</span>*f1*t);</span><br><span class="line"></span><br><span class="line"><span class="comment">%绘图</span></span><br><span class="line">subplot(<span class="number">211</span>);<span class="built_in">plot</span>(t,s0); title(<span class="string">&#x27;f0=67kHz&#x27;</span>);</span><br><span class="line">subplot(<span class="number">212</span>);<span class="built_in">plot</span>(t,s1); title(<span class="string">&#x27;f1=3kHz&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li><p>结果如下：</p>
-<p><img src="/2023/10/06/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E9%A2%91%E5%9F%9F%E5%A4%84%E7%90%86/Nyquist.bmp" alt="Nyquist" style="zoom:50%;"></p>
+<img src="/2023/10/06/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E9%A2%91%E5%9F%9F%E5%A4%84%E7%90%86/Nyquist.bmp" alt="Nyquist" style="zoom:50%;">
 </li>
 <li><p>可见采样后67KHz的频率和3KHz的频率的时域信号一样</p>
 </li>
-<li><p>其原因在于，采样是频谱以$f_s$的线性搬移，搬移后的频率会通过一个低通滤波器，也就是只留下频谱在$\pm \frac{f_s}2$之间的频率，即：</p>
-<script type="math/tex; mode=display">
-f_{out}=\pm k\times f_s \pm f_i\\
-f_{out}\le \frac{f_s}2</script></li>
+<li><p>其原因在于，采样是频谱以$f_s$的线性搬移，搬移后的频率会通过一个低通滤波器，也就是只留下频谱在$\pm \frac{f_s}2$之间的频率，即：<br>$$<br>f_{out}=\pm k\times f_s \pm f_i\<br>f_{out}\le \frac{f_s}2<br>$$</p>
+</li>
 <li><p>所以67KHz会有一个搬移到3KHz（67KHz-64KHz），3KHz在32KHz内，故采样滤波后会输出一个3KHz的正弦波</p>
 </li>
 </ul>
@@ -333,56 +334,50 @@ f_{out}\le \frac{f_s}2</script></li>
 </ul>
 <hr>
 <h1 id="时域离散傅里叶变换"><a href="#时域离散傅里叶变换" class="headerlink" title="时域离散傅里叶变换"></a>时域离散傅里叶变换</h1><ul>
-<li><p>离散时间傅里叶变换的公式：</p>
-<script type="math/tex; mode=display">
-x(e^{jw})=\sum_{n=-\infty}^{+\infty}x(n)e^{-jwn}</script><script type="math/tex; mode=display">
-逆变换:x(n)=\frac1{2\pi}\int_{2\pi}x(e^{jw})e^{jwn}dw</script></li>
+<li><p>离散时间傅里叶变换的公式：<br>$$<br>x(e^{jw})=\sum_{n=-\infty}^{+\infty}x(n)e^{-jwn}<br>$$</p>
+<p>$$<br>逆变换:x(n)=\frac1{2\pi}\int_{2\pi}x(e^{jw})e^{jwn}dw<br>$$</p>
+</li>
 <li><p><strong>$x(e^{jw})$是角频率以$2\pi$为周期的函数</strong></p>
 </li>
 <li><p>理想低通滤波器的iDTFT</p>
-<p><img src="/2023/10/06/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E9%A2%91%E5%9F%9F%E5%A4%84%E7%90%86/image-20231006235153087.png" alt="image-20231006235153087" style="zoom: 50%;"></p>
+<img src="/2023/10/06/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E9%A2%91%E5%9F%9F%E5%A4%84%E7%90%86/image-20231006235153087.png" alt="image-20231006235153087" style="zoom: 50%;">
+
 <ul>
-<li><p>逆变换的公式推导：</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-h(n)&=\frac1{2\pi}\int_{2\pi}x(e^{jw})e^{jwn}dw\\
-&=\frac1{2\pi}\int_{w_c}^{w_c}e^{jwn}dw\\
-&=\frac1{2\pi jn}[e^{jw_cn}-e^{-jw_cn}]\\
-&=\frac{sin(w_cn)}{\pi n}
-\end{aligned}</script></li>
+<li><p>逆变换的公式推导：<br>$$<br>\begin{aligned}<br>h(n)&amp;=\frac1{2\pi}\int_{2\pi}x(e^{jw})e^{jwn}dw\<br>&amp;=\frac1{2\pi}\int_{w_c}^{w_c}e^{jwn}dw\<br>&amp;=\frac1{2\pi jn}[e^{jw_cn}-e^{-jw_cn}]\<br>&amp;=\frac{sin(w_cn)}{\pi n}<br>\end{aligned}<br>$$</p>
+</li>
 <li><p>由Matlab可以画出理想低通滤波器的时域波形</p>
 <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">clc;                      <span class="comment">%清屏</span></span><br><span class="line">clear all;                <span class="comment">%清变量</span></span><br><span class="line"></span><br><span class="line">wc=<span class="number">0.5</span>;</span><br><span class="line">n=<span class="number">-200</span>:<span class="number">200</span>;</span><br><span class="line">hn=<span class="built_in">sin</span>(wc*n)./(<span class="built_in">pi</span>*n);</span><br><span class="line">stem(n,hn)</span><br><span class="line">xlabel(<span class="string">&#x27;n&#x27;</span>);</span><br><span class="line">ylabel(<span class="string">&#x27;hn&#x27;</span>);</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>结果如下：</p>
-<p><img src="/2023/10/06/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E9%A2%91%E5%9F%9F%E5%A4%84%E7%90%86/rect_ift.bmp" alt="rect_ift" style="zoom:80%;"></p>
+<img src="/2023/10/06/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E9%A2%91%E5%9F%9F%E5%A4%84%E7%90%86/rect_ift.bmp" alt="rect_ift" style="zoom:80%;">
+
 </li>
 </ul>
 </li>
 </ul>
 <hr>
 <h1 id="时域离散傅里叶级数"><a href="#时域离散傅里叶级数" class="headerlink" title="时域离散傅里叶级数"></a>时域离散傅里叶级数</h1><ul>
-<li>离散傅里叶级数的公式：<script type="math/tex; mode=display">
-x(k)=\frac1N\sum_{n=0}^{N-1}x(n)e^{-j\frac{2\pi}Nkn}\quad k=0\sim N-1</script></li>
+<li>离散傅里叶级数的公式：<br>$$<br>x(k)=\frac1N\sum_{n=0}^{N-1}x(n)e^{-j\frac{2\pi}Nkn}\quad k=0\sim N-1<br>$$</li>
 </ul>
-<script type="math/tex; mode=display">
-x(n)=\sum_{k=0}^{N-1}x(k)e^{j\frac{2\pi}{N}kn}</script><ul>
+<p>$$<br>x(n)=\sum_{k=0}^{N-1}x(k)e^{j\frac{2\pi}{N}kn}<br>$$</p>
+<ul>
 <li>更详细的解释见我的另一篇文章：<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/03/03/信号处理中的小知识点/">信号处理中的小知识点</a></li>
 </ul>
 <hr>
 <h1 id="离散傅里叶变换"><a href="#离散傅里叶变换" class="headerlink" title="离散傅里叶变换"></a>离散傅里叶变换</h1><ul>
-<li><p>离散傅里叶变换的公式：</p>
-<script type="math/tex; mode=display">
-x(k)=\sum_{n=0}^{N-1}x(n)e^{-j\frac{2\pi k}Nn} \quad k=0\sim N-1</script><script type="math/tex; mode=display">
-逆变换:x(n)=\frac1N\sum_{k=0}^{N-1}x(k)e^{j\frac{2\pi k}Nn}</script></li>
+<li><p>离散傅里叶变换的公式：<br>$$<br>x(k)=\sum_{n=0}^{N-1}x(n)e^{-j\frac{2\pi k}Nn} \quad k=0\sim N-1<br>$$</p>
+<p>$$<br>逆变换:x(n)=\frac1N\sum_{k=0}^{N-1}x(k)e^{j\frac{2\pi k}Nn}<br>$$</p>
+</li>
 <li><p><strong>DFT一定是关于$\frac N2$共轭对称的，也就是$x(k_0)=x(N-k_0)$共轭</strong></p>
 </li>
 </ul>
 <h2 id="1-MATLAB辅助理解DFT"><a href="#1-MATLAB辅助理解DFT" class="headerlink" title="1.MATLAB辅助理解DFT"></a>1.MATLAB辅助理解DFT</h2><ul>
 <li><p>通过Matlab来理解DFT的计算过程：</p>
 <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">clc;                      <span class="comment">%清屏</span></span><br><span class="line">clear all;                <span class="comment">%清变量</span></span><br><span class="line"></span><br><span class="line">N=<span class="number">16</span>;                     <span class="comment">%矩形序列的周期</span></span><br><span class="line">L=<span class="number">4</span>;                      <span class="comment">%矩形序列的长度</span></span><br><span class="line">rn=<span class="built_in">ones</span>(<span class="number">1</span>,L);             <span class="comment">%矩形的长度</span></span><br><span class="line">xn=[rn,<span class="built_in">zeros</span>(<span class="number">1</span>,N-L)];</span><br><span class="line">n=<span class="number">0</span>:N<span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line">xk=fft(rn,N);             <span class="comment">%离散谱</span></span><br><span class="line"></span><br><span class="line">w=<span class="number">0</span>:<span class="number">0.1</span>:<span class="number">2</span>*<span class="built_in">pi</span>;</span><br><span class="line">xw=(<span class="number">1</span>-<span class="built_in">exp</span>(-<span class="built_in">j</span>*w*L))./(<span class="number">1</span>-<span class="built_in">exp</span>(-<span class="built_in">j</span>*w)); <span class="comment">%连续谱</span></span><br><span class="line"></span><br><span class="line">subplot(<span class="number">311</span>)</span><br><span class="line">stem(n,xn);title(<span class="string">&#x27;x(n)&#x27;</span>);grid on;</span><br><span class="line">subplot(<span class="number">312</span>);</span><br><span class="line">stem(n,<span class="built_in">abs</span>(xk));title(<span class="string">&#x27;X(K)&#x27;</span>); grid on;</span><br><span class="line"></span><br><span class="line">subplot(<span class="number">313</span>)</span><br><span class="line"><span class="built_in">plot</span>(w,<span class="built_in">abs</span>(xw));title(<span class="string">&#x27;X(jw)&#x27;</span>);grid on;</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li><p>结果如下：</p>
-<p><img src="/2023/10/06/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E9%A2%91%E5%9F%9F%E5%A4%84%E7%90%86/image-20231007020954256.png" alt="image-20231007020954256" style="zoom:50%;"></p>
+<img src="/2023/10/06/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E9%A2%91%E5%9F%9F%E5%A4%84%E7%90%86/image-20231007020954256.png" alt="image-20231007020954256" style="zoom:50%;">
 </li>
 </ul>
 </li>
@@ -390,6 +385,7 @@ x(k)=\sum_{n=0}^{N-1}x(n)e^{-j\frac{2\pi k}Nn} \quad k=0\sim N-1</script><script
 <ul>
 <li><p><strong>不同序列信号，参与DFT计算的N不同时，DFT可以一样，也可以不一样</strong></p>
 <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">clc;clear all;            <span class="comment">%清屏清变量</span></span><br><span class="line"></span><br><span class="line">n1=<span class="number">0</span>:<span class="number">3</span>; n2=<span class="number">4</span>:<span class="number">7</span>;</span><br><span class="line">n=[n1,n2];</span><br><span class="line"></span><br><span class="line">x2n1=n1+<span class="number">1</span>;</span><br><span class="line">x2n2=<span class="number">8</span>-n2;</span><br><span class="line">x2n=[x2n1,x2n2];</span><br><span class="line"></span><br><span class="line">x3n1=<span class="number">4</span>-n1;</span><br><span class="line">x3n2=n2<span class="number">-3</span>;</span><br><span class="line">x3n=[x3n1,x3n2];</span><br><span class="line"></span><br><span class="line">subplot(<span class="number">321</span>);stem(x2n);title(<span class="string">&#x27;xn2&#x27;</span>);</span><br><span class="line">subplot(<span class="number">322</span>);stem(x3n);title(<span class="string">&#x27;xn3&#x27;</span>);</span><br><span class="line">subplot(<span class="number">323</span>);stem(<span class="built_in">abs</span>(fft(x2n,<span class="number">8</span>)));title(<span class="string">&#x27;DFT(x2n,8)&#x27;</span>);</span><br><span class="line">subplot(<span class="number">324</span>);stem(<span class="built_in">abs</span>(fft(x3n,<span class="number">8</span>)));title(<span class="string">&#x27;DFT(x3n,8)&#x27;</span>);</span><br><span class="line">subplot(<span class="number">325</span>);stem(<span class="built_in">abs</span>(fft(x2n,<span class="number">16</span>)));title(<span class="string">&#x27;DFT(x2n,16)&#x27;</span>);</span><br><span class="line">subplot(<span class="number">326</span>);stem(<span class="built_in">abs</span>(fft(x3n,<span class="number">16</span>)));title(<span class="string">&#x27;DFT(x3n,16)&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">figure</span>(<span class="number">2</span>)</span><br><span class="line">subplot(<span class="number">221</span>);stem([x2n x2n x2n x2n]);title(<span class="string">&#x27;xn2\_8\_repeat4&#x27;</span>);</span><br><span class="line">subplot(<span class="number">222</span>);stem([x3n x3n x3n x3n]);title(<span class="string">&#x27;xn3\_8\_repeat4&#x27;</span>);</span><br><span class="line">x2n=[x2n,<span class="built_in">zeros</span>(<span class="number">1</span>,<span class="number">8</span>)];</span><br><span class="line">x3n=[x3n,<span class="built_in">zeros</span>(<span class="number">1</span>,<span class="number">8</span>)];</span><br><span class="line">subplot(<span class="number">223</span>);stem([x2n x2n x2n x2n]);title(<span class="string">&#x27;xn2\_16\_repeat4&#x27;</span>);</span><br><span class="line">subplot(<span class="number">224</span>);stem([x3n x3n x3n x3n]);title(<span class="string">&#x27;xn3\_16\_repeat4&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>结果如下：</li>
 </ul>
@@ -410,6 +406,7 @@ x(k)=\sum_{n=0}^{N-1}x(n)e^{-j\frac{2\pi k}Nn} \quad k=0\sim N-1</script><script
 </li>
 <li><p><strong>对同一序列，进行不同N的DFT计算，结果也会不同</strong></p>
 <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">clc;clear all;            <span class="comment">%清屏清变量</span></span><br><span class="line"></span><br><span class="line">fs=<span class="number">100</span>;                   <span class="comment">%采样频率</span></span><br><span class="line">f=<span class="number">10</span>;                     <span class="comment">%信号频率</span></span><br><span class="line">t=<span class="number">0</span>:<span class="number">1</span>/fs:<span class="number">10</span>;              <span class="comment">%时间序列</span></span><br><span class="line"></span><br><span class="line">x=<span class="built_in">sin</span>(<span class="number">2</span>*<span class="built_in">pi</span>*f*t);          <span class="comment">%正弦信号</span></span><br><span class="line"></span><br><span class="line"><span class="comment">%绘制幅频响应</span></span><br><span class="line"><span class="built_in">figure</span>(<span class="number">1</span>);</span><br><span class="line">subplot(<span class="number">211</span>);stem(<span class="built_in">abs</span>(fft(x,<span class="number">40</span>)));</span><br><span class="line">subplot(<span class="number">212</span>);stem(<span class="built_in">abs</span>(fft(x,<span class="number">45</span>)));</span><br><span class="line"></span><br><span class="line"><span class="built_in">figure</span>(<span class="number">2</span>)</span><br><span class="line">x40=[x(<span class="number">1</span>:<span class="number">40</span>),x(<span class="number">1</span>:<span class="number">40</span>),x(<span class="number">1</span>:<span class="number">40</span>),x(<span class="number">1</span>:<span class="number">40</span>)];</span><br><span class="line">x45=[x(<span class="number">1</span>:<span class="number">45</span>),x(<span class="number">1</span>:<span class="number">45</span>),x(<span class="number">1</span>:<span class="number">45</span>),x(<span class="number">1</span>:<span class="number">45</span>)];</span><br><span class="line">subplot(<span class="number">211</span>);<span class="built_in">plot</span>(x40); title(<span class="string">&#x27;x40&#x27;</span>);</span><br><span class="line">subplot(<span class="number">212</span>);<span class="built_in">plot</span>(x45); title(<span class="string">&#x27;x45&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>结果如下：</li>
 </ul>
@@ -432,6 +429,7 @@ x(k)=\sum_{n=0}^{N-1}x(n)e^{-j\frac{2\pi k}Nn} \quad k=0\sim N-1</script><script
 </li>
 <li><p><strong>借sin函数讨论不同N对幅频特性中幅度的影响</strong></p>
 <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">clc;clear all;            <span class="comment">%清屏清变量</span></span><br><span class="line"></span><br><span class="line">fs=<span class="number">100</span>;                   <span class="comment">%采样频率</span></span><br><span class="line">f=<span class="number">10</span>;                     <span class="comment">%信号频率</span></span><br><span class="line">t=<span class="number">0</span>:<span class="number">1</span>/fs:<span class="number">10</span>;              <span class="comment">%时间序列</span></span><br><span class="line"></span><br><span class="line">x=<span class="built_in">sin</span>(<span class="number">2</span>*<span class="built_in">pi</span>*f*t);          <span class="comment">%正弦信号</span></span><br><span class="line"></span><br><span class="line"><span class="comment">%绘制幅频响应</span></span><br><span class="line"><span class="built_in">figure</span>(<span class="number">1</span>);</span><br><span class="line">subplot(<span class="number">411</span>);stem(<span class="built_in">abs</span>(fft(x,<span class="number">20</span>)));title(<span class="string">&#x27;DFT\_x20&#x27;</span>);</span><br><span class="line">subplot(<span class="number">412</span>);stem(<span class="built_in">abs</span>(fft(x,<span class="number">80</span>)));title(<span class="string">&#x27;DFT\_x80&#x27;</span>);</span><br><span class="line">subplot(<span class="number">413</span>);stem(<span class="built_in">abs</span>(fft(x,<span class="number">160</span>)));title(<span class="string">&#x27;DFT\_x160&#x27;</span>);</span><br><span class="line">subplot(<span class="number">414</span>);stem(<span class="built_in">abs</span>(fft(x,<span class="number">1000</span>)));title(<span class="string">&#x27;DFT\_x1000&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li><p>结果如下：</p>
 <p><img src="/2023/10/06/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E9%A2%91%E5%9F%9F%E5%A4%84%E7%90%86/DFT_sin_N_double_amp.bmp" alt="DFT_sin_N_double_amp"></p>
@@ -446,32 +444,105 @@ x(k)=\sum_{n=0}^{N-1}x(n)e^{-j\frac{2\pi k}Nn} \quad k=0\sim N-1</script><script
 </li>
 </ul>
 <h2 id="2-循环卷积原理"><a href="#2-循环卷积原理" class="headerlink" title="2.循环卷积原理"></a>2.循环卷积原理</h2><ul>
-<li><p>公式如下：</p>
-<script type="math/tex; mode=display">
-x_1(n)\circledast x_2(n)\rightarrow x_1(k)\cdot x_2(k)</script><script type="math/tex; mode=display">
-x_1(n)\cdot x_2(n)\rightarrow \frac1N[x_1(k)\circledast x_2(k)]</script></li>
-<li><p>循环卷积长度：若$x(n):L,h(n):M$，那么循环长度$N$为：</p>
-<script type="math/tex; mode=display">
-N=max(L,M)</script><ul>
+<li><p>公式如下：<br>$$<br>x_1(n)\circledast x_2(n)\rightarrow x_1(k)\cdot x_2(k)<br>$$</p>
+<p>$$<br>x_1(n)\cdot x_2(n)\rightarrow \frac1N[x_1(k)\circledast x_2(k)]<br>$$</p>
+</li>
+<li><p>循环卷积长度：若$x(n):L,h(n):M$，那么循环长度$N$为：<br>$$<br>N=max(L,M)<br>$$</p>
+<ul>
 <li><strong>是对$L$或者$M$的长度补零，补到比$L+M-1$长</strong>，那么循环卷积和线性卷积相等</li>
 </ul>
 </li>
 <li><p><strong>当循环卷积长度$\ge$线性卷积长度$(L+M-1)$时，二者计算得到的结果相等</strong></p>
 </li>
 <li><p>循环卷积的计算示例：</p>
-<p>|                        |      |      | $a(n)$ | 1    | 2    | 3    | 4    |      |      |      |           |<br>| ——————————— | —— | —— | ——— | —— | —— | —— | —— | —— | —— | —— | ————- |<br>| $b(n)$翻转后的周期延拓 | 0    | 7    | 6      | 5    | 0    | 7    | 6    | 5    | 0    | 7    | $c(0)=50$ |<br>| 翻转延拓后向右移动1    | 5    | 0    | 7      | 6    | 5    | 0    | 7    | 6    | 5    | 0    | $c(1)=44$ |<br>| 翻转延拓后向右移动2    | 6    | 5    | 0      | 7    | 6    | 5    | 0    | 7    | 6    | 5    | $c(2)=34$ |<br>| 翻转延拓后向右移动3    | 7    | 6    | 5      | 0    | 7    | 6    | 5    | 0    | 7    | 6    | $c(3)=52$ |</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th>$a(n)$</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>$b(n)$翻转后的周期延拓</td>
+<td>0</td>
+<td>7</td>
+<td>6</td>
+<td>5</td>
+<td>0</td>
+<td>7</td>
+<td>6</td>
+<td>5</td>
+<td>0</td>
+<td>7</td>
+<td>$c(0)=50$</td>
+</tr>
+<tr>
+<td>翻转延拓后向右移动1</td>
+<td>5</td>
+<td>0</td>
+<td>7</td>
+<td>6</td>
+<td>5</td>
+<td>0</td>
+<td>7</td>
+<td>6</td>
+<td>5</td>
+<td>0</td>
+<td>$c(1)=44$</td>
+</tr>
+<tr>
+<td>翻转延拓后向右移动2</td>
+<td>6</td>
+<td>5</td>
+<td>0</td>
+<td>7</td>
+<td>6</td>
+<td>5</td>
+<td>0</td>
+<td>7</td>
+<td>6</td>
+<td>5</td>
+<td>$c(2)=34$</td>
+</tr>
+<tr>
+<td>翻转延拓后向右移动3</td>
+<td>7</td>
+<td>6</td>
+<td>5</td>
+<td>0</td>
+<td>7</td>
+<td>6</td>
+<td>5</td>
+<td>0</td>
+<td>7</td>
+<td>6</td>
+<td>$c(3)=52$</td>
+</tr>
+</tbody></table>
 </li>
 <li><p>MATLAB的验证</p>
 <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">clc;</span><br><span class="line">an=[<span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span>];</span><br><span class="line">bn=[<span class="number">5</span> <span class="number">6</span> <span class="number">7</span>];</span><br><span class="line"></span><br><span class="line"><span class="comment">%4点DFT验证循环卷积的计算</span></span><br><span class="line">an_fft_4=fft(an,<span class="number">4</span>);</span><br><span class="line">bn_fft_4=fft(bn,<span class="number">4</span>);</span><br><span class="line">cn_circle_4=ifft((an_fft_4.*bn_fft_4),<span class="number">4</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">%6点DFT验证循环卷积与线性卷积相等</span></span><br><span class="line">an_fft_6=fft(an,<span class="number">6</span>);</span><br><span class="line">bn_fft_6=fft(bn,<span class="number">6</span>);</span><br><span class="line">cn_linear=conv(an,bn)</span><br><span class="line">cn_circle_6=ifft((an_fft_6.*bn_fft_6),<span class="number">6</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">%大于6点DFT时循环卷积的结果</span></span><br><span class="line">an_fft_8=fft(an,<span class="number">8</span>);</span><br><span class="line">bn_fft_8=fft(bn,<span class="number">8</span>);</span><br><span class="line">cn_circle_8=ifft((an_fft_8.*bn_fft_8),<span class="number">8</span>)</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>结果如下：</li>
 </ul>
-<p><img src="/2023/10/06/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E9%A2%91%E5%9F%9F%E5%A4%84%E7%90%86/image-20231007112338168.png" alt="image-20231007112338168" style="zoom: 33%;"></p>
+<img src="/2023/10/06/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E9%A2%91%E5%9F%9F%E5%A4%84%E7%90%86/image-20231007112338168.png" alt="image-20231007112338168" style="zoom: 33%;">
+
 </li>
 </ul>
 <hr>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
-<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV13W4y187qy/?spm_id_from=333.788&amp;vd_source=221b76534ba13cfad544149d75ce9b6c">学以致用系列课程之数字信号处理]_哔哩哔哩_bilibili</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV13W4y187qy/?spm_id_from=333.788&vd_source=221b76534ba13cfad544149d75ce9b6c">学以致用系列课程之数字信号处理]_哔哩哔哩_bilibili</a></li>
 </ul>
 
     </div>
@@ -604,7 +675,7 @@ N=max(L,M)</script><ul>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-count">149</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

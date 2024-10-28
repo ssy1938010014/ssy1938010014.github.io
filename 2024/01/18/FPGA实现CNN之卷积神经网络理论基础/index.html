@@ -277,35 +277,25 @@
       
         <p>本节主要介绍了卷积神经网络最基础的知识。</p>
 <span id="more"></span>
-<h1 id="单层神经网络"><a href="#单层神经网络" class="headerlink" title="单层神经网络"></a>单层神经网络</h1><p><img src="/2024/01/18/FPGA%E5%AE%9E%E7%8E%B0CNN%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/image-20240118183520659.png" alt="image-20240118183520659" style="zoom: 67%;"></p>
+
+<h1 id="单层神经网络"><a href="#单层神经网络" class="headerlink" title="单层神经网络"></a>单层神经网络</h1><img src="/2024/01/18/FPGA%E5%AE%9E%E7%8E%B0CNN%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/image-20240118183520659.png" alt="image-20240118183520659" style="zoom: 67%;">
+
 <h2 id="1-NN反向传播的推导"><a href="#1-NN反向传播的推导" class="headerlink" title="1.NN反向传播的推导"></a>1.NN反向传播的推导</h2><ul>
-<li><p>梯度下降的公式为：</p>
-<script type="math/tex; mode=display">
-w=w-\alpha\cdot \frac{\partial L(w,b)}{\partial w}\\
-b = b-\alpha\cdot \frac{\partial L(w,b)}{\partial b}</script></li>
-<li><p>激活函数Sigmoid(x)：</p>
-<script type="math/tex; mode=display">
-Sigmoid(x) = \frac{1}{1+e^{-x}}\\
-Sigmoid'(x)= S\cdot (1-S)</script></li>
-<li><p>损失函数Loss：</p>
-<script type="math/tex; mode=display">
-L (w,b)= \frac12(Z_{out}-Z_{gold})^2\\
-L' (w,b)= (Z_{out}-Z_{gold})</script><ul>
+<li><p>梯度下降的公式为：<br>$$<br>w=w-\alpha\cdot \frac{\partial L(w,b)}{\partial w}\<br>b = b-\alpha\cdot \frac{\partial L(w,b)}{\partial b}<br>$$</p>
+</li>
+<li><p>激活函数Sigmoid(x)：<br>$$<br>Sigmoid(x) = \frac{1}{1+e^{-x}}\<br>Sigmoid’(x)= S\cdot (1-S)<br>$$</p>
+</li>
+<li><p>损失函数Loss：<br>$$<br>L (w,b)= \frac12(Z_{out}-Z_{gold})^2\<br>L’ (w,b)= (Z_{out}-Z_{gold})<br>$$</p>
+<ul>
 <li>其中，$Zout$为神经网络的输出结果，$Z_{gold}$为神经网络的标签</li>
 </ul>
 </li>
 <li><p>以求$w_5$的反向传播为例（先假设学习率为1）：</p>
 <ul>
-<li><p>首先，$w_5$梯度下降公式为：</p>
-<script type="math/tex; mode=display">
-w_5 = w_5 -\frac{\partial L(w,b)}{\partial w_5}</script></li>
-<li><p>那么，主要就是求解$\frac{\part L(w.b)}{\part w_5}$</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-\frac{\part L(w,b)}{\part w_5} &=\frac{\part L(w,b)}{\part Z_{out}}\cdot \frac{\part Z_{out}}{\part w_5}\\
-&=(Z_{out}-Z_{gold})\frac{\part Z_{out}}{\part w_5}\\
-&=(Z_{out}-Z_{gold})\cdot Z_{out}\cdot(1-Z_{out})\cdot z_1
-\end{aligned}</script><ul>
+<li><p>首先，$w_5$梯度下降公式为：<br>$$<br>w_5 = w_5 -\frac{\partial L(w,b)}{\partial w_5}<br>$$</p>
+</li>
+<li><p>那么，主要就是求解$\frac{\part L(w.b)}{\part w_5}$<br>$$<br>\begin{aligned}<br>\frac{\part L(w,b)}{\part w_5} &amp;=\frac{\part L(w,b)}{\part Z_{out}}\cdot \frac{\part Z_{out}}{\part w_5}\<br>&amp;=(Z_{out}-Z_{gold})\frac{\part Z_{out}}{\part w_5}\<br>&amp;=(Z_{out}-Z_{gold})\cdot Z_{out}\cdot(1-Z_{out})\cdot z_1<br>\end{aligned}<br>$$</p>
+<ul>
 <li>其中，$Z_{out} = S(z_1w_5+z_2w_6+b_3),\frac{\part Z_{out}}{\part w_5}=S’(z_1w_5+z_2w_6+b_3)\cdot z_1$</li>
 </ul>
 </li>
@@ -313,17 +303,10 @@ w_5 = w_5 -\frac{\partial L(w,b)}{\partial w_5}</script></li>
 </li>
 <li><p>以求$w_1$的反向传播为例（先假设学习率为1）：</p>
 <ul>
-<li><p>首先，$w_1$的梯度下降公式为：</p>
-<script type="math/tex; mode=display">
-w_1 = w_1-\frac{\part L(w,b)}{\part w_1}</script></li>
-<li><p>那么，主要就是求解$\frac{\part L(w,b)}{\part w_1}$</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-\frac{\part L(w,b)}{\part w_1} &= \frac{\part L(w,b)}{\part Z_{out}}\frac{\part Z_{out}}{\part z_1}\frac{\part z_1}{\part w_1}\\
-& = (Z_{out}-Z_{gold})\frac{\part z_{out}}{\part z_1}\frac{\part z_1}{\part w_1}\\
-& = (Z_{out}-Z_{gold})\cdot (Z_{out}(1-Z_{out}))w_5\cdot\frac{\part z_1}{\part w_1}\\
-& = (Z_{out}-Z_{gold})\cdot (Z_{out}(1-Z_{out}))w_5\cdot(z_1(1-z_1))x_0
-\end{aligned}</script><ul>
+<li><p>首先，$w_1$的梯度下降公式为：<br>$$<br>w_1 = w_1-\frac{\part L(w,b)}{\part w_1}<br>$$</p>
+</li>
+<li><p>那么，主要就是求解$\frac{\part L(w,b)}{\part w_1}$<br>$$<br>\begin{aligned}<br>\frac{\part L(w,b)}{\part w_1} &amp;= \frac{\part L(w,b)}{\part Z_{out}}\frac{\part Z_{out}}{\part z_1}\frac{\part z_1}{\part w_1}\<br>&amp; = (Z_{out}-Z_{gold})\frac{\part z_{out}}{\part z_1}\frac{\part z_1}{\part w_1}\<br>&amp; = (Z_{out}-Z_{gold})\cdot (Z_{out}(1-Z_{out}))w_5\cdot\frac{\part z_1}{\part w_1}\<br>&amp; = (Z_{out}-Z_{gold})\cdot (Z_{out}(1-Z_{out}))w_5\cdot(z_1(1-z_1))x_0<br>\end{aligned}<br>$$</p>
+<ul>
 <li>其中，$z_1 = Sigmoid(w_1x_0+w_2x_1+b_1)$</li>
 </ul>
 </li>
@@ -336,14 +319,17 @@ w_1 = w_1-\frac{\part L(w,b)}{\part w_1}</script></li>
 </li>
 <li><p>f_sigmoid.m</p>
 <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">result</span> = <span class="title">f_sigmoid</span><span class="params">( x )</span></span></span><br><span class="line">    result = <span class="number">1</span>/(<span class="number">1</span>+<span class="built_in">exp</span>(-x));</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
 </li>
 </ul>
 <hr>
-<h1 id="卷积神经网络"><a href="#卷积神经网络" class="headerlink" title="卷积神经网络"></a>卷积神经网络</h1><h2 id="1-卷积层"><a href="#1-卷积层" class="headerlink" title="1.卷积层"></a>1.卷积层</h2><p><img src="/2024/01/18/FPGA%E5%AE%9E%E7%8E%B0CNN%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/image-20240122150347941.png" alt="image-20240122150347941" style="zoom: 33%;"></p>
-<p><img src="/2024/01/18/FPGA%E5%AE%9E%E7%8E%B0CNN%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/image-20240122150454168.png" alt="image-20240122150454168" style="zoom:33%;"></p>
+<h1 id="卷积神经网络"><a href="#卷积神经网络" class="headerlink" title="卷积神经网络"></a>卷积神经网络</h1><h2 id="1-卷积层"><a href="#1-卷积层" class="headerlink" title="1.卷积层"></a>1.卷积层</h2><img src="/2024/01/18/FPGA%E5%AE%9E%E7%8E%B0CNN%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/image-20240122150347941.png" alt="image-20240122150347941" style="zoom: 33%;">
+
+<img src="/2024/01/18/FPGA%E5%AE%9E%E7%8E%B0CNN%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/image-20240122150454168.png" alt="image-20240122150454168" style="zoom:33%;">
+
 <ul>
 <li><p><strong>存在权值共享</strong></p>
-<p><img src="/2024/01/18/FPGA%E5%AE%9E%E7%8E%B0CNN%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/image-20240122150540306.png" alt="image-20240122150540306" style="zoom:33%;"></p>
+<img src="/2024/01/18/FPGA%E5%AE%9E%E7%8E%B0CNN%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/image-20240122150540306.png" alt="image-20240122150540306" style="zoom:33%;">
 </li>
 <li><p><strong>卷积核大小</strong>决定感受野大小</p>
 </li>
@@ -353,10 +339,8 @@ w_1 = w_1-\frac{\part L(w,b)}{\part w_1}</script></li>
 </li>
 <li><p><strong>卷积前后图像尺寸</strong>：</p>
 <ul>
-<li><p>设步长为s，填充为p，输入图像I的尺寸为$I_H\times I_W$，卷积核K的尺寸为$K_H\times K_W$</p>
-<script type="math/tex; mode=display">
-W_{out} = floor(\frac{I_W+2p-K_W}{s}+1)\\
-H_{out} = floor(\frac{I_H+2p-K_H}{s}+1)</script><ul>
+<li><p>设步长为s，填充为p，输入图像I的尺寸为$I_H\times I_W$，卷积核K的尺寸为$K_H\times K_W$<br>$$<br>W_{out} = floor(\frac{I_W+2p-K_W}{s}+1)\<br>H_{out} = floor(\frac{I_H+2p-K_H}{s}+1)<br>$$</p>
+<ul>
 <li>其中，$floor$表示向下取整</li>
 </ul>
 </li>
@@ -371,17 +355,15 @@ H_{out} = floor(\frac{I_H+2p-K_H}{s}+1)</script><ul>
 </ul>
 </li>
 <li><p>考虑梯度消失/梯度爆炸问题</p>
-<p><img src="/2024/01/18/FPGA%E5%AE%9E%E7%8E%B0CNN%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/image-20240122200530083.png" alt="image-20240122200530083" style="zoom:50%;"></p>
+<img src="/2024/01/18/FPGA%E5%AE%9E%E7%8E%B0CNN%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/image-20240122200530083.png" alt="image-20240122200530083" style="zoom:50%;">
+
 <ul>
-<li>考虑对$b_1$的反向传播，重点在于求解$\frac{\part F}{\part b_1}$</li>
+<li><p>考虑对$b_1$的反向传播，重点在于求解$\frac{\part F}{\part b_1}$</p>
+</li>
 <li><p>$y_i = \sigma(z_i) = \sigma(w_ix_i+b_i)$、$x_i = y_{i-1}$、$L$是损失函数</p>
 </li>
-<li><p>那么，有：</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-\frac{\part L}{\part b_1}&=\frac{\part L}{\part y_n}\frac{\part y_n}{\part z_n}\frac{\part z_n}{\part x_n}\frac{\part x_n}{\part z_{n-1}}\cdots \frac{\part z_2}{\part x_2}\frac{\part x_2}{\part z_1}\frac{\part z_1}{\part b_1}\\
-&=\frac{\part L}{\part y_n}\sigma'(z_n)w_n\cdots\sigma'(z_3)w_3\sigma'(z_2)w_2\sigma'(z_1)1
-\end{aligned}</script></li>
+<li><p>那么，有：<br>$$<br>\begin{aligned}<br>\frac{\part L}{\part b_1}&amp;=\frac{\part L}{\part y_n}\frac{\part y_n}{\part z_n}\frac{\part z_n}{\part x_n}\frac{\part x_n}{\part z_{n-1}}\cdots \frac{\part z_2}{\part x_2}\frac{\part x_2}{\part z_1}\frac{\part z_1}{\part b_1}\<br>&amp;=\frac{\part L}{\part y_n}\sigma’(z_n)w_n\cdots\sigma’(z_3)w_3\sigma’(z_2)w_2\sigma’(z_1)1<br>\end{aligned}<br>$$</p>
+</li>
 <li><p><strong>梯度消失</strong>：指激活函数导数乘权重小于1时，在多层链式求导中，出现梯度快速接近0的现象</p>
 </li>
 <li><p><strong>梯度爆炸</strong>：指激活函数导数乘权重大于1时，在多层链式求导中，出现梯度快速增大的现象（甚至溢出）</p>
@@ -428,9 +410,7 @@ H_{out} = floor(\frac{I_H+2p-K_H}{s}+1)</script><ul>
 </li>
 <li><p><strong>池化层前后图像尺寸</strong>：</p>
 <ul>
-<li>设步长为s，输入图像I的尺寸为$I_H\times I_W$，池化尺寸为K<script type="math/tex; mode=display">
-W_{out} = floor(\frac{I_W-K}{s}+1)\\
-H_{out} = floor(\frac{I_H-K}{s}+1)</script></li>
+<li>设步长为s，输入图像I的尺寸为$I_H\times I_W$，池化尺寸为K<br>$$<br>W_{out} = floor(\frac{I_W-K}{s}+1)\<br>H_{out} = floor(\frac{I_H-K}{s}+1)<br>$$</li>
 </ul>
 </li>
 </ul>
@@ -566,7 +546,7 @@ H_{out} = floor(\frac{I_H-K}{s}+1)</script></li>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-count">149</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

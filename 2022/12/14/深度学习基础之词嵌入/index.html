@@ -275,6 +275,7 @@
       
         <p>本节主要介绍了词嵌入的常用方法：Word2Vec。</p>
 <span id="more"></span>
+
 <h1 id="Word2Vec"><a href="#Word2Vec" class="headerlink" title="Word2Vec"></a>Word2Vec</h1><ul>
 <li>利用中心词来预测上下文词</li>
 </ul>
@@ -282,10 +283,12 @@
 <li><p>假设字典中1000个单词，则任意一个单词的表示为[0 0 …… 1 0 0……]，即只在对应的单词为1，其他位置为0</p>
 </li>
 <li><p>例如：</p>
-<p><img src="/2022/12/14/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E8%AF%8D%E5%B5%8C%E5%85%A5/image-20221214092127822.png" alt="image-20221214092127822" style="zoom: 50%;"></p>
+<img src="/2022/12/14/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E8%AF%8D%E5%B5%8C%E5%85%A5/image-20221214092127822.png" alt="image-20221214092127822" style="zoom: 50%;">
+
 </li>
 </ul>
-<h2 id="2-嵌入矩阵"><a href="#2-嵌入矩阵" class="headerlink" title="2.嵌入矩阵"></a>2.嵌入矩阵</h2><p><img src="/2022/12/14/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E8%AF%8D%E5%B5%8C%E5%85%A5/image-20221214092549834.png" alt="image-20221214092549834" style="zoom:50%;"></p>
+<h2 id="2-嵌入矩阵"><a href="#2-嵌入矩阵" class="headerlink" title="2.嵌入矩阵"></a>2.嵌入矩阵</h2><img src="/2022/12/14/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E8%AF%8D%E5%B5%8C%E5%85%A5/image-20221214092549834.png" alt="image-20221214092549834" style="zoom:50%;">
+
 <ul>
 <li>若每个词对应300个特征，那么嵌入矩阵为$300\times1000$</li>
 <li>表中的权重代表词与对应特征的相关程度</li>
@@ -298,12 +301,56 @@
 <li><p>若文本序列为：you are the pretty sunshine of my life.</p>
 </li>
 <li><p>若skip窗口为2，那么中心词pretty、sunshine等的目标可能有如下：</p>
-<p>| context  | Target   |<br>| ———— | ———— |<br>| pretty   | are      |<br>| pretty   | the      |<br>| pretty   | sunshine |<br>| pretty   | of       |<br>| sunshine | the      |<br>| sunshine | pretty   |<br>| sunshine | of       |<br>| sunshine | my       |<br>| ……       | ……       |</p>
+<table>
+<thead>
+<tr>
+<th>context</th>
+<th>Target</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>pretty</td>
+<td>are</td>
+</tr>
+<tr>
+<td>pretty</td>
+<td>the</td>
+</tr>
+<tr>
+<td>pretty</td>
+<td>sunshine</td>
+</tr>
+<tr>
+<td>pretty</td>
+<td>of</td>
+</tr>
+<tr>
+<td>sunshine</td>
+<td>the</td>
+</tr>
+<tr>
+<td>sunshine</td>
+<td>pretty</td>
+</tr>
+<tr>
+<td>sunshine</td>
+<td>of</td>
+</tr>
+<tr>
+<td>sunshine</td>
+<td>my</td>
+</tr>
+<tr>
+<td>……</td>
+<td>……</td>
+</tr>
+</tbody></table>
 </li>
 </ul>
 </li>
 <li><p>模型结构：</p>
-<p><img src="/2022/12/14/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E8%AF%8D%E5%B5%8C%E5%85%A5/image-20221214094143707.png" alt="image-20221214094143707" style="zoom:50%;"></p>
+<img src="/2022/12/14/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E8%AF%8D%E5%B5%8C%E5%85%A5/image-20221214094143707.png" alt="image-20221214094143707" style="zoom:50%;">
+
 <ul>
 <li>将上表中每个context看成训练样本的输入x，每个target看成训练样本的输出y</li>
 <li>Skip-gram可以表示为由输入层、隐藏层（不含激活函数）和输出层（激活函数为softmax）组成的神经网络</li>
@@ -319,7 +366,45 @@
 <li><p>若文本序列为：I want a glass of orange juice to go alone with my cereal</p>
 </li>
 <li><p>则生成的正负样本有如下可能：正样本的生成方式与介绍skip窗口时相同</p>
-<p>| context | word  | target |<br>| ———- | ——- | ——— |<br>| orange  | juice | 1      |<br>| orange  | king  | 0      |<br>| orange  | book  | 0      |<br>| orange  | the   | 0      |<br>| orange  | of    | 0      |<br>| ……      | ……    | ……     |</p>
+<table>
+<thead>
+<tr>
+<th>context</th>
+<th>word</th>
+<th>target</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>orange</td>
+<td>juice</td>
+<td>1</td>
+</tr>
+<tr>
+<td>orange</td>
+<td>king</td>
+<td>0</td>
+</tr>
+<tr>
+<td>orange</td>
+<td>book</td>
+<td>0</td>
+</tr>
+<tr>
+<td>orange</td>
+<td>the</td>
+<td>0</td>
+</tr>
+<tr>
+<td>orange</td>
+<td>of</td>
+<td>0</td>
+</tr>
+<tr>
+<td>……</td>
+<td>……</td>
+<td>……</td>
+</tr>
+</tbody></table>
 <ul>
 <li>其中juice是给定的文本序列中抽取的，则orange-juice对为正样本，记为1</li>
 <li>king、book、the、of等都是随机中字典中抽取的词，则为负样本，记为0</li>
@@ -329,7 +414,8 @@
 </ul>
 </li>
 <li><p>模型结构：</p>
-<p><img src="/2022/12/14/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E8%AF%8D%E5%B5%8C%E5%85%A5/image-20221214195517075.png" alt="image-20221214195517075" style="zoom:50%;"></p>
+<img src="/2022/12/14/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E8%AF%8D%E5%B5%8C%E5%85%A5/image-20221214195517075.png" alt="image-20221214195517075" style="zoom:50%;">
+
 <ul>
 <li>将每个单词所有可能的context与word共同看成训练样本的输入x</li>
 <li>每个target看成训练样本的输出y</li>
@@ -467,7 +553,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-count">149</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

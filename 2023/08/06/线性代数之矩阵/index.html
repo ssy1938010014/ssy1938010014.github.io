@@ -273,19 +273,37 @@
       
         <p>本节主要介绍了矩阵的基本概念、伴随矩阵、逆矩阵、分块矩阵、初等变换以及矩阵的秩</p>
 <span id="more"></span>
+
 <h1 id="矩阵概念"><a href="#矩阵概念" class="headerlink" title="矩阵概念"></a>矩阵概念</h1><ul>
-<li><p>矩阵的定义：由一些数构成的$m\times n$的数表</p>
-<script type="math/tex; mode=display">
-A_{m\times n} = \begin{bmatrix}
-a_{11} & a_{12} & \dots & a_{1n}\\
-a_{21} & a_{21} & \dots & a_{2n}\\
-\dots & \dots & \dots & \dots \\
-a_{m1} & a_{m2} & \dots & a_{mn}\\
-\end{bmatrix}</script></li>
-<li><p><strong>矩阵和行列式的区别</strong>：</p>
-<p>|      | 行列式            | 矩阵                     |<br>| —— | ————————- | ———————————— |<br>| 本质 | 一个数            | 数表                     |<br>| 符号 | | |             | [ ]或( )                 |<br>| 形状 | 行数=列数，是方形 | 行数$\neq$列数（也可等） |</p>
+<li><p>矩阵的定义：由一些数构成的$m\times n$的数表<br>$$<br>A_{m\times n} = \begin{bmatrix}<br>a_{11} &amp; a_{12} &amp; \dots &amp; a_{1n}\<br>a_{21} &amp; a_{21} &amp; \dots &amp; a_{2n}\<br>\dots &amp; \dots &amp; \dots &amp; \dots \<br>a_{m1} &amp; a_{m2} &amp; \dots &amp; a_{mn}\<br>\end{bmatrix}<br>$$</p>
 </li>
-<li><p>方阵：矩阵中若行数=列数，则称为n阶方阵$A_{n\times n}\,or\,A_n$</p>
+<li><p><strong>矩阵和行列式的区别</strong>：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>行列式</th>
+<th>矩阵</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>本质</td>
+<td>一个数</td>
+<td>数表</td>
+</tr>
+<tr>
+<td>符号</td>
+<td>| |</td>
+<td>[ ]或( )</td>
+</tr>
+<tr>
+<td>形状</td>
+<td>行数=列数，是方形</td>
+<td>行数$\neq$列数（也可等）</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>方阵：矩阵中若行数=列数，则称为n阶方阵$A_{n\times n},or,A_n$</p>
 </li>
 <li><p>单位阵$E$：主对角线上的数均为1，其余均为0，<strong>单位阵一定是方阵</strong></p>
 </li>
@@ -307,7 +325,7 @@ a_{m1} & a_{m2} & \dots & a_{mn}\\
 <li>结果矩阵形状：结果矩阵的行数=第一个矩阵的行数，结果矩阵的列数=第二个矩阵的列数</li>
 <li><strong>矩阵$AB\ne BA$，$AB$有意义时，$BA$不一定有意义</strong></li>
 <li>矩阵$AB$相乘时，称$A$左乘$B$，$B$右乘$A$</li>
-<li><strong>若$AB=0$，并不意味着$A=0\,or\,B=0$</strong></li>
+<li><strong>若$AB=0$，并不意味着$A=0,or,B=0$</strong></li>
 <li><strong>若$AB=AC，A\ne0$，并不意味着$B=C$</strong></li>
 <li>与零矩阵相乘都等于0，但得注意必须是同形矩阵</li>
 <li><strong>与单位阵$E$相乘：$AE=A，EB=B$</strong></li>
@@ -323,11 +341,16 @@ a_{m1} & a_{m2} & \dots & a_{mn}\\
 </li>
 <li><p>$A^0=E$</p>
 </li>
-<li>$A^{k_1}A^{k_2}=A^{k_1+k_2}$</li>
-<li>$(A^{k_1})^{k_2}=A^{k_1k_2}$</li>
-<li>$(AB)^k\ne A^kB^k$</li>
-<li>$(A+B)^2\ne A^2+2AB+B^2$</li>
-<li>$(A+E)^2=A^2+2AE+E^2$</li>
+<li><p>$A^{k_1}A^{k_2}=A^{k_1+k_2}$</p>
+</li>
+<li><p>$(A^{k_1})^{k_2}=A^{k_1k_2}$</p>
+</li>
+<li><p>$(AB)^k\ne A^kB^k$</p>
+</li>
+<li><p>$(A+B)^2\ne A^2+2AB+B^2$</p>
+</li>
+<li><p>$(A+E)^2=A^2+2AE+E^2$</p>
+</li>
 </ul>
 </li>
 <li><p>矩阵的转置：</p>
@@ -342,54 +365,18 @@ a_{m1} & a_{m2} & \dots & a_{mn}\\
 </li>
 </ul>
 <hr>
-<h1 id="特殊的矩阵"><a href="#特殊的矩阵" class="headerlink" title="特殊的矩阵"></a>特殊的矩阵</h1><h2 id="1-对角线矩阵"><a href="#1-对角线矩阵" class="headerlink" title="1.对角线矩阵"></a>1.对角线矩阵</h2><script type="math/tex; mode=display">
-diag(a_1,a_2,\dots,a_n) = \begin{bmatrix}
-a_{11} & 0 & \dots & 0\\
-0 & a_{21} & \dots & 0\\
-\dots & \dots & \dots & \dots \\
-0 & 0 & \dots & a_{mn}\\
-\end{bmatrix}</script><ul>
-<li><p>对一个矩阵，左乘对角形矩阵，其结果相当于矩阵中每行元素乘以对角形矩阵中的数</p>
-<script type="math/tex; mode=display">
-\begin{bmatrix}
-k_1 & 0 & 0\\
-0 & k_2 & 0\\
-0 & 0 & k_3\\
-\end{bmatrix}\begin{bmatrix}
-1 & 2 & 3\\
-2 & 2 & 2\\
-8 & 8 & 8\\
-\end{bmatrix}=\begin{bmatrix}
-k_1 & 2k_1 & 3k_1\\
-2k_2 & 2k_2 & 2k_2\\
-8k_3 & 8k_3 & 8k_3\\
-\end{bmatrix}</script></li>
-<li><p>对一个矩阵，右乘对角形矩阵，其结果相当于矩阵中每列元素乘以对角形矩阵中的数</p>
-<script type="math/tex; mode=display">
-\begin{bmatrix}
-1 & 2 & 3\\
-2 & 2 & 2\\
-8 & 8 & 8\\
-\end{bmatrix}\begin{bmatrix}
-k_1 & 0 & 0\\
-0 & k_2 & 0\\
-0 & 0 & k_3\\
-\end{bmatrix}=\begin{bmatrix}
-k_1 & 2k_2 & 3k_3\\
-2k_1 & 2k_2 & 2k_3\\
-8k_1 & 8k_2 & 8k_3\\
-\end{bmatrix}</script></li>
+<h1 id="特殊的矩阵"><a href="#特殊的矩阵" class="headerlink" title="特殊的矩阵"></a>特殊的矩阵</h1><h2 id="1-对角线矩阵"><a href="#1-对角线矩阵" class="headerlink" title="1.对角线矩阵"></a>1.对角线矩阵</h2><p>$$<br>diag(a_1,a_2,\dots,a_n) = \begin{bmatrix}<br>a_{11} &amp; 0 &amp; \dots &amp; 0\<br>0 &amp; a_{21} &amp; \dots &amp; 0\<br>\dots &amp; \dots &amp; \dots &amp; \dots \<br>0 &amp; 0 &amp; \dots &amp; a_{mn}\<br>\end{bmatrix}<br>$$</p>
+<ul>
+<li><p>对一个矩阵，左乘对角形矩阵，其结果相当于矩阵中每行元素乘以对角形矩阵中的数<br>$$<br>\begin{bmatrix}<br>k_1 &amp; 0 &amp; 0\<br>0 &amp; k_2 &amp; 0\<br>0 &amp; 0 &amp; k_3\<br>\end{bmatrix}\begin{bmatrix}<br>1 &amp; 2 &amp; 3\<br>2 &amp; 2 &amp; 2\<br>8 &amp; 8 &amp; 8\<br>\end{bmatrix}=\begin{bmatrix}<br>k_1 &amp; 2k_1 &amp; 3k_1\<br>2k_2 &amp; 2k_2 &amp; 2k_2\<br>8k_3 &amp; 8k_3 &amp; 8k_3\<br>\end{bmatrix}<br>$$</p>
+</li>
+<li><p>对一个矩阵，右乘对角形矩阵，其结果相当于矩阵中每列元素乘以对角形矩阵中的数<br>$$<br>\begin{bmatrix}<br>1 &amp; 2 &amp; 3\<br>2 &amp; 2 &amp; 2\<br>8 &amp; 8 &amp; 8\<br>\end{bmatrix}\begin{bmatrix}<br>k_1 &amp; 0 &amp; 0\<br>0 &amp; k_2 &amp; 0\<br>0 &amp; 0 &amp; k_3\<br>\end{bmatrix}=\begin{bmatrix}<br>k_1 &amp; 2k_2 &amp; 3k_3\<br>2k_1 &amp; 2k_2 &amp; 2k_3\<br>8k_1 &amp; 8k_2 &amp; 8k_3\<br>\end{bmatrix}<br>$$</p>
+</li>
 <li><p>对角形矩阵既是上三角矩阵又是下三角矩阵</p>
 </li>
 </ul>
 <h2 id="2-对称矩阵"><a href="#2-对称矩阵" class="headerlink" title="2.对称矩阵"></a>2.对称矩阵</h2><ul>
-<li><p>$a_{ij}=a_{ji}$：</p>
-<script type="math/tex; mode=display">
-\begin{bmatrix}
-1 & 1 & -1\\
-1 & 2 & 4\\
--1 & 4 & 3\\
-\end{bmatrix}</script></li>
+<li><p>$a_{ij}=a_{ji}$：<br>$$<br>\begin{bmatrix}<br>1 &amp; 1 &amp; -1\<br>1 &amp; 2 &amp; 4\<br>-1 &amp; 4 &amp; 3\<br>\end{bmatrix}<br>$$</p>
+</li>
 <li><p>若A、B是同阶对称，则：</p>
 <ul>
 <li>$A^T=A，B^T=B$</li>
@@ -401,12 +388,7 @@ k_1 & 2k_2 & 3k_3\\
 </li>
 <li><p>反对称矩阵：</p>
 <ul>
-<li>主对角线全为0，$a_{ij}=-a_{ji}$<script type="math/tex; mode=display">
-\begin{bmatrix}
-0 & 1 & -3\\
--1 & 0 & -4\\
-3 & 4 & 0\\
-\end{bmatrix}</script></li>
+<li>主对角线全为0，$a_{ij}=-a_{ji}$<br>$$<br>\begin{bmatrix}<br>0 &amp; 1 &amp; -3\<br>-1 &amp; 0 &amp; -4\<br>3 &amp; 4 &amp; 0\<br>\end{bmatrix}<br>$$</li>
 </ul>
 </li>
 <li><p>$A^T=-A$</p>
@@ -414,17 +396,8 @@ k_1 & 2k_2 & 3k_3\\
 </ul>
 <hr>
 <h1 id="伴随矩阵"><a href="#伴随矩阵" class="headerlink" title="伴随矩阵"></a>伴随矩阵</h1><ul>
-<li><p>方阵的行列式：</p>
-<script type="math/tex; mode=display">
-方阵A=\begin{bmatrix}
-2 & 2 & 2\\
-3 & 3 & 3\\
-1 & 1 & 1\\
-\end{bmatrix}\quad 行列式|A|=\begin{vmatrix}
-2 & 2 & 2\\
-3 & 3 & 3\\
-1 & 1 & 1\\
-\end{vmatrix}</script><ul>
+<li><p>方阵的行列式：<br>$$<br>方阵A=\begin{bmatrix}<br>2 &amp; 2 &amp; 2\<br>3 &amp; 3 &amp; 3\<br>1 &amp; 1 &amp; 1\<br>\end{bmatrix}\quad 行列式|A|=\begin{vmatrix}<br>2 &amp; 2 &amp; 2\<br>3 &amp; 3 &amp; 3\<br>1 &amp; 1 &amp; 1\<br>\end{vmatrix}<br>$$</p>
+<ul>
 <li>方阵行列式的性质：<ul>
 <li>$|A^T|=|A|$</li>
 <li>$|kA|=k^n|A|$</li>
@@ -433,27 +406,14 @@ k_1 & 2k_2 & 3k_3\\
 </li>
 </ul>
 </li>
-<li><p>伴随矩阵：</p>
-<script type="math/tex; mode=display">
-A=\begin{bmatrix}
-1 & 1 & 1\\
-2 & 1 & 3\\
-1 & 1 & 4\\
-\end{bmatrix}</script></li>
+<li><p>伴随矩阵：<br>$$<br>A=\begin{bmatrix}<br>1 &amp; 1 &amp; 1\<br>2 &amp; 1 &amp; 3\<br>1 &amp; 1 &amp; 4\<br>\end{bmatrix}<br>$$</p>
+</li>
 </ul>
 <ul>
-<li><p>求所有元素的代数余子式</p>
-<script type="math/tex; mode=display">
-A_{11}=1\quad A_{12}=-5\quad A_{13}=1\\
-A_{21}=3\quad A_{22}=3\quad A_{23}=0\\
-A_{31}=2\quad A_{32}=-1\quad A_{33}=-1</script></li>
-<li><p>按行求得代数余子式按列放，构成的矩阵$A^*$为伴随矩阵</p>
-<script type="math/tex; mode=display">
-A^*=\begin{bmatrix}
-1 & -3 & 2\\
--5 & 3 & -1\\
-1 & 0 & -1\\
-\end{bmatrix}</script></li>
+<li><p>求所有元素的代数余子式<br>$$<br>A_{11}=1\quad A_{12}=-5\quad A_{13}=1\<br>A_{21}=3\quad A_{22}=3\quad A_{23}=0\<br>A_{31}=2\quad A_{32}=-1\quad A_{33}=-1<br>$$</p>
+</li>
+<li><p>按行求得代数余子式按列放，构成的矩阵$A^<em>$为伴随矩阵<br>$$<br>A^</em>=\begin{bmatrix}<br>1 &amp; -3 &amp; 2\<br>-5 &amp; 3 &amp; -1\<br>1 &amp; 0 &amp; -1\<br>\end{bmatrix}<br>$$</p>
+</li>
 <li><p><strong>伴随矩阵的相关定理</strong>：</p>
 <ul>
 <li>对任意方阵A：$AA^<em>=A^</em>A=|A|E$</li>
@@ -481,17 +441,8 @@ A^*=\begin{bmatrix}
 </ul>
 <hr>
 <h1 id="分块矩阵"><a href="#分块矩阵" class="headerlink" title="分块矩阵"></a>分块矩阵</h1><ul>
-<li><p><strong>标准形矩阵：从左上角开始的一串1，串中1不能间断，不一定是方阵</strong></p>
-<script type="math/tex; mode=display">
-A =\begin{bmatrix}
-1 & 0 & \dots & 0\\
-0 & 1 & \dots & 0\\
-\dots & \dots & \dots & \dots \\
-0 & 0 & \dots & 0\\
-\end{bmatrix}_{m\times n}=\begin{bmatrix}
-A_1 & A_2\\
-A_3 & A_4
-\end{bmatrix}</script></li>
+<li><p><strong>标准形矩阵：从左上角开始的一串1，串中1不能间断，不一定是方阵</strong><br>$$<br>A =\begin{bmatrix}<br>1 &amp; 0 &amp; \dots &amp; 0\<br>0 &amp; 1 &amp; \dots &amp; 0\<br>\dots &amp; \dots &amp; \dots &amp; \dots \<br>0 &amp; 0 &amp; \dots &amp; 0\<br>\end{bmatrix}_{m\times n}=\begin{bmatrix}<br>A_1 &amp; A_2\<br>A_3 &amp; A_4<br>\end{bmatrix}<br>$$</p>
+</li>
 <li><p>分块矩阵的乘法与基本矩阵乘法一致，前提是可乘</p>
 </li>
 </ul>
@@ -504,29 +455,8 @@ A_3 & A_4
 <li>用某行（列）乘以一个数加到另一行（列）上去</li>
 </ul>
 </li>
-<li><p>任给一个矩阵都可以通过初等变换化成标准形</p>
-<script type="math/tex; mode=display">
-A =\begin{bmatrix}
-1 & 2 & 1\\
--1 & -1 & 0\\
-0 & 1 & 1\\
-1 & 3 & 2\\
-\end{bmatrix}\rightarrow\begin{bmatrix}
-1 & 2 & 1\\
-0 & 1 & 1\\
-0 & 1 & 1\\
-0 & 1 & 1\\
-\end{bmatrix}\rightarrow\begin{bmatrix}
-1 & 0 & -1\\
-0 & 1 & 1\\
-0 & 0 & 0\\
-0 & 0 & 0\\
-\end{bmatrix}\rightarrow \begin{bmatrix}
-1 & 0 & 0\\
-0 & 1 & 0\\
-0 & 0 & 0\\
-0 & 0 & 0\\
-\end{bmatrix}</script></li>
+<li><p>任给一个矩阵都可以通过初等变换化成标准形<br>$$<br>A =\begin{bmatrix}<br>1 &amp; 2 &amp; 1\<br>-1 &amp; -1 &amp; 0\<br>0 &amp; 1 &amp; 1\<br>1 &amp; 3 &amp; 2\<br>\end{bmatrix}\rightarrow\begin{bmatrix}<br>1 &amp; 2 &amp; 1\<br>0 &amp; 1 &amp; 1\<br>0 &amp; 1 &amp; 1\<br>0 &amp; 1 &amp; 1\<br>\end{bmatrix}\rightarrow\begin{bmatrix}<br>1 &amp; 0 &amp; -1\<br>0 &amp; 1 &amp; 1\<br>0 &amp; 0 &amp; 0\<br>0 &amp; 0 &amp; 0\<br>\end{bmatrix}\rightarrow \begin{bmatrix}<br>1 &amp; 0 &amp; 0\<br>0 &amp; 1 &amp; 0\<br>0 &amp; 0 &amp; 0\<br>0 &amp; 0 &amp; 0\<br>\end{bmatrix}<br>$$</p>
+</li>
 <li><p><strong>等价：由矩阵A经初等变换得到B，即称A等价于B</strong></p>
 <ul>
 <li>对称性：若A等价于B，则B也等价于A</li>
@@ -544,9 +474,8 @@ A =\begin{bmatrix}
 </li>
 <li><p>初等方阵的相关性质：</p>
 <ul>
-<li><p>初等方阵均可逆：</p>
-<script type="math/tex; mode=display">
-E^{-1}(i,j)=E(i,j)\quad E^{-1}(i(k))=E(i(\frac1k))\quad E^{-1}(i,j(l))=E(i,j(-l))</script></li>
+<li><p>初等方阵均可逆：<br>$$<br>E^{-1}(i,j)=E(i,j)\quad E^{-1}(i(k))=E(i(\frac1k))\quad E^{-1}(i,j(l))=E(i,j(-l))<br>$$</p>
+</li>
 <li><p>其逆矩阵和转置矩阵均为初等方阵</p>
 </li>
 <li><p>若A可逆，那么其充分必要条件是A的标准形为E</p>
@@ -557,10 +486,10 @@ E^{-1}(i,j)=E(i,j)\quad E^{-1}(i(k))=E(i(\frac1k))\quad E^{-1}(i,j(l))=E(i,j(-l)
 </li>
 </ul>
 <h2 id="2-初行变换法求逆"><a href="#2-初行变换法求逆" class="headerlink" title="2.初行变换法求逆"></a>2.初行变换法求逆</h2><ul>
-<li><strong>只做初等行变换</strong>，使得：<script type="math/tex; mode=display">
-(A,E)\rightarrow(E,A^{-1})</script></li>
+<li><strong>只做初等行变换</strong>，使得：<br>$$<br>(A,E)\rightarrow(E,A^{-1})<br>$$</li>
 </ul>
-<p><img src="/2023/08/06/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%E4%B9%8B%E7%9F%A9%E9%98%B5/image-20230808151254781.png" alt="image-20230808151254781" style="zoom: 33%;"></p>
+<img src="/2023/08/06/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%E4%B9%8B%E7%9F%A9%E9%98%B5/image-20230808151254781.png" alt="image-20230808151254781" style="zoom: 33%;">
+
 <hr>
 <h1 id="矩阵的秩"><a href="#矩阵的秩" class="headerlink" title="矩阵的秩"></a>矩阵的秩</h1><ul>
 <li>定义：<strong>非零子式的最高阶数</strong>，记$r(A)=r$</li>
@@ -578,24 +507,15 @@ E^{-1}(i,j)=E(i,j)\quad E^{-1}(i(k))=E(i(\frac1k))\quad E^{-1}(i,j(l))=E(i,j(-l)
 <li>若有零行，零行在非零的下边</li>
 <li>左起首非零元左边零个数随行数增加而严格增加</li>
 </ul>
-<script type="math/tex; mode=display">
-A =\begin{bmatrix}
-1 & 1 & 1 & 1\\
-0 & 1 & 0 & 4\\
-0 & 0 & 0 & 5\\
-\end{bmatrix}</script></li>
+<p>$$<br>A =\begin{bmatrix}<br>1 &amp; 1 &amp; 1 &amp; 1\<br>0 &amp; 1 &amp; 0 &amp; 4\<br>0 &amp; 0 &amp; 0 &amp; 5\<br>\end{bmatrix}<br>$$</p>
+</li>
 </ul>
 <h2 id="2-简化阶梯形"><a href="#2-简化阶梯形" class="headerlink" title="2.简化阶梯形"></a>2.简化阶梯形</h2><ul>
 <li>非零行的首非零元是1</li>
 <li>首非零元所在列的其余元素是0</li>
 </ul>
-<script type="math/tex; mode=display">
-A =\begin{bmatrix}
-1 & 0 & 0 & 4\\
-0 & 1 & 0 & 5\\
-0 & 0 & 1 & 4\\
-0 & 0 & 0 & 0\\
-\end{bmatrix}</script><h2 id="3-秩相关的定理与性质"><a href="#3-秩相关的定理与性质" class="headerlink" title="3.秩相关的定理与性质"></a>3.秩相关的定理与性质</h2><ul>
+<p>$$<br>A =\begin{bmatrix}<br>1 &amp; 0 &amp; 0 &amp; 4\<br>0 &amp; 1 &amp; 0 &amp; 5\<br>0 &amp; 0 &amp; 1 &amp; 4\<br>0 &amp; 0 &amp; 0 &amp; 0\<br>\end{bmatrix}<br>$$</p>
+<h2 id="3-秩相关的定理与性质"><a href="#3-秩相关的定理与性质" class="headerlink" title="3.秩相关的定理与性质"></a>3.秩相关的定理与性质</h2><ul>
 <li><p>初等变换不改变秩</p>
 </li>
 <li><p><strong>r(A)=阶梯形非零行的行数</strong></p>
@@ -605,9 +525,8 @@ A =\begin{bmatrix}
 </li>
 <li><p><strong>任意矩阵乘以可逆矩阵，其秩不变</strong></p>
 </li>
-<li><p>有矩阵$A_{m\times n}$，P为m阶可逆方阵，Q为n阶可逆方阵</p>
-<script type="math/tex; mode=display">
-r(A)=r(PA)=r(AQ)=r(PAQ)</script></li>
+<li><p>有矩阵$A_{m\times n}$，P为m阶可逆方阵，Q为n阶可逆方阵<br>$$<br>r(A)=r(PA)=r(AQ)=r(PAQ)<br>$$</p>
+</li>
 </ul>
 
     </div>
@@ -740,7 +659,7 @@ r(A)=r(PA)=r(AQ)=r(PAQ)</script></li>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-count">149</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

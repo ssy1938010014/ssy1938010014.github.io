@@ -282,34 +282,38 @@
       
         <p>本节通过基于BRAM的PS与PL数据交互实验，简单演示了BRAM的使用</p>
 <span id="more"></span> 
+
 <h1 id="基于BRAM的PS与PL数据交互实验"><a href="#基于BRAM的PS与PL数据交互实验" class="headerlink" title="基于BRAM的PS与PL数据交互实验"></a>基于BRAM的PS与PL数据交互实验</h1><ul>
 <li><p>实验任务：PS将串口接收到的数据写入BRAM（是FPGA内部的一个片上存储资源），然后从BRAM中读出数据，并通过串口打印出来；与此同时，PL从BRAM中同样读出数据，并通过ILA来观察读出的数据与串口打印的数据是否一致</p>
-<p><img src="/2023/09/29/ZYNQ%E5%B5%8C%E5%85%A5%E5%BC%8F%E4%B9%8BBRAM%EF%BC%88%E5%9F%BA%E4%BA%8EPYNQ-Z2%E5%BC%80%E5%8F%91%E6%9D%BF%EF%BC%89/image-20230929013337035.png" alt="image-20230929013337035" style="zoom: 25%;"></p>
+<img src="/2023/09/29/ZYNQ%E5%B5%8C%E5%85%A5%E5%BC%8F%E4%B9%8BBRAM%EF%BC%88%E5%9F%BA%E4%BA%8EPYNQ-Z2%E5%BC%80%E5%8F%91%E6%9D%BF%EF%BC%89/image-20230929013337035.png" alt="image-20230929013337035" style="zoom: 25%;">
+
 </li>
 </ul>
 <h2 id="1-Vivado中的相关配置"><a href="#1-Vivado中的相关配置" class="headerlink" title="1.Vivado中的相关配置"></a>1.Vivado中的相关配置</h2><ul>
 <li><p>ZYNQ PS的配置：直接点击auto自动配置</p>
 </li>
 <li><p>AXI BRAM controller的配置：</p>
-<p><img src="/2023/09/29/ZYNQ%E5%B5%8C%E5%85%A5%E5%BC%8F%E4%B9%8BBRAM%EF%BC%88%E5%9F%BA%E4%BA%8EPYNQ-Z2%E5%BC%80%E5%8F%91%E6%9D%BF%EF%BC%89/image-20231001222224779.png" alt="image-20231001222224779" style="zoom: 50%;"></p>
+<img src="/2023/09/29/ZYNQ%E5%B5%8C%E5%85%A5%E5%BC%8F%E4%B9%8BBRAM%EF%BC%88%E5%9F%BA%E4%BA%8EPYNQ-Z2%E5%BC%80%E5%8F%91%E6%9D%BF%EF%BC%89/image-20231001222224779.png" alt="image-20231001222224779" style="zoom: 50%;">
 </li>
 <li><p>产生一个Block RAM的IP核：</p>
-<p><img src="/2023/09/29/ZYNQ%E5%B5%8C%E5%85%A5%E5%BC%8F%E4%B9%8BBRAM%EF%BC%88%E5%9F%BA%E4%BA%8EPYNQ-Z2%E5%BC%80%E5%8F%91%E6%9D%BF%EF%BC%89/image-20231001222648098.png" alt="image-20231001222648098" style="zoom: 67%;"></p>
-<p><img src="/2023/09/29/ZYNQ%E5%B5%8C%E5%85%A5%E5%BC%8F%E4%B9%8BBRAM%EF%BC%88%E5%9F%BA%E4%BA%8EPYNQ-Z2%E5%BC%80%E5%8F%91%E6%9D%BF%EF%BC%89/image-20231001222753654.png" alt="image-20231001222753654" style="zoom:50%;"></p>
+<img src="/2023/09/29/ZYNQ%E5%B5%8C%E5%85%A5%E5%BC%8F%E4%B9%8BBRAM%EF%BC%88%E5%9F%BA%E4%BA%8EPYNQ-Z2%E5%BC%80%E5%8F%91%E6%9D%BF%EF%BC%89/image-20231001222648098.png" alt="image-20231001222648098" style="zoom: 67%;">
+
+<img src="/2023/09/29/ZYNQ%E5%B5%8C%E5%85%A5%E5%BC%8F%E4%B9%8BBRAM%EF%BC%88%E5%9F%BA%E4%BA%8EPYNQ-Z2%E5%BC%80%E5%8F%91%E6%9D%BF%EF%BC%89/image-20231001222753654.png" alt="image-20231001222753654" style="zoom:50%;">
 </li>
 <li><p>自动连线：</p>
-<p><img src="/2023/09/29/ZYNQ%E5%B5%8C%E5%85%A5%E5%BC%8F%E4%B9%8BBRAM%EF%BC%88%E5%9F%BA%E4%BA%8EPYNQ-Z2%E5%BC%80%E5%8F%91%E6%9D%BF%EF%BC%89/image-20231001223031999.png" alt="image-20231001223031999" style="zoom:50%;"></p>
+<img src="/2023/09/29/ZYNQ%E5%B5%8C%E5%85%A5%E5%BC%8F%E4%B9%8BBRAM%EF%BC%88%E5%9F%BA%E4%BA%8EPYNQ-Z2%E5%BC%80%E5%8F%91%E6%9D%BF%EF%BC%89/image-20231001223031999.png" alt="image-20231001223031999" style="zoom:50%;">
+
 </li>
 </ul>
 <h2 id="2-自定义pl-bram-rd的ip核添加"><a href="#2-自定义pl-bram-rd的ip核添加" class="headerlink" title="2.自定义pl_bram_rd的ip核添加"></a>2.自定义pl_bram_rd的ip核添加</h2><ul>
 <li><p>参考这篇文章的配置<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/09/21/ZYNQ嵌入式之IP核（基于PYNQ-Z2开发板）/">ZYNQ嵌入式之IP核（基于PYNQ-Z2开发板）</a>以及正点原子编写的源代码程序</p>
 </li>
 <li><p>注意：在添加bram_rd源代码时，不能只将其复制到对应ip核的hdl文件夹下，还需要点击添加源文件将文件添加进入工程</p>
-<p><img src="/2023/09/29/ZYNQ%E5%B5%8C%E5%85%A5%E5%BC%8F%E4%B9%8BBRAM%EF%BC%88%E5%9F%BA%E4%BA%8EPYNQ-Z2%E5%BC%80%E5%8F%91%E6%9D%BF%EF%BC%89/image-20231001230715617.png" alt="image-20231001230715617" style="zoom:50%;"></p>
+<img src="/2023/09/29/ZYNQ%E5%B5%8C%E5%85%A5%E5%BC%8F%E4%B9%8BBRAM%EF%BC%88%E5%9F%BA%E4%BA%8EPYNQ-Z2%E5%BC%80%E5%8F%91%E6%9D%BF%EF%BC%89/image-20231001230715617.png" alt="image-20231001230715617" style="zoom:50%;">
 </li>
-<li><p>同时还会遇到端口中没有更新的情况，解决方法参考正点原子视频的<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Hq4y1u7qH?p=61&amp;vd_source=221b76534ba13cfad544149d75ce9b6c">第15.2讲 基于BRAM的PS和PL数据交互（第二讲）</a>15:23处，其实就是将pl_bram_rd_v1_0.v文件打几个空格再保存后，端口就会更新了</p>
+<li><p>同时还会遇到端口中没有更新的情况，解决方法参考正点原子视频的<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Hq4y1u7qH?p=61&vd_source=221b76534ba13cfad544149d75ce9b6c">第15.2讲 基于BRAM的PS和PL数据交互（第二讲）</a>15:23处，其实就是将pl_bram_rd_v1_0.v文件打几个空格再保存后，端口就会更新了</p>
 </li>
-<li><p>根据正点原子视频的<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Hq4y1u7qH?p=61&amp;vd_source=221b76534ba13cfad544149d75ce9b6c">第15.2讲 基于BRAM的PS和PL数据交互（第二讲）</a>16:00处开始封装一个ram接口</p>
+<li><p>根据正点原子视频的<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Hq4y1u7qH?p=61&vd_source=221b76534ba13cfad544149d75ce9b6c">第15.2讲 基于BRAM的PS和PL数据交互（第二讲）</a>16:00处开始封装一个ram接口</p>
 </li>
 <li><p>设置BRAM的存储深度：</p>
 <p><img src="/2023/09/29/ZYNQ%E5%B5%8C%E5%85%A5%E5%BC%8F%E4%B9%8BBRAM%EF%BC%88%E5%9F%BA%E4%BA%8EPYNQ-Z2%E5%BC%80%E5%8F%91%E6%9D%BF%EF%BC%89/image-20231001233913958.png" alt="image-20231001233913958"></p>
@@ -328,9 +332,10 @@
 </li>
 </ul>
 <h2 id="4-Vitis中的代码编写"><a href="#4-Vitis中的代码编写" class="headerlink" title="4.Vitis中的代码编写"></a>4.Vitis中的代码编写</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;xbram_hw.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;pl_bram_rd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PL_BRAM_START			PL_BRAM_RD_S00_AXI_SLV_REG0_OFFSET	<span class="comment">//RAM读开始寄存器地址</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PL_BRAM_START_ADDR		PL_BRAM_RD_S00_AXI_SLV_REG1_OFFSET	<span class="comment">//RAM起始寄存器地址</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PL_BRAM_LEN				PL_BRAM_RD_S00_AXI_SLV_REG2_OFFSET	<span class="comment">//PL读 RAM的深度</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span>	PL_BRAM_BASE			XPAR_PL_BRAM_RD_0_S00_AXI_BASEADDR	<span class="comment">//PL_RAM_RD基地址</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> START_ADDR			0	<span class="comment">//RAM起始地址范围:0~1023</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> BRAM_DATA_BYTE		4	<span class="comment">//BRAM数据字节个数</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">char</span> ch_data[<span class="number">1024</span>];		<span class="comment">//写入BRAM的字符数组</span></span><br><span class="line"><span class="type">int</span>  ch_data_len;		<span class="comment">//写入BRAM的字符个数</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="type">int</span> i = <span class="number">0</span>;</span><br><span class="line">		<span class="type">int</span> wr_cnt = <span class="number">0</span>;</span><br><span class="line">		<span class="type">int</span> read_data = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;Please input data to read and write Bram !\n&quot;</span>);</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">&quot;%s&quot;</span>,ch_data);			<span class="comment">//用户输入字符串</span></span><br><span class="line">		ch_data_len = <span class="built_in">strlen</span>(ch_data);	<span class="comment">//计算字符串的长度</span></span><br><span class="line"></span><br><span class="line">		<span class="comment">//将字符串写入BRAM，每次循环向 BRAM中写入 1 个字符</span></span><br><span class="line">		<span class="keyword">for</span>(i = START_ADDR*BRAM_DATA_BYTE; i&lt;(START_ADDR + ch_data_len)*BRAM_DATA_BYTE; i+=BRAM_DATA_BYTE)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="built_in">XBram_WriteReg</span>(XPAR_BRAM_0_BASEADDR,i,ch_data[wr_cnt]);</span><br><span class="line">			wr_cnt++;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">//配置PL_BRAM_RD起始地址</span></span><br><span class="line">		<span class="built_in">PL_BRAM_RD_mWriteReg</span>(PL_BRAM_BASE,PL_BRAM_START_ADDR,START_ADDR*BRAM_DATA_BYTE);</span><br><span class="line">		<span class="comment">//配置PL_BRAM_RD长度</span></span><br><span class="line">		<span class="built_in">PL_BRAM_RD_mWriteReg</span>(PL_BRAM_BASE,PL_BRAM_LEN,ch_data_len*BRAM_DATA_BYTE);</span><br><span class="line">		<span class="comment">//配置PL_BRAM_RD开始读信号,产生一个上升沿</span></span><br><span class="line">		<span class="built_in">PL_BRAM_RD_mWriteReg</span>(PL_BRAM_BASE,PL_BRAM_START,<span class="number">1</span>);</span><br><span class="line">		<span class="built_in">PL_BRAM_RD_mWriteReg</span>(PL_BRAM_BASE,PL_BRAM_START,<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">		<span class="comment">//从 BRAM 中读出数据，循环从 BRAM 中读出数据</span></span><br><span class="line">		<span class="keyword">for</span>(i = START_ADDR*BRAM_DATA_BYTE; i&lt;(START_ADDR + ch_data_len)*BRAM_DATA_BYTE; i+=BRAM_DATA_BYTE)</span><br><span class="line">		&#123;</span><br><span class="line">			read_data = <span class="built_in">XBram_ReadReg</span>(XPAR_BRAM_0_BASEADDR,i);</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;BRAM address is %d\t,Read data is %c\n&quot;</span>,i/BRAM_DATA_BYTE,read_data);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h2 id="5-实验结果"><a href="#5-实验结果" class="headerlink" title="5.实验结果"></a>5.实验结果</h2><ul>
 <li><p>串口打印：</p>
-<p><img src="/2023/09/29/ZYNQ%E5%B5%8C%E5%85%A5%E5%BC%8F%E4%B9%8BBRAM%EF%BC%88%E5%9F%BA%E4%BA%8EPYNQ-Z2%E5%BC%80%E5%8F%91%E6%9D%BF%EF%BC%89/image-20231002010115177.png" alt="image-20231002010115177" style="zoom: 67%;"></p>
+<img src="/2023/09/29/ZYNQ%E5%B5%8C%E5%85%A5%E5%BC%8F%E4%B9%8BBRAM%EF%BC%88%E5%9F%BA%E4%BA%8EPYNQ-Z2%E5%BC%80%E5%8F%91%E6%9D%BF%EF%BC%89/image-20231002010115177.png" alt="image-20231002010115177" style="zoom: 67%;">
 </li>
 <li><p>ILA：</p>
 <p><img src="/2023/09/29/ZYNQ%E5%B5%8C%E5%85%A5%E5%BC%8F%E4%B9%8BBRAM%EF%BC%88%E5%9F%BA%E4%BA%8EPYNQ-Z2%E5%BC%80%E5%8F%91%E6%9D%BF%EF%BC%89/image-20231002010038782.png" alt="image-20231002010038782"></p>
@@ -467,7 +472,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-count">149</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

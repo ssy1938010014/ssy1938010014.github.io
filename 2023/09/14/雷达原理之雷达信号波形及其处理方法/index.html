@@ -277,6 +277,7 @@
       
         <p>本节主要介绍了雷达信号的数学表示、模糊函数与雷达分辨率的关系、线性调频脉冲信号及其压缩处理、多脉冲积累的处理方法</p>
 <span id="more"></span>
+
 <h1 id="雷达信号的数学表示"><a href="#雷达信号的数学表示" class="headerlink" title="雷达信号的数学表示"></a>雷达信号的数学表示</h1><ul>
 <li><p>雷达的发射信号一般是除初相外其余参量均已知的确知信号</p>
 </li>
@@ -284,79 +285,60 @@
 </li>
 <li><p>信号可以用时间的实函数$s(t)$表示，称为实信号，其特点具有有限的能量或有限的功率</p>
 </li>
-<li><p><strong>能量有限的信号称为能量信号</strong>，描述能量信号的频谱特性通常采用<strong>能量谱密度（ESD）函数</strong></p>
-<script type="math/tex; mode=display">
-|S(w)|^2 = |\int_{-\infty}^{\infty}s(t)e^{-jwt}dt|^2</script><ul>
+<li><p><strong>能量有限的信号称为能量信号</strong>，描述能量信号的频谱特性通常采用<strong>能量谱密度（ESD）函数</strong><br>$$<br>|S(w)|^2 = |\int_{-\infty}^{\infty}s(t)e^{-jwt}dt|^2<br>$$</p>
+<ul>
 <li>其中$s(t)$代表信号</li>
 </ul>
 </li>
-<li><p><strong>能量无限但功率有限的信号，称为功率信号</strong>，对于功率信号，<strong>功率谱密度（PSD）函数</strong>定义为：</p>
-<script type="math/tex; mode=display">
-R_s(w) = \int_{-\infty}^{\infty}r_s(t)e^{-jwt}dt</script><ul>
+<li><p><strong>能量无限但功率有限的信号，称为功率信号</strong>，对于功率信号，<strong>功率谱密度（PSD）函数</strong>定义为：<br>$$<br>R_s(w) = \int_{-\infty}^{\infty}r_s(t)e^{-jwt}dt<br>$$</p>
+<ul>
 <li>其中$r_s(t) = \int_{-\infty}^{\infty}s^*(\tau)s(t+\tau)d\tau$为信号$s(t)$的自相关函数</li>
 </ul>
 </li>
 <li><p>按照信号的频率组成，可将信号划分为低通信号（Low Pass）信号和带通（Band Pass）信号。<strong>通常所用的雷达信号，其带宽比载波小很多，称为窄带（通）信号</strong></p>
 <ul>
-<li><p>一个实带通信号可表示为：</p>
-<script type="math/tex; mode=display">
-x(t) =a(t)cos(2\pi f_0t +\phi_x(t))</script><ul>
+<li><p>一个实带通信号可表示为：<br>$$<br>x(t) =a(t)cos(2\pi f_0t +\phi_x(t))<br>$$</p>
+<ul>
 <li>其中：<strong>$a(t)$为信号的幅度调制或包络，$\phi_x(t)$为相位调制项，$f_0$为载频</strong></li>
 <li>对于低分辨雷达，在一个波位上发射的多个脉冲的目标回波的包络$a(t)$通常近似认为不变</li>
 </ul>
 </li>
 </ul>
 </li>
-<li><p><strong>信号$x(t)$的频率调制函数$f_m(t)$和瞬时频率$f_i(t)$分别为</strong>：</p>
-<script type="math/tex; mode=display">
-f_m(t) = \frac1{2\pi}\frac{d}{dt}\phi_x(t)</script><script type="math/tex; mode=display">
-f_i(t) = \frac1{2\pi}\frac d{dt}(2\pi f_0t + \phi_x(t)) = f_0 + f_m(t)</script></li>
+<li><p><strong>信号$x(t)$的频率调制函数$f_m(t)$和瞬时频率$f_i(t)$分别为</strong>：<br>$$<br>f_m(t) = \frac1{2\pi}\frac{d}{dt}\phi_x(t)<br>$$</p>
+<p>$$<br>f_i(t) = \frac1{2\pi}\frac d{dt}(2\pi f_0t + \phi_x(t)) = f_0 + f_m(t)<br>$$</p>
+</li>
 <li><p><strong>实信号具有对称的双边频谱</strong></p>
 </li>
-<li>对于窄带信号来说，由于其带宽远小于载频，两个边带频谱互不重叠，此时<strong>用一个边带频谱就能完全确定信号波形</strong>。为了简化信号和系统的而分析，<strong>通常采用具有单边频谱的复信号</strong></li>
-<li>常用的复信号白哦是，即实信号的复信号表示有两种：希尔伯特（Hilbert）变换法和指数表示法，对于窄带信号来说，这两种表示方法是近似相同的</li>
+<li><p>对于窄带信号来说，由于其带宽远小于载频，两个边带频谱互不重叠，此时<strong>用一个边带频谱就能完全确定信号波形</strong>。为了简化信号和系统的而分析，<strong>通常采用具有单边频谱的复信号</strong></p>
+</li>
+<li><p>常用的复信号白哦是，即实信号的复信号表示有两种：希尔伯特（Hilbert）变换法和指数表示法，对于窄带信号来说，这两种表示方法是近似相同的</p>
+</li>
 </ul>
 <h2 id="1-希尔伯特（Hilbert）变换表示法"><a href="#1-希尔伯特（Hilbert）变换表示法" class="headerlink" title="1. 希尔伯特（Hilbert）变换表示法"></a>1. 希尔伯特（Hilbert）变换表示法</h2><ul>
-<li><p>一般地，复信号可表示为：</p>
-<script type="math/tex; mode=display">
-s(t) = x(t)+ jy(t)</script><ul>
+<li><p>一般地，复信号可表示为：<br>$$<br>s(t) = x(t)+ jy(t)<br>$$</p>
+<ul>
 <li>如果要求复信号具有单边频谱，那么就要对虚部有所限制</li>
 </ul>
 </li>
-<li><p>如果实信号$x(t)\Leftrightarrow X(f)$（$X(f)$为信号$x(t)$的傅里叶变换），定义其复解析信号为：</p>
-<script type="math/tex; mode=display">
-s_a(t)\Leftrightarrow S_a(f) = 2X(f)\cdot U(f)=\begin{cases}
-2X(f),\quad f\ge 0\\
-0, \quad f<0\\
-\end{cases}</script><ul>
-<li><p>其中$U(f)$为频域的阶跃函数，利用傅里叶变换的性质可得：</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-s_a(t) &= 2(\frac12\delta(t) - \frac1{j2\pi t})\bigotimes x(t)\\
-&=\int_{-\infty}^{\infty}x(\tau)\delta(t-\tau)d\tau-\frac1{j\pi}\int_{-\infty}^{\infty}\frac{x(\tau)}{t-\tau}d\tau\\
-&=x(t)+j\hat x(t)
-\end{aligned}</script><ul>
+<li><p>如果实信号$x(t)\Leftrightarrow X(f)$（$X(f)$为信号$x(t)$的傅里叶变换），定义其复解析信号为：<br>$$<br>s_a(t)\Leftrightarrow S_a(f) = 2X(f)\cdot U(f)=\begin{cases}<br>2X(f),\quad f\ge 0\<br>0, \quad f&lt;0\<br>\end{cases}<br>$$</p>
+<ul>
+<li><p>其中$U(f)$为频域的阶跃函数，利用傅里叶变换的性质可得：<br>$$<br>\begin{aligned}<br>s_a(t) &amp;= 2(\frac12\delta(t) - \frac1{j2\pi t})\bigotimes x(t)\<br>&amp;=\int_{-\infty}^{\infty}x(\tau)\delta(t-\tau)d\tau-\frac1{j\pi}\int_{-\infty}^{\infty}\frac{x(\tau)}{t-\tau}d\tau\<br>&amp;=x(t)+j\hat x(t)<br>\end{aligned}<br>$$</p>
+<ul>
 <li><strong>其中，$\hat x(t) = \frac 1\pi \int_{-\infty}^{\infty}\frac{x(\tau)}{t-\tau}d\tau$为$x(t)$的Hilbert变换式</strong></li>
 <li>这样，复信号的频谱就可以满足使得原始实信号的负频分量相抵消，而正频分量加倍</li>
 </ul>
 </li>
 </ul>
 </li>
-<li><p>实信号$x(t)$的能量和<strong>复解析信号</strong>$s_a(t)$的能量分别为：</p>
-<script type="math/tex; mode=display">
-E = \int_{-\infty}^{\infty}x^2(t)dt = \int_{-\infty}^{\infty}|X(f)|^2df\\
-E_a = \int_{-\infty}^{\infty}|s_a(t)|^2dt = 2\int_{-\infty}^{\infty}x^2(t)dt = 2E</script></li>
+<li><p>实信号$x(t)$的能量和<strong>复解析信号</strong>$s_a(t)$的能量分别为：<br>$$<br>E = \int_{-\infty}^{\infty}x^2(t)dt = \int_{-\infty}^{\infty}|X(f)|^2df\<br>E_a = \int_{-\infty}^{\infty}|s_a(t)|^2dt = 2\int_{-\infty}^{\infty}x^2(t)dt = 2E<br>$$</p>
+</li>
 </ul>
 <h2 id="2-指数表示法"><a href="#2-指数表示法" class="headerlink" title="2. 指数表示法"></a>2. 指数表示法</h2><ul>
 <li><p>复解析信号在推导信号的一般特性时是有效的表示方式，但在分析具体信号时又极不方便，故常采用指数形式的复信号来代替复解析信号</p>
 </li>
-<li><p><strong>实信号用指数形式的复信号实部表示为</strong>：</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-x(t) &= a(t)cos(2\pi f_0 t+\phi_x(t))\\
-&= Re[s_e(t)]\\
-&= \frac12[s_e(t)+s_e^*(t)]
-\end{aligned}</script><ul>
+<li><p><strong>实信号用指数形式的复信号实部表示为</strong>：<br>$$<br>\begin{aligned}<br>x(t) &amp;= a(t)cos(2\pi f_0 t+\phi_x(t))\<br>&amp;= Re[s_e(t)]\<br>&amp;= \frac12[s_e(t)+s_e^*(t)]<br>\end{aligned}<br>$$</p>
+<ul>
 <li>其中，<strong>$s_e(t) = a(t)e^{j[2\pi f_0 t+\phi_xt]} = u(t)e^{j2\pi f_0 t}$为实信号的复指数形式，而$u(t) = a(t)e^{j\phi_x(t)}$为复信号的复包络</strong></li>
 </ul>
 </li>
@@ -370,22 +352,19 @@ x(t) &= a(t)cos(2\pi f_0 t+\phi_x(t))\\
 <li><p>模糊函数最初是为了<strong>研究雷达分辨率</strong>而提出的，两个目标距离和速度上的差异是刚好可以用来相关函数模拟的，越相似相关函数越大，说明两个目标越难以区分</p>
 </li>
 <li><p>利用一对二维变量$(\tau, f_d)$来描述模糊函数，假设目标1和目标2的时延分别为$d$和$d+\tau$，多普勒频移分别为$f$和$f+f_d$，且功率相同</p>
-<p><img src="/2023/09/14/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BF%A1%E5%8F%B7%E6%B3%A2%E5%BD%A2%E5%8F%8A%E5%85%B6%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95/image-20230916235359143.png" alt="image-20230916235359143" style="zoom: 80%;"></p>
+<img src="/2023/09/14/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BF%A1%E5%8F%B7%E6%B3%A2%E5%BD%A2%E5%8F%8A%E5%85%B6%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95/image-20230916235359143.png" alt="image-20230916235359143" style="zoom: 80%;">
+
 <ul>
-<li><p>雷达的<strong>发射信号</strong>通常为窄带信号，用复信号可表示为：</p>
-<script type="math/tex; mode=display">
-s_t(t) = u(t)e^{j2\pi f_0 t}</script></li>
-<li><p><strong>目标1的回波信号可</strong>表示为：</p>
-<script type="math/tex; mode=display">
-s_{r1}(t) = u(t-d)e^{j2\pi (f_0+f) (t-d)}</script></li>
-<li><p><strong>则目标2的回波信号</strong>可表示为：</p>
-<script type="math/tex; mode=display">
-s_{r2}(t) = s_{r1}(t-(d+\tau)) = u(t-(d+\tau))e^{j2\pi(f_0+(f+f_d))(t-(d+\tau))}</script></li>
+<li><p>雷达的<strong>发射信号</strong>通常为窄带信号，用复信号可表示为：<br>$$<br>s_t(t) = u(t)e^{j2\pi f_0 t}<br>$$</p>
+</li>
+<li><p><strong>目标1的回波信号可</strong>表示为：<br>$$<br>s_{r1}(t) = u(t-d)e^{j2\pi (f_0+f) (t-d)}<br>$$</p>
+</li>
+<li><p><strong>则目标2的回波信号</strong>可表示为：<br>$$<br>s_{r2}(t) = s_{r1}(t-(d+\tau)) = u(t-(d+\tau))e^{j2\pi(f_0+(f+f_d))(t-(d+\tau))}<br>$$</p>
+</li>
 </ul>
 </li>
-<li><p>在分析分辨力时，通常利用积分方差来描述，具体来说就是当<strong>积分方差越大时，两个目标就越好区分</strong></p>
-<script type="math/tex; mode=display">
-\varepsilon^2 = \int_{-\infty}^{\infty}|s_{r1}(t) -s_{r2}(t) |^2dt</script><ul>
+<li><p>在分析分辨力时，通常利用积分方差来描述，具体来说就是当<strong>积分方差越大时，两个目标就越好区分</strong><br>$$<br>\varepsilon^2 = \int_{-\infty}^{\infty}|s_{r1}(t) -s_{r2}(t) |^2dt<br>$$</p>
+<ul>
 <li>设$y_1 = X_R + jX_I, y_2 = X_R’+jX_I’$</li>
 <li>$|y_1-y_2|^2 = X_R^2+X_R’^2-2X_RX_R’+X_I^2+X_I’^2-2X_IX_I’^2$<ul>
 <li>其中：$X_R^2+X_I^2 = |y_1|^2, X_R’^2+X_I’^2=|y_2|^2$</li>
@@ -395,77 +374,63 @@ s_{r2}(t) = s_{r1}(t-(d+\tau)) = u(t-(d+\tau))e^{j2\pi(f_0+(f+f_d))(t-(d+\tau))}
 <li>故：$|y_1-y_2|^2 = |y_1|^2+|y_2|^2-2Re|y_1y_2^*|$</li>
 </ul>
 </li>
-<li><p>故<strong>积分方差</strong>为：</p>
-<script type="math/tex; mode=display">
-\varepsilon^2 = 2\{2E-2Re[e^{-j2\pi(f_0+f)\tau}\int_{-\infty}^{\infty}u(t)u^*(t+\tau)e^{j2\pi f_d t}dt]\}</script></li>
-<li><p>定义$\chi(\tau,f_d)$为：</p>
-<script type="math/tex; mode=display">
-\chi(\tau,f_d)= \int_{-\infty}^{\infty}u(t)u^*(t+\tau)e^{j2\pi f_d t}dt</script></li>
-<li><p>则<strong>模糊函数</strong>为：</p>
-<script type="math/tex; mode=display">
-|\chi(\tau,f_d)|=|\int_{-\infty}^{\infty}u(t)u^*(t+\tau)e^{j2\pi f_d t}dt|</script><ul>
+<li><p>故<strong>积分方差</strong>为：<br>$$<br>\varepsilon^2 = 2\{2E-2Re[e^{-j2\pi(f_0+f)\tau}\int_{-\infty}^{\infty}u(t)u^*(t+\tau)e^{j2\pi f_d t}dt]\}<br>$$</p>
+</li>
+<li><p>定义$\chi(\tau,f_d)$为：<br>$$<br>\chi(\tau,f_d)= \int_{-\infty}^{\infty}u(t)u^*(t+\tau)e^{j2\pi f_d t}dt<br>$$</p>
+</li>
+<li><p>则<strong>模糊函数</strong>为：<br>$$<br>|\chi(\tau,f_d)|=|\int_{-\infty}^{\infty}u(t)u^*(t+\tau)e^{j2\pi f_d t}dt|<br>$$</p>
+<ul>
 <li><strong>$|\chi(\tau,f_d)|$式决定相邻目标距离-速度联合分辨率的唯一因素</strong></li>
 <li>有的文献也把$|\chi(\tau,f_d)|^2$当作模糊函数</li>
 </ul>
 </li>
-<li><p>由上述分析可得：</p>
-<script type="math/tex; mode=display">
-\varepsilon^2 = 2\{2E-2Re[e^{j2\pi(f_0+f)\tau}\int_{-\infty}^{\infty}u(t)u^*(t+\tau)e^{j2\pi f_d t}dt]\}\ge2[2E-|\chi(\tau,f_d)|]\ge 0</script><ul>
+<li><p>由上述分析可得：<br>$$<br>\varepsilon^2 = 2\{2E-2Re[e^{j2\pi(f_0+f)\tau}\int_{-\infty}^{\infty}u(t)u^*(t+\tau)e^{j2\pi f_d t}dt]\}\ge2[2E-|\chi(\tau,f_d)|]\ge 0<br>$$</p>
+<ul>
 <li><p><strong>故$|\chi(\tau, f_d)|$的最大值为$2E$，此时两个目标重叠在一起，距离和速度一样</strong></p>
 </li>
-<li><p>那么就意味着$\tau = 0，f_d =0$，即：</p>
-<script type="math/tex; mode=display">
-|\chi(\tau, f_d)|\le|\chi(0,0)| = 2E</script></li>
+<li><p>那么就意味着$\tau = 0，f_d =0$，即：<br>$$<br>|\chi(\tau, f_d)|\le|\chi(0,0)| = 2E<br>$$</p>
+</li>
 <li><p><strong>能够引起$\varepsilon^2 $被滤波器检出，那么这两个目标也就可以分开了。如果保持不$f_d$变，最小的$\tau$值引起的$\varepsilon^2 $能被滤波器检出，此时$\tau$对应的就是距离分辨率。同理多普勒分辨率</strong></p>
 </li>
 </ul>
 </li>
 </ul>
 <h2 id="2-分辨率"><a href="#2-分辨率" class="headerlink" title="2. 分辨率"></a>2. 分辨率</h2><h3 id="2-1-距离分辨率"><a href="#2-1-距离分辨率" class="headerlink" title="2.1 距离分辨率"></a>2.1 距离分辨率</h3><ul>
-<li><p>假设两个目标在同一角度但处在不同距离上，在不考虑相邻目标的多普勒频移（$f_d = 0$）时，有：</p>
-<script type="math/tex; mode=display">
-\varepsilon^2\ge 2(2E-|\chi(\tau, 0)|)</script></li>
-<li><p>此时，信号的<strong>距离模糊函数</strong>为：</p>
-<script type="math/tex; mode=display">
-|\chi(\tau,0)|=|\int_{-\infty}^{\infty}u(t)u^*(t+\tau)dt|</script></li>
+<li><p>假设两个目标在同一角度但处在不同距离上，在不考虑相邻目标的多普勒频移（$f_d = 0$）时，有：<br>$$<br>\varepsilon^2\ge 2(2E-|\chi(\tau, 0)|)<br>$$</p>
+</li>
+<li><p>此时，信号的<strong>距离模糊函数</strong>为：<br>$$<br>|\chi(\tau,0)|=|\int_{-\infty}^{\infty}u(t)u^*(t+\tau)dt|<br>$$</p>
+</li>
 <li><p>当$\tau = 0$时，$|\chi(\tau,0)|$有最大值，距离分辨率由$|\chi(\tau,0)|^2$的大小来衡量</p>
 </li>
 <li><p><strong>当$\tau\neq 0$时，$|\chi(\tau,0)|$随$\tau$增大而下降的越快，距离分辨性能越好</strong></p>
 </li>
-<li><p><strong>时延分辨率为</strong>：</p>
-<script type="math/tex; mode=display">
-\Delta\tau = \frac{\int_{-\infty}^{\infty}|\chi(\tau,0)|^2d\tau}{|\chi(0,0)|^2}</script><ul>
-<li><p>根据Parseval定理，上式可重写为：</p>
-<script type="math/tex; mode=display">
-\Delta\tau = 2\pi\frac{\int_{-\infty}^{\infty}|U(w)|^4dw}{[\int_{-\infty}^{\infty}|U(w)|^2dw]^2}=\frac1B</script></li>
+<li><p><strong>时延分辨率为</strong>：<br>$$<br>\Delta\tau = \frac{\int_{-\infty}^{\infty}|\chi(\tau,0)|^2d\tau}{|\chi(0,0)|^2}<br>$$</p>
+<ul>
+<li><p>根据Parseval定理，上式可重写为：<br>$$<br>\Delta\tau = 2\pi\frac{\int_{-\infty}^{\infty}|U(w)|^4dw}{[\int_{-\infty}^{\infty}|U(w)|^2dw]^2}=\frac1B<br>$$</p>
+</li>
 <li><p>$B$为信号的有效带宽</p>
 </li>
 </ul>
 </li>
-<li><p>因此，时延分辨率对应的<strong>距离分辨率</strong>为：</p>
-<script type="math/tex; mode=display">
-\Delta R = \frac{c\Delta\tau}{2}=\frac{c}{2B}</script></li>
+<li><p>因此，时延分辨率对应的<strong>距离分辨率</strong>为：<br>$$<br>\Delta R = \frac{c\Delta\tau}{2}=\frac{c}{2B}<br>$$</p>
+</li>
 <li><p>只要信号具有大的持续带宽就能获得高的距离分辨率，而不必具有很窄的脉冲宽度</p>
 </li>
 </ul>
 <h3 id="2-2-速度分辨率"><a href="#2-2-速度分辨率" class="headerlink" title="2.2 速度分辨率"></a>2.2 速度分辨率</h3><ul>
-<li><p>与距离分辨率类似，信号的速度分辨率取决于<strong>速度模糊函数</strong>：</p>
-<script type="math/tex; mode=display">
-|\chi(0,f_d)|=\int_{-\infty}^{\infty}|u(t)|^2e^{j2\pi f_d t}dt</script></li>
-<li><p>则<strong>多普勒分辨率</strong>$\Delta f_d$为：</p>
-<script type="math/tex; mode=display">
-\Delta f_d = \frac{\int_{-\infty}^{\infty}|\chi(0,f_d)|^2d\tau}{|\chi(0,0)|^2}=\frac{\int_{-\infty}^{\infty}|u(t)|^4dt}{[\int_{-\infty}^{\infty}|u(t)|^2dt]^2}=\frac1{\tau'}</script><ul>
+<li><p>与距离分辨率类似，信号的速度分辨率取决于<strong>速度模糊函数</strong>：<br>$$<br>|\chi(0,f_d)|=\int_{-\infty}^{\infty}|u(t)|^2e^{j2\pi f_d t}dt<br>$$</p>
+</li>
+<li><p>则<strong>多普勒分辨率</strong>$\Delta f_d$为：<br>$$<br>\Delta f_d = \frac{\int_{-\infty}^{\infty}|\chi(0,f_d)|^2d\tau}{|\chi(0,0)|^2}=\frac{\int_{-\infty}^{\infty}|u(t)|^4dt}{[\int_{-\infty}^{\infty}|u(t)|^2dt]^2}=\frac1{\tau’}<br>$$</p>
+<ul>
 <li>式中：$\tau’$是脉冲宽度</li>
 </ul>
 </li>
-<li><p>则相应的速度分辨率$\Delta v$为：</p>
-<script type="math/tex; mode=display">
-\Delta v = \frac{c\Delta f_d}{2f_0} = \frac{c}{2f_0\tau'}=\frac{\lambda}{2\tau'}</script></li>
+<li><p>则相应的速度分辨率$\Delta v$为：<br>$$<br>\Delta v = \frac{c\Delta f_d}{2f_0} = \frac{c}{2f_0\tau’}=\frac{\lambda}{2\tau’}<br>$$</p>
+</li>
 </ul>
 <h3 id="2-3-距离-速度联合分辨率"><a href="#2-3-距离-速度联合分辨率" class="headerlink" title="2.3 距离-速度联合分辨率"></a>2.3 距离-速度联合分辨率</h3><ul>
-<li><p>定义<strong>模糊面积</strong>$AA$作为距离-速度联合分辨常数：</p>
-<script type="math/tex; mode=display">
-AA=\frac{\int_{-\infty}^{\infty}\int_{-\infty}^{\infty}|\chi(\tau,f_d)|^2d\tau df_d}{|\chi(0,0)|^2}</script><ul>
+<li><p>定义<strong>模糊面积</strong>$AA$作为距离-速度联合分辨常数：<br>$$<br>AA=\frac{\int_{-\infty}^{\infty}\int_{-\infty}^{\infty}|\chi(\tau,f_d)|^2d\tau df_d}{|\chi(0,0)|^2}<br>$$</p>
+<ul>
 <li><strong>只要信号能量一定，模糊面积即为定值1</strong></li>
 <li>这就说明了时延和多普勒联合分辨率的限制，无论怎么使时延$\tau$或多普勒$f_d$分辨率的某一方减小，其结果都将带来另一方的增大，这就是<strong>雷达模糊原理</strong></li>
 <li>设计雷达信号时，只能在模糊原理的约束下通过改变模糊曲面的形状，使之与特定的目标环境相匹配</li>
@@ -474,62 +439,54 @@ AA=\frac{\int_{-\infty}^{\infty}\int_{-\infty}^{\infty}|\chi(\tau,f_d)|^2d\tau d
 </ul>
 <hr>
 <h1 id="线性调频（LFM-or-Chirp）脉冲信号"><a href="#线性调频（LFM-or-Chirp）脉冲信号" class="headerlink" title="线性调频（LFM or Chirp）脉冲信号"></a>线性调频（LFM or Chirp）脉冲信号</h1><ul>
-<li>线性调频信号是一种脉冲压缩信号，它是在匹配滤波理论的基础上提出的</li>
+<li><p>线性调频信号是一种脉冲压缩信号，它是在匹配滤波理论的基础上提出的</p>
+</li>
 <li><p>这种信号的突出<strong>优点</strong>是匹配滤波器对回波信号的多普勒频率不敏感，<strong>即使回波信号有较大的多普勒频移，匹配滤波器仍能起到脉冲压缩的作用</strong></p>
 </li>
-<li><p><strong>线性调频矩形脉冲信号的表达式</strong>写为：</p>
-<script type="math/tex; mode=display">
-s(t) = u(t)e^{j2\pi f_0 t} = \frac1{\sqrt{T}}rect(\frac t{\sqrt{T}}) e^{j(2\pi f_0 t+\pi \mu t^2)}</script><ul>
-<li><p>其中，信号的复包络为：</p>
-<script type="math/tex; mode=display">
-u(t) =\frac1{\sqrt{T}}rect(\frac t{\sqrt{T}})e^{j\pi \mu t^2}</script><script type="math/tex; mode=display">
-rect(\frac t{\sqrt{T}}) = \begin{cases}
-1,\quad |t|\le \frac T2\\
-0,\quad |t|> \frac T2\\
-\end{cases}\\</script><ul>
+<li><p><strong>线性调频矩形脉冲信号的表达式</strong>写为：<br>$$<br>s(t) = u(t)e^{j2\pi f_0 t} = \frac1{\sqrt{T}}rect(\frac t{\sqrt{T}}) e^{j(2\pi f_0 t+\pi \mu t^2)}<br>$$</p>
+<ul>
+<li><p>其中，信号的复包络为：<br>$$<br>u(t) =\frac1{\sqrt{T}}rect(\frac t{\sqrt{T}})e^{j\pi \mu t^2}<br>$$</p>
+<p>$$<br>rect(\frac t{\sqrt{T}}) = \begin{cases}<br>1,\quad |t|\le \frac T2\<br>0,\quad |t|&gt; \frac T2\<br>\end{cases}\<br>$$</p>
+<ul>
 <li>$T$为脉冲宽度，$\mu=\frac BT$为调频斜率，$B$为调频带宽，也称频偏</li>
 </ul>
 </li>
 </ul>
 </li>
-<li><p><strong>信号的瞬时频率</strong>为：</p>
-<script type="math/tex; mode=display">
-f_i(t)=\frac1{2\pi}\frac d{dt}[2\pi f_0 t+\pi \mu t^2]=f_0+\mu t</script><p><img src="/2023/09/14/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BF%A1%E5%8F%B7%E6%B3%A2%E5%BD%A2%E5%8F%8A%E5%85%B6%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95/image-20230917133322131.png" alt="image-20230917133322131" style="zoom:80%;"></p>
+<li><p><strong>信号的瞬时频率</strong>为：<br>$$<br>f_i(t)=\frac1{2\pi}\frac d{dt}[2\pi f_0 t+\pi \mu t^2]=f_0+\mu t<br>$$</p>
+<img src="/2023/09/14/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BF%A1%E5%8F%B7%E6%B3%A2%E5%BD%A2%E5%8F%8A%E5%85%B6%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95/image-20230917133322131.png" alt="image-20230917133322131" style="zoom:80%;">
 </li>
 <li><p>线性调频信号的频谱由信号的复包络完全决定</p>
 </li>
 <li><p><strong>当$BT\gg1$时，信号95%以上的能量集中在$-\frac B2\sim \frac B2$的范围，频谱接近于矩形</strong></p>
-<p><img src="/2023/09/14/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BF%A1%E5%8F%B7%E6%B3%A2%E5%BD%A2%E5%8F%8A%E5%85%B6%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95/image-20230917133954885.png" alt="image-20230917133954885" style="zoom: 80%;"></p>
+<img src="/2023/09/14/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E4%BF%A1%E5%8F%B7%E6%B3%A2%E5%BD%A2%E5%8F%8A%E5%85%B6%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95/image-20230917133954885.png" alt="image-20230917133954885" style="zoom: 80%;">
+
 </li>
 </ul>
 <hr>
 <h1 id="线性调频脉冲信号的压缩处理"><a href="#线性调频脉冲信号的压缩处理" class="headerlink" title="线性调频脉冲信号的压缩处理"></a>线性调频脉冲信号的压缩处理</h1><ul>
 <li><p>雷达系统为了满足提高探测距离和距离分辨率的双重要求，就要求采用<strong>大时宽 带宽 积 信号</strong>。脉冲压缩处理将<strong>发射的宽脉冲信号压缩成窄脉冲信号，它既可以发射宽脉冲以提高平均功率和雷达的检测能力，又能保持窄脉冲的距离分辨率</strong></p>
 </li>
-<li><p>假设雷达发射线性调频脉冲信号，可表示为：</p>
-<script type="math/tex; mode=display">
-s_1(t)= rect(\frac{t}{T_e})cos(2\pi f_0 t + \pi \mu t^2)</script><ul>
+<li><p>假设雷达发射线性调频脉冲信号，可表示为：<br>$$<br>s_1(t)= rect(\frac{t}{T_e})cos(2\pi f_0 t + \pi \mu t^2)<br>$$</p>
+<ul>
 <li><p>式中，$rect(\frac{t}{T_e})=1,|t|\le \frac12 T_e$，$T_e$为发射脉冲宽度，$f_0$为中心载频，$\mu = \frac B{T_e}$为调频斜率，$B$为调频带宽</p>
 </li>
-<li><p><strong>该信号的复包络及其离散信号（采样间隔为$T_s$)为：</strong></p>
-<script type="math/tex; mode=display">
-s(t)\approx rect(\frac{t}{T_e})e^{j\pi\mu t^2}</script><script type="math/tex; mode=display">
-s(n)\approx rect(\frac{nT_s}{T_e})e^{j\pi\mu(nT_s)^2}</script></li>
+<li><p><strong>该信号的复包络及其离散信号（采样间隔为$T_s$)为：</strong><br>$$<br>s(t)\approx rect(\frac{t}{T_e})e^{j\pi\mu t^2}<br>$$</p>
+<p>$$<br>s(n)\approx rect(\frac{nT_s}{T_e})e^{j\pi\mu(nT_s)^2}<br>$$</p>
+</li>
 </ul>
 </li>
-<li><p>假设目标初始距离$R_0$对应的时延为$t_0$，即$t_0 = \frac{2R_0}{c}$，目标的径向速度为$v$，若不考虑幅度的衰减，则接收信号及其相对于发射信号的时延分别为：</p>
-<script type="math/tex; mode=display">
-s_{r1}(t) = s_1(t-\Delta(t))</script><script type="math/tex; mode=display">
-\Delta(t) = t_0 = \frac{2v}{c}(t-t_0)</script><p>则有：</p>
-<script type="math/tex; mode=display">
-s_{r1}(t) = s_1(t-t_0+\frac{2v}c(t-t_0))=s_1(\gamma(t-t_0))</script><p>其中：</p>
-<script type="math/tex; mode=display">
-\gamma = 1+\frac{2v}c</script></li>
+<li><p>假设目标初始距离$R_0$对应的时延为$t_0$，即$t_0 = \frac{2R_0}{c}$，目标的径向速度为$v$，若不考虑幅度的衰减，则接收信号及其相对于发射信号的时延分别为：<br>$$<br>s_{r1}(t) = s_1(t-\Delta(t))<br>$$</p>
+<p>$$<br>\Delta(t) = t_0 = \frac{2v}{c}(t-t_0)<br>$$</p>
+<p>则有：<br>$$<br>s_{r1}(t) = s_1(t-t_0+\frac{2v}c(t-t_0))=s_1(\gamma(t-t_0))<br>$$<br>其中：<br>$$<br>\gamma = 1+\frac{2v}c<br>$$</p>
+</li>
 </ul>
 <p>这一部分暂时还没完全整明白，等整明白了再来记录</p>
 <ul>
-<li>匹配滤波器的压缩比？？</li>
-<li>为什么脉冲压缩对多普勒频率不敏感？</li>
+<li><p>匹配滤波器的压缩比？？</p>
+</li>
+<li><p>为什么脉冲压缩对多普勒频率不敏感？</p>
+</li>
 <li><p>在频域和时域上的匹配滤波到底有个啥区别？</p>
 </li>
 <li><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/kinologic/p/14105907.html">【雷达原理】脉冲压缩-匹配滤波的自己理解与参考资料 - KinoLogic - 博客园 (cnblogs.com)</a></p>
@@ -556,17 +513,15 @@ s_{r1}(t) = s_1(t-t_0+\frac{2v}c(t-t_0))=s_1(\gamma(t-t_0))</script><p>其中：
 </li>
 </ul>
 <h2 id="2-相干积累的处理方法"><a href="#2-相干积累的处理方法" class="headerlink" title="2.相干积累的处理方法"></a>2.相干积累的处理方法</h2><ul>
-<li><p>由于运动目标的回波包括多普勒频率$f_d$，当脉冲雷达的每个脉冲重复周期$T_r$相等，如果忽略目标回波的幅度起伏，则对目标所在距离单元的信号在每个$T_r$采样时，就可以看作是<strong>对频率为$f_d$的正弦波的采样</strong>，这时，第$i$个脉冲重复周期对目标的采样值可以表示为：</p>
-<script type="math/tex; mode=display">
-x(i) = a \cdot exp(j2\pi f_d i T_r),i=0,1,...,M-1</script><ul>
+<li><p>由于运动目标的回波包括多普勒频率$f_d$，当脉冲雷达的每个脉冲重复周期$T_r$相等，如果忽略目标回波的幅度起伏，则对目标所在距离单元的信号在每个$T_r$采样时，就可以看作是<strong>对频率为$f_d$的正弦波的采样</strong>，这时，第$i$个脉冲重复周期对目标的采样值可以表示为：<br>$$<br>x(i) = a \cdot exp(j2\pi f_d i T_r),i=0,1,…,M-1<br>$$</p>
+<ul>
 <li>式中$M$表示在一个波位（半功率波束宽度）内发射的脉冲数</li>
 <li><strong>若$M$不是2的幂，则通过补零到2的幂（即$N = 2^n \ge M$）</strong>，因为相干累加通常采用$FFT$的处理方法实现</li>
 <li><strong>上图中包括$L$个距离单元，则需要进行$L$次$2^n$点的$FFT$处理</strong></li>
 </ul>
 </li>
-<li><p>于是目标所在距离单元、所在多普勒通道的输出为：</p>
-<script type="math/tex; mode=display">
-x(k) = a\frac{sin[\pi(f_dT_rN-k)]}{sin[\frac{\pi}{N}(f_dT_rN-k)]}e^{j\frac{N-1}{2}\frac{2\pi}{N}(f_d T_rN-k)}</script><ul>
+<li><p>于是目标所在距离单元、所在多普勒通道的输出为：<br>$$<br>x(k) = a\frac{sin[\pi(f_dT_rN-k)]}{sin[\frac{\pi}{N}(f_dT_rN-k)]}e^{j\frac{N-1}{2}\frac{2\pi}{N}(f_d T_rN-k)}<br>$$</p>
+<ul>
 <li><strong>上式只有当$f_d=\frac{k}{T_rN}=\frac{k}{N}f_r$时才出现峰值</strong></li>
 </ul>
 </li>
@@ -709,7 +664,7 @@ x(k) = a\frac{sin[\pi(f_dT_rN-k)]}{sin[\frac{\pi}{N}(f_dT_rN-k)]}e^{j\frac{N-1}{
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-count">149</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
