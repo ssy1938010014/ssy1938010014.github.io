@@ -271,12 +271,11 @@
       
         <p>本节主要介绍了衰落信道的多径效应与多普勒效应，以及相干带宽与相干时间。</p>
 <span id="more"></span>
-
 <h1 id="无线信道的多径效应"><a href="#无线信道的多径效应" class="headerlink" title="无线信道的多径效应"></a>无线信道的多径效应</h1><h2 id="1-多径效应的基本概念与产生原因"><a href="#1-多径效应的基本概念与产生原因" class="headerlink" title="1.多径效应的基本概念与产生原因"></a>1.多径效应的基本概念与产生原因</h2><ul>
 <li><p><strong>信道的衰落</strong>：无线通信中信道特征的变化，引起接收机接收到的信号强度随时间而变化的现象</p>
 </li>
 <li><p><strong>多径衰落</strong>：无线通信接收机接收到的多个子径信号所合成的信号，在不同的时间、地点上会时大时小的现象</p>
-<img src="/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/image-20221201202614344.png" alt="image-20221201202614344" style="zoom:50%;">
+<p><img src="/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/image-20221201202614344.png" alt="image-20221201202614344" style="zoom:50%;"></p>
 </li>
 <li><p><strong>多径衰落的原因</strong>：</p>
 <ul>
@@ -292,23 +291,25 @@
 <h2 id="2-时延扩展"><a href="#2-时延扩展" class="headerlink" title="2.时延扩展"></a>2.时延扩展</h2><ul>
 <li><p><strong>时延扩展</strong>：时延扩展是对多径信道的统计描述</p>
 </li>
-<li><p><strong>平均附加时延</strong>：<br>$$<br>\bar{\tau}=\frac{\sum_k{P(\tau_k)}\cdot\tau_k}{\sum_{k}P(\tau_k)}<br>$$</p>
-<p>$$<br>其中:\tau_k是接收到的第k个时延信号的延迟时间;P(\tau_k)是接收到的第k个时延信号的功率<br>$$</p>
-<img src="/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/image-20221201204327892.png" alt="image-20221201204327892" style="zoom:50%;">
+<li><p><strong>平均附加时延</strong>：</p>
+<script type="math/tex; mode=display">
+\bar{\tau}=\frac{\sum_k{P(\tau_k)}\cdot\tau_k}{\sum_{k}P(\tau_k)}</script><script type="math/tex; mode=display">
+其中:\tau_k是接收到的第k个时延信号的延迟时间;P(\tau_k)是接收到的第k个时延信号的功率</script><p><img src="/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/image-20221201204327892.png" alt="image-20221201204327892" style="zoom:50%;"></p>
 </li>
-<li><p><strong>时延扩展的描述方法</strong>：平均附加时延扩展标准差<br>$$<br>\sigma_\tau=\tau_{RMS}=\sqrt{\bar{\tau^2}-(\bar{\tau})^2}<br>$$</p>
-</li>
+<li><p><strong>时延扩展的描述方法</strong>：平均附加时延扩展标准差</p>
+<script type="math/tex; mode=display">
+\sigma_\tau=\tau_{RMS}=\sqrt{\bar{\tau^2}-(\bar{\tau})^2}</script></li>
 <li><p><strong>时延扩展小好，其意味着多径信号延迟相当</strong></p>
 </li>
 </ul>
 <h2 id="3-相干带宽"><a href="#3-相干带宽" class="headerlink" title="3.相干带宽"></a>3.相干带宽</h2><ul>
 <li><p><strong>相干带宽</strong>：接收信号在频带内任两个频率分量的信号，相关系数不小于0.5</p>
 </li>
-<li><p><strong>在相干带宽范围内，两个频率分量有很强的相关性</strong><br>$$<br>B_c≈\frac{1}{5\sigma_\tau}<br>$$</p>
-</li>
+<li><p><strong>在相干带宽范围内，两个频率分量有很强的相关性</strong></p>
+<script type="math/tex; mode=display">
+B_c≈\frac{1}{5\sigma_\tau}</script></li>
 </ul>
-<img src="/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/image-20221201204945516.png" alt="image-20221201204945516" style="zoom: 33%;">
-
+<p><img src="/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/image-20221201204945516.png" alt="image-20221201204945516" style="zoom: 33%;"></p>
 <h2 id="4-平衰落与频率选择性衰落"><a href="#4-平衰落与频率选择性衰落" class="headerlink" title="4.平衰落与频率选择性衰落"></a>4.平衰落与频率选择性衰落</h2><ul>
 <li><strong>平衰落</strong>：<ul>
 <li>在相干带宽内，信号的所有频率分量经历相同的衰落</li>
@@ -323,8 +324,7 @@
 </ul>
 </li>
 </ul>
-<img src="/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/image-20221201205434545.png" alt="image-20221201205434545" style="zoom:50%;">
-
+<p><img src="/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/image-20221201205434545.png" alt="image-20221201205434545" style="zoom:50%;"></p>
 <ul>
 <li><strong>对抗频率选择性衰落的方法</strong>：<ul>
 <li>均衡器</li>
@@ -334,10 +334,12 @@
 </ul>
 <hr>
 <h1 id="无线信道的多普勒效应"><a href="#无线信道的多普勒效应" class="headerlink" title="无线信道的多普勒效应"></a>无线信道的多普勒效应</h1><h2 id="1-多普勒频率"><a href="#1-多普勒频率" class="headerlink" title="1.多普勒频率"></a>1.多普勒频率</h2><ul>
-<li><p><strong>多普勒频率</strong>：<br>$$<br>f_d=\frac{v}{c}f_tcos\theta<br>$$</p>
-</li>
-<li><p><strong>接收信号频率</strong>：<br>$$<br>f_r=f_t(1-\frac vccos\theta)<br>$$</p>
-</li>
+<li><p><strong>多普勒频率</strong>：</p>
+<script type="math/tex; mode=display">
+f_d=\frac{v}{c}f_tcos\theta</script></li>
+<li><p><strong>接收信号频率</strong>：</p>
+<script type="math/tex; mode=display">
+f_r=f_t(1-\frac vccos\theta)</script></li>
 <li><p><strong>移动速度增大，多普勒频移变大，导致误码率上升</strong></p>
 </li>
 </ul>
@@ -345,8 +347,8 @@
 <li><strong>无线信道的相干时间</strong>：在此时间间隔内任两个时刻对接收信号的复包络采样，各频率分量信号的相关系数不小于0.5</li>
 <li><strong>在相干时间间隔内，接收的信号的幅值有很强的相关性</strong></li>
 </ul>
-<p>$$<br>T_c≈\frac{0.5}{f_d}<br>$$</p>
-<ul>
+<script type="math/tex; mode=display">
+T_c≈\frac{0.5}{f_d}</script><ul>
 <li><p><strong>相干时间度量了信道的时变特性</strong></p>
 <ul>
 <li>相干时间$T_c$大意味着信道变化慢</li>
@@ -358,18 +360,19 @@
 <li>在相干时间的时间间隔内，接收信号幅值有很强的相关性</li>
 <li>在相干时间的时间间隔外，接收信号幅值得相关性不明显</li>
 </ul>
-<img src="/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/image-20221201221409445.png" alt="image-20221201221409445" style="zoom: 50%;">
-
+<p><img src="/2022/12/01/VLSI%20DSP%E4%B9%8B%E8%A1%B0%E8%90%BD%E4%BF%A1%E9%81%93/image-20221201221409445.png" alt="image-20221201221409445" style="zoom: 50%;"></p>
 </li>
 </ul>
 <h2 id="3-快衰落与慢衰落"><a href="#3-快衰落与慢衰落" class="headerlink" title="3.快衰落与慢衰落"></a>3.快衰落与慢衰落</h2><ul>
-<li><p><strong>快衰落</strong>：相干时间$T_c$小于码元周期$T_s$，该信道即为快衰落<br>$$<br>T_c&lt;T_s<br>$$</p>
-<ul>
+<li><p><strong>快衰落</strong>：相干时间$T_c$小于码元周期$T_s$，该信道即为快衰落</p>
+<script type="math/tex; mode=display">
+T_c<T_s</script><ul>
 <li><strong>衰落特性将在码元周期内改变多次，误码率提升</strong></li>
 </ul>
 </li>
-<li><p><strong>慢衰落</strong>：相干时间$T_c$大于码元周期$T_s$，该信道即为慢衰落<br>$$<br>T_c&gt;T_s<br>$$</p>
-<ul>
+<li><p><strong>慢衰落</strong>：相干时间$T_c$大于码元周期$T_s$，该信道即为慢衰落</p>
+<script type="math/tex; mode=display">
+T_c>T_s</script><ul>
 <li><strong>慢衰落信道误码率性能降低的主要原因是信噪比的损失</strong></li>
 </ul>
 </li>

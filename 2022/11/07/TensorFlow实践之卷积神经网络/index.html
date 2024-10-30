@@ -57,8 +57,8 @@
 <meta property="article:modified_time" content="2022-11-11T08:50:36.803Z">
 <meta property="article:author" content="ssy">
 <meta property="article:tag" content="神经网络">
-<meta property="article:tag" content="TensorFlow">
 <meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="TensorFlow">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107120929581.png">
 
@@ -297,61 +297,49 @@
       
         <p>本节主要介绍了卷积神经网络的基本结构，并通过Sequential模型对卷积神经网络进行了搭建。</p>
 <span id="more"></span>
-
 <h1 id="深度学习基础"><a href="#深度学习基础" class="headerlink" title="深度学习基础"></a>深度学习基础</h1><ul>
 <li><strong>深度神经网络</strong>：有多层隐含层的神经网络</li>
 <li><strong>端到端学习</strong>：自动的从数据中学习特征</li>
 <li><strong>具有多层隐含层的深度神经网络就是深度学习（Deep Learning）</strong></li>
 <li>深度学习能够自动从数据中学习到与任务相关的特征，提取出的特征缺乏可解释性</li>
 </ul>
-<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107120929581.png" alt="image-20221107120929581" style="zoom: 33%;">
-
+<p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107120929581.png" alt="image-20221107120929581" style="zoom: 33%;"></p>
 <hr>
 <h1 id="图像卷积"><a href="#图像卷积" class="headerlink" title="图像卷积"></a>图像卷积</h1><h2 id="1-图像卷积运算"><a href="#1-图像卷积运算" class="headerlink" title="1.图像卷积运算"></a>1.图像卷积运算</h2><ul>
 <li>首先，把卷积核和图像中的像素点一一对应</li>
 <li>加权求和，把得到的结果作为中心像素点新的灰度值</li>
-<li>用卷积核从左至右，从上至下滑动，就可以计算出每个像素点的取值<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107121513161.png" alt="image-20221107121513161" style="zoom: 33%;"></li>
+<li>用卷积核从左至右，从上至下滑动，就可以计算出每个像素点的取值<br><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107121513161.png" alt="image-20221107121513161" style="zoom: 33%;"></li>
 <li>使用卷积核计算后的结果会比原图稍微小一点，因为对于图像边界上的点，无法进行卷积运算<br>  <img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107121617059.png" alt="image-20221107121617059" style="zoom: 25%;">            <img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107121658899.png" alt="image-20221107121658899" style="zoom:25%;"></li>
-<li>可以通过填充外层使得卷积后图像大小和原图一样<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107121827880.png" alt="image-20221107121827880" style="zoom: 50%;"></li>
+<li>可以通过填充外层使得卷积后图像大小和原图一样<br><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107121827880.png" alt="image-20221107121827880" style="zoom: 50%;"></li>
 <li>步长(stride)：卷积核一次移动的像素数</li>
-<li>步长等于卷积核的边长，相当于将图像缩小了n倍<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107121906994.png" alt="image-20221107121906994" style="zoom: 50%;">
-
-</li>
+<li>步长等于卷积核的边长，相当于将图像缩小了n倍<br><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107121906994.png" alt="image-20221107121906994" style="zoom: 50%;"></li>
 </ul>
 <h2 id="2-卷积核的作用效果"><a href="#2-卷积核的作用效果" class="headerlink" title="2.卷积核的作用效果"></a>2.卷积核的作用效果</h2><ul>
 <li><p><strong>卷积核的尺寸，决定了周围像素的范围，卷积核的数值，表明了其权值，采用不同的卷积核，能够产生不同的效果</strong></p>
 </li>
-<li><p>输出原图：</p>
-<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107122049776.png" alt="image-20221107122049776" style="zoom:50%;">
+<li><p>输出原图：<br><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107122049776.png" alt="image-20221107122049776" style="zoom:50%;"></p>
 </li>
-<li><p><strong>均值模糊</strong>：可以将图像中的高频噪声过滤掉，故对图像的卷积运算，也称为平滑或者滤波，卷积核也称为滤波器</p>
-<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107122126981.png" alt="image-20221107122126981" style="zoom:50%;">
-
+<li><p><strong>均值模糊</strong>：可以将图像中的高频噪声过滤掉，故对图像的卷积运算，也称为平滑或者滤波，卷积核也称为滤波器<br><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107122126981.png" alt="image-20221107122126981" style="zoom:50%;"></p>
 <ul>
 <li><strong>卷积核尺寸越大，图像越模糊</strong></li>
 </ul>
-<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107122232759.png" alt="image-20221107122232759" style="zoom: 50%;">
+<p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107122232759.png" alt="image-20221107122232759" style="zoom: 50%;"></p>
 </li>
 <li><p><strong>高斯模糊</strong>：根据高斯分布的取值来确定权值</p>
 <ul>
-<li>为了尽可能保留图像中的边缘信息，给不同位置的像素点赋予不同的权值，离中心点越近的像素，权值越大，远离中心点的像素，权值也逐渐减小<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107122501280.png" alt="image-20221107122501280" style="zoom:50%;">
-</li>
+<li>为了尽可能保留图像中的边缘信息，给不同位置的像素点赋予不同的权值，离中心点越近的像素，权值越大，远离中心点的像素，权值也逐渐减小<br><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107122501280.png" alt="image-20221107122501280" style="zoom:50%;"></li>
 </ul>
 </li>
-<li><p>均值模糊与高斯模糊的对比：高斯模糊能够更好的保留图像的边缘和轮廓</p>
-<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107123237685.png" alt="image-20221107123237685" style="zoom: 50%;">
-
+<li><p>均值模糊与高斯模糊的对比：高斯模糊能够更好的保留图像的边缘和轮廓<br><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107123237685.png" alt="image-20221107123237685" style="zoom: 50%;"></p>
 </li>
 </ul>
 <h2 id="3-边缘检测"><a href="#3-边缘检测" class="headerlink" title="3.边缘检测"></a>3.边缘检测</h2><ul>
 <li>计算当前点和周围点颜色值或灰度值的差别</li>
-<li><strong>Prewitt算子</strong>：<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107123416992.png" alt="image-20221107123416992" style="zoom:33%;"></li>
+<li><strong>Prewitt算子</strong>：<br><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107123416992.png" alt="image-20221107123416992" style="zoom:33%;"></li>
 <li><strong>Roberts算子</strong>：能够比较好的检测45°角方向的边缘</li>
 <li><strong>Sobel算子</strong>：在Prewitt算子的基础上增加的权重的概念，认为上下左右直线方向的距离大于斜线方向的距离</li>
 <li><strong>Laplacian算子</strong>：判断中心像素的灰度与邻域内其他像素灰度的关系</li>
-<li><strong>Log算子</strong>：综合考虑了噪声的抑制和边缘检测,其抗干扰能力强，边界定位精度高，边缘连续性好，而且能有效提取对比度弱的边界<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107123553479.png" alt="image-20221107123553479" style="zoom:33%;">
-
-</li>
+<li><strong>Log算子</strong>：综合考虑了噪声的抑制和边缘检测,其抗干扰能力强，边界定位精度高，边缘连续性好，而且能有效提取对比度弱的边界<br><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107123553479.png" alt="image-20221107123553479" style="zoom:33%;"></li>
 </ul>
 <hr>
 <h1 id="卷积神经网络"><a href="#卷积神经网络" class="headerlink" title="卷积神经网络"></a>卷积神经网络</h1><h2 id="1-基本概念"><a href="#1-基本概念" class="headerlink" title="1.基本概念"></a>1.基本概念</h2><ul>
@@ -360,19 +348,18 @@
 <li>卷积神经网络具有局部连接和权值共享的特点</li>
 <li>卷积核中的权值是从数据中学习得到的</li>
 </ul>
-<h2 id="2-卷积神经网络的构成"><a href="#2-卷积神经网络的构成" class="headerlink" title="2.卷积神经网络的构成"></a>2.卷积神经网络的构成</h2><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107123809535.png" alt="image-20221107123809535" style="zoom: 33%;">
-
+<h2 id="2-卷积神经网络的构成"><a href="#2-卷积神经网络的构成" class="headerlink" title="2.卷积神经网络的构成"></a>2.卷积神经网络的构成</h2><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107123809535.png" alt="image-20221107123809535" style="zoom: 33%;"></p>
 <ul>
 <li><strong>特征提取阶段</strong><ul>
 <li>卷积层：特征提取层<ul>
 <li><strong>每个卷积层中包含多个卷积核提取不同的特征</strong></li>
 <li><strong>每个卷积核（每个卷积核又可能包含多通道）都输出一张特征图</strong></li>
-<li>激励函数：如ReLU<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107123910625.png" alt="image-20221107123910625" style="zoom:33%;"></li>
+<li>激励函数：如ReLU<br><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107123910625.png" alt="image-20221107123910625" style="zoom:33%;"></li>
 </ul>
 </li>
 <li>池化层：特征映射层<ul>
 <li><strong>下采样：使用n×n的池化模板，且步长为n，将其尺寸减小到1/n</strong></li>
-<li>在减小数据的处理量的同时，保留有用的信息<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107124037477.png" alt="image-20221107124037477" style="zoom:33%;"></li>
+<li>在减小数据的处理量的同时，保留有用的信息<br><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107124037477.png" alt="image-20221107124037477" style="zoom:33%;"></li>
 </ul>
 </li>
 </ul>
@@ -393,15 +380,12 @@
 <li>input_shape表示输入卷积层的数据形状，分别是samples（由batch_size自动指定）,rows,cols,channels</li>
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tf.keras.layers.Conv2D(filters=<span class="number">16</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu,input_shape=(<span class="number">28</span>,<span class="number">28</span>,<span class="number">1</span>))<span class="comment">#因为MNIST数据集是灰度图像，所以通道数为1</span></span><br></pre></td></tr></table></figure>
-
 <h2 id="2-创建池化层"><a href="#2-创建池化层" class="headerlink" title="2.创建池化层"></a>2.创建池化层</h2><ul>
 <li><code>tf.keras.layers.MaxPool2D(pool_size)</code></li>
 <li>pool_size指定池化窗口的大小</li>
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>))</span><br></pre></td></tr></table></figure>
-
-<h2 id="3-模型设计"><a href="#3-模型设计" class="headerlink" title="3.模型设计"></a>3.模型设计</h2><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107124332422.png" alt="image-20221107124332422" style="zoom: 50%;">
-
+<h2 id="3-模型设计"><a href="#3-模型设计" class="headerlink" title="3.模型设计"></a>3.模型设计</h2><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107124332422.png" alt="image-20221107124332422" style="zoom: 50%;"></p>
 <h2 id="4-具体代码实现"><a href="#4-具体代码实现" class="headerlink" title="4.具体代码实现"></a>4.具体代码实现</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#1.导入库</span></span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="comment">#2.加载数据</span></span><br><span class="line">mnist=tf.keras.datasets.mnist</span><br><span class="line">(train_x,train_y),(test_x,test_y)=mnist.load_data(path=<span class="string">&quot;D:\App_Data_File\Anaconda_data\jupyter\image\mnist.npz&quot;</span>)</span><br><span class="line"><span class="comment">#3.数据预处理:对属性进行归一化并转化为Tensor张量</span></span><br><span class="line">X_train,X_test=tf.cast(train_x/<span class="number">255.0</span>,tf.float32),tf.cast(test_x/<span class="number">255.0</span>,tf.float32)</span><br><span class="line">y_train,y_test=tf.cast(train_y,tf.int16),tf.cast(test_y,tf.int16)</span><br><span class="line">X_train=tf.reshape(X_train,[<span class="number">60000</span>,<span class="number">28</span>,<span class="number">28</span>,<span class="number">1</span>])</span><br><span class="line">X_test=tf.reshape(X_test,[<span class="number">10000</span>,<span class="number">28</span>,<span class="number">28</span>,<span class="number">1</span>])</span><br><span class="line"><span class="comment">#4.建立模型</span></span><br><span class="line">model=tf.keras.Sequential()</span><br><span class="line"><span class="comment">#添加卷积层1</span></span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">16</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu,input_shape=(<span class="number">28</span>,<span class="number">28</span>,<span class="number">1</span>)))</span><br><span class="line"><span class="comment">#添加池化层1</span></span><br><span class="line">model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line"><span class="comment">#添加卷积层2</span></span><br><span class="line">model.add(tf.keras.layers.Conv2D(<span class="number">32</span>,kernel_size=(<span class="number">3</span>,<span class="number">3</span>),padding=<span class="string">&quot;same&quot;</span>,activation=tf.nn.relu))</span><br><span class="line"><span class="comment">#添加池化层2</span></span><br><span class="line">model.add(tf.keras.layers.MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line"><span class="comment">#添加Flatten层，将数据拉直</span></span><br><span class="line">model.add(tf.keras.layers.Flatten())</span><br><span class="line"><span class="comment">#添加隐含层和输出层</span></span><br><span class="line">model.add(tf.keras.layers.Dense(<span class="number">128</span>,activation=<span class="string">&quot;relu&quot;</span>))</span><br><span class="line">model.add(tf.keras.layers.Dense(<span class="number">10</span>,activation=<span class="string">&quot;softmax&quot;</span>))</span><br><span class="line">model.summary()</span><br><span class="line"><span class="comment">#5.配置训练方法</span></span><br><span class="line">model.<span class="built_in">compile</span>(optimizer=<span class="string">&quot;adam&quot;</span>,loss=<span class="string">&quot;sparse_categorical_crossentropy&quot;</span>,metrics=[<span class="string">&quot;sparse_categorical_accuracy&quot;</span>])</span><br><span class="line"><span class="comment">#6.训练模型</span></span><br><span class="line"><span class="comment">#model.load_weights(&quot;mnist_save_weights_CNN.h5&quot;)</span></span><br><span class="line">history=model.fit(X_train,y_train,batch_size=<span class="number">64</span>,epochs=<span class="number">5</span>,validation_split=<span class="number">0.2</span>)</span><br><span class="line"><span class="comment">#7.评估模型</span></span><br><span class="line">model.evaluate(X_test,y_test,verbose=<span class="number">2</span>)</span><br><span class="line"><span class="comment">#8.保存训练日志并绘制训练曲线</span></span><br><span class="line">plt.rcParams[<span class="string">&quot;font.sans-serif&quot;</span>]=<span class="string">&quot;SimHei&quot;</span></span><br><span class="line">plt.rcParams[<span class="string">&quot;axes.unicode_minus&quot;</span>]=<span class="literal">False</span></span><br><span class="line">pd.DataFrame(history.history).to_csv(<span class="string">&quot;trainning_log.csv&quot;</span>,index=<span class="literal">False</span>)</span><br><span class="line">graph=pd.read_csv(<span class="string">&quot;trainning_log.csv&quot;</span>)</span><br><span class="line">graph.plot(figsize=(<span class="number">8</span>,<span class="number">5</span>))</span><br><span class="line">plt.grid(<span class="number">1</span>)</span><br><span class="line">plt.xlim(<span class="number">0</span>,<span class="number">4</span>)</span><br><span class="line">plt.ylim(<span class="number">0</span>,<span class="number">1</span>)</span><br><span class="line">plt.show()</span><br><span class="line"><span class="comment">#9.使用模型</span></span><br><span class="line"><span class="comment"># 下面再随机取出测试集中的任意10个数据进行识别</span></span><br><span class="line">plt.figure()</span><br><span class="line">plt.suptitle(<span class="string">&quot;随机取出测试集中的任意10个数据进行识别&quot;</span>, fontsize=<span class="number">20</span>, color=<span class="string">&quot;blue&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">    num = np.random.randint(<span class="number">1</span>, <span class="number">10000</span>)</span><br><span class="line">    plt.subplot(<span class="number">2</span>, <span class="number">5</span>, i+<span class="number">1</span>)</span><br><span class="line">    plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">    plt.imshow(test_x[num], cmap=<span class="string">&quot;gray&quot;</span>)</span><br><span class="line">    y_pred = np.argmax(model.predict(tf.reshape(X_test[num],(<span class="number">1</span>,<span class="number">28</span>,<span class="number">28</span>,<span class="number">1</span>))))</span><br><span class="line">    plt.title(<span class="string">&quot;y= &quot;</span>+<span class="built_in">str</span>(test_y[num]) + <span class="string">&quot;\n&quot;</span> + <span class="string">&quot;y_pred=&quot;</span> + <span class="built_in">str</span>(y_pred))</span><br><span class="line">plt.tight_layout(rect=[<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0.98</span>])</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
 <p>结果如下：</p>
 <pre><code>Model: &quot;sequential_2&quot;
@@ -436,10 +420,10 @@ Epoch 4/5
 750/750 [==============================] - 25s 34ms/step - loss: 0.0332 - sparse_categorical_accuracy: 0.9892 - val_loss: 0.0412 - val_sparse_categorical_accuracy: 0.9892
 Epoch 5/5
 750/750 [==============================] - 25s 33ms/step - loss: 0.0246 - sparse_categorical_accuracy: 0.9920 - val_loss: 0.0450 - val_sparse_categorical_accuracy: 0.9855
-313/313 - 2s - loss: 0.0345 - sparse_categorical_accuracy: 0.9884</code></pre><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_14_1.png" alt="output_14_1"></p>
+313/313 - 2s - loss: 0.0345 - sparse_categorical_accuracy: 0.9884
+</code></pre><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_14_1.png" alt="output_14_1"></p>
 <p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_14_2.png" alt="output_14_2"></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#保存训练的模型参数</span></span><br><span class="line">model.save_weights(<span class="string">&quot;mnist_save_weights_CNN.h5&quot;</span>)</span><br></pre></td></tr></table></figure>
-
 <hr>
 <h1 id="卷积神经网络的优化"><a href="#卷积神经网络的优化" class="headerlink" title="卷积神经网络的优化"></a>卷积神经网络的优化</h1><h2 id="1-Dropout-：减少过拟合"><a href="#1-Dropout-：减少过拟合" class="headerlink" title="1.Dropout()：减少过拟合"></a>1.Dropout()：减少过拟合</h2><ul>
 <li>随机让神经网络的某些隐含层节点停止工作，也就是让他们的权值为0</li>
@@ -451,10 +435,8 @@ Epoch 5/5
 <li>name表示dropout层的名称</li>
 </ul>
 <h2 id="2-级联卷积核"><a href="#2-级联卷积核" class="headerlink" title="2.级联卷积核"></a>2.级联卷积核</h2><ul>
-<li>使用两个3×3的卷积核级联与使用一个5×5的卷积核得到的感受野是一样的，但参数个数却少了<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107124918062.png" alt="image-20221107124918062" style="zoom:33%;"></li>
-<li>多通道的级联卷积核<img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107124939129.png" alt="image-20221107124939129" style="zoom:33%;">
-
-</li>
+<li>使用两个3×3的卷积核级联与使用一个5×5的卷积核得到的感受野是一样的，但参数个数却少了<br><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107124918062.png" alt="image-20221107124918062" style="zoom:33%;"></li>
+<li>多通道的级联卷积核<br><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107124939129.png" alt="image-20221107124939129" style="zoom:33%;"></li>
 </ul>
 <hr>
 <h1 id="实例：卷积神经网络识别cifar10图片"><a href="#实例：卷积神经网络识别cifar10图片" class="headerlink" title="实例：卷积神经网络识别cifar10图片"></a>实例：卷积神经网络识别cifar10图片</h1><h2 id="1-设计卷积神经网络的结构"><a href="#1-设计卷积神经网络的结构" class="headerlink" title="1.设计卷积神经网络的结构"></a>1.设计卷积神经网络的结构</h2><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20221107125056907.png" alt="image-20221107125056907"></p>
@@ -514,10 +496,10 @@ Epoch 9/10
 625/625 [==============================] - 76s 121ms/step - loss: 0.8886 - sparse_categorical_accuracy: 0.6809 - val_loss: 0.8450 - val_sparse_categorical_accuracy: 0.6965
 Epoch 10/10
 625/625 [==============================] - 76s 121ms/step - loss: 0.8632 - sparse_categorical_accuracy: 0.6917 - val_loss: 0.8446 - val_sparse_categorical_accuracy: 0.7016
-313/313 - 7s - loss: 0.8541 - sparse_categorical_accuracy: 0.7033</code></pre><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_22_1.png" alt="output_22_1"></p>
+313/313 - 7s - loss: 0.8541 - sparse_categorical_accuracy: 0.7033
+</code></pre><p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_22_1.png" alt="output_22_1"></p>
 <p><img src="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/output_22_2.png" alt="output_22_2"></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#保存所有模型与数据</span></span><br><span class="line">model.save(<span class="string">&quot;cifar10_save_all.h5&quot;</span>)</span><br></pre></td></tr></table></figure>
-
 
     </div>
 
@@ -560,8 +542,8 @@ Epoch 10/10
       <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="tag"># 神经网络</a>
-              <a href="/tags/TensorFlow/" rel="tag"># TensorFlow</a>
               <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"># 深度学习</a>
+              <a href="/tags/TensorFlow/" rel="tag"># TensorFlow</a>
           </div>
 
         

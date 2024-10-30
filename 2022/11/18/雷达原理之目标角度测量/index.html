@@ -284,10 +284,10 @@
       
         <p>本节主要介绍了雷达目标角度测量的基本方法，包括相位法与振幅法，以及圆锥扫描自动测角系统与单脉冲自动扫描测角系统。</p>
 <span id="more"></span>
-
 <h1 id="天线方向图的一般性质"><a href="#天线方向图的一般性质" class="headerlink" title="天线方向图的一般性质"></a>天线方向图的一般性质</h1><ul>
-<li><p>雷达天线方向函数：<br>$$<br>F(\theta)=|F(\theta)|e^{j\phi(\theta)}<br>$$</p>
-<ul>
+<li><p>雷达天线方向函数：</p>
+<script type="math/tex; mode=display">
+F(\theta)=|F(\theta)|e^{j\phi(\theta)}</script><ul>
 <li>其中$|F(\theta)|$是天线方向图函数的振幅响应</li>
 <li>$\phi(\theta)$是天线方向图函数的相位响应</li>
 </ul>
@@ -303,56 +303,60 @@
 </ul>
 </li>
 </ul>
-<img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118145144773.png" alt="image-20221118145144773" style="zoom: 33%;">
-
+<p><img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118145144773.png" alt="image-20221118145144773" style="zoom: 33%;"></p>
 <hr>
-<h1 id="相位法测角"><a href="#相位法测角" class="headerlink" title="相位法测角"></a>相位法测角</h1><h2 id="1-两天线相位法测角原理"><a href="#1-两天线相位法测角原理" class="headerlink" title="1.两天线相位法测角原理"></a>1.两天线相位法测角原理</h2><img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118145524628.png" alt="image-20221118145524628" style="zoom:50%;">
-
+<h1 id="相位法测角"><a href="#相位法测角" class="headerlink" title="相位法测角"></a>相位法测角</h1><h2 id="1-两天线相位法测角原理"><a href="#1-两天线相位法测角原理" class="headerlink" title="1.两天线相位法测角原理"></a>1.两天线相位法测角原理</h2><p><img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118145524628.png" alt="image-20221118145524628" style="zoom:50%;"></p>
 <ul>
 <li><p>假设两天线之间的距离$d$，远远小于目标到振源的距离，则可以认为到达接收点的目标所反射的电磁波近似为平面波。</p>
 </li>
-<li><p>目标到$A，B$两点的距离相等，回波到$A，B$两点的相位也相等，回波到接收点的距离相差$dsin(θ)$，对应相位相差$\phi$，有：<br>$$<br>\frac{\phi}{2\pi}=\frac{dsin\theta}{\lambda}\Rightarrow \phi=\frac{2\pi dsin\theta}{\lambda}<br>$$</p>
-</li>
+<li><p>目标到$A，B$两点的距离相等，回波到$A，B$两点的相位也相等，回波到接收点的距离相差$dsin(θ)$，对应相位相差$\phi$，有：</p>
+<script type="math/tex; mode=display">
+\frac{\phi}{2\pi}=\frac{dsin\theta}{\lambda}\Rightarrow \phi=\frac{2\pi dsin\theta}{\lambda}</script></li>
 <li><p>则测量相位差$\phi$就能测量角度了</p>
 </li>
-<li><p>当$ϕ∈[−π,π]$时，$θ$取值无模糊。$θ$对应的取值范围$[−θ<em>{max},θ</em>{max}]$，由$\phi=\frac{2\pi dsin\theta}{\lambda}$可得：<br>$$<br>\theta_{max}=arcsin(\frac{\lambda}{2d})<br>$$</p>
-</li>
+<li><p>当$ϕ∈[−π,π]$时，$θ$取值无模糊。$θ$对应的取值范围$[−θ_{max},θ_{max}]$，由$\phi=\frac{2\pi dsin\theta}{\lambda}$可得：</p>
+<script type="math/tex; mode=display">
+\theta_{max}=arcsin(\frac{\lambda}{2d})</script></li>
 <li><p>从上式可知，只要$d$越小，对应的$θ_{max}$就越大。则短基线保证大的无模糊测角范围。</p>
 </li>
 </ul>
 <h2 id="2-测角误差分析与多值性"><a href="#2-测角误差分析与多值性" class="headerlink" title="2.测角误差分析与多值性"></a>2.测角误差分析与多值性</h2><ul>
-<li><p>对$\phi=\frac{2\pi dsin\theta}{\lambda}$两边同时微分，有：<br>$$<br>d\phi=\frac{2\pi dcos\theta}{\lambda}d\theta \Rightarrow d\theta=\frac{\lambda}{2\pi dcos\theta}d\phi<br>$$</p>
-</li>
+<li><p>对$\phi=\frac{2\pi dsin\theta}{\lambda}$两边同时微分，有：</p>
+<script type="math/tex; mode=display">
+d\phi=\frac{2\pi dcos\theta}{\lambda}d\theta \Rightarrow d\theta=\frac{\lambda}{2\pi dcos\theta}d\phi</script></li>
 <li><p>采用读数精度高（$dϕ$小）的相位计，可以提高测角精度</p>
 </li>
 <li><p>增大$\frac dλ$的值，即<strong>长基线保证高的测角精度</strong></p>
 </li>
 <li><p>$\theta=0°$时，$d\theta$最小</p>
 </li>
-<li><p>$\theta=\pm90°$时，$d\theta$最大</p>
-</li>
+<li>$\theta=\pm90°$时，$d\theta$最大</li>
 </ul>
 <h2 id="3-多基线测角"><a href="#3-多基线测角" class="headerlink" title="3.多基线测角"></a>3.多基线测角</h2><ul>
 <li><strong>短基线保证最大无模糊测角范围；长基线保证高的测角精度</strong>，故采用多基线测角结合二者优点。</li>
 </ul>
-<img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118152009476.png" alt="image-20221118152009476" style="zoom:50%;">
-
+<p><img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118152009476.png" alt="image-20221118152009476" style="zoom:50%;"></p>
 <ul>
-<li><p>$1$和$2$之间的间距$d_{12}$比较短，$θ<em>{max}$ 就比较大，以保证比较大的无模糊测角范围，长基线$d</em>{13}$保证高的测角精度，有：<br>$$<br>\phi_{12}=\frac{2\pi d_{12}sin\theta}{\lambda}<br>$$</p>
-<p>$$<br>\phi_{13}=\frac{2\pi d_{13}sin\theta}{\lambda}<br>$$</p>
+<li><p>$1$和$2$之间的间距$d_{12}$比较短，$θ_{max}$ 就比较大，以保证比较大的无模糊测角范围，长基线$d_{13}$保证高的测角精度，有：</p>
+<script type="math/tex; mode=display">
+\phi_{12}=\frac{2\pi d_{12}sin\theta}{\lambda}</script><script type="math/tex; mode=display">
+\phi_{13}=\frac{2\pi d_{13}sin\theta}{\lambda}</script></li>
+<li><p>要使$ϕ_{12}$无模糊测角，$ϕ_{12}$就不能超过$2π$。因此，$ϕ_{12}$就是鉴相器能测出来的值。对于$ϕ_{13}$来讲，因为$ϕ_{13}$比较大，所以 $ϕ_{13}$一般大于 $2π$，有：</p>
+<script type="math/tex; mode=display">
+\phi_{13}=2\pi N+\phi</script></li>
+<li><p>因为长基线$d_{13}$算出来的$θ$精度更高，所以有：</p>
+<script type="math/tex; mode=display">
+\theta=arcsin(\frac{\phi_{13}\lambda}{2\pi d_{13}})</script></li>
+<li><p>式中，$λ$和$d_{13}$已知。因为只能测得$ϕ$，而$N$不知道，所以$ϕ_{13}$未知。只要求得$N$，就可以求出$ϕ_{13}$</p>
 </li>
-<li><p>要使$ϕ<em>{12}$无模糊测角，$ϕ</em>{12}$就不能超过$2π$。因此，$ϕ<em>{12}$就是鉴相器能测出来的值。对于$ϕ</em>{13}$来讲，因为$ϕ<em>{13}$比较大，所以 $ϕ</em>{13}$一般大于 $2π$，有：<br>$$<br>\phi_{13}=2\pi N+\phi<br>$$</p>
-</li>
-<li><p>因为长基线$d_{13}$算出来的$θ$精度更高，所以有：<br>$$<br>\theta=arcsin(\frac{\phi_{13}\lambda}{2\pi d_{13}})<br>$$</p>
-</li>
-<li><p>式中，$λ$和$d_{13}$已知。因为只能测得$ϕ$，而$N$不知道，所以$ϕ<em>{13}$未知。只要求得$N$，就可以求出$ϕ</em>{13}$</p>
-</li>
-<li><p>将$\phi_{13},\phi_{12}$相比，有：<br>$$<br>\frac{\phi_{13}}{\phi_{12}}=\frac{d_{13}}{d_{12}}=\frac{2\pi N+\phi}{\phi_{12}} \Rightarrow \frac{d_{13}}{d_{12}}\phi_{12}=2\pi N+\phi \Rightarrow \phi_{12}\frac{d_{13}}{d_{12}}\frac{1}{2\pi}=N+\frac{\phi}{2\pi}<br>$$</p>
-</li>
-<li><p>上式中的$ϕ$是可测量的，其值满足$ϕ&lt;2π$。因此，$\frac{ϕ}{2π}&lt;1$，则$N$：<br>$$<br>N=INT[\phi_{12}\frac{d_{13}}{d_{12}}\frac{1}{2\pi}]<br>$$</p>
-<p>$$<br>其中,INT表示取整<br>$$</p>
-</li>
-<li><p>根据已知的$ϕ<em>{12}，d</em>{13}，d_{12}$，可以求出$N$，进而可以得到$ϕ<em>{13}=2πN+ϕ$。最后根据公式$\phi</em>{13}=\frac{2\pi d_{13}sin\theta}{\lambda}$就可以求得$θ$：</p>
+<li><p>将$\phi_{13},\phi_{12}$相比，有：</p>
+<script type="math/tex; mode=display">
+\frac{\phi_{13}}{\phi_{12}}=\frac{d_{13}}{d_{12}}=\frac{2\pi N+\phi}{\phi_{12}} \Rightarrow \frac{d_{13}}{d_{12}}\phi_{12}=2\pi N+\phi \Rightarrow \phi_{12}\frac{d_{13}}{d_{12}}\frac{1}{2\pi}=N+\frac{\phi}{2\pi}</script></li>
+<li><p>上式中的$ϕ$是可测量的，其值满足$ϕ&lt;2π$。因此，$\frac{ϕ}{2π}&lt;1$，则$N$：</p>
+<script type="math/tex; mode=display">
+N=INT[\phi_{12}\frac{d_{13}}{d_{12}}\frac{1}{2\pi}]</script><script type="math/tex; mode=display">
+其中,INT表示取整</script></li>
+<li><p>根据已知的$ϕ_{12}，d_{13}，d_{12}$，可以求出$N$，进而可以得到$ϕ_{13}=2πN+ϕ$。最后根据公式$\phi_{13}=\frac{2\pi d_{13}sin\theta}{\lambda}$就可以求得$θ$：</p>
 </li>
 </ul>
 <hr>
@@ -365,13 +369,12 @@
 <li>如果把从扫描起始时刻到扫描结束时刻，雷达收到目标回波的幅度作图，其幅度的变化过程就类似于天线方向图函数的变化过程，开始比较小，然后逐渐增大，到最大值再慢慢减小</li>
 <li><strong>最大信号法就是在找幅度变化过程中的极大值所在的位置</strong></li>
 </ul>
-<img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118154913552.png" alt="image-20221118154913552" style="zoom: 50%;">
-
-<img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118154955574.png" alt="image-20221118154955574" style="zoom:50%;">
-
+<p><img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118154913552.png" alt="image-20221118154913552" style="zoom: 50%;"></p>
+<p><img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118154955574.png" alt="image-20221118154955574" style="zoom:50%;"></p>
 <ul>
-<li><p>波束宽度、信噪比都会影响最大信号法测角的精度，测角精度满足如下公式：<br>$$<br>\delta_{\theta}=\frac{0.5\theta_B}{\sqrt {(\frac{S}{N})_m^n}}<br>$$</p>
-</li>
+<li><p>波束宽度、信噪比都会影响最大信号法测角的精度，测角精度满足如下公式：</p>
+<script type="math/tex; mode=display">
+\delta_{\theta}=\frac{0.5\theta_B}{\sqrt {(\frac{S}{N})_m^n}}</script></li>
 <li><p>其中，$θ_B$为天线波束宽度，$(\frac SN)_m$为中心脉冲的信噪比，$n$为单程半功率点波束宽度内的脉冲数。</p>
 </li>
 </ul>
@@ -380,40 +383,47 @@
 <li><strong>如果目标处在两波束的交叠轴方向，则由两波束收到的信号强度相等，否则一个波束收到的信号强度高于另一个</strong></li>
 <li>故常常称 0A 为等信号轴。<strong>当两个波束收到的回波信号相等时，等信号轴所指方向即为目标方向</strong></li>
 </ul>
-<img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118155608746.png" alt="image-20221118155608746" style="zoom: 50%;">
-
+<p><img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118155608746.png" alt="image-20221118155608746" style="zoom: 50%;"></p>
 <ul>
-<li>设天线电压方向性函数为$F(θ)$，等信号轴$OA$的指向为$θ_0$，$\theta_k$为$\theta_0$与最大方向的偏角，有：<br>$$<br>\theta_0-\theta_1=\theta_2-\theta_0=\theta_k<br>$$</li>
+<li>设天线电压方向性函数为$F(θ)$，等信号轴$OA$的指向为$θ_0$，$\theta_k$为$\theta_0$与最大方向的偏角，有：<script type="math/tex; mode=display">
+\theta_0-\theta_1=\theta_2-\theta_0=\theta_k</script></li>
 </ul>
-<p>$$<br>F_1(\theta)=F(\theta-\theta_1)=F(\theta-\theta_0+\theta_k)<br>$$</p>
-<ul>
-<li><p>假设$\theta_t=\theta-\theta_0$为目标与等信号轴的夹角，则有：<br>$$<br>F_1(\theta)=F(\theta-\theta_1)=F(\theta-\theta_0+\theta_k)=F(\theta_t+\theta_k)<br>$$</p>
-<p>$$<br>F_2(\theta)=F(\theta-\theta_2)=F(\theta-\theta_0+\theta_k)=F(\theta_t-\theta_k)<br>$$</p>
-</li>
+<script type="math/tex; mode=display">
+F_1(\theta)=F(\theta-\theta_1)=F(\theta-\theta_0+\theta_k)</script><ul>
+<li><p>假设$\theta_t=\theta-\theta_0$为目标与等信号轴的夹角，则有：</p>
+<script type="math/tex; mode=display">
+F_1(\theta)=F(\theta-\theta_1)=F(\theta-\theta_0+\theta_k)=F(\theta_t+\theta_k)</script><script type="math/tex; mode=display">
+F_2(\theta)=F(\theta-\theta_2)=F(\theta-\theta_0+\theta_k)=F(\theta_t-\theta_k)</script></li>
 </ul>
-<img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118160139982.png" alt="image-20221118160139982" style="zoom:50%;">
-
+<p><img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118160139982.png" alt="image-20221118160139982" style="zoom:50%;"></p>
 <ul>
 <li>故只要求得$\theta_t$就可以得到$\theta$</li>
 </ul>
 <h3 id="2-1-比幅法"><a href="#2-1-比幅法" class="headerlink" title="2.1 比幅法"></a>2.1 比幅法</h3><ul>
-<li><p>根据雷达方程可以算得到达天线口面的回波信号功率，然后开方就可以得到幅度，因为两个相同且彼此部分重叠的波束的雷达方程中只有$F(\theta)$不同，其他相同部分均用用$K$统一表示，则有：<br>$$<br>u_1(\theta)=KF(\theta_t+\theta_k)<br>$$</p>
-<p>$$<br>u_2(\theta)=KF(\theta_t-\theta_k)<br>$$</p>
-</li>
-<li><p>比幅法就是将二者相比，得到：<br>$$<br>\frac{u_1(\theta)}{u_2(\theta)}=\frac{F(\theta_t+\theta_k)}{F(\theta_t-\theta_k)}<br>$$</p>
-</li>
+<li><p>根据雷达方程可以算得到达天线口面的回波信号功率，然后开方就可以得到幅度，因为两个相同且彼此部分重叠的波束的雷达方程中只有$F(\theta)$不同，其他相同部分均用用$K$统一表示，则有：</p>
+<script type="math/tex; mode=display">
+u_1(\theta)=KF(\theta_t+\theta_k)</script><script type="math/tex; mode=display">
+u_2(\theta)=KF(\theta_t-\theta_k)</script></li>
+<li><p>比幅法就是将二者相比，得到：</p>
+<script type="math/tex; mode=display">
+\frac{u_1(\theta)}{u_2(\theta)}=\frac{F(\theta_t+\theta_k)}{F(\theta_t-\theta_k)}</script></li>
 <li><p>式中，$u_1$和$u_2$是可以测量出来的值；$θ_k$为天线方向图最大值与等信号轴夹角已知。只有$θ_t$是未知量，因此可以求得最终角度</p>
 </li>
 </ul>
 <h3 id="2-2-和差法"><a href="#2-2-和差法" class="headerlink" title="2.2 和差法"></a>2.2 和差法</h3><ul>
 <li><p>和信号为两个天线接收到信号之和，差信号为两个天线接收到信号之差</p>
 </li>
-<li><p><strong>差信号</strong>：<br>$$<br>\Delta(\theta_t)=u_1(\theta)-u_2(\theta)=K[F(\theta_t+\theta_k)-F(\theta_t-\theta_k)]<br>$$<br>在$\theta_0$附近做级数展开，得到：<br>$$<br>\Delta\theta_t=2K\theta_tF’(\theta_0)<br>$$</p>
-</li>
-<li><p><strong>和信号</strong>：<br>$$<br>\Sigma(\theta_t)=u_1(\theta)+u_2(\theta)=K[F(\theta_t+\theta_k)+F(\theta_t-\theta_k)]=2KF(\theta_0)<br>$$</p>
-</li>
-<li><p>将和、差信号相比：<br>$$<br>\frac{\Delta}{\Sigma}=\frac{\theta_t}{F(\theta_0)}F’(\theta_0)<br>$$</p>
-</li>
+<li><p><strong>差信号</strong>：</p>
+<script type="math/tex; mode=display">
+\Delta(\theta_t)=u_1(\theta)-u_2(\theta)=K[F(\theta_t+\theta_k)-F(\theta_t-\theta_k)]</script><p>在$\theta_0$附近做级数展开，得到：</p>
+<script type="math/tex; mode=display">
+\Delta\theta_t=2K\theta_tF'(\theta_0)</script></li>
+<li><p><strong>和信号</strong>：</p>
+<script type="math/tex; mode=display">
+\Sigma(\theta_t)=u_1(\theta)+u_2(\theta)=K[F(\theta_t+\theta_k)+F(\theta_t-\theta_k)]=2KF(\theta_0)</script></li>
+<li><p>将和、差信号相比：</p>
+<script type="math/tex; mode=display">
+\frac{\Delta}{\Sigma}=\frac{\theta_t}{F(\theta_0)}F'(\theta_0)</script></li>
 <li><p>只有$θ_t$是未知量，因此可以求得最终角度</p>
 </li>
 </ul>
@@ -421,13 +431,11 @@
 <h1 id="自动测角的原理与方法"><a href="#自动测角的原理与方法" class="headerlink" title="自动测角的原理与方法"></a>自动测角的原理与方法</h1><h2 id="1-圆锥扫描自动测角系统"><a href="#1-圆锥扫描自动测角系统" class="headerlink" title="1.圆锥扫描自动测角系统"></a>1.圆锥扫描自动测角系统</h2><ul>
 <li>圆锥扫描波束</li>
 </ul>
-<img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118184018318.png" alt="image-20221118184018318" style="zoom:50%;">
-
+<p><img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118184018318.png" alt="image-20221118184018318" style="zoom:50%;"></p>
 <ul>
 <li>垂直于等信号轴的截面</li>
 </ul>
-<img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118184042690.png" alt="image-20221118184042690" style="zoom: 33%;">
-
+<p><img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118184042690.png" alt="image-20221118184042690" style="zoom: 33%;"></p>
 <ul>
 <li><p>$\delta$：对应前面的$θ_k$，即等信号轴与波束最大值方向的偏角。</p>
 </li>
@@ -435,22 +443,28 @@
 </li>
 <li><p>$θ$：表示目标方向与波束最大值方向的夹角</p>
 </li>
-<li><p>接收信号电压振幅大小为：<br>$$<br>U=KF_电^2(\theta)<br>$$</p>
-<ul>
+<li><p>接收信号电压振幅大小为：</p>
+<script type="math/tex; mode=display">
+U=KF_电^2(\theta)</script><ul>
 <li>根据雷达方程推导，$K$包含了距离、功率等因素</li>
 <li>如果目标与天线最大增益处的夹角为$θ$，假设电磁波发射到接收过程中，角度$θ$没有发生变化，发射有一个$F_电(θ)$，接收再乘以一个$F_电(θ)$，所以有一个平方项</li>
 </ul>
 </li>
-<li><p>根据余弦定理有：<br>$$<br>R^2\theta^2=R^2\delta^2+R^2\epsilon^2-2R^2\delta\epsilon cos(w_st-\phi_0)<br>$$<br>近似可得：<br>$$<br>\theta=\delta-\epsilon cos(w_s-\phi_0)<br>$$</p>
-</li>
-<li><p>将$\theta$带入U：<br>$$<br>U=KF_电^2(\delta-\epsilon cos(w_s-\phi_0))<br>$$</p>
-</li>
-<li><p>将上式在$\delta$处展开为泰勒级数并忽略高次项，有：<br>$$<br>U=U_0[1+\eta\epsilon cos(w_st-\phi_0)]<br>$$</p>
-<ul>
+<li><p>根据余弦定理有：</p>
+<script type="math/tex; mode=display">
+R^2\theta^2=R^2\delta^2+R^2\epsilon^2-2R^2\delta\epsilon cos(w_st-\phi_0)</script><p>近似可得：</p>
+<script type="math/tex; mode=display">
+\theta=\delta-\epsilon cos(w_s-\phi_0)</script></li>
+<li><p>将$\theta$带入U：</p>
+<script type="math/tex; mode=display">
+U=KF_电^2(\delta-\epsilon cos(w_s-\phi_0))</script></li>
+<li><p>将上式在$\delta$处展开为泰勒级数并忽略高次项，有：</p>
+<script type="math/tex; mode=display">
+U=U_0[1+\eta\epsilon cos(w_st-\phi_0)]</script><ul>
 <li>$U_0=KF_电^2(\delta)$</li>
 <li>$\eta=\frac{-2F_电’(\delta)}{F(\delta)}$</li>
 </ul>
-<img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118190940403.png" alt="image-20221118190940403" style="zoom:50%;">
+<p><img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118190940403.png" alt="image-20221118190940403" style="zoom:50%;"></p>
 </li>
 <li><p>$U$反映的是回波信号的幅度，且随着时间 t 在发生变化。当$ϵ=0$的时候，$U$为一常数，说明此时目标就在旋转轴上，为一等幅信号。$\epsilon\neq0$的时候，$U$为一调幅信号</p>
 </li>
@@ -463,48 +477,53 @@
 </ul>
 </li>
 <li><p>前面的推导是假设$U_0$为一常数，即$K$为常数，也就是说假设目标是静止不动的。如果目标远离雷达或者向着雷达运动，$K$就会发生变化，不再是一个常数。如果目标向着雷达运动，$K$就会逐渐变大</p>
-<img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118193055329.png" alt="image-20221118193055329" style="zoom: 50%;">
-
+<p><img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118193055329.png" alt="image-20221118193055329" style="zoom: 50%;"></p>
 </li>
 </ul>
 <h2 id="2-单脉冲自动测角系统"><a href="#2-单脉冲自动测角系统" class="headerlink" title="2.单脉冲自动测角系统"></a>2.单脉冲自动测角系统</h2><ul>
 <li><p>在一个角平面内，两个相同的波束部分重叠，其交叠方向即为等信号轴。将两个波束同时接收到的回波信号振幅进行比较，即可取得目标在该平面上的角误差信号，然后将此误差信号电压放大变换后加到驱动电机，控制天线向减小误差的方向运动</p>
 </li>
 <li><p>和差比较器是单脉冲雷达的重要部件，由它完成和、差处理，形成和差波束。用得较多的是双T接头</p>
-<img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118193310164.png" alt="image-20221118193310164" style="zoom:50%;">
-
+<p><img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118193310164.png" alt="image-20221118193310164" style="zoom:50%;"></p>
 </li>
 </ul>
 <h3 id="2-1-雷达发射过程"><a href="#2-1-雷达发射过程" class="headerlink" title="2.1 雷达发射过程"></a>2.1 雷达发射过程</h3><ul>
-<li><p>发射时，从发射机来的信号加到和差比较器的$Σ$端，$Δ$端无输出，$1,2$两端输出同幅同相信号<br>$$<br>F_\Sigma(\theta)=F_1(\theta)+F_2(\theta)<br>$$</p>
-<p>$$<br>F_\Delta(\theta)=F_2(\theta)-F_1(\theta)<br>$$</p>
-</li>
-<li><p>两个馈源被同相激励并辐射相同的功率，结果两波束在空间各点产生的场强同相相加，形成发射和波束$F_Σ(θ)$[以下都是电压天线图]<br>$$<br>AF_1(\theta)+AF_2(\theta)=A(F_1(\theta)+F_2(\theta))=AF_\Sigma(\theta)<br>$$</p>
-</li>
+<li><p>发射时，从发射机来的信号加到和差比较器的$Σ$端，$Δ$端无输出，$1,2$两端输出同幅同相信号</p>
+<script type="math/tex; mode=display">
+F_\Sigma(\theta)=F_1(\theta)+F_2(\theta)</script><script type="math/tex; mode=display">
+F_\Delta(\theta)=F_2(\theta)-F_1(\theta)</script></li>
+<li><p>两个馈源被同相激励并辐射相同的功率，结果两波束在空间各点产生的场强同相相加，形成发射和波束$F_Σ(θ)$[以下都是电压天线图]</p>
+<script type="math/tex; mode=display">
+AF_1(\theta)+AF_2(\theta)=A(F_1(\theta)+F_2(\theta))=AF_\Sigma(\theta)</script></li>
 </ul>
 <h3 id="2-2-雷达接收过程"><a href="#2-2-雷达接收过程" class="headerlink" title="2.2 雷达接收过程"></a>2.2 雷达接收过程</h3><ul>
-<li><p>双 T 接头的$1,2$端输入，$Δ$端输出差信号，$Σ$端输出和信号。到达$1,2$的回波信号为$K_FΣ(θ)$，振幅用$K$表示<br>$$<br>\Delta=KF_\Sigma(\theta)F_2(\theta)-KF_\Sigma(\theta)F_1(\theta)=KF_\Sigma(\theta)[F_2(\theta)-F_1(\theta)]=KF_\Sigma(\theta)F_\Delta(\theta)<br>$$</p>
-<p>$$<br>\Sigma=KF_\Sigma(\theta)F_2(\theta)+KF_\Sigma(\theta)F_1(\theta)=KF_\Sigma(\theta)[F_2(\theta)+F_1(\theta)]=KF_\Sigma^2(\theta)<br>$$</p>
-</li>
+<li><p>双 T 接头的$1,2$端输入，$Δ$端输出差信号，$Σ$端输出和信号。到达$1,2$的回波信号为$K_FΣ(θ)$，振幅用$K$表示</p>
+<script type="math/tex; mode=display">
+\Delta=KF_\Sigma(\theta)F_2(\theta)-KF_\Sigma(\theta)F_1(\theta)=KF_\Sigma(\theta)[F_2(\theta)-F_1(\theta)]=KF_\Sigma(\theta)F_\Delta(\theta)</script><script type="math/tex; mode=display">
+\Sigma=KF_\Sigma(\theta)F_2(\theta)+KF_\Sigma(\theta)F_1(\theta)=KF_\Sigma(\theta)[F_2(\theta)+F_1(\theta)]=KF_\Sigma^2(\theta)</script></li>
 </ul>
-<h3 id="2-3-理论分析"><a href="#2-3-理论分析" class="headerlink" title="2.3 理论分析"></a>2.3 理论分析</h3><img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118194933733.png" alt="image-20221118194933733" style="zoom: 33%;">
-
+<h3 id="2-3-理论分析"><a href="#2-3-理论分析" class="headerlink" title="2.3 理论分析"></a>2.3 理论分析</h3><p><img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118194933733.png" alt="image-20221118194933733" style="zoom: 33%;"></p>
 <ul>
-<li><p>雷达通过和天线方向图将信号发射出去，接收时，得到$Δ$和$Σ$信号，需通过$Δ$和$Σ$将目标所在位置$θ$求出来，就达到了自动测角的目的<br>$$<br>F_\Sigma(\theta)=F(\theta-\delta)+F(\theta+\delta)<br>$$</p>
-<p>$$<br>F_\Delta(\theta)=F(\theta-\delta)-F(\theta+\delta)<br>$$</p>
-<ul>
-<li><p>将$F(\theta+\delta)$与$F(\theta-\delta)$在$\delta$处做泰勒展开，忽略高阶项得到：<br>$$<br>F(\theta+\delta)=F(\delta)+F’(\delta)\theta<br>$$</p>
-<p>$$<br>F(\theta-\delta)=F(\delta)-F’(\delta)\theta<br>$$</p>
-</li>
+<li><p>雷达通过和天线方向图将信号发射出去，接收时，得到$Δ$和$Σ$信号，需通过$Δ$和$Σ$将目标所在位置$θ$求出来，就达到了自动测角的目的</p>
+<script type="math/tex; mode=display">
+F_\Sigma(\theta)=F(\theta-\delta)+F(\theta+\delta)</script><script type="math/tex; mode=display">
+F_\Delta(\theta)=F(\theta-\delta)-F(\theta+\delta)</script><ul>
+<li><p>将$F(\theta+\delta)$与$F(\theta-\delta)$在$\delta$处做泰勒展开，忽略高阶项得到：</p>
+<script type="math/tex; mode=display">
+F(\theta+\delta)=F(\delta)+F'(\delta)\theta</script><script type="math/tex; mode=display">
+F(\theta-\delta)=F(\delta)-F'(\delta)\theta</script></li>
 </ul>
 </li>
-<li><p>将$F(θ±δ) 、 F_Σ 、 F_Δ$带入到$Σ$和$Δ$的表达式中，得到：<br>$$<br>\Sigma=4KF^2(\delta)<br>$$</p>
-<p>$$<br>\Delta=-4KF(\delta)F’(\delta)\theta<br>$$</p>
-</li>
-<li><p>式中，$Σ 、 Δ 、 δ 、 F$函数均为已知项，$K$和$θ$为未知项，将两式相比得到:<br>$$<br>\frac{\Delta}{\Sigma}=-\frac{F’(\delta)}{F(\delta)}\theta=\eta\theta<br>$$</p>
-</li>
-<li><p>最终得到$\theta$：<br>$$<br>\theta=\frac{1}{\eta}\frac{\Delta}{\Sigma}<br>$$</p>
-</li>
+<li><p>将$F(θ±δ) 、 F_Σ 、 F_Δ$带入到$Σ$和$Δ$的表达式中，得到：</p>
+<script type="math/tex; mode=display">
+\Sigma=4KF^2(\delta)</script><script type="math/tex; mode=display">
+\Delta=-4KF(\delta)F'(\delta)\theta</script></li>
+<li><p>式中，$Σ 、 Δ 、 δ 、 F$函数均为已知项，$K$和$θ$为未知项，将两式相比得到:</p>
+<script type="math/tex; mode=display">
+\frac{\Delta}{\Sigma}=-\frac{F'(\delta)}{F(\delta)}\theta=\eta\theta</script></li>
+<li><p>最终得到$\theta$：</p>
+<script type="math/tex; mode=display">
+\theta=\frac{1}{\eta}\frac{\Delta}{\Sigma}</script></li>
 <li><p>只要收到一个脉冲，就能输出$Σ$信号和$Δ$信号，将两者相比就能得到$θ$</p>
 <ul>
 <li>$Σ$和$Δ$同相，$θ$就为正；</li>
