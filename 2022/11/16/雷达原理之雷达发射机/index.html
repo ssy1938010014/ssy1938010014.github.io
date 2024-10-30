@@ -278,6 +278,7 @@
       
         <p>本节主要介绍了雷达接收机，包括雷达接收机频率调制与相位调制的原理，以及单级振荡式发射机与主振放大式发射机。</p>
 <span id="more"></span>
+
 <h1 id="雷达发射机的任务"><a href="#雷达发射机的任务" class="headerlink" title="雷达发射机的任务"></a>雷达发射机的任务</h1><ul>
 <li><p>产生<strong>大功率</strong>、<strong>特定调制</strong>的<strong>射频</strong>信号。</p>
 </li>
@@ -291,15 +292,17 @@
 <li><p>线性调频信号：$S_t(t)=Acos(2\pi f_0t+\pi\mu t^2+\phi)$</p>
 </li>
 <li><p>时域波形：</p>
-<p><img src="/2022/11/16/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA/image-20221116122426205.png" alt="image-20221116122426205" style="zoom: 50%;"></p>
+<img src="/2022/11/16/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA/image-20221116122426205.png" alt="image-20221116122426205" style="zoom: 50%;">
 </li>
 <li><p>频域波形：</p>
-<p><img src="/2022/11/16/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA/image-20221116122512747.png" alt="image-20221116122512747" style="zoom:50%;"></p>
+<img src="/2022/11/16/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA/image-20221116122512747.png" alt="image-20221116122512747" style="zoom:50%;">
+
 </li>
 </ul>
 <h2 id="2-频率捷变"><a href="#2-频率捷变" class="headerlink" title="2.频率捷变"></a>2.频率捷变</h2><ul>
 <li><p>每一个脉冲的频率不同，是一种有效的抗干扰手段</p>
-<p><img src="/2022/11/16/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA/image-20221116122709279.png" alt="image-20221116122709279" style="zoom:50%;"></p>
+<img src="/2022/11/16/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA/image-20221116122709279.png" alt="image-20221116122709279" style="zoom:50%;">
+
 </li>
 </ul>
 <hr>
@@ -318,7 +321,8 @@
 <li><p>因为脉冲调制器直接控制振荡器的工作，每个射频脉冲的起始射频相位是由振荡器的噪声决定的，相继脉冲的射频相位是随机的，不能根据一个周期内的确定时刻，确定下一周期内相同位置的幅度信息，这样的信号<strong>相位是不相参的。</strong></p>
 </li>
 <li><p>其组成如下：</p>
-<p><img src="/2022/11/16/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA/image-20221116123217773.png" alt="image-20221116123217773" style="zoom: 33%;"></p>
+<img src="/2022/11/16/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA/image-20221116123217773.png" alt="image-20221116123217773" style="zoom: 33%;">
+
 </li>
 </ul>
 <h2 id="2-主振放大式发射机"><a href="#2-主振放大式发射机" class="headerlink" title="2.主振放大式发射机"></a>2.主振放大式发射机</h2><ul>
@@ -330,7 +334,8 @@
 <li><p>发射机的发射信号$f_0$，稳定本振电压$f_L$，相参振荡电压$f_c$，定时器触发脉冲$f_r$，均是由基准信号F产生的，他们之间具有<strong>相位相参性</strong></p>
 </li>
 <li><p>其组成如下：</p>
-<p><img src="/2022/11/16/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA/image-20221116124123261.png" alt="image-20221116124123261" style="zoom:50%;"></p>
+<img src="/2022/11/16/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA/image-20221116124123261.png" alt="image-20221116124123261" style="zoom:50%;">
+
 </li>
 </ul>
 <hr>
@@ -344,16 +349,14 @@
 <li>平均功率$P_{av}$：$T_r$内的输出平均功率</li>
 <li>峰值功率$P_t$：$\tau$内的输出平均功率</li>
 </ul>
-<script type="math/tex; mode=display">
-P_{av}=P_t\times\frac{\tau}{T_r}=P_tD
-\\其中，D为工作比</script><h2 id="3-总效率"><a href="#3-总效率" class="headerlink" title="3.总效率"></a>3.总效率</h2><script type="math/tex; mode=display">
-\eta=\frac{P_{av}}{P_s}
-\\其中，P_s发射机发射的总功率</script><hr>
+<p>$$<br>P_{av}=P_t\times\frac{\tau}{T_r}=P_tD<br>\\其中，D为工作比<br>$$</p>
+<h2 id="3-总效率"><a href="#3-总效率" class="headerlink" title="3.总效率"></a>3.总效率</h2><p>$$<br>\eta=\frac{P_{av}}{P_s}<br>\\其中，P_s发射机发射的总功率<br>$$</p>
+<hr>
 <h1 id="脉冲调制器"><a href="#脉冲调制器" class="headerlink" title="脉冲调制器"></a>脉冲调制器</h1><ul>
 <li><p>脉冲调制器的任务是给发射机的射频各级提供合适的视频调制脉冲</p>
 </li>
 <li><p>基本组成：</p>
-<p><img src="/2022/11/16/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA/image-20221116130342927.png" alt="image-20221116130342927" style="zoom:50%;"></p>
+<img src="/2022/11/16/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E6%9C%BA/image-20221116130342927.png" alt="image-20221116130342927" style="zoom:50%;">
 </li>
 <li><p>刚性开关脉冲调制器：产生的脉冲前后沿由预调器的脉冲控制</p>
 </li>

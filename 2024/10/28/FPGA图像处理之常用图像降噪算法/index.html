@@ -270,19 +270,20 @@
       
         <p>本节主要介绍了FPGA图像处理中常用的图像降噪算法，包括均值滤波算法、中值滤波算法、高斯滤波算法、双边滤波算法，以及它的MATLAB与FPGA实现。</p>
 <span id="more"></span>
+
 <h1 id="图像噪声简介"><a href="#图像噪声简介" class="headerlink" title="图像噪声简介"></a>图像噪声简介</h1><ul>
-<li><p>在图像传感器成像过程中， 光电转换及数模放大时， 不可避免地会产生噪声； 在图像传输过程中，也将二次引入噪声。 假设原始图像的噪声为$I(x,y)$，噪声noise为随机干扰噪声， 则真实图像的噪声可以用如下公式表示：  </p>
-<script type="math/tex; mode=display">
-f(x,y) = I(x,y)+noise</script></li>
+<li><p>在图像传感器成像过程中， 光电转换及数模放大时， 不可避免地会产生噪声； 在图像传输过程中，也将二次引入噪声。 假设原始图像的噪声为$I(x,y)$，噪声noise为随机干扰噪声， 则真实图像的噪声可以用如下公式表示：<br>$$<br>f(x,y) = I(x,y)+noise<br>$$</p>
+</li>
 <li><p>所以， 降噪过程中， 如何有效地去除叠加在原始图像中的噪声， 又尽可能地减少对原始图像数据的影响， 尤其是对原始图像的细节及纹理的保留， 非常重要。  </p>
 </li>
 <li><p>噪声有很多种，常见的噪声有椒盐噪声、高斯噪声、伽马噪声、指数噪声等。其<strong>中椒盐噪声是图像信号传输、解码等过程产生的或黑或白的噪声点，通常随机分布</strong>。而<strong>高斯噪声则是指与当前像素服从正态分布的噪声，通常是由于亮度不足或高温引起的图像传感器噪声。</strong></p>
-<p><img src="/2024/10/28/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E5%B8%B8%E7%94%A8%E5%9B%BE%E5%83%8F%E9%99%8D%E5%99%AA%E7%AE%97%E6%B3%95/image-20241028200110815.png" alt="image-20241028200110815" style="zoom: 80%;"></p>
+<img src="/2024/10/28/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E5%B8%B8%E7%94%A8%E5%9B%BE%E5%83%8F%E9%99%8D%E5%99%AA%E7%AE%97%E6%B3%95/image-20241028200110815.png" alt="image-20241028200110815" style="zoom: 80%;">
 </li>
 <li><p>从图中可见， <strong>松鼠测试图添加椒盐噪声后叠加了随机的黑白点</strong>， 符合椒盐噪声异常突出的属性， 类似于图像传感器的坏点； 而<strong>添加高斯噪声后则是满屏的噪点</strong>， 模拟图像传感器因为照度/散热引起的全幅画面的噪声。   </p>
 </li>
 <li><p>2D降噪思维导图</p>
-<p><img src="/2024/10/28/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E5%B8%B8%E7%94%A8%E5%9B%BE%E5%83%8F%E9%99%8D%E5%99%AA%E7%AE%97%E6%B3%95/image-20241028200224688.png" alt="image-20241028200224688" style="zoom: 50%;"></p>
+<img src="/2024/10/28/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E5%B8%B8%E7%94%A8%E5%9B%BE%E5%83%8F%E9%99%8D%E5%99%AA%E7%AE%97%E6%B3%95/image-20241028200224688.png" alt="image-20241028200224688" style="zoom: 50%;">
+
 </li>
 </ul>
 <hr>
@@ -292,7 +293,7 @@ f(x,y) = I(x,y)+noise</script></li>
 <li><p><strong>因此主要涉及两个变量： 窗口内像素的权重值， 以及窗口的大小。 滤波的窗口有3×3、 5×5、 7×7、 11×11等， 窗口尺度越大， 相应的计算量也越大， 效果也越明显</strong></p>
 </li>
 <li><p>均值滤波计算流程：</p>
-<p><img src="/2024/10/28/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E5%B8%B8%E7%94%A8%E5%9B%BE%E5%83%8F%E9%99%8D%E5%99%AA%E7%AE%97%E6%B3%95/image-20241028200659655.png" alt="image-20241028200659655" style="zoom: 67%;"></p>
+<img src="/2024/10/28/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E5%B8%B8%E7%94%A8%E5%9B%BE%E5%83%8F%E9%99%8D%E5%99%AA%E7%AE%97%E6%B3%95/image-20241028200659655.png" alt="image-20241028200659655" style="zoom: 67%;">
 </li>
 <li><p>均值滤波可以简单地表示为在邻域窗3×3内， 所有像素权重相同， 简单加权后求平均值。 <strong>那么可想而知， 噪声并没有被去除， 只是被平均了而已。 此外， 均值滤波除了抑制噪声， 也有平滑纹理的效果。 如果窗口很大， 也会产生模糊的效果。</strong>  </p>
 </li>
@@ -300,7 +301,8 @@ f(x,y) = I(x,y)+noise</script></li>
 <h2 id="1-均值滤波的MATLAB实现"><a href="#1-均值滤波的MATLAB实现" class="headerlink" title="1.均值滤波的MATLAB实现"></a>1.均值滤波的MATLAB实现</h2><ul>
 <li><p>matlab代码：</p>
 <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">% 灰度图像均值滤波算法实现</span></span><br><span class="line"><span class="comment">% IMG为输入的灰度图像</span></span><br><span class="line"><span class="comment">% n为滤波的窗口大小，为奇数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Q</span>=<span class="title">avg_filter</span><span class="params">(IMG,n)</span>    </span></span><br><span class="line"><span class="comment">% IMG = rgb2gray(imread(&#x27;../../0_images/Scart.jpg&#x27;));    % 读取jpg图像</span></span><br><span class="line"><span class="comment">% n=3;</span></span><br><span class="line"></span><br><span class="line">[h,w] = <span class="built_in">size</span>(IMG); </span><br><span class="line">win = <span class="built_in">zeros</span>(n,n);</span><br><span class="line">Q = <span class="built_in">zeros</span>(h,w);</span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span>=<span class="number">1</span> : h</span><br><span class="line">    <span class="keyword">for</span> <span class="built_in">j</span>=<span class="number">1</span>:w</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">i</span>&lt;(n<span class="number">-1</span>)/<span class="number">2</span>+<span class="number">1</span> || <span class="built_in">i</span>&gt;h-(n<span class="number">-1</span>)/<span class="number">2</span> || <span class="built_in">j</span>&lt;(n<span class="number">-1</span>)/<span class="number">2</span>+<span class="number">1</span> || <span class="built_in">j</span>&gt;w-(n<span class="number">-1</span>)/<span class="number">2</span>)</span><br><span class="line">            Q(<span class="built_in">i</span>,<span class="built_in">j</span>) = IMG(<span class="built_in">i</span>,<span class="built_in">j</span>); 	 <span class="comment">%边缘像素取原值</span></span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            win =  IMG(<span class="built_in">i</span>-(n<span class="number">-1</span>)/<span class="number">2</span>:<span class="built_in">i</span>+(n<span class="number">-1</span>)/<span class="number">2</span>,  <span class="built_in">j</span>-(n<span class="number">-1</span>)/<span class="number">2</span>:<span class="built_in">j</span>+(n<span class="number">-1</span>)/<span class="number">2</span>);    </span><br><span class="line">            Q(<span class="built_in">i</span>,<span class="built_in">j</span>)=sum(sum(win)) / (n*n);    <span class="comment">%n*n窗口的矩阵，求和再均值</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span>  </span><br><span class="line"><span class="keyword">end</span> </span><br><span class="line">Q=uint8(Q);</span><br></pre></td></tr></table></figure>
-<p><img src="/2024/10/28/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E5%B8%B8%E7%94%A8%E5%9B%BE%E5%83%8F%E9%99%8D%E5%99%AA%E7%AE%97%E6%B3%95/%E5%9D%87%E5%80%BC%E6%BB%A4%E6%B3%A2%E7%BB%93%E6%9E%9C%EF%BC%88MATLAB%EF%BC%89.jpg" alt="均值滤波结果（MATLAB）" style="zoom:60%;"></p>
+
+<img src="/2024/10/28/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E5%B8%B8%E7%94%A8%E5%9B%BE%E5%83%8F%E9%99%8D%E5%99%AA%E7%AE%97%E6%B3%95/%E5%9D%87%E5%80%BC%E6%BB%A4%E6%B3%A2%E7%BB%93%E6%9E%9C%EF%BC%88MATLAB%EF%BC%89.jpg" alt="均值滤波结果（MATLAB）" style="zoom:60%;">
 </li>
 <li><p><strong>均值滤波对椒盐噪声的处理并不是那么理想的</strong>。 均值滤波算法是较简单的滤波算法， 计算量较小， 其成效显而易见， <strong>对噪声能起到一个平滑的作用</strong>。  </p>
 </li>
