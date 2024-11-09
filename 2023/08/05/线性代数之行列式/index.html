@@ -270,7 +270,6 @@
       
         <p>本节主要介绍了行列式的基本性质与相关定理</p>
 <span id="more"></span>
-
 <h1 id="排列与对换"><a href="#排列与对换" class="headerlink" title="排列与对换"></a>排列与对换</h1><h2 id="1-排列"><a href="#1-排列" class="headerlink" title="1.排列"></a>1.排列</h2><ul>
 <li><p>排列：由1，2，……，n组成的一个有序数组（中间不能缺数），叫n级排列</p>
 </li>
@@ -284,8 +283,7 @@
 </li>
 <li><p>逆序数为奇数为奇排列</p>
 </li>
-<li><p>逆序数为偶数为偶排列</p>
-</li>
+<li>逆序数为偶数为偶排列</li>
 </ul>
 </li>
 <li><p>标准（自然）排列：$N(1,2,3,\dots n)=0$</p>
@@ -300,9 +298,20 @@
 <h1 id="n阶行列式"><a href="#n阶行列式" class="headerlink" title="n阶行列式"></a>n阶行列式</h1><ul>
 <li><p><strong>行列式的本质就是一个数</strong></p>
 </li>
-<li><p><strong>按行展开的定义</strong>：<strong>行</strong>标取标准排列，<strong>列</strong>标取排列的所有可能，从<strong>不同行不同列</strong>取出n各元素相乘，<strong>符号由列标排列的奇偶性决定</strong>，奇数为负，偶数取正<br>$$<br>下三角 = \begin{vmatrix}<br>a_{11} &amp; 0 &amp; 0 &amp;\dots &amp; 0\<br>a_{21} &amp; a_{22} &amp; 0 &amp;\dots &amp; 0\<br>\dots &amp; \dots &amp;  \dots &amp; \dots &amp; \dots\<br>a_{n1} &amp; a_{n2} &amp; a_{a3} &amp;\dots &amp; a_{nn}<br>\end{vmatrix}=a_{11}a_{22}\dots a_{nn}(主对角元素相乘)<br>$$</p>
-<p>$$<br>上三角 = \begin{vmatrix}<br>a_{11} &amp; a_{12} &amp; a_{13} &amp;\dots &amp; a_{1n}\<br>0 &amp; a_{22} &amp;a_{23} &amp; \dots &amp; a_{2n} &amp;\<br>\dots &amp; \dots &amp;  \dots &amp; \dots &amp; \dots\<br>0 &amp; 0 &amp; 0 &amp;\dots &amp; a_{nn}\<br>\end{vmatrix}=a_{11}a_{22}\dots a_{nn}(主对角元素相乘)<br>$$</p>
-</li>
+<li><p><strong>按行展开的定义</strong>：<strong>行</strong>标取标准排列，<strong>列</strong>标取排列的所有可能，从<strong>不同行不同列</strong>取出n各元素相乘，<strong>符号由列标排列的奇偶性决定</strong>，奇数为负，偶数取正</p>
+<script type="math/tex; mode=display">
+下三角 = \begin{vmatrix}
+a_{11} & 0 & 0 &\dots & 0\\
+a_{21} & a_{22} & 0 &\dots & 0\\
+\dots & \dots &  \dots & \dots & \dots\\
+a_{n1} & a_{n2} & a_{a3} &\dots & a_{nn}
+\end{vmatrix}=a_{11}a_{22}\dots a_{nn}(主对角元素相乘)</script><script type="math/tex; mode=display">
+上三角 = \begin{vmatrix}
+a_{11} & a_{12} & a_{13} &\dots & a_{1n}\\
+0 & a_{22} &a_{23} & \dots & a_{2n} &\\
+\dots & \dots &  \dots & \dots & \dots\\
+0 & 0 & 0 &\dots & a_{nn}\\
+\end{vmatrix}=a_{11}a_{22}\dots a_{nn}(主对角元素相乘)</script></li>
 <li><p><strong>按列展开的定义</strong>：<strong>列</strong>标取标准排列，<strong>行</strong>标取排列的所有可能，从<strong>不同行不同列</strong>取出n各元素相乘，<strong>符号由行标排列的奇偶性决定</strong>，奇数为负，偶数取正</p>
 </li>
 <li><p>当矩阵即不按行也不按列展开时，其符号由行排列与列排列的奇偶性的和决定</p>
@@ -323,8 +332,7 @@
 </li>
 <li><p>行列式所有元素，均有公因子k，则k外提n次</p>
 </li>
-<li><p><strong>两行对应成比例，$D=0$</strong></p>
-</li>
+<li><strong>两行对应成比例，$D=0$</strong></li>
 </ul>
 <h2 id="4-全零行"><a href="#4-全零行" class="headerlink" title="4.全零行"></a>4.全零行</h2><ul>
 <li><strong>某一行（列）全为0，$D=0$</strong></li>
@@ -336,58 +344,148 @@
 </li>
 </ul>
 <h2 id="6-反对称行列式"><a href="#6-反对称行列式" class="headerlink" title="6.反对称行列式"></a>6.反对称行列式</h2><ul>
-<li>奇数阶的反对称行列式$D=0$<br>$$<br>\begin{vmatrix}<br>0 &amp; a &amp; b\<br>-a &amp; 0 &amp; c\<br>-b &amp; -c &amp; 0<br>\end{vmatrix}=0<br>$$</li>
+<li>奇数阶的反对称行列式$D=0$<script type="math/tex; mode=display">
+\begin{vmatrix}
+0 & a & b\\
+-a & 0 & c\\
+-b & -c & 0 
+\end{vmatrix}=0</script></li>
 </ul>
 <hr>
 <h1 id="行列式按行展开"><a href="#行列式按行展开" class="headerlink" title="行列式按行展开"></a>行列式按行展开</h1><h2 id="1-余子式与代数余子式"><a href="#1-余子式与代数余子式" class="headerlink" title="1.余子式与代数余子式"></a>1.余子式与代数余子式</h2><ul>
-<li><p>假设有行列式：<br>$$<br>\begin{vmatrix}<br>1 &amp; 1 &amp; 0 &amp; 3\<br>1 &amp; 1 &amp; 1 &amp; 1\<br>2 &amp; 2 &amp; 3 &amp; 4\<br>5 &amp; 5 &amp; 6 &amp; 6<br>\end{vmatrix}<br>$$</p>
-</li>
-<li><p>则余子式：<br>$$<br>M_{32}=\begin{vmatrix}<br>1 &amp; 0 &amp; 3\<br>1 &amp; 1 &amp; 1\<br>5 &amp; 6 &amp; 6<br>\end{vmatrix}<br>$$</p>
-<p>$$<br>M_{14}=\begin{vmatrix}<br>1 &amp; 1 &amp; 1\<br>2 &amp; 2 &amp; 3\<br>5 &amp; 5 &amp; 6<br>\end{vmatrix}<br>$$</p>
-</li>
-<li><p>则代数余子式：<br>$$<br>A_{32}=(-1)^{3+2}\begin{vmatrix}<br>1 &amp; 0 &amp; 3\<br>1 &amp; 1 &amp; 1\<br>5 &amp; 6 &amp; 6<br>\end{vmatrix}=(-1)^{3+2}M_{32}<br>$$</p>
-<p>$$<br>A_{14}=(-1)^{1+4}\begin{vmatrix}<br>1 &amp; 1 &amp; 1\<br>2 &amp; 2 &amp; 3\<br>5 &amp; 5 &amp; 6<br>\end{vmatrix}=(-1)^{1+4}M_{14}<br>$$</p>
-</li>
+<li><p>假设有行列式：</p>
+<script type="math/tex; mode=display">
+\begin{vmatrix}
+1 & 1 & 0 & 3\\
+1 & 1 & 1 & 1\\
+2 & 2 & 3 & 4\\
+5 & 5 & 6 & 6
+\end{vmatrix}</script></li>
+<li><p>则余子式：</p>
+<script type="math/tex; mode=display">
+M_{32}=\begin{vmatrix}
+1 & 0 & 3\\
+1 & 1 & 1\\
+5 & 6 & 6
+\end{vmatrix}</script><script type="math/tex; mode=display">
+M_{14}=\begin{vmatrix}
+1 & 1 & 1\\
+2 & 2 & 3\\
+5 & 5 & 6
+\end{vmatrix}</script></li>
+<li><p>则代数余子式：</p>
+<script type="math/tex; mode=display">
+A_{32}=(-1)^{3+2}\begin{vmatrix}
+1 & 0 & 3\\
+1 & 1 & 1\\
+5 & 6 & 6
+\end{vmatrix}=(-1)^{3+2}M_{32}</script><script type="math/tex; mode=display">
+A_{14}=(-1)^{1+4}\begin{vmatrix}
+1 & 1 & 1\\
+2 & 2 & 3\\
+5 & 5 & 6
+\end{vmatrix}=(-1)^{1+4}M_{14}</script></li>
 <li><p><strong>相关定理</strong>：</p>
 <ul>
 <li>$D=a_{i1}A_{i1}+a_{i2}A_{i2}+\dots+a_{in}A_{in}$（按某一行展开）</li>
 <li>$D = a_{1j}A_{1j}+a_{2j}A_{2j}+\dots+a_{nj}A_{nj}$（按某一列展开）</li>
 </ul>
 </li>
-<li><p><strong>异乘变零定理：某一行元素与另一行元素的代数余子式乘积之和=0</strong></p>
-</li>
+<li><strong>异乘变零定理：某一行元素与另一行元素的代数余子式乘积之和=0</strong></li>
 </ul>
 <h2 id="2-拉普拉斯展开定理"><a href="#2-拉普拉斯展开定理" class="headerlink" title="2.拉普拉斯展开定理"></a>2.拉普拉斯展开定理</h2><ul>
 <li><p>k阶子式：取k行k列，重叠部分即为k阶子式</p>
 <ul>
-<li><p>若有行列式：<br>$$<br>\begin{vmatrix}<br>1 &amp; 2 &amp; 3 &amp; 4\<br>1 &amp; 1 &amp; 2 &amp; 5\<br>1 &amp; 1 &amp; 0 &amp; 8\<br>9 &amp; 9 &amp; 9 &amp; 10<br>\end{vmatrix}<br>$$</p>
-</li>
-<li><p>取第1、2行与1、2列，则其2阶子式为：<br>$$<br>\begin{vmatrix}<br>1 &amp; 2 \<br>1 &amp; 1<br>\end{vmatrix}<br>$$</p>
-</li>
+<li><p>若有行列式：</p>
+<script type="math/tex; mode=display">
+\begin{vmatrix}
+1 & 2 & 3 & 4\\
+1 & 1 & 2 & 5\\
+1 & 1 & 0 & 8\\
+9 & 9 & 9 & 10
+\end{vmatrix}</script></li>
+<li><p>取第1、2行与1、2列，则其2阶子式为：</p>
+<script type="math/tex; mode=display">
+\begin{vmatrix}
+1 & 2 \\
+1 & 1 
+\end{vmatrix}</script></li>
 </ul>
 </li>
 <li><p>余子式：取完k行k列后剩下的行列式</p>
 <ul>
-<li>则余子式为：<br>$$<br>\begin{vmatrix}<br>0 &amp; 8 \<br>9 &amp; 10<br>\end{vmatrix}<br>$$</li>
+<li>则余子式为：<script type="math/tex; mode=display">
+\begin{vmatrix}
+0 & 8 \\
+9 & 10 
+\end{vmatrix}</script></li>
 </ul>
 </li>
 <li><p>代数余子式：在余子式的基础上乘以代数$(-1)^{取的行数和+列数和}$</p>
 <ul>
-<li>则代数余子式为：<br>$$<br>(-1)^{1+2+1+2}\begin{vmatrix}<br>0 &amp; 8 \<br>9 &amp; 10<br>\end{vmatrix}<br>$$</li>
+<li>则代数余子式为：<script type="math/tex; mode=display">
+(-1)^{1+2+1+2}\begin{vmatrix}
+0 & 8 \\
+9 & 10 
+\end{vmatrix}</script></li>
 </ul>
 </li>
-<li><p>定理：取定k行，由k行元素组成的所有k阶子式与代数余子式乘积之和=D（行列式的值）<br>$$<br>\begin{vmatrix}<br>1 &amp; 2 &amp; 0 &amp; 0 &amp; 0\<br>3 &amp; 4 &amp; 0 &amp; 0 &amp; 0\<br>1 &amp; 2 &amp; 3 &amp; 4 &amp; 5\<br>1 &amp; 1 &amp; 1 &amp; 1 &amp; 1\<br>6 &amp; 6 &amp; 8 &amp; 3 &amp; 1<br>\end{vmatrix}=\begin{vmatrix}<br>1 &amp; 2 \<br>3 &amp; 4<br>\end{vmatrix}\times(-1)^{1+2+1+2}\times \begin{vmatrix}<br>3 &amp; 4 &amp; 5\<br>1 &amp; 1 &amp; 1\<br>8 &amp; 3 &amp; 1<br>\end{vmatrix}<br>$$</p>
-</li>
+<li><p>定理：取定k行，由k行元素组成的所有k阶子式与代数余子式乘积之和=D（行列式的值）</p>
+<script type="math/tex; mode=display">
+\begin{vmatrix}
+1 & 2 & 0 & 0 & 0\\
+3 & 4 & 0 & 0 & 0\\
+1 & 2 & 3 & 4 & 5\\
+1 & 1 & 1 & 1 & 1\\
+6 & 6 & 8 & 3 & 1
+\end{vmatrix}=\begin{vmatrix}
+1 & 2 \\
+3 & 4 
+\end{vmatrix}\times(-1)^{1+2+1+2}\times \begin{vmatrix}
+3 & 4 & 5\\
+1 & 1 & 1\\
+8 & 3 & 1
+\end{vmatrix}</script></li>
 </ul>
 <hr>
-<h1 id="范德蒙德行列式"><a href="#范德蒙德行列式" class="headerlink" title="范德蒙德行列式"></a>范德蒙德行列式</h1><p>$$<br>\begin{vmatrix}<br>1 &amp; 1 &amp; 1 &amp; \dots &amp; 1\<br>x_1 &amp; x_2 &amp; x_3 &amp; \dots&amp; x_n\<br>\dots &amp; \dots &amp; \dots &amp; \dots &amp; \dots\<br>x_1^{n-2} &amp; x_2^{n-2} &amp; x_3^{n-2} &amp; \dots &amp; x_n^{n-2}\<br>x_1^{n-1} &amp; x_2^{n-1} &amp; x_3^{n-1} &amp; \dots &amp; x_n^{n-1}<br>\end{vmatrix}=\prod_{1\le j&lt;i\le n}(x_i-x_j)<br>$$</p>
-<hr>
-<h1 id="Cramer法则"><a href="#Cramer法则" class="headerlink" title="Cramer法则"></a>Cramer法则</h1><p>$$<br>\begin{cases}<br>\begin{aligned}<br>x_1 + x_2 + x_3 &amp; = 1\<br>x_1 - x_2 + 5x_3 &amp; = 6\<br>-x_1 + x_2 + 6x_3 &amp; = 9<br>\end{aligned}<br>\end{cases}<br>$$</p>
-<ul>
-<li><p>则：<br>$$<br>D=\begin{vmatrix}<br>1 &amp; 1 &amp; 1\<br>1 &amp; -1 &amp; 5\<br>-1 &amp; 1 &amp; 6\<br>\end{vmatrix}\quad D_1=\begin{vmatrix}<br>1 &amp; 1 &amp; 1\<br>6 &amp; -1 &amp; 5\<br>9 &amp; 1 &amp; 6\<br>\end{vmatrix}\quad D_2=\begin{vmatrix}<br>1 &amp; 1 &amp; 1\<br>1 &amp; 6 &amp; 5\<br>-1 &amp; 9 &amp; 6\<br>\end{vmatrix}\quad D_3=\begin{vmatrix}<br>1 &amp; 1 &amp; 1\<br>1 &amp; -1 &amp; 6\<br>-1 &amp; 1 &amp; 9\<br>\end{vmatrix}<br>$$</p>
-</li>
-<li><p>则：<br>$$<br>x_1=\frac{D_1}{D}\quad x_2=\frac{D_2}{D}\quad x_3=\frac{D_3}{D}<br>$$</p>
-</li>
+<h1 id="范德蒙德行列式"><a href="#范德蒙德行列式" class="headerlink" title="范德蒙德行列式"></a>范德蒙德行列式</h1><script type="math/tex; mode=display">
+\begin{vmatrix}
+1 & 1 & 1 & \dots & 1\\
+x_1 & x_2 & x_3 & \dots& x_n\\
+\dots & \dots & \dots & \dots & \dots\\
+x_1^{n-2} & x_2^{n-2} & x_3^{n-2} & \dots & x_n^{n-2}\\
+x_1^{n-1} & x_2^{n-1} & x_3^{n-1} & \dots & x_n^{n-1}
+\end{vmatrix}=\prod_{1\le j<i\le n}(x_i-x_j)</script><hr>
+<h1 id="Cramer法则"><a href="#Cramer法则" class="headerlink" title="Cramer法则"></a>Cramer法则</h1><script type="math/tex; mode=display">
+\begin{cases}
+\begin{aligned}
+x_1 + x_2 + x_3 & = 1\\
+x_1 - x_2 + 5x_3 & = 6\\
+-x_1 + x_2 + 6x_3 & = 9
+\end{aligned}
+\end{cases}</script><ul>
+<li><p>则：</p>
+<script type="math/tex; mode=display">
+D=\begin{vmatrix}
+1 & 1 & 1\\
+1 & -1 & 5\\
+-1 & 1 & 6\\
+\end{vmatrix}\quad D_1=\begin{vmatrix}
+1 & 1 & 1\\
+6 & -1 & 5\\
+9 & 1 & 6\\
+\end{vmatrix}\quad D_2=\begin{vmatrix}
+1 & 1 & 1\\
+1 & 6 & 5\\
+-1 & 9 & 6\\
+\end{vmatrix}\quad D_3=\begin{vmatrix}
+1 & 1 & 1\\
+1 & -1 & 6\\
+-1 & 1 & 9\\
+\end{vmatrix}</script></li>
+<li><p>则：</p>
+<script type="math/tex; mode=display">
+x_1=\frac{D_1}{D}\quad x_2=\frac{D_2}{D}\quad x_3=\frac{D_3}{D}</script></li>
 <li><p><strong>只适用于方程个数=未知量个数，且$D\neq 0$的情况</strong></p>
 </li>
 <li><p>当方程组右侧的值均为0时，则称为齐次方程组</p>

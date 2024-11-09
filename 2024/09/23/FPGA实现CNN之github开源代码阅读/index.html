@@ -42,8 +42,8 @@
 <meta property="article:published_time" content="2024-09-23T02:07:12.000Z">
 <meta property="article:modified_time" content="2024-10-06T13:43:39.364Z">
 <meta property="article:author" content="ssy">
-<meta property="article:tag" content="verilog">
 <meta property="article:tag" content="CNN">
+<meta property="article:tag" content="verilog">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/09/23/FPGA%E5%AE%9E%E7%8E%B0CNN%E4%B9%8Bgithub%E5%BC%80%E6%BA%90%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB/image-20240923221927480.png">
 
@@ -282,7 +282,6 @@
       
         <p>本节主要分享在github中阅读学习别人开源代码的感悟。</p>
 <span id="more"></span>
-
 <h1 id="https-github-com-omarelhedaby-CNN-FPGA"><a href="#https-github-com-omarelhedaby-CNN-FPGA" class="headerlink" title="https://github.com/omarelhedaby/CNN-FPGA"></a><a target="_blank" rel="noopener" href="https://github.com/omarelhedaby/CNN-FPGA">https://github.com/omarelhedaby/CNN-FPGA</a></h1><ul>
 <li><p>该代码展开得很少，更多得考虑资源，架构上没有啥特色，就是乘加运算的堆叠【浮点乘加】</p>
 </li>
@@ -294,10 +293,10 @@
 <p><img src="/2024/09/23/FPGA%E5%AE%9E%E7%8E%B0CNN%E4%B9%8Bgithub%E5%BC%80%E6%BA%90%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB/image-20240923221927480.png" alt="image-20240923221927480"></p>
 </li>
 <li><p>softmax模块设计框图：</p>
-<img src="/2024/09/23/FPGA%E5%AE%9E%E7%8E%B0CNN%E4%B9%8Bgithub%E5%BC%80%E6%BA%90%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB/image-20240923222011978.png" alt="image-20240923222011978" style="zoom: 50%;">
+<p><img src="/2024/09/23/FPGA%E5%AE%9E%E7%8E%B0CNN%E4%B9%8Bgithub%E5%BC%80%E6%BA%90%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB/image-20240923222011978.png" alt="image-20240923222011978" style="zoom: 50%;"></p>
 </li>
 <li><p>平均池化设计框图：</p>
-<img src="/2024/09/23/FPGA%E5%AE%9E%E7%8E%B0CNN%E4%B9%8Bgithub%E5%BC%80%E6%BA%90%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB/image-20240923222056732.png" alt="image-20240923222056732" style="zoom:80%;">
+<p><img src="/2024/09/23/FPGA%E5%AE%9E%E7%8E%B0CNN%E4%B9%8Bgithub%E5%BC%80%E6%BA%90%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB/image-20240923222056732.png" alt="image-20240923222056732" style="zoom:80%;"></p>
 </li>
 <li><p>这里面有个串行加法器的写法有点意思：</p>
 <p><img src="/2024/09/23/FPGA%E5%AE%9E%E7%8E%B0CNN%E4%B9%8Bgithub%E5%BC%80%E6%BA%90%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB/image-20240923221812752.png" alt="image-20240923221812752"></p>
@@ -317,24 +316,23 @@
 <p><img src="/2024/09/23/FPGA%E5%AE%9E%E7%8E%B0CNN%E4%B9%8Bgithub%E5%BC%80%E6%BA%90%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB/image-20241006200407737.png" alt="image-20241006200407737"></p>
 </li>
 <li><p>卷积块：</p>
-<img src="/2024/09/23/FPGA%E5%AE%9E%E7%8E%B0CNN%E4%B9%8Bgithub%E5%BC%80%E6%BA%90%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB/image-20241006201221908.png" alt="image-20241006201221908" style="zoom: 50%;">
+<p><img src="/2024/09/23/FPGA%E5%AE%9E%E7%8E%B0CNN%E4%B9%8Bgithub%E5%BC%80%E6%BA%90%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB/image-20241006201221908.png" alt="image-20241006201221908" style="zoom: 50%;"></p>
 </li>
 <li><p>矩阵乘累加模块：这里MAC是串行实现方式，只有一个硬件单元，用时间换资源了</p>
-<img src="/2024/09/23/FPGA%E5%AE%9E%E7%8E%B0CNN%E4%B9%8Bgithub%E5%BC%80%E6%BA%90%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB/image-20241006201322564.png" alt="image-20241006201322564" style="zoom:50%;">
+<p><img src="/2024/09/23/FPGA%E5%AE%9E%E7%8E%B0CNN%E4%B9%8Bgithub%E5%BC%80%E6%BA%90%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB/image-20241006201322564.png" alt="image-20241006201322564" style="zoom:50%;"></p>
 </li>
 </ul>
 </li>
 <li><p>ReLu层：并行Relu</p>
-<img src="/2024/09/23/FPGA%E5%AE%9E%E7%8E%B0CNN%E4%B9%8Bgithub%E5%BC%80%E6%BA%90%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB/7_relu_activation.jpeg" alt="7_relu_activation" style="zoom: 67%;">
+<p><img src="/2024/09/23/FPGA%E5%AE%9E%E7%8E%B0CNN%E4%B9%8Bgithub%E5%BC%80%E6%BA%90%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB/7_relu_activation.jpeg" alt="7_relu_activation" style="zoom: 67%;"></p>
 </li>
 <li><p>最大池化层：</p>
 <ul>
-<li><p>池化顶层：3 * 3 经过2 * 2池化，需要滑动4次池化窗口，故此处为4次展开并行处理</p>
-<img src="/2024/09/23/FPGA%E5%AE%9E%E7%8E%B0CNN%E4%B9%8Bgithub%E5%BC%80%E6%BA%90%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB/10_max_pooling.jpeg" alt="10_max_pooling" style="zoom: 80%;">
+<li><p>池化顶层：3 <em> 3 经过2 </em> 2池化，需要滑动4次池化窗口，故此处为4次展开并行处理</p>
+<p><img src="/2024/09/23/FPGA%E5%AE%9E%E7%8E%B0CNN%E4%B9%8Bgithub%E5%BC%80%E6%BA%90%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB/10_max_pooling.jpeg" alt="10_max_pooling" style="zoom: 80%;"></p>
 </li>
-<li><p>小池化块：对于每次池化窗口2<em>2=4个数据，级联方式需要3个比较器得最大值，*</em>这样子可以实现流水处理方式**</p>
-<img src="/2024/09/23/FPGA%E5%AE%9E%E7%8E%B0CNN%E4%B9%8Bgithub%E5%BC%80%E6%BA%90%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB/image-20241006201951218.png" alt="image-20241006201951218" style="zoom:80%;">
-
+<li><p>小池化块：对于每次池化窗口2<em>2=4个数据，级联方式需要3个比较器得最大值，<em>*这样子可以实现流水处理方式</em></em></p>
+<p><img src="/2024/09/23/FPGA%E5%AE%9E%E7%8E%B0CNN%E4%B9%8Bgithub%E5%BC%80%E6%BA%90%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB/image-20241006201951218.png" alt="image-20241006201951218" style="zoom:80%;"></p>
 </li>
 </ul>
 </li>
@@ -381,8 +379,8 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/verilog/" rel="tag"># verilog</a>
               <a href="/tags/CNN/" rel="tag"># CNN</a>
+              <a href="/tags/verilog/" rel="tag"># verilog</a>
           </div>
 
         
