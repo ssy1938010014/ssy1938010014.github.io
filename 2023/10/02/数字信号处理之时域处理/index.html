@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1/themes/blue/pace-theme-minimal.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"xn--ssy-lq6e63gg6fuu2d.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本节主要介绍了数字信号处理中的一些时域上的处理，包括序列信号的线性时不变系统、线性卷积、Z变换等">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数字信号处理之时域处理">
+<meta property="og:url" content="http://ssy的小天地.com/2023/10/02/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%97%B6%E5%9F%9F%E5%A4%84%E7%90%86/index.html">
+<meta property="og:site_name" content="ssy的小天地">
+<meta property="og:description" content="本节主要介绍了数字信号处理中的一些时域上的处理，包括序列信号的线性时不变系统、线性卷积、Z变换等">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/02/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%97%B6%E5%9F%9F%E5%A4%84%E7%90%86/image-20231004202820105.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/02/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%97%B6%E5%9F%9F%E5%A4%84%E7%90%86/LinearConv.bmp">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/02/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%97%B6%E5%9F%9F%E5%A4%84%E7%90%86/image-20231004212620824.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/02/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%97%B6%E5%9F%9F%E5%A4%84%E7%90%86/image-20231004213058396.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/02/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%97%B6%E5%9F%9F%E5%A4%84%E7%90%86/image-20231004214850605.png">
+<meta property="article:published_time" content="2023-10-02T02:07:12.000Z">
+<meta property="article:modified_time" content="2023-10-07T03:54:20.291Z">
+<meta property="article:author" content="ssy">
+<meta property="article:tag" content="数字信号处理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/10/02/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%97%B6%E5%9F%9F%E5%A4%84%E7%90%86/image-20231004202820105.png">
+
+<link rel="canonical" href="http://ssy的小天地.com/2023/10/02/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%97%B6%E5%9F%9F%E5%A4%84%E7%90%86/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>数字信号处理之时域处理 | ssy的小天地</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+    <a target="_blank" rel="noopener" href="https://github.com/ssy1938010014" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ssy的小天地</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">愿汝如是 千金不换</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-works">
+
+    <a href="/works/" rel="section"><i class="fa fa-fw fa-sitemap"></i>文章</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ssy的小天地.com/2023/10/02/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%97%B6%E5%9F%9F%E5%A4%84%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ssy.png">
+      <meta itemprop="name" content="ssy">
+      <meta itemprop="description" content="满怀希望 就会所向披靡">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ssy的小天地">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          数字信号处理之时域处理
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+
+
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-10-02 10:07:12" itemprop="dateCreated datePublished" datetime="2023-10-02T10:07:12+08:00">2023-10-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-10-07 11:54:20" itemprop="dateModified" datetime="2023-10-07T11:54:20+08:00">2023-10-07</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%A7%AF%E7%B4%AF/" itemprop="url" rel="index"><span itemprop="name">学习积累</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本节主要介绍了数字信号处理中的一些时域上的处理，包括序列信号的线性时不变系统、线性卷积、Z变换等</p>
+<span id="more"></span>
+
+<h1 id="数字信号的理解"><a href="#数字信号的理解" class="headerlink" title="数字信号的理解"></a>数字信号的理解</h1><ul>
+<li>模拟信号：时域连续和幅度连续</li>
+<li>数字信号：时域和幅度均离散</li>
+<li>时域连续信号：时域连续、幅度连续或离散</li>
+<li>时域离散信号：时域离散、幅度连续或离散</li>
+<li>时域离散就意味着：<ul>
+<li>$x[n]$中$n$一定要是整数</li>
+</ul>
+</li>
+<li>幅度离散并不要求幅度值一定是整数，只要是有限的状态值就可以了</li>
+</ul>
+<hr>
+<h1 id="序列的基本概念"><a href="#序列的基本概念" class="headerlink" title="序列的基本概念"></a>序列的基本概念</h1><h2 id="1-任何序列都可以用单位样本序列-delta-n-来表示"><a href="#1-任何序列都可以用单位样本序列-delta-n-来表示" class="headerlink" title="1.任何序列都可以用单位样本序列$\delta (n)$来表示"></a>1.任何序列都可以用单位样本序列$\delta (n)$来表示</h2><p>$$<br>x(n)=\sum_{m=-\infty}^{\infty}x(m)\delta(n-m)<br>$$</p>
+<h2 id="2-正弦序列的周期性"><a href="#2-正弦序列的周期性" class="headerlink" title="2.正弦序列的周期性"></a>2.正弦序列的周期性</h2><ul>
+<li><p>正弦序列$sin(mn)$不一定是周期信号</p>
+</li>
+<li><p>若想要$sin(mn)$为周期信号，那么需满足<br>$$<br>sin(mn)=sin<a href="N只能是整数">m(n+N)</a><br>$$</p>
+</li>
+<li><p>则需满足：<br>$$<br>mN = 2\pi k<br>$$</p>
+<p>$$<br>N=\frac{2\pi k}{m}<br>$$</p>
+</li>
+<li><p>而$N$需满足为整数，$k$也是整数，那么只有当$m$为$\pi$的倍数时，N才是整数，此时正弦序列$sin(mn)$才是周期信号</p>
+</li>
+</ul>
+<h2 id="3-数字域频率"><a href="#3-数字域频率" class="headerlink" title="3.数字域频率"></a>3.数字域频率</h2><ul>
+<li><p>数字域频率为：<br>$$<br>w_0=\Omega_0T_s=\frac{\Omega_0}{f_s}=2\pi\frac{f_0}{f_s}=\frac{2\pi}{N}<br>$$</p>
+<p>$$<br>其中:\Omega_0为模拟角频率(rad/s),\quad w_0为数字角频率(rad)\<br>T_s为采样间隔(s),\quad f_s为采样频率(Hz),\quad f_0为模拟频率(Hz)\<br>N=T_0\times f_s,其中T_0为原始模拟信号的周期<br>$$</p>
+</li>
+<li><p>推导过程：</p>
+<ul>
+<li>连续时间正弦信号：$x_a(t)=cos(\Omega_0t+\phi)$</li>
+<li>令$t=nT$，$T$为采样间隔</li>
+<li>则$x_a(t)|_{t=nT}=cos(\Omega nT+\phi)=x_a(nT)$</li>
+<li>将$x_a(nT)$简记为$x(n)$</li>
+<li>$\Omega_0 T$记为$w_0$</li>
+<li>则离散时间正弦序列为：$x(n)=cos(w_0n+\phi)$</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="线性时不变系统"><a href="#线性时不变系统" class="headerlink" title="线性时不变系统"></a>线性时不变系统</h1><ul>
+<li>线性特性：<ul>
+<li>$x(n)$做为一个整体只能是一次方，可以对$x(n)$乘以其它值；不能出现完全与$x(n)$无关的项；$x(n)$中的自变量$n$可以任意变换；</li>
+<li>线性是针对$x(n)$来讨论的</li>
+</ul>
+</li>
+<li>时不变特性：<ul>
+<li>n必须作为$x(n)$（不能对$x(n)$乘以带$n$的系数，比如$sin(wn)$）中的自变量，不能对$n$进行乘法运算，可进行加减常数运算</li>
+<li>时不变是针对$n$来讨论的</li>
+</ul>
+</li>
+<li>线性时不变特性：<ul>
+<li>$FIR$滤波：$y(n)=b_0x(n)+b_1x(n-1)+…b_rx(n-r)$的形式，其中$n-1,n-2..$也可为$n+1,n+2..$</li>
+<li>$IIR$滤波：$y(n)+a_1y(n-1)+…=b_0x(n)+b_1x(n-1)+…b_rx(n-r)$的形式（需要满足$y(n)=0,n&lt;0$）</li>
+</ul>
+</li>
+<li>对于线性时不变系统因果稳定性的判定：<ul>
+<li>因果性：$h(n)=0,n&lt;0$</li>
+<li>稳定性：$\sum|h(n)|&lt;\infty$</li>
+</ul>
+</li>
+<li><strong>系统的作用不过是改变正弦信号的幅度和相位</strong></li>
+</ul>
+<hr>
+<h1 id="线性卷积"><a href="#线性卷积" class="headerlink" title="线性卷积"></a>线性卷积</h1><img src="/2023/10/02/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%97%B6%E5%9F%9F%E5%A4%84%E7%90%86/image-20231004202820105.png" alt="image-20231004202820105" style="zoom: 80%;">
+
+<ul>
+<li><p>首先，定义系统对输入是单位脉冲序列的响应为单位脉冲响应，即：<br>$$<br>输入\delta (n)\rightarrow 输出h(n)<br>$$</p>
+</li>
+<li><p>其次，我们知道，任何一个序列信号都可以由单位脉冲序列表示，即：<br>$$<br>x(n)=\sum_{m=-\infty}^{\infty}x(m)\delta(n-m)<br>$$</p>
+</li>
+<li><p>此外，对于一个线性系统：<br>$$<br>\because \delta(n)\rightarrow h(n)\<br>\therefore a\delta(n)\rightarrow ah(n)\<br>\therefore a\delta(n-n_0)\rightarrow ah(n-n_0)<br>$$</p>
+</li>
+<li><p>那么$y(n)$就是$x(n)$经过线性系统的结果：<br>$$<br>\because x(n)=\cdots x(-1)\delta(n+1)+x(0)\delta(n)+x(1)\delta(n-1)+\cdots\<br>\therefore y(n)=\cdots x(-1)h(n+1)+x(0)h(n)+x(1)h(n-1)+\cdots<br>$$</p>
+</li>
+<li><p>所以最终$y(n)$的结果是：<br>$$<br>y(n)=\sum_{m=-\infty}^{\infty}x(m)h(n-m)<br>$$</p>
+</li>
+<li><p>而我们称卷积为：<br>$$<br>y(n)=x(n)*h(n)=\sum_{m=-\infty}^{\infty}x(m)h(n-m)<br>$$</p>
+<ul>
+<li>其中，$*$称为卷积运算</li>
+<li>卷积满足交换律：$x(n)<em>h(n)=h(n)</em>x(n)$</li>
+</ul>
+</li>
+<li><p>所以系统输出$y(n)$就是输入$x(n)$与单位脉冲响应$h(n)$的卷积结果</p>
+</li>
+</ul>
+<h2 id="1-卷积的意义"><a href="#1-卷积的意义" class="headerlink" title="1.卷积的意义"></a>1.卷积的意义</h2><ul>
+<li><p><strong>卷积是系统的工作方式：翻转、移位、相乘相加</strong></p>
+</li>
+<li><p>举个例子：</p>
+<ul>
+<li><p>若$h(n)=[1,2,3,4]$，即$h(n)=\delta(n)+2\delta(n-1)+3\delta(n-2)+4\delta(n-3)$</p>
+</li>
+<li><p>若$x(n)=[1,1,1,1]$</p>
+</li>
+<li><p>那么$y(n)=\sum_{m=-\infty}^{\infty}x(m)h(n-m)$，有：<br>$$<br>y(0)=\sum_{m=-\infty}^{\infty}x(m)h(-m)\<br>y(1)=\sum_{m=-\infty}^{\infty}x(m)h(1-m)\<br>y(2)=\sum_{m=-\infty}^{\infty}x(m)h(2-m)\<br>……<br>$$</p>
+</li>
+<li><p>则可视化的运算如下：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th>$x(n)$</th>
+<th>1</th>
+<th>1</th>
+<th>1</th>
+<th>1</th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>$h(n)$</td>
+<td>4</td>
+<td>3</td>
+<td>2</td>
+<td>1</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>$y(0)=1$</td>
+</tr>
+<tr>
+<td>$h(1-n)$</td>
+<td></td>
+<td>4</td>
+<td>3</td>
+<td>2</td>
+<td>1</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>$y(1)=3$</td>
+</tr>
+<tr>
+<td>$h(2-n)$</td>
+<td></td>
+<td></td>
+<td>4</td>
+<td>3</td>
+<td>2</td>
+<td>1</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>$y(2)=6$</td>
+</tr>
+<tr>
+<td>$h(3-n)$</td>
+<td></td>
+<td></td>
+<td></td>
+<td>4</td>
+<td>3</td>
+<td>2</td>
+<td>1</td>
+<td></td>
+<td></td>
+<td></td>
+<td>$y(3)=10$</td>
+</tr>
+<tr>
+<td>$h(4-n)$</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>4</td>
+<td>3</td>
+<td>2</td>
+<td>1</td>
+<td></td>
+<td></td>
+<td>$y(4)=9$</td>
+</tr>
+<tr>
+<td>$h(5-n)$</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>4</td>
+<td>3</td>
+<td>2</td>
+<td>1</td>
+<td></td>
+<td>$y(5)=7$</td>
+</tr>
+<tr>
+<td>$h(6-n)$</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>4</td>
+<td>3</td>
+<td>2</td>
+<td>1</td>
+<td>$y(6)=4$</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+<li><p><strong>线性卷积的长度是$len[x(n)]+len[h(n)]-1$</strong></p>
+</li>
+</ul>
+<h2 id="2-MATLAB实现举例"><a href="#2-MATLAB实现举例" class="headerlink" title="2.MATLAB实现举例"></a>2.MATLAB实现举例</h2><ul>
+<li><p>特定的卷积核，对某些特定信号有的滤波作用</p>
+</li>
+<li><p>示例代码：</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">clc;                      <span class="comment">%清屏</span></span><br><span class="line">clear all;                <span class="comment">%清变量</span></span><br><span class="line"></span><br><span class="line">fs=<span class="number">200</span>;                   <span class="comment">%采样频率为200Hz</span></span><br><span class="line">hn=<span class="built_in">ones</span>(<span class="number">1</span>,<span class="number">4</span>);             <span class="comment">%系统hn</span></span><br><span class="line"></span><br><span class="line">t=<span class="number">0</span>:<span class="number">1</span>/fs:<span class="number">1</span>;               <span class="comment">%时间序列</span></span><br><span class="line">xn1=<span class="built_in">sin</span>(<span class="number">2</span>*<span class="built_in">pi</span>*<span class="number">50</span>*t);       <span class="comment">%50Hz正弦信号</span></span><br><span class="line">xn2=<span class="built_in">sin</span>(<span class="number">2</span>*<span class="built_in">pi</span>*<span class="number">5</span>*t);        <span class="comment">%5Hz正弦信号</span></span><br><span class="line">xn=xn1+xn2;               <span class="comment">%叠加信号</span></span><br><span class="line"></span><br><span class="line">yn=conv(xn,hn);           <span class="comment">%卷积运算获得系统输出</span></span><br><span class="line"></span><br><span class="line"><span class="comment">%绘图</span></span><br><span class="line">subplot(<span class="number">411</span>);</span><br><span class="line"><span class="built_in">plot</span>(t,xn1);title(<span class="string">&#x27;50Hz正弦信号&#x27;</span>);</span><br><span class="line">subplot(<span class="number">412</span>);</span><br><span class="line"><span class="built_in">plot</span>(t,xn2);title(<span class="string">&#x27;5Hz正弦信号&#x27;</span>);</span><br><span class="line">subplot(<span class="number">413</span>);</span><br><span class="line"><span class="built_in">plot</span>(t,xn);title(<span class="string">&#x27;输入信号&#x27;</span>);</span><br><span class="line">subplot(<span class="number">414</span>);</span><br><span class="line"><span class="built_in">plot</span>(t,yn(<span class="number">1</span>:<span class="built_in">length</span>(xn)));title(<span class="string">&#x27;输出信号&#x27;</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>结果如下：</p>
+<img src="/2023/10/02/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%97%B6%E5%9F%9F%E5%A4%84%E7%90%86/LinearConv.bmp" alt="LinearConv" style="zoom: 67%;">
+
+<ul>
+<li><p>观察到输出信号中50Hz的正弦信号被滤除了</p>
+</li>
+<li><p>其原因是采样频率200Hz是正弦信号50Hz的4倍，在一个周期内采样了4个点</p>
+<img src="/2023/10/02/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%97%B6%E5%9F%9F%E5%A4%84%E7%90%86/image-20231004212620824.png" alt="image-20231004212620824" style="zoom:50%;">
+</li>
+<li><p>而这四个点正好对应这四个位置</p>
+<img src="/2023/10/02/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%97%B6%E5%9F%9F%E5%A4%84%E7%90%86/image-20231004213058396.png" alt="image-20231004213058396" style="zoom: 33%;">
+</li>
+<li><p><strong>相当于是$0,1,0,-1,0,1,0,-1,…$这一串数接受$1,1,1,1$的检阅</strong></p>
+<img src="/2023/10/02/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%97%B6%E5%9F%9F%E5%A4%84%E7%90%86/image-20231004214850605.png" alt="image-20231004214850605" style="zoom:50%;">
+
+<ul>
+<li>只有在起始和末尾绿色部分才会有值</li>
+<li>在中间红色部分滑动时是将滑窗中的4个数相加，和均为0</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="Z变换"><a href="#Z变换" class="headerlink" title="Z变换"></a>Z变换</h1><h2 id="1-Z变换的定义"><a href="#1-Z变换的定义" class="headerlink" title="1.Z变换的定义"></a>1.Z变换的定义</h2><ul>
+<li><p>双边Z变换：<br>$$<br>X(z)=\sum_{n=-\infty}^{\infty}x(n)Z^{-n}<br>$$</p>
+</li>
+<li><p>单边Z变换：<br>$$<br>X(z)=\sum_{n=0}^{+\infty}x(n)Z^{-n}\quad or\quad \sum_{n=-\infty}^{0}x(n)Z^{-n}<br>$$</p>
+</li>
+<li><p>左边序列、右边序列、因果序列：</p>
+<ul>
+<li><p>左边序列：当$n&lt;N$时有非零值，而在$n&gt;N$时$x(n)$为0</p>
+</li>
+<li><p>右边序列：当$n\ge N$时有非零值，而在$n&lt;N$时$x(n)$为0</p>
+<ul>
+<li>若$N=0$，则称此序列为因果序列，即$x(n)=0,n&lt;0$</li>
+</ul>
+</li>
+<li><p>对于因果序列，有以下关系：<br>$$<br>因果序列\rightarrow |Z|&gt;a<br>$$</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-Z的收敛域"><a href="#2-Z的收敛域" class="headerlink" title="2.Z的收敛域"></a>2.Z的收敛域</h2><ul>
+<li><p>因为要求Z变换有解，所以需要满足：<br>$$<br>|\sum_{n=-\infty}^{\infty}x(n)Z^{-n}|&lt;+\infty<br>$$</p>
+</li>
+<li><p>等比数列求和公式：<br>$$<br>\frac{a_0-a_nq}{1-q}<br>$$</p>
+<ul>
+<li>若想要其有界，需满足等比因子$|q|&lt;1$</li>
+</ul>
+</li>
+<li><p>而Z的表达式其实是：<br>$$<br>Z=re^{jw}<br>$$</p>
+</li>
+<li><p>那么：<br>$$<br>\begin{aligned}<br>X(z) &amp;=\sum_{n=-\infty}^{\infty}x(n)Z^{-n}\<br>&amp;=\sum_{n=-\infty}^{\infty}x(n)r^{-n}e^{-jwn}<br>\end{aligned}<br>$$</p>
+</li>
+<li><p>所以，求Z的收敛域主要看$r$</p>
+</li>
+</ul>
+<h2 id="3-Z变换的常用性质"><a href="#3-Z变换的常用性质" class="headerlink" title="3.Z变换的常用性质"></a>3.Z变换的常用性质</h2><ul>
+<li><p>时移特性：<br>$$<br>x(n)\leftrightarrow X(z)\<br>x(n-n_0)\leftrightarrow X(z)Z^{-n_0}<br>$$</p>
+</li>
+<li><p>卷积特性：<br>$$<br>x_1(n)*x_2(n)\leftrightarrow X_1(z)\cdot X_2(z)<br>$$</p>
+</li>
+<li><p>对于因果稳定的系统：</p>
+<ul>
+<li>$H(Z)$的收敛域一定包括单位圆（稳定性）</li>
+<li>$H(Z)$的所有极点一定在单位圆内（因为因果系统是$|Z|&gt;a$，而又要求稳定，即收敛域需包含单位圆，故极点需在单位圆内，这样能使得$|Z|&gt;极点,极点&lt;1$）</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1W94y1R7J9/?spm_id_from=333.788&vd_source=221b76534ba13cfad544149d75ce9b6c">数字信号处理基本概念（已完结）_哔哩哔哩_bilibili</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>欢迎来到ssy的世界</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/WeChaPay.jpg" alt="ssy 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>ssy
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://ssy的小天地.com/2023/10/02/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%97%B6%E5%9F%9F%E5%A4%84%E7%90%86/" title="数字信号处理之时域处理">http://ssy的小天地.com/2023/10/02/数字信号处理之时域处理/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86/" rel="tag"># 数字信号处理</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/10/02/ZYNQ%E5%B5%8C%E5%85%A5%E5%BC%8F%E4%B9%8BAXI%EF%BC%88%E5%9F%BA%E4%BA%8EPYNQ-Z2%E5%BC%80%E5%8F%91%E6%9D%BF%EF%BC%89/" rel="prev" title="ZYNQ嵌入式之AXI（基于PYNQ-Z2开发板）">
+      <i class="fa fa-chevron-left"></i> ZYNQ嵌入式之AXI（基于PYNQ-Z2开发板）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/10/02/ZYNQ%E5%B5%8C%E5%85%A5%E5%BC%8F%E4%B9%8BAXI%20DMA%EF%BC%88%E5%9F%BA%E4%BA%8EPYNQ-Z2%E5%BC%80%E5%8F%91%E6%9D%BF%EF%BC%89/" rel="next" title="ZYNQ嵌入式之AXI DMA（基于PYNQ-Z2开发板）">
+      ZYNQ嵌入式之AXI DMA（基于PYNQ-Z2开发板） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E7%9A%84%E7%90%86%E8%A7%A3"><span class="nav-number">1.</span> <span class="nav-text">数字信号的理解</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BA%8F%E5%88%97%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">2.</span> <span class="nav-text">序列的基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BB%BB%E4%BD%95%E5%BA%8F%E5%88%97%E9%83%BD%E5%8F%AF%E4%BB%A5%E7%94%A8%E5%8D%95%E4%BD%8D%E6%A0%B7%E6%9C%AC%E5%BA%8F%E5%88%97-delta-n-%E6%9D%A5%E8%A1%A8%E7%A4%BA"><span class="nav-number">2.1.</span> <span class="nav-text">1.任何序列都可以用单位样本序列$\delta (n)$来表示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%AD%A3%E5%BC%A6%E5%BA%8F%E5%88%97%E7%9A%84%E5%91%A8%E6%9C%9F%E6%80%A7"><span class="nav-number">2.2.</span> <span class="nav-text">2.正弦序列的周期性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%95%B0%E5%AD%97%E5%9F%9F%E9%A2%91%E7%8E%87"><span class="nav-number">2.3.</span> <span class="nav-text">3.数字域频率</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7%E6%97%B6%E4%B8%8D%E5%8F%98%E7%B3%BB%E7%BB%9F"><span class="nav-number">3.</span> <span class="nav-text">线性时不变系统</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7%E5%8D%B7%E7%A7%AF"><span class="nav-number">4.</span> <span class="nav-text">线性卷积</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%8D%B7%E7%A7%AF%E7%9A%84%E6%84%8F%E4%B9%89"><span class="nav-number">4.1.</span> <span class="nav-text">1.卷积的意义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-MATLAB%E5%AE%9E%E7%8E%B0%E4%B8%BE%E4%BE%8B"><span class="nav-number">4.2.</span> <span class="nav-text">2.MATLAB实现举例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Z%E5%8F%98%E6%8D%A2"><span class="nav-number">5.</span> <span class="nav-text">Z变换</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Z%E5%8F%98%E6%8D%A2%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-number">5.1.</span> <span class="nav-text">1.Z变换的定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Z%E7%9A%84%E6%94%B6%E6%95%9B%E5%9F%9F"><span class="nav-number">5.2.</span> <span class="nav-text">2.Z的收敛域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Z%E5%8F%98%E6%8D%A2%E7%9A%84%E5%B8%B8%E7%94%A8%E6%80%A7%E8%B4%A8"><span class="nav-number">5.3.</span> <span class="nav-text">3.Z变换的常用性质</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">6.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ssy"
+      src="/images/ssy.png">
+  <p class="site-author-name" itemprop="name">ssy</p>
+  <div class="site-description" itemprop="description">满怀希望 就会所向披靡</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ssy1938010014" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ssy1938010014" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://m.weibo.cn/u/5469432500?uid=5469432500&t=0&luicode=10000011&lfid=100103type=1&q=JIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" title="Weibo → https:&#x2F;&#x2F;m.weibo.cn&#x2F;u&#x2F;5469432500?uid&#x3D;5469432500&amp;t&#x3D;0&amp;luicode&#x3D;10000011&amp;lfid&#x3D;100103type%3D1%26q%3DJIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://ssy1938010014.github.io/" title="http:&#x2F;&#x2F;ssy1938010014.github.io" rel="noopener" target="_blank">ssy的小天地</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://y006.github.io/" title="http:&#x2F;&#x2F;y006.github.io" rel="noopener" target="_blank">邱院士的Blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://bengoooo.github.io/" title="http:&#x2F;&#x2F;BENgoooo.github.io" rel="noopener" target="_blank">赵总的Blog</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=1469041281&auto=1&height=66"></iframe>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ssy</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-ribbon@1/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+<script data-pjax>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  let url = element.dataset.target;
+  let pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  let pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  let fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+
+
+    <div id="pjax">
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+    </div>
+</body>
+</html>

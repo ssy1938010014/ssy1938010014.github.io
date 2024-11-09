@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1/themes/blue/pace-theme-minimal.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"xn--ssy-lq6e63gg6fuu2d.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本节介绍了MATLAB学习的一些基础知识，包括数值类型、矩阵的创建以及相关运算、字符串处理等。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MATLAB之基础知识">
+<meta property="og:url" content="http://ssy的小天地.com/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/index.html">
+<meta property="og:site_name" content="ssy的小天地">
+<meta property="og:description" content="本节介绍了MATLAB学习的一些基础知识，包括数值类型、矩阵的创建以及相关运算、字符串处理等。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109122902166.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109123220743.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109141448904.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109141745974.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109142322591.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109142852414.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221120125607598.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109144556051.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109144914092.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109145523588.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109145746394.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109150859310.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109150953705.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109151403981.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109152801772.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109153206104.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109154021265.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109155627818.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109162421397.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109163246893.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109164858570.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109165035761.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109165516169.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109165804919.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109170131759.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109170323450.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109172205320.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109172940944.png">
+<meta property="article:published_time" content="2022-11-09T12:07:12.000Z">
+<meta property="article:modified_time" content="2022-12-27T11:22:17.997Z">
+<meta property="article:author" content="ssy">
+<meta property="article:tag" content="MATLAB">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109122902166.png">
+
+<link rel="canonical" href="http://ssy的小天地.com/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>MATLAB之基础知识 | ssy的小天地</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+    <a target="_blank" rel="noopener" href="https://github.com/ssy1938010014" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ssy的小天地</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">愿汝如是 千金不换</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-works">
+
+    <a href="/works/" rel="section"><i class="fa fa-fw fa-sitemap"></i>文章</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ssy的小天地.com/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ssy.png">
+      <meta itemprop="name" content="ssy">
+      <meta itemprop="description" content="满怀希望 就会所向披靡">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ssy的小天地">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MATLAB之基础知识
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+
+
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-11-09 20:07:12" itemprop="dateCreated datePublished" datetime="2022-11-09T20:07:12+08:00">2022-11-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-12-27 19:22:17" itemprop="dateModified" datetime="2022-12-27T19:22:17+08:00">2022-12-27</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%A7%AF%E7%B4%AF/" itemprop="url" rel="index"><span itemprop="name">学习积累</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本节介绍了MATLAB学习的一些基础知识，包括数值类型、矩阵的创建以及相关运算、字符串处理等。</p>
+<span id="more"></span>
+
+<h1 id="MATLAB数据类型"><a href="#MATLAB数据类型" class="headerlink" title="MATLAB数据类型"></a>MATLAB数据类型</h1><ul>
+<li><p>MATLAB中数值数据默认double类型</p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109122902166.png" alt="image-20221109122902166" style="zoom: 67%;">
+</li>
+<li><p>single()函数：将其他类型的数据转化为单精度型</p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109123220743.png" alt="image-20221109123220743" style="zoom: 67%;">
+</li>
+<li><p>double()函数：将其他类型的数据转化为双精度型</p>
+</li>
+<li><p>复数类型：</p>
+<ul>
+<li><p>实部和虚部默认为双精度型</p>
+</li>
+<li><p>虚数单位用i或j来表示</p>
+</li>
+<li><p>real函数：求复数的实部</p>
+</li>
+<li><p>imag函数：求复数的虚部</p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="常用数学函数"><a href="#常用数学函数" class="headerlink" title="常用数学函数"></a>常用数学函数</h1><ul>
+<li><p>三角函数：有以弧度为单位的函数和以角度为单位的函数，如果是以角度为单位的函数就在函数名后面加“d”</p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109141448904.png" alt="image-20221109141448904" style="zoom:50%;">
+</li>
+<li><p>abs函数可以求实数的绝对值、复数的模、字符串的ASCII码值</p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109141745974.png" alt="image-20221109141745974" style="zoom:50%;">
+</li>
+<li><p><strong>用于取整的函数有fix、floor、ceil、round</strong></p>
+<ul>
+<li>round函数按照四舍五入的规则取整</li>
+<li>ceil函数是向上取整，取大于等于这个数的第一个整数</li>
+<li>floor函数是向下取整，取小于等于这个数的第一个整数</li>
+<li>fix函数是舍去小数取整</li>
+</ul>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109142322591.png" alt="image-20221109142322591" style="zoom:50%;">
+</li>
+<li><p>isprime()函数判断是否为素数：若是则返回1，否则返回0</p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109142852414.png" alt="image-20221109142852414" style="zoom:50%;">
+</li>
+<li><p>perms()函数可以用来计算全排列</p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221120125607598.png" alt="image-20221120125607598" style="zoom:50%;">
+
+</li>
+</ul>
+<hr>
+<h1 id="内存变量文件"><a href="#内存变量文件" class="headerlink" title="内存变量文件"></a>内存变量文件</h1><ul>
+<li><p>save命令：创建内存变量文件</p>
+</li>
+<li><p>load命令：装入内存变量文件</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">save mydata a x</span><br><span class="line">load mydata</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<hr>
+<h1 id="MATLAB矩阵的表示"><a href="#MATLAB矩阵的表示" class="headerlink" title="MATLAB矩阵的表示"></a>MATLAB矩阵的表示</h1><h2 id="1-基本矩阵的建立"><a href="#1-基本矩阵的建立" class="headerlink" title="1.基本矩阵的建立"></a>1.基本矩阵的建立</h2><ul>
+<li><p><strong>利用直接输入法建立矩阵</strong>：将矩阵的元素用<strong>中括号</strong>括起来，按矩阵行的顺序输入各元素，同一行的各元素之间<strong>用逗号或空格</strong>分隔，不同行的元素之间用<strong>分号</strong>分隔</p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109144556051.png" alt="image-20221109144556051" style="zoom:50%;">
+</li>
+<li><p><strong>利用已建好的矩阵建立更大的矩阵</strong>：一个大矩阵可以由已经建立好的小矩阵拼接而成</p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109144914092.png" alt="image-20221109144914092" style="zoom:50%;">
+
+</li>
+</ul>
+<h2 id="2-行向量的建立"><a href="#2-行向量的建立" class="headerlink" title="2.行向量的建立"></a>2.行向量的建立</h2><ul>
+<li><p>使用冒号表达式</p>
+<ul>
+<li>格式：e1:e2:e3</li>
+<li>其中，<strong>e1为初始值，e2为步长，e3为终止值</strong></li>
+<li>如果省略步长e2，则步长为1</li>
+</ul>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109145523588.png" alt="image-20221109145523588" style="zoom:50%;">
+</li>
+<li><p>使用linspace()函数</p>
+<ul>
+<li><code>linspace(a,b,n)</code></li>
+<li>其中，a为第一个元素，b为最后一个元素，n为元素总个数</li>
+</ul>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109145746394.png" alt="image-20221109145746394" style="zoom:50%;">
+
+</li>
+</ul>
+<h2 id="3-结构矩阵的建立"><a href="#3-结构矩阵的建立" class="headerlink" title="3.结构矩阵的建立"></a>3.结构矩阵的建立</h2><ul>
+<li><p>结构矩阵.成员名=表达式</p>
+<p><img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109150859310.png" alt="image-20221109150859310"></p>
+<p>结果如下：</p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109150953705.png" alt="image-20221109150953705" style="zoom: 67%;">
+
+</li>
+</ul>
+<h2 id="4-单元矩阵的建立"><a href="#4-单元矩阵的建立" class="headerlink" title="4.单元矩阵的建立"></a>4.单元矩阵的建立</h2><ul>
+<li><p>建立单元矩阵和基本矩阵相似，只是单元矩阵元素用<strong>大括号</strong>括起来</p>
+</li>
+<li><p>其允许输入不同数据类型的数据</p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109151403981.png" alt="image-20221109151403981" style="zoom:50%;">
+
+</li>
+</ul>
+<hr>
+<h1 id="矩阵元素的引用"><a href="#矩阵元素的引用" class="headerlink" title="矩阵元素的引用"></a>矩阵元素的引用</h1><ul>
+<li><p>通过下标来引用矩阵的元素，若下标超过矩阵大小，将用0填充</p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109152801772.png" alt="image-20221109152801772" style="zoom:50%;">
+</li>
+<li><p>通过序号来引用：矩阵中的元素按列存储</p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109153206104.png" alt="image-20221109153206104" style="zoom:50%;">
+</li>
+<li><p><strong>矩阵元素的删除</strong>：通过对元素赋予[]从而删除元素</p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109154021265.png" alt="image-20221109154021265" style="zoom:50%;">
+</li>
+<li><p><strong>改变矩阵的形状</strong>：<code>reshape(A,m,n)</code>，在矩阵总元素保持不变得前提下，将矩阵A重新排成m×n的二维矩阵</p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109155627818.png" alt="image-20221109155627818" style="zoom:50%;">
+
+</li>
+</ul>
+<hr>
+<h1 id="MATLAB基本运算"><a href="#MATLAB基本运算" class="headerlink" title="MATLAB基本运算"></a>MATLAB基本运算</h1><ul>
+<li><p>除法运算</p>
+<ul>
+<li>B/A等效于B*inv(A)</li>
+<li>A\B等效于inv(A)*B</li>
+</ul>
+</li>
+<li><p>乘法运算与点乘运算</p>
+<ul>
+<li><p>*表示矩阵相乘</p>
+</li>
+<li><p>.*表示两个矩阵中对应元素相乘</p>
+</li>
+</ul>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109162421397.png" alt="image-20221109162421397" style="zoom:50%;">
+</li>
+<li><p>逻辑运算符：&amp;、|、~</p>
+</li>
+<li><p>实例：水仙花数是指各位数字的立方之和等于该数本身的三位正整数，求全部水仙花数</p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109163246893.png" alt="image-20221109163246893" style="zoom:50%;">
+
+</li>
+</ul>
+<hr>
+<h1 id="字符串处理"><a href="#字符串处理" class="headerlink" title="字符串处理"></a>字符串处理</h1><h2 id="1-字符串的表示"><a href="#1-字符串的表示" class="headerlink" title="1.字符串的表示"></a>1.字符串的表示</h2><ul>
+<li><p>在MATLAB中，字符串是用单引号括起来的字符序列</p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109164858570.png" alt="image-20221109164858570" style="zoom:50%;">
+</li>
+<li><p>若字符串中的字符含有单引号，则该单引号字符要用两个单引号来表示</p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109165035761.png" alt="image-20221109165035761" style="zoom:50%;">
+</li>
+<li><p>建立多行字符串，形成字符串矩阵</p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109165516169.png" alt="image-20221109165516169" style="zoom:50%;">
+
+</li>
+</ul>
+<h2 id="2-字符串的操作"><a href="#2-字符串的操作" class="headerlink" title="2.字符串的操作"></a>2.字符串的操作</h2><ul>
+<li><p><code>eval(s)</code> %表示执行字符串中的内容</p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109165804919.png" alt="image-20221109165804919" style="zoom:50%;">
+</li>
+<li><p>字符串与数值之间的转换</p>
+<ul>
+<li><code>abs</code>与<code>double</code>函数都可以用来获取字符串矩阵所对应的ASCII码数值矩阵</li>
+<li><code>char</code>函数可以把ASCII码矩阵转化为字符串矩阵</li>
+</ul>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109170131759.png" alt="image-20221109170131759" style="zoom:50%;">
+</li>
+<li><p>字符串的比较</p>
+<ul>
+<li><p>关系运算符比较：两个字符串中的元素分别比较</p>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109170323450.png" alt="image-20221109170323450" style="zoom:50%;">
+</li>
+<li><p>字符串比较函数</p>
+<ul>
+<li><code>strcmp(s1,s2)</code>：用来比较字符串s1和s2是否相等，如果相等，返回结果1，否则返回0</li>
+<li><code>strcmpn(s1,s2,n)</code>：用来比较字符串s1和s2中前n个字符串是否相等，如果相等，返回结果1，否则返回0</li>
+<li><code>strcmpi(s1,s2)</code>：在忽略字母大小写前提下，比较字符串s1和s2是否相等，如果相等，返回结果1，否则返回0</li>
+<li><code>strcmpi(s1,s2)</code>：在忽略字母大小写前提下，比较字符串s1和s2中前n个字符串是否相等，如果相等，返回结果1，否则返回0     </li>
+</ul>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109172205320.png" alt="image-20221109172205320" style="zoom:50%;">
+</li>
+</ul>
+</li>
+<li><p>字符串的查找与替换</p>
+<ul>
+<li><code>findstr(s1,s2)</code>：返回短字符串在长字符串中的开始位置</li>
+<li><code>strrep(s1,s2,s3)</code>：将字符串s1中的所有子字符串s2替换为字符串s3</li>
+</ul>
+<img src="/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/image-20221109172940944.png" alt="image-20221109172940944" style="zoom:50%;">
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>欢迎来到ssy的世界</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/WeChaPay.jpg" alt="ssy 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>ssy
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://ssy的小天地.com/2022/11/09/MATLAB%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" title="MATLAB之基础知识">http://ssy的小天地.com/2022/11/09/MATLAB之基础知识/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/MATLAB/" rel="tag"># MATLAB</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/11/07/TensorFlow%E5%AE%9E%E8%B7%B5%E4%B9%8B%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="prev" title="TensorFlow实践之人工神经网路">
+      <i class="fa fa-chevron-left"></i> TensorFlow实践之人工神经网路
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/11/10/%E6%9C%AC%E7%A7%91%E8%AF%BE%E7%A8%8B%E8%AE%BE%E8%AE%A1/" rel="next" title="小沈同学的本科课程设计">
+      小沈同学的本科课程设计 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MATLAB%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.</span> <span class="nav-text">MATLAB数据类型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%95%B0%E5%AD%A6%E5%87%BD%E6%95%B0"><span class="nav-number">2.</span> <span class="nav-text">常用数学函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E5%8F%98%E9%87%8F%E6%96%87%E4%BB%B6"><span class="nav-number">3.</span> <span class="nav-text">内存变量文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MATLAB%E7%9F%A9%E9%98%B5%E7%9A%84%E8%A1%A8%E7%A4%BA"><span class="nav-number">4.</span> <span class="nav-text">MATLAB矩阵的表示</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%9F%BA%E6%9C%AC%E7%9F%A9%E9%98%B5%E7%9A%84%E5%BB%BA%E7%AB%8B"><span class="nav-number">4.1.</span> <span class="nav-text">1.基本矩阵的建立</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E8%A1%8C%E5%90%91%E9%87%8F%E7%9A%84%E5%BB%BA%E7%AB%8B"><span class="nav-number">4.2.</span> <span class="nav-text">2.行向量的建立</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E7%BB%93%E6%9E%84%E7%9F%A9%E9%98%B5%E7%9A%84%E5%BB%BA%E7%AB%8B"><span class="nav-number">4.3.</span> <span class="nav-text">3.结构矩阵的建立</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%8D%95%E5%85%83%E7%9F%A9%E9%98%B5%E7%9A%84%E5%BB%BA%E7%AB%8B"><span class="nav-number">4.4.</span> <span class="nav-text">4.单元矩阵的建立</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9F%A9%E9%98%B5%E5%85%83%E7%B4%A0%E7%9A%84%E5%BC%95%E7%94%A8"><span class="nav-number">5.</span> <span class="nav-text">矩阵元素的引用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MATLAB%E5%9F%BA%E6%9C%AC%E8%BF%90%E7%AE%97"><span class="nav-number">6.</span> <span class="nav-text">MATLAB基本运算</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86"><span class="nav-number">7.</span> <span class="nav-text">字符串处理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E8%A1%A8%E7%A4%BA"><span class="nav-number">7.1.</span> <span class="nav-text">1.字符串的表示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="nav-number">7.2.</span> <span class="nav-text">2.字符串的操作</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ssy"
+      src="/images/ssy.png">
+  <p class="site-author-name" itemprop="name">ssy</p>
+  <div class="site-description" itemprop="description">满怀希望 就会所向披靡</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ssy1938010014" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ssy1938010014" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://m.weibo.cn/u/5469432500?uid=5469432500&t=0&luicode=10000011&lfid=100103type=1&q=JIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" title="Weibo → https:&#x2F;&#x2F;m.weibo.cn&#x2F;u&#x2F;5469432500?uid&#x3D;5469432500&amp;t&#x3D;0&amp;luicode&#x3D;10000011&amp;lfid&#x3D;100103type%3D1%26q%3DJIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://ssy1938010014.github.io/" title="http:&#x2F;&#x2F;ssy1938010014.github.io" rel="noopener" target="_blank">ssy的小天地</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://y006.github.io/" title="http:&#x2F;&#x2F;y006.github.io" rel="noopener" target="_blank">邱院士的Blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://bengoooo.github.io/" title="http:&#x2F;&#x2F;BENgoooo.github.io" rel="noopener" target="_blank">赵总的Blog</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=1469041281&auto=1&height=66"></iframe>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ssy</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-ribbon@1/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+<script data-pjax>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  let url = element.dataset.target;
+  let pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  let pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  let fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+
+
+    <div id="pjax">
+  
+
+  
+
+  
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1/themes/blue/pace-theme-minimal.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"xn--ssy-lq6e63gg6fuu2d.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="学习积累1. 深度学习相关$\quad$$\bullet$深度学习基础之特征工程 $\quad$$\bullet$深度学习基础之范数与正则化 $\quad$$\bullet$深度学习基础之信息熵与感知机 $\quad$$\bullet$深度学习基础之循环神经网络及其变体 $\quad$$\bullet$深度学习基础之词嵌入 $\quad$$\bullet$深度学习基础之Transformer模型">
+<meta property="og:type" content="website">
+<meta property="og:title" content="文章">
+<meta property="og:url" content="http://ssy的小天地.com/works/index.html">
+<meta property="og:site_name" content="ssy的小天地">
+<meta property="og:description" content="学习积累1. 深度学习相关$\quad$$\bullet$深度学习基础之特征工程 $\quad$$\bullet$深度学习基础之范数与正则化 $\quad$$\bullet$深度学习基础之信息熵与感知机 $\quad$$\bullet$深度学习基础之循环神经网络及其变体 $\quad$$\bullet$深度学习基础之词嵌入 $\quad$$\bullet$深度学习基础之Transformer模型">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-11-12T08:04:17.000Z">
+<meta property="article:modified_time" content="2024-11-08T14:41:42.562Z">
+<meta property="article:author" content="ssy">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://ssy的小天地.com/works/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : false,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>文章 | ssy的小天地
+</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+    <a target="_blank" rel="noopener" href="https://github.com/ssy1938010014" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ssy的小天地</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">愿汝如是 千金不换</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-works">
+
+    <a href="/works/" rel="section"><i class="fa fa-fw fa-sitemap"></i>文章</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+  
+  
+
+          <div class="content page posts-expand">
+            
+
+    
+    
+    
+    <div class="post-block" lang="zh-CN">
+      <header class="post-header">
+
+<h1 class="post-title" itemprop="name headline">文章
+</h1>
+
+<div class="post-meta">
+  
+
+</div>
+
+</header>
+
+      
+      
+      
+      <div class="post-body">
+          <h1 id="学习积累"><a href="#学习积累" class="headerlink" title="学习积累"></a>学习积累</h1><h2 id="1-深度学习相关"><a href="#1-深度学习相关" class="headerlink" title="1. 深度学习相关"></a>1. 深度学习相关</h2><p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/12/04/深度学习基础之特征工程/">深度学习基础之特征工程</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/12/06/深度学习基础之范数及正则化/">深度学习基础之范数与正则化</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/12/07/深度学习基础之信息熵与感知机/">深度学习基础之信息熵与感知机</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/12/08/深度学习基础之循环神经网络及其变体/">深度学习基础之循环神经网络及其变体</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/12/14/深度学习基础之词嵌入/">深度学习基础之词嵌入</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/12/17/深度学习基础之Transformer模型/">深度学习基础之Transformer模型</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/12/15/深度学习基础之自动编码器与生成对抗网络/">深度学习基础之自动编码器与生成对抗网络</a></p>
+<p>$\quad$$\bullet$ <a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/11/01/TensorFlow基础之张量相关/">TensorFlow基础之张量相关</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/10/28/TensorFlow实践之NumPy与Matplotlib库/">TensorFlow实践之NumPy与Matplotlib库</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/10/28/TensorFlow实践之数字图像处理基础/">TensorFlow实践之数字图像处理基础</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/11/01/TensorFlow实践之线性回归问题/">TensorFlow实践之线性回归问题</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/11/07/TensorFlow实践之分类问题/">TensorFlow实践之分类问题</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/11/07/TensorFlow实践之人工神经网络/">TensorFlow实践之人工神经网络</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/11/07/TensorFlow实践之卷积神经网络/">TensorFlow实践之卷积神经网络</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/11/07/TensorFlow实践之典型的卷积神经网络/">TensorFlow实践之典型的卷积神经网络</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/02/11/Pytorch之数据操作及其预处理/">Pytorch之数据操作及其预处理</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/03/28/Pytorch之线性神经网络/">Pytorch之线性神经网络</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/04/12/Pytorch之多层感知机/">Pytorch之多层感知机</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/08/09/Pytorch之卷积神经网络/">Pytorch之卷积神经网络</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/08/17/Pytorch之文本情感分类/">Pytorch之文本情感分类</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/08/24/Pytorch之Transformer/">Pytorch之Transformer</a></p>
+<h2 id="2-语言基础"><a href="#2-语言基础" class="headerlink" title="2. 语言基础"></a>2. 语言基础</h2><h3 id="2-1-Python"><a href="#2-1-Python" class="headerlink" title="2.1 Python"></a>2.1 Python</h3><p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/10/24/Python基础之数据类型/">Python基础之数据类型</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/10/24/Python基础之文件的读写/">Python基础之文件的读写</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/10/24/Python基础之标准库与第三方库/">Python基础之标准库与第三方库</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/09/05/Python之常用特性补充/">Python之常用特性补充</a></p>
+<h3 id="2-2-MATLAB"><a href="#2-2-MATLAB" class="headerlink" title="2.2 MATLAB"></a>2.2 MATLAB</h3><p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/11/09/MATLAB之基础知识/">MATLAB之基础知识</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/11/10/MATLAB之矩阵处理/">MATLAB之矩阵处理</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/11/11/MATLAB之程序流程控制/">MATLAB之程序流程控制</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/11/12/MATLAB之图像绘制/">MATLAB之图像绘制</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/11/13/MATLAB之数据分析与多项式计算/">MATLAB之数据分析与多项式计算</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/11/14/MATLAB之数值微积分与方程求解/">MATLAB之数值微积分与方程求解</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/11/15/MATLAB之符号计算/">MATLAB之符号计算</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/11/19/MATLAB之文件操作/">MATLAB之文件操作</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/11/22/MATLAB之常见变换/">MATLAB之常见变换</a></p>
+<h3 id="2-3-C"><a href="#2-3-C" class="headerlink" title="2.3 C++"></a>2.3 C++</h3><p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/11/04/C++之数据类型/">C++之数据类型</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/12/03/C++之循环/">C++之循环</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/12/05/C++之分支语句/">C++之分支语句</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/12/10/C++之函数/">C++之函数</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/12/22/C++之函数高级用法/">C++之函数高级用法</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/12/25/C++之内存模型与名称空间/">C++之内存模型与名称空间</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/02/02/C++之类与对象/">C++之类与对象</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/02/08/C++之使用类/">C++之使用类</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/02/18/C++之类和动态内存分配/">C++之类和动态内存分配</a></p>
+<h3 id="2-4-Verilog"><a href="#2-4-Verilog" class="headerlink" title="2.4 Verilog"></a>2.4 Verilog</h3><p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/01/05/Verilog之由浅入深学习/">Verilog之由浅入深学习</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/01/05/Verilog之边码边学/">Verilog之边码边学</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/11/10/Verilog之入门级刷题/">Verilog之入门级刷题</a></p>
+<p>$\quad$$\bullet$​<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2024/01/10/Verilog之进阶级刷题/">Verilog之进阶级刷题</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2024/10/08/Verilog之企业真题刷题/">Verilog之企业真题刷题</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2024/05/17/Verilog之易错易忘知识点/">Verilog之易错易忘知识点</a></p>
+<h3 id="2-5-SystemVerilog"><a href="#2-5-SystemVerilog" class="headerlink" title="2.5 SystemVerilog"></a>2.5 SystemVerilog</h3><p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/08/15/SV之数据类型/">SV之数据类型</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/08/15/SV之设计特性与接口/">SV之设计特性与接口</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/08/16/SV之函数与任务/">SV之函数与任务</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/08/21/SV之数组/">SV之数组</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/08/21/SV之类的封装与继承/">SV之类的封装与继承</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/08/22/SV之随机约束/">SV之随机约束</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/08/23/SV之线程控制与通信/">SV之线程控制与通信</a></p>
+<h2 id="3-硬件相关"><a href="#3-硬件相关" class="headerlink" title="3. 硬件相关"></a>3. 硬件相关</h2><h3 id="3-1-计算机体系结构"><a href="#3-1-计算机体系结构" class="headerlink" title="3.1 计算机体系结构"></a>3.1 计算机体系结构</h3><p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/06/26/计算机体系结构之基本概念/">计算机体系结构之基本概念</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/08/02/计算机体系结构之指令系统/">计算机体系结构之指令系统</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/08/04/计算机体系结构之流水线技术/">计算机体系结构之流水线技术</a></p>
+<h3 id="3-2-EDA工具使用in-Linux"><a href="#3-2-EDA工具使用in-Linux" class="headerlink" title="3.2 EDA工具使用in Linux"></a>3.2 EDA工具使用in Linux</h3><p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/08/12/ubuntu之问题及其解决方法记录/">ubuntu之问题及其解决方法记录</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/08/25/VCS之基本操作/">VCS之基本操作</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/08/30/Verdi之基本使用/">Verdi之基本使用</a></p>
+<h3 id="3-3-ZYNQ"><a href="#3-3-ZYNQ" class="headerlink" title="3.3 ZYNQ"></a>3.3 ZYNQ</h3><p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/09/11/ZYNQ嵌入式之hello_word简单示例（基于PYNQ-Z2开发板）/">ZYNQ嵌入式之hello_word简单示例（基于PYNQ-Z2开发板）</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/09/12/ZYNQ嵌入式之GPIO（基于PYNQ-Z2开发板）/">ZYNQ嵌入式之GPIO（基于PYNQ-Z2开发板）</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/09/21/ZYNQ嵌入式之IP核（基于PYNQ-Z2开发板）/">ZYNQ嵌入式之IP核（基于PYNQ-Z2开发板）</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/09/25/ZYNQ嵌入式之程序固化（基于PYNQ-Z2开发板）/">ZYNQ嵌入式之程序固化（基于PYNQ-Z2开发板）</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/09/25/ZYNQ嵌入式之UART控制器（基于PYNQ-Z2开发板）/">ZYNQ嵌入式之UART控制器（基于PYNQ-Z2开发板）</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/09/26/ZYNQ嵌入式之定时器（基于PYNQ-Z2开发板）/">ZYNQ嵌入式之定时器（基于PYNQ-Z2开发板）</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/09/26/ZYNQ嵌入式之PS-XADC（基于PYNQ-Z2开发板）/">ZYNQ嵌入式之PS-XADC（基于PYNQ-Z2开发板）</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/09/27/ZYNQ嵌入式之QSPI Flash（基于PYNQ-Z2开发板）/">ZYNQ嵌入式之QSPI Flash（基于PYNQ-Z2开发板）</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/09/28/ZYNQ嵌入式之SD卡（基于PYNQ-Z2开发板）/">ZYNQ嵌入式之SD卡（基于PYNQ-Z2开发板）</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/09/29/ZYNQ嵌入式之BRAM（基于PYNQ-Z2开发板）/">ZYNQ嵌入式之BRAM（基于PYNQ-Z2开发板）</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/10/02/ZYNQ嵌入式之AXI（基于PYNQ-Z2开发板）/">ZYNQ嵌入式之AXI（基于PYNQ-Z2开发板）</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/10/02/ZYNQ嵌入式之AXI DMA（基于PYNQ-Z2开发板）/">ZYNQ嵌入式之AXI DMA（基于PYNQ-Z2开发板）</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/10/20/ZYNQ嵌入式之常用接口（基于PYNQ-Z2开发板）/">ZYNQ嵌入式之常用接口（基于PYNQ-Z2开发板）</a></p>
+<h3 id="3-4-FPGA"><a href="#3-4-FPGA" class="headerlink" title="3.4 FPGA"></a>3.4 FPGA</h3><h4 id="3-4-1-FPGA高级设计技巧"><a href="#3-4-1-FPGA高级设计技巧" class="headerlink" title="3.4.1 FPGA高级设计技巧"></a>3.4.1 FPGA高级设计技巧</h4><p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2024/02/25/FPGA设计高级技巧之状态机/">FPGA设计高级技巧之状态机</a></p>
+<h4 id="3-4-2-FPGA数字信号处理"><a href="#3-4-2-FPGA数字信号处理" class="headerlink" title="3.4.2 FPGA数字信号处理"></a>3.4.2 FPGA数字信号处理</h4><p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/10/09/FPGA数字信号处理之数的运算/">FPGA数字信号处理之数的运算</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/10/10/FPGA数字信号处理之典型IP核/">FPGA数字信号处理之典型IP核</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/10/31/FPGA数字信号处理之加法器与乘法器的设计/">FPGA数字信号处理之加法器与乘法器的设计</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/11/06/FPGA数字信号处理之高速度结构设计/">FPGA数字信号处理之高速度结构设计</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/11/08/FPGA数字信号处理之CFAR检测/">FPGA数字信号处理之CFAR检测</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/11/12/FPGA数字信号处理之CORDIC算法求正余弦值与模值/">FPGA数字信号处理之CORDIC算法求正余弦值与模值</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/11/20/FPGA数字信号处理之FIR滤波器/">FPGA数字信号处理之FIR滤波器</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/12/18/FPGA数字信号处理之脉动阵列/">FPGA数字信号处理之脉动阵列</a></p>
+<p>$\quad$$\bullet$​<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/12/24/FPGA数字信号处理之FIFO/">FPGA数字信号处理之FIFO</a></p>
+<p>$\quad$$\bullet$​<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2024/03/15/FPGA数字信号处理之常用通信接口时序/">FPGA数字信号处理之常用通信接口时序</a></p>
+<p>$\quad$$\bullet$​<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2024/04/13/FPGA数字信号处理之数据校验/">FPGA数字信号处理之数据校验</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2024/05/29/FPGA数字信号处理之编解码/">FPGA数字信号处理之编解码</a></p>
+<h4 id="3-4-2-FPGA系统设计"><a href="#3-4-2-FPGA系统设计" class="headerlink" title="3.4.2 FPGA系统设计"></a>3.4.2 FPGA系统设计</h4><p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2024/04/26/FPGA设计之实用小工具/">FPGA设计之实用小工具</a></p>
+<p>$\quad$$\bullet$​<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2024/04/16/FPGA系统设计之AXI总线/">FPGA系统设计之AXI总线</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2024/05/23/FPGA系统设计之PetaLinux/">FPGA系统设计之PetaLinux</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2024/10/27/FPGA系统设计之仲裁器/">FPGA系统设计之仲裁器</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2024/10/30/FPGA系统设计之跨时钟域问题（CDC）/">FPGA系统设计之跨时钟域问题（CDC）</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2024/10/30/FPGA系统设计之跨时钟域问题（CDC）/">FPGA系统设计之跨时钟域问题（CDC）</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2024/10/30/FPGA系统设计之跨时钟域问题（CDC）/">FPGA系统设计之跨时钟域问题（CDC）</a></p>
+<h4 id="3-4-3-FPGA之CNN硬件实现"><a href="#3-4-3-FPGA之CNN硬件实现" class="headerlink" title="3.4.3 FPGA之CNN硬件实现"></a>3.4.3 FPGA之CNN硬件实现</h4><p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2024/01/18/FPGA实现CNN之卷积神经网络理论基础/">FPGA实现CNN之卷积神经网络理论基础</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2024/09/23/FPGA实现CNN之github开源代码阅读/">FPGA实现CNN之github开源代码阅读</a></p>
+<h4 id="3-4-4-FPGA之图像处理"><a href="#3-4-4-FPGA之图像处理" class="headerlink" title="3.4.4 FPGA之图像处理"></a>3.4.4 FPGA之图像处理</h4><p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2024/10/23/FPGA图像处理之硬件加速引擎与仿真验证平台介绍/">FPGA图像处理之硬件加速引擎与仿真验证平台介绍</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2024/10/24/FPGA图像处理之RGB转YCbCr/">FPGA图像处理之RGB转YCbCr</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2024/10/25/FPGA图像处理之常用图像增强算法/">FPGA图像处理之常用图像增强算法</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2024/10/28/FPGA图像处理之常用图像降噪算法/">FPGA图像处理之常用图像降噪算法</a></p>
+<h3 id="3-5-UVM"><a href="#3-5-UVM" class="headerlink" title="3.5 UVM"></a>3.5 UVM</h3><p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2024/04/23/UVM白皮书之一个简单的UVM验证平台/">UVM白皮书之一个简单的UVM验证平台</a></p>
+<h3 id="3-6-QT"><a href="#3-6-QT" class="headerlink" title="3.6 QT"></a>3.6 QT</h3><p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2024/05/12/QT之基础用法/">QT之基础用法</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2024/10/15/QT之网络通信/">QT之网络通信</a></p>
+<h3 id="3-7-TI-AWR2243"><a href="#3-7-TI-AWR2243" class="headerlink" title="3.7 TI AWR2243"></a>3.7 TI AWR2243</h3><p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/10/11/TI AWR2243文档阅读之Programming Chirp Parameters in TI Radar Devices/">TI AWR2243文档阅读之Programming Chirp Parameters in TI Radar Devices</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/10/11/TI AWR2243文档阅读之mmWave Radar Interface Control Document/">TI AWR2243文档阅读之mmWave Radar Interface Control Document</a></p>
+<p>$\quad$$\bullet$​<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/10/23/AWR2243级联板之MIMO数据采集处理及其原理/">AWR2243级联板之MIMO数据采集处理及其原理</a></p>
+<h2 id="4-算法相关"><a href="#4-算法相关" class="headerlink" title="4. 算法相关"></a>4. 算法相关</h2><h3 id="4-1-数据结构"><a href="#4-1-数据结构" class="headerlink" title="4.1 数据结构"></a>4.1 数据结构</h3><p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/12/06/数据结构与算法之面向对象与流/">数据结构与算法之面向对象与流</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/12/07/数据结构与算法之线性表/">数据结构与算法之线性表</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/12/09/数据结构与算法之栈与队列/">数据结构与算法之栈与队列</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/12/12/数据结构与算法之字符串的模式匹配/">数据结构与算法之字符串的模式匹配</a></p>
+<h3 id="4-2-VLSI-DSP算法"><a href="#4-2-VLSI-DSP算法" class="headerlink" title="4.2 VLSI DSP算法"></a>4.2 VLSI DSP算法</h3><p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/11/03/VLSI基础之易错易忘知识点/">VLSI基础之易错易忘知识点</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/11/21/VLSI DSP之迭代边界/">VLSI DSP之迭代边界</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/11/22/VLSI DSP之流水线与并行处理/">VLSI DSP之流水线与并行处理</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/11/23/VLSI DSP之重定时/">VLSI DSP之重定时</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/11/24/VLSI DSP之展开/">VLSI DSP之展开</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/11/25/VLSI DSP之折叠/">VLSI DSP之折叠</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/11/28/VLSI DSP之脉动阵列/">VLSI DSP之脉动阵列</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/12/01/VLSI DSP之衰落信道/">VLSI DSP之衰落信道</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/12/02/VLSI DSP之带通调制与解调/">VLSI DSP之带通调制与解调</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/12/03/VLSI DSP之信道编码与解码/">VLSI DSP之信道编码与解码</a></p>
+<h2 id="5-信号相关"><a href="#5-信号相关" class="headerlink" title="5. 信号相关"></a>5. 信号相关</h2><p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/11/15/雷达原理之基本概念/">雷达原理之基本概念</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/11/16/雷达原理之雷达发射机/">雷达原理之雷达发射机</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/11/17/雷达原理之雷达接收机/">雷达原理之雷达接收机</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/11/17/雷达原理之雷达终端显示器/">雷达原理之雷达终端显示器</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/11/17/雷达原理之雷达作用距离/">雷达原理之雷达作用距离</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/09/14/雷达原理之雷达信号波形及其处理方法/">雷达原理之雷达信号波形及其处理方法</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/11/17/雷达原理之目标距离测量/">雷达原理之目标距离测量</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/11/18/雷达原理之目标角度测量/">雷达原理之目标角度测量</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/11/19/雷达原理之运动目标检测及测速/">雷达原理之运动目标检测及测速</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/11/24/雷达原理之毫米波雷达/">雷达原理之毫米波雷达</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/03/03/信号处理中的小知识点/">信号处理中的小知识点</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/10/02/数字信号处理之时域处理/">数字信号处理之时域处理</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/10/06/数字信号处理之频域处理/">数字信号处理之频域处理</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/10/07/数字信号处理之应用设计/">数字信号处理之应用设计</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/11/03/数字信号处理之FFT终极理解/">数字信号处理之FFT终极理解</a></p>
+<h2 id="6-数学基础"><a href="#6-数学基础" class="headerlink" title="6. 数学基础"></a>6. 数学基础</h2><p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/08/05/线性代数之行列式/">线性代数之行列式</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/08/06/线性代数之矩阵/">线性代数之矩阵</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/08/09/线性代数之向量/">线性代数之向量</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/08/10/线性代数之线性方程组/">线性代数之线性方程组</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/08/11/线性代数之特征值与特征向量/">线性代数之特征值与特征向量</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/08/12/线性代数之二次型/">线性代数之二次型</a></p>
+<hr>
+<h1 id="知识共享"><a href="#知识共享" class="headerlink" title="知识共享"></a>知识共享</h1><h2 id="1-本科期间"><a href="#1-本科期间" class="headerlink" title="1. 本科期间"></a>1. 本科期间</h2><p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/10/24/本科学习笔记/">本科学习笔记</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/11/10/本科课程期末复习重点/">本科课程期末复习宝典</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/11/10/本科课程设计/">本科课程设计</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/11/12/本科实验报告/">本科实验报告</a></p>
+<hr>
+<h1 id="经验之谈"><a href="#经验之谈" class="headerlink" title="经验之谈"></a>经验之谈</h1><p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/10/23/保研分享/">保研分享</a></p>
+<hr>
+<h1 id="生活碎片"><a href="#生活碎片" class="headerlink" title="生活碎片"></a>生活碎片</h1><p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/10/24/Tape提问箱/">Tape提问箱</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2022/11/12/日常分享2022/">日常分享2022</a></p>
+<p>$\quad$$\bullet$<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/01/01/日常分享2023/">日常分享2023</a></p>
+
+      </div>
+      
+      
+      
+    </div>
+    
+
+    
+    
+    
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AD%A6%E4%B9%A0%E7%A7%AF%E7%B4%AF"><span class="nav-number">1.</span> <span class="nav-text">学习积累</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3"><span class="nav-number">1.1.</span> <span class="nav-text">1. 深度学习相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80"><span class="nav-number">1.2.</span> <span class="nav-text">2. 语言基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-Python"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 Python</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-MATLAB"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 MATLAB</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-C"><span class="nav-number">1.2.3.</span> <span class="nav-text">2.3 C++</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-Verilog"><span class="nav-number">1.2.4.</span> <span class="nav-text">2.4 Verilog</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-SystemVerilog"><span class="nav-number">1.2.5.</span> <span class="nav-text">2.5 SystemVerilog</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E7%A1%AC%E4%BB%B6%E7%9B%B8%E5%85%B3"><span class="nav-number">1.3.</span> <span class="nav-text">3. 硬件相关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1 计算机体系结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-EDA%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8in-Linux"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.2 EDA工具使用in Linux</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-ZYNQ"><span class="nav-number">1.3.3.</span> <span class="nav-text">3.3 ZYNQ</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-FPGA"><span class="nav-number">1.3.4.</span> <span class="nav-text">3.4 FPGA</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-1-FPGA%E9%AB%98%E7%BA%A7%E8%AE%BE%E8%AE%A1%E6%8A%80%E5%B7%A7"><span class="nav-number">1.3.4.1.</span> <span class="nav-text">3.4.1 FPGA高级设计技巧</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-2-FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86"><span class="nav-number">1.3.4.2.</span> <span class="nav-text">3.4.2 FPGA数字信号处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-2-FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1"><span class="nav-number">1.3.4.3.</span> <span class="nav-text">3.4.2 FPGA系统设计</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-3-FPGA%E4%B9%8BCNN%E7%A1%AC%E4%BB%B6%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.3.4.4.</span> <span class="nav-text">3.4.3 FPGA之CNN硬件实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-4-FPGA%E4%B9%8B%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86"><span class="nav-number">1.3.4.5.</span> <span class="nav-text">3.4.4 FPGA之图像处理</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-UVM"><span class="nav-number">1.3.5.</span> <span class="nav-text">3.5 UVM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-6-QT"><span class="nav-number">1.3.6.</span> <span class="nav-text">3.6 QT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-7-TI-AWR2243"><span class="nav-number">1.3.7.</span> <span class="nav-text">3.7 TI AWR2243</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E7%AE%97%E6%B3%95%E7%9B%B8%E5%85%B3"><span class="nav-number">1.4.</span> <span class="nav-text">4. 算法相关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-number">1.4.1.</span> <span class="nav-text">4.1 数据结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-VLSI-DSP%E7%AE%97%E6%B3%95"><span class="nav-number">1.4.2.</span> <span class="nav-text">4.2 VLSI DSP算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E4%BF%A1%E5%8F%B7%E7%9B%B8%E5%85%B3"><span class="nav-number">1.5.</span> <span class="nav-text">5. 信号相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80"><span class="nav-number">1.6.</span> <span class="nav-text">6. 数学基础</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E5%85%B1%E4%BA%AB"><span class="nav-number">2.</span> <span class="nav-text">知识共享</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%9C%AC%E7%A7%91%E6%9C%9F%E9%97%B4"><span class="nav-number">2.1.</span> <span class="nav-text">1. 本科期间</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%8F%E9%AA%8C%E4%B9%8B%E8%B0%88"><span class="nav-number">3.</span> <span class="nav-text">经验之谈</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%9F%E6%B4%BB%E7%A2%8E%E7%89%87"><span class="nav-number">4.</span> <span class="nav-text">生活碎片</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ssy"
+      src="/images/ssy.png">
+  <p class="site-author-name" itemprop="name">ssy</p>
+  <div class="site-description" itemprop="description">满怀希望 就会所向披靡</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ssy1938010014" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ssy1938010014" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://m.weibo.cn/u/5469432500?uid=5469432500&t=0&luicode=10000011&lfid=100103type=1&q=JIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" title="Weibo → https:&#x2F;&#x2F;m.weibo.cn&#x2F;u&#x2F;5469432500?uid&#x3D;5469432500&amp;t&#x3D;0&amp;luicode&#x3D;10000011&amp;lfid&#x3D;100103type%3D1%26q%3DJIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://ssy1938010014.github.io/" title="http:&#x2F;&#x2F;ssy1938010014.github.io" rel="noopener" target="_blank">ssy的小天地</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://y006.github.io/" title="http:&#x2F;&#x2F;y006.github.io" rel="noopener" target="_blank">邱院士的Blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://bengoooo.github.io/" title="http:&#x2F;&#x2F;BENgoooo.github.io" rel="noopener" target="_blank">赵总的Blog</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=1469041281&auto=1&height=66"></iframe>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ssy</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-ribbon@1/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+<script data-pjax>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  let url = element.dataset.target;
+  let pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  let pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  let fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+
+
+    <div id="pjax">
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+    </div>
+</body>
+</html>

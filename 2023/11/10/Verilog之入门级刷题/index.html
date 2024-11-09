@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1/themes/blue/pace-theme-minimal.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"xn--ssy-lq6e63gg6fuu2d.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本文主要对牛客网Verilog刷题中的入门习题进行记录，其中标题带*号的表示题目相对有学习价值。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Verilog之入门级刷题">
+<meta property="og:url" content="http://ssy的小天地.com/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/index.html">
+<meta property="og:site_name" content="ssy的小天地">
+<meta property="og:description" content="本文主要对牛客网Verilog刷题中的入门习题进行记录，其中标题带*号的表示题目相对有学习价值。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20231110153403923.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20231110153859533.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20231110154235961.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20231110164517235.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20231110172248731.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20231110175239174.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20231110194006603.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20231112014304793.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20231112015014386.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20231112143533256.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20231112144734119.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20231112152523054.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20231112154435953.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20231112161742832.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20231112163254237.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20231116195138065.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20231116203246152.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20240110012824743.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20240110012938022.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20240110193442403.png">
+<meta property="article:published_time" content="2023-11-10T02:07:12.000Z">
+<meta property="article:modified_time" content="2024-01-10T11:35:49.215Z">
+<meta property="article:author" content="ssy">
+<meta property="article:tag" content="Verilog">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20231110153403923.png">
+
+<link rel="canonical" href="http://ssy的小天地.com/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Verilog之入门级刷题 | ssy的小天地</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+    <a target="_blank" rel="noopener" href="https://github.com/ssy1938010014" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ssy的小天地</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">愿汝如是 千金不换</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-works">
+
+    <a href="/works/" rel="section"><i class="fa fa-fw fa-sitemap"></i>文章</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ssy的小天地.com/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ssy.png">
+      <meta itemprop="name" content="ssy">
+      <meta itemprop="description" content="满怀希望 就会所向披靡">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ssy的小天地">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Verilog之入门级刷题
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+
+
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-11-10 10:07:12" itemprop="dateCreated datePublished" datetime="2023-11-10T10:07:12+08:00">2023-11-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-01-10 19:35:49" itemprop="dateModified" datetime="2024-01-10T19:35:49+08:00">2024-01-10</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%A7%AF%E7%B4%AF/" itemprop="url" rel="index"><span itemprop="name">学习积累</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本文主要对牛客网Verilog刷题中的入门习题进行记录，其中标题带*号的表示题目相对有学习价值。</p>
+<span id="more"></span>
+
+<h1 id="四选一多路器"><a href="#四选一多路器" class="headerlink" title="四选一多路器"></a>四选一多路器</h1><ul>
+<li><p>制作一个四选一的多路选择器，要求输出定义上为线网类型</p>
+<img src="/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20231110153403923.png" alt="image-20231110153403923" style="zoom: 33%;">
+</li>
+<li><p>Mux41.v</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> Mux41(</span><br><span class="line">    <span class="keyword">input</span> [<span class="number">1</span>:<span class="number">0</span>]d1,d2,d3,d0,</span><br><span class="line">    <span class="keyword">input</span> [<span class="number">1</span>:<span class="number">0</span>]sel,</span><br><span class="line">    <span class="keyword">output</span>[<span class="number">1</span>:<span class="number">0</span>]mux_out</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">reg</span> [<span class="number">1</span>:<span class="number">0</span>] mux_out_reg;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">always</span> @(*) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">case</span>(sel)</span><br><span class="line">            <span class="number">2&#x27;b00</span>: mux_out_reg = d3;</span><br><span class="line">            <span class="number">2&#x27;b01</span>: mux_out_reg = d2;</span><br><span class="line">            <span class="number">2&#x27;b10</span>: mux_out_reg = d1;</span><br><span class="line">            <span class="number">2&#x27;b11</span>: mux_out_reg = d0;</span><br><span class="line">            <span class="keyword">default</span>: mux_out_reg = <span class="number">2&#x27;b00</span>;</span><br><span class="line">        <span class="keyword">endcase</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">assign</span> mux_out = mux_out_reg;</span><br><span class="line">    </span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Mux41_tb.v</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> Mux41_tb;</span><br><span class="line">    <span class="keyword">reg</span> [<span class="number">1</span>:<span class="number">0</span>]d1,d2,d3,d0;</span><br><span class="line">    <span class="keyword">reg</span> [<span class="number">1</span>:<span class="number">0</span>]sel;</span><br><span class="line">    <span class="keyword">wire</span>[<span class="number">1</span>:<span class="number">0</span>]mux_out;</span><br><span class="line"></span><br><span class="line">    Mux41 u1(</span><br><span class="line">        <span class="variable">.d1</span>(d1),</span><br><span class="line">        <span class="variable">.d2</span>(d2),</span><br><span class="line">        <span class="variable">.d3</span>(d3),</span><br><span class="line">        <span class="variable">.d0</span>(d0),</span><br><span class="line">        <span class="variable">.sel</span>(sel),</span><br><span class="line">        <span class="variable">.mux_out</span>(mux_out)</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">        d1 = <span class="number">0</span>;</span><br><span class="line">        d2 = <span class="number">1</span>;</span><br><span class="line">        d3 = <span class="number">2</span>;</span><br><span class="line">        d0 = <span class="number">3</span>;</span><br><span class="line">        #<span class="number">10</span> sel = <span class="number">0</span>;</span><br><span class="line">        #<span class="number">10</span> sel = <span class="number">1</span>;</span><br><span class="line">        #<span class="number">10</span> sel = <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>结果如下：</p>
+<p><img src="/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20231110153859533.png" alt="image-20231110153859533"></p>
+<p>RTL原理图：</p>
+<img src="/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20231110154235961.png" alt="image-20231110154235961" style="zoom:50%;">
+
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="异步复位的串联T触发器"><a href="#异步复位的串联T触发器" class="headerlink" title="异步复位的串联T触发器"></a>异步复位的串联T触发器</h1><ul>
+<li><p><strong>T触发器逻辑功能为：在脉冲有效边沿到来时，T=0，触发器状态不变Qn+1=Qn；T=1，Qn=~Qn</strong></p>
+</li>
+<li><p>Tff_2.v</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> Tff_2(</span><br><span class="line">    <span class="keyword">input</span> <span class="keyword">wire</span> data, clk, rst,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">reg</span> q  </span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">reg</span> data_reg;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">negedge</span> rst) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>(!rst)<span class="keyword">begin</span></span><br><span class="line">            data_reg &lt;= <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">            <span class="keyword">if</span>(data == <span class="number">0</span>) <span class="keyword">begin</span></span><br><span class="line">                data_reg &lt;= data_reg;</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (data == <span class="number">1</span>) <span class="keyword">begin</span></span><br><span class="line">                data_reg &lt;= ~data_reg;</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">negedge</span> rst) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>(!rst)<span class="keyword">begin</span></span><br><span class="line">            q &lt;= <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">            <span class="keyword">if</span>(data_reg == <span class="number">0</span>) <span class="keyword">begin</span></span><br><span class="line">                q &lt;= q;</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (data_reg == <span class="number">1</span>) <span class="keyword">begin</span></span><br><span class="line">                q &lt;= ~q;</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Tff_2_tb.v</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">`<span class="keyword">define</span> CLK_PERIOD 10</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">module</span> Tff_2_tb;</span><br><span class="line">    <span class="keyword">reg</span> data, clk, rst;</span><br><span class="line">    <span class="keyword">wire</span> q;</span><br><span class="line"></span><br><span class="line">    Tff_2 u1(</span><br><span class="line">        <span class="variable">.data</span>(data), </span><br><span class="line">        <span class="variable">.clk</span>(clk), </span><br><span class="line">        <span class="variable">.rst</span>(rst),</span><br><span class="line">        <span class="variable">.q</span>(q) </span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="comment">//时钟信号的产生</span></span><br><span class="line">    <span class="keyword">initial</span> clk = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">always</span> <span class="variable">#(`CLK_PERIOD/2)</span> clk = ~clk;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//复位和结束信号的产生</span></span><br><span class="line">    <span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">        rst = <span class="number">0</span>;</span><br><span class="line">        #<span class="number">11</span> rst = <span class="number">1</span>;</span><br><span class="line">        #<span class="number">1000</span> <span class="built_in">$stop</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">//其他激励信号</span></span><br><span class="line">    <span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">        data = <span class="number">0</span>;</span><br><span class="line">        #<span class="number">21</span> data = <span class="number">1</span>;</span><br><span class="line">        #<span class="number">20</span> data = <span class="number">0</span>;</span><br><span class="line">        #<span class="number">40</span> data = <span class="number">1</span>;</span><br><span class="line">        #<span class="number">20</span> data = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>结果如下：</p>
+<p><img src="/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20231110164517235.png" alt="image-20231110164517235"></p>
+<p>RTL原理图：</p>
+<p><img src="/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20231110172248731.png" alt="image-20231110172248731"></p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="奇偶校验"><a href="#奇偶校验" class="headerlink" title="奇偶校验"></a>奇偶校验</h1><ul>
+<li><p>如果是奇数个1 则结果为1，为偶数则结果为0（通过sel选择是进行奇校验还是偶校验）</p>
+</li>
+<li><p><strong>运用单目运算符（|,^,&amp;）可以进行如下检测：</strong></p>
+<ul>
+<li><code>e = &amp;d;</code>//检测是否全为1（若全为1，则e=1，若有0，则e=0）</li>
+<li><code>f = ^d;</code>//奇偶校验（检测1的个数是奇数还是偶数，若是奇数，则f=1，若是偶数，则f=0）</li>
+<li><code>g = |d;</code>//检测是否全为0（若全为0，则g=0，若有1，则g=1）</li>
+</ul>
+</li>
+<li><p>odd_sel.v</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> odd_sel(</span><br><span class="line">    <span class="keyword">input</span> [<span class="number">31</span>:<span class="number">0</span>] bus,</span><br><span class="line">    <span class="keyword">input</span> sel,</span><br><span class="line">    <span class="keyword">output</span> check</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="comment">//使用单目运算符^判断bus中1的个数，若奇数个1，则结果为1，若偶数个1，则结果为0</span></span><br><span class="line">    <span class="keyword">wire</span> odd_even;</span><br><span class="line">    <span class="keyword">assign</span> odd_even = ^bus;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//sel == 1意味着进行奇校验，sel == 0意味着进行偶校验</span></span><br><span class="line">    <span class="keyword">assign</span> check = sel ? odd_even : ~odd_even;</span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>RTL原理图：</p>
+<img src="/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20231110175239174.png" alt="image-20231110175239174" style="zoom: 50%;">
+
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="移位运算与乘法"><a href="#移位运算与乘法" class="headerlink" title="移位运算与乘法*"></a>移位运算与乘法*</h1><ul>
+<li><p>已知d为一个8位数，请在每个时钟周期分别输出该数乘1/3/7/8,并输出一个信号通知此时刻输入的d有效（d给出的信号的上升沿表示写入有效）</p>
+<ul>
+<li><p>状态机与移位运算逻辑：</p>
+<table>
+<thead>
+<tr>
+<th align="center">状态</th>
+<th align="center">输出位运算</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">d</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">(din &lt;&lt; 2) - din</td>
+</tr>
+<tr>
+<td align="center">7</td>
+<td align="center">(din &lt;&lt; 3) - din</td>
+</tr>
+<tr>
+<td align="center">8</td>
+<td align="center">(din &lt;&lt; 3)</td>
+</tr>
+</tbody></table>
+</li>
+<li><p><strong>状态机不受输入信号控制，循环跳转就可以</strong></p>
+</li>
+<li><p><strong>状态输出采用时序电路的方式，这样可以节省一个复位状态，在rst归0时输出为0</strong></p>
+</li>
+</ul>
+</li>
+<li><p>multi_sel.v</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> multi_sel(</span><br><span class="line">    <span class="keyword">input</span> clk,</span><br><span class="line">    <span class="keyword">input</span> rst,</span><br><span class="line">    <span class="keyword">input</span> [<span class="number">7</span>:<span class="number">0</span>]d,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">reg</span> input_grant,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">reg</span> [<span class="number">10</span>:<span class="number">0</span>]out</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="comment">//状态定义</span></span><br><span class="line">    <span class="keyword">parameter</span> S0 = <span class="number">4&#x27;d1</span>,</span><br><span class="line">              S1 = <span class="number">4&#x27;d3</span>,</span><br><span class="line">              S2 = <span class="number">4&#x27;d7</span>,</span><br><span class="line">              S3 = <span class="number">4&#x27;d8</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">reg</span> [<span class="number">3</span>:<span class="number">0</span>] state;</span><br><span class="line">    <span class="keyword">reg</span> [<span class="number">3</span>:<span class="number">0</span>] next_state;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">reg</span> [<span class="number">7</span>:<span class="number">0</span>] din;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//状态跳转</span></span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">negedge</span> rst) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>(~rst) <span class="keyword">begin</span></span><br><span class="line">            state &lt;= S0;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">            state &lt;= next_state;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//下一状态的判断</span></span><br><span class="line">    <span class="keyword">always</span> @(*) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">case</span>(state)</span><br><span class="line">            S0: next_state &lt;= S1;</span><br><span class="line">            S1: next_state &lt;= S2;</span><br><span class="line">            S2: next_state &lt;= S3;</span><br><span class="line">            S3: next_state &lt;= S0;</span><br><span class="line">            <span class="keyword">default</span>: next_state &lt;= S0;</span><br><span class="line">        <span class="keyword">endcase</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//状态对应输出</span></span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">negedge</span> rst) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>(~rst) <span class="keyword">begin</span></span><br><span class="line">            out &lt;= <span class="number">11&#x27;d0</span>;</span><br><span class="line">            input_grant &lt;= <span class="number">0</span>;</span><br><span class="line">            din &lt;= <span class="number">8&#x27;d0</span>;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">            <span class="keyword">case</span>(state)</span><br><span class="line">                S0: <span class="keyword">begin</span></span><br><span class="line">                    din &lt;= d; <span class="comment">//这里很妙，能保证后面的都是与din相乘，而不是与新输入的d相乘</span></span><br><span class="line">                    out &lt;= d;</span><br><span class="line">                    input_grant &lt;= <span class="number">1</span>;</span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line">                S1: <span class="keyword">begin</span></span><br><span class="line">                    out &lt;= (din &lt;&lt; <span class="number">2</span>) - din; <span class="comment">//d*3 = d*4-d</span></span><br><span class="line">                    input_grant &lt;= <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line">                S2: <span class="keyword">begin</span></span><br><span class="line">                    out &lt;= (din &lt;&lt; <span class="number">3</span>) - din; <span class="comment">//d*7 = d*8-d</span></span><br><span class="line">                    input_grant &lt;= <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line">                S3: <span class="keyword">begin</span></span><br><span class="line">                    out &lt;= (din &lt;&lt; <span class="number">3</span>);</span><br><span class="line">                    input_grant &lt;= <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">end</span>              </span><br><span class="line">            <span class="keyword">endcase</span>  </span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>multi_sel_tb.v</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">`<span class="keyword">define</span> CLK_PERIOD 10</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">module</span> multi_sel_tb;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">reg</span> clk;</span><br><span class="line">    <span class="keyword">reg</span> rst;</span><br><span class="line">    <span class="keyword">reg</span> [<span class="number">7</span>:<span class="number">0</span>] d;</span><br><span class="line">    <span class="keyword">wire</span> input_grant;</span><br><span class="line">    <span class="keyword">wire</span> [<span class="number">10</span>:<span class="number">0</span>] out;</span><br><span class="line"></span><br><span class="line">    multi_sel u1(</span><br><span class="line">        <span class="variable">.clk</span>(clk),</span><br><span class="line">        <span class="variable">.rst</span>(rst),</span><br><span class="line">        <span class="variable">.d</span>(d),</span><br><span class="line">        <span class="variable">.input_grant</span>(input_grant),</span><br><span class="line">        <span class="variable">.out</span>(out)</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="comment">//时钟信号的产生</span></span><br><span class="line">    <span class="keyword">initial</span> clk = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">always</span> <span class="variable">#(`CLK_PERIOD/2)</span> clk = ~clk;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//复位和结束信号的产生</span></span><br><span class="line">    <span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">        rst = <span class="number">0</span>;</span><br><span class="line">        #<span class="number">11</span> rst = <span class="number">1</span>;</span><br><span class="line">        #<span class="number">1000</span> <span class="built_in">$stop</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//其他激励信号</span></span><br><span class="line">    <span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">        d = <span class="number">143</span>;</span><br><span class="line">        #<span class="number">40</span> d = <span class="number">7</span>;</span><br><span class="line">        #<span class="number">50</span> d = <span class="number">6</span>;</span><br><span class="line">        #<span class="number">10</span> d = <span class="number">128</span>;</span><br><span class="line">        #<span class="number">20</span> d = <span class="number">129</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>结果如下：</p>
+<p><img src="/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20231110194006603.png" alt="image-20231110194006603"></p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="位拆分与运算"><a href="#位拆分与运算" class="headerlink" title="位拆分与运算*"></a>位拆分与运算*</h1><ul>
+<li><p>现在输入了一个压缩的16位数据，按照sel选择输出四个数据的相加结果,并输出valid_out信号（在不输出时候拉低）</p>
+<ul>
+<li>0:  不输出且只有此时的输入有效</li>
+<li>1：输出[3:0]+[7:4]</li>
+<li>2：输出[3:0]+[11:8]</li>
+<li>3：输出[3:0]+[15:12]</li>
+</ul>
+<img src="/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20231112014304793.png" alt="image-20231112014304793" style="zoom:33%;">
+</li>
+<li><p>这题的关键其实在于：<strong>只有当sel信号为0时，输入数据才被锁存，后续执行的都是锁存的这个数据，只有当sel信号再次为0时，输入数据才会被再次锁存，而在这期间输入信号的改变，对输出是不起作用的</strong>。这一部分的代码如下：</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">reg</span> [<span class="number">15</span>:<span class="number">0</span>] data_lock;  </span><br><span class="line"><span class="comment">//sel==0时将输入数据锁住，只有当sel再次为零的时候，输入的数据才有效</span></span><br><span class="line"><span class="keyword">always</span>@(<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">negedge</span> rst) <span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">if</span> (!rst)</span><br><span class="line">        data_lock &lt;= <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(!sel)</span><br><span class="line">        data_lock &lt;= d; <span class="comment">//后续sel不等于0时都是对这个data_lock操作</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>data_cal.v</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> data_cal(</span><br><span class="line">    <span class="keyword">input</span> clk,</span><br><span class="line">    <span class="keyword">input</span> rst,</span><br><span class="line">    <span class="keyword">input</span> [<span class="number">15</span>:<span class="number">0</span>] d,</span><br><span class="line">    <span class="keyword">input</span> [<span class="number">1</span>:<span class="number">0</span>] sel,</span><br><span class="line"></span><br><span class="line">    <span class="keyword">output</span> [<span class="number">4</span>:<span class="number">0</span>] out,</span><br><span class="line">    <span class="keyword">output</span> validout</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">reg</span> [<span class="number">4</span>:<span class="number">0</span>] out_reg;</span><br><span class="line">    <span class="keyword">reg</span> validout_reg;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">reg</span> [<span class="number">15</span>:<span class="number">0</span>] data_lock;  </span><br><span class="line">    <span class="comment">//sel==0时将输入数据锁住，只有当sel再次为零的时候，输入的数据才有效</span></span><br><span class="line">    <span class="keyword">always</span>@(<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">negedge</span> rst) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span> (!rst)</span><br><span class="line">            data_lock &lt;= <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(!sel)</span><br><span class="line">            data_lock &lt;= d;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">negedge</span> rst) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>(~rst) <span class="keyword">begin</span></span><br><span class="line">            out_reg &lt;= <span class="number">5&#x27;b0</span>;</span><br><span class="line">            validout_reg &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">            <span class="keyword">case</span>(sel) </span><br><span class="line">                <span class="number">2&#x27;b00</span>: <span class="keyword">begin</span></span><br><span class="line">                    out_reg &lt;= <span class="number">5&#x27;b0</span>;</span><br><span class="line">                    validout_reg &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line">                <span class="number">2&#x27;b01</span>: <span class="keyword">begin</span></span><br><span class="line">                    out_reg &lt;= data_lock[<span class="number">3</span>:<span class="number">0</span>] + data_lock[<span class="number">7</span>:<span class="number">4</span>];</span><br><span class="line">                    validout_reg &lt;= <span class="number">1&#x27;b1</span>;</span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line">                <span class="number">2&#x27;b10</span>: <span class="keyword">begin</span></span><br><span class="line">                    out_reg &lt;= data_lock[<span class="number">3</span>:<span class="number">0</span>] + data_lock[<span class="number">11</span>:<span class="number">8</span>];</span><br><span class="line">                    validout_reg &lt;= <span class="number">1&#x27;b1</span>;</span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line">                <span class="number">2&#x27;b11</span>: <span class="keyword">begin</span></span><br><span class="line">                    out_reg &lt;= data_lock[<span class="number">3</span>:<span class="number">0</span>] + data_lock[<span class="number">15</span>:<span class="number">12</span>];</span><br><span class="line">                    validout_reg &lt;= <span class="number">1&#x27;b1</span>;</span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line">                <span class="keyword">default</span>: <span class="keyword">begin</span></span><br><span class="line">                    out_reg &lt;= <span class="number">5&#x27;b0</span>;</span><br><span class="line">                    validout_reg &lt;= <span class="number">1&#x27;b0</span>;                   </span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line">            <span class="keyword">endcase</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">assign</span> out = out_reg;</span><br><span class="line">    <span class="keyword">assign</span> validout = validout_reg;</span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>RTL原理图</p>
+<p><img src="/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20231112015014386.png" alt="image-20231112015014386"></p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="多功能数据处理器"><a href="#多功能数据处理器" class="headerlink" title="多功能数据处理器*"></a>多功能数据处理器*</h1><ul>
+<li><p>根据指示信号select的不同，对输入信号a,b实现不同的运算。输入信号a,b为8bit有符号数，当select信号为0，输出a；当select信号为1，输出b；当select信号为2，输出a+b；当select信号为3，输出a-b</p>
+<img src="/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20231112143533256.png" alt="image-20231112143533256" style="zoom: 67%;">
+</li>
+<li><p>此题提到了一个有符号数，<strong>我的理解是，在FPGA的加减法运算中，如果没有bit的溢出，那么其实你定义是无符号还是有符号，计算的结果都是一样的，那么为了防止溢出，在进行有符号加减法运算时，我们对输入的数据通常扩展一个符号位。对于加法运算通常将结果扩展为length(max(a,b)+1)</strong></p>
+</li>
+<li><p><strong>对于有符号数+无符号数的情况，有符号位前面扩展一个符号位，无符号数前面扩展0，结果用有符号数显示</strong></p>
+</li>
+<li><p><strong>对于无符号数+无符号数的情况，可以不扩展，因为要扩展也是扩展0，所有没必要</strong></p>
+</li>
+<li><p>所以我的建议是，在进行加减运算时，其实不需要指定输入数据是否signed，运算时进行相应符号位扩展就可</p>
+</li>
+<li><p><strong>data_select.v</strong></p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> data_select(</span><br><span class="line">	<span class="keyword">input</span> clk,</span><br><span class="line">	<span class="keyword">input</span> rst_n,</span><br><span class="line">	<span class="keyword">input</span> <span class="keyword">signed</span>[<span class="number">7</span>:<span class="number">0</span>]a,</span><br><span class="line">	<span class="keyword">input</span> <span class="keyword">signed</span>[<span class="number">7</span>:<span class="number">0</span>]b,</span><br><span class="line">	<span class="keyword">input</span> [<span class="number">1</span>:<span class="number">0</span>]select,</span><br><span class="line">	<span class="keyword">output</span> <span class="keyword">reg</span> <span class="keyword">signed</span> [<span class="number">8</span>:<span class="number">0</span>]c</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">negedge</span> rst_n) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>(~rst_n)<span class="keyword">begin</span></span><br><span class="line">            c &lt;= <span class="number">9&#x27;b0</span>;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">            <span class="keyword">case</span>(select)</span><br><span class="line">                <span class="number">2&#x27;b00</span>: c &lt;= &#123;a[<span class="number">7</span>], a&#125;;</span><br><span class="line">                <span class="number">2&#x27;b01</span>: c &lt;= &#123;b[<span class="number">7</span>], b&#125;;</span><br><span class="line">                <span class="number">2&#x27;b10</span>: c &lt;= &#123;a[<span class="number">7</span>], a&#125; + &#123;b[<span class="number">7</span>], b&#125;;</span><br><span class="line">                <span class="number">2&#x27;b11</span>: c &lt;= &#123;a[<span class="number">7</span>], a&#125; - &#123;b[<span class="number">7</span>], b&#125;;</span><br><span class="line">                <span class="keyword">default</span>: c &lt;= <span class="number">9&#x27;b0</span>;</span><br><span class="line">            <span class="keyword">endcase</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>data_select_tb.v</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">`<span class="keyword">define</span> CLK_PERIOD 10</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">module</span> data_select_tb;</span><br><span class="line">	<span class="keyword">reg</span> clk;</span><br><span class="line">	<span class="keyword">reg</span> rst_n;</span><br><span class="line">	<span class="keyword">reg</span> <span class="keyword">signed</span>[<span class="number">7</span>:<span class="number">0</span>]a;</span><br><span class="line">	<span class="keyword">reg</span> <span class="keyword">signed</span>[<span class="number">7</span>:<span class="number">0</span>]b;</span><br><span class="line">	<span class="keyword">reg</span> [<span class="number">1</span>:<span class="number">0</span>]select;</span><br><span class="line">	<span class="keyword">wire</span> <span class="keyword">signed</span> [<span class="number">8</span>:<span class="number">0</span>]c;</span><br><span class="line"></span><br><span class="line">    data_select u1(</span><br><span class="line">        <span class="variable">.clk</span>(clk),</span><br><span class="line">        <span class="variable">.rst_n</span>(rst_n),</span><br><span class="line">        <span class="variable">.a</span>(a),</span><br><span class="line">        <span class="variable">.b</span>(b),</span><br><span class="line">        <span class="variable">.select</span>(select),</span><br><span class="line">        <span class="variable">.c</span>(c)</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="comment">//时钟信号的产生</span></span><br><span class="line">    <span class="keyword">initial</span> clk = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">always</span> <span class="variable">#(`CLK_PERIOD/2)</span> clk = ~clk;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//复位和结束信号的产生</span></span><br><span class="line">    <span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">        rst_n = <span class="number">0</span>;</span><br><span class="line">        #<span class="number">11</span> rst_n = <span class="number">1</span>;</span><br><span class="line">        #<span class="number">1000</span> <span class="built_in">$stop</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">        a = <span class="number">8&#x27;b0</span>;</span><br><span class="line">        b = <span class="number">8&#x27;b0</span>;</span><br><span class="line">        select = <span class="number">2&#x27;b0</span>;</span><br><span class="line">        #<span class="number">12</span> a = <span class="number">8&#x27;d127</span>;</span><br><span class="line">            b = -<span class="number">8&#x27;d100</span>;</span><br><span class="line">            select = <span class="number">2&#x27;d2</span>;</span><br><span class="line">        #<span class="number">20</span> a = -<span class="number">8&#x27;d125</span>;</span><br><span class="line">            b = -<span class="number">8&#x27;d128</span>;</span><br><span class="line">            select = <span class="number">2&#x27;d3</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>结果如下：</p>
+<p><img src="/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20231112144734119.png" alt="image-20231112144734119"></p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="求两个数的差值"><a href="#求两个数的差值" class="headerlink" title="求两个数的差值"></a>求两个数的差值</h1><ul>
+<li><p>根据输入信号a,b的大小关系，求解两个数的差值：输入信号a,b为8bit位宽的无符号数。如果a&gt;b，则输出a-b，如果a≤b，则输出b-a。</p>
+<img src="/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20231112152523054.png" alt="image-20231112152523054" style="zoom:67%;">
+</li>
+<li><p>data_minus.v</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> data_minus(</span><br><span class="line">	<span class="keyword">input</span> clk,</span><br><span class="line">	<span class="keyword">input</span> rst_n,</span><br><span class="line">	<span class="keyword">input</span> [<span class="number">7</span>:<span class="number">0</span>]a,</span><br><span class="line">	<span class="keyword">input</span> [<span class="number">7</span>:<span class="number">0</span>]b,</span><br><span class="line"></span><br><span class="line">	<span class="keyword">output</span>  <span class="keyword">reg</span> [<span class="number">8</span>:<span class="number">0</span>]c</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">negedge</span> rst_n) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>(~rst_n) <span class="keyword">begin</span></span><br><span class="line">            c &lt;= <span class="number">9&#x27;b0</span>;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">if</span>(a &gt; b) <span class="keyword">begin</span></span><br><span class="line">            c &lt;= a - b;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">            c &lt;= b - a;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>这里有个点是：在Verilog HDL中，仍然有必要根据设计需要采用关键字signed对信号进行声明。 例如，在进行比较运算时，对于无符号数据，1000大于0100；对于有 符号数据，1000小于0100。</strong>（虽然在此题中都是无符号，所以不用考虑）</p>
+</li>
+</ul>
+<hr>
+<h1 id="使用generate…for语句简化代码"><a href="#使用generate…for语句简化代码" class="headerlink" title="使用generate…for语句简化代码*"></a>使用generate…for语句简化代码*</h1><ul>
+<li><p>在某个module中包含了很多相似的连续赋值语句，请使用generata…for语句编写代码，替代该语句，要求不能改变原module的功能。使用Verilog HDL实现以上功能并编写testbench验证。</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> template_module( </span><br><span class="line">  <span class="keyword">input</span> [<span class="number">7</span>:<span class="number">0</span>] data_in,</span><br><span class="line">  <span class="keyword">output</span> [<span class="number">7</span>:<span class="number">0</span>] data_out</span><br><span class="line">);</span><br><span class="line">  <span class="keyword">assign</span> data_out [<span class="number">0</span>] = data_in [<span class="number">7</span>];</span><br><span class="line">  <span class="keyword">assign</span> data_out [<span class="number">1</span>] = data_in [<span class="number">6</span>];</span><br><span class="line">  <span class="keyword">assign</span> data_out [<span class="number">2</span>] = data_in [<span class="number">5</span>];</span><br><span class="line">  <span class="keyword">assign</span> data_out [<span class="number">3</span>] = data_in [<span class="number">4</span>];</span><br><span class="line">  <span class="keyword">assign</span> data_out [<span class="number">4</span>] = data_in [<span class="number">3</span>];</span><br><span class="line">  <span class="keyword">assign</span> data_out [<span class="number">5</span>] = data_in [<span class="number">2</span>];</span><br><span class="line">  <span class="keyword">assign</span> data_out [<span class="number">6</span>] = data_in [<span class="number">1</span>];</span><br><span class="line">  <span class="keyword">assign</span> data_out [<span class="number">7</span>] = data_in [<span class="number">0</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>gen_for_module.v</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> gen_for_module(</span><br><span class="line">    <span class="keyword">input</span> [<span class="number">7</span>:<span class="number">0</span>] data_in,</span><br><span class="line">    <span class="keyword">output</span> [<span class="number">7</span>:<span class="number">0</span>] data_out</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">genvar</span> i;</span><br><span class="line">    <span class="keyword">generate</span> <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i = i + <span class="number">1</span>)  <span class="keyword">begin</span>: bit_block_name</span><br><span class="line">        <span class="keyword">assign</span> data_out[i] = data_in[<span class="number">7</span> - i];</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">endgenerate</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在begin之后的bit_block_name，表示该generate…for语句块的名称，可以根据需要修改。<strong>特别需要注意的是，即使只有一个语句，也需要使用begin…end</strong>。同时需要使用endgenerate表示结束</p>
+<img src="/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20231112154435953.png" alt="image-20231112154435953" style="zoom: 33%;">
+
+</li>
+</ul>
+<hr>
+<h1 id="使用子模块实现三输入数的大小比较"><a href="#使用子模块实现三输入数的大小比较" class="headerlink" title="使用子模块实现三输入数的大小比较"></a>使用子模块实现三输入数的大小比较</h1><ul>
+<li><p>请编写一个子模块，将输入两个8bit位宽的变量data_a,data_b，并输出data_a,data_b之中较小的数。并在主模块中例化，实现输出三个8bit输入信号的最小值的功能。</p>
+</li>
+<li><p>main_mod.v</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> main_mod(</span><br><span class="line">	<span class="keyword">input</span> clk,</span><br><span class="line">	<span class="keyword">input</span> rst_n,</span><br><span class="line">	<span class="keyword">input</span> [<span class="number">7</span>:<span class="number">0</span>]a,</span><br><span class="line">	<span class="keyword">input</span> [<span class="number">7</span>:<span class="number">0</span>]b,</span><br><span class="line">	<span class="keyword">input</span> [<span class="number">7</span>:<span class="number">0</span>]c,</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">output</span> [<span class="number">7</span>:<span class="number">0</span>]d</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">	<span class="keyword">wire</span> [<span class="number">7</span>:<span class="number">0</span>] temp1;</span><br><span class="line">	<span class="keyword">wire</span> [<span class="number">7</span>:<span class="number">0</span>] temp2;</span><br><span class="line"></span><br><span class="line">	child_mod u1(</span><br><span class="line">		<span class="variable">.clk</span>(clk),</span><br><span class="line">		<span class="variable">.rst_n</span>(rst_n),</span><br><span class="line">		<span class="variable">.a</span>(a),</span><br><span class="line">		<span class="variable">.b</span>(b),</span><br><span class="line">		<span class="variable">.d</span>(temp1)</span><br><span class="line">	);</span><br><span class="line"></span><br><span class="line">	child_mod u2(</span><br><span class="line">		<span class="variable">.clk</span>(clk),</span><br><span class="line">		<span class="variable">.rst_n</span>(rst_n),</span><br><span class="line">		<span class="variable">.a</span>(a),</span><br><span class="line">		<span class="variable">.b</span>(c),</span><br><span class="line">		<span class="variable">.d</span>(temp2)</span><br><span class="line">	);</span><br><span class="line"></span><br><span class="line">	child_mod u3(</span><br><span class="line">		<span class="variable">.clk</span>(clk),</span><br><span class="line">		<span class="variable">.rst_n</span>(rst_n),</span><br><span class="line">		<span class="variable">.a</span>(temp1),</span><br><span class="line">		<span class="variable">.b</span>(temp2),</span><br><span class="line">		<span class="variable">.d</span>(d)</span><br><span class="line">	);</span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>child_mod.v</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> child_mod(</span><br><span class="line">    <span class="keyword">input</span> clk,</span><br><span class="line">    <span class="keyword">input</span> rst_n,</span><br><span class="line">    <span class="keyword">input</span> [<span class="number">7</span>:<span class="number">0</span>]a,</span><br><span class="line">    <span class="keyword">input</span> [<span class="number">7</span>:<span class="number">0</span>]b,</span><br><span class="line">    <span class="keyword">output</span> [<span class="number">7</span>:<span class="number">0</span>]d</span><br><span class="line"> );</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">reg</span> [<span class="number">7</span>:<span class="number">0</span>] d_reg;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">always</span> @ (<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">negedge</span> rst_n) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>( ~rst_n ) <span class="keyword">begin</span></span><br><span class="line">            d_reg &lt;= <span class="number">8&#x27;b0</span>;</span><br><span class="line">        <span class="keyword">end</span> </span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">            <span class="keyword">if</span>( a &gt; b )</span><br><span class="line">                d_reg &lt;= b;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                d_reg &lt;= a;</span><br><span class="line">        <span class="keyword">end</span> </span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">assign</span> d = d_reg;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>RTL原理图</li>
+</ul>
+<img src="/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20231112161742832.png" alt="image-20231112161742832" style="zoom:50%;">
+
+</li>
+</ul>
+<hr>
+<h1 id="使用函数实现数据大小端转换"><a href="#使用函数实现数据大小端转换" class="headerlink" title="使用函数实现数据大小端转换"></a>使用函数实现数据大小端转换</h1><ul>
+<li><p>请用函数实现一个4bit数据大小端（高位bit与低位bit对应互换）转换的功能。实现对两个不同的输入分别转换并输出。</p>
+<img src="/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20231112163254237.png" alt="image-20231112163254237" style="zoom: 67%;">
+</li>
+<li><p>function_mod.v</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> function_mod(</span><br><span class="line">	<span class="keyword">input</span> [<span class="number">3</span>:<span class="number">0</span>]a,</span><br><span class="line">	<span class="keyword">input</span> [<span class="number">3</span>:<span class="number">0</span>]b,</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">output</span> [<span class="number">3</span>:<span class="number">0</span>]c,</span><br><span class="line">	<span class="keyword">output</span> [<span class="number">3</span>:<span class="number">0</span>]d</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">assign</span> c = data_bit_converse(a, <span class="number">4</span>);</span><br><span class="line">    <span class="keyword">assign</span> d = data_bit_converse(b, <span class="number">4</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span>  [<span class="number">3</span>:<span class="number">0</span>] data_bit_converse;</span><br><span class="line">        <span class="keyword">input</span> [<span class="number">3</span>:<span class="number">0</span>] data; <span class="comment">//输入变量</span></span><br><span class="line">        <span class="keyword">input</span> [<span class="number">2</span>:<span class="number">0</span>] data_bit;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">integer</span> i; <span class="comment">//函数内的变量</span></span><br><span class="line">        <span class="keyword">begin</span></span><br><span class="line">            <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; data_bit; i = i + <span class="number">1</span>) <span class="keyword">begin</span></span><br><span class="line">                data_bit_converse[i] = data[data_bit - i - <span class="number">1</span>];</span><br><span class="line">            <span class="keyword">end</span>  </span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">endfunction</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<hr>
+<h1 id="4位数值比较器电路"><a href="#4位数值比较器电路" class="headerlink" title="4位数值比较器电路"></a>4位数值比较器电路</h1><ul>
+<li><p>某4位数值比较器的功能表如下。请用Verilog语言采用门级描述方式，实现此4位数值比较器</p>
+<img src="/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20231116195138065.png" alt="image-20231116195138065" style="zoom: 50%;">
+</li>
+<li><p>先用门级电路描述1bit比较器</p>
+<table>
+<thead>
+<tr>
+<th align="center">A</th>
+<th align="center">B</th>
+<th align="center">F(A&gt;B)</th>
+<th align="center">F(A&lt;B)</th>
+<th align="center">F(A=B)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+</tr>
+</tbody></table>
+<ul>
+<li>则有：<br>$$<br>F(A&gt;B) = A\bar B\<br>F(A&lt;B) = \bar A B\<br>F(A=B) = \bar A\bar B + AB =\overline{A\bar B+\bar AB}<br>$$</li>
+</ul>
+</li>
+<li><p>最后再调用四个1bit比较器，根据题目所述表格将其串起来</p>
+</li>
+<li><p>comparator_4.v</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> comparator_4(</span><br><span class="line">	<span class="keyword">input</span> [<span class="number">3</span>:<span class="number">0</span>] A,</span><br><span class="line">	<span class="keyword">input</span> [<span class="number">3</span>:<span class="number">0</span>] B,</span><br><span class="line"> 	<span class="keyword">output</span> <span class="keyword">wire</span>	Y2, <span class="comment">//A&gt;B</span></span><br><span class="line">	<span class="keyword">output</span> <span class="keyword">wire</span> Y1, <span class="comment">//A=B</span></span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">wire</span> Y0  <span class="comment">//A&lt;B</span></span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">wire</span> W_y2[<span class="number">3</span>:<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">wire</span> W_y1[<span class="number">3</span>:<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">wire</span> W_y0[<span class="number">3</span>:<span class="number">0</span>];</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">genvar</span> gen_i;</span><br><span class="line">    <span class="keyword">for</span> (gen_i = <span class="number">0</span>; gen_i &lt; <span class="number">4</span>; gen_i = gen_i + <span class="number">1</span>) <span class="keyword">begin</span></span><br><span class="line">        compare_1 compare_1_u(</span><br><span class="line">        <span class="variable">.A</span> (A[gen_i]   ),</span><br><span class="line">        <span class="variable">.B</span> (B[gen_i]   ),</span><br><span class="line">        <span class="variable">.Y2</span>(W_y2[gen_i]),<span class="comment">//A&gt;B</span></span><br><span class="line">        <span class="variable">.Y1</span>(W_y1[gen_i]),<span class="comment">//A=B</span></span><br><span class="line">        <span class="variable">.Y0</span>(W_y0[gen_i]) <span class="comment">//A&lt;B</span></span><br><span class="line">        );</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">assign</span> Y2 = W_y2[<span class="number">3</span>] | ((W_y1[<span class="number">3</span>]) &amp; (W_y2[<span class="number">2</span>])) | ((W_y1[<span class="number">3</span>]) &amp; (W_y1[<span class="number">2</span>]) &amp; (W_y2[<span class="number">1</span>])) | ((W_y1[<span class="number">3</span>]) &amp; (W_y1[<span class="number">2</span>]) &amp; (W_y1[<span class="number">1</span>]) &amp; (W_y2[<span class="number">0</span>]));</span><br><span class="line">    <span class="keyword">assign</span> Y0 = W_y0[<span class="number">3</span>] | ((W_y1[<span class="number">3</span>]) &amp; (W_y0[<span class="number">2</span>])) | ((W_y1[<span class="number">3</span>]) &amp; (W_y1[<span class="number">2</span>]) &amp; (W_y0[<span class="number">1</span>])) | ((W_y1[<span class="number">3</span>]) &amp; (W_y1[<span class="number">2</span>]) &amp; (W_y1[<span class="number">1</span>]) &amp; (W_y0[<span class="number">0</span>]));</span><br><span class="line">    <span class="keyword">assign</span> Y1 = W_y1[<span class="number">3</span>] &amp; W_y1[<span class="number">2</span>] &amp; W_y1[<span class="number">1</span>] &amp; W_y1[<span class="number">0</span>];</span><br><span class="line"> </span><br><span class="line"><span class="keyword">endmodule</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">module</span> compare_1(</span><br><span class="line">    <span class="keyword">input</span> A,</span><br><span class="line">    <span class="keyword">input</span> B,</span><br><span class="line">    <span class="keyword">output</span> Y2,<span class="comment">//A&gt;B</span></span><br><span class="line">    <span class="keyword">output</span> Y1,<span class="comment">//A=B</span></span><br><span class="line">    <span class="keyword">output</span> Y0 <span class="comment">//A&lt;B</span></span><br><span class="line">);</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">assign</span> Y2 = A &amp; (!B);</span><br><span class="line">    <span class="keyword">assign</span> Y0 = (!A) &amp; B;</span><br><span class="line">    <span class="keyword">assign</span> Y1 = !(Y2 | Y0);</span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<hr>
+<h1 id="4bit超前进位加法器"><a href="#4bit超前进位加法器" class="headerlink" title="4bit超前进位加法器"></a>4bit超前进位加法器</h1><ul>
+<li><p>请用Verilog语言采用门级描述方式，实现此4bit超前进位加法器，其逻辑表达式如下：</p>
+<ul>
+<li>中间变量：$G_i = A_i B_i,P_i = A_i \bigoplus B_i$</li>
+<li>和：$S_i = P_i\bigoplus C_{i-1}$</li>
+<li>进位：$C_i = G_i + P_i C_{i-1}$</li>
+</ul>
+</li>
+<li><p>lca_4.v</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> lca_4(</span><br><span class="line">	<span class="keyword">input</span> [<span class="number">3</span>:<span class="number">0</span>] A_in,</span><br><span class="line">	<span class="keyword">input</span> [<span class="number">3</span>:<span class="number">0</span>] B_in,</span><br><span class="line">    <span class="keyword">input</span> C_1,</span><br><span class="line"> 	<span class="keyword">output</span> <span class="keyword">wire</span> CO,</span><br><span class="line">	<span class="keyword">output</span> <span class="keyword">wire</span> [<span class="number">3</span>:<span class="number">0</span>] S</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">wire</span> [<span class="number">3</span>:<span class="number">0</span>] G;</span><br><span class="line">    <span class="keyword">wire</span> [<span class="number">3</span>:<span class="number">0</span>] P;</span><br><span class="line">    <span class="keyword">wire</span> [<span class="number">3</span>:<span class="number">0</span>] C;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">assign</span> G = A_in &amp; B_in;  <span class="comment">//按位与就ok</span></span><br><span class="line">    <span class="keyword">assign</span> P = A_in ^ B_in;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">assign</span> C[<span class="number">0</span>] = G[<span class="number">0</span>] | P[<span class="number">0</span>] &amp; C_1;</span><br><span class="line">    <span class="keyword">assign</span> C[<span class="number">1</span>] = G[<span class="number">1</span>] | P[<span class="number">1</span>] &amp; C[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">assign</span> C[<span class="number">2</span>] = G[<span class="number">2</span>] | P[<span class="number">2</span>] &amp; C[<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">assign</span> C[<span class="number">3</span>] = G[<span class="number">3</span>] | P[<span class="number">3</span>] &amp; C[<span class="number">2</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">assign</span> S[<span class="number">0</span>] = P[<span class="number">0</span>] ^ C_1;</span><br><span class="line">    <span class="keyword">assign</span> S[<span class="number">1</span>] = P[<span class="number">1</span>] ^ C[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">assign</span> S[<span class="number">2</span>] = P[<span class="number">2</span>] ^ C[<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">assign</span> S[<span class="number">3</span>] = P[<span class="number">3</span>] ^ C[<span class="number">2</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">assign</span> CO = C[<span class="number">3</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>RTL原理图</p>
+<p><img src="/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20231116203246152.png" alt="image-20231116203246152"></p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="根据状态转移图或表写状态机"><a href="#根据状态转移图或表写状态机" class="headerlink" title="根据状态转移图或表写状态机"></a>根据状态转移图或表写状态机</h1><ul>
+<li><p>某同步时序电路转换表如下，请使用D触发器和必要的逻辑门实现此同步时序电路，用Verilog语言描述。</p>
+<img src="/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20240110012824743.png" alt="image-20240110012824743" style="zoom:50%;">
+
+<ul>
+<li><p>以上状态转移表对应的状态转移图如下：</p>
+<img src="/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20240110012938022.png" alt="image-20240110012938022" style="zoom: 33%;">
+</li>
+</ul>
+</li>
+<li><p>Machine_state_design1.v</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> Machine_state_design1(</span><br><span class="line">    <span class="keyword">input</span>                A   ,</span><br><span class="line">    <span class="keyword">input</span>                clk ,</span><br><span class="line">    <span class="keyword">input</span>                rst_n,</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">output</span>   <span class="keyword">wire</span>        Y   </span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//状态定义</span></span><br><span class="line">    <span class="keyword">parameter</span> S0 = <span class="number">2&#x27;b00</span>,</span><br><span class="line">              S1 = <span class="number">2&#x27;b01</span>,</span><br><span class="line">              S2 = <span class="number">2&#x27;b10</span>,</span><br><span class="line">              S3 = <span class="number">2&#x27;b11</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//状态的中间变量</span></span><br><span class="line">    <span class="keyword">reg</span> [<span class="number">1</span>:<span class="number">0</span>] state, next_state;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//状态跳转</span></span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">negedge</span> rst_n) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>(~rst_n) <span class="keyword">begin</span></span><br><span class="line">            state &lt;= S0;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            state &lt;= next_state;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//次态判断</span></span><br><span class="line">    <span class="keyword">always</span> @(*) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">case</span>(state) </span><br><span class="line">            S0: <span class="keyword">begin</span></span><br><span class="line">                <span class="keyword">if</span>(A) next_state = S3;</span><br><span class="line">                <span class="keyword">else</span> next_state = S1;</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">            S1: <span class="keyword">begin</span></span><br><span class="line">                <span class="keyword">if</span>(A) next_state = S0;</span><br><span class="line">                <span class="keyword">else</span> next_state = S2;</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">            S2: <span class="keyword">begin</span></span><br><span class="line">                <span class="keyword">if</span>(A) next_state = S1;</span><br><span class="line">                <span class="keyword">else</span> next_state = S3;</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">            S3: <span class="keyword">begin</span></span><br><span class="line">                <span class="keyword">if</span>(A) next_state = S2;</span><br><span class="line">                <span class="keyword">else</span> next_state = S0;</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">            <span class="keyword">default</span>: next_state = S0;</span><br><span class="line">        <span class="keyword">endcase</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//输出</span></span><br><span class="line">    <span class="keyword">assign</span> Y = (state == S3) ? <span class="number">1&#x27;b1</span>: <span class="number">1&#x27;b0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<hr>
+<h1 id="ROM的简单实现"><a href="#ROM的简单实现" class="headerlink" title="ROM的简单实现"></a>ROM的简单实现</h1><ul>
+<li><p>实现一个深度为8，位宽为4bit的ROM，数据初始化为0，2，4，6，8，10，12，14。可以通过输入地址addr，输出相应的数据data。接口信号图如下：</p>
+<img src="/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/image-20240110193442403.png" alt="image-20240110193442403" style="zoom:50%;">
+</li>
+<li><p>ROM_easy_design.v</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> ROM_easy_design(</span><br><span class="line">	<span class="keyword">input</span> clk,</span><br><span class="line">	<span class="keyword">input</span> rst_n,</span><br><span class="line">	<span class="keyword">input</span> [<span class="number">7</span>:<span class="number">0</span>]addr,</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">output</span> [<span class="number">3</span>:<span class="number">0</span>]data</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">reg</span> [<span class="number">3</span>:<span class="number">0</span>] value [<span class="number">7</span>:<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">reg</span> [<span class="number">3</span>:<span class="number">0</span>] data_r;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">negedge</span> rst_n) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>(~rst_n) <span class="keyword">begin</span></span><br><span class="line">            data_r &lt;= <span class="number">4&#x27;b0</span>;</span><br><span class="line">            value[<span class="number">0</span>] &lt;= <span class="number">4&#x27;d0</span>;</span><br><span class="line">            value[<span class="number">1</span>] &lt;= <span class="number">4&#x27;d2</span>;</span><br><span class="line">            value[<span class="number">2</span>] &lt;= <span class="number">4&#x27;d4</span>;</span><br><span class="line">            value[<span class="number">3</span>] &lt;= <span class="number">4&#x27;d6</span>;</span><br><span class="line">            value[<span class="number">4</span>] &lt;= <span class="number">4&#x27;d8</span>;</span><br><span class="line">            value[<span class="number">5</span>] &lt;= <span class="number">4&#x27;d10</span>;</span><br><span class="line">            value[<span class="number">6</span>] &lt;= <span class="number">4&#x27;d12</span>;</span><br><span class="line">            value[<span class="number">7</span>] &lt;= <span class="number">4&#x27;d14</span>;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">            data_r &lt;= value[addr];</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">assign</span> data = data_r;</span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<hr>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><p>移位运算和乘法这一题有人（<a target="_blank" rel="noopener" href="https://www.nowcoder.com/practice/1dd22852bcac42ce8f781737f84a3272?tpId=301&tqId=5000607&ru=/exam/oj&qru=/ta/verilog-start/question-ranking&sourceUrl=%2Fexam%2Foj%3Ftab%3DVerilog%E7%AF%87%26topicId%3D302">移位运算与乘法_牛客题霸_牛客网 (nowcoder.com)</a>）提供了更加简单的写法（它这相当于将cnt当成4个状态了，并用一段式状态机描述）：</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">`<span class="keyword">timescale</span> 1ns/1ns</span></span><br><span class="line"><span class="keyword">module</span> multi_sel(</span><br><span class="line"><span class="keyword">input</span> [<span class="number">7</span>:<span class="number">0</span>]d ,</span><br><span class="line"><span class="keyword">input</span> clk,</span><br><span class="line"><span class="keyword">input</span> rst,</span><br><span class="line"><span class="keyword">output</span> <span class="keyword">reg</span> input_grant,</span><br><span class="line"><span class="keyword">output</span> <span class="keyword">reg</span> [<span class="number">10</span>:<span class="number">0</span>]out</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">reg</span> [<span class="number">1</span>:<span class="number">0</span>]cnt;</span><br><span class="line"><span class="keyword">reg</span> [<span class="number">7</span>:<span class="number">0</span>]din;</span><br><span class="line"></span><br><span class="line"><span class="keyword">always</span>@(<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">negedge</span> rst) <span class="keyword">begin</span></span><br><span class="line">	<span class="keyword">if</span>(!rst) <span class="keyword">begin</span></span><br><span class="line">		cnt &lt;= <span class="number">0</span>;</span><br><span class="line">		out &lt;= <span class="number">0</span>;</span><br><span class="line">		input_grant &lt;= <span class="number">0</span>;</span><br><span class="line">		din &lt;= <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">		cnt &lt;= cnt+<span class="number">1</span>;</span><br><span class="line">		<span class="keyword">case</span> (cnt)</span><br><span class="line">			<span class="number">0</span>: <span class="keyword">begin</span></span><br><span class="line">				din &lt;= d;</span><br><span class="line">				input_grant &lt;= <span class="number">1</span>;</span><br><span class="line">				out &lt;= d;</span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">			<span class="number">1</span>: <span class="keyword">begin</span></span><br><span class="line">				input_grant &lt;= <span class="number">0</span>;</span><br><span class="line">				out &lt;= (din&lt;&lt;<span class="number">2</span>)-din;</span><br><span class="line">			<span class="keyword">end</span>		</span><br><span class="line">			<span class="number">2</span>: <span class="keyword">begin</span></span><br><span class="line">				input_grant &lt;= <span class="number">0</span>;</span><br><span class="line">				out &lt;= (din&lt;&lt;<span class="number">3</span>)-din;</span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">			<span class="number">3</span>: <span class="keyword">begin</span></span><br><span class="line">				input_grant &lt;= <span class="number">0</span>;</span><br><span class="line">				out &lt;= (din&lt;&lt;<span class="number">3</span>);</span><br><span class="line">			<span class="keyword">end</span>	</span><br><span class="line">		<span class="keyword">endcase</span></span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>关于子模块实现三输入数的大小比较时，需要调用3个模块，这里很多同学可能疑惑为什么用3个而不是2个。参考：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Tq4y1v7MN/?spm_id_from=333.788&vd_source=221b76534ba13cfad544149d75ce9b6c">FPGA数字IC牛客网Verilog刷题09-子模块例化_哔哩哔哩_bilibili</a>，解释如下：</p>
+<ul>
+<li>第一个模块：比较 T 时刻的 a 和 b，T+1 时刻出来 tmp1； 第二个模块：比较 T 时刻的 a 和 c，T+1 时刻 出来 tmp2； 第三个模块：比较 T+1 时刻的 tmp1 和 tmp2，T+2 时刻出来 d；</li>
+<li><strong>如果只用 2 个子模块，那么 T时刻比较 a和 b得到 tmp1 ，再比较 tmp1和 c的时候是 T+1时刻的 c 和 T+1时刻的 tmp1</strong> ，而 tmp1代表的是 T时刻 a和 b的较小值，所以这时候比较的 T时刻的 a 、 b 和 T+1时刻的 c ，显然不符合要求。</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>欢迎来到ssy的世界</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/WeChaPay.jpg" alt="ssy 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>ssy
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://ssy的小天地.com/2023/11/10/Verilog%E4%B9%8B%E5%85%A5%E9%97%A8%E7%BA%A7%E5%88%B7%E9%A2%98/" title="Verilog之入门级刷题">http://ssy的小天地.com/2023/11/10/Verilog之入门级刷题/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Verilog/" rel="tag"># Verilog</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/11/08/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BCFAR%E6%A3%80%E6%B5%8B/" rel="prev" title="FPGA数字信号处理之CFAR检测">
+      <i class="fa fa-chevron-left"></i> FPGA数字信号处理之CFAR检测
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/11/12/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BCORDIC%E7%AE%97%E6%B3%95%E6%B1%82%E6%AD%A3%E4%BD%99%E5%BC%A6%E5%80%BC%E4%B8%8E%E6%A8%A1%E5%80%BC/" rel="next" title="FPGA数字信号处理之CORDIC算法求正余弦值与模值">
+      FPGA数字信号处理之CORDIC算法求正余弦值与模值 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9B%E9%80%89%E4%B8%80%E5%A4%9A%E8%B7%AF%E5%99%A8"><span class="nav-number">1.</span> <span class="nav-text">四选一多路器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5%E5%A4%8D%E4%BD%8D%E7%9A%84%E4%B8%B2%E8%81%94T%E8%A7%A6%E5%8F%91%E5%99%A8"><span class="nav-number">2.</span> <span class="nav-text">异步复位的串联T触发器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A5%87%E5%81%B6%E6%A0%A1%E9%AA%8C"><span class="nav-number">3.</span> <span class="nav-text">奇偶校验</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A7%BB%E4%BD%8D%E8%BF%90%E7%AE%97%E4%B8%8E%E4%B9%98%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text">移位运算与乘法*</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%8D%E6%8B%86%E5%88%86%E4%B8%8E%E8%BF%90%E7%AE%97"><span class="nav-number">5.</span> <span class="nav-text">位拆分与运算*</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%9A%E5%8A%9F%E8%83%BD%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E5%99%A8"><span class="nav-number">6.</span> <span class="nav-text">多功能数据处理器*</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B1%82%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%9A%84%E5%B7%AE%E5%80%BC"><span class="nav-number">7.</span> <span class="nav-text">求两个数的差值</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8generate%E2%80%A6for%E8%AF%AD%E5%8F%A5%E7%AE%80%E5%8C%96%E4%BB%A3%E7%A0%81"><span class="nav-number">8.</span> <span class="nav-text">使用generate…for语句简化代码*</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%AD%90%E6%A8%A1%E5%9D%97%E5%AE%9E%E7%8E%B0%E4%B8%89%E8%BE%93%E5%85%A5%E6%95%B0%E7%9A%84%E5%A4%A7%E5%B0%8F%E6%AF%94%E8%BE%83"><span class="nav-number">9.</span> <span class="nav-text">使用子模块实现三输入数的大小比较</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0%E6%95%B0%E6%8D%AE%E5%A4%A7%E5%B0%8F%E7%AB%AF%E8%BD%AC%E6%8D%A2"><span class="nav-number">10.</span> <span class="nav-text">使用函数实现数据大小端转换</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4%E4%BD%8D%E6%95%B0%E5%80%BC%E6%AF%94%E8%BE%83%E5%99%A8%E7%94%B5%E8%B7%AF"><span class="nav-number">11.</span> <span class="nav-text">4位数值比较器电路</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4bit%E8%B6%85%E5%89%8D%E8%BF%9B%E4%BD%8D%E5%8A%A0%E6%B3%95%E5%99%A8"><span class="nav-number">12.</span> <span class="nav-text">4bit超前进位加法器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A0%B9%E6%8D%AE%E7%8A%B6%E6%80%81%E8%BD%AC%E7%A7%BB%E5%9B%BE%E6%88%96%E8%A1%A8%E5%86%99%E7%8A%B6%E6%80%81%E6%9C%BA"><span class="nav-number">13.</span> <span class="nav-text">根据状态转移图或表写状态机</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ROM%E7%9A%84%E7%AE%80%E5%8D%95%E5%AE%9E%E7%8E%B0"><span class="nav-number">14.</span> <span class="nav-text">ROM的简单实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">15.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ssy"
+      src="/images/ssy.png">
+  <p class="site-author-name" itemprop="name">ssy</p>
+  <div class="site-description" itemprop="description">满怀希望 就会所向披靡</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ssy1938010014" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ssy1938010014" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://m.weibo.cn/u/5469432500?uid=5469432500&t=0&luicode=10000011&lfid=100103type=1&q=JIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" title="Weibo → https:&#x2F;&#x2F;m.weibo.cn&#x2F;u&#x2F;5469432500?uid&#x3D;5469432500&amp;t&#x3D;0&amp;luicode&#x3D;10000011&amp;lfid&#x3D;100103type%3D1%26q%3DJIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://ssy1938010014.github.io/" title="http:&#x2F;&#x2F;ssy1938010014.github.io" rel="noopener" target="_blank">ssy的小天地</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://y006.github.io/" title="http:&#x2F;&#x2F;y006.github.io" rel="noopener" target="_blank">邱院士的Blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://bengoooo.github.io/" title="http:&#x2F;&#x2F;BENgoooo.github.io" rel="noopener" target="_blank">赵总的Blog</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=1469041281&auto=1&height=66"></iframe>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ssy</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-ribbon@1/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+<script data-pjax>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  let url = element.dataset.target;
+  let pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  let pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  let fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+
+
+    <div id="pjax">
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1/themes/blue/pace-theme-minimal.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"xn--ssy-lq6e63gg6fuu2d.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本节从离散傅里叶变换的深入理解说起，介绍了FFT的基本原理，其中包括基2、基4的按时间抽选FFT算法和按频率抽取FFT算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数字信号处理之FFT终极理解">
+<meta property="og:url" content="http://ssy的小天地.com/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/index.html">
+<meta property="og:site_name" content="ssy的小天地">
+<meta property="og:description" content="本节从离散傅里叶变换的深入理解说起，介绍了FFT的基本原理，其中包括基2、基4的按时间抽选FFT算法和按频率抽取FFT算法">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231103170339511.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/Snipaste_2023-11-04_02-41-55.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/Snipaste_2023-11-04_02-43-08.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/Snipaste_2023-11-04_02-43-08-1699037281630-3.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104030201498.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104031359017.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104153953253.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104163326522.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104184905802.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104191548459.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104191810967.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104205651274.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104205958813.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104210238454.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104210134227.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231105133359626.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231105133621770.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231105141302313.png">
+<meta property="article:published_time" content="2023-11-03T02:07:12.000Z">
+<meta property="article:modified_time" content="2024-03-31T06:09:47.772Z">
+<meta property="article:author" content="ssy">
+<meta property="article:tag" content="数字信号处理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231103170339511.png">
+
+<link rel="canonical" href="http://ssy的小天地.com/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>数字信号处理之FFT终极理解 | ssy的小天地</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+    <a target="_blank" rel="noopener" href="https://github.com/ssy1938010014" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ssy的小天地</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">愿汝如是 千金不换</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-works">
+
+    <a href="/works/" rel="section"><i class="fa fa-fw fa-sitemap"></i>文章</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ssy的小天地.com/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ssy.png">
+      <meta itemprop="name" content="ssy">
+      <meta itemprop="description" content="满怀希望 就会所向披靡">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ssy的小天地">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          数字信号处理之FFT终极理解
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+
+
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-11-03 10:07:12" itemprop="dateCreated datePublished" datetime="2023-11-03T10:07:12+08:00">2023-11-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-03-31 14:09:47" itemprop="dateModified" datetime="2024-03-31T14:09:47+08:00">2024-03-31</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%A7%AF%E7%B4%AF/" itemprop="url" rel="index"><span itemprop="name">学习积累</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本节从离散傅里叶变换的深入理解说起，介绍了FFT的基本原理，其中包括基2、基4的按时间抽选FFT算法和按频率抽取FFT算法</p>
+<span id="more"></span>
+
+<h1 id="从DFT说起"><a href="#从DFT说起" class="headerlink" title="从DFT说起"></a>从DFT说起</h1><ul>
+<li><p>DFT的基本公式：<br>$$<br>X(k)=\sum_{n=0}^{N-1}x(n)W_N^{nk},k=0,1,…,N-1<br>$$</p>
+<p>$$<br>W_N^{nk}=e^{-j\frac{2\pi}{N}nk}<br>$$</p>
+</li>
+<li><p>看这个公式里面有个$\frac{2\pi}{N}$，有没有觉得很熟悉，哦没错，它其实就是数字角频率$w_0$（这个在我的其他笔记中有提到<a target="_blank" rel="noopener" href="https://ssy1938010014.github.io/2023/03/03/信号处理中的小知识点/">信号处理中的小知识点 | ssy的小天地 (ssy1938010014.github.io)</a>）</p>
+<ul>
+<li><p>那么该如何理解它呢？正如在之前笔记中提到的，它代表在复数平面内每个点转过的角度</p>
+<img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231103170339511.png" alt="image-20231103170339511" style="zoom:50%;">
+</li>
+<li><p>图中标出的$\theta$，其实就是数字角频率$w_0$，在对一个正弦波抽样后，得到的点，其实就没有时间的概念了，只是我们自己心里清楚，点与点之间的时间间隔是$T_s$（采样间隔）</p>
+</li>
+<li><p>那么如何数字角频率和实际模拟信号的角频率是如何对应的呢？即在之前笔记中提到的：$\Omega_0=w_0f_s$，那对于频域来说，旋转因子中的角频率不能只有$w_0$，不然就只能测出$w_0$对应模拟信号的频率，类似DTFT的基频和倍频，这里我们也多取一些角频率$w_0,2w_0,3w_0,…(N-1)w_0$，也就是$kw_0,k=0,1,…,N-1$。理想情况下，如果在频域$kw_0$有个冲击，那么就说明对应时域信号中含有角频率为$kw_0f_s=k\frac{2\pi}{N}f_s=2\pi\cdot \frac{kf_s}{N}$的正弦信号，即频率为$k\frac{f_s}{N}$的正弦信号（其实，这也从公式本质的切入点上，解释了数字k域与实际时域频率的对应关系）</p>
+</li>
+<li><p>上述一大段的解释可能也有误，但是我自己最极限的理解了，如果不理解也没关系，我觉得这里只需要记住：<strong>以角频率$w_0$每隔$T_s$时间在复数域内转动的N点（其在实轴上的投影就是$cos(\frac{2\pi}{N}n)$，其本身就是复数$e^{j\frac{2\pi}{N}n}$），在经过DFT之后，可以得到这个N点数字域对应模拟域的实际频率$f_0$，且$f_0=k\cdot \frac{f_s}{N}$</strong></p>
+</li>
+</ul>
+</li>
+<li><p>下面重点解释为啥$x(n)$与$e^{-j\frac{2\pi}{N}nk}$这么个玩意相乘，就能挑选出对应频率（这些解释都偏个人的感性解释，也不一定完全正确）</p>
+<ul>
+<li><p>首先，假设$x(n)=cos(\frac{2\pi}{N}n)$，$x(k)$就等于$k$确定情况下，$n=0\sim N-1$个$x(n)$对应的点与旋转因子中$e^{-j\frac{2\pi}{N}n},n=0\sim N-1$对应元素相乘（例如$x(0)\times e^{-j\frac{2\pi}{N}\cdot 0\cdot k},x(1)\times e^{-j\frac{2\pi}{N}\cdot 1\cdot k},x(2)\times e^{-j\frac{2\pi}{N}\cdot 2\cdot k},…$）。简单来说，这一步骤就是：<strong>在$k$（也就是某一频率）下，求信号对这一频率幅频特性曲线的贡献（这么说可能不太规范，通俗来讲，就是如果信号中含有这个频率，那么它的幅频特性曲线中，这个频率对应的幅度就会格外高，也就是说这一步就是在求这个幅度到底有多高）</strong></p>
+</li>
+<li><p>此时，你会发现，有个离谱的事情发生了$x(n)$是个$cos$，$e^{j\frac{2\pi}{N}n}$是个复数，这咋乘，就现在，我发现了欧拉的伟大，应用欧拉公式，有：<br>$$<br>cos(\frac{2\pi}{N}n)=\frac{e^{j\frac{2\pi}{N}n}+e^{-j\frac{2\pi}{N}n}}{2}<br>$$</p>
+</li>
+<li><p>现在是不是cos就能和复数相乘了，为了便于解释，假设$N=8$，那么$e^{j\frac{2\pi}{N}n}$在复平面上的8个点（图1）为：</p>
+<img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/Snipaste_2023-11-04_02-41-55.png" alt="Snipaste_2023-11-04_02-41-55" style="zoom:50%;">
+</li>
+<li><p>$e^{-j\frac{2\pi}{N}n}$在复平面上的8个点（图2）为：</p>
+<img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/Snipaste_2023-11-04_02-43-08.png" alt="Snipaste_2023-11-04_02-43-08" style="zoom:50%;">
+</li>
+<li><p>当$k=1$时，$W_N^{n}=e^{-j\frac{2\pi}{N}n}$，其在复平面上的8个点（图3）为：</p>
+<img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/Snipaste_2023-11-04_02-43-08-1699037281630-3.png" alt="Snipaste_2023-11-04_02-43-08" style="zoom:50%;">
+
+<ul>
+<li><p>图1中8个复数乘以图3中对应的复数（例如图1中n=1的复数乘以图3中n=1中的复数，图1中n=2的复数乘以图3中n=2中的复数），显然，每个点对点的相乘，其均是模值相乘，由于角度相反，那么相乘后相位为0，最终这8个点对点相乘求和的结果就是8，可视化示意图如下：</p>
+<img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104030201498.png" alt="image-20231104030201498" style="zoom:50%;">
+</li>
+<li><p>同样，图2中8个复数乘以图3中对应的复数，每个点对点结果是模值相乘，旋转角变为原来两倍，对结果求和后，最终为0</p>
+<img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104031359017.png" alt="image-20231104031359017" style="zoom:50%;">
+</li>
+</ul>
+</li>
+<li><p>其实，$W_N^{nk}=e^{-j\frac{2\pi}{N}nk}$就是将复平面均匀分成8份，由$nk$决定，具体对应是八份中的哪一份，当$k=2$时，$nk$为$0,2,4,6,8,10,12,14$，由于8个点就转了一圈，即周期时8，那么$nk$实际对应的是$0,2,4,6,0,2,4,6$，其可视化示意如下（图4）：</p>
+<img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104153953253.png" alt="image-20231104153953253" style="zoom:50%;">
+
+<ul>
+<li>将图1与图4中n相同的点对应相乘，根据模值相乘，角度相加的原则，最终矢量相加的结果为0，图2乘以图4的结果也为0</li>
+</ul>
+</li>
+<li><p>同理，当$k=3,4,5,6$时（$k=7$的情况后面会解释，存在对称性），图1乘以图4，图2乘以图4的结果均为0（这里没有严格上的数学推导，但我觉得对于理解FFT，自己带数进去算一遍更能理解）</p>
+</li>
+<li><p>总之，最后我们会发现：只有$e^{j\frac{2\pi}{N}n}$乘以$W_N^{nk}(k=1)$有值，其值为$e^{j\frac{2\pi}{N}n}$每个点的模值（这里都假设为1了）与$W_N^{nk}$对应点的模值（显然$W_N^{nk}$的模都是1）相乘后再求和（还要除以2，因为欧拉公式后$e^{j\frac{2\pi}{N}n}$前的系数为$\frac12$），其实，$e^{j\frac{2\pi}{N}n}$每个点的模值都一样，你想，$cos(\frac{2\pi}{N}n)$和$5cos(\frac{2\pi}{N}n)$用欧拉公式展开之后，不就是$e^{j\frac{2\pi}{N}n}$和$5e^{j\frac{2\pi}{N}n}$的区别么，那么实际上每个点的模值都是一样的，即$(1,1,1,1,1,1,1,1)$和$(5,5,5,5,5,5,5,5)$，那么<strong>实际上$cos(\frac{2\pi}{N}n)$乘以$W_N^{nk}$就是$\frac{A\times N}{2}$（其中$A$为正弦信号的幅度，$N$为采样的点数）</strong>，这个峰值会出现在$k=1$的位置（这里的解释都先不讨论$k=7$的情况）</p>
+</li>
+<li><p>哦对了，其实这里也很好的解释了<strong>采样点数$N$加倍，DFT结果幅值也会加倍</strong></p>
+</li>
+<li><p>有个细节是，当$k=0$时，很容易得到$cos(\frac{2\pi}{N}n)$乘以$W_N^{nk}$是16（因为不管是$e^{j\frac{2\pi}{N}n}$还是$e^{-j\frac{2\pi}{N}n}$都是一堆111去乘以$W_N^{nk}$的一堆1嘛），所以这也解释了<strong>零频对应的峰值是其他频率峰值的两倍</strong></p>
+</li>
+</ul>
+</li>
+<li><p>下面解释DFT的共轭对称性，即$X(k)=X^*(N-k)$</p>
+<ul>
+<li><p>那么我们来讨论$k=7$的情况，$W_N^{7n}=e^{-j\frac{2\pi}{N}n\cdot7}$，其在复平面上的8个点（图5）为：</p>
+<img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104163326522.png" alt="image-20231104163326522" style="zoom:50%;">
+</li>
+<li><p>不难发现，$k=7$时的情况刚好和$k=1$的情况是反过来的，<strong>此时是$e^{-j\frac{2\pi}{N}n}$乘以$W_N^{nk}$有值（且也为$\frac{A\times N}{2}$），$e^{j\frac{2\pi}{N}n}$乘以$W_N^{nk}$为0，所以频谱中还会在$k=7$时再出现一个峰值</strong></p>
+</li>
+<li><p>同时也解释了为什么复数信号的DFT是单边谱，<strong>因为复数信号只有$e^{j\frac{2\pi}{N}n}$部分，只存在$e^{j\frac{2\pi}{N}n}$乘以$W_N^{nk}$的结果，故复数信号只有单边谱（换句话来说，实数信号的双边谱多余的那边是$e^{-j\frac{2\pi}{N}n}$造成的）</strong></p>
+</li>
+<li><p>笑了，上面解释一大堆，其实就是用了<strong>旋转因子的对称性</strong>：$(W_N^{nk})^*=W_N^{-nk}=W_N^{(N-n)k}$</p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="按时间抽选FFT算法"><a href="#按时间抽选FFT算法" class="headerlink" title="按时间抽选FFT算法"></a>按时间抽选FFT算法</h1><h2 id="1-基2-FFT算法"><a href="#1-基2-FFT算法" class="headerlink" title="1.基2-FFT算法"></a>1.基2-FFT算法</h2><ul>
+<li><p>设序列$x(n)$点数为$N=2^L$，$L$为正整数</p>
+</li>
+<li><p>将序列$x(n)$<strong>按$n$的奇偶分为</strong>以下两组：<br>$$<br>偶序列:x(2r)=x_1(r),r=0,1,…,\frac N2-1<br>$$</p>
+<p>$$<br>奇序列:x(2r+1)=x_2(r),r=0,1,…,\frac N2-1<br>$$</p>
+</li>
+<li><p>则其$N$点FFT为：<br>$$<br>\begin{aligned}<br>X(k) &amp;= \sum_{n=0}^{N-1}x(n)W_N^{nk}\<br>&amp;=\sum_{n=0}^{\frac N2-1}x(2r)W_N^{2rk}+\sum_{n=0}^{\frac N2-1}x(2r+1)W_N^{(2r+1)k}\<br>&amp;=\sum_{n=0}^{\frac N2-1}x_1(r)W_N^{2rk}+\sum_{n=0}^{\frac N2-1}x_2(r)W_N^{(2r+1)k}\<br>&amp;=\sum_{n=0}^{\frac N2-1}x_1(r)W_{\frac N2}^{rk}+W_N^k\sum_{n=0}^{\frac N2-1}x_2(r)W_{\frac N2}^{2rk}\<br>&amp;= X_1(k)+W_N^kX_2(k)<br>\end{aligned}<br>$$</p>
+<ul>
+<li>其中有用到旋转因子的约分性$W_N^m=W_{\frac N2}^{\frac m2}$</li>
+<li><strong>且$X_1(k)$和$X_2(k)$分别是$x_1(r)$和$x_2(r)$的$\frac N2$点DFT</strong></li>
+</ul>
+</li>
+<li><p>对于$X(k+\frac N2)$，有：<br>$$<br>X(k+\frac N2) = X_1(k+\frac N2)+W_N^{k+\frac N2}X_2(k+\frac N2)\<br>$$</p>
+<ul>
+<li><p>我们知道，频谱也是有周期的，以N（参与傅里叶变换的点数）个点为周期，对于DFT只是取了最中心的一个周期，而$X_1(k)$和$X_2(k)$都是$\frac N2$点DFT，故：<br>$$<br>X_1(k)=X_1(k+\frac N2)<br>$$</p>
+<p>$$<br>X_2(k)=X_2(k+\frac N2)<br>$$</p>
+</li>
+<li><p>根据旋转因子的性质有：<br>$$<br>W_N^{(k+\frac N2)}=W_N^k\cdot W_N^{\frac N2}=-W_N^k<br>$$</p>
+<ul>
+<li>因为$W_N^{\frac N2}=-1$</li>
+</ul>
+</li>
+<li><p>所以，最终$X(k+\frac N2)$的结果为：<br>$$<br>X(k+\frac N2) = X_1(k)-W_N^kX_2(k)<br>$$</p>
+</li>
+</ul>
+</li>
+<li><p><strong>整理上述推导，可以得到：</strong><br>$$<br>\begin{cases}<br>\begin{aligned}<br>X(k) &amp;= X_1(k)+W_N^kX_2(k)\<br>X(k+\frac N2) &amp;= X_1(k)-W_N^kX_2(k)<br>\end{aligned}<br>\end{cases},k=0,1,…,\frac N2-1<br>$$</p>
+<ul>
+<li>这个式子画成信号流图就是一个蝶形变换，每求一个点的频谱，都需要知道对应偶序列的一个点和奇序列的一个点</li>
+</ul>
+</li>
+<li><p>根据上式可知，只要能求出$k=0,1,…,\frac N2-1$对应的频谱，就可以同时得到$k=\frac N2,\frac N2+1,\frac N2+2,…,N-1$的频谱</p>
+<ul>
+<li><p>那么，如何得到频谱中前一半的值呢？根据公式，只需要能求出$X_1(k)$和$X_2(k)$就搞定了，而$X_1(k)$和$X_2(k)$是偶序列和奇序列的傅里叶变换，貌似也求不出来，那么就继续分解$X_1(k)$和$X_2(k)$</p>
+</li>
+<li><p>将$X_1(k)$对应的序列又分为偶序列和奇序列，$X_2(k)$对应的序列又分为偶序列和奇序列</p>
+</li>
+<li><p>一直这么分解下去，直到时域上只有两个点，2点DFT（这也称为蝶形变换）我们还是很容易得到的，即：</p>
+<img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104184905802.png" alt="image-20231104184905802" style="zoom:80%;">
+$$
+X(0)=x(0)+x(1)
+$$
+
+<p>$$<br>X(1)=x(0)-x(1)<br>$$</p>
+</li>
+<li><p>得到这两个点的DFT，我们就得到了4个点偶序列和奇序列的DFT，进而可以求出4个点的DFT，以此类推，从而可以求出更高点数的DFT</p>
+</li>
+<li><p>也就是说，我们对时域序列进行偶序列和奇序列分类，再对这个偶序列进行偶序列和奇序列分类，对这个奇序列进行偶序列和奇序列分类，分到最后时域上的序列两两一组，然后依次往下求蝶形变换，就可以得到最终N个序列的DFT结果，举一个8点FFT的例子，先画一个时域上两两分组的示意图：</p>
+<img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104191548459.png" alt="image-20231104191548459" style="zoom:50%;">
+</li>
+<li><p>一个标准的8点基2-FFT流图如下：</p>
+<p><img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104191810967.png" alt="image-20231104191810967"></p>
+</li>
+</ul>
+</li>
+<li><p>所以简单概括来说，<strong>基2-FFT算法是，计算一个N点DFT时，先需要计算两个$\frac N2$点DFT，然后对每个$\frac N2$点DFT，继续往下划分，还需要计算2个$\frac N4$点DFT（总共这一层就有4个$\frac N4$点DFT结果），直至最后分解到$\frac N{2^k}$（$k$表示第k次分解）=2时（容易通过这个等式得到$k=log_2^{\frac N2}$），我们就能迅速计算出第$k$次分解后$2^k$个2点DFT的结果（这里单纯用数学归纳法都能计算出第$k$次分解后需要计算的DFT个数为$2^k$），之后我们就可以反推回去，得到$N$点DFT的结果</strong></p>
+</li>
+<li><p><strong>N点基2-FFT的计算量</strong>：</p>
+<ul>
+<li>蝶形级数：$M=log_2^N$</li>
+<li>每级的蝶形数量：$\frac N2$</li>
+<li>每个蝶形的计算量：<ul>
+<li>加法2次</li>
+<li>乘法1次</li>
+</ul>
+</li>
+<li>总共的计算量：<ul>
+<li>加法：$Nlog_2^N$</li>
+<li>乘法：$\frac N2 log_2^N$</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-基4-FFT算法"><a href="#2-基4-FFT算法" class="headerlink" title="2.基4-FFT算法"></a>2.基4-FFT算法</h2><ul>
+<li><p>设序列$x(n)$点数为$N=4^L$，$L$为正整数</p>
+</li>
+<li><p>将$N=4^L$分为以下4组：<br>$$<br>\begin{cases}<br>\begin{aligned}<br>x(4r) &amp;= x_1(r)\<br>x(4r+1) &amp;= x_1(r)\<br>x(4r+2) &amp;= x_1(r)\<br>x(4r+3) &amp;= x_1(r)<br>\end{aligned}<br>\end{cases},r=0,1,…,\frac N4 -1<br>$$</p>
+</li>
+<li><p>则其$N$点DFT为：<br>$$<br>\begin{aligned}<br>X(k)&amp;=\sum_{n=0}^{N-1}x(n)W_N^{nk}\<br>&amp;= \sum_{r=0}^{\frac N4-1}x(4r)W_N^{4rk}+\sum_{r=0}^{\frac N4-1}x(4r+1)W_N^{(4r+1)k}+\sum_{r=0}^{\frac N4-1}x(4r+2)W_N^{(4r+2)k}+\sum_{r=0}^{\frac N4-1}x(4r+3)W_N^{(4r+3)k}\<br>&amp;= \sum_{r=0}^{\frac N4-1}x_1(r)W_{\frac N4}^{rk}+W_N^k\sum_{r=0}^{\frac N4-1}x_2(r)W_{\frac N4}^{rk}+W_N^{2k}\sum_{r=0}^{\frac N4-1}x_3(r)W_{\frac N4}^{rk}+W_{\frac N4}^{3k}\sum_{r=0}^{\frac N4-1}x_4(r)W_{\frac N4}^{rk}\<br>&amp;= X_1(k)+W_N^kX_2(k)+W_N^{2k}X_3(k)+W_N^{3k}X_4(k)<br>\end{aligned}<br>$$</p>
+<ul>
+<li>其中$X_1(k),X_2(k),X_3(k),X_4(k)$分别是$x_1(r),x_2(r),x_3(r),x_4(r)$的$\frac N4$点DFT</li>
+</ul>
+</li>
+<li><p>由于$W_N^k$有以下性质：<br>$$<br>W_N^{(k+\frac N4)}=W_N^{\frac N4}W_N^k=-jW_N^k<br>$$</p>
+<p>$$<br>W_N^{(k+\frac N2)}=W_N^{\frac N2}W_N^k=-W_N^k<br>$$</p>
+<p>$$<br>W_N^{(k+\frac {3N}4)}=W_N^{\frac {3N}4}W_N^k= jW_N^k<br>$$</p>
+</li>
+<li><p>故有：<br>$$<br>\begin{cases}<br>\begin{aligned}<br>X(k) &amp;= X_1(k)+W_N^kX_2(k)+W_N^{2k}X_3(k)+W_N^{3k}X_4(k)\<br>X(k+\frac N4) &amp;= X_1(k)-jW_N^kX_2(k)-W_N^{2k}X_3(k)+jW_N^{3k}X_4(k)\<br>X(k+\frac N2) &amp;= X_1(k)-W_N^kX_2(k)+W_N^{2k}X_3(k)-W_N^{3k}X_4(k)\<br>X(k+\frac {3k}{4}) &amp;= X_1(k)+jW_N^kX_2(k)-W_N^{2k}X_3(k)-jW_N^{3k}X_4(k)<br>\end{aligned}<br>\end{cases},k=0,1,…,\frac N4 -1<br>$$</p>
+</li>
+<li><p>与之基2类似，计算一个N点DFT时，先需要计算4个$\frac N4$点DFT，然后对每个$\frac N4$点DFT，继续往下划分，还需要计算4个$\frac{N}{16}$点DFT（总共这一层就有16个$\frac N{16}$点DFT结果），直至最后分解到$\frac N{4^k}$=4时（容易通过这个等式得到$k=log_4^{\frac N4}$），我们就能比较容易计算出第$k$次分解后$4^k$个4点DFT的结果（这里单纯用数学归纳法都能计算出第$k$次分解后需要计算的DFT个数为$4^k$），之后我们就可以反推回去，得到$N$点DFT的结果（只是这里反推时乘以的旋转因子与基2时不太一样，<strong>这里的蝶形运算是以4个点为基本单位</strong>）。</p>
+<ul>
+<li>以16点FFT为例，其运算过程的可视化示意图如下：（如果是64点FFT，就把下面这个图看成一个整体，复制粘贴4份分析）</li>
+</ul>
+<img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104205651274.png" alt="image-20231104205651274" style="zoom:50%;">
+
+<ul>
+<li><p>图中第一层的4点DFT的算法和基2FF算法计算4点FFT一样</p>
+<img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104205958813.png" alt="image-20231104205958813" style="zoom: 67%;">
+</li>
+<li><p>将两幅图合起来理解就是：</p>
+<img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104210238454.png" alt="image-20231104210238454" style="zoom: 67%;">
+</li>
+<li><p>一个标准的16点基4-FFT流程图如下：</p>
+<p><img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231104210134227.png" alt="image-20231104210134227"></p>
+</li>
+</ul>
+</li>
+<li><p><strong>N点基4-FFT的计算量</strong>：</p>
+<ul>
+<li>蝶形级数：$M=log_4^N$</li>
+<li>每级的蝶形数量：$\frac N4$</li>
+<li><strong>每个蝶形运算有4点输入和4点输出，则：</strong><ul>
+<li><strong>加法8次</strong></li>
+<li><strong>乘法3次</strong></li>
+</ul>
+</li>
+<li>总共的计算量：<ul>
+<li>加法：$2Nlog_4^N$</li>
+<li>乘法：$\frac {3N}4 log_4^N$</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="按频率抽选FFT算法"><a href="#按频率抽选FFT算法" class="headerlink" title="按频率抽选FFT算法"></a>按频率抽选FFT算法</h1><h2 id="1-基2-FFT算法-1"><a href="#1-基2-FFT算法-1" class="headerlink" title="1.基2-FFT算法"></a>1.基2-FFT算法</h2><ul>
+<li><p>设序列$x(n)$点数为$N=2^L$，$L$为正整数</p>
+</li>
+<li><p>将序列<strong>按$n$的顺序分为前后两组</strong>，其$N$点DFT为：<br>$$<br>\begin{aligned}<br>X(k)&amp;=\sum_{n=0}^{N-1}x(n)W_N^{nk}\<br>&amp;=\sum_{n=0}^{\frac N2-1}x(n)W_N^{nk}+\sum_{n=\frac N2}^{N-1}x(n)W_N^{nk}\<br>&amp;= \sum_{n=0}^{\frac N2 -1}x(n)W_N^{nk}+\sum_{n=0}^{\frac N2-1}x(n+\frac N2)W_N^{(n+\frac N2)k}\<br>&amp;= \sum_{n=0}^{\frac N2-1}[x(n)+x(n+\frac N2)W_N^{\frac N2k}]W_N^{nk}\<br>&amp;= \sum_{n=0}^{\frac N2-1}[x(n)+(-1)^kx(n+\frac N2)]W_N^{nk}<br>\end{aligned}<br>$$</p>
+</li>
+<li><p><strong>按$k$的奇偶可将$X(k)$分为两部分</strong>：<br>$$<br>\begin{cases}<br>\begin{aligned}<br>k &amp;= 2r\<br>k &amp;= 2r+1<br>\end{aligned}<br>\end{cases},k=0,1,…,\frac N2-1<br>$$</p>
+</li>
+<li><p>则有：<br>$$<br>\begin{aligned}<br>X(2r)&amp;=\sum_{n=0}^{\frac N2 -1}[x(n)+x(n+\frac N2)]W_N^{2nr}\<br>&amp;=\sum_{n=0}^{\frac N2 -1}[x(n)+x(n+\frac N2)]W_{\frac N2}^{nr}<br>\end{aligned}<br>$$</p>
+<p>$$<br>\begin{aligned}<br>X(2r+1)&amp;=\sum_{n=0}^{\frac N2 -1}[x(n)-x(n+\frac N2)]W_N^{n(2r+1)}\<br>&amp;=\sum_{n=0}^{\frac N2 -1}[x(n)-x(n+\frac N2)]W_N^nW_{\frac N2}^{nr}<br>\end{aligned}<br>$$</p>
+<ul>
+<li>令：<br>$$<br>\begin{cases}<br>\begin{aligned}<br>x_1(n)&amp;=x(n)+x(n+\frac N2)\<br>x_2(n)&amp;=[x(n)-x(n+\frac N2)]W_N^n<br>\end{aligned}<br>\end{cases},n=0,1,…,\frac N2-1<br>$$</li>
+</ul>
+</li>
+<li><p>则得到：<br>$$<br>\begin{cases}<br>\begin{aligned}<br>X(2r)&amp;=\sum_{n=0}^{\frac N2-1}x_1(n)W_{\frac N2}^{nr}\<br>X(2r+1)&amp;=\sum_{n=0}^{\frac N2-1}x_2(n)W_{\frac N2}^{nr}<br>\end{aligned}<br>\end{cases},r=0,1,…,\frac N2-1<br>$$</p>
+<ul>
+<li>仔细观察$\sum_{n=0}^{\frac N2-1}x_1(n)W_{\frac N2}^{nr}$这玩意不就是$x_1(n)$的$\frac N2$的DFT么</li>
+</ul>
+</li>
+<li><p><strong>简而言之，有：</strong><br>$$<br>X(k)的偶序列:X(2r)=DFT[x_1(n)]<br>$$</p>
+<p>$$<br>X(k)的奇序列:X(2r+1)=DFT[x_2(n)]<br>$$</p>
+</li>
+<li><p>也就是$X(k)$的偶序列只跟$x_1(n)$（与时域序列对半分有关）的傅里叶变换有关，$X(k)$的奇序列只跟$x_2(n)$（与时域序列对半分有关）的傅里叶变换有关，那么问题的关键在于首先要知道$x_1(n)$和$x_2(n)$是啥，如果能将$x_1(n)$和$x_2(n)$继续往下分，使得最后只剩下两个点，那么做2点DFT就可以得到$X(k)$中2个点的DFT</p>
+<ul>
+<li>以8点FFT为例，整个运算过程的可视化示意图如下：</li>
+</ul>
+<img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231105133359626.png" alt="image-20231105133359626" style="zoom:50%;">
+
+<ul>
+<li><p>下面是一个按频率抽选运算的完整的8点FFT流图：</p>
+<img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231105133621770.png" alt="image-20231105133621770" style="zoom:80%;">
+
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-基4-FFT算法-1"><a href="#2-基4-FFT算法-1" class="headerlink" title="2.基4-FFT算法"></a>2.基4-FFT算法</h2><ul>
+<li><p>设序列$x(n)$点数为$N=4^L$，$L$为正整数</p>
+</li>
+<li><p>将<strong>序列$x(n)$按$n$的顺序分为前后4组</strong>，其N点DFT为：<br>$$<br>\begin{aligned}<br>X(k)&amp;=\sum_{n=0}^{N-1}x(n)W_N^{nk}+\sum_{n=0}^{\frac N4-1}x(n)W_N^{nk}+\sum_{n=\frac N2}^{\frac {3N}4-1}x(n)W_N^{nk}+\sum_{n=\frac {3N}4}^{N-1}x(n)W_N^{nk}\<br>&amp;=\sum_{n=0}^{\frac N4-1}x(n)W_N^{nk}+\sum_{n=0}^{\frac N4-1}x(n+\frac N4)W_N^{(n+\frac N4)k}+\sum_{n=0}^{\frac N4-1}x(n+\frac N2)W_N^{(n+\frac N2)k}+\sum_{n=0}^{\frac N4-1}x(n+\frac {3N}4)W_N^{(n+\frac {3N}4)k}\<br>&amp;=\sum_{n=0}^{\frac N4-1}[x(n)+x(n+\frac N4)W_N^{\frac N4 k}+x(n+\frac N2)W_N^{\frac N2k}+x(n+\frac {3N}4)W_N^{\frac{3N}4k}]W_N^{nk}\<br>&amp;=\sum_{n=0}^{\frac N4-1}[x(n)+(-j)^kx(n+\frac N4)+(-1)^kx(n+\frac N2)+j^kx(n+\frac {3N}4)]W_N^{nk}<br>\end{aligned}<br>$$</p>
+</li>
+<li><p><strong>按$k$将$X(k)$分为4部分</strong>：<br>$$<br>\begin{cases}<br>\begin{aligned}<br>k &amp;= 4r\<br>k &amp;= 4r+1\<br>k &amp;= 4r+2\<br>k &amp;= 4r+3<br>\end{aligned}<br>\end{cases},r=0,1,…,\frac N4-1<br>$$</p>
+</li>
+<li><p>则有：<br>$$<br>\begin{aligned}<br>X(4r)&amp;=\sum_{n=0}^{\frac N4-1}[x(n)+x(n+\frac N4)+x(n+\frac N2)+x(n+\frac {3N}4)]W_N^{4nr}\<br>&amp;=\sum_{n=0}^{\frac N4-1}[x(n)+x(n+\frac N4)+x(n+\frac N2)+x(n+\frac {3N}4)]W_{\frac N4}^{nr}<br>\end{aligned}<br>$$</p>
+<p>$$<br>\begin{aligned}<br>X(4r+1)&amp;=\sum_{n=0}^{\frac N4-1}[x(n)-jx(n+\frac N4)-x(n+\frac N2)+x(n+\frac {3N}4)]W_N^{n(4r+1)}\<br>&amp;=\sum_{n=0}^{\frac N4-1}[x(n)-jx(n+\frac N4)-x(n+\frac N2)+x(n+\frac {3N}4)]W_N^nW_{\frac N4}^{nr}<br>\end{aligned}<br>$$</p>
+<p>$$<br>\begin{aligned}<br>X(4r+2)&amp;=\sum_{n=0}^{\frac N4-1}[x(n)-x(n+\frac N4)+x(n+\frac N2)-x(n+\frac {3N}4)]W_N^{n(4r+2)}\<br>&amp;=\sum_{n=0}^{\frac N4-1}[x(n)-x(n+\frac N4)+x(n+\frac N2)-x(n+\frac {3N}4)]W_N^{2n}W_{\frac N4}^{nr}<br>\end{aligned}<br>$$</p>
+<p>$$<br>\begin{aligned}<br>X(4r+3)&amp;=\sum_{n=0}^{\frac N4-1}[x(n)+jx(n+\frac N4)-x(n+\frac N2)-jx(n+\frac {3N}4)]W_N^{n(4r+3)}\<br>&amp;=\sum_{n=0}^{\frac N4-1}[x(n)+jx(n+\frac N4)-x(n+\frac N2)-jx(n+\frac {3N}4)]W_N^{3n}W_{\frac N4}^{nr}<br>\end{aligned}<br>$$</p>
+<ul>
+<li>令：<br>$$<br>\begin{cases}<br>\begin{aligned}<br>x_1(n)&amp;=x(n)+x(n+\frac N4)+x(n+\frac N2)+x(n+\frac {3N}4)\<br>x_2(n)&amp;=[x(n)-jx(n+\frac N4)-x(n+\frac N2)+x(n+\frac {3N}4)]W_N^n\<br>x_3(n)&amp;=[x(n)-x(n+\frac N4)+x(n+\frac N2)-x(n+\frac {3N}4)]W_N^{2n}\<br>x_4(n)&amp;=[x(n)+jx(n+\frac N4)-x(n+\frac N2)-jx(n+\frac {3N}4)]W_N^{3n}<br>\end{aligned}<br>\end{cases},n=0,1,…,\frac N4-1<br>$$</li>
+</ul>
+</li>
+<li><p>则得到：<br>$$<br>\begin{cases}<br>\begin{aligned}<br>X(4r)&amp;=\sum_{n=0}^{\frac N4 -1}x_1(n)W_{\frac N4}^{nr}\<br>X(4r+1)&amp;=\sum_{n=0}^{\frac N4 -1}x_2(n)W_{\frac N4}^{nr}\<br>X(4r+2)&amp;=\sum_{n=0}^{\frac N4 -1}x_3(n)W_{\frac N4}^{nr}\<br>X(4r+3)&amp;=\sum_{n=0}^{\frac N4 -1}x_4(n)W_{\frac N4}^{nr}<br>\end{aligned}<br>\end{cases},r=0,1,…,\frac N4-1<br>$$</p>
+</li>
+<li><p>简而言之，有：<br>$$<br>\begin{cases}<br>\begin{aligned}<br>X(4r)&amp;=DFT[x_1(n)]\<br>X(4r+1)&amp;=DFT[x_2(n)]\<br>X(4r+2)&amp;=DFT[x_3(n)]\<br>X(4r+3)&amp;=DFT[x_4(n)]<br>\end{aligned}<br>\end{cases}<br>$$</p>
+</li>
+<li><p><strong>这样我们就把一个N点DFT按$k$的抽取分解为了4个$\frac N4$点DFT</strong></p>
+</li>
+<li><p>下面是一个按频率抽选运算的16点FFT流图：</p>
+<img src="/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/image-20231105141302313.png" alt="image-20231105141302313" style="zoom: 67%;">
+
+</li>
+</ul>
+<hr>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Hu411r7xR/?spm_id_from=333.788&vd_source=221b76534ba13cfad544149d75ce9b6c">快速傅里叶变换FFT_哔哩哔哩_bilibili</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/lanlancky/p/17102834.html">基2和基4FFT - luckylan - 博客园 (cnblogs.com)</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/bleauchat/article/details/88031656">基2与基4时分FFT算法浅析及其比较_基4fft-CSDN博客</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1E8411A7tK/?spm_id_from=333.1007.top_right_bar_window_history.content.click&vd_source=221b76534ba13cfad544149d75ce9b6c">FPGA数字信号处理之基2FFT的verilog实现<em>2</em>哔哩哔哩_bilibili</a>（可以参考这个视频中的代码理解，但我觉得他在进行蝶形运算时并没有进行并行处理）</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>欢迎来到ssy的世界</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/WeChaPay.jpg" alt="ssy 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>ssy
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://ssy的小天地.com/2023/11/03/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8BFFT%E7%BB%88%E6%9E%81%E7%90%86%E8%A7%A3/" title="数字信号处理之FFT终极理解">http://ssy的小天地.com/2023/11/03/数字信号处理之FFT终极理解/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86/" rel="tag"># 数字信号处理</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/10/31/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%8A%A0%E6%B3%95%E5%99%A8%E4%B8%8E%E4%B9%98%E6%B3%95%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1/" rel="prev" title="FPGA数字信号处理之加法器与乘法器的设计">
+      <i class="fa fa-chevron-left"></i> FPGA数字信号处理之加法器与乘法器的设计
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/11/06/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E9%AB%98%E9%80%9F%E5%BA%A6%E7%BB%93%E6%9E%84%E8%AE%BE%E8%AE%A1/" rel="next" title="FPGA数字信号处理之高速度结构设计">
+      FPGA数字信号处理之高速度结构设计 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%8EDFT%E8%AF%B4%E8%B5%B7"><span class="nav-number">1.</span> <span class="nav-text">从DFT说起</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8C%89%E6%97%B6%E9%97%B4%E6%8A%BD%E9%80%89FFT%E7%AE%97%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">按时间抽选FFT算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%9F%BA2-FFT%E7%AE%97%E6%B3%95"><span class="nav-number">2.1.</span> <span class="nav-text">1.基2-FFT算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%9F%BA4-FFT%E7%AE%97%E6%B3%95"><span class="nav-number">2.2.</span> <span class="nav-text">2.基4-FFT算法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8C%89%E9%A2%91%E7%8E%87%E6%8A%BD%E9%80%89FFT%E7%AE%97%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">按频率抽选FFT算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%9F%BA2-FFT%E7%AE%97%E6%B3%95-1"><span class="nav-number">3.1.</span> <span class="nav-text">1.基2-FFT算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%9F%BA4-FFT%E7%AE%97%E6%B3%95-1"><span class="nav-number">3.2.</span> <span class="nav-text">2.基4-FFT算法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ssy"
+      src="/images/ssy.png">
+  <p class="site-author-name" itemprop="name">ssy</p>
+  <div class="site-description" itemprop="description">满怀希望 就会所向披靡</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ssy1938010014" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ssy1938010014" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://m.weibo.cn/u/5469432500?uid=5469432500&t=0&luicode=10000011&lfid=100103type=1&q=JIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" title="Weibo → https:&#x2F;&#x2F;m.weibo.cn&#x2F;u&#x2F;5469432500?uid&#x3D;5469432500&amp;t&#x3D;0&amp;luicode&#x3D;10000011&amp;lfid&#x3D;100103type%3D1%26q%3DJIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://ssy1938010014.github.io/" title="http:&#x2F;&#x2F;ssy1938010014.github.io" rel="noopener" target="_blank">ssy的小天地</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://y006.github.io/" title="http:&#x2F;&#x2F;y006.github.io" rel="noopener" target="_blank">邱院士的Blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://bengoooo.github.io/" title="http:&#x2F;&#x2F;BENgoooo.github.io" rel="noopener" target="_blank">赵总的Blog</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=1469041281&auto=1&height=66"></iframe>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ssy</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-ribbon@1/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+<script data-pjax>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  let url = element.dataset.target;
+  let pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  let pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  let fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+
+
+    <div id="pjax">
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+    </div>
+</body>
+</html>

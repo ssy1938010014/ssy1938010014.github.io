@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1/themes/blue/pace-theme-minimal.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"xn--ssy-lq6e63gg6fuu2d.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本节主要介绍了MATLAB中函数的定义调用以及三种基本的程序运行结构，以及函数相关的定义与调用。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MATLAB之程序流程控制与函数">
+<meta property="og:url" content="http://ssy的小天地.com/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/index.html">
+<meta property="og:site_name" content="ssy的小天地">
+<meta property="og:description" content="本节主要介绍了MATLAB中函数的定义调用以及三种基本的程序运行结构，以及函数相关的定义与调用。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/image-20221111124011062.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/image-20221111125023125.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/image-20221111125529258.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/image-20221111141909298.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/image-20221111142213387.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/image-20221111155246922.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/image-20221111160019289.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/image-20221111160115764.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/image-20221111162644607.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/image-20221111163746681.png">
+<meta property="article:published_time" content="2022-11-11T12:07:12.000Z">
+<meta property="article:modified_time" content="2022-11-20T07:10:13.127Z">
+<meta property="article:author" content="ssy">
+<meta property="article:tag" content="MATLAB">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/image-20221111124011062.png">
+
+<link rel="canonical" href="http://ssy的小天地.com/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>MATLAB之程序流程控制与函数 | ssy的小天地</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+    <a target="_blank" rel="noopener" href="https://github.com/ssy1938010014" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ssy的小天地</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">愿汝如是 千金不换</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-works">
+
+    <a href="/works/" rel="section"><i class="fa fa-fw fa-sitemap"></i>文章</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ssy的小天地.com/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ssy.png">
+      <meta itemprop="name" content="ssy">
+      <meta itemprop="description" content="满怀希望 就会所向披靡">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ssy的小天地">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MATLAB之程序流程控制与函数
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+
+
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-11-11 20:07:12" itemprop="dateCreated datePublished" datetime="2022-11-11T20:07:12+08:00">2022-11-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-11-20 15:10:13" itemprop="dateModified" datetime="2022-11-20T15:10:13+08:00">2022-11-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%A7%AF%E7%B4%AF/" itemprop="url" rel="index"><span itemprop="name">学习积累</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本节主要介绍了MATLAB中函数的定义调用以及三种基本的程序运行结构，以及函数相关的定义与调用。</p>
+<span id="more"></span>
+
+<h1 id="顺序结构程序"><a href="#顺序结构程序" class="headerlink" title="顺序结构程序"></a>顺序结构程序</h1><h2 id="1-文件的建立"><a href="#1-文件的建立" class="headerlink" title="1.文件的建立"></a>1.文件的建立</h2><ul>
+<li>用命令按钮创建文件<img src="/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/image-20221111124011062.png" alt="image-20221111124011062" style="zoom: 50%;"> </li>
+<li>用edit命令创建文件：<code>edit 文件名</code></li>
+</ul>
+<h2 id="2-脚本文件与函数文件"><a href="#2-脚本文件与函数文件" class="headerlink" title="2.脚本文件与函数文件"></a>2.脚本文件与函数文件</h2><ul>
+<li><p>脚本文件</p>
+<img src="/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/image-20221111125023125.png" alt="image-20221111125023125" style="zoom:50%;">
+</li>
+<li><p>函数文件</p>
+<img src="/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/image-20221111125529258.png" alt="image-20221111125529258" style="zoom:50%;">
+
+</li>
+</ul>
+<h2 id="3-数据的输入"><a href="#3-数据的输入" class="headerlink" title="3.数据的输入"></a>3.数据的输入</h2><ul>
+<li><p><code>A=input(提示信息)</code> %此时只能输入数值，不能输入字符串</p>
+</li>
+<li><p><code>A=input(提示信息,&#39;s&#39;)</code> %输入的东西将当成字符串存储起来</p>
+<p> <img src="/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/image-20221111141909298.png" alt="image-20221111141909298" style="zoom:50%;">、</p>
+</li>
+</ul>
+<h2 id="4-数据的输出"><a href="#4-数据的输出" class="headerlink" title="4.数据的输出"></a>4.数据的输出</h2><ul>
+<li><p><code>disp(输出项)</code></p>
+ <img src="/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/image-20221111142213387.png" alt="image-20221111142213387" style="zoom:50%;">
+
+</li>
+</ul>
+<h2 id="5-程序的暂停"><a href="#5-程序的暂停" class="headerlink" title="5.程序的暂停"></a>5.程序的暂停</h2><ul>
+<li><code>pause(暂停的秒数)</code></li>
+</ul>
+<hr>
+<h1 id="选择结构"><a href="#选择结构" class="headerlink" title="选择结构"></a>选择结构</h1><ul>
+<li><p><strong>if语句</strong></p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%输入一个字符，若为大写字母，则输出其对应的小写字母；若为小写字母，则输出其对应</span></span><br><span class="line"><span class="comment">%的大写字母；若为数字字符则输出对应的数的平方，若为其他字符则原样输出</span></span><br><span class="line">c=input(<span class="string">&#x27;Please enter a char:&#x27;</span>,<span class="string">&#x27;s&#x27;</span>);</span><br><span class="line"><span class="keyword">if</span> c&gt;=<span class="string">&#x27;A&#x27;</span> &amp;&amp; c&lt;=<span class="string">&#x27;Z&#x27;</span></span><br><span class="line">    <span class="built_in">disp</span>(<span class="string">&#x27;大写字母转小写字母:&#x27;</span>)</span><br><span class="line">    <span class="built_in">disp</span>(lower(c))</span><br><span class="line"><span class="keyword">elseif</span> c&gt;=<span class="string">&#x27;a&#x27;</span> &amp;&amp; c&lt;=<span class="string">&#x27;z&#x27;</span></span><br><span class="line">    <span class="built_in">disp</span>(<span class="string">&quot;小写字母转大写字母:&quot;</span>)</span><br><span class="line">    <span class="built_in">disp</span>(upper(c))</span><br><span class="line"><span class="keyword">elseif</span> c&gt;=<span class="string">&#x27;0&#x27;</span> &amp;&amp; c&lt;=<span class="string">&#x27;9&#x27;</span></span><br><span class="line">    <span class="built_in">disp</span>(<span class="string">&quot;数字字符输出对应的数的平方:&quot;</span>)</span><br><span class="line">    <span class="built_in">disp</span>(str2double(c)^<span class="number">2</span>) <span class="comment">%将字符串转化为浮点型</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="built_in">disp</span>(c)</span><br><span class="line"><span class="keyword">end</span> <span class="comment">%结束需加end</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>switch语句</strong></p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%PM2.5数值在[0，35）空气质量为优，</span></span><br><span class="line"><span class="comment">%[35，75）为良，[75，115）为轻度污染，</span></span><br><span class="line"><span class="comment">% [115，150）为中度污染，</span></span><br><span class="line"><span class="comment">% [150，250）为重度污染，</span></span><br><span class="line"><span class="comment">% 大于等于250为严重污染。</span></span><br><span class="line"><span class="comment">% 编写程序，输入PM2.5数值，输出空气质量等级。</span></span><br><span class="line">g=input(<span class="string">&#x27;请输入PM2.5值：&#x27;</span>);</span><br><span class="line"><span class="keyword">switch</span> <span class="built_in">fix</span>(g) </span><br><span class="line">    <span class="keyword">case</span> <span class="built_in">num2cell</span>(<span class="number">0</span>:<span class="number">34</span>) <span class="comment">%将0~34的一个数组整体，变成单个的个体</span></span><br><span class="line">        <span class="built_in">disp</span>(<span class="string">&#x27;空气质量优&#x27;</span>);</span><br><span class="line">    <span class="keyword">case</span> <span class="built_in">num2cell</span>(<span class="number">35</span>:<span class="number">74</span>) </span><br><span class="line">        <span class="built_in">disp</span>(<span class="string">&#x27;空气质量良好&#x27;</span>);</span><br><span class="line">    <span class="keyword">case</span> <span class="built_in">num2cell</span>(<span class="number">75</span>:<span class="number">114</span>) </span><br><span class="line">        <span class="built_in">disp</span>(<span class="string">&#x27;空气质量轻度污染&#x27;</span>);</span><br><span class="line">    <span class="keyword">case</span> <span class="built_in">num2cell</span>(<span class="number">115</span>:<span class="number">149</span>) </span><br><span class="line">        <span class="built_in">disp</span>(<span class="string">&#x27;空气质量中度污染&#x27;</span>); </span><br><span class="line">    <span class="keyword">case</span> <span class="built_in">num2cell</span>(<span class="number">150</span>:<span class="number">249</span>) </span><br><span class="line">        <span class="built_in">disp</span>(<span class="string">&#x27;空气质量重度污染&#x27;</span>);  </span><br><span class="line">    <span class="keyword">otherwise</span> <span class="comment">%注意matlab中使用otherwise表示其他</span></span><br><span class="line">        <span class="built_in">disp</span>(<span class="string">&#x27;空气质量严重污染&#x27;</span>);</span><br><span class="line"><span class="keyword">end</span> <span class="comment">%也需添加结束符end</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<hr>
+<h1 id="循环结构"><a href="#循环结构" class="headerlink" title="循环结构"></a>循环结构</h1><h2 id="1-for语句"><a href="#1-for语句" class="headerlink" title="1.for语句"></a>1.for语句</h2><ul>
+<li><p>格式：</p>
+<p><code>for 循环变量=初值：步长：终值</code></p>
+<p>​    <code>循环体语句</code></p>
+<p><code>end</code></p>
+</li>
+<li><p>例：用蒙特卡洛法求$\pi$</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%利用蒙特卡洛法求π的近似值</span></span><br><span class="line">s=<span class="number">0</span>;</span><br><span class="line">n=input(<span class="string">&#x27;输入随机投掷的次数:(次数越多越准确)n=&#x27;</span>);</span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span>=<span class="number">1</span>:n <span class="comment">%有点像python中的遍历了</span></span><br><span class="line">    x=<span class="built_in">rand</span>(<span class="number">1</span>);</span><br><span class="line">    y=<span class="built_in">rand</span>(<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">if</span> x*x+y*y&lt;=<span class="number">1</span></span><br><span class="line">        s=s+<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line">pai=s/n*<span class="number">4</span>;</span><br><span class="line"><span class="built_in">disp</span>(pai)</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ul>
+<h2 id="2-while语句"><a href="#2-while语句" class="headerlink" title="2.while语句"></a>2.while语句</h2><ul>
+<li><p>格式：</p>
+<p><code>while 条件</code></p>
+<p>​    <code>循环体语句</code></p>
+<p><code>end</code></p>
+</li>
+<li><p>例：</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%从键盘输入若干个数，当输入0时结束输入，求这些数的平均值和它们之和。</span></span><br><span class="line">msum=<span class="number">0</span>;</span><br><span class="line">n=<span class="number">0</span>;</span><br><span class="line">x=input(<span class="string">&#x27;Enter a number (end in 0):&#x27;</span>);</span><br><span class="line"><span class="keyword">while</span> x~=<span class="number">0</span> <span class="comment">%x不等于0时</span></span><br><span class="line">    msum=msum+x;</span><br><span class="line">    n=n+<span class="number">1</span>;</span><br><span class="line">    x=input(<span class="string">&#x27;Enter a number (end in 0):&#x27;</span>);</span><br><span class="line"><span class="keyword">end</span> <span class="comment">%结束符end别忘了</span></span><br><span class="line"><span class="keyword">if</span> n&gt;<span class="number">0</span></span><br><span class="line">    <span class="built_in">mean</span>=msum/n;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="built_in">disp</span>(msum);</span><br><span class="line"><span class="built_in">disp</span>(<span class="built_in">mean</span>);</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<hr>
+<h1 id="函数文件的定义与调用"><a href="#函数文件的定义与调用" class="headerlink" title="函数文件的定义与调用"></a>函数文件的定义与调用</h1><h2 id="1-函数文件的基本结构"><a href="#1-函数文件的基本结构" class="headerlink" title="1.函数文件的基本结构"></a>1.函数文件的基本结构</h2><ul>
+<li><p><code>function 输出形参表=函数名（输入形参表）</code></p>
+</li>
+<li><p>return语句表示结束函数的执行。通常在函数文件中也可以不使用return语句，那么被调用函数执行完成后会自动返回</p>
+</li>
+<li><p>例：</p>
+ <img src="/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/image-20221111155246922.png" alt="image-20221111155246922" style="zoom:50%;">
+
+</li>
+</ul>
+<h2 id="2-匿名函数"><a href="#2-匿名函数" class="headerlink" title="2.匿名函数"></a>2.匿名函数</h2><ul>
+<li><p>格式：</p>
+<p><code>函数句柄变量=@（匿名函数输入参数）匿名函数表达式</code></p>
+<p><code>函数句柄变量=@函数名 %这里的函数名可以是内部函数或自定义函数</code></p>
+</li>
+<li><p>例：</p>
+ <img src="/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/image-20221111160019289.png" alt="image-20221111160019289" style="zoom:50%;">
+
+ <img src="/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/image-20221111160115764.png" alt="image-20221111160115764" style="zoom:50%;">
+
+</li>
+</ul>
+<hr>
+<h1 id="函数的递归调用"><a href="#函数的递归调用" class="headerlink" title="函数的递归调用"></a>函数的递归调用</h1><img src="/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/image-20221111162644607.png" alt="image-20221111162644607" style="zoom: 50%;">
+
+<hr>
+<h1 id="函数参数的可调性"><a href="#函数参数的可调性" class="headerlink" title="函数参数的可调性"></a>函数参数的可调性</h1><ul>
+<li><strong>nargin</strong>：输入实参的个数</li>
+<li><strong>nargout</strong>：输出实参的个数</li>
+</ul>
+<img src="/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/image-20221111163746681.png" alt="image-20221111163746681" style="zoom:50%;">
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>欢迎来到ssy的世界</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/WeChaPay.jpg" alt="ssy 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>ssy
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://ssy的小天地.com/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/" title="MATLAB之程序流程控制与函数">http://ssy的小天地.com/2022/11/11/MATLAB之程序流程控制与函数/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/MATLAB/" rel="tag"># MATLAB</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/11/10/MATLAB%E4%B9%8B%E7%9F%A9%E9%98%B5%E5%A4%84%E7%90%86/" rel="prev" title="MATLAB之矩阵处理">
+      <i class="fa fa-chevron-left"></i> MATLAB之矩阵处理
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/11/12/%E6%97%A5%E5%B8%B8%E5%88%86%E4%BA%AB2022/" rel="next" title="小沈同学的日常分享2022">
+      小沈同学的日常分享2022 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A1%BA%E5%BA%8F%E7%BB%93%E6%9E%84%E7%A8%8B%E5%BA%8F"><span class="nav-number">1.</span> <span class="nav-text">顺序结构程序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%96%87%E4%BB%B6%E7%9A%84%E5%BB%BA%E7%AB%8B"><span class="nav-number">1.1.</span> <span class="nav-text">1.文件的建立</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E8%84%9A%E6%9C%AC%E6%96%87%E4%BB%B6%E4%B8%8E%E5%87%BD%E6%95%B0%E6%96%87%E4%BB%B6"><span class="nav-number">1.2.</span> <span class="nav-text">2.脚本文件与函数文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%95%B0%E6%8D%AE%E7%9A%84%E8%BE%93%E5%85%A5"><span class="nav-number">1.3.</span> <span class="nav-text">3.数据的输入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E6%95%B0%E6%8D%AE%E7%9A%84%E8%BE%93%E5%87%BA"><span class="nav-number">1.4.</span> <span class="nav-text">4.数据的输出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9A%82%E5%81%9C"><span class="nav-number">1.5.</span> <span class="nav-text">5.程序的暂停</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E7%BB%93%E6%9E%84"><span class="nav-number">2.</span> <span class="nav-text">选择结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BE%AA%E7%8E%AF%E7%BB%93%E6%9E%84"><span class="nav-number">3.</span> <span class="nav-text">循环结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-for%E8%AF%AD%E5%8F%A5"><span class="nav-number">3.1.</span> <span class="nav-text">1.for语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-while%E8%AF%AD%E5%8F%A5"><span class="nav-number">3.2.</span> <span class="nav-text">2.while语句</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E6%96%87%E4%BB%B6%E7%9A%84%E5%AE%9A%E4%B9%89%E4%B8%8E%E8%B0%83%E7%94%A8"><span class="nav-number">4.</span> <span class="nav-text">函数文件的定义与调用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%87%BD%E6%95%B0%E6%96%87%E4%BB%B6%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84"><span class="nav-number">4.1.</span> <span class="nav-text">1.函数文件的基本结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0"><span class="nav-number">4.2.</span> <span class="nav-text">2.匿名函数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E7%9A%84%E9%80%92%E5%BD%92%E8%B0%83%E7%94%A8"><span class="nav-number">5.</span> <span class="nav-text">函数的递归调用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E7%9A%84%E5%8F%AF%E8%B0%83%E6%80%A7"><span class="nav-number">6.</span> <span class="nav-text">函数参数的可调性</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ssy"
+      src="/images/ssy.png">
+  <p class="site-author-name" itemprop="name">ssy</p>
+  <div class="site-description" itemprop="description">满怀希望 就会所向披靡</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ssy1938010014" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ssy1938010014" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://m.weibo.cn/u/5469432500?uid=5469432500&t=0&luicode=10000011&lfid=100103type=1&q=JIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" title="Weibo → https:&#x2F;&#x2F;m.weibo.cn&#x2F;u&#x2F;5469432500?uid&#x3D;5469432500&amp;t&#x3D;0&amp;luicode&#x3D;10000011&amp;lfid&#x3D;100103type%3D1%26q%3DJIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://ssy1938010014.github.io/" title="http:&#x2F;&#x2F;ssy1938010014.github.io" rel="noopener" target="_blank">ssy的小天地</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://y006.github.io/" title="http:&#x2F;&#x2F;y006.github.io" rel="noopener" target="_blank">邱院士的Blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://bengoooo.github.io/" title="http:&#x2F;&#x2F;BENgoooo.github.io" rel="noopener" target="_blank">赵总的Blog</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=1469041281&auto=1&height=66"></iframe>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ssy</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-ribbon@1/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+<script data-pjax>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  let url = element.dataset.target;
+  let pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  let pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  let fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+
+
+    <div id="pjax">
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+    </div>
+</body>
+</html>

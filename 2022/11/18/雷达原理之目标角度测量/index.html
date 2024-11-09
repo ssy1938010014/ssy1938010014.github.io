@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1/themes/blue/pace-theme-minimal.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"xn--ssy-lq6e63gg6fuu2d.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本节主要介绍了雷达目标角度测量的基本方法，包括相位法与振幅法，以及圆锥扫描自动测角系统与单脉冲自动扫描测角系统。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="雷达原理之目标角度测量">
+<meta property="og:url" content="http://ssy的小天地.com/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/index.html">
+<meta property="og:site_name" content="ssy的小天地">
+<meta property="og:description" content="本节主要介绍了雷达目标角度测量的基本方法，包括相位法与振幅法，以及圆锥扫描自动测角系统与单脉冲自动扫描测角系统。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118145144773.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118145524628.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118152009476.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118154913552.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118154955574.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118155608746.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118160139982.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118184018318.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118184042690.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118190940403.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118193055329.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118193310164.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118194933733.png">
+<meta property="article:published_time" content="2022-11-18T13:07:12.000Z">
+<meta property="article:modified_time" content="2023-09-25T10:42:28.104Z">
+<meta property="article:author" content="ssy">
+<meta property="article:tag" content="雷达原理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118145144773.png">
+
+<link rel="canonical" href="http://ssy的小天地.com/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>雷达原理之目标角度测量 | ssy的小天地</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+    <a target="_blank" rel="noopener" href="https://github.com/ssy1938010014" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ssy的小天地</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">愿汝如是 千金不换</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-works">
+
+    <a href="/works/" rel="section"><i class="fa fa-fw fa-sitemap"></i>文章</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ssy的小天地.com/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ssy.png">
+      <meta itemprop="name" content="ssy">
+      <meta itemprop="description" content="满怀希望 就会所向披靡">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ssy的小天地">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          雷达原理之目标角度测量
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+
+
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-11-18 21:07:12" itemprop="dateCreated datePublished" datetime="2022-11-18T21:07:12+08:00">2022-11-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-09-25 18:42:28" itemprop="dateModified" datetime="2023-09-25T18:42:28+08:00">2023-09-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%A7%AF%E7%B4%AF/" itemprop="url" rel="index"><span itemprop="name">学习积累</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本节主要介绍了雷达目标角度测量的基本方法，包括相位法与振幅法，以及圆锥扫描自动测角系统与单脉冲自动扫描测角系统。</p>
+<span id="more"></span>
+
+<h1 id="天线方向图的一般性质"><a href="#天线方向图的一般性质" class="headerlink" title="天线方向图的一般性质"></a>天线方向图的一般性质</h1><ul>
+<li><p>雷达天线方向函数：<br>$$<br>F(\theta)=|F(\theta)|e^{j\phi(\theta)}<br>$$</p>
+<ul>
+<li>其中$|F(\theta)|$是天线方向图函数的振幅响应</li>
+<li>$\phi(\theta)$是天线方向图函数的相位响应</li>
+</ul>
+</li>
+<li><p>只考虑振幅响应，有：</p>
+<ul>
+<li>$F(0)\ge F(\theta),∀θ∈[−π，π]$</li>
+<li>$F(\theta)=F(-\theta)$</li>
+<li>$|\theta_1|&gt;|\theta_2|,且\theta_1,\theta_2在主瓣内，则F(\theta_1)&lt;F(\theta_2)$</li>
+<li>$\frac{F_电(\frac{\theta_{0.5}}{2})}{F(0)}=\frac{\sqrt2}2$</li>
+<li>$F_{功-t}(\theta_1)=F_{电-t}^2(\theta1)$</li>
+<li>$F_{功-r}(\theta_1)=F_{电-r}^2(\theta1)$</li>
+</ul>
+</li>
+</ul>
+<img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118145144773.png" alt="image-20221118145144773" style="zoom: 33%;">
+
+<hr>
+<h1 id="相位法测角"><a href="#相位法测角" class="headerlink" title="相位法测角"></a>相位法测角</h1><h2 id="1-两天线相位法测角原理"><a href="#1-两天线相位法测角原理" class="headerlink" title="1.两天线相位法测角原理"></a>1.两天线相位法测角原理</h2><img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118145524628.png" alt="image-20221118145524628" style="zoom:50%;">
+
+<ul>
+<li><p>假设两天线之间的距离$d$，远远小于目标到振源的距离，则可以认为到达接收点的目标所反射的电磁波近似为平面波。</p>
+</li>
+<li><p>目标到$A，B$两点的距离相等，回波到$A，B$两点的相位也相等，回波到接收点的距离相差$dsin(θ)$，对应相位相差$\phi$，有：<br>$$<br>\frac{\phi}{2\pi}=\frac{dsin\theta}{\lambda}\Rightarrow \phi=\frac{2\pi dsin\theta}{\lambda}<br>$$</p>
+</li>
+<li><p>则测量相位差$\phi$就能测量角度了</p>
+</li>
+<li><p>当$ϕ∈[−π,π]$时，$θ$取值无模糊。$θ$对应的取值范围$[−θ<em>{max},θ</em>{max}]$，由$\phi=\frac{2\pi dsin\theta}{\lambda}$可得：<br>$$<br>\theta_{max}=arcsin(\frac{\lambda}{2d})<br>$$</p>
+</li>
+<li><p>从上式可知，只要$d$越小，对应的$θ_{max}$就越大。则短基线保证大的无模糊测角范围。</p>
+</li>
+</ul>
+<h2 id="2-测角误差分析与多值性"><a href="#2-测角误差分析与多值性" class="headerlink" title="2.测角误差分析与多值性"></a>2.测角误差分析与多值性</h2><ul>
+<li><p>对$\phi=\frac{2\pi dsin\theta}{\lambda}$两边同时微分，有：<br>$$<br>d\phi=\frac{2\pi dcos\theta}{\lambda}d\theta \Rightarrow d\theta=\frac{\lambda}{2\pi dcos\theta}d\phi<br>$$</p>
+</li>
+<li><p>采用读数精度高（$dϕ$小）的相位计，可以提高测角精度</p>
+</li>
+<li><p>增大$\frac dλ$的值，即<strong>长基线保证高的测角精度</strong></p>
+</li>
+<li><p>$\theta=0°$时，$d\theta$最小</p>
+</li>
+<li><p>$\theta=\pm90°$时，$d\theta$最大</p>
+</li>
+</ul>
+<h2 id="3-多基线测角"><a href="#3-多基线测角" class="headerlink" title="3.多基线测角"></a>3.多基线测角</h2><ul>
+<li><strong>短基线保证最大无模糊测角范围；长基线保证高的测角精度</strong>，故采用多基线测角结合二者优点。</li>
+</ul>
+<img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118152009476.png" alt="image-20221118152009476" style="zoom:50%;">
+
+<ul>
+<li><p>$1$和$2$之间的间距$d_{12}$比较短，$θ<em>{max}$ 就比较大，以保证比较大的无模糊测角范围，长基线$d</em>{13}$保证高的测角精度，有：<br>$$<br>\phi_{12}=\frac{2\pi d_{12}sin\theta}{\lambda}<br>$$</p>
+<p>$$<br>\phi_{13}=\frac{2\pi d_{13}sin\theta}{\lambda}<br>$$</p>
+</li>
+<li><p>要使$ϕ<em>{12}$无模糊测角，$ϕ</em>{12}$就不能超过$2π$。因此，$ϕ<em>{12}$就是鉴相器能测出来的值。对于$ϕ</em>{13}$来讲，因为$ϕ<em>{13}$比较大，所以 $ϕ</em>{13}$一般大于 $2π$，有：<br>$$<br>\phi_{13}=2\pi N+\phi<br>$$</p>
+</li>
+<li><p>因为长基线$d_{13}$算出来的$θ$精度更高，所以有：<br>$$<br>\theta=arcsin(\frac{\phi_{13}\lambda}{2\pi d_{13}})<br>$$</p>
+</li>
+<li><p>式中，$λ$和$d_{13}$已知。因为只能测得$ϕ$，而$N$不知道，所以$ϕ<em>{13}$未知。只要求得$N$，就可以求出$ϕ</em>{13}$</p>
+</li>
+<li><p>将$\phi_{13},\phi_{12}$相比，有：<br>$$<br>\frac{\phi_{13}}{\phi_{12}}=\frac{d_{13}}{d_{12}}=\frac{2\pi N+\phi}{\phi_{12}} \Rightarrow \frac{d_{13}}{d_{12}}\phi_{12}=2\pi N+\phi \Rightarrow \phi_{12}\frac{d_{13}}{d_{12}}\frac{1}{2\pi}=N+\frac{\phi}{2\pi}<br>$$</p>
+</li>
+<li><p>上式中的$ϕ$是可测量的，其值满足$ϕ&lt;2π$。因此，$\frac{ϕ}{2π}&lt;1$，则$N$：<br>$$<br>N=INT[\phi_{12}\frac{d_{13}}{d_{12}}\frac{1}{2\pi}]<br>$$</p>
+<p>$$<br>其中,INT表示取整<br>$$</p>
+</li>
+<li><p>根据已知的$ϕ<em>{12}，d</em>{13}，d_{12}$，可以求出$N$，进而可以得到$ϕ<em>{13}=2πN+ϕ$。最后根据公式$\phi</em>{13}=\frac{2\pi d_{13}sin\theta}{\lambda}$就可以求得$θ$：</p>
+</li>
+</ul>
+<hr>
+<h1 id="振幅法测角"><a href="#振幅法测角" class="headerlink" title="振幅法测角"></a>振幅法测角</h1><ul>
+<li>振幅法测角是用天线收到的回波信号幅度值来做角度测量的，该幅度值的变化规律取决于天线方向图以及天线扫描方式</li>
+<li>振幅法测角可分为最大信号法和等信号法两大类</li>
+</ul>
+<h2 id="1-最大信号法"><a href="#1-最大信号法" class="headerlink" title="1.最大信号法"></a>1.最大信号法</h2><ul>
+<li>天线扫描的过程就是雷达天线方向图函数最大值指向不断发生变化的过程</li>
+<li>如果把从扫描起始时刻到扫描结束时刻，雷达收到目标回波的幅度作图，其幅度的变化过程就类似于天线方向图函数的变化过程，开始比较小，然后逐渐增大，到最大值再慢慢减小</li>
+<li><strong>最大信号法就是在找幅度变化过程中的极大值所在的位置</strong></li>
+</ul>
+<img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118154913552.png" alt="image-20221118154913552" style="zoom: 50%;">
+
+<img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118154955574.png" alt="image-20221118154955574" style="zoom:50%;">
+
+<ul>
+<li><p>波束宽度、信噪比都会影响最大信号法测角的精度，测角精度满足如下公式：<br>$$<br>\delta_{\theta}=\frac{0.5\theta_B}{\sqrt {(\frac{S}{N})_m^n}}<br>$$</p>
+</li>
+<li><p>其中，$θ_B$为天线波束宽度，$(\frac SN)_m$为中心脉冲的信噪比，$n$为单程半功率点波束宽度内的脉冲数。</p>
+</li>
+</ul>
+<h2 id="2-等信号法"><a href="#2-等信号法" class="headerlink" title="2.等信号法"></a>2.等信号法</h2><ul>
+<li>等信号法测角釆用两个相同且彼此部分重叠的波束，两个天线方向图交叠处大概在 3dB 点处</li>
+<li><strong>如果目标处在两波束的交叠轴方向，则由两波束收到的信号强度相等，否则一个波束收到的信号强度高于另一个</strong></li>
+<li>故常常称 0A 为等信号轴。<strong>当两个波束收到的回波信号相等时，等信号轴所指方向即为目标方向</strong></li>
+</ul>
+<img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118155608746.png" alt="image-20221118155608746" style="zoom: 50%;">
+
+<ul>
+<li>设天线电压方向性函数为$F(θ)$，等信号轴$OA$的指向为$θ_0$，$\theta_k$为$\theta_0$与最大方向的偏角，有：<br>$$<br>\theta_0-\theta_1=\theta_2-\theta_0=\theta_k<br>$$</li>
+</ul>
+<p>$$<br>F_1(\theta)=F(\theta-\theta_1)=F(\theta-\theta_0+\theta_k)<br>$$</p>
+<ul>
+<li><p>假设$\theta_t=\theta-\theta_0$为目标与等信号轴的夹角，则有：<br>$$<br>F_1(\theta)=F(\theta-\theta_1)=F(\theta-\theta_0+\theta_k)=F(\theta_t+\theta_k)<br>$$</p>
+<p>$$<br>F_2(\theta)=F(\theta-\theta_2)=F(\theta-\theta_0+\theta_k)=F(\theta_t-\theta_k)<br>$$</p>
+</li>
+</ul>
+<img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118160139982.png" alt="image-20221118160139982" style="zoom:50%;">
+
+<ul>
+<li>故只要求得$\theta_t$就可以得到$\theta$</li>
+</ul>
+<h3 id="2-1-比幅法"><a href="#2-1-比幅法" class="headerlink" title="2.1 比幅法"></a>2.1 比幅法</h3><ul>
+<li><p>根据雷达方程可以算得到达天线口面的回波信号功率，然后开方就可以得到幅度，因为两个相同且彼此部分重叠的波束的雷达方程中只有$F(\theta)$不同，其他相同部分均用用$K$统一表示，则有：<br>$$<br>u_1(\theta)=KF(\theta_t+\theta_k)<br>$$</p>
+<p>$$<br>u_2(\theta)=KF(\theta_t-\theta_k)<br>$$</p>
+</li>
+<li><p>比幅法就是将二者相比，得到：<br>$$<br>\frac{u_1(\theta)}{u_2(\theta)}=\frac{F(\theta_t+\theta_k)}{F(\theta_t-\theta_k)}<br>$$</p>
+</li>
+<li><p>式中，$u_1$和$u_2$是可以测量出来的值；$θ_k$为天线方向图最大值与等信号轴夹角已知。只有$θ_t$是未知量，因此可以求得最终角度</p>
+</li>
+</ul>
+<h3 id="2-2-和差法"><a href="#2-2-和差法" class="headerlink" title="2.2 和差法"></a>2.2 和差法</h3><ul>
+<li><p>和信号为两个天线接收到信号之和，差信号为两个天线接收到信号之差</p>
+</li>
+<li><p><strong>差信号</strong>：<br>$$<br>\Delta(\theta_t)=u_1(\theta)-u_2(\theta)=K[F(\theta_t+\theta_k)-F(\theta_t-\theta_k)]<br>$$<br>在$\theta_0$附近做级数展开，得到：<br>$$<br>\Delta\theta_t=2K\theta_tF’(\theta_0)<br>$$</p>
+</li>
+<li><p><strong>和信号</strong>：<br>$$<br>\Sigma(\theta_t)=u_1(\theta)+u_2(\theta)=K[F(\theta_t+\theta_k)+F(\theta_t-\theta_k)]=2KF(\theta_0)<br>$$</p>
+</li>
+<li><p>将和、差信号相比：<br>$$<br>\frac{\Delta}{\Sigma}=\frac{\theta_t}{F(\theta_0)}F’(\theta_0)<br>$$</p>
+</li>
+<li><p>只有$θ_t$是未知量，因此可以求得最终角度</p>
+</li>
+</ul>
+<hr>
+<h1 id="自动测角的原理与方法"><a href="#自动测角的原理与方法" class="headerlink" title="自动测角的原理与方法"></a>自动测角的原理与方法</h1><h2 id="1-圆锥扫描自动测角系统"><a href="#1-圆锥扫描自动测角系统" class="headerlink" title="1.圆锥扫描自动测角系统"></a>1.圆锥扫描自动测角系统</h2><ul>
+<li>圆锥扫描波束</li>
+</ul>
+<img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118184018318.png" alt="image-20221118184018318" style="zoom:50%;">
+
+<ul>
+<li>垂直于等信号轴的截面</li>
+</ul>
+<img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118184042690.png" alt="image-20221118184042690" style="zoom: 33%;">
+
+<ul>
+<li><p>$\delta$：对应前面的$θ_k$，即等信号轴与波束最大值方向的偏角。</p>
+</li>
+<li><p>$ϵ$：对应前面的$θ_t$，即目标与等信号轴的夹角，是自动测角系统想要测量的值。只要$ϵ$不为 0 ，就要调整旋转轴的指向，使其指向目标的方向。</p>
+</li>
+<li><p>$θ$：表示目标方向与波束最大值方向的夹角</p>
+</li>
+<li><p>接收信号电压振幅大小为：<br>$$<br>U=KF_电^2(\theta)<br>$$</p>
+<ul>
+<li>根据雷达方程推导，$K$包含了距离、功率等因素</li>
+<li>如果目标与天线最大增益处的夹角为$θ$，假设电磁波发射到接收过程中，角度$θ$没有发生变化，发射有一个$F_电(θ)$，接收再乘以一个$F_电(θ)$，所以有一个平方项</li>
+</ul>
+</li>
+<li><p>根据余弦定理有：<br>$$<br>R^2\theta^2=R^2\delta^2+R^2\epsilon^2-2R^2\delta\epsilon cos(w_st-\phi_0)<br>$$<br>近似可得：<br>$$<br>\theta=\delta-\epsilon cos(w_s-\phi_0)<br>$$</p>
+</li>
+<li><p>将$\theta$带入U：<br>$$<br>U=KF_电^2(\delta-\epsilon cos(w_s-\phi_0))<br>$$</p>
+</li>
+<li><p>将上式在$\delta$处展开为泰勒级数并忽略高次项，有：<br>$$<br>U=U_0[1+\eta\epsilon cos(w_st-\phi_0)]<br>$$</p>
+<ul>
+<li>$U_0=KF_电^2(\delta)$</li>
+<li>$\eta=\frac{-2F_电’(\delta)}{F(\delta)}$</li>
+</ul>
+<img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118190940403.png" alt="image-20221118190940403" style="zoom:50%;">
+</li>
+<li><p>$U$反映的是回波信号的幅度，且随着时间 t 在发生变化。当$ϵ=0$的时候，$U$为一常数，说明此时目标就在旋转轴上，为一等幅信号。$\epsilon\neq0$的时候，$U$为一调幅信号</p>
+</li>
+<li><p>取出回波信号的包络，消除直流分量，则可以测得信号的包络为$U_0\eta\epsilon cos(w_st-\phi_0)$</p>
+</li>
+<li><p>真正进行角度跟踪，光知道$ϵ$并不能唯一确定目标位置。需要知道方位和俯仰误差两部分，即$U_0\eta\epsilon cos(\phi_0)、U_0\eta\epsilon sin(\phi_0)$</p>
+<ul>
+<li>误差电压分解的办法是采用两个相位鉴别器，相位鉴别器的基准电压分别为$cos(ω_st)$和$sin(ω_st)$ </li>
+<li>将这两项分别与前面的包络项相混频（相乘），然后过低通滤波器，就可以得到方位和俯仰误差两部分分量</li>
+</ul>
+</li>
+<li><p>前面的推导是假设$U_0$为一常数，即$K$为常数，也就是说假设目标是静止不动的。如果目标远离雷达或者向着雷达运动，$K$就会发生变化，不再是一个常数。如果目标向着雷达运动，$K$就会逐渐变大</p>
+<img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118193055329.png" alt="image-20221118193055329" style="zoom: 50%;">
+
+</li>
+</ul>
+<h2 id="2-单脉冲自动测角系统"><a href="#2-单脉冲自动测角系统" class="headerlink" title="2.单脉冲自动测角系统"></a>2.单脉冲自动测角系统</h2><ul>
+<li><p>在一个角平面内，两个相同的波束部分重叠，其交叠方向即为等信号轴。将两个波束同时接收到的回波信号振幅进行比较，即可取得目标在该平面上的角误差信号，然后将此误差信号电压放大变换后加到驱动电机，控制天线向减小误差的方向运动</p>
+</li>
+<li><p>和差比较器是单脉冲雷达的重要部件，由它完成和、差处理，形成和差波束。用得较多的是双T接头</p>
+<img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118193310164.png" alt="image-20221118193310164" style="zoom:50%;">
+
+</li>
+</ul>
+<h3 id="2-1-雷达发射过程"><a href="#2-1-雷达发射过程" class="headerlink" title="2.1 雷达发射过程"></a>2.1 雷达发射过程</h3><ul>
+<li><p>发射时，从发射机来的信号加到和差比较器的$Σ$端，$Δ$端无输出，$1,2$两端输出同幅同相信号<br>$$<br>F_\Sigma(\theta)=F_1(\theta)+F_2(\theta)<br>$$</p>
+<p>$$<br>F_\Delta(\theta)=F_2(\theta)-F_1(\theta)<br>$$</p>
+</li>
+<li><p>两个馈源被同相激励并辐射相同的功率，结果两波束在空间各点产生的场强同相相加，形成发射和波束$F_Σ(θ)$[以下都是电压天线图]<br>$$<br>AF_1(\theta)+AF_2(\theta)=A(F_1(\theta)+F_2(\theta))=AF_\Sigma(\theta)<br>$$</p>
+</li>
+</ul>
+<h3 id="2-2-雷达接收过程"><a href="#2-2-雷达接收过程" class="headerlink" title="2.2 雷达接收过程"></a>2.2 雷达接收过程</h3><ul>
+<li><p>双 T 接头的$1,2$端输入，$Δ$端输出差信号，$Σ$端输出和信号。到达$1,2$的回波信号为$K_FΣ(θ)$，振幅用$K$表示<br>$$<br>\Delta=KF_\Sigma(\theta)F_2(\theta)-KF_\Sigma(\theta)F_1(\theta)=KF_\Sigma(\theta)[F_2(\theta)-F_1(\theta)]=KF_\Sigma(\theta)F_\Delta(\theta)<br>$$</p>
+<p>$$<br>\Sigma=KF_\Sigma(\theta)F_2(\theta)+KF_\Sigma(\theta)F_1(\theta)=KF_\Sigma(\theta)[F_2(\theta)+F_1(\theta)]=KF_\Sigma^2(\theta)<br>$$</p>
+</li>
+</ul>
+<h3 id="2-3-理论分析"><a href="#2-3-理论分析" class="headerlink" title="2.3 理论分析"></a>2.3 理论分析</h3><img src="/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/image-20221118194933733.png" alt="image-20221118194933733" style="zoom: 33%;">
+
+<ul>
+<li><p>雷达通过和天线方向图将信号发射出去，接收时，得到$Δ$和$Σ$信号，需通过$Δ$和$Σ$将目标所在位置$θ$求出来，就达到了自动测角的目的<br>$$<br>F_\Sigma(\theta)=F(\theta-\delta)+F(\theta+\delta)<br>$$</p>
+<p>$$<br>F_\Delta(\theta)=F(\theta-\delta)-F(\theta+\delta)<br>$$</p>
+<ul>
+<li><p>将$F(\theta+\delta)$与$F(\theta-\delta)$在$\delta$处做泰勒展开，忽略高阶项得到：<br>$$<br>F(\theta+\delta)=F(\delta)+F’(\delta)\theta<br>$$</p>
+<p>$$<br>F(\theta-\delta)=F(\delta)-F’(\delta)\theta<br>$$</p>
+</li>
+</ul>
+</li>
+<li><p>将$F(θ±δ) 、 F_Σ 、 F_Δ$带入到$Σ$和$Δ$的表达式中，得到：<br>$$<br>\Sigma=4KF^2(\delta)<br>$$</p>
+<p>$$<br>\Delta=-4KF(\delta)F’(\delta)\theta<br>$$</p>
+</li>
+<li><p>式中，$Σ 、 Δ 、 δ 、 F$函数均为已知项，$K$和$θ$为未知项，将两式相比得到:<br>$$<br>\frac{\Delta}{\Sigma}=-\frac{F’(\delta)}{F(\delta)}\theta=\eta\theta<br>$$</p>
+</li>
+<li><p>最终得到$\theta$：<br>$$<br>\theta=\frac{1}{\eta}\frac{\Delta}{\Sigma}<br>$$</p>
+</li>
+<li><p>只要收到一个脉冲，就能输出$Σ$信号和$Δ$信号，将两者相比就能得到$θ$</p>
+<ul>
+<li>$Σ$和$Δ$同相，$θ$就为正；</li>
+<li>$Σ$和$Δ$反相，$θ$就为负。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/256359707">七、角度测量 - 知乎 (zhihu.com)</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>欢迎来到ssy的世界</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/WeChaPay.jpg" alt="ssy 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>ssy
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://ssy的小天地.com/2022/11/18/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%A7%92%E5%BA%A6%E6%B5%8B%E9%87%8F/" title="雷达原理之目标角度测量">http://ssy的小天地.com/2022/11/18/雷达原理之目标角度测量/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86/" rel="tag"># 雷达原理</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%B7%9D%E7%A6%BB%E6%B5%8B%E9%87%8F/" rel="prev" title="雷达原理之目标距离测量">
+      <i class="fa fa-chevron-left"></i> 雷达原理之目标距离测量
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/11/19/MATLAB%E4%B9%8B%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/" rel="next" title="MATLAB之文件操作">
+      MATLAB之文件操作 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%A9%E7%BA%BF%E6%96%B9%E5%90%91%E5%9B%BE%E7%9A%84%E4%B8%80%E8%88%AC%E6%80%A7%E8%B4%A8"><span class="nav-number">1.</span> <span class="nav-text">天线方向图的一般性质</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9B%B8%E4%BD%8D%E6%B3%95%E6%B5%8B%E8%A7%92"><span class="nav-number">2.</span> <span class="nav-text">相位法测角</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%B8%A4%E5%A4%A9%E7%BA%BF%E7%9B%B8%E4%BD%8D%E6%B3%95%E6%B5%8B%E8%A7%92%E5%8E%9F%E7%90%86"><span class="nav-number">2.1.</span> <span class="nav-text">1.两天线相位法测角原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%B5%8B%E8%A7%92%E8%AF%AF%E5%B7%AE%E5%88%86%E6%9E%90%E4%B8%8E%E5%A4%9A%E5%80%BC%E6%80%A7"><span class="nav-number">2.2.</span> <span class="nav-text">2.测角误差分析与多值性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%A4%9A%E5%9F%BA%E7%BA%BF%E6%B5%8B%E8%A7%92"><span class="nav-number">2.3.</span> <span class="nav-text">3.多基线测角</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8C%AF%E5%B9%85%E6%B3%95%E6%B5%8B%E8%A7%92"><span class="nav-number">3.</span> <span class="nav-text">振幅法测角</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%9C%80%E5%A4%A7%E4%BF%A1%E5%8F%B7%E6%B3%95"><span class="nav-number">3.1.</span> <span class="nav-text">1.最大信号法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E7%AD%89%E4%BF%A1%E5%8F%B7%E6%B3%95"><span class="nav-number">3.2.</span> <span class="nav-text">2.等信号法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E6%AF%94%E5%B9%85%E6%B3%95"><span class="nav-number">3.2.1.</span> <span class="nav-text">2.1 比幅法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E5%92%8C%E5%B7%AE%E6%B3%95"><span class="nav-number">3.2.2.</span> <span class="nav-text">2.2 和差法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E6%B5%8B%E8%A7%92%E7%9A%84%E5%8E%9F%E7%90%86%E4%B8%8E%E6%96%B9%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text">自动测角的原理与方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%9C%86%E9%94%A5%E6%89%AB%E6%8F%8F%E8%87%AA%E5%8A%A8%E6%B5%8B%E8%A7%92%E7%B3%BB%E7%BB%9F"><span class="nav-number">4.1.</span> <span class="nav-text">1.圆锥扫描自动测角系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%8D%95%E8%84%89%E5%86%B2%E8%87%AA%E5%8A%A8%E6%B5%8B%E8%A7%92%E7%B3%BB%E7%BB%9F"><span class="nav-number">4.2.</span> <span class="nav-text">2.单脉冲自动测角系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E9%9B%B7%E8%BE%BE%E5%8F%91%E5%B0%84%E8%BF%87%E7%A8%8B"><span class="nav-number">4.2.1.</span> <span class="nav-text">2.1 雷达发射过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E9%9B%B7%E8%BE%BE%E6%8E%A5%E6%94%B6%E8%BF%87%E7%A8%8B"><span class="nav-number">4.2.2.</span> <span class="nav-text">2.2 雷达接收过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E7%90%86%E8%AE%BA%E5%88%86%E6%9E%90"><span class="nav-number">4.2.3.</span> <span class="nav-text">2.3 理论分析</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ssy"
+      src="/images/ssy.png">
+  <p class="site-author-name" itemprop="name">ssy</p>
+  <div class="site-description" itemprop="description">满怀希望 就会所向披靡</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ssy1938010014" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ssy1938010014" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://m.weibo.cn/u/5469432500?uid=5469432500&t=0&luicode=10000011&lfid=100103type=1&q=JIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" title="Weibo → https:&#x2F;&#x2F;m.weibo.cn&#x2F;u&#x2F;5469432500?uid&#x3D;5469432500&amp;t&#x3D;0&amp;luicode&#x3D;10000011&amp;lfid&#x3D;100103type%3D1%26q%3DJIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://ssy1938010014.github.io/" title="http:&#x2F;&#x2F;ssy1938010014.github.io" rel="noopener" target="_blank">ssy的小天地</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://y006.github.io/" title="http:&#x2F;&#x2F;y006.github.io" rel="noopener" target="_blank">邱院士的Blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://bengoooo.github.io/" title="http:&#x2F;&#x2F;BENgoooo.github.io" rel="noopener" target="_blank">赵总的Blog</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=1469041281&auto=1&height=66"></iframe>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ssy</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-ribbon@1/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+<script data-pjax>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  let url = element.dataset.target;
+  let pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  let pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  let fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+
+
+    <div id="pjax">
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+    </div>
+</body>
+</html>

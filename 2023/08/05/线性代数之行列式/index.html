@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1/themes/blue/pace-theme-minimal.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"xn--ssy-lq6e63gg6fuu2d.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本节主要介绍了行列式的基本性质与相关定理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="线性代数之行列式">
+<meta property="og:url" content="http://ssy的小天地.com/2023/08/05/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%E4%B9%8B%E8%A1%8C%E5%88%97%E5%BC%8F/index.html">
+<meta property="og:site_name" content="ssy的小天地">
+<meta property="og:description" content="本节主要介绍了行列式的基本性质与相关定理">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-08-05T02:07:12.000Z">
+<meta property="article:modified_time" content="2023-08-06T07:16:21.901Z">
+<meta property="article:author" content="ssy">
+<meta property="article:tag" content="线性代数">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://ssy的小天地.com/2023/08/05/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%E4%B9%8B%E8%A1%8C%E5%88%97%E5%BC%8F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>线性代数之行列式 | ssy的小天地</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+    <a target="_blank" rel="noopener" href="https://github.com/ssy1938010014" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ssy的小天地</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">愿汝如是 千金不换</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-works">
+
+    <a href="/works/" rel="section"><i class="fa fa-fw fa-sitemap"></i>文章</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ssy的小天地.com/2023/08/05/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%E4%B9%8B%E8%A1%8C%E5%88%97%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ssy.png">
+      <meta itemprop="name" content="ssy">
+      <meta itemprop="description" content="满怀希望 就会所向披靡">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ssy的小天地">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          线性代数之行列式
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+
+
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-08-05 10:07:12" itemprop="dateCreated datePublished" datetime="2023-08-05T10:07:12+08:00">2023-08-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-08-06 15:16:21" itemprop="dateModified" datetime="2023-08-06T15:16:21+08:00">2023-08-06</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%A7%AF%E7%B4%AF/" itemprop="url" rel="index"><span itemprop="name">学习积累</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本节主要介绍了行列式的基本性质与相关定理</p>
+<span id="more"></span>
+
+<h1 id="排列与对换"><a href="#排列与对换" class="headerlink" title="排列与对换"></a>排列与对换</h1><h2 id="1-排列"><a href="#1-排列" class="headerlink" title="1.排列"></a>1.排列</h2><ul>
+<li><p>排列：由1，2，……，n组成的一个有序数组（中间不能缺数），叫n级排列</p>
+</li>
+<li><p>n级排列的个数有：$n\times (n-1)\dots 3\times 2\times 1=n!$</p>
+</li>
+<li><p>逆序：大数排在小数的前面</p>
+</li>
+<li><p>逆序数：逆序的总数（从第一个数开始，数后面有几个比它小的）</p>
+<ul>
+<li><p>如4213的逆序数$N(4213)=3+1=4$</p>
+</li>
+<li><p>逆序数为奇数为奇排列</p>
+</li>
+<li><p>逆序数为偶数为偶排列</p>
+</li>
+</ul>
+</li>
+<li><p>标准（自然）排列：$N(1,2,3,\dots n)=0$</p>
+</li>
+</ul>
+<h2 id="2-对换"><a href="#2-对换" class="headerlink" title="2.对换"></a>2.对换</h2><ul>
+<li>交换一个排列中的两个数</li>
+<li>对换一次，奇偶性改变一次</li>
+<li>n级排列中，奇排列和偶排列各占一半，即$\frac{n!}{2}$</li>
+</ul>
+<hr>
+<h1 id="n阶行列式"><a href="#n阶行列式" class="headerlink" title="n阶行列式"></a>n阶行列式</h1><ul>
+<li><p><strong>行列式的本质就是一个数</strong></p>
+</li>
+<li><p><strong>按行展开的定义</strong>：<strong>行</strong>标取标准排列，<strong>列</strong>标取排列的所有可能，从<strong>不同行不同列</strong>取出n各元素相乘，<strong>符号由列标排列的奇偶性决定</strong>，奇数为负，偶数取正<br>$$<br>下三角 = \begin{vmatrix}<br>a_{11} &amp; 0 &amp; 0 &amp;\dots &amp; 0\<br>a_{21} &amp; a_{22} &amp; 0 &amp;\dots &amp; 0\<br>\dots &amp; \dots &amp;  \dots &amp; \dots &amp; \dots\<br>a_{n1} &amp; a_{n2} &amp; a_{a3} &amp;\dots &amp; a_{nn}<br>\end{vmatrix}=a_{11}a_{22}\dots a_{nn}(主对角元素相乘)<br>$$</p>
+<p>$$<br>上三角 = \begin{vmatrix}<br>a_{11} &amp; a_{12} &amp; a_{13} &amp;\dots &amp; a_{1n}\<br>0 &amp; a_{22} &amp;a_{23} &amp; \dots &amp; a_{2n} &amp;\<br>\dots &amp; \dots &amp;  \dots &amp; \dots &amp; \dots\<br>0 &amp; 0 &amp; 0 &amp;\dots &amp; a_{nn}\<br>\end{vmatrix}=a_{11}a_{22}\dots a_{nn}(主对角元素相乘)<br>$$</p>
+</li>
+<li><p><strong>按列展开的定义</strong>：<strong>列</strong>标取标准排列，<strong>行</strong>标取排列的所有可能，从<strong>不同行不同列</strong>取出n各元素相乘，<strong>符号由行标排列的奇偶性决定</strong>，奇数为负，偶数取正</p>
+</li>
+<li><p>当矩阵即不按行也不按列展开时，其符号由行排列与列排列的奇偶性的和决定</p>
+</li>
+</ul>
+<hr>
+<h1 id="行列式的性质"><a href="#行列式的性质" class="headerlink" title="行列式的性质"></a>行列式的性质</h1><h2 id="1-转置"><a href="#1-转置" class="headerlink" title="1.转置"></a>1.转置</h2><ul>
+<li>$D\rightarrow D^T$：行列交换</li>
+<li>$(D^T)^T=D$</li>
+<li>$D^T=D$：行列式转置后其值不变，<strong>对行成立的性质，对列也成立</strong></li>
+</ul>
+<h2 id="2-互换"><a href="#2-互换" class="headerlink" title="2.互换"></a>2.互换</h2><ul>
+<li>行列式中两行互换，值变号</li>
+<li><strong>两行（列）相等，$D=0$</strong></li>
+</ul>
+<h2 id="3-公因数提取"><a href="#3-公因数提取" class="headerlink" title="3.公因数提取"></a>3.公因数提取</h2><ul>
+<li><p>某一行（列）都乘以k，等于用k乘以D</p>
+</li>
+<li><p>行列式所有元素，均有公因子k，则k外提n次</p>
+</li>
+<li><p><strong>两行对应成比例，$D=0$</strong></p>
+</li>
+</ul>
+<h2 id="4-全零行"><a href="#4-全零行" class="headerlink" title="4.全零行"></a>4.全零行</h2><ul>
+<li><strong>某一行（列）全为0，$D=0$</strong></li>
+</ul>
+<h2 id="5-分解"><a href="#5-分解" class="headerlink" title="5.分解"></a>5.分解</h2><ul>
+<li><p>行列式中某一行（列）是两个数相加，则是和的那一行分开，其余行保持不变</p>
+</li>
+<li><p><strong>某一行（列）乘以一个数，加到另外一行（列）上去，D不变</strong>，即行列式的值不变</p>
+</li>
+</ul>
+<h2 id="6-反对称行列式"><a href="#6-反对称行列式" class="headerlink" title="6.反对称行列式"></a>6.反对称行列式</h2><ul>
+<li>奇数阶的反对称行列式$D=0$<br>$$<br>\begin{vmatrix}<br>0 &amp; a &amp; b\<br>-a &amp; 0 &amp; c\<br>-b &amp; -c &amp; 0<br>\end{vmatrix}=0<br>$$</li>
+</ul>
+<hr>
+<h1 id="行列式按行展开"><a href="#行列式按行展开" class="headerlink" title="行列式按行展开"></a>行列式按行展开</h1><h2 id="1-余子式与代数余子式"><a href="#1-余子式与代数余子式" class="headerlink" title="1.余子式与代数余子式"></a>1.余子式与代数余子式</h2><ul>
+<li><p>假设有行列式：<br>$$<br>\begin{vmatrix}<br>1 &amp; 1 &amp; 0 &amp; 3\<br>1 &amp; 1 &amp; 1 &amp; 1\<br>2 &amp; 2 &amp; 3 &amp; 4\<br>5 &amp; 5 &amp; 6 &amp; 6<br>\end{vmatrix}<br>$$</p>
+</li>
+<li><p>则余子式：<br>$$<br>M_{32}=\begin{vmatrix}<br>1 &amp; 0 &amp; 3\<br>1 &amp; 1 &amp; 1\<br>5 &amp; 6 &amp; 6<br>\end{vmatrix}<br>$$</p>
+<p>$$<br>M_{14}=\begin{vmatrix}<br>1 &amp; 1 &amp; 1\<br>2 &amp; 2 &amp; 3\<br>5 &amp; 5 &amp; 6<br>\end{vmatrix}<br>$$</p>
+</li>
+<li><p>则代数余子式：<br>$$<br>A_{32}=(-1)^{3+2}\begin{vmatrix}<br>1 &amp; 0 &amp; 3\<br>1 &amp; 1 &amp; 1\<br>5 &amp; 6 &amp; 6<br>\end{vmatrix}=(-1)^{3+2}M_{32}<br>$$</p>
+<p>$$<br>A_{14}=(-1)^{1+4}\begin{vmatrix}<br>1 &amp; 1 &amp; 1\<br>2 &amp; 2 &amp; 3\<br>5 &amp; 5 &amp; 6<br>\end{vmatrix}=(-1)^{1+4}M_{14}<br>$$</p>
+</li>
+<li><p><strong>相关定理</strong>：</p>
+<ul>
+<li>$D=a_{i1}A_{i1}+a_{i2}A_{i2}+\dots+a_{in}A_{in}$（按某一行展开）</li>
+<li>$D = a_{1j}A_{1j}+a_{2j}A_{2j}+\dots+a_{nj}A_{nj}$（按某一列展开）</li>
+</ul>
+</li>
+<li><p><strong>异乘变零定理：某一行元素与另一行元素的代数余子式乘积之和=0</strong></p>
+</li>
+</ul>
+<h2 id="2-拉普拉斯展开定理"><a href="#2-拉普拉斯展开定理" class="headerlink" title="2.拉普拉斯展开定理"></a>2.拉普拉斯展开定理</h2><ul>
+<li><p>k阶子式：取k行k列，重叠部分即为k阶子式</p>
+<ul>
+<li><p>若有行列式：<br>$$<br>\begin{vmatrix}<br>1 &amp; 2 &amp; 3 &amp; 4\<br>1 &amp; 1 &amp; 2 &amp; 5\<br>1 &amp; 1 &amp; 0 &amp; 8\<br>9 &amp; 9 &amp; 9 &amp; 10<br>\end{vmatrix}<br>$$</p>
+</li>
+<li><p>取第1、2行与1、2列，则其2阶子式为：<br>$$<br>\begin{vmatrix}<br>1 &amp; 2 \<br>1 &amp; 1<br>\end{vmatrix}<br>$$</p>
+</li>
+</ul>
+</li>
+<li><p>余子式：取完k行k列后剩下的行列式</p>
+<ul>
+<li>则余子式为：<br>$$<br>\begin{vmatrix}<br>0 &amp; 8 \<br>9 &amp; 10<br>\end{vmatrix}<br>$$</li>
+</ul>
+</li>
+<li><p>代数余子式：在余子式的基础上乘以代数$(-1)^{取的行数和+列数和}$</p>
+<ul>
+<li>则代数余子式为：<br>$$<br>(-1)^{1+2+1+2}\begin{vmatrix}<br>0 &amp; 8 \<br>9 &amp; 10<br>\end{vmatrix}<br>$$</li>
+</ul>
+</li>
+<li><p>定理：取定k行，由k行元素组成的所有k阶子式与代数余子式乘积之和=D（行列式的值）<br>$$<br>\begin{vmatrix}<br>1 &amp; 2 &amp; 0 &amp; 0 &amp; 0\<br>3 &amp; 4 &amp; 0 &amp; 0 &amp; 0\<br>1 &amp; 2 &amp; 3 &amp; 4 &amp; 5\<br>1 &amp; 1 &amp; 1 &amp; 1 &amp; 1\<br>6 &amp; 6 &amp; 8 &amp; 3 &amp; 1<br>\end{vmatrix}=\begin{vmatrix}<br>1 &amp; 2 \<br>3 &amp; 4<br>\end{vmatrix}\times(-1)^{1+2+1+2}\times \begin{vmatrix}<br>3 &amp; 4 &amp; 5\<br>1 &amp; 1 &amp; 1\<br>8 &amp; 3 &amp; 1<br>\end{vmatrix}<br>$$</p>
+</li>
+</ul>
+<hr>
+<h1 id="范德蒙德行列式"><a href="#范德蒙德行列式" class="headerlink" title="范德蒙德行列式"></a>范德蒙德行列式</h1><p>$$<br>\begin{vmatrix}<br>1 &amp; 1 &amp; 1 &amp; \dots &amp; 1\<br>x_1 &amp; x_2 &amp; x_3 &amp; \dots&amp; x_n\<br>\dots &amp; \dots &amp; \dots &amp; \dots &amp; \dots\<br>x_1^{n-2} &amp; x_2^{n-2} &amp; x_3^{n-2} &amp; \dots &amp; x_n^{n-2}\<br>x_1^{n-1} &amp; x_2^{n-1} &amp; x_3^{n-1} &amp; \dots &amp; x_n^{n-1}<br>\end{vmatrix}=\prod_{1\le j&lt;i\le n}(x_i-x_j)<br>$$</p>
+<hr>
+<h1 id="Cramer法则"><a href="#Cramer法则" class="headerlink" title="Cramer法则"></a>Cramer法则</h1><p>$$<br>\begin{cases}<br>\begin{aligned}<br>x_1 + x_2 + x_3 &amp; = 1\<br>x_1 - x_2 + 5x_3 &amp; = 6\<br>-x_1 + x_2 + 6x_3 &amp; = 9<br>\end{aligned}<br>\end{cases}<br>$$</p>
+<ul>
+<li><p>则：<br>$$<br>D=\begin{vmatrix}<br>1 &amp; 1 &amp; 1\<br>1 &amp; -1 &amp; 5\<br>-1 &amp; 1 &amp; 6\<br>\end{vmatrix}\quad D_1=\begin{vmatrix}<br>1 &amp; 1 &amp; 1\<br>6 &amp; -1 &amp; 5\<br>9 &amp; 1 &amp; 6\<br>\end{vmatrix}\quad D_2=\begin{vmatrix}<br>1 &amp; 1 &amp; 1\<br>1 &amp; 6 &amp; 5\<br>-1 &amp; 9 &amp; 6\<br>\end{vmatrix}\quad D_3=\begin{vmatrix}<br>1 &amp; 1 &amp; 1\<br>1 &amp; -1 &amp; 6\<br>-1 &amp; 1 &amp; 9\<br>\end{vmatrix}<br>$$</p>
+</li>
+<li><p>则：<br>$$<br>x_1=\frac{D_1}{D}\quad x_2=\frac{D_2}{D}\quad x_3=\frac{D_3}{D}<br>$$</p>
+</li>
+<li><p><strong>只适用于方程个数=未知量个数，且$D\neq 0$的情况</strong></p>
+</li>
+<li><p>当方程组右侧的值均为0时，则称为齐次方程组</p>
+<ul>
+<li>其至少有零解</li>
+<li>若$D\neq 0$，则只有零解</li>
+<li>齐次方程有非零解的充分必要条件是$D=0$</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>欢迎来到ssy的世界</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/WeChaPay.jpg" alt="ssy 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>ssy
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://ssy的小天地.com/2023/08/05/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%E4%B9%8B%E8%A1%8C%E5%88%97%E5%BC%8F/" title="线性代数之行列式">http://ssy的小天地.com/2023/08/05/线性代数之行列式/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/" rel="tag"># 线性代数</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/08/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8A%80%E6%9C%AF/" rel="prev" title="计算机体系结构之指令系统">
+      <i class="fa fa-chevron-left"></i> 计算机体系结构之指令系统
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/08/06/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%E4%B9%8B%E7%9F%A9%E9%98%B5/" rel="next" title="线性代数之矩阵">
+      线性代数之矩阵 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8E%92%E5%88%97%E4%B8%8E%E5%AF%B9%E6%8D%A2"><span class="nav-number">1.</span> <span class="nav-text">排列与对换</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%8E%92%E5%88%97"><span class="nav-number">1.1.</span> <span class="nav-text">1.排列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%AF%B9%E6%8D%A2"><span class="nav-number">1.2.</span> <span class="nav-text">2.对换</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#n%E9%98%B6%E8%A1%8C%E5%88%97%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text">n阶行列式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A1%8C%E5%88%97%E5%BC%8F%E7%9A%84%E6%80%A7%E8%B4%A8"><span class="nav-number">3.</span> <span class="nav-text">行列式的性质</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E8%BD%AC%E7%BD%AE"><span class="nav-number">3.1.</span> <span class="nav-text">1.转置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%BA%92%E6%8D%A2"><span class="nav-number">3.2.</span> <span class="nav-text">2.互换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%85%AC%E5%9B%A0%E6%95%B0%E6%8F%90%E5%8F%96"><span class="nav-number">3.3.</span> <span class="nav-text">3.公因数提取</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%85%A8%E9%9B%B6%E8%A1%8C"><span class="nav-number">3.4.</span> <span class="nav-text">4.全零行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E5%88%86%E8%A7%A3"><span class="nav-number">3.5.</span> <span class="nav-text">5.分解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E5%8F%8D%E5%AF%B9%E7%A7%B0%E8%A1%8C%E5%88%97%E5%BC%8F"><span class="nav-number">3.6.</span> <span class="nav-text">6.反对称行列式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A1%8C%E5%88%97%E5%BC%8F%E6%8C%89%E8%A1%8C%E5%B1%95%E5%BC%80"><span class="nav-number">4.</span> <span class="nav-text">行列式按行展开</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BD%99%E5%AD%90%E5%BC%8F%E4%B8%8E%E4%BB%A3%E6%95%B0%E4%BD%99%E5%AD%90%E5%BC%8F"><span class="nav-number">4.1.</span> <span class="nav-text">1.余子式与代数余子式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%8B%89%E6%99%AE%E6%8B%89%E6%96%AF%E5%B1%95%E5%BC%80%E5%AE%9A%E7%90%86"><span class="nav-number">4.2.</span> <span class="nav-text">2.拉普拉斯展开定理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%8C%83%E5%BE%B7%E8%92%99%E5%BE%B7%E8%A1%8C%E5%88%97%E5%BC%8F"><span class="nav-number">5.</span> <span class="nav-text">范德蒙德行列式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Cramer%E6%B3%95%E5%88%99"><span class="nav-number">6.</span> <span class="nav-text">Cramer法则</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ssy"
+      src="/images/ssy.png">
+  <p class="site-author-name" itemprop="name">ssy</p>
+  <div class="site-description" itemprop="description">满怀希望 就会所向披靡</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ssy1938010014" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ssy1938010014" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://m.weibo.cn/u/5469432500?uid=5469432500&t=0&luicode=10000011&lfid=100103type=1&q=JIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" title="Weibo → https:&#x2F;&#x2F;m.weibo.cn&#x2F;u&#x2F;5469432500?uid&#x3D;5469432500&amp;t&#x3D;0&amp;luicode&#x3D;10000011&amp;lfid&#x3D;100103type%3D1%26q%3DJIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://ssy1938010014.github.io/" title="http:&#x2F;&#x2F;ssy1938010014.github.io" rel="noopener" target="_blank">ssy的小天地</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://y006.github.io/" title="http:&#x2F;&#x2F;y006.github.io" rel="noopener" target="_blank">邱院士的Blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://bengoooo.github.io/" title="http:&#x2F;&#x2F;BENgoooo.github.io" rel="noopener" target="_blank">赵总的Blog</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=1469041281&auto=1&height=66"></iframe>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ssy</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-ribbon@1/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+<script data-pjax>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  let url = element.dataset.target;
+  let pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  let pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  let fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+
+
+    <div id="pjax">
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+    </div>
+</body>
+</html>
