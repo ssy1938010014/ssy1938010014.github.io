@@ -284,26 +284,31 @@
       
         <p>本节是针对TI官方提供的接口配置的文档进行了阅读，并分析了文档中主要将了哪些模块</p>
 <span id="more"></span>
+
 <h1 id="TI毫米波雷达传感器通信的基础"><a href="#TI毫米波雷达传感器通信的基础" class="headerlink" title="TI毫米波雷达传感器通信的基础"></a>TI毫米波雷达传感器通信的基础</h1><h2 id="1-通信的基本结构"><a href="#1-通信的基本结构" class="headerlink" title="1.通信的基本结构"></a>1.通信的基本结构</h2><h3 id="1-1-SPI"><a href="#1-1-SPI" class="headerlink" title="1.1 SPI"></a>1.1 SPI</h3><ul>
 <li>AWR2243 / xWR6243雷达设备通过SPI接口与外部主机处理器通信。<strong>通过SPI向AWR2243 / xWR6243设备发送命令</strong>，从外部主机处理器对雷达设备进行配置和控制。</li>
 <li>SPI这个接口是同步的。该接口包括4路信号( SPICCLK、SPICS、Data In and Data Out)</li>
 </ul>
 <h3 id="1-2-Mailbox"><a href="#1-2-Mailbox" class="headerlink" title="1.2 Mailbox"></a>1.2 Mailbox</h3><ul>
 <li><p>这个应该是MSS与BSS的通信接口，但目前并不清楚AW2243中MSS是哪个部分（因为一直以为MSS是指MCU部分，但AWR2243并没有内部处理器）</p>
-<p><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011111915637.png" alt="image-20231011111915637" style="zoom: 50%;"></p>
+<img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011111915637.png" alt="image-20231011111915637" style="zoom: 50%;">
+
 </li>
 </ul>
 <h2 id="2-雷达信号结构（MailboxRadar-Message-Structure）"><a href="#2-雷达信号结构（MailboxRadar-Message-Structure）" class="headerlink" title="2.雷达信号结构（MailboxRadar Message Structure）"></a>2.雷达信号结构（MailboxRadar Message Structure）</h2><ul>
 <li><p>Radar Message Structure应该就是雷达传感器与外界通信时，彼此遵循的一种信号格式</p>
-<p><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011112118308.png" alt="image-20231011112118308" style="zoom:50%;"></p>
+<img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011112118308.png" alt="image-20231011112118308" style="zoom:50%;">
+
 </li>
 </ul>
 <h3 id="2-1-SYNC"><a href="#2-1-SYNC" class="headerlink" title="2.1 SYNC"></a>2.1 SYNC</h3><ul>
 <li><p>消息的起始位，标志着消息的开始</p>
-<p><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011112832510.png" alt="image-20231011112832510" style="zoom:50%;"></p>
+<img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011112832510.png" alt="image-20231011112832510" style="zoom:50%;">
+
 </li>
 </ul>
-<h3 id="2-2-MSGHDR"><a href="#2-2-MSGHDR" class="headerlink" title="2.2 MSGHDR"></a>2.2 MSGHDR</h3><h4 id="2-2-1-OPCODE"><a href="#2-2-1-OPCODE" class="headerlink" title="2.2.1 OPCODE"></a>2.2.1 OPCODE</h4><p><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011113216065.png" alt="image-20231011113216065" style="zoom:50%;"></p>
+<h3 id="2-2-MSGHDR"><a href="#2-2-MSGHDR" class="headerlink" title="2.2 MSGHDR"></a>2.2 MSGHDR</h3><h4 id="2-2-1-OPCODE"><a href="#2-2-1-OPCODE" class="headerlink" title="2.2.1 OPCODE"></a>2.2.1 OPCODE</h4><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011113216065.png" alt="image-20231011113216065" style="zoom:50%;">
+
 <ul>
 <li>MSGID尚未完全研究清楚，应该是一些更细节的分类，比如是错误响应，静态参数设置命令之类的</li>
 </ul>
@@ -311,14 +316,15 @@
 <li><p>就是message header+message data+CRC的长度</p>
 </li>
 <li><p>LENGTH的最小长度为12byte，最大长度为252byte（因为LEN最多有12bit，那么最多表示$2^{12}$个数，就正好等于$256\times 8$，即256byte，其实应该是可以表示256byte的长度的，可能是为了LENGTH+SYNC正好是256byte吧，就限制LENGTH最大为252byte吧）</p>
-<p><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011114532160.png" alt="image-20231011114532160" style="zoom:50%;"></p>
+<img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011114532160.png" alt="image-20231011114532160" style="zoom:50%;">
 </li>
 <li><p>LENGTH-CRC的长度必须是4byte的倍数</p>
 </li>
 </ul>
 <h4 id="2-2-3-FLAGS"><a href="#2-2-3-FLAGS" class="headerlink" title="2.2.3 FLAGS"></a>2.2.3 FLAGS</h4><ul>
 <li><p>FLAGS用于控制雷达设备与外部主机之间的通信</p>
-<p><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011114948954.png" alt="image-20231011114948954" style="zoom:50%;"></p>
+<img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011114948954.png" alt="image-20231011114948954" style="zoom:50%;">
+
 </li>
 </ul>
 <h4 id="2-2-4-REMCHUNKS"><a href="#2-2-4-REMCHUNKS" class="headerlink" title="2.2.4 REMCHUNKS"></a>2.2.4 REMCHUNKS</h4><ul>
@@ -326,16 +332,19 @@
 </ul>
 <h4 id="2-2-5-NSBC"><a href="#2-2-5-NSBC" class="headerlink" title="2.2.5 NSBC"></a>2.2.5 NSBC</h4><ul>
 <li><p>通常会将一条消息分成多个子块（sub block）传输（请注意block和chunk的区别，一个是把message分为好几个小段，一个是message太大了，才分成一些个块）</p>
-<p><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011115938961.png" alt="image-20231011115938961" style="zoom:50%;"></p>
+<img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011115938961.png" alt="image-20231011115938961" style="zoom:50%;">
+
 </li>
 </ul>
 <h4 id="2-2-6-CHKSUM"><a href="#2-2-6-CHKSUM" class="headerlink" title="2.2.6 CHKSUM"></a>2.2.6 CHKSUM</h4><ul>
 <li>对MSGHDR消息头的16bit校验信号</li>
 </ul>
-<h4 id="2-2-7-MSGDATA"><a href="#2-2-7-MSGDATA" class="headerlink" title="2.2.7 MSGDATA"></a>2.2.7 MSGDATA</h4><p><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011120249098.png" alt="image-20231011120249098" style="zoom:50%;"></p>
+<h4 id="2-2-7-MSGDATA"><a href="#2-2-7-MSGDATA" class="headerlink" title="2.2.7 MSGDATA"></a>2.2.7 MSGDATA</h4><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011120249098.png" alt="image-20231011120249098" style="zoom:50%;">
+
 <h4 id="2-2-8-CRC"><a href="#2-2-8-CRC" class="headerlink" title="2.2.8 CRC"></a>2.2.8 CRC</h4><ul>
 <li><p>应该也是一种校验方式吧，是根据MSGHDR 和 MSGDATA 中的所有字节计算</p>
-<p><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011120448016.png" alt="image-20231011120448016" style="zoom:50%;"></p>
+<img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011120448016.png" alt="image-20231011120448016" style="zoom:50%;">
+
 </li>
 </ul>
 <hr>
@@ -384,14 +393,15 @@
 </ul>
 <h3 id="2-2-Bootup-Asynchronous-Event"><a href="#2-2-Bootup-Asynchronous-Event" class="headerlink" title="2.2 Bootup/ Asynchronous Event"></a>2.2 Bootup/ Asynchronous Event</h3><ul>
 <li><p>这玩意还不太懂</p>
-<p><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011123354989.png" alt="image-20231011123354989" style="zoom: 80%;"></p>
+<img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011123354989.png" alt="image-20231011123354989" style="zoom: 80%;">
+
 </li>
 </ul>
 <h3 id="2-3-SPI时序（Command-Response）"><a href="#2-3-SPI时序（Command-Response）" class="headerlink" title="2.3 SPI时序（Command/Response）"></a>2.3 SPI时序（Command/Response）</h3><p><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011124344497.png" alt="image-20231011124344497"></p>
 <hr>
 <h1 id="雷达接口信息详细描述"><a href="#雷达接口信息详细描述" class="headerlink" title="雷达接口信息详细描述"></a>雷达接口信息详细描述</h1><ul>
 <li><p>本部分介绍了与雷达收发信机通信所使用的所有雷达接口消息</p>
-<p><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011125353204.png" alt="image-20231011125353204" style="zoom:50%;"></p>
+<img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BmmWave%20Radar%20Interface%20Control%20Document/image-20231011125353204.png" alt="image-20231011125353204" style="zoom:50%;">
 </li>
 <li><p>这一节只能做一个大致总结，要用的时候还得再查接口手册</p>
 </li>
