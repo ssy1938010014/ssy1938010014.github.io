@@ -287,6 +287,7 @@
       
         <p>本节主要介绍了雷达接收机的任务与组成、重点描述了雷达接收机的高频部分与中频部分。</p>
 <span id="more"></span>
+
 <h1 id="雷达接收机的任务"><a href="#雷达接收机的任务" class="headerlink" title="雷达接收机的任务"></a>雷达接收机的任务</h1><ul>
 <li>不失真地放大所需的微弱信号，抑制不需要的其他信号</li>
 <li>其他信号包括：<ul>
@@ -319,7 +320,25 @@
 <hr>
 <h1 id="接收机的噪声系数和灵敏度"><a href="#接收机的噪声系数和灵敏度" class="headerlink" title="接收机的噪声系数和灵敏度"></a>接收机的噪声系数和灵敏度</h1><h2 id="1-接收机中的噪声"><a href="#1-接收机中的噪声" class="headerlink" title="1.接收机中的噪声"></a>1.接收机中的噪声</h2><ul>
 <li><p><strong>噪声来源</strong>：</p>
-<p>|                                | 电阻热噪声                            | 天线噪声                                     |<br>| ——————————————— | ——————————————————- | —————————————————————— |<br>| 谱性质                         | 高斯白噪声：（-∞~+∞内功率谱密度恒定） | 高斯色噪声（在某一较大频带内功率谱密度恒定） |<br>| 噪声电压均方值（反映的是功率） | $\bar{U_n^2}=4kTB_nR$                 | $\bar{U_n^2}=4kT_BB_nR_A$                    |</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>电阻热噪声</th>
+<th>天线噪声</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>谱性质</td>
+<td>高斯白噪声：（-∞~+∞内功率谱密度恒定）</td>
+<td>高斯色噪声（在某一较大频带内功率谱密度恒定）</td>
+</tr>
+<tr>
+<td>噪声电压均方值（反映的是功率）</td>
+<td>$\bar{U_n^2}=4kTB_nR$</td>
+<td>$\bar{U_n^2}=4kT_BB_nR_A$</td>
+</tr>
+</tbody></table>
 <ul>
 <li>k为玻尔兹曼常数，$k = 1.38\times 10^{-23}$</li>
 <li>T为电阻的热力学温度，以绝对温度（K）计量，对于$17^oC$的室温，$T = T_0 = 290K$，称为标准噪声温度</li>
@@ -331,16 +350,16 @@
 <li><p><strong>定量描述噪声信号</strong>：</p>
 <ul>
 <li><p>等效噪声功率谱宽度或噪声带宽</p>
-<p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E6%8E%A5%E6%94%B6%E6%9C%BA/image-20221116215619044.png" alt="image-20221116215619044" style="zoom:50%;"></p>
+<img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E6%8E%A5%E6%94%B6%E6%9C%BA/image-20221116215619044.png" alt="image-20221116215619044" style="zoom:50%;">
 </li>
 <li><p>功率谱均匀的白噪声，通过具有频率选择性的接收线性系统后，接收机输出的白噪声功率谱密度如下：</p>
-<p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E6%8E%A5%E6%94%B6%E6%9C%BA/image-20221116215715140.png" alt="image-20221116215715140" style="zoom:50%;"></p>
+<img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E6%8E%A5%E6%94%B6%E6%9C%BA/image-20221116215715140.png" alt="image-20221116215715140" style="zoom:50%;">
 </li>
 <li><p>则为了分析和计算方便，通常把这个不均匀的噪声功率谱等效为在一定带宽B内是均匀的功率谱。这个带宽B称为<strong>等效噪声功率谱宽度</strong>，一般简称<strong>噪声带宽</strong>。</p>
 </li>
 <li><p>功率谱在频率轴上进行积分就得到噪声功率，假设其与噪声带宽内的功率相等，即可求得$B=\frac{\int_{0}^{\infty}{p(f)}df}{p(f_0)}=\frac{\int_{0}^{\infty}{|H(f)|^2}df}{H(f_0)}$</p>
 </li>
-<li><p>从上述公式可知，噪声带宽是受|H(f)|限制的，<strong>|H(f)|反映的是雷达接收机中频滤波器的传递响应函数</strong>。接收机中频滤波器又是根据 $h(t)=KS^<em>(t_0−t)$ 来设计的，$S(t)$表示雷达信号。也就是说<strong>信号本身的带宽就决定了中频滤波器怎么设计</strong>。因此，我们可以认为<em>*信号带宽、接收机带宽、噪声带宽是近似相等的</em></em>。</p>
+<li><p>从上述公式可知，噪声带宽是受|H(f)|限制的，<strong>|H(f)|反映的是雷达接收机中频滤波器的传递响应函数</strong>。接收机中频滤波器又是根据 $h(t)=KS^<em>(t_0−t)$ 来设计的，$S(t)$表示雷达信号。也就是说*</em>信号本身的带宽就决定了中频滤波器怎么设计<strong>。因此，我们可以认为</strong>信号带宽、接收机带宽、噪声带宽是近似相等的**。</p>
 </li>
 </ul>
 </li>
@@ -348,33 +367,27 @@
 <h2 id="2-噪声系数"><a href="#2-噪声系数" class="headerlink" title="2.噪声系数"></a>2.噪声系数</h2><ul>
 <li><p>噪声系数是指接收机输入端信噪比$SNR_i$与输出端信噪比$SNR_o$的比值</p>
 </li>
-<li><p>它的物理意义是指<strong>由于接收机内部噪声的影响</strong>，使接收机输出端的信噪比相对于其输入端的<strong>信噪比变坏的倍数</strong>，<strong>噪声系数可表示为</strong>：</p>
-<script type="math/tex; mode=display">
-F = \frac{(SNR)_i}{(SNR)_o}=\frac{\frac{S_i}{N_i}}{\frac{S_o}{N_o}}=\frac{N_o}{N_iG_a}</script><ul>
+<li><p>它的物理意义是指<strong>由于接收机内部噪声的影响</strong>，使接收机输出端的信噪比相对于其输入端的<strong>信噪比变坏的倍数</strong>，<strong>噪声系数可表示为</strong>：<br>$$<br>F = \frac{(SNR)_i}{(SNR)_o}=\frac{\frac{S_i}{N_i}}{\frac{S_o}{N_o}}=\frac{N_o}{N_iG_a}<br>$$</p>
+<ul>
 <li>其中：$N_i = kT_0B$为输入噪声功率，$G_a$为接收机的额定功率增益，$G_a = \frac{S_o}{S_i}$</li>
 </ul>
 </li>
-<li><p>假设接收机内部噪声的额定功率为$\Delta N$，输出噪声功率为：</p>
-<script type="math/tex; mode=display">
-  N_o = N_iG_a+\Delta N = kT_0B_nG_a+\Delta N</script></li>
-<li><p><strong>合并上述两式可得到噪声系数F为</strong>：</p>
-<script type="math/tex; mode=display">
-F = 1+\frac{\Delta N}{kT_0B_nG_a}\ge 1</script></li>
-<li><p>若有n级电路级联，则n级电路级联时的<strong>总噪声系数</strong>为：</p>
-<script type="math/tex; mode=display">
-F_o = F_1 + \frac{F_2 - 1}{G_1}+\frac{F_3 - 1}{G_1G_2}+...+\frac{F_n-1}{G_1G_2...G_{n-1}}</script></li>
+<li><p>假设接收机内部噪声的额定功率为$\Delta N$，输出噪声功率为：<br>  $$<br>  N_o = N_iG_a+\Delta N = kT_0B_nG_a+\Delta N<br>  $$</p>
+</li>
+<li><p><strong>合并上述两式可得到噪声系数F为</strong>：<br>$$<br>F = 1+\frac{\Delta N}{kT_0B_nG_a}\ge 1<br>$$</p>
+</li>
+<li><p>若有n级电路级联，则n级电路级联时的<strong>总噪声系数</strong>为：<br>$$<br>F_o = F_1 + \frac{F_2 - 1}{G_1}+\frac{F_3 - 1}{G_1G_2}+…+\frac{F_n-1}{G_1G_2…G_{n-1}}<br>$$</p>
+</li>
 </ul>
 <h2 id="3-灵敏度"><a href="#3-灵敏度" class="headerlink" title="3.灵敏度"></a>3.灵敏度</h2><ul>
 <li><p>接收机灵敏度表示接收机接收微弱信号的能力</p>
 </li>
 <li><p><strong>能接收的信号越微弱，则接收机的灵敏度越高，因而雷达的作用距离就越远</strong></p>
 </li>
-<li><p>灵敏度用<strong>接收机输入端</strong>的<strong>最小可检测信号功率$S_{imin}$</strong>来表示，其表达式为：</p>
-<script type="math/tex; mode=display">
-S_{imin}=N_iF(\frac{S_o}{N_o}) = kT_0BF(\frac{S_o}{N_o})</script></li>
-<li><p>为了保证检测系统发现目标的性能，要求$(\frac{S_o}{N_o})\ge(\frac{S_i}{N_i})_{min}$，接收机实际灵敏度为：</p>
-<script type="math/tex; mode=display">
-  S_{imin}= kT_0BF(\frac{S_o}{N_o})_{min} = kT_0BFM</script><ul>
+<li><p>灵敏度用<strong>接收机输入端</strong>的<strong>最小可检测信号功率$S_{imin}$</strong>来表示，其表达式为：<br>$$<br>S_{imin}=N_iF(\frac{S_o}{N_o}) = kT_0BF(\frac{S_o}{N_o})<br>$$</p>
+</li>
+<li><p>为了保证检测系统发现目标的性能，要求$(\frac{S_o}{N_o})\ge(\frac{S_i}{N_i})<em>{min}$，接收机实际灵敏度为：<br>  $$<br>  S</em>{imin}= kT_0BF(\frac{S_o}{N_o})_{min} = kT_0BFM<br>  $$</p>
+<ul>
 <li><p>其中，$F$为噪声系数，其定义为接收机输入端信号噪声比与输出端信号噪声比的比值，即$F=\frac{S_i/N_i}{S_o/N_o}$</p>
 </li>
 <li><p>M为识别系数，定义接收机输出端信噪比的最小值$M=(\frac{S_o}{N_o})_{min}$，<strong>即达到一定检测性能所要求的接收机输出信号的最小信噪比</strong></p>
@@ -392,33 +405,34 @@ S_{imin}=N_iF(\frac{S_o}{N_o}) = kT_0BF(\frac{S_o}{N_o})</script></li>
 <li>保护放电管 TR1、TR2 放电，大部分能量被反射（图中蓝色虚线），</li>
 <li>只有一部分漏过放电管（图中黄线），在接收机处反向相消。</li>
 </ul>
-<p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E6%8E%A5%E6%94%B6%E6%9C%BA/image-20221116222219708.png" alt="image-20221116222219708" style="zoom:50%;"></p>
+<img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E6%8E%A5%E6%94%B6%E6%9C%BA/image-20221116222219708.png" alt="image-20221116222219708" style="zoom:50%;">
 </li>
 <li><p><strong>接收状态时</strong>：</p>
 <ul>
 <li>保护放电管 TR1、TR2 不放电，天线接收到的信号在接收机处同相相加</li>
 <li>就算有少数信号穿过，在假负载处也会相互抵消</li>
 </ul>
-<p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E6%8E%A5%E6%94%B6%E6%9C%BA/image-20221116222432939.png" alt="image-20221116222432939" style="zoom:50%;"></p>
+<img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E6%8E%A5%E6%94%B6%E6%9C%BA/image-20221116222432939.png" alt="image-20221116222432939" style="zoom:50%;">
+
 </li>
 </ul>
 <h2 id="3-本机振荡器（LO）和自动频率控制（AFC）"><a href="#3-本机振荡器（LO）和自动频率控制（AFC）" class="headerlink" title="3.本机振荡器（LO）和自动频率控制（AFC）"></a>3.本机振荡器（LO）和自动频率控制（AFC）</h2><h3 id="3-1-混频器原理"><a href="#3-1-混频器原理" class="headerlink" title="3.1 混频器原理"></a>3.1 混频器原理</h3><ul>
 <li><p>超外差式接收机利用本机振荡器和混频器把高频回波信号变换成便于滤波和处理的中频信号</p>
-<p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E6%8E%A5%E6%94%B6%E6%9C%BA/image-20221116225047186.png" alt="image-20221116225047186" style="zoom:50%;"></p>
+<img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E6%8E%A5%E6%94%B6%E6%9C%BA/image-20221116225047186.png" alt="image-20221116225047186" style="zoom:50%;">
 </li>
 <li><p>理想情况下，发射的高频信号$f_R$和本振频率$f_L$都是固定的，混频后二者之差也是固定不变的 “ 正确中频 ”$f_I$。但在实际工作中，常规雷达发射机磁控管振荡器和接收机本机振荡器频率稳定度不高，容易受外界条件（温度、负载、电源等）的改变而变化，使混频后的实际中频偏离 “ 正确中频 ”$f_I$。可能超出中放通带，使接收机增益大大降低甚至不能正常工作。因此，必须采用AFC，以保证混频器输出为 “ 正确中频 ” $f_I$。</p>
 </li>
 </ul>
-<h3 id="3-2-常规雷达本振与AFC"><a href="#3-2-常规雷达本振与AFC" class="headerlink" title="3.2 常规雷达本振与AFC"></a>3.2 常规雷达本振与AFC</h3><p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E6%8E%A5%E6%94%B6%E6%9C%BA/image-20221116225655072.png" alt="image-20221116225655072" style="zoom:50%;"></p>
+<h3 id="3-2-常规雷达本振与AFC"><a href="#3-2-常规雷达本振与AFC" class="headerlink" title="3.2 常规雷达本振与AFC"></a>3.2 常规雷达本振与AFC</h3><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E6%8E%A5%E6%94%B6%E6%9C%BA/image-20221116225655072.png" alt="image-20221116225655072" style="zoom:50%;">
+
 <hr>
 <h1 id="接收机的动态范围"><a href="#接收机的动态范围" class="headerlink" title="接收机的动态范围"></a>接收机的动态范围</h1><ul>
 <li><p><strong>接收机的动态范围表示接收机能够正常工作所容许的输入信号强度变化的范围</strong></p>
 </li>
 <li><p><strong>信号太弱，它不能检测出来；信号太强，接收机会发生饱和而失去放大作用，这种现象称为过载</strong></p>
 </li>
-<li><p><strong>使接收机开始出现过载时的输入功率与最小可检测功率之比，叫做动态范围</strong>，其公式为：</p>
-<script type="math/tex; mode=display">
-D(dB)=10lg\frac{P_{imax}}{P_{imin}}=20lg\frac{U_{imax}}{U_{imin}}</script><ul>
+<li><p><strong>使接收机开始出现过载时的输入功率与最小可检测功率之比，叫做动态范围</strong>，其公式为：<br>$$<br>D(dB)=10lg\frac{P_{imax}}{P_{imin}}=20lg\frac{U_{imax}}{U_{imin}}<br>$$</p>
+<ul>
 <li>D表示接收机的动态范围，单位 dB</li>
 <li>$P_{imax}$ 表示最大接收信号功率</li>
 <li>$P_{imin}$ 表示最小接收信号功率，即灵敏度</li>
@@ -428,27 +442,26 @@ D(dB)=10lg\frac{P_{imax}}{P_{imin}}=20lg\frac{U_{imax}}{U_{imin}}</script><ul>
 <ul>
 <li>定义增量增益$K_d=\frac{du_o}{du_i}$，若$K_d\le0$，则称为饱和过载</li>
 </ul>
-<p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E6%8E%A5%E6%94%B6%E6%9C%BA/image-20221116230738572.png" alt="image-20221116230738572" style="zoom:50%;"></p>
+<img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E6%8E%A5%E6%94%B6%E6%9C%BA/image-20221116230738572.png" alt="image-20221116230738572" style="zoom:50%;">
+
 </li>
 </ul>
 <hr>
-<h1 id="滤波与接收机带宽"><a href="#滤波与接收机带宽" class="headerlink" title="滤波与接收机带宽"></a>滤波与接收机带宽</h1><h2 id="1-中频放大器（匹配滤波器）"><a href="#1-中频放大器（匹配滤波器）" class="headerlink" title="1.中频放大器（匹配滤波器）"></a>1.中频放大器（匹配滤波器）</h2><p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E6%8E%A5%E6%94%B6%E6%9C%BA/image-20221116232729568.png" alt="image-20221116232729568" style="zoom:50%;"></p>
+<h1 id="滤波与接收机带宽"><a href="#滤波与接收机带宽" class="headerlink" title="滤波与接收机带宽"></a>滤波与接收机带宽</h1><h2 id="1-中频放大器（匹配滤波器）"><a href="#1-中频放大器（匹配滤波器）" class="headerlink" title="1.中频放大器（匹配滤波器）"></a>1.中频放大器（匹配滤波器）</h2><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E6%8E%A5%E6%94%B6%E6%9C%BA/image-20221116232729568.png" alt="image-20221116232729568" style="zoom:50%;">
+
 <ul>
 <li><p>匹配滤波器是<strong>当输入端出现信号与加性白噪声时，使其输出信噪比最大的滤波器</strong>，就是一个与输入信号相匹配的最佳滤波器</p>
 </li>
-<li><p>冲击函数$h(t)$：</p>
-<script type="math/tex; mode=display">
-h(t)=KS^*(t_0-t)</script><ul>
+<li><p>冲击函数$h(t)$：<br>$$<br>h(t)=KS^*(t_0-t)<br>$$</p>
+<ul>
 <li>说明匹配滤波器实际上是根据雷达发射信号$S(t)$设计的。</li>
 <li>输出信噪比在$t_0$时刻达到最大。</li>
 </ul>
 </li>
-<li><p>传递响应函数$H(f)$：</p>
-<script type="math/tex; mode=display">
-H(f)=KS^*(f)e^{-j2\pi ft_0}=|H(f)|e^{j\phi(f)}</script></li>
-<li><p>匹配滤波器的最大输出信噪比：</p>
-<script type="math/tex; mode=display">
-(\frac{S}{N})_{omax}=\frac{E}{N_o/2}</script><ul>
+<li><p>传递响应函数$H(f)$：<br>$$<br>H(f)=KS^*(f)e^{-j2\pi ft_0}=|H(f)|e^{j\phi(f)}<br>$$</p>
+</li>
+<li><p>匹配滤波器的最大输出信噪比：<br>$$<br>(\frac{S}{N})_{omax}=\frac{E}{N_o/2}<br>$$</p>
+<ul>
 <li>其中，$N_0/2$为白噪声功率谱密度。</li>
 <li>$E$为输入信号能量，根据帕塞瓦尔定理：$E=\int_{-\infty}^{+\infty}|S(t)|^2dt=\int_{-\infty}^{+\infty}|S(f)|^2df$</li>
 <li>由此可知，<strong>匹配滤波器输出端的峰值瞬时信号功率与噪声的平均功率之比$SNR_o$等于两倍的输入信号能量除以输入噪声功率</strong></li>
@@ -458,15 +471,18 @@ H(f)=KS^*(f)e^{-j2\pi ft_0}=|H(f)|e^{j\phi(f)}</script></li>
 </ul>
 <h2 id="2-单个脉冲信号的匹配滤波"><a href="#2-单个脉冲信号的匹配滤波" class="headerlink" title="2.单个脉冲信号的匹配滤波"></a>2.单个脉冲信号的匹配滤波</h2><ul>
 <li><p>假设矩形脉冲幅度为A，脉宽为$\tau$，信号波形为：</p>
-<p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E6%8E%A5%E6%94%B6%E6%9C%BA/image-20221116234631379.png" alt="image-20221116234631379" style="zoom:50%;"></p>
-<p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E6%8E%A5%E6%94%B6%E6%9C%BA/image-20221116234539583.png" alt="image-20221116234539583" style="zoom:50%;"></p>
+<img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E6%8E%A5%E6%94%B6%E6%9C%BA/image-20221116234631379.png" alt="image-20221116234631379" style="zoom:50%;">
+
+<img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E6%8E%A5%E6%94%B6%E6%9C%BA/image-20221116234539583.png" alt="image-20221116234539583" style="zoom:50%;">
 </li>
 <li><p>经傅里叶变换，可得信号频谱：</p>
-<p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E6%8E%A5%E6%94%B6%E6%9C%BA/image-20221116234654662.png" alt="image-20221116234654662" style="zoom:50%;"></p>
-<p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E6%8E%A5%E6%94%B6%E6%9C%BA/image-20221116234733146.png" alt="image-20221116234733146" style="zoom:50%;"></p>
+<img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E6%8E%A5%E6%94%B6%E6%9C%BA/image-20221116234654662.png" alt="image-20221116234654662" style="zoom:50%;">
+
+<img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E6%8E%A5%E6%94%B6%E6%9C%BA/image-20221116234733146.png" alt="image-20221116234733146" style="zoom:50%;">
 </li>
 <li><p>此时，<strong>匹配滤波器的带宽为$B\approx\frac{1}{\tau}$</strong></p>
-<p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E6%8E%A5%E6%94%B6%E6%9C%BA/image-20221116235501254.png" alt="image-20221116235501254" style="zoom: 33%;"></p>
+<img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E6%8E%A5%E6%94%B6%E6%9C%BA/image-20221116235501254.png" alt="image-20221116235501254" style="zoom: 33%;">
+
 </li>
 </ul>
 <h2 id="3-准匹配滤波"><a href="#3-准匹配滤波" class="headerlink" title="3.准匹配滤波"></a>3.准匹配滤波</h2><ul>
@@ -478,9 +494,8 @@ H(f)=KS^*(f)e^{-j2\pi ft_0}=|H(f)|e^{j\phi(f)}</script></li>
 <li>其中实线为理想的匹配滤波器的频率特性，虚线为矩形特性滤波器的频率特性</li>
 </ul>
 </li>
-<li><p><strong>准匹配滤波器的最大输出信噪比与理想匹配滤波器的最大输出信噪比的比值定义为失配损失</strong>ρ：</p>
-<script type="math/tex; mode=display">
-\rho=\frac{(\frac{S}{N})_{\approx max}}{\frac{E}{N_o/2}}\le1</script></li>
+<li><p><strong>准匹配滤波器的最大输出信噪比与理想匹配滤波器的最大输出信噪比的比值定义为失配损失</strong>ρ：<br>$$<br>\rho=\frac{(\frac{S}{N})_{\approx max}}{\frac{E}{N_o/2}}\le1<br>$$</p>
+</li>
 </ul>
 <ul>
 <li>准匹配滤波器的最大信噪比$(\frac{S}{N})_{\approx max}$</li>
@@ -494,14 +509,15 @@ H(f)=KS^*(f)e^{-j2\pi ft_0}=|H(f)|e^{j\phi(f)}</script></li>
 <li>从<strong>视频</strong>取反馈控制信号，最终控制中频放大器的增益</li>
 <li>AGC是负反馈系统</li>
 </ul>
-<p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E6%8E%A5%E6%94%B6%E6%9C%BA/image-20221117002147018.png" alt="image-20221117002147018" style="zoom: 33%;"></p>
+<img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E6%8E%A5%E6%94%B6%E6%9C%BA/image-20221117002147018.png" alt="image-20221117002147018" style="zoom: 33%;">
 </li>
 <li><p><strong>瞬时自动增益控制（IAGC）</strong></p>
 <ul>
 <li>目的是使大功率干扰受到衰减，而维持目标信号的增益尽量不变。</li>
 <li>直接从<strong>中频</strong>放大器的输出端取反馈控制信号。因此，IAGC比AGC反应更快。</li>
 </ul>
-<p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E6%8E%A5%E6%94%B6%E6%9C%BA/image-20221117002310909.png" alt="image-20221117002310909" style="zoom:33%;"></p>
+<img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E9%9B%B7%E8%BE%BE%E6%8E%A5%E6%94%B6%E6%9C%BA/image-20221117002310909.png" alt="image-20221117002310909" style="zoom:33%;">
+
 </li>
 </ul>
 <hr>

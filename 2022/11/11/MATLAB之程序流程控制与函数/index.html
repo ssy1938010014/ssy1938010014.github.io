@@ -281,14 +281,18 @@
       
         <p>本节主要介绍了MATLAB中函数的定义调用以及三种基本的程序运行结构，以及函数相关的定义与调用。</p>
 <span id="more"></span>
+
 <h1 id="顺序结构程序"><a href="#顺序结构程序" class="headerlink" title="顺序结构程序"></a>顺序结构程序</h1><h2 id="1-文件的建立"><a href="#1-文件的建立" class="headerlink" title="1.文件的建立"></a>1.文件的建立</h2><ul>
-<li>用命令按钮创建文件<br><img src="/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/image-20221111124011062.png" alt="image-20221111124011062" style="zoom: 50%;"> </li>
+<li>用命令按钮创建文件<img src="/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/image-20221111124011062.png" alt="image-20221111124011062" style="zoom: 50%;"> </li>
 <li>用edit命令创建文件：<code>edit 文件名</code></li>
 </ul>
 <h2 id="2-脚本文件与函数文件"><a href="#2-脚本文件与函数文件" class="headerlink" title="2.脚本文件与函数文件"></a>2.脚本文件与函数文件</h2><ul>
-<li><p>脚本文件<br><img src="/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/image-20221111125023125.png" alt="image-20221111125023125" style="zoom:50%;"></p>
+<li><p>脚本文件</p>
+<img src="/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/image-20221111125023125.png" alt="image-20221111125023125" style="zoom:50%;">
 </li>
-<li><p>函数文件<br><img src="/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/image-20221111125529258.png" alt="image-20221111125529258" style="zoom:50%;"></p>
+<li><p>函数文件</p>
+<img src="/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/image-20221111125529258.png" alt="image-20221111125529258" style="zoom:50%;">
+
 </li>
 </ul>
 <h2 id="3-数据的输入"><a href="#3-数据的输入" class="headerlink" title="3.数据的输入"></a>3.数据的输入</h2><ul>
@@ -300,7 +304,8 @@
 </ul>
 <h2 id="4-数据的输出"><a href="#4-数据的输出" class="headerlink" title="4.数据的输出"></a>4.数据的输出</h2><ul>
 <li><p><code>disp(输出项)</code></p>
-<p> <img src="/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/image-20221111142213387.png" alt="image-20221111142213387" style="zoom:50%;"></p>
+ <img src="/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/image-20221111142213387.png" alt="image-20221111142213387" style="zoom:50%;">
+
 </li>
 </ul>
 <h2 id="5-程序的暂停"><a href="#5-程序的暂停" class="headerlink" title="5.程序的暂停"></a>5.程序的暂停</h2><ul>
@@ -313,6 +318,7 @@
 </li>
 <li><p><strong>switch语句</strong></p>
 <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%PM2.5数值在[0，35）空气质量为优，</span></span><br><span class="line"><span class="comment">%[35，75）为良，[75，115）为轻度污染，</span></span><br><span class="line"><span class="comment">% [115，150）为中度污染，</span></span><br><span class="line"><span class="comment">% [150，250）为重度污染，</span></span><br><span class="line"><span class="comment">% 大于等于250为严重污染。</span></span><br><span class="line"><span class="comment">% 编写程序，输入PM2.5数值，输出空气质量等级。</span></span><br><span class="line">g=input(<span class="string">&#x27;请输入PM2.5值：&#x27;</span>);</span><br><span class="line"><span class="keyword">switch</span> <span class="built_in">fix</span>(g) </span><br><span class="line">    <span class="keyword">case</span> <span class="built_in">num2cell</span>(<span class="number">0</span>:<span class="number">34</span>) <span class="comment">%将0~34的一个数组整体，变成单个的个体</span></span><br><span class="line">        <span class="built_in">disp</span>(<span class="string">&#x27;空气质量优&#x27;</span>);</span><br><span class="line">    <span class="keyword">case</span> <span class="built_in">num2cell</span>(<span class="number">35</span>:<span class="number">74</span>) </span><br><span class="line">        <span class="built_in">disp</span>(<span class="string">&#x27;空气质量良好&#x27;</span>);</span><br><span class="line">    <span class="keyword">case</span> <span class="built_in">num2cell</span>(<span class="number">75</span>:<span class="number">114</span>) </span><br><span class="line">        <span class="built_in">disp</span>(<span class="string">&#x27;空气质量轻度污染&#x27;</span>);</span><br><span class="line">    <span class="keyword">case</span> <span class="built_in">num2cell</span>(<span class="number">115</span>:<span class="number">149</span>) </span><br><span class="line">        <span class="built_in">disp</span>(<span class="string">&#x27;空气质量中度污染&#x27;</span>); </span><br><span class="line">    <span class="keyword">case</span> <span class="built_in">num2cell</span>(<span class="number">150</span>:<span class="number">249</span>) </span><br><span class="line">        <span class="built_in">disp</span>(<span class="string">&#x27;空气质量重度污染&#x27;</span>);  </span><br><span class="line">    <span class="keyword">otherwise</span> <span class="comment">%注意matlab中使用otherwise表示其他</span></span><br><span class="line">        <span class="built_in">disp</span>(<span class="string">&#x27;空气质量严重污染&#x27;</span>);</span><br><span class="line"><span class="keyword">end</span> <span class="comment">%也需添加结束符end</span></span><br></pre></td></tr></table></figure>
+
 </li>
 </ul>
 <hr>
@@ -324,6 +330,8 @@
 </li>
 <li><p>例：用蒙特卡洛法求$\pi$</p>
 <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%利用蒙特卡洛法求π的近似值</span></span><br><span class="line">s=<span class="number">0</span>;</span><br><span class="line">n=input(<span class="string">&#x27;输入随机投掷的次数:(次数越多越准确)n=&#x27;</span>);</span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span>=<span class="number">1</span>:n <span class="comment">%有点像python中的遍历了</span></span><br><span class="line">    x=<span class="built_in">rand</span>(<span class="number">1</span>);</span><br><span class="line">    y=<span class="built_in">rand</span>(<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">if</span> x*x+y*y&lt;=<span class="number">1</span></span><br><span class="line">        s=s+<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line">pai=s/n*<span class="number">4</span>;</span><br><span class="line"><span class="built_in">disp</span>(pai)</span><br></pre></td></tr></table></figure>
+
+
 </li>
 </ul>
 <h2 id="2-while语句"><a href="#2-while语句" class="headerlink" title="2.while语句"></a>2.while语句</h2><ul>
@@ -334,6 +342,7 @@
 </li>
 <li><p>例：</p>
 <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%从键盘输入若干个数，当输入0时结束输入，求这些数的平均值和它们之和。</span></span><br><span class="line">msum=<span class="number">0</span>;</span><br><span class="line">n=<span class="number">0</span>;</span><br><span class="line">x=input(<span class="string">&#x27;Enter a number (end in 0):&#x27;</span>);</span><br><span class="line"><span class="keyword">while</span> x~=<span class="number">0</span> <span class="comment">%x不等于0时</span></span><br><span class="line">    msum=msum+x;</span><br><span class="line">    n=n+<span class="number">1</span>;</span><br><span class="line">    x=input(<span class="string">&#x27;Enter a number (end in 0):&#x27;</span>);</span><br><span class="line"><span class="keyword">end</span> <span class="comment">%结束符end别忘了</span></span><br><span class="line"><span class="keyword">if</span> n&gt;<span class="number">0</span></span><br><span class="line">    <span class="built_in">mean</span>=msum/n;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="built_in">disp</span>(msum);</span><br><span class="line"><span class="built_in">disp</span>(<span class="built_in">mean</span>);</span><br></pre></td></tr></table></figure>
+
 </li>
 </ul>
 <hr>
@@ -343,7 +352,8 @@
 <li><p>return语句表示结束函数的执行。通常在函数文件中也可以不使用return语句，那么被调用函数执行完成后会自动返回</p>
 </li>
 <li><p>例：</p>
-<p> <img src="/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/image-20221111155246922.png" alt="image-20221111155246922" style="zoom:50%;"></p>
+ <img src="/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/image-20221111155246922.png" alt="image-20221111155246922" style="zoom:50%;">
+
 </li>
 </ul>
 <h2 id="2-匿名函数"><a href="#2-匿名函数" class="headerlink" title="2.匿名函数"></a>2.匿名函数</h2><ul>
@@ -352,18 +362,21 @@
 <p><code>函数句柄变量=@函数名 %这里的函数名可以是内部函数或自定义函数</code></p>
 </li>
 <li><p>例：</p>
-<p> <img src="/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/image-20221111160019289.png" alt="image-20221111160019289" style="zoom:50%;"></p>
-<p> <img src="/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/image-20221111160115764.png" alt="image-20221111160115764" style="zoom:50%;"></p>
+ <img src="/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/image-20221111160019289.png" alt="image-20221111160019289" style="zoom:50%;">
+
+ <img src="/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/image-20221111160115764.png" alt="image-20221111160115764" style="zoom:50%;">
+
 </li>
 </ul>
 <hr>
-<h1 id="函数的递归调用"><a href="#函数的递归调用" class="headerlink" title="函数的递归调用"></a>函数的递归调用</h1><p><img src="/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/image-20221111162644607.png" alt="image-20221111162644607" style="zoom: 50%;"></p>
+<h1 id="函数的递归调用"><a href="#函数的递归调用" class="headerlink" title="函数的递归调用"></a>函数的递归调用</h1><img src="/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/image-20221111162644607.png" alt="image-20221111162644607" style="zoom: 50%;">
+
 <hr>
 <h1 id="函数参数的可调性"><a href="#函数参数的可调性" class="headerlink" title="函数参数的可调性"></a>函数参数的可调性</h1><ul>
 <li><strong>nargin</strong>：输入实参的个数</li>
 <li><strong>nargout</strong>：输出实参的个数</li>
 </ul>
-<p><img src="/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/image-20221111163746681.png" alt="image-20221111163746681" style="zoom:50%;"></p>
+<img src="/2022/11/11/MATLAB%E4%B9%8B%E7%A8%8B%E5%BA%8F%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E5%87%BD%E6%95%B0/image-20221111163746681.png" alt="image-20221111163746681" style="zoom:50%;">
 
     </div>
 
