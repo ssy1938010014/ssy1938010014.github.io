@@ -266,7 +266,6 @@
       
         <p>本节主要介绍了突发长度下FIFO深度的计算方法。</p>
 <span id="more"></span>
-
 <h1 id="burst-length相关"><a href="#burst-length相关" class="headerlink" title="burst length相关"></a>burst length相关</h1><ul>
 <li>假设模块A不间断地往FIFO中写数据，模块B同样不间断地从FIFO中读数据，不同的是模块A写数据的时钟频率要大于模块B读数据的时钟频率，那么那些没有被读走的数据会越积累越多，那么FIFO深度需要是无穷大的，因此<strong>只有在突发数据传输过程中讨论FIFO深度才是有意义的</strong>。</li>
 <li>连续不断传递完一包数据，歇会，再接着传下一包数据，在每段连续传输时间内传递的数据个数称为burst length</li>
@@ -354,7 +353,7 @@
 <li><p><strong>在最坏的情形中，读写的速率应该相差最大，也就是说需要找出最大的写速率和最小的读速率</strong></p>
 </li>
 <li><p><strong>只有在背对背情况下写速率才是最高的</strong></p>
-<img src="/2024/11/08/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BFIFO%E6%B7%B1%E5%BA%A6%E8%AE%A1%E7%AE%97/image-20241108220900011.png" alt="image-20241108220900011" style="zoom: 67%;">
+<p><img src="/2024/11/08/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BFIFO%E6%B7%B1%E5%BA%A6%E8%AE%A1%E7%AE%97/image-20241108220900011.png" alt="image-20241108220900011" style="zoom: 67%;"></p>
 </li>
 <li><p>写数据时钟频率fa=80MHz，读数据时钟频率fb=50MHz，在写时钟周期内，每100个周期就有40个数据写入FIFO，在读时钟周期内，每10个周期可以有8个数据读出FIFO。</p>
 </li>
@@ -424,7 +423,10 @@
     <a href="/2024/11/05/Spyglass%E4%B9%8B%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" rel="prev" title="Spyglass之基本使用">
       <i class="fa fa-chevron-left"></i> Spyglass之基本使用
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2024/11/13/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BAPB%E6%80%BB%E7%BA%BF/" rel="next" title="FPGA系统设计之APB总线">
+      FPGA系统设计之APB总线 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -499,7 +501,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-count">156</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

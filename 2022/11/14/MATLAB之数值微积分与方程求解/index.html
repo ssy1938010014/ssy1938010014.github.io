@@ -299,13 +299,12 @@
       
         <p>本节主要介绍了MATLAB中微积分的计算、线性方程与非线性方程的求解方法、以及常微分方程的求解。</p>
 <span id="more"></span>
-
 <h1 id="数值微分与数值积分"><a href="#数值微分与数值积分" class="headerlink" title="数值微分与数值积分"></a>数值微分与数值积分</h1><h2 id="1-数值微分的定义"><a href="#1-数值微分的定义" class="headerlink" title="1.数值微分的定义"></a>1.数值微分的定义</h2><ul>
 <li><p>函数在x0点处以h（h&gt;0）为步长的差分公式：</p>
-<img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114114047436.png" alt="image-20221114114047436" style="zoom: 33%;">
+<p><img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114114047436.png" alt="image-20221114114047436" style="zoom: 33%;"></p>
 </li>
 <li><p>当步长h充分小时，得到 <a href="MATLAB之图像绘制.md">MATLAB之图像绘制.md</a> 函数在x0点处以h（h&gt;0)为步长的差商公式：</p>
-<img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114114223056.png" alt="image-20221114114223056" style="zoom:33%;">
+<p><img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114114223056.png" alt="image-20221114114223056" style="zoom:33%;"></p>
 </li>
 <li><p>函数f(x)在点x0的微分接近于函数在该点的差分，而f在点x的导数接近于函数在该点的差商</p>
 </li>
@@ -316,21 +315,19 @@
 <li>如果x是长度为 m 的向量，则 dx = diff(x) 返回长度为 <strong>m-1</strong> 的向量。dx的元素是x相邻元素之间的差分。</li>
 <li>dx = [X(2)-X(1) X(3)-X(2) … X(m)-X(m-1)]</li>
 </ul>
-<img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114115313838.png" alt="image-20221114115313838" style="zoom:50%;">
+<p><img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114115313838.png" alt="image-20221114115313838" style="zoom:50%;"></p>
 </li>
 <li><p><code>dx=diff(x,n)</code> %计算向量x的n阶向前差分，相当于将diff(x)重复调用了n次                                                                                                                               </p>
-<img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114115656613.png" alt="image-20221114115656613" style="zoom: 50%;">
+<p><img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114115656613.png" alt="image-20221114115656613" style="zoom: 50%;"></p>
 </li>
 <li><p><code>dx=diff(A,n,dim)</code> %计算矩阵A的n阶差分</p>
-<img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114131530593.png" alt="image-20221114131530593" style="zoom:50%;">
-
+<p><img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114131530593.png" alt="image-20221114131530593" style="zoom:50%;"></p>
 </li>
 </ul>
 <p>​                                 </p>
 <h2 id="3-数值积分的定义"><a href="#3-数值积分的定义" class="headerlink" title="3.数值积分的定义"></a>3.数值积分的定义</h2><ul>
 <li><p>将积分区间[a,b]分成n个子区间[$x_i$,$x_{i+1}$],i=1,2,……,n，其中$x_1$=a；$x_{n+1}$=b，这样求定积分问题就分解为：</p>
-<img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114132437831.png" alt="image-20221114132437831" style="zoom:50%;">
-
+<p><img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114132437831.png" alt="image-20221114132437831" style="zoom:50%;"></p>
 </li>
 </ul>
 <h2 id="4-数值积分的实现"><a href="#4-数值积分的实现" class="headerlink" title="4.数值积分的实现"></a>4.数值积分的实现</h2><ul>
@@ -346,7 +343,7 @@
 <ul>
 <li><code>[I,n]=quadl(filename,a,b,tol,trace)</code></li>
 </ul>
-<img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114133957614.png" alt="image-20221114133957614" style="zoom:50%;">
+<p><img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114133957614.png" alt="image-20221114133957614" style="zoom:50%;"></p>
 </li>
 <li><p><strong>基于全局自适应积分方法（MATLAB推荐使用</strong>）</p>
 <ul>
@@ -355,13 +352,12 @@
 <li>a和b分别是定积分的下限和上限</li>
 <li>积分限可以为无穷大，<code>Inf</code>表示无穷大</li>
 </ul>
-<img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114134705448.png" alt="image-20221114134705448" style="zoom:50%;">
+<p><img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114134705448.png" alt="image-20221114134705448" style="zoom:50%;"></p>
 </li>
 <li><p><strong>多重积分的数值求解</strong></p>
 <ul>
 <li><p>二重积分</p>
-<img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114135057453.png" alt="image-20221114135057453" style="zoom: 50%;">
-
+<p><img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114135057453.png" alt="image-20221114135057453" style="zoom: 50%;"></p>
 <ul>
 <li><p><code>I=integral2(filename,a,b,c,d)</code></p>
 </li>
@@ -372,16 +368,14 @@
 </ul>
 </li>
 <li><p>三重积分</p>
-<img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114135314582.png" alt="image-20221114135314582" style="zoom:50%;">
-
+<p><img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114135314582.png" alt="image-20221114135314582" style="zoom:50%;"></p>
 <ul>
 <li><code>I=integral3(filename,a,b,c,d,e,f)</code></li>
 <li><code>I=triplequad(filename,a,b,c,d,e,f,tol)</code></li>
 </ul>
 </li>
 </ul>
-<img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114135711548.png" alt="image-20221114135711548" style="zoom:50%;">
-
+<p><img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114135711548.png" alt="image-20221114135711548" style="zoom:50%;"></p>
 </li>
 </ul>
 <p>​    </p>
@@ -389,14 +383,14 @@
 <h1 id="线性方程组求解"><a href="#线性方程组求解" class="headerlink" title="线性方程组求解"></a>线性方程组求解</h1><h2 id="1-直接法"><a href="#1-直接法" class="headerlink" title="1.直接法"></a>1.直接法</h2><ul>
 <li><p>利用左除运算符的直接解法</p>
 <ul>
-<li>Ax=b ——&gt; <code>x=A\b</code></li>
+<li>Ax=b ———&gt; <code>x=A\b</code></li>
 </ul>
-<img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114141202880.png" alt="image-20221114141202880" style="zoom:50%;">
+<p><img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114141202880.png" alt="image-20221114141202880" style="zoom:50%;"></p>
 </li>
 <li><p>利用矩阵分解求解——LU解法</p>
 <ul>
 <li><p>LU分解的基本思想：将一个n阶矩阵表示为一个下三角矩阵和一个上三角矩阵的乘积。可以首先求解向量y使Ly=b，再求解Ux=y</p>
-<img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114141707389.png" alt="image-20221114141707389" style="zoom:50%;">
+<p><img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114141707389.png" alt="image-20221114141707389" style="zoom:50%;"></p>
 </li>
 <li><p>求解函数：</p>
 <ul>
@@ -412,7 +406,7 @@
 <li><p>雅可比（Jacobi）迭代法</p>
 <ul>
 <li><p>基本思想：</p>
-<img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114142857874.png" alt="image-20221114142857874" style="zoom:50%;">
+<p><img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114142857874.png" alt="image-20221114142857874" style="zoom:50%;"></p>
 </li>
 <li><p>函数编写</p>
 <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%雅可比迭代法的函数文件jacobi.m：</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="params">[y,n]</span>=<span class="title">jacobi</span><span class="params">(A,b,x0,ep)</span> %<span class="title">x0</span>是初值，<span class="title">ep</span>是误差</span></span><br><span class="line">D=<span class="built_in">diag</span>(<span class="built_in">diag</span>(A));</span><br><span class="line">L=-<span class="built_in">tril</span>(A,<span class="number">-1</span>);</span><br><span class="line">U=-<span class="built_in">triu</span>(A,<span class="number">1</span>);</span><br><span class="line">B=D\(L+U);</span><br><span class="line">f=D\b;</span><br><span class="line">y=B*x0+f;</span><br><span class="line">n=<span class="number">1</span>;</span><br><span class="line"><span class="keyword">while</span> norm(y-x0)&gt;=ep</span><br><span class="line">    x0=y;</span><br><span class="line">    y=B*x0+f;</span><br><span class="line">    n=n+<span class="number">1</span>;</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
@@ -422,7 +416,7 @@
 <li><p>高斯-赛德尔（Gauss-Serdel）迭代法</p>
 <ul>
 <li><p>基本思想：</p>
-<img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114143825105.png" alt="image-20221114143825105" style="zoom:50%;">
+<p><img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114143825105.png" alt="image-20221114143825105" style="zoom:50%;"></p>
 </li>
 <li><p>函数编写</p>
 <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%Gauss-Serdel迭代法的函数文件</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="params">[y,n]</span>=<span class="title">gauseidel</span><span class="params">(A,b,x0,ep)</span></span></span><br><span class="line">D=<span class="built_in">diag</span>(<span class="built_in">diag</span>(A));</span><br><span class="line">L=-<span class="built_in">tril</span>(A,<span class="number">-1</span>); </span><br><span class="line">U=-<span class="built_in">triu</span>(A,<span class="number">1</span>);</span><br><span class="line">B=(D-L)\U;</span><br><span class="line">f=(D-L)\b;</span><br><span class="line">y=B*x0+f;</span><br><span class="line">n=<span class="number">1</span>;</span><br><span class="line"><span class="keyword">while</span> norm(y-x0)&gt;=ep</span><br><span class="line">    x0=y;</span><br><span class="line">    y=B*x0+f;</span><br><span class="line">    n=n+<span class="number">1</span>;</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
@@ -430,8 +424,7 @@
 </ul>
 </li>
 <li><p>调用：</p>
-<img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114144237853.png" alt="image-20221114144237853" style="zoom:50%;">
-
+<p><img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114144237853.png" alt="image-20221114144237853" style="zoom:50%;"></p>
 </li>
 </ul>
 <hr>
@@ -440,7 +433,7 @@
 <ul>
 <li><code>x=fzero(filename,x0)</code> %x0是初值</li>
 </ul>
-<img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114150314743.png" alt="image-20221114150314743" style="zoom:50%;">
+<p><img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114150314743.png" alt="image-20221114150314743" style="zoom:50%;"></p>
 </li>
 <li><p>非线性方程组的求解</p>
 <ul>
@@ -448,10 +441,7 @@
 <li>x为返回的解的近似解，x0是初值</li>
 <li>opton用于设置优化工具箱的优化参数，可以调用optimset函数来完成</li>
 </ul>
-<img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114152425293.png" alt="image-20221114152425293" style="zoom:50%;">
-
-
-
+<p><img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114152425293.png" alt="image-20221114152425293" style="zoom:50%;"></p>
 </li>
 </ul>
 <h2 id="2-函数极值的计算"><a href="#2-函数极值的计算" class="headerlink" title="2.函数极值的计算"></a>2.函数极值的计算</h2><ul>
@@ -462,7 +452,7 @@
 <li><code>[xmin,fmin]=fminunc(filename,x0,option)</code></li>
 <li>x1、x2分别表示被研究区间的左、右边界；后两个函数的输入变量x0是一个向量，表示极值点的初值</li>
 </ul>
-<img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114153148161.png" alt="image-20221114153148161" style="zoom:50%;">
+<p><img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114153148161.png" alt="image-20221114153148161" style="zoom:50%;"></p>
 </li>
 <li><p>有约束最优化问题</p>
 <ul>
@@ -476,22 +466,19 @@
 <li><p>ceq(x) 是 x 处的非线性等式约束的数组。fmincon 尝试满足</p>
 <p>对于 ceq 的所有项，有 ceq(x) = 0。</p>
 </li>
-<li><img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114154903952.png" alt="image-20221114154903952" style="zoom: 67%;">
-
+<li><p><img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114154903952.png" alt="image-20221114154903952" style="zoom: 67%;"></p>
 </li>
 </ul>
 </li>
 </ul>
-<img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114155228510.png" alt="image-20221114155228510" style="zoom:50%;">
-
+<p><img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114155228510.png" alt="image-20221114155228510" style="zoom:50%;"></p>
 </li>
 </ul>
 <hr>
 <h1 id="常微分方程数值求解"><a href="#常微分方程数值求解" class="headerlink" title="常微分方程数值求解"></a>常微分方程数值求解</h1><h2 id="1-常微分方程数值求解的一般概念"><a href="#1-常微分方程数值求解的一般概念" class="headerlink" title="1.常微分方程数值求解的一般概念"></a>1.常微分方程数值求解的一般概念</h2><ul>
 <li>求解常微分方程初值问题就是寻找函数y(t)使之满足如下方程</li>
 </ul>
-<img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114160541636.png" alt="image-20221114160541636" style="zoom:50%;">
-
+<p><img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114160541636.png" alt="image-20221114160541636" style="zoom:50%;"></p>
 <h2 id="2-一般调用格式"><a href="#2-一般调用格式" class="headerlink" title="2.一般调用格式"></a>2.一般调用格式</h2><ul>
 <li><p><code>[t,y]=solver(filename,tspan,y0,option)</code></p>
 </li>
@@ -510,21 +497,18 @@
 <li><p>xx是字母，用于标注方法的专门特征</p>
 </li>
 <li><p>常用的求解函数：</p>
-<img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114161327744.png" alt="image-20221114161327744" style="zoom:50%;">
-
+<p><img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114161327744.png" alt="image-20221114161327744" style="zoom:50%;"></p>
 </li>
 </ul>
 </li>
 </ul>
 <h2 id="3-相关实例"><a href="#3-相关实例" class="headerlink" title="3.相关实例"></a>3.相关实例</h2><ul>
 <li><p>例1：</p>
-<img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114162355202.png" alt="image-20221114162355202" style="zoom:33%;">
-
+<p><img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114162355202.png" alt="image-20221114162355202" style="zoom:33%;"></p>
 <p><img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114162502800.png" alt="image-20221114162502800"></p>
 </li>
 <li><p>例2：</p>
-<img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114162715389.png" alt="image-20221114162715389" style="zoom:33%;">
-
+<p><img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114162715389.png" alt="image-20221114162715389" style="zoom:33%;"></p>
 <p><img src="/2022/11/14/MATLAB%E4%B9%8B%E6%95%B0%E5%80%BC%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3/image-20221114162925269.png" alt="image-20221114162925269"></p>
 </li>
 </ul>
@@ -659,7 +643,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-count">156</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

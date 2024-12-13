@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1/themes/blue/pace-theme-minimal.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"xn--ssy-lq6e63gg6fuu2d.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本节主要介绍了APB协议的基本传输时序，并以基于简单APB的SRAM读写实验加强理解。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FPGA系统设计之APB总线">
+<meta property="og:url" content="http://ssy的小天地.com/2024/11/13/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BAPB%E6%80%BB%E7%BA%BF/index.html">
+<meta property="og:site_name" content="ssy的小天地">
+<meta property="og:description" content="本节主要介绍了APB协议的基本传输时序，并以基于简单APB的SRAM读写实验加强理解。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/11/13/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BAPB%E6%80%BB%E7%BA%BF/image-20241113221717120.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/11/13/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BAPB%E6%80%BB%E7%BA%BF/image-20241113222349327.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/11/13/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BAPB%E6%80%BB%E7%BA%BF/image-20241113222434656.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/11/13/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BAPB%E6%80%BB%E7%BA%BF/image-20241113222624798.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/11/13/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BAPB%E6%80%BB%E7%BA%BF/image-20241113222659661.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/11/13/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BAPB%E6%80%BB%E7%BA%BF/image-20241113223256203.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/11/13/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BAPB%E6%80%BB%E7%BA%BF/image-20241113223648826.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/11/13/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BAPB%E6%80%BB%E7%BA%BF/image-20241113224820952.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/11/13/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BAPB%E6%80%BB%E7%BA%BF/image-20241113225608614.png">
+<meta property="article:published_time" content="2024-11-13T04:07:12.000Z">
+<meta property="article:modified_time" content="2024-11-14T14:27:24.902Z">
+<meta property="article:author" content="ssy">
+<meta property="article:tag" content="FPGA">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/11/13/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BAPB%E6%80%BB%E7%BA%BF/image-20241113221717120.png">
+
+<link rel="canonical" href="http://ssy的小天地.com/2024/11/13/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BAPB%E6%80%BB%E7%BA%BF/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>FPGA系统设计之APB总线 | ssy的小天地</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+    <a target="_blank" rel="noopener" href="https://github.com/ssy1938010014" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ssy的小天地</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">愿汝如是 千金不换</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-works">
+
+    <a href="/works/" rel="section"><i class="fa fa-fw fa-sitemap"></i>文章</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ssy的小天地.com/2024/11/13/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BAPB%E6%80%BB%E7%BA%BF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ssy.png">
+      <meta itemprop="name" content="ssy">
+      <meta itemprop="description" content="满怀希望 就会所向披靡">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ssy的小天地">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          FPGA系统设计之APB总线
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+
+
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-11-13 12:07:12" itemprop="dateCreated datePublished" datetime="2024-11-13T12:07:12+08:00">2024-11-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-11-14 22:27:24" itemprop="dateModified" datetime="2024-11-14T22:27:24+08:00">2024-11-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%A7%AF%E7%B4%AF/" itemprop="url" rel="index"><span itemprop="name">学习积累</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本节主要介绍了APB协议的基本传输时序，并以基于简单APB的SRAM读写实验加强理解。</p>
+<span id="more"></span>
+<h1 id="APB协议的基本介绍"><a href="#APB协议的基本介绍" class="headerlink" title="APB协议的基本介绍"></a>APB协议的基本介绍</h1><ul>
+<li><p>Advanced Peripheral Bus（先进外设总线），具备低功耗、接口简单、控制简单的特点，主要用于<strong>低速、功耗低</strong>的外设寄存器配置</p>
+</li>
+<li><p>APB协议是一种低成本接口，针对低功耗和降低接口复杂度进行了优化，APB接口<strong>不是流水线接口</strong>，是一种简单的同步协议。<strong>每次传输至少需要两个周期才能完成</strong></p>
+</li>
+<li><p><strong>不能读写同时传输，因为其读写地址是共用的</strong></p>
+</li>
+<li><p><strong>不能仲裁</strong>，因为是单主多从协议。典型的APB协议包括唯一的APB桥作为Master，而所有的APB模块都是APB slave</p>
+<p><img src="/2024/11/13/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BAPB%E6%80%BB%E7%BA%BF/image-20241113221717120.png" alt="image-20241113221717120" style="zoom: 50%;"></p>
+</li>
+</ul>
+<hr>
+<h1 id="APB协议的基本传输时序"><a href="#APB协议的基本传输时序" class="headerlink" title="APB协议的基本传输时序"></a>APB协议的基本传输时序</h1><ul>
+<li>传输时序建议直接看APB官方手册，实际上APB比较简单，单看时序图也能懂</li>
+</ul>
+<h2 id="1-写操作"><a href="#1-写操作" class="headerlink" title="1.写操作"></a>1.写操作</h2><h3 id="1-1-无等待"><a href="#1-1-无等待" class="headerlink" title="1.1 无等待"></a>1.1 无等待</h3><p><img src="/2024/11/13/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BAPB%E6%80%BB%E7%BA%BF/image-20241113222349327.png" alt="image-20241113222349327" style="zoom:40%;"></p>
+<h3 id="1-2-有等待"><a href="#1-2-有等待" class="headerlink" title="1.2 有等待"></a>1.2 有等待</h3><p><img src="/2024/11/13/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BAPB%E6%80%BB%E7%BA%BF/image-20241113222434656.png" alt="image-20241113222434656" style="zoom:40%;"></p>
+<h2 id="2-读操作"><a href="#2-读操作" class="headerlink" title="2.读操作"></a>2.读操作</h2><h3 id="2-1-无等待"><a href="#2-1-无等待" class="headerlink" title="2.1 无等待"></a>2.1 无等待</h3><p><img src="/2024/11/13/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BAPB%E6%80%BB%E7%BA%BF/image-20241113222624798.png" alt="image-20241113222624798" style="zoom:40%;"></p>
+<h3 id="2-2-有等待"><a href="#2-2-有等待" class="headerlink" title="2.2 有等待"></a>2.2 有等待</h3><p><img src="/2024/11/13/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BAPB%E6%80%BB%E7%BA%BF/image-20241113222659661.png" alt="image-20241113222659661" style="zoom:50%;"></p>
+<hr>
+<h1 id="APB时序控制状态机"><a href="#APB时序控制状态机" class="headerlink" title="APB时序控制状态机"></a>APB时序控制状态机</h1><ul>
+<li><p>从APB master角度</p>
+<p><img src="/2024/11/13/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BAPB%E6%80%BB%E7%BA%BF/image-20241113223256203.png" alt="image-20241113223256203" style="zoom: 75%;"></p>
+</li>
+<li><p>退出ACCESS状态取决于slaver的PREADY信号</p>
+</li>
+<li><p>Transfer这一状态跳转条件其实取决于master的上游模块是否需要发起一次传输活动</p>
+</li>
+</ul>
+<hr>
+<h1 id="基于APB总线的简单SRAM读写实验"><a href="#基于APB总线的简单SRAM读写实验" class="headerlink" title="基于APB总线的简单SRAM读写实验"></a>基于APB总线的简单SRAM读写实验</h1><ul>
+<li><p>设计框图：</p>
+<p><img src="/2024/11/13/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BAPB%E6%80%BB%E7%BA%BF/image-20241113223648826.png" alt="image-20241113223648826" style="zoom:50%;"></p>
+</li>
+</ul>
+<h2 id="1-源代码"><a href="#1-源代码" class="headerlink" title="1.源代码"></a>1.源代码</h2><ul>
+<li><p>apb_master.v</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*-------------------------------------------------------------</span></span><br><span class="line"><span class="comment">-- modified by xlinxdu, 2022/05/27</span></span><br><span class="line"><span class="comment">-- pclk 50MHz</span></span><br><span class="line"><span class="comment">-- APB3,No pslverr signal</span></span><br><span class="line"><span class="comment">-- cmd_i:56bit;[55:48]:r/w ,8&#x27;b0 -&gt; read,8&#x27;b1 -&gt; write</span></span><br><span class="line"><span class="comment">               [47:32]:paddr ,</span></span><br><span class="line"><span class="comment">               [31:0]:pwdata</span></span><br><span class="line"><span class="comment">-------------------------------------------------------------*/</span></span><br><span class="line"><span class="keyword">module</span> apb_master #(</span><br><span class="line">    <span class="keyword">parameter</span> RD_FLAG        = <span class="number">8&#x27;b0</span>           ,</span><br><span class="line">    <span class="keyword">parameter</span> WR_FLAG        = <span class="number">8&#x27;b1</span>           ,</span><br><span class="line">    <span class="keyword">parameter</span> CMD_RW_WIDTH   = <span class="number">8</span>              ,</span><br><span class="line">    <span class="keyword">parameter</span> CMD_ADDR_WIDTH = <span class="number">16</span>             ,</span><br><span class="line">    <span class="keyword">parameter</span> CMD_DATA_WIDTH = <span class="number">32</span>             ,</span><br><span class="line">    <span class="keyword">parameter</span> CMD_WIDTH      = CMD_RW_WIDTH   +  CMD_ADDR_WIDTH +  CMD_DATA_WIDTH</span><br><span class="line">)(</span><br><span class="line">    <span class="comment">//-- system signal</span></span><br><span class="line">    <span class="keyword">input</span>                                   pclk_i       ,</span><br><span class="line">    <span class="keyword">input</span>                                   prst_n_i     ,</span><br><span class="line"></span><br><span class="line">    <span class="comment">//-- cmd_in</span></span><br><span class="line">    <span class="keyword">input</span>      [CMD_WIDTH -<span class="number">1</span> : <span class="number">0</span>]           cmd_i        ,</span><br><span class="line">    <span class="keyword">input</span>                                   cmd_vld_i    ,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">reg</span> [CMD_DATA_WIDTH - <span class="number">1</span> : <span class="number">0</span>]     cmd_rd_data_o,</span><br><span class="line"></span><br><span class="line">    <span class="comment">//-- apb interface</span></span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">reg</span> [CMD_ADDR_WIDTH - <span class="number">1</span> : <span class="number">0</span>]     paddr_o      ,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">reg</span>                              pwrite_o     ,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">reg</span>                              psel_o       ,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">reg</span>                              penable_o    ,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">reg</span> [CMD_DATA_WIDTH - <span class="number">1</span> : <span class="number">0</span>]     pwdata_o     ,</span><br><span class="line">    <span class="keyword">input</span>      [CMD_DATA_WIDTH - <span class="number">1</span> : <span class="number">0</span>]     prdata_i     ,</span><br><span class="line">    <span class="keyword">input</span>                                   pready_i     </span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//-- FSM state</span></span><br><span class="line">    <span class="keyword">parameter</span> IDLE   = <span class="number">3&#x27;b001</span>;</span><br><span class="line">    <span class="keyword">parameter</span> SETUP  = <span class="number">3&#x27;b010</span>;</span><br><span class="line">    <span class="keyword">parameter</span> ACCESS = <span class="number">3&#x27;b100</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//-- current state and next state</span></span><br><span class="line">    <span class="keyword">reg</span> [<span class="number">2</span> : <span class="number">0</span>] cur_state;</span><br><span class="line">    <span class="keyword">reg</span> [<span class="number">2</span> : <span class="number">0</span>] nxt_state;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//-- data buf</span></span><br><span class="line">    <span class="keyword">reg</span>                          start_flag     ;</span><br><span class="line">    <span class="keyword">reg</span> [CMD_WIDTH - <span class="number">1</span> : <span class="number">0</span>]      cmd_in_buf     ;</span><br><span class="line">    <span class="keyword">reg</span> [CMD_DATA_WIDTH - <span class="number">1</span> : <span class="number">0</span>] cmd_rd_data_buf;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/*-----------------------------------------------\</span></span><br><span class="line"><span class="comment">    --             update cmd_in_buf              --</span></span><br><span class="line"><span class="comment">    \-----------------------------------------------*/</span></span><br><span class="line">    <span class="keyword">always</span> @ (<span class="keyword">posedge</span> pclk_i <span class="keyword">or</span> <span class="keyword">negedge</span> prst_n_i) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span> (!prst_n_i) <span class="keyword">begin</span></span><br><span class="line">            cmd_in_buf &lt;= &#123;(CMD_WIDTH)&#123;<span class="number">1&#x27;b0</span>&#125;&#125;;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (cmd_vld_i) <span class="keyword">begin</span></span><br><span class="line">            cmd_in_buf &lt;= cmd_i;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/*-----------------------------------------------\</span></span><br><span class="line"><span class="comment">    --             start flag of transfer         --</span></span><br><span class="line"><span class="comment">    \-----------------------------------------------*/</span></span><br><span class="line">    <span class="keyword">always</span> @ (<span class="keyword">posedge</span> pclk_i <span class="keyword">or</span> <span class="keyword">negedge</span> prst_n_i) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span> (!prst_n_i) <span class="keyword">begin</span></span><br><span class="line">            start_flag &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (cmd_vld_i) <span class="keyword">begin</span></span><br><span class="line">            start_flag &lt;= <span class="number">1&#x27;b1</span>;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">            start_flag &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/*-----------------------------------------------\</span></span><br><span class="line"><span class="comment">    --           update current state             --</span></span><br><span class="line"><span class="comment">    \-----------------------------------------------*/</span></span><br><span class="line">    <span class="keyword">always</span> @ (<span class="keyword">posedge</span> pclk_i <span class="keyword">or</span> <span class="keyword">negedge</span> prst_n_i) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span> (!prst_n_i) <span class="keyword">begin</span></span><br><span class="line">            cur_state &lt;= IDLE;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">            cur_state &lt;= nxt_state;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/*-----------------------------------------------\</span></span><br><span class="line"><span class="comment">    --               update next state            --</span></span><br><span class="line"><span class="comment">    \-----------------------------------------------*/</span></span><br><span class="line">    <span class="keyword">always</span> @ (*) <span class="keyword">begin</span></span><br><span class="line">        nxt_state = cur_state;</span><br><span class="line">        <span class="keyword">case</span>(cur_state)</span><br><span class="line">            IDLE  : <span class="keyword">begin</span></span><br><span class="line">                <span class="keyword">if</span>(start_flag)<span class="keyword">begin</span></span><br><span class="line">                    nxt_state = SETUP;</span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">                    nxt_state = IDLE;</span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">            SETUP : <span class="keyword">begin</span></span><br><span class="line">                nxt_state = ACCESS;</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">            ACCESS: <span class="keyword">begin</span></span><br><span class="line">                <span class="keyword">if</span> (!pready_i)<span class="keyword">begin</span></span><br><span class="line">                    nxt_state = ACCESS;</span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span>(start_flag)<span class="keyword">begin</span></span><br><span class="line">                    nxt_state = SETUP;</span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span>(pready_i)<span class="keyword">begin</span></span><br><span class="line">                    nxt_state = IDLE;</span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">endcase</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/*-----------------------------------------------\</span></span><br><span class="line"><span class="comment">    --         update signal of output            --</span></span><br><span class="line"><span class="comment">    \-----------------------------------------------*/</span></span><br><span class="line">    <span class="keyword">always</span> @ (<span class="keyword">posedge</span> pclk_i <span class="keyword">or</span> <span class="keyword">negedge</span> prst_n_i) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span> (!prst_n_i) <span class="keyword">begin</span></span><br><span class="line">            pwrite_o  &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">            psel_o    &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">            penable_o &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">            paddr_o   &lt;= &#123;(CMD_ADDR_WIDTH)&#123;<span class="number">1&#x27;b0</span>&#125;&#125;;</span><br><span class="line">            pwdata_o  &lt;= &#123;(CMD_DATA_WIDTH)&#123;<span class="number">1&#x27;b0</span>&#125;&#125;;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">            <span class="keyword">if</span> (nxt_state == IDLE) <span class="keyword">begin</span></span><br><span class="line">                psel_o    &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">                penable_o &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(nxt_state == SETUP)<span class="keyword">begin</span></span><br><span class="line">                psel_o    &lt;= <span class="number">1&#x27;b1</span>;</span><br><span class="line">                penable_o &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">                paddr_o   &lt;= cmd_in_buf[CMD_WIDTH - CMD_RW_WIDTH - <span class="number">1</span> : CMD_DATA_WIDTH];</span><br><span class="line">                <span class="comment">//-- read</span></span><br><span class="line">                <span class="keyword">if</span>(cmd_in_buf[CMD_WIDTH - <span class="number">1</span> : CMD_WIDTH - <span class="number">8</span>] == RD_FLAG)<span class="keyword">begin</span></span><br><span class="line">                    pwrite_o &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line">                <span class="comment">//-- write</span></span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">                    pwrite_o  &lt;= <span class="number">1&#x27;b1</span>;</span><br><span class="line">                    pwdata_o  &lt;= cmd_in_buf[CMD_DATA_WIDTH - <span class="number">1</span> : <span class="number">0</span>];</span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(nxt_state == ACCESS)<span class="keyword">begin</span></span><br><span class="line">                penable_o &lt;= <span class="number">1&#x27;b1</span>;</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/*-----------------------------------------------\</span></span><br><span class="line"><span class="comment">    --            update cmd_rd_data_buf          --</span></span><br><span class="line"><span class="comment">    \-----------------------------------------------*/</span></span><br><span class="line">    <span class="keyword">always</span> @ (<span class="keyword">posedge</span> pclk_i <span class="keyword">or</span> <span class="keyword">negedge</span> prst_n_i) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span> (!prst_n_i) <span class="keyword">begin</span></span><br><span class="line">            cmd_rd_data_buf &lt;= &#123;(CMD_DATA_WIDTH)&#123;<span class="number">1&#x27;b0</span>&#125;&#125;;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (pready_i &amp;&amp; psel_o &amp;&amp; penable_o) <span class="keyword">begin</span></span><br><span class="line">            cmd_rd_data_buf &lt;= prdata_i;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/*-----------------------------------------------\</span></span><br><span class="line"><span class="comment">    --            update cmd_rd_data_o            --</span></span><br><span class="line"><span class="comment">    \-----------------------------------------------*/</span></span><br><span class="line">    <span class="keyword">always</span> @ (<span class="keyword">posedge</span> pclk_i <span class="keyword">or</span> <span class="keyword">negedge</span> prst_n_i) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span> (!prst_n_i) <span class="keyword">begin</span></span><br><span class="line">            cmd_rd_data_o &lt;= &#123;(CMD_DATA_WIDTH)&#123;<span class="number">1&#x27;b0</span>&#125;&#125;;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">            cmd_rd_data_o &lt;= cmd_rd_data_buf;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>apb_slave_sram.v</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> apb_slave_sram #(</span><br><span class="line">    <span class="keyword">parameter</span> DATA_WIDTH = <span class="number">32</span>,     </span><br><span class="line">    <span class="keyword">parameter</span> DATA_DEPTH = <span class="number">16</span>,</span><br><span class="line">    <span class="keyword">parameter</span> ADDR_WIDTH = <span class="number">16</span></span><br><span class="line">)(</span><br><span class="line">    <span class="keyword">input</span>		PCLK,</span><br><span class="line">    <span class="keyword">input</span>		PSEL,</span><br><span class="line">    <span class="keyword">input</span>		PENABLE,</span><br><span class="line">    <span class="keyword">input</span>		PWRITE,</span><br><span class="line">    <span class="keyword">input</span>		[DATA_WIDTH - <span class="number">1</span> : <span class="number">0</span>] PWDATA,</span><br><span class="line">    <span class="keyword">input</span>		[ADDR_WIDTH - <span class="number">1</span> : <span class="number">0</span>] PADDR,</span><br><span class="line">    <span class="keyword">input</span>		PRESETn,</span><br><span class="line">    <span class="keyword">output</span>		<span class="keyword">wire</span> PREADY,</span><br><span class="line">    <span class="keyword">output</span>		<span class="keyword">reg</span> [DATA_WIDTH - <span class="number">1</span> : <span class="number">0</span>] PRDATA</span><br><span class="line">);</span><br><span class="line">    <span class="keyword">integer</span> i;</span><br><span class="line">    <span class="keyword">reg</span> [DATA_WIDTH - <span class="number">1</span> : <span class="number">0</span>] SRAM [DATA_DEPTH - <span class="number">1</span> : <span class="number">0</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">assign</span> PREADY = PSEL &amp;&amp; PENABLE;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">always</span>@(<span class="keyword">posedge</span> PCLK <span class="keyword">or</span> <span class="keyword">negedge</span> PRESETn)</span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>(!PRESETn) <span class="keyword">begin</span> </span><br><span class="line">            <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; DATA_DEPTH; i = i + <span class="number">1</span>) <span class="keyword">begin</span></span><br><span class="line">                SRAM [i] &lt;= <span class="number">&#x27;d0</span>;	</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">            PRDATA &lt;= <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">begin</span> </span><br><span class="line">            <span class="keyword">if</span>(PSEL == <span class="number">1</span> &amp;&amp; PENABLE == <span class="number">0</span> &amp;&amp; PWRITE == <span class="number">1</span>) <span class="keyword">begin</span></span><br><span class="line">                SRAM[PADDR] &lt;= PWDATA;</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(PSEL == <span class="number">1</span> &amp;&amp; PENABLE == <span class="number">0</span> &amp;&amp; PWRITE == <span class="number">0</span>) <span class="keyword">begin</span></span><br><span class="line">                PRDATA &lt;= SRAM[PADDR];</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">                PRDATA &lt;= PRDATA;</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// integer i;</span></span><br><span class="line">    <span class="comment">// reg [DATA_WIDTH - 1 : 0] SRAM [DATA_DEPTH - 1 : 0];</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// always @(posedge PCLK or negedge PRESETn) begin</span></span><br><span class="line">    <span class="comment">//     if(~PRESETn) begin</span></span><br><span class="line">    <span class="comment">//         PREADY &lt;= &#x27;d0;</span></span><br><span class="line">    <span class="comment">//     end</span></span><br><span class="line">    <span class="comment">//     else begin</span></span><br><span class="line">    <span class="comment">//         PREADY &lt;= PSEL &amp;&amp; PENABLE;</span></span><br><span class="line">    <span class="comment">//     end</span></span><br><span class="line">    <span class="comment">// end</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// always@(posedge PCLK or negedge PRESETn)</span></span><br><span class="line">    <span class="comment">// begin</span></span><br><span class="line">    <span class="comment">//     if(!PRESETn) begin </span></span><br><span class="line">    <span class="comment">//         for(i = 0; i &lt; DATA_DEPTH; i = i + 1) begin</span></span><br><span class="line">    <span class="comment">//             SRAM [i] &lt;= &#x27;d0;	</span></span><br><span class="line">    <span class="comment">//         end</span></span><br><span class="line">    <span class="comment">//         PRDATA &lt;= 0;</span></span><br><span class="line">    <span class="comment">//     end</span></span><br><span class="line">    <span class="comment">//     else begin </span></span><br><span class="line">    <span class="comment">//         if(PSEL &amp;&amp; PENABLE &amp;&amp; PWRITE == 1) begin</span></span><br><span class="line">    <span class="comment">//             SRAM[PADDR] &lt;= PWDATA;</span></span><br><span class="line">    <span class="comment">//         end</span></span><br><span class="line">    <span class="comment">//         else if(PSEL &amp;&amp; PENABLE &amp;&amp; PWRITE == 0) begin</span></span><br><span class="line">    <span class="comment">//             PRDATA &lt;= SRAM[PADDR];</span></span><br><span class="line">    <span class="comment">//         end</span></span><br><span class="line">    <span class="comment">//         else begin</span></span><br><span class="line">    <span class="comment">//             PRDATA &lt;= PRDATA;</span></span><br><span class="line">    <span class="comment">//         end</span></span><br><span class="line">    <span class="comment">//     end</span></span><br><span class="line">    <span class="comment">// end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="2-Testbench"><a href="#2-Testbench" class="headerlink" title="2.Testbench"></a>2.Testbench</h2><ul>
+<li><p>apb_simple_tb.v</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> apb_simple_tb;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">parameter</span> RD_FLAG        = <span class="number">8&#x27;b0</span>                                                ;</span><br><span class="line">    <span class="keyword">parameter</span> WR_FLAG        = <span class="number">8&#x27;b1</span>                                                ;</span><br><span class="line">    <span class="keyword">parameter</span> CMD_RW_WIDTH   = <span class="number">8</span>                                                   ;</span><br><span class="line">    <span class="keyword">parameter</span> CMD_ADDR_WIDTH = <span class="number">16</span>                                                  ;</span><br><span class="line">    <span class="keyword">parameter</span> CMD_DATA_WIDTH = <span class="number">32</span>                                                  ;</span><br><span class="line">    <span class="keyword">parameter</span> CMD_WIDTH      = CMD_RW_WIDTH   +  CMD_ADDR_WIDTH +  CMD_DATA_WIDTH  ;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//-- system signal</span></span><br><span class="line">    <span class="keyword">reg</span>                                   pclk_i       ;</span><br><span class="line">    <span class="keyword">reg</span>                                   prst_n_i     ;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//-- cmd_in</span></span><br><span class="line">    <span class="keyword">reg</span>      [CMD_WIDTH -<span class="number">1</span> : <span class="number">0</span>]           cmd_i        ;</span><br><span class="line">    <span class="keyword">reg</span>                                   cmd_vld_i    ;</span><br><span class="line">    <span class="keyword">wire</span>     [CMD_DATA_WIDTH - <span class="number">1</span> : <span class="number">0</span>]     cmd_rd_data_o;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//-- apb interface</span></span><br><span class="line">    <span class="keyword">wire</span> [CMD_ADDR_WIDTH - <span class="number">1</span> : <span class="number">0</span>]     paddr_o  ;</span><br><span class="line">    <span class="keyword">wire</span>                              pwrite_o ;</span><br><span class="line">    <span class="keyword">wire</span>                              psel_o   ;</span><br><span class="line">    <span class="keyword">wire</span>                              penable_o;</span><br><span class="line">    <span class="keyword">wire</span> [CMD_DATA_WIDTH - <span class="number">1</span> : <span class="number">0</span>]     pwdata_o ;</span><br><span class="line">    <span class="keyword">wire</span> [CMD_DATA_WIDTH - <span class="number">1</span> : <span class="number">0</span>]     prdata_i ;</span><br><span class="line">    <span class="keyword">wire</span>                              pready_i  ;</span><br><span class="line"></span><br><span class="line">    apb_master #(</span><br><span class="line">        <span class="variable">.RD_FLAG</span>        (RD_FLAG       ),</span><br><span class="line">        <span class="variable">.WR_FLAG</span>        (WR_FLAG       ),</span><br><span class="line">        <span class="variable">.CMD_RW_WIDTH</span>   (CMD_RW_WIDTH  ),</span><br><span class="line">        <span class="variable">.CMD_ADDR_WIDTH</span> (CMD_ADDR_WIDTH),</span><br><span class="line">        <span class="variable">.CMD_DATA_WIDTH</span> (CMD_DATA_WIDTH),</span><br><span class="line">        <span class="variable">.CMD_WIDTH</span>      (CMD_WIDTH     )</span><br><span class="line">    )apb_master_U1(</span><br><span class="line">        <span class="comment">//-- system signal</span></span><br><span class="line">        <span class="variable">.pclk_i</span>       (pclk_i  ),</span><br><span class="line">        <span class="variable">.prst_n_i</span>     (prst_n_i),</span><br><span class="line"></span><br><span class="line">        <span class="comment">//-- cmd_in</span></span><br><span class="line">        <span class="variable">.cmd_i</span>        (cmd_i        ),</span><br><span class="line">        <span class="variable">.cmd_vld_i</span>    (cmd_vld_i    ),</span><br><span class="line">        <span class="variable">.cmd_rd_data_o</span>(cmd_rd_data_o),</span><br><span class="line"></span><br><span class="line">        <span class="comment">//-- apb interface</span></span><br><span class="line">        <span class="variable">.paddr_o</span>      (paddr_o  ),</span><br><span class="line">        <span class="variable">.pwrite_o</span>     (pwrite_o ),</span><br><span class="line">        <span class="variable">.psel_o</span>       (psel_o   ),</span><br><span class="line">        <span class="variable">.penable_o</span>    (penable_o),</span><br><span class="line">        <span class="variable">.pwdata_o</span>     (pwdata_o ),</span><br><span class="line">        <span class="variable">.prdata_i</span>     (prdata_i ),</span><br><span class="line">        <span class="variable">.pready_i</span>     (pready_i )</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    apb_slave_sram #(</span><br><span class="line">        <span class="variable">.DATA_WIDTH</span> (CMD_DATA_WIDTH),     </span><br><span class="line">        <span class="variable">.DATA_DEPTH</span> (CMD_ADDR_WIDTH),</span><br><span class="line">        <span class="variable">.ADDR_WIDTH</span> (CMD_ADDR_WIDTH)</span><br><span class="line">    )apb_slave_sram_U1(</span><br><span class="line">        <span class="variable">.PCLK</span>   (pclk_i  ),</span><br><span class="line">        <span class="variable">.PRESETn</span>(prst_n_i),</span><br><span class="line">        <span class="variable">.PSEL</span>   (psel_o),</span><br><span class="line">        <span class="variable">.PENABLE</span>(penable_o),</span><br><span class="line">        <span class="variable">.PWRITE</span> (pwrite_o),</span><br><span class="line">        <span class="variable">.PWDATA</span> (pwdata_o),</span><br><span class="line">        <span class="variable">.PADDR</span>  (paddr_o),</span><br><span class="line">        <span class="variable">.PREADY</span> (pready_i),</span><br><span class="line">        <span class="variable">.PRDATA</span> (prdata_i)</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">        pclk_i = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">always</span> #<span class="number">10</span> pclk_i = ~pclk_i;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">        prst_n_i = <span class="number">0</span>;</span><br><span class="line">        cmd_i = <span class="number">&#x27;d0</span>; </span><br><span class="line">        cmd_vld_i = <span class="number">&#x27;d0</span>;</span><br><span class="line">        #<span class="number">51</span> prst_n_i = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//--------------------------有等待读写-----------------------------------</span></span><br><span class="line">        <span class="comment">//写操作</span></span><br><span class="line">        <span class="comment">// cmd_vld_i &lt;= &#x27;d1; cmd_i &lt;= &#123;8&#x27;b1, 16&#x27;d0, 32&#x27;d101&#125;;</span></span><br><span class="line">        <span class="comment">// #20 cmd_vld_i &lt;= &#x27;d0;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// #40 cmd_vld_i &lt;= &#x27;d1; cmd_i &lt;= &#123;8&#x27;b1, 16&#x27;d1, 32&#x27;d102&#125;;</span></span><br><span class="line">        <span class="comment">// #20 cmd_vld_i &lt;= &#x27;d0;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// #40 cmd_vld_i &lt;= &#x27;d1; cmd_i &lt;= &#123;8&#x27;b1, 16&#x27;d2, 32&#x27;d103&#125;;</span></span><br><span class="line">        <span class="comment">// #20 cmd_vld_i &lt;= &#x27;d0;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// #40 cmd_vld_i &lt;= &#x27;d1; cmd_i &lt;= &#123;8&#x27;b1, 16&#x27;d3, 32&#x27;d104&#125;;</span></span><br><span class="line">        <span class="comment">// #20 cmd_vld_i &lt;= &#x27;d0;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// #60 cmd_vld_i &lt;= &#x27;d1; cmd_i &lt;= &#123;8&#x27;b1, 16&#x27;d4, 32&#x27;d105&#125;;</span></span><br><span class="line">        <span class="comment">// #20 cmd_vld_i &lt;= &#x27;d0;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// #40 cmd_vld_i &lt;= &#x27;d1; cmd_i &lt;= &#123;8&#x27;b1, 16&#x27;d5, 32&#x27;d106&#125;;</span></span><br><span class="line">        <span class="comment">// #20 cmd_vld_i &lt;= &#x27;d0;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// #40 cmd_vld_i &lt;= &#x27;d1; cmd_i &lt;= &#123;8&#x27;b1, 16&#x27;d6, 32&#x27;d107&#125;;</span></span><br><span class="line">        <span class="comment">// #20 cmd_vld_i &lt;= &#x27;d0;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// //读操作</span></span><br><span class="line">        <span class="comment">// #100 cmd_vld_i &lt;= &#x27;d1; cmd_i &lt;= &#123;8&#x27;b0, 16&#x27;d6, 32&#x27;d0&#125;;</span></span><br><span class="line">        <span class="comment">// #20 cmd_vld_i &lt;= &#x27;d0;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// #40 cmd_vld_i &lt;= &#x27;d1; cmd_i &lt;= &#123;8&#x27;b0, 16&#x27;d5, 32&#x27;d0&#125;;</span></span><br><span class="line">        <span class="comment">// #20 cmd_vld_i &lt;= &#x27;d0;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// #40 cmd_vld_i &lt;= &#x27;d1; cmd_i &lt;= &#123;8&#x27;b0, 16&#x27;d4, 32&#x27;d0&#125;;</span></span><br><span class="line">        <span class="comment">// #20 cmd_vld_i &lt;= &#x27;d0;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// #80 cmd_vld_i &lt;= &#x27;d1; cmd_i &lt;= &#123;8&#x27;b0, 16&#x27;d3, 32&#x27;d0&#125;;</span></span><br><span class="line">        <span class="comment">// #20 cmd_vld_i &lt;= &#x27;d0;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// #40 cmd_vld_i &lt;= &#x27;d1; cmd_i &lt;= &#123;8&#x27;b0, 16&#x27;d2, 32&#x27;d0&#125;;</span></span><br><span class="line">        <span class="comment">// #20 cmd_vld_i &lt;= &#x27;d0;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// #40 cmd_vld_i &lt;= &#x27;d1; cmd_i &lt;= &#123;8&#x27;b0, 16&#x27;d1, 32&#x27;d0&#125;;</span></span><br><span class="line">        <span class="comment">// #20 cmd_vld_i &lt;= &#x27;d0;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// #40 cmd_vld_i &lt;= &#x27;d1; cmd_i &lt;= &#123;8&#x27;b0, 16&#x27;d0, 32&#x27;d0&#125;;</span></span><br><span class="line">        <span class="comment">// #20 cmd_vld_i &lt;= &#x27;d0;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//--------------------------无等待读写-----------------------------------</span></span><br><span class="line">        <span class="comment">//写操作</span></span><br><span class="line">        cmd_vld_i &lt;= <span class="number">&#x27;d1</span>; cmd_i &lt;= &#123;<span class="number">8&#x27;b1</span>, <span class="number">16&#x27;d0</span>, <span class="number">32&#x27;d101</span>&#125;;</span><br><span class="line">        #<span class="number">20</span> cmd_vld_i &lt;= <span class="number">&#x27;d0</span>;</span><br><span class="line"></span><br><span class="line">        #<span class="number">20</span> cmd_vld_i &lt;= <span class="number">&#x27;d1</span>; cmd_i &lt;= &#123;<span class="number">8&#x27;b1</span>, <span class="number">16&#x27;d1</span>, <span class="number">32&#x27;d102</span>&#125;;</span><br><span class="line">        #<span class="number">20</span> cmd_vld_i &lt;= <span class="number">&#x27;d0</span>;</span><br><span class="line"></span><br><span class="line">        #<span class="number">20</span> cmd_vld_i &lt;= <span class="number">&#x27;d1</span>; cmd_i &lt;= &#123;<span class="number">8&#x27;b1</span>, <span class="number">16&#x27;d2</span>, <span class="number">32&#x27;d103</span>&#125;;</span><br><span class="line">        #<span class="number">20</span> cmd_vld_i &lt;= <span class="number">&#x27;d0</span>;</span><br><span class="line"></span><br><span class="line">        #<span class="number">20</span> cmd_vld_i &lt;= <span class="number">&#x27;d1</span>; cmd_i &lt;= &#123;<span class="number">8&#x27;b1</span>, <span class="number">16&#x27;d3</span>, <span class="number">32&#x27;d104</span>&#125;;</span><br><span class="line">        #<span class="number">20</span> cmd_vld_i &lt;= <span class="number">&#x27;d0</span>;</span><br><span class="line"></span><br><span class="line">        #<span class="number">40</span> cmd_vld_i &lt;= <span class="number">&#x27;d1</span>; cmd_i &lt;= &#123;<span class="number">8&#x27;b1</span>, <span class="number">16&#x27;d4</span>, <span class="number">32&#x27;d105</span>&#125;;</span><br><span class="line">        #<span class="number">20</span> cmd_vld_i &lt;= <span class="number">&#x27;d0</span>;</span><br><span class="line"></span><br><span class="line">        #<span class="number">20</span> cmd_vld_i &lt;= <span class="number">&#x27;d1</span>; cmd_i &lt;= &#123;<span class="number">8&#x27;b1</span>, <span class="number">16&#x27;d5</span>, <span class="number">32&#x27;d106</span>&#125;;</span><br><span class="line">        #<span class="number">20</span> cmd_vld_i &lt;= <span class="number">&#x27;d0</span>;</span><br><span class="line"></span><br><span class="line">        #<span class="number">20</span> cmd_vld_i &lt;= <span class="number">&#x27;d1</span>; cmd_i &lt;= &#123;<span class="number">8&#x27;b1</span>, <span class="number">16&#x27;d6</span>, <span class="number">32&#x27;d107</span>&#125;;</span><br><span class="line">        #<span class="number">20</span> cmd_vld_i &lt;= <span class="number">&#x27;d0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//读操作</span></span><br><span class="line">        #<span class="number">80</span> cmd_vld_i &lt;= <span class="number">&#x27;d1</span>; cmd_i &lt;= &#123;<span class="number">8&#x27;b0</span>, <span class="number">16&#x27;d6</span>, <span class="number">32&#x27;d0</span>&#125;;</span><br><span class="line">        #<span class="number">20</span> cmd_vld_i &lt;= <span class="number">&#x27;d0</span>;</span><br><span class="line"></span><br><span class="line">        #<span class="number">20</span> cmd_vld_i &lt;= <span class="number">&#x27;d1</span>; cmd_i &lt;= &#123;<span class="number">8&#x27;b0</span>, <span class="number">16&#x27;d5</span>, <span class="number">32&#x27;d0</span>&#125;;</span><br><span class="line">        #<span class="number">20</span> cmd_vld_i &lt;= <span class="number">&#x27;d0</span>;</span><br><span class="line"></span><br><span class="line">        #<span class="number">20</span> cmd_vld_i &lt;= <span class="number">&#x27;d1</span>; cmd_i &lt;= &#123;<span class="number">8&#x27;b0</span>, <span class="number">16&#x27;d4</span>, <span class="number">32&#x27;d0</span>&#125;;</span><br><span class="line">        #<span class="number">20</span> cmd_vld_i &lt;= <span class="number">&#x27;d0</span>;</span><br><span class="line"></span><br><span class="line">        #<span class="number">60</span> cmd_vld_i &lt;= <span class="number">&#x27;d1</span>; cmd_i &lt;= &#123;<span class="number">8&#x27;b0</span>, <span class="number">16&#x27;d3</span>, <span class="number">32&#x27;d0</span>&#125;;</span><br><span class="line">        #<span class="number">20</span> cmd_vld_i &lt;= <span class="number">&#x27;d0</span>;</span><br><span class="line"></span><br><span class="line">        #<span class="number">20</span> cmd_vld_i &lt;= <span class="number">&#x27;d1</span>; cmd_i &lt;= &#123;<span class="number">8&#x27;b0</span>, <span class="number">16&#x27;d2</span>, <span class="number">32&#x27;d0</span>&#125;;</span><br><span class="line">        #<span class="number">20</span> cmd_vld_i &lt;= <span class="number">&#x27;d0</span>;</span><br><span class="line"></span><br><span class="line">        #<span class="number">20</span> cmd_vld_i &lt;= <span class="number">&#x27;d1</span>; cmd_i &lt;= &#123;<span class="number">8&#x27;b0</span>, <span class="number">16&#x27;d1</span>, <span class="number">32&#x27;d0</span>&#125;;</span><br><span class="line">        #<span class="number">20</span> cmd_vld_i &lt;= <span class="number">&#x27;d0</span>;</span><br><span class="line"></span><br><span class="line">        #<span class="number">20</span> cmd_vld_i &lt;= <span class="number">&#x27;d1</span>; cmd_i &lt;= &#123;<span class="number">8&#x27;b0</span>, <span class="number">16&#x27;d0</span>, <span class="number">32&#x27;d0</span>&#125;;</span><br><span class="line">        #<span class="number">20</span> cmd_vld_i &lt;= <span class="number">&#x27;d0</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="3-仿真结果"><a href="#3-仿真结果" class="headerlink" title="3.仿真结果"></a>3.仿真结果</h2><ul>
+<li><p>无等待读写：（这种情况下，将pready一直拉高也可以）</p>
+<p><img src="/2024/11/13/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BAPB%E6%80%BB%E7%BA%BF/image-20241113224820952.png" alt="image-20241113224820952"></p>
+</li>
+<li><p>有等待读写：</p>
+<p><img src="/2024/11/13/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BAPB%E6%80%BB%E7%BA%BF/image-20241113225608614.png" alt="image-20241113225608614"></p>
+</li>
+<li><p>其实master中的关键就是写出控制状态机，slaver中主要是psel和penable对原模块的控制</p>
+</li>
+</ul>
+<hr>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_43244515/article/details/124968189">05【Verilog实战】AMBA 3 APB接口设计（附源码RTL/TB）_apb verilog-CSDN博客</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/607424587">soc设计入门6-apb2sram - 知乎</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1gh4y1c7xW/?spm_id_from=333.999.0.0&amp;vd_source=221b76534ba13cfad544149d75ce9b6c">APB总线协议 + APB_SRAM代码实现_哔哩哔哩_bilibili</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>欢迎来到ssy的世界</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/WeChaPay.jpg" alt="ssy 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>ssy
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://ssy的小天地.com/2024/11/13/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BAPB%E6%80%BB%E7%BA%BF/" title="FPGA系统设计之APB总线">http://ssy的小天地.com/2024/11/13/FPGA系统设计之APB总线/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/FPGA/" rel="tag"># FPGA</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/11/08/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BFIFO%E6%B7%B1%E5%BA%A6%E8%AE%A1%E7%AE%97/" rel="prev" title="FPGA系统设计之FIFO深度计算">
+      <i class="fa fa-chevron-left"></i> FPGA系统设计之FIFO深度计算
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2024/11/14/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BAHB%E6%80%BB%E7%BA%BF/" rel="next" title="FPGA系统设计之AHB总线">
+      FPGA系统设计之AHB总线 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#APB%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">APB协议的基本介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#APB%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BC%A0%E8%BE%93%E6%97%B6%E5%BA%8F"><span class="nav-number">2.</span> <span class="nav-text">APB协议的基本传输时序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%86%99%E6%93%8D%E4%BD%9C"><span class="nav-number">2.1.</span> <span class="nav-text">1.写操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E6%97%A0%E7%AD%89%E5%BE%85"><span class="nav-number">2.1.1.</span> <span class="nav-text">1.1 无等待</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E6%9C%89%E7%AD%89%E5%BE%85"><span class="nav-number">2.1.2.</span> <span class="nav-text">1.2 有等待</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E8%AF%BB%E6%93%8D%E4%BD%9C"><span class="nav-number">2.2.</span> <span class="nav-text">2.读操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E6%97%A0%E7%AD%89%E5%BE%85"><span class="nav-number">2.2.1.</span> <span class="nav-text">2.1 无等待</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E6%9C%89%E7%AD%89%E5%BE%85"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.2 有等待</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#APB%E6%97%B6%E5%BA%8F%E6%8E%A7%E5%88%B6%E7%8A%B6%E6%80%81%E6%9C%BA"><span class="nav-number">3.</span> <span class="nav-text">APB时序控制状态机</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8EAPB%E6%80%BB%E7%BA%BF%E7%9A%84%E7%AE%80%E5%8D%95SRAM%E8%AF%BB%E5%86%99%E5%AE%9E%E9%AA%8C"><span class="nav-number">4.</span> <span class="nav-text">基于APB总线的简单SRAM读写实验</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%BA%90%E4%BB%A3%E7%A0%81"><span class="nav-number">4.1.</span> <span class="nav-text">1.源代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Testbench"><span class="nav-number">4.2.</span> <span class="nav-text">2.Testbench</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E4%BB%BF%E7%9C%9F%E7%BB%93%E6%9E%9C"><span class="nav-number">4.3.</span> <span class="nav-text">3.仿真结果</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ssy"
+      src="/images/ssy.png">
+  <p class="site-author-name" itemprop="name">ssy</p>
+  <div class="site-description" itemprop="description">满怀希望 就会所向披靡</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">156</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ssy1938010014" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ssy1938010014" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://m.weibo.cn/u/5469432500?uid=5469432500&t=0&luicode=10000011&lfid=100103type=1&q=JIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" title="Weibo → https:&#x2F;&#x2F;m.weibo.cn&#x2F;u&#x2F;5469432500?uid&#x3D;5469432500&amp;t&#x3D;0&amp;luicode&#x3D;10000011&amp;lfid&#x3D;100103type%3D1%26q%3DJIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://ssy1938010014.github.io/" title="http:&#x2F;&#x2F;ssy1938010014.github.io" rel="noopener" target="_blank">ssy的小天地</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://y006.github.io/" title="http:&#x2F;&#x2F;y006.github.io" rel="noopener" target="_blank">邱院士的Blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://bengoooo.github.io/" title="http:&#x2F;&#x2F;BENgoooo.github.io" rel="noopener" target="_blank">赵总的Blog</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=1469041281&auto=1&height=66"></iframe>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ssy</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-ribbon@1/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+<script data-pjax>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  let url = element.dataset.target;
+  let pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  let pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  let fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+
+
+    <div id="pjax">
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+    </div>
+</body>
+</html>

@@ -282,46 +282,50 @@
       
         <p>本节主要介绍了数字带通调制中的高阶调制技术，以及OFDM调制与解调、CORDIC的硬件设计方法。</p>
 <span id="more"></span>
-
 <h1 id="数字带通调制的基本概念"><a href="#数字带通调制的基本概念" class="headerlink" title="数字带通调制的基本概念"></a>数字带通调制的基本概念</h1><ul>
-<li><p>载波的一般表达式<br>$$<br>s(t)=A(t)cos[w_0t+\Phi(t)]<br>$$</p>
-</li>
-<li><p><strong>波形振幅系数</strong>：<br>$$<br>\because P=\frac{A^2}{2}=\frac ET<br>$$</p>
-<p>$$<br>\therefore A=\sqrt{\frac{2E}{T}}<br>$$</p>
-<p>$$<br>其中:E为码元能量,T为码元周期<br>$$</p>
-</li>
+<li><p>载波的一般表达式</p>
+<script type="math/tex; mode=display">
+s(t)=A(t)cos[w_0t+\Phi(t)]</script></li>
+<li><p><strong>波形振幅系数</strong>：</p>
+<script type="math/tex; mode=display">
+\because P=\frac{A^2}{2}=\frac ET</script><script type="math/tex; mode=display">
+\therefore A=\sqrt{\frac{2E}{T}}</script><script type="math/tex; mode=display">
+其中:E为码元能量,T为码元周期</script></li>
 <li><p><strong>基本键控方式</strong>：</p>
 <ul>
 <li>振幅键控（ASK）：利用载波的幅度变化来传递数字信息，而其频率和初始相位保持不变</li>
 <li>频移键控（FSK）：利用载波的频率变化来传递数字信息</li>
 <li>相移键控（PSK）：利用载波的相位变化来传递数字信息，而振幅和频率保持不变</li>
 </ul>
-<img src="/2022/12/02/VLSI%20DSP%E4%B9%8B%E5%B8%A6%E9%80%9A%E8%B0%83%E5%88%B6%E4%B8%8E%E8%A7%A3%E8%B0%83/image-20221202133255807.png" alt="image-20221202133255807" style="zoom:50%;">
+<p><img src="/2022/12/02/VLSI%20DSP%E4%B9%8B%E5%B8%A6%E9%80%9A%E8%B0%83%E5%88%B6%E4%B8%8E%E8%A7%A3%E8%B0%83/image-20221202133255807.png" alt="image-20221202133255807" style="zoom:50%;"></p>
 </li>
 <li><p><strong>多进制数字调制</strong></p>
 <ul>
 <li><p>定义：在码元间隔$0\leq t\leq T_s$内，可能发送的码元有M种，M通常为2的整数幂，则称为M进制数字调制</p>
 </li>
-<li><p>误码率取决于信噪比$r$：<br>$$<br>r=\frac{A^2}{2\sigma_n^2}=\frac E{n_0}<br>$$</p>
-</li>
-<li><p>设多进制码元的进制数为M，码元能量为E，一个码元中包含信息k比特，则有：<br>$$<br>k=log_2M<br>$$</p>
-</li>
-<li><p>若码元能量E平均分配给每个比特，则每比特的能量$E_b$等于$\frac Ek$：<br>$$<br>\frac{E_b}{n_0}=\frac{E}{kn_0}=r_b<br>$$</p>
-</li>
+<li><p>误码率取决于信噪比$r$：</p>
+<script type="math/tex; mode=display">
+r=\frac{A^2}{2\sigma_n^2}=\frac E{n_0}</script></li>
+<li><p>设多进制码元的进制数为M，码元能量为E，一个码元中包含信息k比特，则有：</p>
+<script type="math/tex; mode=display">
+k=log_2M</script></li>
+<li><p>若码元能量E平均分配给每个比特，则每比特的能量$E_b$等于$\frac Ek$：</p>
+<script type="math/tex; mode=display">
+\frac{E_b}{n_0}=\frac{E}{kn_0}=r_b</script></li>
 </ul>
 </li>
 </ul>
 <hr>
 <h1 id="高阶调制与解调技术"><a href="#高阶调制与解调技术" class="headerlink" title="高阶调制与解调技术"></a>高阶调制与解调技术</h1><h2 id="1-多进制调制"><a href="#1-多进制调制" class="headerlink" title="1.多进制调制"></a>1.多进制调制</h2><ul>
-<li><p>原理：<br>$$<br>\because R_b=R_Blog_2M<br>$$</p>
-<p>$$<br>\therefore R_B一定时，增加调制阶数M，可以的增大R_b<br>$$</p>
-</li>
+<li><p>原理：</p>
+<script type="math/tex; mode=display">
+\because R_b=R_Blog_2M</script><script type="math/tex; mode=display">
+\therefore R_B一定时，增加调制阶数M，可以的增大R_b</script></li>
 <li><p>故在相同带宽内传输更多比特的信息，信道的频率效率提高至$log_2M$倍</p>
 </li>
 <li><p>但噪声容限会降低</p>
 </li>
-<li><p>暴露问题：随着M增加，距离减小，误码率增加</p>
-</li>
+<li>暴露问题：随着M增加，距离减小，误码率增加</li>
 </ul>
 <h2 id="2-MQAM调制"><a href="#2-MQAM调制" class="headerlink" title="2.MQAM调制"></a>2.MQAM调制</h2><ul>
 <li><p><strong>振幅和相位联合键控的调制方式</strong></p>
@@ -330,25 +334,26 @@
 <ul>
 <li><strong>随着调制阶数M增加：传输速率提升，相邻信号点距离减小，误码率提升</strong></li>
 </ul>
-<img src="/2022/12/02/VLSI%20DSP%E4%B9%8B%E5%B8%A6%E9%80%9A%E8%B0%83%E5%88%B6%E4%B8%8E%E8%A7%A3%E8%B0%83/image-20221202152932288.png" alt="image-20221202152932288" style="zoom: 50%;">
+<p><img src="/2022/12/02/VLSI%20DSP%E4%B9%8B%E5%B8%A6%E9%80%9A%E8%B0%83%E5%88%B6%E4%B8%8E%E8%A7%A3%E8%B0%83/image-20221202152932288.png" alt="image-20221202152932288" style="zoom: 50%;"></p>
 </li>
 <li><p><strong>16QAM信号的产生方法</strong>：</p>
 <ul>
 <li><p>正交调幅法：用两路独立的正交4ASK信号叠加，形成16QAM信号</p>
-<img src="/2022/12/02/VLSI%20DSP%E4%B9%8B%E5%B8%A6%E9%80%9A%E8%B0%83%E5%88%B6%E4%B8%8E%E8%A7%A3%E8%B0%83/image-20221202153301199.png" alt="image-20221202153301199" style="zoom: 50%;">
+<p><img src="/2022/12/02/VLSI%20DSP%E4%B9%8B%E5%B8%A6%E9%80%9A%E8%B0%83%E5%88%B6%E4%B8%8E%E8%A7%A3%E8%B0%83/image-20221202153301199.png" alt="image-20221202153301199" style="zoom: 50%;"></p>
 </li>
 <li><p>复合相移法：用两路独立的QPSK信号叠加，形成16QAM信号</p>
-<img src="/2022/12/02/VLSI%20DSP%E4%B9%8B%E5%B8%A6%E9%80%9A%E8%B0%83%E5%88%B6%E4%B8%8E%E8%A7%A3%E8%B0%83/image-20221202153456786.png" alt="image-20221202153456786" style="zoom: 50%;">
+<p><img src="/2022/12/02/VLSI%20DSP%E4%B9%8B%E5%B8%A6%E9%80%9A%E8%B0%83%E5%88%B6%E4%B8%8E%E8%A7%A3%E8%B0%83/image-20221202153456786.png" alt="image-20221202153456786" style="zoom: 50%;"></p>
 </li>
 </ul>
 </li>
 <li><p><strong>16QAM与16PSK的对比</strong>：</p>
-<img src="/2022/12/02/VLSI%20DSP%E4%B9%8B%E5%B8%A6%E9%80%9A%E8%B0%83%E5%88%B6%E4%B8%8E%E8%A7%A3%E8%B0%83/image-20221202153709312.png" alt="image-20221202153709312" style="zoom: 33%;">
+<p><img src="/2022/12/02/VLSI%20DSP%E4%B9%8B%E5%B8%A6%E9%80%9A%E8%B0%83%E5%88%B6%E4%B8%8E%E8%A7%A3%E8%B0%83/image-20221202153709312.png" alt="image-20221202153709312" style="zoom: 33%;"></p>
 </li>
 <li><p>MQAM解调系统仍是一种线性系统，解调后叠加的噪声仍为高斯白噪声</p>
 </li>
-<li><p>同相和正交信号电平数为：<br>$$<br>L=\sqrt M<br>$$</p>
-</li>
+<li><p>同相和正交信号电平数为：</p>
+<script type="math/tex; mode=display">
+L=\sqrt M</script></li>
 <li><p><strong>AWGN信道下的误比特率</strong>：</p>
 <ul>
 <li>MPSK与MQAM的误比特率随着M的增大而增大</li>
@@ -359,25 +364,25 @@
 <hr>
 <h1 id="OFDM调制与解调的原理"><a href="#OFDM调制与解调的原理" class="headerlink" title="OFDM调制与解调的原理"></a>OFDM调制与解调的原理</h1><ul>
 <li><p>OFDM系统把高速数据流通过串并转换，分解成若干低速的子数据流，用多个正交子载波去调制</p>
-<p><img src="/2022/12/02/VLSI%20DSP%E4%B9%8B%E5%B8%A6%E9%80%9A%E8%B0%83%E5%88%B6%E4%B8%8E%E8%A7%A3%E8%B0%83/image-20221202170259222.png" alt="image-20221202170259222"><br>$$<br>s(t)=\sum_{n=0}^{N-1}x(n)e^{j2\pi f_nt}<br>$$</p>
-<p>$$<br>r_m=\frac 1T\int_0^Ts(t)e^{-j2\pi f_mt}dt=\sum_{n=0}^{N-1}x(n)\frac 1T\int_0^Te^{j2\pi f_nt}e^{-j2\pi f_mt}dt<br>$$</p>
-</li>
+<p><img src="/2022/12/02/VLSI%20DSP%E4%B9%8B%E5%B8%A6%E9%80%9A%E8%B0%83%E5%88%B6%E4%B8%8E%E8%A7%A3%E8%B0%83/image-20221202170259222.png" alt="image-20221202170259222"></p>
+<script type="math/tex; mode=display">
+s(t)=\sum_{n=0}^{N-1}x(n)e^{j2\pi f_nt}</script><script type="math/tex; mode=display">
+r_m=\frac 1T\int_0^Ts(t)e^{-j2\pi f_mt}dt=\sum_{n=0}^{N-1}x(n)\frac 1T\int_0^Te^{j2\pi f_nt}e^{-j2\pi f_mt}dt</script></li>
 <li><p>信号的正交性：对于任意两个函数$S_1(t)$和$S_2(t)$，如果有$\int_0^TS_1(t)S_2(t)dt=0$，则函数$S_1(t)$和$S_2(t)$在区间$(0,T)$上正交</p>
 </li>
-<li><p>对于OFDM：若相邻子载波的频率间隔$\Delta f=\frac 1T$，则子载波相互正交，有：<br>$$<br>\frac1T\int_0^Te^{j2\pi f_nt}e^{-j2\pi f_mt}dt=\delta_{mn}=0(n≠m) \quad or\quad 1(n=m)<br>$$</p>
-<img src="/2022/12/02/VLSI%20DSP%E4%B9%8B%E5%B8%A6%E9%80%9A%E8%B0%83%E5%88%B6%E4%B8%8E%E8%A7%A3%E8%B0%83/image-20221202171223266.png" alt="image-20221202171223266" style="zoom: 33%;">
+<li><p>对于OFDM：若相邻子载波的频率间隔$\Delta f=\frac 1T$，则子载波相互正交，有：</p>
+<script type="math/tex; mode=display">
+\frac1T\int_0^Te^{j2\pi f_nt}e^{-j2\pi f_mt}dt=\delta_{mn}=0(n≠m) \quad or\quad 1(n=m)</script><p><img src="/2022/12/02/VLSI%20DSP%E4%B9%8B%E5%B8%A6%E9%80%9A%E8%B0%83%E5%88%B6%E4%B8%8E%E8%A7%A3%E8%B0%83/image-20221202171223266.png" alt="image-20221202171223266" style="zoom: 33%;"></p>
 </li>
 <li><p>OFDM系统频谱：每个载波在其自身取最大值时，其他载波都取0，降低了带宽</p>
-<img src="/2022/12/02/VLSI%20DSP%E4%B9%8B%E5%B8%A6%E9%80%9A%E8%B0%83%E5%88%B6%E4%B8%8E%E8%A7%A3%E8%B0%83/image-20221202171528968.png" alt="image-20221202171528968" style="zoom: 50%;">
-
+<p><img src="/2022/12/02/VLSI%20DSP%E4%B9%8B%E5%B8%A6%E9%80%9A%E8%B0%83%E5%88%B6%E4%B8%8E%E8%A7%A3%E8%B0%83/image-20221202171528968.png" alt="image-20221202171528968" style="zoom: 50%;"></p>
 </li>
 </ul>
 <hr>
 <h1 id="OFDM调制与解调的实现"><a href="#OFDM调制与解调的实现" class="headerlink" title="OFDM调制与解调的实现"></a>OFDM调制与解调的实现</h1><ul>
 <li><p>OFDM调制通过IFFT实现，解调通过FFT实现</p>
-<img src="/2022/12/02/VLSI%20DSP%E4%B9%8B%E5%B8%A6%E9%80%9A%E8%B0%83%E5%88%B6%E4%B8%8E%E8%A7%A3%E8%B0%83/image-20221202225312360.png" alt="image-20221202225312360" style="zoom: 33%;">
-
-<img src="/2022/12/02/VLSI%20DSP%E4%B9%8B%E5%B8%A6%E9%80%9A%E8%B0%83%E5%88%B6%E4%B8%8E%E8%A7%A3%E8%B0%83/image-20221202225342274.png" alt="image-20221202225342274" style="zoom: 33%;">
+<p><img src="/2022/12/02/VLSI%20DSP%E4%B9%8B%E5%B8%A6%E9%80%9A%E8%B0%83%E5%88%B6%E4%B8%8E%E8%A7%A3%E8%B0%83/image-20221202225312360.png" alt="image-20221202225312360" style="zoom: 33%;"></p>
+<p><img src="/2022/12/02/VLSI%20DSP%E4%B9%8B%E5%B8%A6%E9%80%9A%E8%B0%83%E5%88%B6%E4%B8%8E%E8%A7%A3%E8%B0%83/image-20221202225342274.png" alt="image-20221202225342274" style="zoom: 33%;"></p>
 </li>
 <li><p>系统设计需考虑的参数：</p>
 <ul>
@@ -392,9 +397,9 @@
 <li>各子载波间距的大小也受到载波偏移及相位稳定度的影响</li>
 <li>子载波的数量根据信道带宽、数据速率以及符号周期来确定</li>
 </ul>
-<p>$$<br>两个最近子载波的间隔=\frac1{OFDM符号长度}<br>$$</p>
-<p>$$<br>子载波个数=\frac{带宽}{两个最近子载波的间距}<br>$$</p>
-</li>
+<script type="math/tex; mode=display">
+两个最近子载波的间隔=\frac1{OFDM符号长度}</script><script type="math/tex; mode=display">
+子载波个数=\frac{带宽}{两个最近子载波的间距}</script></li>
 <li><p>调制与信道编码：</p>
 <ul>
 <li>由误码率决定</li>
@@ -552,7 +557,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-count">156</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

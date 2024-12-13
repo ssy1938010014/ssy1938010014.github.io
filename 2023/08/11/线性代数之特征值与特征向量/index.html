@@ -272,22 +272,16 @@
       
         <p>本节主要介绍了矩阵的特征值与特征向量、相似矩阵、矩阵可对角化的条件以及实对称矩阵的对角化</p>
 <span id="more"></span>
-
 <h1 id="矩阵的特征值与特征向量"><a href="#矩阵的特征值与特征向量" class="headerlink" title="矩阵的特征值与特征向量"></a>矩阵的特征值与特征向量</h1><h2 id="1-基本概念"><a href="#1-基本概念" class="headerlink" title="1.基本概念"></a>1.基本概念</h2><ul>
-<li><p><strong>A是n阶方阵，对于一个数$\lambda$，存在非零列向量，使得$A\alpha=\lambda\alpha$成立，那么$\lambda$为特征值，$\alpha$为对应$\lambda$的特征向量</strong></p>
-</li>
-<li><p>$\lambda$可以为0，但特征向量不能为0向量</p>
-</li>
-<li><p><strong>特征方程</strong>：$|\lambda E-A|=0$</p>
-<ul>
+<li><strong>A是n阶方阵，对于一个数$\lambda$，存在非零列向量，使得$A\alpha=\lambda\alpha$成立，那么$\lambda$为特征值，$\alpha$为对应$\lambda$的特征向量</strong></li>
+<li>$\lambda$可以为0，但特征向量不能为0向量</li>
+<li><strong>特征方程</strong>：$|\lambda E-A|=0$<ul>
 <li><strong>通过求解特征方程计算$\lambda$，求出$\lambda$后带入$(\lambda E-A)\alpha=0$中求解齐次方程，而方程的基础解系就是特征向量</strong></li>
 <li>若能证明两个矩阵的$|\lambda E-A|$相等，那么就说明这两个矩阵有相同的特征值</li>
 </ul>
 </li>
-<li><p><strong>$\lambda$是A的特征值，$\alpha$是$\lambda$对应的特征向量，则$c\alpha$也是$\lambda$的特征向量$(c\ne 0)$</strong></p>
-</li>
-<li><p>一个特征向量只能对应一个特征值</p>
-</li>
+<li><strong>$\lambda$是A的特征值，$\alpha$是$\lambda$对应的特征向量，则$c\alpha$也是$\lambda$的特征向量$(c\ne 0)$</strong></li>
+<li>一个特征向量只能对应一个特征值</li>
 <li><p><strong>若$\alpha_1,\alpha_2$是$\lambda$的特征向量，则$c_1\alpha_1+c_2\alpha_2$也是$\lambda$的特征向量</strong></p>
 </li>
 <li><p><strong>上三角矩阵中，n阶对角线上的特征值就是主对角线上的n个元素</strong></p>
@@ -332,21 +326,32 @@
 </li>
 <li><p>若A有n个不相同的特征根，则A相似于对角形</p>
 </li>
-<li><p>对角形矩阵为：<br>$$<br>\begin{bmatrix}<br>\lambda_{1} &amp; 0 &amp; \dots &amp; 0\<br>0 &amp; \lambda_{2} &amp; \dots &amp; 0\<br>\dots &amp; \dots &amp; \dots &amp; \dots \<br>0 &amp; 0 &amp; \dots &amp; \lambda_{n}\<br>\end{bmatrix}<br>$$</p>
-</li>
-<li><p>可逆矩阵P为：<br>$$<br>P=\begin{bmatrix}<br>\alpha_{1} &amp; \alpha_{2} &amp; \dots &amp; \alpha_{n}<br>\end{bmatrix}<br>$$</p>
-</li>
+<li><p>对角形矩阵为：</p>
+<script type="math/tex; mode=display">
+\begin{bmatrix}
+\lambda_{1} & 0 & \dots & 0\\
+0 & \lambda_{2} & \dots & 0\\
+\dots & \dots & \dots & \dots \\
+0 & 0 & \dots & \lambda_{n}\\
+\end{bmatrix}</script></li>
+<li><p>可逆矩阵P为：</p>
+<script type="math/tex; mode=display">
+P=\begin{bmatrix}
+\alpha_{1} & \alpha_{2} & \dots & \alpha_{n}
+\end{bmatrix}</script></li>
 <li><p><strong>A相似于对角形矩阵$\Leftrightarrow r_i$重根的基础解系有$r_i$个</strong></p>
-<img src="/2023/08/11/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%E4%B9%8B%E7%89%B9%E5%BE%81%E5%80%BC%E4%B8%8E%E7%89%B9%E5%BE%81%E5%90%91%E9%87%8F/image-20230811135014738.png" alt="image-20230811135014738" style="zoom: 33%;">
-
+<p><img src="/2023/08/11/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0%E4%B9%8B%E7%89%B9%E5%BE%81%E5%80%BC%E4%B8%8E%E7%89%B9%E5%BE%81%E5%90%91%E9%87%8F/image-20230811135014738.png" alt="image-20230811135014738" style="zoom: 33%;"></p>
 </li>
 </ul>
 <hr>
 <h1 id="实对称矩阵的对角化"><a href="#实对称矩阵的对角化" class="headerlink" title="实对称矩阵的对角化"></a>实对称矩阵的对角化</h1><h2 id="1-向量的长度（范数、模）"><a href="#1-向量的长度（范数、模）" class="headerlink" title="1.向量的长度（范数、模）"></a>1.向量的长度（范数、模）</h2><ul>
-<li><p>计算公式：<br>$$<br>||\alpha||=\sqrt{(\alpha,\alpha)}<br>$$<br>其中(,)表示进行内积运算</p>
+<li><p>计算公式：</p>
+<script type="math/tex; mode=display">
+||\alpha||=\sqrt{(\alpha,\alpha)}</script><p>其中(,)表示进行内积运算</p>
 </li>
-<li><p>单位化（标准化）：使得模值为1<br>$$<br>\frac1{||\alpha||}\alpha<br>$$</p>
-</li>
+<li><p>单位化（标准化）：使得模值为1</p>
+<script type="math/tex; mode=display">
+\frac1{||\alpha||}\alpha</script></li>
 <li><p>相关性质</p>
 <ul>
 <li>$||\alpha||\ge 0$</li>
@@ -354,25 +359,31 @@
 <li>$||k\alpha||=|k|\cdot||\alpha||$</li>
 </ul>
 </li>
-<li><p><strong>柯西-施瓦茨不等式</strong>：<br>$$<br>|(\alpha,\beta)|\le ||\alpha||\cdot||\beta||<br>$$</p>
-</li>
-<li><p><strong>三角形不等式</strong>：<br>$$<br>||\alpha+\beta||\le ||\alpha||+||\beta||<br>$$</p>
-</li>
+<li><p><strong>柯西-施瓦茨不等式</strong>：</p>
+<script type="math/tex; mode=display">
+|(\alpha,\beta)|\le ||\alpha||\cdot||\beta||</script></li>
+<li><p><strong>三角形不等式</strong>：</p>
+<script type="math/tex; mode=display">
+||\alpha+\beta||\le ||\alpha||+||\beta||</script></li>
 </ul>
 <h2 id="2-正交（垂直）"><a href="#2-正交（垂直）" class="headerlink" title="2.正交（垂直）"></a>2.正交（垂直）</h2><ul>
 <li><p>定义：$(\alpha,\beta)=0$</p>
 </li>
 <li><p>正交向量组：<strong>不含零向量</strong>的一组$a_1,a_2,…,a_s$向量两两正交</p>
 </li>
-<li><p>标准正交向量组：<br>$$<br>\begin{cases}<br>(\alpha_i,\alpha_i)=1\<br>(\alpha_i,\alpha_j)=0<br>\end{cases}\<br>$$</p>
-</li>
+<li><p>标准正交向量组：</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+(\alpha_i,\alpha_i)=1\\
+(\alpha_i,\alpha_j)=0
+\end{cases}\\</script></li>
 <li><p>定理：<strong>$a_1,a_2,…,a_s$是正交向量组，则$a_1,a_2,…,a_s$是线性无关的</strong></p>
 </li>
 </ul>
 <h2 id="3-正交矩阵"><a href="#3-正交矩阵" class="headerlink" title="3.正交矩阵"></a>3.正交矩阵</h2><ul>
 <li>定义：A为n阶方阵，若满足$A^T A=E$，则A为正交矩阵</li>
 <li>相关性质：<ul>
-<li>若A为正交矩阵，那么$|A|=1,or,-1$</li>
+<li>若A为正交矩阵，那么$|A|=1\,or\,-1$</li>
 <li><strong>若A为正交矩阵，那么$A^{-1}=A^T$，且$A^{-1}$和$A^T$均为正交矩阵</strong></li>
 <li>若A、B为正交矩阵，那么AB也为正交矩阵</li>
 <li>若A为正交矩阵，$\alpha,\beta$为列向量，则$(A\alpha,A\beta)=(\alpha,\beta)$</li>
@@ -519,7 +530,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-count">156</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

@@ -277,15 +277,13 @@
       
         <p>本节主要介绍了雷达目标距离测量的两种方式：脉冲法与调频法。</p>
 <span id="more"></span>
-
 <h1 id="脉冲法测距"><a href="#脉冲法测距" class="headerlink" title="脉冲法测距"></a>脉冲法测距</h1><h2 id="1-基本原理"><a href="#1-基本原理" class="headerlink" title="1.基本原理"></a>1.基本原理</h2><ul>
 <li><p>目标到雷达的距离的计算公式为$R=\frac{1}{2}Ct_R$，时间$t_R$就是回波相对于发射信号的延迟，因此，目标距离测量就是要精确测量延迟时间$t_R$</p>
 </li>
 <li><p>有两种定义回波到达时间$t_R$的方法：一种是以目标回波脉冲的前沿作为它的到达时刻；另一种是以回波脉冲的<strong>中心（或最大值）</strong> 作为它的到达时刻</p>
 </li>
 <li><p>回波脉冲中心估计</p>
-<img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%B7%9D%E7%A6%BB%E6%B5%8B%E9%87%8F/image-20221117231223154.png" alt="image-20221117231223154" style="zoom:50%;">
-
+<p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%B7%9D%E7%A6%BB%E6%B5%8B%E9%87%8F/image-20221117231223154.png" alt="image-20221117231223154" style="zoom:50%;"></p>
 </li>
 </ul>
 <h2 id="2-影响测距精度的因素"><a href="#2-影响测距精度的因素" class="headerlink" title="2.影响测距精度的因素"></a>2.影响测距精度的因素</h2><ul>
@@ -293,22 +291,19 @@
 </li>
 <li><p>时间差的影响：$d{t_R}\downarrow,d{R}\downarrow$</p>
 </li>
-<li><p>传播速度变化的影响：$\frac{dR}R\propto \frac{dC}C$</p>
-</li>
-<li><p>大气折射的影响</p>
-</li>
-<li><p>测读方法误差</p>
-</li>
+<li>传播速度变化的影响：$\frac{dR}R\propto \frac{dC}C$</li>
+<li>大气折射的影响</li>
+<li>测读方法误差</li>
 </ul>
 <h2 id="3-距离分辨率"><a href="#3-距离分辨率" class="headerlink" title="3.距离分辨率"></a>3.距离分辨率</h2><ul>
-<li><p>距离分辨率$\Delta R$是指同一方向上两个大小相等点目标之间的最小可区分距离<br>$$<br>\Delta R=\frac12C(\tau+\frac d{V_n})<br>$$</p>
-<p>$$<br>其中，d:光电直径(m);V_n:扫掠速度(m/s)<br>$$</p>
-</li>
+<li><p>距离分辨率$\Delta R$是指同一方向上两个大小相等点目标之间的最小可区分距离</p>
+<script type="math/tex; mode=display">
+\Delta R=\frac12C(\tau+\frac d{V_n})</script><script type="math/tex; mode=display">
+其中，d:光电直径(m);V_n:扫掠速度(m/s)</script></li>
 <li><p>通常希望距离分辨率$\Delta R$越小越好，但$\Delta R\downarrow,\Rightarrow\tau\downarrow,\Rightarrow  R_{max}\downarrow$，故存在距离分辨力和最大作用距离的矛盾问题</p>
 </li>
 <li><p>解决上述问题的办法：<strong>发射脉冲压缩波形，比如线性调频信号，接收时对回波进行匹配滤波</strong></p>
-<img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%B7%9D%E7%A6%BB%E6%B5%8B%E9%87%8F/image-20221117234512550.png" alt="image-20221117234512550" style="zoom:33%;">
-
+<p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%B7%9D%E7%A6%BB%E6%B5%8B%E9%87%8F/image-20221117234512550.png" alt="image-20221117234512550" style="zoom:33%;"></p>
 <ul>
 <li>采用-4dB的点的宽度来表示辛克函数的宽度，此时对应的时间为$\frac1B$</li>
 <li>则脉压雷达的距离分辨率为：$\Delta R=\frac12C\cdot\frac1B$</li>
@@ -324,8 +319,9 @@
 </li>
 <li><p>最大无模糊作用距离：$R_{max}=\frac12CT_r$，<strong>其出现原因是最大距离大于脉冲重复周期$T_r$，不能确定距离跨越了几个$T_r$周期</strong></p>
 </li>
-<li><p>雷达探测目标，首先应该考虑达到最大作用距离，这时$T_r$就确定下来了。再来考虑是否满足最大无模糊距离。如果不满足，就需要解模糊<br>$$<br>R=\frac12Ct_R=\frac12C(mT_r+t_r);0\le t_r&lt;T_r<br>$$</p>
-<ul>
+<li><p>雷达探测目标，首先应该考虑达到最大作用距离，这时$T_r$就确定下来了。再来考虑是否满足最大无模糊距离。如果不满足，就需要解模糊</p>
+<script type="math/tex; mode=display">
+R=\frac12Ct_R=\frac12C(mT_r+t_r);0\le t_r<T_r</script><ul>
 <li><p>$R$：目标到雷达的距离</p>
 </li>
 <li><p>$m$：假设跨了$m$个周期</p>
@@ -335,87 +331,99 @@
 </ul>
 </li>
 </ul>
-<h2 id="5-距离模糊的判决方法（重频参差（两重频））"><a href="#5-距离模糊的判决方法（重频参差（两重频））" class="headerlink" title="5.距离模糊的判决方法（重频参差（两重频））"></a>5.距离模糊的判决方法（重频参差（两重频））</h2><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%B7%9D%E7%A6%BB%E6%B5%8B%E9%87%8F/image-20230917160314632.png" alt="image-20230917160314632" style="zoom: 67%;">
-
-<img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%B7%9D%E7%A6%BB%E6%B5%8B%E9%87%8F/image-20230917160245645.png" alt="image-20230917160245645" style="zoom: 33%;">
-
+<h2 id="5-距离模糊的判决方法（重频参差（两重频））"><a href="#5-距离模糊的判决方法（重频参差（两重频））" class="headerlink" title="5.距离模糊的判决方法（重频参差（两重频））"></a>5.距离模糊的判决方法（重频参差（两重频））</h2><p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%B7%9D%E7%A6%BB%E6%B5%8B%E9%87%8F/image-20230917160314632.png" alt="image-20230917160314632" style="zoom: 67%;"></p>
+<p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%B7%9D%E7%A6%BB%E6%B5%8B%E9%87%8F/image-20230917160245645.png" alt="image-20230917160245645" style="zoom: 33%;"></p>
 <ul>
-<li><p>$t_1,t_2$是发射脉冲1和发射脉冲2接收到的回波与最近的发射脉冲之间的时间差，<strong>应满足如下条件</strong>：<br>$$<br>0\le t_1\le T_{r1}<br>$$</p>
-<p>$$<br>0\le t_2\le T_{r2}<br>$$</p>
-<ul>
+<li><p>$t_1,t_2$是发射脉冲1和发射脉冲2接收到的回波与最近的发射脉冲之间的时间差，<strong>应满足如下条件</strong>：</p>
+<script type="math/tex; mode=display">
+0\le t_1\le T_{r1}</script><script type="math/tex; mode=display">
+0\le t_2\le T_{r2}</script><ul>
 <li>两种PRF下发射的脉冲数目互斥，如选取：$f_{r1} = N\cdot f_{rd}、f_{r2}=(N+1)\cdot f_{rd}$</li>
 <li><strong>在一个期望的脉冲重复周期（PRI）内，两种发射信号的回波仅在一个时延位置上重合，这就是真正的目标位置</strong></li>
 </ul>
 </li>
 <li><p>设$n_1,n_2$为两组发射脉冲的跨周期数</p>
 </li>
-<li><p>则当两发射信号的回波在同一个时刻重合时，有：<br>$$<br>t_R=t_1+n1\frac1{f_{r1}}=t_2+n_2\frac1{f_{r2}}<br>$$</p>
-</li>
+<li><p>则当两发射信号的回波在同一个时刻重合时，有：</p>
+<script type="math/tex; mode=display">
+t_R=t_1+n1\frac1{f_{r1}}=t_2+n_2\frac1{f_{r2}}</script></li>
 <li><p><strong>两种发射信号的回波仅在一个时延位置上重合，这就是真正的目标位置（因为目标与雷达之间的距离是确定的，无论脉冲重复频率怎么变，同一时间发出的脉冲，回波到达雷达的时间是相等的）</strong></p>
 </li>
-<li><p>$f_{r1},f_{r2}$可以看成一个基础频率$f_r$上的倍频，有：<br>$$<br>f_{r1}=(N+a)f_r<br>$$</p>
-<p>$$<br>f_{r2}=Nf_r<br>$$</p>
-</li>
-<li><p>通常取$a=1$（图中$N=4$），则有：<br>$$<br>\frac{f_{r1}}{f_{r2}}=\frac{N+1}{N}<br>$$</p>
-</li>
+<li><p>$f_{r1},f_{r2}$可以看成一个基础频率$f_r$上的倍频，有：</p>
+<script type="math/tex; mode=display">
+f_{r1}=(N+a)f_r</script><script type="math/tex; mode=display">
+f_{r2}=Nf_r</script></li>
+<li><p>通常取$a=1$（图中$N=4$），则有：</p>
+<script type="math/tex; mode=display">
+\frac{f_{r1}}{f_{r2}}=\frac{N+1}{N}</script></li>
 <li><p>当$a=1$时，$n_1,n_2$的关系有两种可能，即$n_1=n_2$和$n_1=n_2+1$：</p>
 <ul>
-<li><p>当$n_1=n_2(t_1&gt;t_2)$时，可得：<br>$$<br>t_R=\frac{t_1f_{r1}-t_2f_{r2}}{f_{r1}-f_{r2}}<br>$$</p>
-</li>
-<li><p>当$n_1=n_2+1(t_1&lt;t_2)$时，可得：<br>$$<br>t_R=\frac{t_1f_{r1}-t_2f_{r2}+1}{f_{r1}-f_{r2}}<br>$$</p>
-</li>
+<li><p>当$n_1=n_2(t_1&gt;t_2)$时，可得：</p>
+<script type="math/tex; mode=display">
+t_R=\frac{t_1f_{r1}-t_2f_{r2}}{f_{r1}-f_{r2}}</script></li>
+<li><p>当$n_1=n_2+1(t_1&lt;t_2)$时，可得：</p>
+<script type="math/tex; mode=display">
+t_R=\frac{t_1f_{r1}-t_2f_{r2}+1}{f_{r1}-f_{r2}}</script></li>
 </ul>
 </li>
-<li><p><strong>重频参差的最大模糊距离</strong>：<br>$$<br>R_{max}=\frac12c(T_{r1}和T_{r2}的最小公倍数)<br>$$</p>
-</li>
+<li><p><strong>重频参差的最大模糊距离</strong>：</p>
+<script type="math/tex; mode=display">
+R_{max}=\frac12c(T_{r1}和T_{r2}的最小公倍数)</script></li>
 <li><p><strong>重频参差并没有消除距离模糊的问题，而是将最大模糊距离扩大了</strong></p>
 </li>
 </ul>
 <hr>
 <h1 id="调频法测距（三角形波调制测距）"><a href="#调频法测距（三角形波调制测距）" class="headerlink" title="调频法测距（三角形波调制测距）"></a>调频法测距（三角形波调制测距）</h1><ul>
 <li><p>发射频率按周期性三角波形的规律变化：</p>
-<img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%B7%9D%E7%A6%BB%E6%B5%8B%E9%87%8F/image-20221118111033034.png" alt="image-20221118111033034" style="zoom:50%;">
+<p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%B7%9D%E7%A6%BB%E6%B5%8B%E9%87%8F/image-20221118111033034.png" alt="image-20221118111033034" style="zoom:50%;"></p>
 </li>
 <li><p><strong>正程</strong>：</p>
 <ul>
 <li><p>发射频率：$f(t)=f_0+\mu t$，其对应的发射信号的时域表达式为：$S_t(t)=Acos(2\pi f_0t+\pi\mu t^2)$</p>
 </li>
-<li><p>则接收信号的时域表示：<br>$$<br>S_r(t)=kS_t(t-t_r)=kAcos(2\pi f_0(t-\frac{2(R_0-v_tt)}{C})+\pi\mu(t-\frac{2(R_0-v_tt)}{C})^2)<br>$$</p>
-<ul>
+<li><p>则接收信号的时域表示：</p>
+<script type="math/tex; mode=display">
+S_r(t)=kS_t(t-t_r)=kAcos(2\pi f_0(t-\frac{2(R_0-v_tt)}{C})+\pi\mu(t-\frac{2(R_0-v_tt)}{C})^2)</script><ul>
 <li>$v_t$：目标相对于雷达的径向速度</li>
 <li>$R_0$：目标到雷达的初始距离</li>
 </ul>
 </li>
-<li><p>$S_r(t)$对时间求导，可以得到接收信号的频率$f_r$：<br>$$<br>f_r=f_0+\frac{2v_t}{\lambda}+\mu(t-\frac{2R_0}{C})(1+\frac{2v_t}{C})<br>$$</p>
-<ul>
+<li><p>$S_r(t)$对时间求导，可以得到接收信号的频率$f_r$：</p>
+<script type="math/tex; mode=display">
+f_r=f_0+\frac{2v_t}{\lambda}+\mu(t-\frac{2R_0}{C})(1+\frac{2v_t}{C})</script><ul>
 <li>由于多普勒频率$f_d=\frac{2v_t}{\lambda}$，$C&gt;&gt;v$</li>
 <li>则：</li>
 </ul>
-<p>$$<br>f_r=f_0+f_d+\mu(t-\frac{2R_0}C)<br>$$</p>
-</li>
+<script type="math/tex; mode=display">
+f_r=f_0+f_d+\mu(t-\frac{2R_0}C)</script></li>
 </ul>
 </li>
 <li><p><strong>逆程</strong>：</p>
 <ul>
 <li><p>发射频率：$f_t=f_0-\mu t$</p>
 </li>
-<li><p>与正程推理相同，则可得到接收频率$f_r$：<br>$$<br>f_r=f_0-\mu(t-\frac{2R_0}C)+f_d<br>$$</p>
-</li>
+<li><p>与正程推理相同，则可得到接收频率$f_r$：</p>
+<script type="math/tex; mode=display">
+f_r=f_0-\mu(t-\frac{2R_0}C)+f_d</script></li>
 </ul>
 </li>
 <li><p>则物体无运动，忽略$f_d$，有：</p>
-<img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%B7%9D%E7%A6%BB%E6%B5%8B%E9%87%8F/image-20221118112818465.png" alt="image-20221118112818465" style="zoom:50%;">
+<p><img src="/2022/11/17/%E9%9B%B7%E8%BE%BE%E5%8E%9F%E7%90%86%E4%B9%8B%E7%9B%AE%E6%A0%87%E8%B7%9D%E7%A6%BB%E6%B5%8B%E9%87%8F/image-20221118112818465.png" alt="image-20221118112818465" style="zoom:50%;"></p>
 </li>
 <li><p>求差频的平均值：</p>
 <ul>
-<li><p>正程频率差$f_{b^+}$：<br>$$<br>f_{b^+}=f_t-f_r=\frac{2\mu R_0}{C}-f_d<br>$$</p>
-</li>
-<li><p>负程频率差$f_{b^-}$：<br>$$<br>f_{b^-}=f_r-f_t=\frac{2\mu R_0}{C}+f_d<br>$$</p>
-</li>
-<li><p>频率计测得的差频的平均值$F_{bav}$：<br>$$<br>F_{bav}=\frac{f_{b^+}+f_{b^-}}{2}=\frac{2\mu R_0}C<br>$$</p>
-</li>
-<li><p>则：<br>$$<br>R_0=\frac{CF_{bav}}{2\mu}<br>$$</p>
-</li>
+<li><p>正程频率差$f_{b^+}$：</p>
+<script type="math/tex; mode=display">
+f_{b^+}=f_t-f_r=\frac{2\mu R_0}{C}-f_d</script></li>
+<li><p>负程频率差$f_{b^-}$：</p>
+<script type="math/tex; mode=display">
+f_{b^-}=f_r-f_t=\frac{2\mu R_0}{C}+f_d</script></li>
+<li><p>频率计测得的差频的平均值$F_{bav}$：</p>
+<script type="math/tex; mode=display">
+F_{bav}=\frac{f_{b^+}+f_{b^-}}{2}=\frac{2\mu R_0}C</script></li>
+<li><p>则：</p>
+<script type="math/tex; mode=display">
+R_0=\frac{CF_{bav}}{2\mu}</script></li>
 </ul>
 </li>
 </ul>
@@ -554,7 +562,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-count">156</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

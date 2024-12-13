@@ -278,18 +278,17 @@
       
         <p>本节主要介绍了编写状态机时要注意的细节，后续在实际工作中遇到状态机的坑也会在此记录。</p>
 <span id="more"></span>
-
 <h1 id="状态机的编码方式"><a href="#状态机的编码方式" class="headerlink" title="状态机的编码方式"></a>状态机的编码方式</h1><ul>
 <li><p>具体的编码方式有三种：</p>
 <ul>
 <li><p><strong>顺序码</strong>：状态编码遵循传统的状态二进制序列</p>
- <img src="/2024/02/25/FPGA%E8%AE%BE%E8%AE%A1%E9%AB%98%E7%BA%A7%E6%8A%80%E5%B7%A7%E4%B9%8B%E7%8A%B6%E6%80%81%E6%9C%BA/image-20240411221917212.png" alt="image-20240411221917212" style="zoom: 50%;">
+<p> <img src="/2024/02/25/FPGA%E8%AE%BE%E8%AE%A1%E9%AB%98%E7%BA%A7%E6%8A%80%E5%B7%A7%E4%B9%8B%E7%8A%B6%E6%80%81%E6%9C%BA/image-20240411221917212.png" alt="image-20240411221917212" style="zoom: 50%;"></p>
 </li>
 <li><p><strong>格雷码</strong>：除了相邻状态编码之间只有一个位变化外，其他和顺序码类似</p>
- <img src="/2024/02/25/FPGA%E8%AE%BE%E8%AE%A1%E9%AB%98%E7%BA%A7%E6%8A%80%E5%B7%A7%E4%B9%8B%E7%8A%B6%E6%80%81%E6%9C%BA/image-20240411221940827.png" alt="image-20240411221940827" style="zoom:50%;">
+<p> <img src="/2024/02/25/FPGA%E8%AE%BE%E8%AE%A1%E9%AB%98%E7%BA%A7%E6%8A%80%E5%B7%A7%E4%B9%8B%E7%8A%B6%E6%80%81%E6%9C%BA/image-20240411221940827.png" alt="image-20240411221940827" style="zoom:50%;"></p>
 </li>
 <li><p><strong>独热码</strong>：这种方法是在状态机中为每一种状态分配一个触发器。只有一个触发器当前设置有效，其余均设置为无效，故称为“独热”</p>
- <img src="/2024/02/25/FPGA%E8%AE%BE%E8%AE%A1%E9%AB%98%E7%BA%A7%E6%8A%80%E5%B7%A7%E4%B9%8B%E7%8A%B6%E6%80%81%E6%9C%BA/image-20240411221954703.png" alt="image-20240411221954703" style="zoom:50%;">
+<p> <img src="/2024/02/25/FPGA%E8%AE%BE%E8%AE%A1%E9%AB%98%E7%BA%A7%E6%8A%80%E5%B7%A7%E4%B9%8B%E7%8A%B6%E6%80%81%E6%9C%BA/image-20240411221954703.png" alt="image-20240411221954703" style="zoom:50%;"></p>
 </li>
 </ul>
 </li>
@@ -305,7 +304,7 @@
 <li><p>三进程状态机又分为两种，第一种是输出进程使用组合逻辑进行描述；第二种是使用时序逻辑对输出进行描述，其余两个进程完全相同</p>
 </li>
 <li><p><strong>一般来说，使用寄存器输出可以改变输出的时序条件，还能避免组合电路的毛刺，所以是推荐的描述方式</strong></p>
-<img src="/2024/02/25/FPGA%E8%AE%BE%E8%AE%A1%E9%AB%98%E7%BA%A7%E6%8A%80%E5%B7%A7%E4%B9%8B%E7%8A%B6%E6%80%81%E6%9C%BA/image-20240411220452371.png" alt="image-20240411220452371" style="zoom: 33%;">
+<p><img src="/2024/02/25/FPGA%E8%AE%BE%E8%AE%A1%E9%AB%98%E7%BA%A7%E6%8A%80%E5%B7%A7%E4%B9%8B%E7%8A%B6%E6%80%81%E6%9C%BA/image-20240411220452371.png" alt="image-20240411220452371" style="zoom: 33%;"></p>
 </li>
 <li><p>上述<strong>这种结构可以有效地抑制过渡状态的出现，这是因为输出寄存器只要求状态值在时钟边沿稳定</strong></p>
 </li>
@@ -317,7 +316,7 @@
 <li><p>如果使用的是SystemVerilog，一定要使用<strong>枚举类型</strong>来描述状态机</p>
 </li>
 <li><p>如果在状态转换逻辑中使用了下例所示的<strong>算术运算</strong>，那么综合工具将不会识别状态机</p>
-<img src="/2024/02/25/FPGA%E8%AE%BE%E8%AE%A1%E9%AB%98%E7%BA%A7%E6%8A%80%E5%B7%A7%E4%B9%8B%E7%8A%B6%E6%80%81%E6%9C%BA/image-20240411221339251.png" alt="image-20240411221339251" style="zoom:33%;">
+<p><img src="/2024/02/25/FPGA%E8%AE%BE%E8%AE%A1%E9%AB%98%E7%BA%A7%E6%8A%80%E5%B7%A7%E4%B9%8B%E7%8A%B6%E6%80%81%E6%9C%BA/image-20240411221339251.png" alt="image-20240411221339251" style="zoom:33%;"></p>
 </li>
 <li><p><strong>如果将状态变量作为输出</strong>，那么综合工具将无法识别状态机</p>
 </li>
@@ -330,7 +329,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">#run.do文件中#代表注释</span><br><span class="line"></span><br><span class="line">#退出当前仿真功能</span><br><span class="line">quit -sim</span><br><span class="line">#清除命令行显示信息</span><br><span class="line">.main clear</span><br><span class="line"></span><br><span class="line">#vlib为创建库</span><br><span class="line">vlib	./lib/</span><br><span class="line">vlib	./lib/work_a/</span><br><span class="line">vlib	./lib/design/</span><br><span class="line">#映射逻辑库名，将逻辑库名映射库路径</span><br><span class="line">vmap	base_space ./lib/work_a/</span><br><span class="line">vmap	design	./lib/design/</span><br><span class="line"></span><br><span class="line">#vlog -work代表编译</span><br><span class="line">vlog	-work base_space	./tb_mealy.v</span><br><span class="line">vlog	-work design		./../design/*.v</span><br><span class="line">#vsim为启动仿真</span><br><span class="line">#-t 运行仿真的时间精度是ns</span><br><span class="line">#-L 是链接库关键字</span><br><span class="line">vsim	-t ns  -voptargs=+acc -L base_space -L design base_space.tb_mealy</span><br><span class="line"></span><br><span class="line">#用虚拟信号表示状态信息</span><br><span class="line">virtual	type &#123;</span><br><span class="line">&#123;01 S1&#125;</span><br><span class="line">&#123;02 S2&#125;</span><br><span class="line">&#123;04 S3&#125;</span><br><span class="line">&#123;08 S4&#125;</span><br><span class="line">&#123;10 S5&#125;</span><br><span class="line">&#123;20 S6&#125;</span><br><span class="line">&#125; vir_new_signal</span><br><span class="line"></span><br><span class="line">#add wave用来添加波形</span><br><span class="line">#-divider用来分组</span><br><span class="line">add wave	-divider &#123;tb_mealy_1&#125;</span><br><span class="line">add wave	tb_mealy/*</span><br><span class="line">add wave	-divider &#123;mealy&#125;</span><br><span class="line">#顶层/例化的名字/* 其中*号是通配符，匹配所有信号</span><br><span class="line">add wave	tb_mealy/mealy_inst/*</span><br><span class="line">#创建一个vir_new_signal 类型的信号，也就是把Currt_st进行类型转换</span><br><span class="line">virtual	function &#123;(vir_new_signal)tb_mealy/mealy_inst/Curr_st&#125; new_state</span><br><span class="line">add wave  -color red	tb_mealy/mealy_inst/new_state</span><br><span class="line"></span><br><span class="line">run 1us</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>对应文件夹（在sim文件夹下建一个modelsim工程）：</p>
- <img src="/2024/02/25/FPGA%E8%AE%BE%E8%AE%A1%E9%AB%98%E7%BA%A7%E6%8A%80%E5%B7%A7%E4%B9%8B%E7%8A%B6%E6%80%81%E6%9C%BA/image-20240306222959762.png" alt="image-20240306222959762" style="zoom:80%;">
+<p> <img src="/2024/02/25/FPGA%E8%AE%BE%E8%AE%A1%E9%AB%98%E7%BA%A7%E6%8A%80%E5%B7%A7%E4%B9%8B%E7%8A%B6%E6%80%81%E6%9C%BA/image-20240306222959762.png" alt="image-20240306222959762" style="zoom:80%;"></p>
 </li>
 <li><p>如果因为<code>-voptargs=+acc</code>报错，见<a target="_blank" rel="noopener" href="https://blog.csdn.net/Tina_yaoyao/article/details/45127259">关于 modelsim仿真时出现No objects found matching ‘/*’问题-CSDN博客</a>第一种解决办法即可</p>
 </li>
@@ -339,7 +338,6 @@
 </li>
 </ul>
 <h2 id="2-testbench运用task的某写法"><a href="#2-testbench运用task的某写法" class="headerlink" title="2.testbench运用task的某写法"></a>2.testbench运用task的某写法</h2><figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">task</span> in_data();</span><br><span class="line">	<span class="keyword">integer</span> i;</span><br><span class="line">	<span class="keyword">begin</span></span><br><span class="line">		<span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;<span class="number">1024</span>;i=i+<span class="number">1</span>)	</span><br><span class="line">		<span class="keyword">begin</span></span><br><span class="line">			@(<span class="keyword">posedge</span> sclk);	<span class="comment">/****for循环里面包含@(clk)，这写法有点意思******/</span></span><br><span class="line">			<span class="keyword">if</span>(i&lt;<span class="number">50</span>)</span><br><span class="line">				in_A=<span class="number">0</span>;</span><br><span class="line">			<span class="keyword">else</span> <span class="keyword">if</span>(i&lt;<span class="number">200</span>)</span><br><span class="line">				in_A=<span class="number">1</span>;</span><br><span class="line">			<span class="keyword">else</span> <span class="keyword">if</span>(i&lt;<span class="number">700</span>)</span><br><span class="line">				in_A=<span class="number">0</span>;</span><br><span class="line">			<span class="keyword">else</span> <span class="keyword">if</span>(i&lt;<span class="number">800</span>)</span><br><span class="line">				in_A=<span class="number">1</span>;</span><br><span class="line">			<span class="keyword">else</span> <span class="keyword">if</span>(i&lt;<span class="number">900</span>)</span><br><span class="line">				in_A=<span class="number">0</span>;</span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line"><span class="keyword">endtask</span></span><br></pre></td></tr></table></figure>
-
 
     </div>
 
@@ -471,7 +469,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-count">156</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

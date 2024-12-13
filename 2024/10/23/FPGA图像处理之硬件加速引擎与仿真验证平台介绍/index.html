@@ -36,7 +36,7 @@
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/10/23/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F%E5%BC%95%E6%93%8E%E4%B8%8E%E4%BB%BF%E7%9C%9F%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0%E4%BB%8B%E7%BB%8D/image-20241024161137421.png">
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/10/23/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F%E5%BC%95%E6%93%8E%E4%B8%8E%E4%BB%BF%E7%9C%9F%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0%E4%BB%8B%E7%BB%8D/image-20241024161048062.png">
 <meta property="article:published_time" content="2024-10-23T04:07:12.000Z">
-<meta property="article:modified_time" content="2024-10-24T08:15:40.526Z">
+<meta property="article:modified_time" content="2024-11-25T07:49:00.427Z">
 <meta property="article:author" content="ssy">
 <meta property="article:tag" content="FPGA">
 <meta property="article:tag" content="图像处理">
@@ -246,7 +246,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-10-24 16:15:40" itemprop="dateModified" datetime="2024-10-24T16:15:40+08:00">2024-10-24</time>
+                <time title="修改时间：2024-11-25 15:49:00" itemprop="dateModified" datetime="2024-11-25T15:49:00+08:00">2024-11-25</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -278,7 +278,6 @@
       
         <p>本节主要介绍了FPGA图像处理的准备知识，包括什么是硬件加速引擎？如何用脚本的方式运行modelsim？</p>
 <span id="more"></span>
-
 <h1 id="CPU体系结构简介"><a href="#CPU体系结构简介" class="headerlink" title="CPU体系结构简介"></a>CPU体系结构简介</h1><ul>
 <li><p>冯诺依曼体系结构CPU，是一种<strong>将程序指令和数据合并在一起</strong>的存储器结构。该结构中程序指令和数据共用一条总线，通过时分复用的方式进行读写操作，结构相对简单，总线面积较小，但缺点是效率低，无法同时取程序指令和数据，成为执行的瓶颈。</p>
 <p><img src="/2024/10/23/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F%E5%BC%95%E6%93%8E%E4%B8%8E%E4%BB%BF%E7%9C%9F%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0%E4%BB%8B%E7%BB%8D/image-20241023202415398.png" alt="image-20241023202415398"></p>
@@ -319,18 +318,15 @@
 </li>
 <li><p>添加一个文件中的多个module到库文件</p>
 <figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-v /home/yuxiang/proj/tsmc_lib/tsmc13.v</span><br></pre></td></tr></table></figure>
-
 </li>
 </ul>
 </li>
 </ul>
 <h2 id="2-do脚本"><a href="#2-do脚本" class="headerlink" title="2.do脚本"></a>2.do脚本</h2><figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#run.do文件中#代表注释</span></span><br><span class="line"></span><br><span class="line">transcript <span class="keyword">file</span> new_transcript_file.log  <span class="comment">;# 设置新的 transcript 文件名</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#退出当前仿真功能</span></span><br><span class="line">quit -sim</span><br><span class="line"><span class="comment">#清除命令行显示信息</span></span><br><span class="line"><span class="comment">#.main clear</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#vlib为创建库</span></span><br><span class="line">vlib	./lib/</span><br><span class="line">vlib	./lib/Sim_work/</span><br><span class="line"><span class="comment">#映射逻辑库名，将逻辑库名映射库路径</span></span><br><span class="line">vmap	sim_file ./lib/Sim_work/</span><br><span class="line"></span><br><span class="line"><span class="comment">#vlog -work代表编译到指定的库文件中</span></span><br><span class="line">vlog	-work sim_file -f ../filelist.f</span><br><span class="line"></span><br><span class="line"><span class="comment">#vsim为启动仿真</span></span><br><span class="line"><span class="comment">#-t 运行仿真的时间精度是ns</span></span><br><span class="line"><span class="comment">#-L 是链接库关键字</span></span><br><span class="line">vsim	-t ns  -voptargs=+acc -L sim_file sim_file.tb_mealy</span><br><span class="line"></span><br><span class="line"><span class="comment">#用虚拟信号表示状态信息</span></span><br><span class="line">virtual	type &#123;</span><br><span class="line">&#123;<span class="number">01</span> S1&#125;</span><br><span class="line">&#123;<span class="number">02</span> S2&#125;</span><br><span class="line">&#123;<span class="number">04</span> S3&#125;</span><br><span class="line">&#123;<span class="number">08</span> S4&#125;</span><br><span class="line">&#123;<span class="number">10</span> S5&#125;</span><br><span class="line">&#123;<span class="number">20</span> S6&#125;</span><br><span class="line">&#125; vir_new_signal</span><br><span class="line"></span><br><span class="line"><span class="comment">#add wave用来添加波形</span></span><br><span class="line"><span class="comment">#-divider用来分组</span></span><br><span class="line">add wave	-divider &#123;tb_mealy_1&#125;</span><br><span class="line">add wave	tb_mealy/*</span><br><span class="line">add wave	-divider &#123;mealy&#125;</span><br><span class="line"><span class="comment">#顶层/例化的名字/* 其中*号是通配符，匹配所有信号</span></span><br><span class="line">add wave	tb_mealy/mealy_inst/*</span><br><span class="line"><span class="comment">#创建一个vir_new_signal 类型的信号，也就是把Currt_st进行类型转换</span></span><br><span class="line">virtual	function &#123;(vir_new_signal)tb_mealy/mealy_inst/Curr_st&#125; new_state</span><br><span class="line">add wave  -color red	tb_mealy/mealy_inst/new_state</span><br><span class="line"></span><br><span class="line">run <span class="number">1</span>us</span><br></pre></td></tr></table></figure>
-
 <ul>
 <li><p>仿真平台文件架构：</p>
-<img src="/2024/10/23/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F%E5%BC%95%E6%93%8E%E4%B8%8E%E4%BB%BF%E7%9C%9F%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0%E4%BB%8B%E7%BB%8D/image-20241024161137421.png" alt="image-20241024161137421" style="zoom:80%;">
-
-<img src="/2024/10/23/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F%E5%BC%95%E6%93%8E%E4%B8%8E%E4%BB%BF%E7%9C%9F%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0%E4%BB%8B%E7%BB%8D/image-20241024161048062.png" alt="image-20241024161048062" style="zoom:80%;">
+<p><img src="/2024/10/23/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F%E5%BC%95%E6%93%8E%E4%B8%8E%E4%BB%BF%E7%9C%9F%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0%E4%BB%8B%E7%BB%8D/image-20241024161137421.png" alt="image-20241024161137421" style="zoom:80%;"></p>
+<p><img src="/2024/10/23/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F%E5%BC%95%E6%93%8E%E4%B8%8E%E4%BB%BF%E7%9C%9F%E9%AA%8C%E8%AF%81%E5%B9%B3%E5%8F%B0%E4%BB%8B%E7%BB%8D/image-20241024161048062.png" alt="image-20241024161048062" style="zoom:80%;"></p>
 </li>
 <li><p><strong>run.do文件中要注意：因为run_do.bat中把路径切换至sim_log，所以在run.do中用到文件路径的地方，记得当前是在sim_log目录下的。</strong></p>
 </li>
@@ -341,10 +337,12 @@
 </li>
 <li><p><strong>read_wave.bat</strong></p>
 <figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@echo off</span><br><span class="line">title %<span class="keyword">cd</span>%</span><br><span class="line"><span class="keyword">cd</span> ./sim_log</span><br><span class="line">vsim -view vsim2.wlf -do wave.do</span><br></pre></td></tr></table></figure>
-
 </li>
 </ul>
 <hr>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li>《基于MATLAB与FPGA的图像处理教程》图书及其配套资料</li>
+</ul>
 
     </div>
 
@@ -461,7 +459,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CPU%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">CPU体系结构简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F%E5%BC%95%E6%93%8E"><span class="nav-number">2.</span> <span class="nav-text">什么是硬件加速引擎</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#FPGA%E8%BD%AF%E4%BB%B6%E4%BB%BF%E7%9C%9F%E7%8E%AF%E5%A2%83%E4%BB%8B%E7%BB%8D"><span class="nav-number">3.</span> <span class="nav-text">FPGA软件仿真环境介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-filelist%E5%B8%B8%E8%A7%81%E5%86%99%E6%B3%95"><span class="nav-number">3.1.</span> <span class="nav-text">1.filelist常见写法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-do%E8%84%9A%E6%9C%AC"><span class="nav-number">3.2.</span> <span class="nav-text">2.do脚本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%89%B9%E9%87%8F%E5%A4%84%E7%90%86%E8%84%9A%E6%9C%AC"><span class="nav-number">3.3.</span> <span class="nav-text">2.批量处理脚本</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CPU%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">CPU体系结构简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F%E5%BC%95%E6%93%8E"><span class="nav-number">2.</span> <span class="nav-text">什么是硬件加速引擎</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#FPGA%E8%BD%AF%E4%BB%B6%E4%BB%BF%E7%9C%9F%E7%8E%AF%E5%A2%83%E4%BB%8B%E7%BB%8D"><span class="nav-number">3.</span> <span class="nav-text">FPGA软件仿真环境介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-filelist%E5%B8%B8%E8%A7%81%E5%86%99%E6%B3%95"><span class="nav-number">3.1.</span> <span class="nav-text">1.filelist常见写法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-do%E8%84%9A%E6%9C%AC"><span class="nav-number">3.2.</span> <span class="nav-text">2.do脚本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%89%B9%E9%87%8F%E5%A4%84%E7%90%86%E8%84%9A%E6%9C%AC"><span class="nav-number">3.3.</span> <span class="nav-text">2.批量处理脚本</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -477,7 +475,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-count">156</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

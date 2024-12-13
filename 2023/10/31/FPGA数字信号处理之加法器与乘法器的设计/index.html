@@ -285,23 +285,21 @@
       
         <p>本节主要介绍了常见的加法器与乘法器的加速设计方法</p>
 <span id="more"></span>
-
 <h1 id="加法器"><a href="#加法器" class="headerlink" title="加法器"></a>加法器</h1><h2 id="1-Ripple-Carry-Adder（串行逐个进位加法器）"><a href="#1-Ripple-Carry-Adder（串行逐个进位加法器）" class="headerlink" title="1.Ripple Carry Adder（串行逐个进位加法器）"></a>1.Ripple Carry Adder（串行逐个进位加法器）</h2><ul>
 <li><p>Ripple Carry Adder就是串联加法器，前一个加法器的进位会连接到下一个加法器的进位输入</p>
-<img src="/2023/10/31/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%8A%A0%E6%B3%95%E5%99%A8%E4%B8%8E%E4%B9%98%E6%B3%95%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1/image-20231031150011522.png" alt="image-20231031150011522" style="zoom: 67%;">
+<p><img src="/2023/10/31/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%8A%A0%E6%B3%95%E5%99%A8%E4%B8%8E%E4%B9%98%E6%B3%95%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1/image-20231031150011522.png" alt="image-20231031150011522" style="zoom: 67%;"></p>
 </li>
-<li><p>Ripple Carry Adder的关键路径延迟为：<br>$$<br>T_{RCA}=(N-1)T_{FA}+T_m<br>$$</p>
-<ul>
+<li><p>Ripple Carry Adder的关键路径延迟为：</p>
+<script type="math/tex; mode=display">
+T_{RCA}=(N-1)T_{FA}+T_m</script><ul>
 <li>$T_{FA}$是全加器的延时，$T_{m}$是全加器进位产生的延迟</li>
 </ul>
 </li>
 <li><p>ripple_carry_adder.v</p>
 <figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> ripple_carry_adder #(<span class="keyword">parameter</span> W=<span class="number">16</span>) (</span><br><span class="line">    <span class="keyword">input</span> clk, </span><br><span class="line">    <span class="keyword">input</span> [W-<span class="number">1</span>:<span class="number">0</span>] a, b, </span><br><span class="line">    <span class="keyword">input</span> cin, </span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">reg</span> [W-<span class="number">1</span>:<span class="number">0</span>] s_r, </span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">reg</span> cout_r</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">wire</span> [W-<span class="number">1</span>:<span class="number">0</span>] s; </span><br><span class="line">    <span class="keyword">wire</span> cout; </span><br><span class="line">    <span class="keyword">reg</span> [W-<span class="number">1</span>:<span class="number">0</span>] a_r, b_r; </span><br><span class="line">    <span class="keyword">reg</span> cin_r; </span><br><span class="line"></span><br><span class="line">    <span class="keyword">assign</span> &#123;cout,s&#125; = a_r + b_r + cin_r; </span><br><span class="line"></span><br><span class="line">    <span class="keyword">always</span>@(<span class="keyword">posedge</span> clk) <span class="keyword">begin</span></span><br><span class="line">        a_r&lt;=a; </span><br><span class="line">        b_r&lt;=b; </span><br><span class="line">        cin_r&lt;=cin; </span><br><span class="line">        s_r&lt;=s; </span><br><span class="line">        cout_r&lt;=cout;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
-
 <ul>
 <li><p>原理图如下：</p>
-<img src="/2023/10/31/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%8A%A0%E6%B3%95%E5%99%A8%E4%B8%8E%E4%B9%98%E6%B3%95%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1/image-20231031150916675.png" alt="image-20231031150916675" style="zoom: 80%;">
-
+<p><img src="/2023/10/31/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%8A%A0%E6%B3%95%E5%99%A8%E4%B8%8E%E4%B9%98%E6%B3%95%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1/image-20231031150916675.png" alt="image-20231031150916675" style="zoom: 80%;"></p>
 </li>
 </ul>
 </li>
@@ -311,19 +309,24 @@
 </li>
 <li><p>Carry Look-ahead Adder（CLA）可以有效的解决这一问题</p>
 <ul>
-<li><p>进位输出位方程：<br>$$<br>c_{i+1}=a_i\cdot b_i+c_i\cdot(a_i\bigoplus b_i)<br>$$</p>
-<ul>
+<li><p>进位输出位方程：</p>
+<script type="math/tex; mode=display">
+c_{i+1}=a_i\cdot b_i+c_i\cdot(a_i\bigoplus b_i)</script><ul>
 <li>$\bigoplus $代表异或，$\cdot$代表与门</li>
 </ul>
 </li>
-<li><p>其中，进位产生项$g_i$：<br>$$<br>g_i=a_i\cdot b_i<br>$$</p>
-</li>
-<li><p>进位传播项$p_i$：<br>$$<br>p_i=a_i \bigoplus b_i<br>$$</p>
-</li>
-<li><p>则$c_{i+1}$：<br>$$<br>c_{i+1}=g_i+c_i\cdot p_i<br>$$</p>
-</li>
-<li><p>而输出结果位$s_i$：<br>$$<br>s_i=p_i\bigoplus c_i<br>$$</p>
-</li>
+<li><p>其中，进位产生项$g_i$：</p>
+<script type="math/tex; mode=display">
+g_i=a_i\cdot b_i</script></li>
+<li><p>进位传播项$p_i$：</p>
+<script type="math/tex; mode=display">
+p_i=a_i \bigoplus b_i</script></li>
+<li><p>则$c_{i+1}$：</p>
+<script type="math/tex; mode=display">
+c_{i+1}=g_i+c_i\cdot p_i</script></li>
+<li><p>而输出结果位$s_i$：</p>
+<script type="math/tex; mode=display">
+s_i=p_i\bigoplus c_i</script></li>
 </ul>
 </li>
 <li><p><strong>故CLA的主要思想是先对每位计算$g_i$和$p_i$的值，然后运用它们来计算进位$c_{i+1}$和$s_i$，这避免了进位串行传播通过进位链，从而实现超前进位的目的</strong></p>
@@ -333,7 +336,6 @@
 </li>
 <li><p>这里给出位数可变的通用CLA的设计文件BinaryCarryLookaheadAdder.v</p>
 <figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> BinaryCarryLookaheadAdder # (<span class="keyword">parameter</span> N=<span class="number">16</span>)(</span><br><span class="line">    <span class="keyword">input</span> [N-<span class="number">1</span>:<span class="number">0</span>] a,b, </span><br><span class="line">    <span class="keyword">input</span> c_in, </span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">reg</span> [N-<span class="number">1</span>:<span class="number">0</span>] sum, </span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">reg</span> c_out</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">reg</span> [N-<span class="number">1</span>:<span class="number">0</span>] p, g, P, G; </span><br><span class="line">    <span class="keyword">reg</span> [N:<span class="number">0</span>] c; </span><br><span class="line">    <span class="keyword">integer</span> i; </span><br><span class="line">    </span><br><span class="line">    <span class="keyword">always</span> @(*) <span class="keyword">begin</span> </span><br><span class="line">        <span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;N;i=i+<span class="number">1</span>)  <span class="keyword">begin</span> <span class="comment">// Generate all ps and gs </span></span><br><span class="line">            p[i] = a[i] ^ b[i]; </span><br><span class="line">            g[i] = a[i] &amp; b[i];</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">always</span> @(*) <span class="keyword">begin</span></span><br><span class="line">        <span class="comment">// Linearly apply dot operators </span></span><br><span class="line">        P[<span class="number">0</span>] = p[<span class="number">0</span>]; </span><br><span class="line">        G[<span class="number">0</span>] = g[<span class="number">0</span>]; </span><br><span class="line">        <span class="keyword">for</span> (i=<span class="number">1</span>; i&lt;N; i=i+<span class="number">1</span>) <span class="keyword">begin</span></span><br><span class="line">            P[i] = p[i] &amp; P[i-<span class="number">1</span>]; </span><br><span class="line">            G[i] = g[i] | (p[i] &amp; G[i-<span class="number">1</span>]) ;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">always</span>@(*) <span class="keyword">begin</span> <span class="comment">//Generate all carries and sum </span></span><br><span class="line">        c[<span class="number">0</span>] = c_in; </span><br><span class="line">        <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;N;i=i+<span class="number">1</span>) <span class="keyword">begin</span> </span><br><span class="line">            c[i+<span class="number">1</span>] = G[i] | (P[i] &amp; c[<span class="number">0</span>]); </span><br><span class="line">            sum[i] = p[i] ^ c[i]; </span><br><span class="line">        <span class="keyword">end</span> </span><br><span class="line">        c_out = c[N]; </span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
-
 <ul>
 <li><p>原理图如下：</p>
 <p><img src="/2023/10/31/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%8A%A0%E6%B3%95%E5%99%A8%E4%B8%8E%E4%B9%98%E6%B3%95%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1/Snipaste_2023-10-30_19-46-30.png" alt="Snipaste_2023-10-30_19-46-30"></p>
@@ -341,26 +343,23 @@
 </ul>
 </li>
 <li><p>Carry Select Adder采用面积换速度的思想，由于进位不确定导致下一级加法器只能等待，反正进位不是0就是1，那么可以提前算出1或者0的情况，最后再由进位去选择算好的结果</p>
-<img src="/2023/10/31/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%8A%A0%E6%B3%95%E5%99%A8%E4%B8%8E%E4%B9%98%E6%B3%95%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1/image-20231031154457762.png" alt="image-20231031154457762" style="zoom:80%;">
-
+<p><img src="/2023/10/31/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%8A%A0%E6%B3%95%E5%99%A8%E4%B8%8E%E4%B9%98%E6%B3%95%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1/image-20231031154457762.png" alt="image-20231031154457762" style="zoom:80%;"></p>
 <ul>
 <li>图中所说的第二级其实只是做了MUX的判断，具体需要结合代码分析理解</li>
 </ul>
 </li>
 <li><p>HierarchicalCSA.v</p>
 <figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> HierarchicalCSA(a, b, cin, sum, c_out);</span><br><span class="line">    <span class="keyword">input</span> [<span class="number">15</span>:<span class="number">0</span>] a,b;</span><br><span class="line">    <span class="keyword">input</span> cin; </span><br><span class="line">    <span class="keyword">output</span> c_out; </span><br><span class="line">    <span class="keyword">output</span> [<span class="number">15</span>:<span class="number">0</span>] sum; </span><br><span class="line"></span><br><span class="line">    <span class="keyword">wire</span> c4, c8, c8_0, c8_1, c12_0, c12_1, c16_0, c16_1, c16L2_0, c16L2_1; </span><br><span class="line">    <span class="keyword">wire</span> [<span class="number">15</span>:<span class="number">4</span>] sumL1_0, sumL1_1; </span><br><span class="line">    <span class="keyword">wire</span> [<span class="number">15</span>:<span class="number">12</span>] sumL2_0, sumL2_1;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Level one of hierarchical CSA </span></span><br><span class="line">    <span class="keyword">assign</span> &#123;c4,sum[<span class="number">3</span>:<span class="number">0</span>]&#125; = a[<span class="number">3</span>:<span class="number">0</span>] + b[<span class="number">3</span>:<span class="number">0</span>] + cin; </span><br><span class="line">    <span class="keyword">assign</span> &#123;c8_0, sumL1_0[<span class="number">7</span>:<span class="number">4</span>]&#125; = a[<span class="number">7</span>:<span class="number">4</span>] + b[<span class="number">7</span>:<span class="number">4</span>] + <span class="number">1&#x27;b0</span>; </span><br><span class="line">    <span class="keyword">assign</span> &#123;c8_1, sumL1_1[<span class="number">7</span>:<span class="number">4</span>]&#125; = a[<span class="number">7</span>:<span class="number">4</span>] + b[<span class="number">7</span>:<span class="number">4</span>] + <span class="number">1&#x27;b1</span>; </span><br><span class="line"></span><br><span class="line">    <span class="keyword">assign</span> &#123;c12_0,sumL1_0[<span class="number">11</span>:<span class="number">8</span>]&#125; = a[<span class="number">11</span>:<span class="number">8</span>] + b[<span class="number">11</span>:<span class="number">8</span>] + <span class="number">1&#x27;b0</span>; </span><br><span class="line">    <span class="keyword">assign</span> &#123;c12_1,sumL1_1[<span class="number">11</span>:<span class="number">8</span>]&#125; = a[<span class="number">11</span>:<span class="number">8</span>] + b[<span class="number">11</span>:<span class="number">8</span>] + <span class="number">1&#x27;b1</span>; </span><br><span class="line"></span><br><span class="line">    <span class="keyword">assign</span> &#123;c16_0, sumL1_0[<span class="number">15</span>:<span class="number">12</span>]&#125; = a[<span class="number">15</span>:<span class="number">12</span>] + b[<span class="number">15</span>:<span class="number">12</span>] + <span class="number">1&#x27;b0</span>; </span><br><span class="line">    <span class="keyword">assign</span> &#123;c16_1, sumL1_1[<span class="number">15</span>:<span class="number">12</span>]&#125; = a[<span class="number">15</span>:<span class="number">12</span>] + b[<span class="number">15</span>:<span class="number">12</span>] + <span class="number">1&#x27;b1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Level two of hierarchical CSA </span></span><br><span class="line">    <span class="keyword">assign</span> c8 = c4 ? c8_1 : c8_0; </span><br><span class="line">    <span class="keyword">assign</span> sum[<span class="number">7</span>:<span class="number">4</span>] = c4 ? sumL1_1[<span class="number">7</span>:<span class="number">4</span>]: sumL1_0[<span class="number">7</span>:<span class="number">4</span>]; </span><br><span class="line">    <span class="comment">// Selecting sum and carry within a group </span></span><br><span class="line">    <span class="keyword">assign</span> c16L2_0 = c12_0 ? c16_1 : c16_0; </span><br><span class="line">    <span class="keyword">assign</span> sumL2_0[<span class="number">15</span>:<span class="number">12</span>] = c12_0 ? sumL1_1[<span class="number">15</span>:<span class="number">12</span>] : sumL1_0[<span class="number">15</span>:<span class="number">12</span>]; </span><br><span class="line">    <span class="keyword">assign</span> c16L2_1 = c12_1 ? c16_1 : c16_0; </span><br><span class="line">    <span class="keyword">assign</span> sumL2_1[<span class="number">15</span>:<span class="number">12</span>] = c12_1 ? sumL1_1[<span class="number">15</span>:<span class="number">12</span>]: sumL1_0[<span class="number">15</span>:<span class="number">12</span>]; </span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Level three selecting the final outputs </span></span><br><span class="line">    <span class="keyword">assign</span> c_out = c8 ? c16L2_1 : c16L2_0; </span><br><span class="line">    <span class="keyword">assign</span> sum[<span class="number">15</span>:<span class="number">8</span>] = c8 ? &#123;sumL2_1[<span class="number">15</span>:<span class="number">12</span>], sumL1_1[<span class="number">11</span>:<span class="number">8</span>]&#125; : &#123;sumL2_0[<span class="number">15</span>:<span class="number">12</span>], sumL1_0[<span class="number">11</span>:<span class="number">8</span>]&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
-
 <ul>
 <li><p>原理图如下：</p>
-<img src="/2023/10/31/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%8A%A0%E6%B3%95%E5%99%A8%E4%B8%8E%E4%B9%98%E6%B3%95%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1/Snipaste_2023-10-30_22-23-02.png" alt="Snipaste_2023-10-30_22-23-02" style="zoom: 50%;">
-
+<p><img src="/2023/10/31/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%8A%A0%E6%B3%95%E5%99%A8%E4%B8%8E%E4%B9%98%E6%B3%95%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1/Snipaste_2023-10-30_22-23-02.png" alt="Snipaste_2023-10-30_22-23-02" style="zoom: 50%;"></p>
 </li>
 </ul>
 </li>
 </ul>
 <h2 id="4-Carry-Save-Adder（进位保留加法器"><a href="#4-Carry-Save-Adder（进位保留加法器" class="headerlink" title="4. Carry Save Adder（进位保留加法器)"></a>4. Carry Save Adder（进位保留加法器)</h2><ul>
 <li><p>Carry Save Adder（CSA）它的内部结构实际上跟全加器FA一样，只是它不将进位传递给下一位，而是将其保留下来</p>
-<img src="/2023/10/31/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%8A%A0%E6%B3%95%E5%99%A8%E4%B8%8E%E4%B9%98%E6%B3%95%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1/image-20231031155720102.png" alt="image-20231031155720102" style="zoom: 80%;">
+<p><img src="/2023/10/31/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%8A%A0%E6%B3%95%E5%99%A8%E4%B8%8E%E4%B9%98%E6%B3%95%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1/image-20231031155720102.png" alt="image-20231031155720102" style="zoom: 80%;"></p>
 </li>
 <li><p>由此引申出来的CSA树，可以得到参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_45791458/article/details/133518505">数字IC前端学习笔记：数字乘法器的优化设计（进位保留乘法器）_日晨难再的博客-CSDN博客</a></p>
 </li>
@@ -368,26 +367,32 @@
 <hr>
 <h1 id="乘法器"><a href="#乘法器" class="headerlink" title="乘法器"></a>乘法器</h1><h2 id="1-Wallace-Tree乘法器"><a href="#1-Wallace-Tree乘法器" class="headerlink" title="1.Wallace Tree乘法器"></a>1.Wallace Tree乘法器</h2><ul>
 <li><p>Wallace Tree是基于CSA的结构的，它能同时对不同的3bit结果使用CSA压缩成2bit，再在结果中又结合成3bit，继续压缩至2bit，直至最后压缩到只有2bit，此时可以用CLA去计算这个2bit的结果</p>
-<img src="/2023/10/31/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%8A%A0%E6%B3%95%E5%99%A8%E4%B8%8E%E4%B9%98%E6%B3%95%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1/image-20231031160740596.png" alt="image-20231031160740596" style="zoom:80%;">
+<p><img src="/2023/10/31/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%8A%A0%E6%B3%95%E5%99%A8%E4%B8%8E%E4%B9%98%E6%B3%95%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1/image-20231031160740596.png" alt="image-20231031160740596" style="zoom:80%;"></p>
 </li>
-<li><p>详情参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/zhouxuanyuye/article/details/105543551?ops_request_misc=&request_id=&biz_id=102&utm_term=wallace乘法器&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-6-105543551.nonecase&spm=1018.2226.3001.4187">【HDL系列】乘法器(4)——图解Wallace树_multiplier hdl-CSDN博客</a>（写的非常形象）</p>
+<li><p>详情参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/zhouxuanyuye/article/details/105543551?ops_request_misc=&amp;request_id=&amp;biz_id=102&amp;utm_term=wallace乘法器&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-6-105543551.nonecase&amp;spm=1018.2226.3001.4187">【HDL系列】乘法器(4)——图解Wallace树_multiplier hdl-CSDN博客</a>（写的非常形象）</p>
 </li>
-<li><p>例子参考：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1WM4y1n7KB/?spm_id_from=333.337.search-card.all.click&vd_source=221b76534ba13cfad544149d75ce9b6c">18a 數位邏輯設計 Fast Multiplier – Wallace Tree Example_哔哩哔哩_bilibili</a>（视频中举例也十分清楚）</p>
+<li><p>例子参考：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1WM4y1n7KB/?spm_id_from=333.337.search-card.all.click&amp;vd_source=221b76534ba13cfad544149d75ce9b6c">18a 數位邏輯設計 Fast Multiplier — Wallace Tree Example_哔哩哔哩_bilibili</a>（视频中举例也十分清楚）</p>
 </li>
 </ul>
 <h2 id="2-Booth乘法器"><a href="#2-Booth乘法器" class="headerlink" title="2.Booth乘法器"></a>2.Booth乘法器</h2><h3 id="2-1-Radix2-Booth"><a href="#2-1-Radix2-Booth" class="headerlink" title="2.1 Radix2 Booth"></a>2.1 Radix2 Booth</h3><ul>
 <li><p>Booth算法的目的是解决<strong>有符号乘法</strong>运算中复杂的符号修正问题，同时也能减少部分乘积项（PP）的数量</p>
 </li>
-<li><p>设n位乘法B的补码形式为：<br>$$<br>\begin{aligned}<br>B &amp;= -B_{n-1}\cdot 2^{n-1}+B_{n-2}\cdot 2^{n-2}+\dots+B_1\cdot 2^1+B_0\cdot 2^0\<br>  &amp;= -B_{n-1}2^{n-1}+(\sum_{i=0}^{n-2}B_i\cdot2^i)<br>\end{aligned}<br>$$</p>
-</li>
-<li><p>对上式做一些变换后可得到：<br>$$<br>B=\sum_{i=0,B_{-1}=0}^{n-1}(-B_i+B_{i-1})\cdot 2^i=\sum_{i=0}^{n-1}E_i\cdot 2^i<br>$$</p>
-</li>
-<li><p>则有两个有符号乘积结果$P$：<br>$$<br>P=A\times B=A\times(\sum_{i=0}^{n-1}E_i\cdot 2^i) = \sum_{i=0}^{n-1}(A\times E_i)\cdot 2^i<br>$$</p>
-<ul>
+<li><p>设n位乘法B的补码形式为：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+B &= -B_{n-1}\cdot 2^{n-1}+B_{n-2}\cdot 2^{n-2}+\dots+B_1\cdot 2^1+B_0\cdot 2^0\\
+  &= -B_{n-1}2^{n-1}+(\sum_{i=0}^{n-2}B_i\cdot2^i)
+\end{aligned}</script></li>
+<li><p>对上式做一些变换后可得到：</p>
+<script type="math/tex; mode=display">
+B=\sum_{i=0,B_{-1}=0}^{n-1}(-B_i+B_{i-1})\cdot 2^i=\sum_{i=0}^{n-1}E_i\cdot 2^i</script></li>
+<li><p>则有两个有符号乘积结果$P$：</p>
+<script type="math/tex; mode=display">
+P=A\times B=A\times(\sum_{i=0}^{n-1}E_i\cdot 2^i) = \sum_{i=0}^{n-1}(A\times E_i)\cdot 2^i</script><ul>
 <li>其中：$E_i=-B_i+B_{i-1},0\le i \le n-1,B_{-1}=0$</li>
 <li>$E_i$称为编码值，$A\times E_i$称为部分积</li>
 </ul>
-<img src="/2023/10/31/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%8A%A0%E6%B3%95%E5%99%A8%E4%B8%8E%E4%B9%98%E6%B3%95%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1/image-20231031162452338.png" alt="image-20231031162452338" style="zoom:80%;">
+<p><img src="/2023/10/31/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%8A%A0%E6%B3%95%E5%99%A8%E4%B8%8E%E4%B9%98%E6%B3%95%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1/image-20231031162452338.png" alt="image-20231031162452338" style="zoom:80%;"></p>
 </li>
 <li><p><strong>缺点：对于101010101010这样的乘数，需要计算的部分积个数没有变，反而多了编码的步骤，计算延迟增加，得不偿失，故实际中很少使用，而采用其优化而来的Radix4 Booth算法</strong></p>
 </li>
@@ -395,25 +400,26 @@
 <h3 id="2-2-Radix4-Booth"><a href="#2-2-Radix4-Booth" class="headerlink" title="2.2 Radix4 Booth"></a>2.2 Radix4 Booth</h3><ul>
 <li><p>对于有符号数补码而言，扩展其最高位对数值并无影响。因此任何奇数位宽的有符号数补码都可以看成是偶数位宽</p>
 </li>
-<li><p>设一个二进制乘数B，位宽为n，且n为偶数，则B可以表示为：<br>$$<br>B=\sum_{i=0,B_{-1}=0}^{\frac n2-1}(-2B_{2i+1}+B_{2i}+B_{2i-1})\cdot 2^{2i}=\sum_{i=0}^{\frac n2 -1}E_i\cdot 4^i<br>$$</p>
-</li>
-<li><p>则有两个有符号乘积结果$P$：<br>$$<br>P=A\times B=A\times \sum_{i=0}^{\frac n2 -1}E_i\cdot 4^i =\sum_{i=0}^{\frac n2 -1}(A\times E_i)\cdot 4^i<br>$$</p>
-<ul>
+<li><p>设一个二进制乘数B，位宽为n，且n为偶数，则B可以表示为：</p>
+<script type="math/tex; mode=display">
+B=\sum_{i=0,B_{-1}=0}^{\frac n2-1}(-2B_{2i+1}+B_{2i}+B_{2i-1})\cdot 2^{2i}=\sum_{i=0}^{\frac n2 -1}E_i\cdot 4^i</script></li>
+<li><p>则有两个有符号乘积结果$P$：</p>
+<script type="math/tex; mode=display">
+P=A\times B=A\times \sum_{i=0}^{\frac n2 -1}E_i\cdot 4^i =\sum_{i=0}^{\frac n2 -1}(A\times E_i)\cdot 4^i</script><ul>
 <li>其中，$E_i=-2B_{2i+1}+B_{2i}+B_{2i-1},0\le i\le \frac n2 -1,B_{-1}=0$</li>
 <li><strong>且$\frac n2$为部分积的个数</strong></li>
 </ul>
 </li>
 <li><p><strong>Radix4 Booth算法每次编码的位数为3bit，使得部分积的数目减少为原始Booth算法的一半</strong></p>
-<img src="/2023/10/31/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%8A%A0%E6%B3%95%E5%99%A8%E4%B8%8E%E4%B9%98%E6%B3%95%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1/image-20231031163518501.png" alt="image-20231031163518501" style="zoom: 67%;">
+<p><img src="/2023/10/31/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%8A%A0%E6%B3%95%E5%99%A8%E4%B8%8E%E4%B9%98%E6%B3%95%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1/image-20231031163518501.png" alt="image-20231031163518501" style="zoom: 67%;"></p>
 </li>
 <li><p>而Radix4 Booth的编码结果如下：</p>
-<img src="/2023/10/31/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%8A%A0%E6%B3%95%E5%99%A8%E4%B8%8E%E4%B9%98%E6%B3%95%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1/image-20231031163635108.png" alt="image-20231031163635108" style="zoom: 80%;">
+<p><img src="/2023/10/31/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%8A%A0%E6%B3%95%E5%99%A8%E4%B8%8E%E4%B9%98%E6%B3%95%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1/image-20231031163635108.png" alt="image-20231031163635108" style="zoom: 80%;"></p>
 </li>
 <li><p><strong>对除0外的操作都先对被乘数A的最高位添上一个符号位，再进行操作，+2A是左移，-2A代表取补码后左移（或者左移后再取补码也可）</strong></p>
 </li>
 <li><p>Radix4 Booth编码实现的两个8bit有符号数相乘，输出为16bit有符号数</p>
-<img src="/2023/10/31/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%8A%A0%E6%B3%95%E5%99%A8%E4%B8%8E%E4%B9%98%E6%B3%95%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1/image-20231031164644373.png" alt="image-20231031164644373" style="zoom: 80%;">
-
+<p><img src="/2023/10/31/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%8A%A0%E6%B3%95%E5%99%A8%E4%B8%8E%E4%B9%98%E6%B3%95%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1/image-20231031164644373.png" alt="image-20231031164644373" style="zoom: 80%;"></p>
 <ul>
 <li><p>相关代码：</p>
 </li>
@@ -437,7 +443,6 @@
 </li>
 <li><p>Testbench</p>
 <figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> Booth_mul_tb;</span><br><span class="line">    <span class="keyword">reg</span>   [<span class="number">7</span> : <span class="number">0</span>]  a_i,b_i;</span><br><span class="line">    <span class="keyword">wire</span>  [<span class="number">15</span> : <span class="number">0</span>]  mul_o;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    Booth_mul_top u0(</span><br><span class="line">        <span class="variable">.a_i</span>(a_i),</span><br><span class="line">        <span class="variable">.b_i</span>(b_i),</span><br><span class="line">        <span class="variable">.mul_o</span>(mul_o)</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">integer</span> i;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">        a_i = <span class="number">8&#x27;b1111_1111</span>;</span><br><span class="line">        b_i = <span class="number">8&#x27;b1111_1111</span>;</span><br><span class="line"></span><br><span class="line">        #<span class="number">10</span>;</span><br><span class="line">        a_i = <span class="number">8&#x27;b1000_1111</span>;</span><br><span class="line">        b_i = <span class="number">8&#x27;b0000_0010</span>;</span><br><span class="line"></span><br><span class="line">        #<span class="number">10</span>;</span><br><span class="line">        a_i = <span class="number">8&#x27;b0000_0010</span>;</span><br><span class="line">        b_i = <span class="number">8&#x27;b0000_0001</span>;</span><br><span class="line"></span><br><span class="line">        #<span class="number">10</span>;</span><br><span class="line">        a_i = <span class="number">8&#x27;b1000_0010</span>;</span><br><span class="line">        b_i = <span class="number">8&#x27;b0000_0001</span>;</span><br><span class="line"></span><br><span class="line">        #<span class="number">10</span>;</span><br><span class="line">        a_i = <span class="number">8&#x27;b1000_0010</span>;</span><br><span class="line">        b_i = <span class="number">8&#x27;b1000_0001</span>;</span><br><span class="line"></span><br><span class="line">        #<span class="number">10</span>;</span><br><span class="line">        b_i[<span class="number">3</span>:<span class="number">1</span>] = <span class="number">3&#x27;b001</span>;</span><br><span class="line">        a_i = <span class="number">8&#x27;b1111_1111</span>;</span><br><span class="line">        b_i = <span class="number">8&#x27;b1111_1111</span>;</span><br><span class="line"></span><br><span class="line">        #<span class="number">10</span>;</span><br><span class="line">        a_i = <span class="number">8&#x27;b1111_1111</span>;</span><br><span class="line">        b_i = <span class="number">8&#x27;b0000_0010</span>;</span><br><span class="line"></span><br><span class="line">        #<span class="number">10</span>;</span><br><span class="line">        a_i = <span class="number">8&#x27;b1111_1111</span>;</span><br><span class="line">        b_i = <span class="number">8&#x27;b1111_1111</span>;</span><br><span class="line"></span><br><span class="line">        #<span class="number">10</span>;</span><br><span class="line">        a_i = <span class="number">8&#x27;b1111_1111</span>;</span><br><span class="line">        b_i = <span class="number">8&#x27;b0000_0000</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (i = <span class="number">0</span>; i&lt;<span class="number">10</span>; i=i+<span class="number">1</span>) <span class="keyword">begin</span></span><br><span class="line">            a_i = a_i + <span class="number">1</span>;</span><br><span class="line">            b_i = b_i + <span class="number">1</span>;</span><br><span class="line">            #<span class="number">10</span>;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">        #<span class="number">1000</span> <span class="built_in">$stop</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
-
 <ul>
 <li><p>仿真结果如下：</p>
 <p><img src="/2023/10/31/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%8A%A0%E6%B3%95%E5%99%A8%E4%B8%8E%E4%B9%98%E6%B3%95%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1/image-20231031165217224.png" alt="image-20231031165217224"></p>
@@ -449,8 +454,8 @@
 </ul>
 <hr>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
-<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV15P411s7qJ?p=4&vd_source=221b76534ba13cfad544149d75ce9b6c">R4booth乘法器设计与仿真_哔哩哔哩_bilibili</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1s84y1W72L/?spm_id_from=333.788&vd_source=221b76534ba13cfad544149d75ce9b6c">【IC设计】【前端到后端全流程】【基于Booth2算法的32位乘法器】3-Booth算法与Booth2算法讲解以及RTL设计_哔哩哔哩_bilibili</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV15P411s7qJ?p=4&amp;vd_source=221b76534ba13cfad544149d75ce9b6c">R4booth乘法器设计与仿真_哔哩哔哩_bilibili</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1s84y1W72L/?spm_id_from=333.788&amp;vd_source=221b76534ba13cfad544149d75ce9b6c">【IC设计】【前端到后端全流程】【基于Booth2算法的32位乘法器】3-Booth算法与Booth2算法讲解以及RTL设计_哔哩哔哩_bilibili</a></li>
 </ul>
 
     </div>
@@ -584,7 +589,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-count">156</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

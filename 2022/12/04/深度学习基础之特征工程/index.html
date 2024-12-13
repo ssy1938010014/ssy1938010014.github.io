@@ -273,7 +273,6 @@
       
         <p>本节主要介绍了特征工程中特征处理这一核心部分，包括特征值的缩放、归一化、特征选择与降维等</p>
 <span id="more"></span>
-
 <h1 id="特征工程的基本概念"><a href="#特征工程的基本概念" class="headerlink" title="特征工程的基本概念"></a>特征工程的基本概念</h1><ul>
 <li>定义：其本质是一项工程活动，目的是最大限度地从原始数据中提取特征以供算法和模型使用</li>
 <li>特征处理是特征工程的核心部分，其包括特征缩放、特征选择及降维</li>
@@ -283,23 +282,28 @@
 <h1 id="特征值的缩放"><a href="#特征值的缩放" class="headerlink" title="特征值的缩放"></a>特征值的缩放</h1><h2 id="1-标准化法"><a href="#1-标准化法" class="headerlink" title="1.标准化法"></a>1.标准化法</h2><ul>
 <li><p>标准化的前提是特征值服从正态分布</p>
 </li>
-<li><p>标准化需要计算特征的均值和标准差，其公式为：<br>$$<br>X_{scale}=\frac{(X(axis=0)-X.mean(axis=0))}{X.std(axis=0)}<br>$$</p>
-</li>
+<li><p>标准化需要计算特征的均值和标准差，其公式为：</p>
+<script type="math/tex; mode=display">
+X_{scale}=\frac{(X(axis=0)-X.mean(axis=0))}{X.std(axis=0)}</script></li>
 </ul>
 <h2 id="2-区间缩放法"><a href="#2-区间缩放法" class="headerlink" title="2.区间缩放法"></a>2.区间缩放法</h2><ul>
-<li><p>区间缩放利用了边界值信息，将特征的取值区间缩放到某个特定范围，假设max和min为希望的调整后的范围，则：<br>$$<br>X_{scaled}=\frac{(X(axis=0)-X.min(axis=0))}{(X.max(axis=0)-X.min(axis=0))}\times (max-min)+min<br>$$</p>
-</li>
-<li><p>由于希望的调整后范围一般为$[0,1]$，则公式变为：<br>$$<br>X_{scaled}=\frac{(X(axis=0)-X.min(axis=0))}{(X.max(axis=0)-X.min(axis=0))}<br>$$</p>
-</li>
+<li><p>区间缩放利用了边界值信息，将特征的取值区间缩放到某个特定范围，假设max和min为希望的调整后的范围，则：</p>
+<script type="math/tex; mode=display">
+X_{scaled}=\frac{(X(axis=0)-X.min(axis=0))}{(X.max(axis=0)-X.min(axis=0))}\times (max-min)+min</script></li>
+<li><p>由于希望的调整后范围一般为$[0,1]$，则公式变为：</p>
+<script type="math/tex; mode=display">
+X_{scaled}=\frac{(X(axis=0)-X.min(axis=0))}{(X.max(axis=0)-X.min(axis=0))}</script></li>
 </ul>
 <hr>
 <h1 id="特征值的归一化"><a href="#特征值的归一化" class="headerlink" title="特征值的归一化"></a>特征值的归一化</h1><ul>
 <li><p>归一化是依照特征矩阵的行（样本）处理数据，其目的在于样本向量在点乘运算或计算相似性时，拥有统一的标准，也就是说都转化为“单位向量”</p>
 </li>
-<li><p>规则为L1 norm的归一化公式如下：<br>$$<br>x’=\frac{x}{\sum_{j=0}^{n-1}|x_j|}<br>$$</p>
-</li>
-<li><p>规则为L2 norm的归一化公式如下：<br>$$<br>x’=\frac{x}{\sqrt{\sum_{j=0}^{n-1}x_j^2}}<br>$$</p>
-</li>
+<li><p>规则为L1 norm的归一化公式如下：</p>
+<script type="math/tex; mode=display">
+x'=\frac{x}{\sum_{j=0}^{n-1}|x_j|}</script></li>
+<li><p>规则为L2 norm的归一化公式如下：</p>
+<script type="math/tex; mode=display">
+x'=\frac{x}{\sqrt{\sum_{j=0}^{n-1}x_j^2}}</script></li>
 </ul>
 <hr>
 <h1 id="创建多项式特征"><a href="#创建多项式特征" class="headerlink" title="创建多项式特征"></a>创建多项式特征</h1><ul>
@@ -318,18 +322,18 @@
 <li>使用方差选择法，先要计算各个特征的方差，然后根据阈值，选择方差大于阈值的特征</li>
 </ul>
 <h2 id="2-皮尔森相关系数法"><a href="#2-皮尔森相关系数法" class="headerlink" title="2.皮尔森相关系数法"></a>2.皮尔森相关系数法</h2><ul>
-<li><p>皮尔森相关系数显示两个随机变量之间线性关系的强度和方向，其计算公式为：<br>$$<br>\rho_{X,Y}=\frac{cov(X,Y)}{\sigma_X\sigma_Y}=\frac{E[(X-\mu_X)(Y-\mu_Y)]}{\sigma_X\sigma_Y}\<br>\sigma_X是X的均方差，\mu_X是X的均值<br>$$</p>
-</li>
+<li><p>皮尔森相关系数显示两个随机变量之间线性关系的强度和方向，其计算公式为：</p>
+<script type="math/tex; mode=display">
+\rho_{X,Y}=\frac{cov(X,Y)}{\sigma_X\sigma_Y}=\frac{E[(X-\mu_X)(Y-\mu_Y)]}{\sigma_X\sigma_Y}\\
+\sigma_X是X的均方差，\mu_X是X的均值</script></li>
 <li><p>将与目标值相关性较小的特征过滤掉</p>
 </li>
-<li><p>Pearson相关系数对线性关系比较敏感，如果关系是非线性的，即使两个变量具有一一对应的关系，Pearson相关性也可能接近0</p>
-</li>
+<li>Pearson相关系数对线性关系比较敏感，如果关系是非线性的，即使两个变量具有一一对应的关系，Pearson相关性也可能接近0</li>
 </ul>
 <h2 id="3-基于森林的特征选择法"><a href="#3-基于森林的特征选择法" class="headerlink" title="3.基于森林的特征选择法"></a>3.基于森林的特征选择法</h2><ul>
 <li>其原理是某些分类器，自身提供了特征的重要性分值，因此可以直接调用这些分类器，得到特征重要性分值并排序</li>
 </ul>
-<img src="/2022/12/04/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20221204220229202.png" alt="image-20221204220229202" style="zoom:50%;">
-
+<p><img src="/2022/12/04/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20221204220229202.png" alt="image-20221204220229202" style="zoom:50%;"></p>
 <h2 id="4-递归特征消除"><a href="#4-递归特征消除" class="headerlink" title="4.递归特征消除"></a>4.递归特征消除</h2><ul>
 <li>首先在初始特征或权重特征集合上训练，通过学习器返回的属性来获取每个特征的重要程度</li>
 <li>选择最小权重的特征移除</li>
@@ -344,11 +348,9 @@
 <li>LDA的借本思想：“投影后类内方差最小，类间方差最大”，即将数据在低维度上进行投影，投影后希望同类数据的投影点尽可能接近，而不同类数据的类别中心之间的距离尽可能的大</li>
 <li>下图中，右图要更好</li>
 </ul>
-<img src="/2022/12/04/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20221204220801322.png" alt="image-20221204220801322" style="zoom: 67%;">
-
+<p><img src="/2022/12/04/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20221204220801322.png" alt="image-20221204220801322" style="zoom: 67%;"></p>
 <h2 id="2-主成分分析（PCA）"><a href="#2-主成分分析（PCA）" class="headerlink" title="2.主成分分析（PCA）"></a>2.主成分分析（PCA）</h2><ul>
-<li><p>主成分分析是一种无监督的降维方法</p>
-</li>
+<li>主成分分析是一种无监督的降维方法</li>
 <li><p>方法：寻找使方差最大的方向（数学上用方差来表达投影后分散的程度），并在该方向上投影</p>
 </li>
 <li><p><a target="_blank" rel="noopener" href="https://kdocs.cn/l/cv4iZs9MpU4t?f=201">点击此处获取 PCA的原理解释与算法流程</a></p>
@@ -485,7 +487,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-count">156</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

@@ -278,7 +278,6 @@
       
         <p>本文主要记录在Verilog学习的过程中容易出错、容易遗忘的知识点，会不定期更新</p>
 <span id="more"></span>
-
 <h1 id="组合逻辑易错点"><a href="#组合逻辑易错点" class="headerlink" title="组合逻辑易错点"></a>组合逻辑易错点</h1><h2 id="1-always块语句"><a href="#1-always块语句" class="headerlink" title="1.always块语句"></a>1.always块语句</h2><ul>
 <li><p>在Verilog中可以使用两种方法描述组合逻辑：使用always组合块或assign语句</p>
 <ul>
@@ -293,7 +292,6 @@
 </li>
 <li><p>以case为例：</p>
 <figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">always</span> @(*) <span class="keyword">begin</span></span><br><span class="line">    state_nxt = state;	<span class="comment">//declare the default value in the beginning</span></span><br><span class="line">    <span class="keyword">case</span>(state) </span><br><span class="line">        IDLE: <span class="keyword">begin</span></span><br><span class="line">            <span class="keyword">if</span>(start_write)</span><br><span class="line">                start_nxt = WRITE;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(start_read)</span><br><span class="line">                start_nxt = READ；</span><br><span class="line">            <span class="comment">//else start_nxt = state; already covered in beginning</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        WRITE: <span class="keyword">begin</span></span><br><span class="line">            <span class="keyword">if</span>(end_write)</span><br><span class="line">                state_nxt = IDLE;</span><br><span class="line">            <span class="comment">//else start_nxt = state; already covered in beginning</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        READ: <span class="keyword">begin</span></span><br><span class="line">            <span class="keyword">if</span>(end_read)</span><br><span class="line">                state_nxt = IDLE;</span><br><span class="line">            <span class="comment">//else start_nxt = state; already covered in beginning</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">default</span>: <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">endcase</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-
 </li>
 </ul>
 </li>
@@ -301,7 +299,6 @@
 <h2 id="2-移位操作符"><a href="#2-移位操作符" class="headerlink" title="2.移位操作符"></a>2.移位操作符</h2><ul>
 <li><p>算数左移<code>&lt;&lt;</code>：</p>
 <figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">wire</span> [<span class="number">7</span> : <span class="number">0</span>] a, b, c;</span><br><span class="line"><span class="keyword">assign</span> c = a &lt;&lt; b;	<span class="comment">//将a向左移b位，低位用0填充</span></span><br></pre></td></tr></table></figure>
-
 <ul>
 <li><strong>在不发生溢出时，左移可以用来进行某些乘法运算</strong>，这里的溢出，指的是a最大能表示的范围，如果a左移后的值超过a能表示的最大范围，还用左移来代替乘法运算，就会出错！！！</li>
 <li>例如a = 8’b11000011（195），将a左移2位后（就是乘以4），c = 8’b00001100，最高两位就丢失了（因为195*4后是780，而8bit无符号数最多表示255，故会发生溢出）</li>
@@ -309,9 +306,6 @@
 </li>
 <li><p>算数右移<code>&gt;&gt;</code>：</p>
 <figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">wire</span> [<span class="number">7</span> : <span class="number">0</span>] a, b, c;</span><br><span class="line"><span class="keyword">assign</span> c = a &gt;&gt; b;	<span class="comment">//将a向右移b位，高位用0填充</span></span><br></pre></td></tr></table></figure>
-
-
-
 </li>
 </ul>
 <hr>
@@ -336,10 +330,9 @@
 </li>
 <li><p>ifdef用法举例</p>
 <figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">`<span class="keyword">ifdef</span> CHIP_XYZ_SEL1</span></span><br><span class="line">    <span class="keyword">assign</span> d_nxt = a + b;</span><br><span class="line">    <span class="keyword">assign</span> e_nxt = a + c;</span><br><span class="line"><span class="meta">`<span class="keyword">elsif</span> CHIP_XYZ_SEL2</span></span><br><span class="line">    <span class="keyword">assign</span> d_nxt = a - b;</span><br><span class="line">    <span class="keyword">assign</span> e_nxt = a - c;</span><br><span class="line"><span class="meta">`<span class="keyword">else</span> </span></span><br><span class="line">    <span class="keyword">assign</span> d_nxt = a * b;</span><br><span class="line">    <span class="keyword">assign</span> e_nxt = a * c;</span><br><span class="line"><span class="meta">`<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-
 <ul>
 <li>上面是一个具有多个条件编译分支的例子。如果在chiptop_defines.vh文件中对CHIP_XYZ_SEL1进行了定义，编译后将在电路代码中插入d_nxt = a + b;e_nxt = a + c;否则将判断是否定义了CHIP_XYZ_SEL2，如果没有定义，那么编译器将进入最后一个分支。</li>
-<li>注意：是``elsif<code>，不是</code>else if（这么写会报错）【《Verilog高级数字系统设计计数与实例分析》这本书咋这么多错误，还得自己敲敲代码】</li>
+<li>注意：是<code>`elsif</code>，不是`else if（这么写会报错）【《Verilog高级数字系统设计计数与实例分析》这本书咋这么多错误，还得自己敲敲代码】</li>
 </ul>
 </li>
 <li><p>仿真结果如下：</p>
@@ -359,21 +352,18 @@
 <h1 id="用于验证的Verilog语法"><a href="#用于验证的Verilog语法" class="headerlink" title="用于验证的Verilog语法"></a>用于验证的Verilog语法</h1><h2 id="1-random"><a href="#1-random" class="headerlink" title="1.$random"></a>1.$random</h2><ul>
 <li><p>$random可以产生一个有符号的32bit随机整数，一般的用法为：</p>
 <figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">num = <span class="built_in">$random</span> % b;</span><br></pre></td></tr></table></figure>
-
 <ul>
 <li><strong>num的范围在-(b-1)~(b-1)的随机数</strong></li>
 </ul>
 </li>
 <li><p>产生随机正整数：</p>
 <figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">num = &#123;<span class="built_in">$random</span>&#125; % b;</span><br></pre></td></tr></table></figure>
-
 <ul>
 <li><strong>num的范围在0~(b-1)中的随机数</strong></li>
 </ul>
 </li>
 <li><p><strong>产生一个在min，max之间随机数</strong></p>
 <figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">num = min + &#123;<span class="built_in">$random</span>&#125; % (max - min + <span class="number">1</span>);</span><br></pre></td></tr></table></figure>
-
 </li>
 </ul>
 <h2 id="2-while循环"><a href="#2-while循环" class="headerlink" title="2.while循环"></a>2.while循环</h2><ul>
@@ -385,8 +375,7 @@
 <figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> while_tb;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">parameter</span>   INIT_ADDR = <span class="number">32&#x27;h0000_0020</span>,</span><br><span class="line">                MAX_ADDR = <span class="number">32&#x27;h0000_003C</span>,</span><br><span class="line">                ADDR_INCR = <span class="number">8&#x27;h04</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">reg</span> clk;</span><br><span class="line">    <span class="keyword">reg</span> [<span class="number">32</span> : <span class="number">0</span>] mem_addr;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">always</span> #<span class="number">5</span> clk = ~clk;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">        clk = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">        mem_addr = INIT_ADDR;</span><br><span class="line">        <span class="keyword">while</span>(mem_addr &lt;= MAX_ADDR) <span class="keyword">begin</span></span><br><span class="line">            @(<span class="keyword">posedge</span> clk);</span><br><span class="line">            <span class="comment">//---do the task here</span></span><br><span class="line">            <span class="comment">//---end of task</span></span><br><span class="line">            <span class="built_in">$display</span>(<span class="string">&quot;memory address = %h&quot;</span>, mem_addr);</span><br><span class="line">            mem_addr = mem_addr + ADDR_INCR;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
 <ul>
 <li><p>仿真结果：</p>
- <img src="/2024/05/17/Verilog%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/image-20240527110056644.png" alt="image-20240527110056644" style="zoom:50%;">
-
+<p> <img src="/2024/05/17/Verilog%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/image-20240527110056644.png" alt="image-20240527110056644" style="zoom:50%;"></p>
 </li>
 </ul>
 </li>
@@ -407,7 +396,7 @@
 <figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">genvar</span> i;</span><br><span class="line"><span class="keyword">generate</span></span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i = i + <span class="number">1</span>) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">always</span> @(<span class="keyword">posedge</span> clk) <span class="keyword">begin</span></span><br><span class="line">            <span class="keyword">if</span>(cfar_flag[i]) <span class="keyword">begin</span></span><br><span class="line">                object &lt;= <span class="number">2&#x27;d2</span>;</span><br><span class="line">            <span class="keyword">end</span>        </span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">endgenerate</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p>综合结果：</p>
-<img src="/2024/05/17/Verilog%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/image-20240604114309065.png" alt="image-20240604114309065" style="zoom:80%;">
+<p><img src="/2024/05/17/Verilog%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/image-20240604114309065.png" alt="image-20240604114309065" style="zoom:80%;"></p>
 </li>
 <li><p>但这种方式综合会报CW（critical warning），布线会报错</p>
 <p><img src="/2024/05/17/Verilog%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/image-20240604120117359.png" alt="image-20240604120117359"></p>
@@ -418,11 +407,10 @@
 <li><p><strong>若测试接口用总线模式输出，此时若ila单独一根一根线拉出去观察，就会把之前总线覆盖，所以此时ila也要用总线模式</strong></p>
 <ul>
 <li><p>错误的：</p>
- <img src="/2024/05/17/Verilog%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/image-20240624134811042.png" alt="image-20240624134811042" style="zoom: 33%;">
+<p> <img src="/2024/05/17/Verilog%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/image-20240624134811042.png" alt="image-20240624134811042" style="zoom: 33%;"></p>
 </li>
 <li><p>正确的：</p>
- <img src="/2024/05/17/Verilog%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/image-20240624134844215.png" alt="image-20240624134844215" style="zoom:33%;">
-
+<p> <img src="/2024/05/17/Verilog%E4%B9%8B%E6%98%93%E9%94%99%E6%98%93%E5%BF%98%E7%9F%A5%E8%AF%86%E7%82%B9/image-20240624134844215.png" alt="image-20240624134844215" style="zoom:33%;"></p>
 </li>
 </ul>
 </li>
@@ -481,8 +469,8 @@
       <i class="fa fa-chevron-left"></i> QT之基础用法
     </a></div>
       <div class="post-nav-item">
-    <a href="/2024/05/23/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8BPetaLinux/" rel="next" title="FPGA系统设计之PetaLinux">
-      FPGA系统设计之PetaLinux <i class="fa fa-chevron-right"></i>
+    <a href="/2024/05/29/FPGA%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E7%BC%96%E8%A7%A3%E7%A0%81/" rel="next" title="FPGA数字信号处理之编解码">
+      FPGA数字信号处理之编解码 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -558,7 +546,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-count">156</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

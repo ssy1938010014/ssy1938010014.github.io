@@ -286,24 +286,24 @@
       
         <p>本节主要介绍了VLSI DSP中的迭代边界相关知识，包括DSP算法的四种表示方法、迭代边界的基本概念以及用LPM求解迭代边界。</p>
 <span id="more"></span>
-
 <h1 id="关键路径"><a href="#关键路径" class="headerlink" title="关键路径"></a>关键路径</h1><ul>
 <li><p><strong>路径</strong>：数据在任意两个节点间经有向边和中间节点的通路</p>
 </li>
 <li><p><strong>关键路径</strong>：没有延时单元的最长路径（DFG中在不包含延迟单元的路径中执行计算时间最长的路径$T_c$）</p>
-<img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121151920311.png" alt="image-20221121151920311" style="zoom:50%;">
+<p><img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121151920311.png" alt="image-20221121151920311" style="zoom:50%;"></p>
 </li>
 <li><p>关键路径确定了最小可行的时钟周期</p>
 </li>
-<li><p>时钟速度被关键路径限制<br>$$<br>T_{clk}\ge T_{critical}<br>$$</p>
-</li>
+<li><p>时钟速度被关键路径限制</p>
+<script type="math/tex; mode=display">
+T_{clk}\ge T_{critical}</script></li>
 <li><p>以4阶FIR为例：红色与紫色所示为关键路径，均包含1个乘法器和3个加法器</p>
-<img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121110000319.png" alt="image-20221121110000319" style="zoom: 67%;">
-
+<p><img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121110000319.png" alt="image-20221121110000319" style="zoom: 67%;"></p>
 <ul>
-<li><p>将其推广到N阶FIR，则：<br>$$<br>T_{critical}=T_M+(N-1)T_A<br>$$</p>
-<p>$$<br>其中,N为抽头系数<br>$$</p>
-</li>
+<li><p>将其推广到N阶FIR，则：</p>
+<script type="math/tex; mode=display">
+T_{critical}=T_M+(N-1)T_A</script><script type="math/tex; mode=display">
+其中,N为抽头系数</script></li>
 </ul>
 </li>
 </ul>
@@ -312,14 +312,12 @@
 <li>常用于图形化地描述DSP系统，由功能块和有向边组成</li>
 <li>有向边：表示从输入到输出的数据流动</li>
 </ul>
-<img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121110712904.png" alt="image-20221121110712904">
-
+<p><img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121110712904.png" alt="image-20221121110712904"></p>
 <h2 id="2-信号流图（SFG）"><a href="#2-信号流图（SFG）" class="headerlink" title="2.信号流图（SFG）"></a>2.信号流图（SFG）</h2><ul>
 <li>信号流图是一组节点和有向边的集合</li>
 <li>用于分析、表示、评估线性数字网络结构</li>
 </ul>
-<img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121111534784.png" alt="image-20221121111534784" style="zoom:50%;">
-
+<p><img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121111534784.png" alt="image-20221121111534784" style="zoom:50%;"></p>
 <h2 id="3-数据流图（DFG）"><a href="#3-数据流图（DFG）" class="headerlink" title="3.数据流图（DFG）"></a>3.数据流图（DFG）</h2><ul>
 <li><p><strong>节点</strong>：</p>
 <ul>
@@ -341,16 +339,13 @@
 </ul>
 </li>
 <li><p>同步DFG表示：</p>
-<img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121150732638.png" alt="image-20221121150732638" style="zoom:33%;">
-
+<p><img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121150732638.png" alt="image-20221121150732638" style="zoom:33%;"></p>
 </li>
 </ul>
-<img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121150657618.png" alt="image-20221121150657618" style="zoom: 33%;">
-
+<p><img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121150657618.png" alt="image-20221121150657618" style="zoom: 33%;"></p>
 <h2 id="4-依赖图（Dependence-Graph）"><a href="#4-依赖图（Dependence-Graph）" class="headerlink" title="4.依赖图（Dependence Graph）"></a>4.依赖图（Dependence Graph）</h2><ul>
 <li><p>依赖图是一种有向图，表示算法计算间的依赖关系（脉动阵列常用）</p>
-<img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121151219068.png" alt="image-20221121151219068" style="zoom: 50%;">
-
+<p><img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121151219068.png" alt="image-20221121151219068" style="zoom: 50%;"></p>
 </li>
 </ul>
 <hr>
@@ -364,20 +359,19 @@
 <li><p><strong>系统时钟频率</strong>$f$：$f=\frac1{T_{clock}}$</p>
 </li>
 <li><p><strong>环路</strong>：开始与结束于同一节点的有向路径</p>
-<img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121153445674.png" alt="image-20221121153445674" style="zoom:50%;">
+<p><img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121153445674.png" alt="image-20221121153445674" style="zoom:50%;"></p>
 </li>
-<li><p><strong>环路边界</strong>：第L个环路的环路边界为：<br>$$<br>T_{LoopBond}=\frac{T_L}{W_L}<br>$$</p>
-</li>
+<li><p><strong>环路边界</strong>：第L个环路的环路边界为：</p>
+<script type="math/tex; mode=display">
+T_{LoopBond}=\frac{T_L}{W_L}</script></li>
 </ul>
-<p>$$<br>其中,T_L是环路运行时间,W_L是环路中延迟数<br>$$</p>
-<img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121153518090.png" alt="image-20221121153518090" style="zoom:50%;">
-
+<script type="math/tex; mode=display">
+其中,T_L是环路运行时间,W_L是环路中延迟数</script><p><img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121153518090.png" alt="image-20221121153518090" style="zoom:50%;"></p>
 <ul>
 <li><p><strong>关键环路</strong>：具有最大环路边界的环路</p>
 </li>
 <li><p><strong>迭代边界</strong>：关键环路对应的环路边界值$T_{\infty}$</p>
-<img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121154307985.png" alt="image-20221121154307985" style="zoom:50%;">
-
+<p><img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121154307985.png" alt="image-20221121154307985" style="zoom:50%;"></p>
 </li>
 </ul>
 <h2 id="2-迭代边界的特点"><a href="#2-迭代边界的特点" class="headerlink" title="2.迭代边界的特点"></a>2.迭代边界的特点</h2><ul>
@@ -399,16 +393,15 @@
 <li><p>具体求解步骤：</p>
 <ul>
 <li><p>先计算$L^{(1)}$：</p>
-<img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121162232884.png" alt="image-20221121162232884" style="zoom: 67%;">
+<p><img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121162232884.png" alt="image-20221121162232884" style="zoom: 67%;"></p>
 </li>
-<li><p>通过如下公式求得其他延时下的矩阵：<br>$$<br>L_{i,j}^{(m+1)}=max(-1,L_{i,k}^{(1)}+L_{k,j}^{(m)})<br>$$</p>
-<img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121162903924.png" alt="image-20221121162903924" style="zoom: 67%;">
-
+<li><p>通过如下公式求得其他延时下的矩阵：</p>
+<script type="math/tex; mode=display">
+L_{i,j}^{(m+1)}=max(-1,L_{i,k}^{(1)}+L_{k,j}^{(m)})</script><p><img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121162903924.png" alt="image-20221121162903924" style="zoom: 67%;"></p>
 <p><img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121162957174.png" alt="image-20221121162957174"></p>
 </li>
 <li><p>则最终迭代边界为：</p>
-<img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121163042631.png" alt="image-20221121163042631" style="zoom:50%;">
-
+<p><img src="/2022/11/21/VLSI%20DSP%E4%B9%8B%E8%BF%AD%E4%BB%A3%E8%BE%B9%E7%95%8C/image-20221121163042631.png" alt="image-20221121163042631" style="zoom:50%;"></p>
 </li>
 </ul>
 </li>
@@ -567,7 +560,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-count">156</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

@@ -281,23 +281,19 @@
       
         <p>本节主要介绍了RNN、LSTM与BRNN</p>
 <span id="more"></span>
-
 <h1 id="循环神经网络RNN"><a href="#循环神经网络RNN" class="headerlink" title="循环神经网络RNN"></a>循环神经网络RNN</h1><ul>
 <li><p>用于处理序列模型</p>
-<img src="/2022/12/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%8F%8A%E5%85%B6%E5%8F%98%E4%BD%93/image-20221208160500015.png" alt="image-20221208160500015" style="zoom:50%;">
+<p><img src="/2022/12/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%8F%8A%E5%85%B6%E5%8F%98%E4%BD%93/image-20221208160500015.png" alt="image-20221208160500015" style="zoom:50%;"></p>
 </li>
 <li><p>数学表示符号：</p>
-<img src="/2022/12/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%8F%8A%E5%85%B6%E5%8F%98%E4%BD%93/image-20221208161313985.png" alt="image-20221208161313985" style="zoom: 50%;">
-
+<p><img src="/2022/12/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%8F%8A%E5%85%B6%E5%8F%98%E4%BD%93/image-20221208161313985.png" alt="image-20221208161313985" style="zoom: 50%;"></p>
 <ul>
 <li><p>$x^{(i)<t>}$：表示第i个样本的第t个元素</t></p>
 </li>
 <li><p>$T_x^{(i)}$：表示第i个样本输入序列x的长度</p>
 </li>
-<li><p>$y^{(i)<t>}$：表示第i个样本输出的第t个元素</t></p>
-</li>
-<li><p>$T_y^{(i)}$：表示第i个样本输出序列y的长度</p>
-</li>
+<li>$y^{(i)<t>}$：表示第i个样本输出的第t个元素</t></li>
+<li>$T_y^{(i)}$：表示第i个样本输出序列y的长度</li>
 </ul>
 </li>
 <li><p>单词的表示：</p>
@@ -307,26 +303,39 @@
 <p><img src="/2022/12/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%8F%8A%E5%85%B6%E5%8F%98%E4%BD%93/image-20221208162619154.png" alt="image-20221208162619154"></p>
 <p><img src="/2022/12/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%8F%8A%E5%85%B6%E5%8F%98%E4%BD%93/image-20221208162932876.png" alt="image-20221208162932876"></p>
 <ul>
-<li><p>一般假设$a^{&lt;0&gt;}$为0的行向量，即：<br>$$<br>a^{&lt;0&gt;}=\mathop{0}^\rightarrow<br>$$</p>
-</li>
-<li><p>$a^{&lt;1&gt;}、\widehat{y}^{&lt;1&gt;}$的计算，即：<br>$$<br>a^{&lt;1&gt;}=g_1(W_{aa}a^{&lt;0&gt;}+W_{ax}X^{&lt;1&gt;}+b_a)\<br>\widehat{y}^{&lt;1&gt;}=g_2(W_{ya}a^{&lt;1&gt;}+b_y)<br>$$</p>
-</li>
-<li><p>则推导可得$a^{<t>}、\widehat{y}^{<t>}$的计公式：<br>$$<br>a^{<t>}=g_1(W_{aa}a^{<t-1>}+W_{ax}X^{<t>}+b_a)\<br>\widehat{y}^{<t>}=g_2(W_{ya}a^{<t>}+b_y)\<br>其中,激活函数g1通常使用tanh/Relu,激活函数g2通常使用sigmoid/softmax<br>$$</t></t></t></t-1></t></t></t></p>
-</li>
-<li><p>RNN的简化表示：<br>$$<br>a^{<t>}=g(W_a\begin{bmatrix}<br>a^{<t-1>}\<br>x^{<t>}<br>\end{bmatrix}+b_a)\<br>其中,W_a=\begin{bmatrix}<br>W_{aa} &amp; W_{ax}<br>\end{bmatrix}<br>$$</t></t-1></t></p>
-<p>$$<br>\widehat{y}^{<t>}=g(W_ya^{<t>}+b_y)<br>$$</t></t></p>
-</li>
+<li><p>一般假设$a^{<0>}$为0的行向量，即：</0></p>
+<script type="math/tex; mode=display">
+a^{<0>}=\mathop{0}^\rightarrow</script></li>
+<li><p>$a^{<1>}、\widehat{y}^{<1>}$的计算，即：</1></1></p>
+<script type="math/tex; mode=display">
+a^{<1>}=g_1(W_{aa}a^{<0>}+W_{ax}X^{<1>}+b_a)\\
+\widehat{y}^{<1>}=g_2(W_{ya}a^{<1>}+b_y)</script></li>
+<li><p>则推导可得$a^{<t>}、\widehat{y}^{<t>}$的计公式：</t></t></p>
+<script type="math/tex; mode=display">
+a^{<t>}=g_1(W_{aa}a^{<t-1>}+W_{ax}X^{<t>}+b_a)\\
+\widehat{y}^{<t>}=g_2(W_{ya}a^{<t>}+b_y)\\
+其中,激活函数g1通常使用tanh/Relu,激活函数g2通常使用sigmoid/softmax</script></li>
+<li><p>RNN的简化表示：</p>
+<script type="math/tex; mode=display">
+a^{<t>}=g(W_a\begin{bmatrix}
+a^{<t-1>}\\
+x^{<t>}
+\end{bmatrix}+b_a)\\
+其中,W_a=\begin{bmatrix}
+W_{aa} & W_{ax}
+\end{bmatrix}</script><script type="math/tex; mode=display">
+\widehat{y}^{<t>}=g(W_ya^{<t>}+b_y)</script></li>
 </ul>
 </li>
 <li><p><strong>不同类型的循环神经网络</strong>：</p>
 <p><img src="/2022/12/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%8F%8A%E5%85%B6%E5%8F%98%E4%BD%93/image-20221208174432112.png" alt="image-20221208174432112"></p>
 </li>
 <li><p><strong>RNN单元</strong>：</p>
-<img src="/2022/12/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%8F%8A%E5%85%B6%E5%8F%98%E4%BD%93/image-20221208200447733.png" alt="image-20221208200447733" style="zoom: 50%;">
+<p><img src="/2022/12/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%8F%8A%E5%85%B6%E5%8F%98%E4%BD%93/image-20221208200447733.png" alt="image-20221208200447733" style="zoom: 50%;"></p>
 </li>
-<li><p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1JP4y117mX?p=1&vd_source=221b76534ba13cfad544149d75ce9b6c">46. 49 循环神经网络RNN_哔哩哔哩_bilibili</a></p>
+<li><p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1JP4y117mX?p=1&amp;vd_source=221b76534ba13cfad544149d75ce9b6c">46. 49 循环神经网络RNN_哔哩哔哩_bilibili</a></p>
 </li>
-<li><p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1JP4y117mX?p=2&vd_source=221b76534ba13cfad544149d75ce9b6c">47. 50 不同类型的RNN模型_哔哩哔哩_bilibili</a></p>
+<li><p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1JP4y117mX?p=2&amp;vd_source=221b76534ba13cfad544149d75ce9b6c">47. 50 不同类型的RNN模型_哔哩哔哩_bilibili</a></p>
 </li>
 </ul>
 <hr>
@@ -334,12 +343,18 @@
 <li><strong>在网络结构很深（很多层）的情况下，也能保留重要信息</strong></li>
 <li><strong>解决了普通RNN求解过程中的梯度消失问题</strong></li>
 </ul>
-<p>$$<br>{\mathop c^{\sim}}^{<t>}=tanh(W_c[a^{<t-1>},x^{<t>}]+b_c)\<br>其中:[a^{<t-1>},x^{<t>}]代表\begin{bmatrix}<br>a^{<t-1>}\<br>x^{<t>}<br>\end{bmatrix}<br>$$</t></t-1></t></t-1></t></t-1></t></p>
-<p>$$<br>c^{<t>}=\Gamma_u\cdot{\mathop c^{\sim}}^{<t>}+\Gamma_f\cdot{\mathop c^{\sim}}^{<t-1>}\<br>其中,\cdot代表对应元素相乘<br>$$</t-1></t></t></p>
-<p>$$<br>a^{<t>}=\Gamma_o\cdot tanh,c^{<t>}<br>$$</t></t></p>
-<p>$$<br>更新门:\Gamma_u=\sigma(W_u[a^{<t-1>},x^{<t>}]+b_u)\<br>遗忘门:\Gamma_f=\sigma(W_f[a^{<t-1>},x^{<t>}]+b_f)\<br>输出门:\Gamma_o=\sigma(W_o[a^{<t-1>},x^{<t>}]+b_o)<br>$$</t></t-1></t></t-1></t></t-1></p>
-<img src="/2022/12/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%8F%8A%E5%85%B6%E5%8F%98%E4%BD%93/image-20221208203507229.png" alt="image-20221208203507229" style="zoom: 67%;">
-
+<script type="math/tex; mode=display">
+{\mathop c^{\sim}}^{<t>}=tanh(W_c[a^{<t-1>},x^{<t>}]+b_c)\\
+其中:[a^{<t-1>},x^{<t>}]代表\begin{bmatrix}
+a^{<t-1>}\\
+x^{<t>}
+\end{bmatrix}</script><script type="math/tex; mode=display">
+c^{<t>}=\Gamma_u\cdot{\mathop c^{\sim}}^{<t>}+\Gamma_f\cdot{\mathop c^{\sim}}^{<t-1>}\\
+其中\,\cdot代表对应元素相乘</script><script type="math/tex; mode=display">
+a^{<t>}=\Gamma_o\cdot tanh\,c^{<t>}</script><script type="math/tex; mode=display">
+更新门:\Gamma_u=\sigma(W_u[a^{<t-1>},x^{<t>}]+b_u)\\
+遗忘门:\Gamma_f=\sigma(W_f[a^{<t-1>},x^{<t>}]+b_f)\\
+输出门:\Gamma_o=\sigma(W_o[a^{<t-1>},x^{<t>}]+b_o)</script><p><img src="/2022/12/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%8F%8A%E5%85%B6%E5%8F%98%E4%BD%93/image-20221208203507229.png" alt="image-20221208203507229" style="zoom: 67%;"></p>
 <p><img src="/2022/12/08/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%8F%8A%E5%85%B6%E5%8F%98%E4%BD%93/image-20221208203655582.png" alt="image-20221208203655582"></p>
 <hr>
 <h1 id="双向循环神经网络BRNN"><a href="#双向循环神经网络BRNN" class="headerlink" title="双向循环神经网络BRNN"></a>双向循环神经网络BRNN</h1><ul>
@@ -477,7 +492,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-count">156</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
