@@ -60,7 +60,7 @@
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/10/28/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E5%B8%B8%E7%94%A8%E5%9B%BE%E5%83%8F%E9%99%8D%E5%99%AA%E7%AE%97%E6%B3%95/image-20241126153115872.png">
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/10/28/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E5%B8%B8%E7%94%A8%E5%9B%BE%E5%83%8F%E9%99%8D%E5%99%AA%E7%AE%97%E6%B3%95/image-20241126155756562.png">
 <meta property="article:published_time" content="2024-10-28T04:07:12.000Z">
-<meta property="article:modified_time" content="2024-11-28T02:30:22.901Z">
+<meta property="article:modified_time" content="2025-02-12T11:38:45.766Z">
 <meta property="article:author" content="ssy">
 <meta property="article:tag" content="FPGA">
 <meta property="article:tag" content="图像处理">
@@ -270,7 +270,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-11-28 10:30:22" itemprop="dateModified" datetime="2024-11-28T10:30:22+08:00">2024-11-28</time>
+                <time title="修改时间：2025-02-12 19:38:45" itemprop="dateModified" datetime="2025-02-12T19:38:45+08:00">2025-02-12</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -339,7 +339,7 @@
 <li><p><strong>均值滤波对椒盐噪声的处理并不是那么理想的</strong>。 均值滤波算法是较简单的滤波算法， 计算量较小， 其成效显而易见， <strong>对噪声能起到一个平滑的作用</strong>。  </p>
 </li>
 </ul>
-<h2 id="2-均值滤波的FPGA实现-·"><a href="#2-均值滤波的FPGA实现-·" class="headerlink" title="2.均值滤波的FPGA实现**·"></a>2.均值滤波的FPGA实现**·</h2><ul>
+<h2 id="2-均值滤波的FPGA实现"><a href="#2-均值滤波的FPGA实现" class="headerlink" title="2.均值滤波的FPGA实现**"></a>2.均值滤波的FPGA实现**</h2><ul>
 <li><p>均值滤波FPGA实现的关键在于<strong>3*3滑窗的缓存</strong>以及<strong>图像边缘的处理</strong></p>
 </li>
 <li><p>为3×3窗口生成的模块， 为了生成以目标像素为中心的3×3窗口， <strong>需要缓存3行像素， 但在设计时只需要缓存两行像素， 第3行像素实时输入即可</strong>  </p>
@@ -667,7 +667,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%BE%E5%83%8F%E5%99%AA%E5%A3%B0%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">图像噪声简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9D%87%E5%80%BC%E6%BB%A4%E6%B3%A2%E7%AE%97%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">均值滤波算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%9D%87%E5%80%BC%E6%BB%A4%E6%B3%A2%E7%9A%84MATLAB%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.1.</span> <span class="nav-text">1.均值滤波的MATLAB实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%9D%87%E5%80%BC%E6%BB%A4%E6%B3%A2%E7%9A%84FPGA%E5%AE%9E%E7%8E%B0-%C2%B7"><span class="nav-number">2.2.</span> <span class="nav-text">2.均值滤波的FPGA实现**·</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%AD%E5%80%BC%E6%BB%A4%E6%B3%A2%E7%AE%97%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">中值滤波算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%B8%AD%E5%80%BC%E6%BB%A4%E6%B3%A2%E7%9A%84MATLAB%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.1.</span> <span class="nav-text">1.中值滤波的MATLAB实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%B8%AD%E5%80%BC%E6%BB%A4%E6%B3%A2%E7%9A%84FPGA%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.2.</span> <span class="nav-text">2.中值滤波的FPGA实现*</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%AB%98%E6%96%AF%E6%BB%A4%E6%B3%A2%E7%AE%97%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text">高斯滤波算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E9%AB%98%E6%96%AF%E6%BB%A4%E6%B3%A2%E7%9A%84MATLAB%E5%AE%9E%E7%8E%B0"><span class="nav-number">4.1.</span> <span class="nav-text">1.高斯滤波的MATLAB实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E9%AB%98%E6%96%AF%E6%BB%A4%E6%B3%A2%E7%9A%84FPGA%E5%AE%9E%E7%8E%B0"><span class="nav-number">4.2.</span> <span class="nav-text">2.高斯滤波的FPGA实现**</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%8C%E8%BE%B9%E6%BB%A4%E6%B3%A2%E7%AE%97%E6%B3%95"><span class="nav-number">5.</span> <span class="nav-text">双边滤波算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%8F%8C%E8%BE%B9%E6%BB%A4%E6%B3%A2%E7%AE%97%E6%B3%95%E7%9A%84MATLAB%E5%AE%9E%E7%8E%B0"><span class="nav-number">5.1.</span> <span class="nav-text">1.双边滤波算法的MATLAB实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%8F%8C%E8%BE%B9%E6%BB%A4%E6%B3%A2%E7%AE%97%E6%B3%95%E7%9A%84FPGA%E5%AE%9E%E7%8E%B0"><span class="nav-number">5.2.</span> <span class="nav-text">2.双边滤波算法的FPGA实现**</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">6.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%BE%E5%83%8F%E5%99%AA%E5%A3%B0%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">图像噪声简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9D%87%E5%80%BC%E6%BB%A4%E6%B3%A2%E7%AE%97%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">均值滤波算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%9D%87%E5%80%BC%E6%BB%A4%E6%B3%A2%E7%9A%84MATLAB%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.1.</span> <span class="nav-text">1.均值滤波的MATLAB实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%9D%87%E5%80%BC%E6%BB%A4%E6%B3%A2%E7%9A%84FPGA%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.2.</span> <span class="nav-text">2.均值滤波的FPGA实现**</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%AD%E5%80%BC%E6%BB%A4%E6%B3%A2%E7%AE%97%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">中值滤波算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%B8%AD%E5%80%BC%E6%BB%A4%E6%B3%A2%E7%9A%84MATLAB%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.1.</span> <span class="nav-text">1.中值滤波的MATLAB实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%B8%AD%E5%80%BC%E6%BB%A4%E6%B3%A2%E7%9A%84FPGA%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.2.</span> <span class="nav-text">2.中值滤波的FPGA实现*</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%AB%98%E6%96%AF%E6%BB%A4%E6%B3%A2%E7%AE%97%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text">高斯滤波算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E9%AB%98%E6%96%AF%E6%BB%A4%E6%B3%A2%E7%9A%84MATLAB%E5%AE%9E%E7%8E%B0"><span class="nav-number">4.1.</span> <span class="nav-text">1.高斯滤波的MATLAB实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E9%AB%98%E6%96%AF%E6%BB%A4%E6%B3%A2%E7%9A%84FPGA%E5%AE%9E%E7%8E%B0"><span class="nav-number">4.2.</span> <span class="nav-text">2.高斯滤波的FPGA实现**</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%8C%E8%BE%B9%E6%BB%A4%E6%B3%A2%E7%AE%97%E6%B3%95"><span class="nav-number">5.</span> <span class="nav-text">双边滤波算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%8F%8C%E8%BE%B9%E6%BB%A4%E6%B3%A2%E7%AE%97%E6%B3%95%E7%9A%84MATLAB%E5%AE%9E%E7%8E%B0"><span class="nav-number">5.1.</span> <span class="nav-text">1.双边滤波算法的MATLAB实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%8F%8C%E8%BE%B9%E6%BB%A4%E6%B3%A2%E7%AE%97%E6%B3%95%E7%9A%84FPGA%E5%AE%9E%E7%8E%B0"><span class="nav-number">5.2.</span> <span class="nav-text">2.双边滤波算法的FPGA实现**</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">6.</span> <span class="nav-text">Reference</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -683,7 +683,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">157</span>
+          <span class="site-state-item-count">159</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

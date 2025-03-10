@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1/themes/blue/pace-theme-minimal.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"xn--ssy-lq6e63gg6fuu2d.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本节主要介绍常用的串行通信接口UART、SPI、IIC时序及其Verilog代码实现。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FPGA系统设计之常用串行通信接口">
+<meta property="og:url" content="http://ssy的小天地.com/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/index.html">
+<meta property="og:site_name" content="ssy的小天地">
+<meta property="og:description" content="本节主要介绍常用的串行通信接口UART、SPI、IIC时序及其Verilog代码实现。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309150828616.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309150856614.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309150920930.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309151635179.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309154432478.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309154539709.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309163717252.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309170521701.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309174845480.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309180026123.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309180933950.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309211942611.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309213526404.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309213645301.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309214255314.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309222131604.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309222831876.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309223155209.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309223222552.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309223731605.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309230656096.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309232117019.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309232429673.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309232918663.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250310111418790.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250310112128449.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250310112831959.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250310113544931.png">
+<meta property="article:published_time" content="2025-03-09T02:07:12.000Z">
+<meta property="article:modified_time" content="2025-03-10T03:36:10.432Z">
+<meta property="article:author" content="ssy">
+<meta property="article:tag" content="FPGA">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309150828616.png">
+
+<link rel="canonical" href="http://ssy的小天地.com/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>FPGA系统设计之常用串行通信接口 | ssy的小天地</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <!--pjax：防止跳转页面音乐暂停-->
+  <script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+    <a target="_blank" rel="noopener" href="https://github.com/ssy1938010014" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ssy的小天地</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">愿汝如是 千金不换</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-works">
+
+    <a href="/works/" rel="section"><i class="fa fa-fw fa-sitemap"></i>文章</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ssy的小天地.com/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/ssy.png">
+      <meta itemprop="name" content="ssy">
+      <meta itemprop="description" content="满怀希望 就会所向披靡">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ssy的小天地">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          FPGA系统设计之常用串行通信接口
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+
+
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-03-09 10:07:12" itemprop="dateCreated datePublished" datetime="2025-03-09T10:07:12+08:00">2025-03-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-03-10 11:36:10" itemprop="dateModified" datetime="2025-03-10T11:36:10+08:00">2025-03-10</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%A7%AF%E7%B4%AF/" itemprop="url" rel="index"><span itemprop="name">学习积累</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本节主要介绍常用的串行通信接口UART、SPI、IIC时序及其Verilog代码实现。</p>
+<span id="more"></span>
+
+<h1 id="URAT"><a href="#URAT" class="headerlink" title="URAT"></a>URAT</h1><ul>
+<li><p>异步全双工串行通信协议</p>
+</li>
+<li><p>所谓<strong>异步：发送、接收方使用各自的时钟控制数据的收发</strong></p>
+</li>
+<li><p>所谓<strong>串行：将数据每个bit逐个传输</strong></p>
+</li>
+<li><p>串行通信的传输方向：</p>
+<ul>
+<li><p>单工：数据只能沿着一个方向传输</p>
+ <img src="/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309150828616.png" alt="image-20250309150828616" style="zoom:50%;">
+</li>
+<li><p>半双工：数据可以沿着两个方向传输，但需要分别进行</p>
+ <img src="/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309150856614.png" alt="image-20250309150856614" style="zoom:50%;">
+</li>
+<li><p>全双工：数据可以同时进行双向传输</p>
+ <img src="/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309150920930.png" alt="image-20250309150920930" style="zoom:50%;">
+</li>
+</ul>
+</li>
+<li><p>发送方：将<strong>并行数据</strong>转换为<strong>串行数据</strong>进行传输</p>
+</li>
+<li><p>接收方：将<strong>串行数据</strong>转换为<strong>并行数据</strong>进行传输</p>
+</li>
+</ul>
+<h2 id="1-时序格式"><a href="#1-时序格式" class="headerlink" title="1.时序格式"></a>1.时序格式</h2><img src="/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309151635179.png" alt="image-20250309151635179" style="zoom: 67%;">
+
+<ul>
+<li>数据格式：<ul>
+<li><strong>起始位</strong>：标志一帧数据的开始</li>
+<li><strong>数据位</strong>：一帧数据中的有效数据，可以是5~8个bit</li>
+<li><strong>校验位</strong>：用于检测数据传输是否出错<ul>
+<li>奇校验</li>
+<li>偶校验</li>
+<li>无校验位</li>
+</ul>
+</li>
+<li><strong>停止位</strong>：标志一帧数据的结束，可以是1（默认）、1.5、2个bit</li>
+</ul>
+</li>
+<li>串口通信速率：<ul>
+<li>波特率：<strong>每秒钟传输二进制数据的位数，单位bit/s(bps)</strong></li>
+<li>常用波特率：9600、19200、38400、57600、115200bit/s</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-设计思路"><a href="#2-设计思路" class="headerlink" title="2.设计思路"></a>2.设计思路</h2><ul>
+<li><p>模式选择：</p>
+<ul>
+<li>开始位：1bit</li>
+<li>数据位：8bit</li>
+<li>校验位：无</li>
+<li>停止位：1bit</li>
+<li>波特率：115200bit/s</li>
+</ul>
+</li>
+<li><p><strong>收发设计分析：</strong></p>
+<ul>
+<li>由于使用的波特率为115200，那么意味着串口发送或者接收1bit数据的时间为1个波特，即$\frac1{115200}s$</li>
+<li>使用FPGA系统时钟周期来计数，若其为50MHz（20ns），那么需要$(1/115200)/(20\times 10^{-9})\approx 434$个系统时钟周期对1bit数据计数。这样我们就需要一个至少为 9 位的波特率计数器来计数，实际使用设为 16 位是为了其他波特率的使用  </li>
+<li>还需要一个4bit的计数器对总共要发送的10bit数据计数</li>
+<li><strong>在系统时钟计数器计数到一半时去采集数据，这时候的数据采集是最稳定的</strong></li>
+</ul>
+</li>
+<li><p>串口接收模块波形图：</p>
+<p><img src="/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309154432478.png" alt="image-20250309154432478"></p>
+</li>
+<li><p>串口发送模块波形图：</p>
+<p><img src="/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309154539709.png" alt="image-20250309154539709"></p>
+</li>
+</ul>
+<h2 id="3-uart串口接收代码设计"><a href="#3-uart串口接收代码设计" class="headerlink" title="3.uart串口接收代码设计"></a>3.uart串口接收代码设计</h2><ul>
+<li>结合上述时序图，还是很容易看懂下述代码的。主要是通过两个计数器计数，一个计数器是对每个1bit内部计数（baud_cnt），一个计数器是对10个bit计数（rx_cnt），此外，rx_flag这个标志此时处于接收过程中的标志位还是比较妙的。其次，通过对uart_rxd下降沿的判断（有做两级寄存减少亚稳态），得到一个start_en的开始接收数据标志</li>
+</ul>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> uart_rx(</span><br><span class="line">    <span class="keyword">input</span>               clk         ,  <span class="comment">//系统时钟</span></span><br><span class="line">    <span class="keyword">input</span>               rst_n       ,  <span class="comment">//系统复位，低有效</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">input</span>               uart_rxd    ,  <span class="comment">//UART接收端口</span></span><br><span class="line">    <span class="keyword">output</span>  <span class="keyword">reg</span>         uart_rx_done,  <span class="comment">//UART接收完成信号</span></span><br><span class="line">    <span class="keyword">output</span>  <span class="keyword">reg</span>  [<span class="number">7</span>:<span class="number">0</span>]  uart_rx_data   <span class="comment">//UART接收到的数据</span></span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line"><span class="comment">//parameter define</span></span><br><span class="line"><span class="keyword">parameter</span> CLK_FREQ = <span class="number">50000000</span>;               <span class="comment">//系统时钟频率</span></span><br><span class="line"><span class="keyword">parameter</span> UART_BPS = <span class="number">115200</span>  ;               <span class="comment">//串口波特率</span></span><br><span class="line"><span class="keyword">localparam</span> BAUD_CNT_MAX = CLK_FREQ/UART_BPS; <span class="comment">//为得到指定波特率，对系统时钟计数BPS_CNT次</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//reg define</span></span><br><span class="line"><span class="keyword">reg</span>          uart_rxd_d0;</span><br><span class="line"><span class="keyword">reg</span>          uart_rxd_d1;</span><br><span class="line"><span class="keyword">reg</span>          uart_rxd_d2;</span><br><span class="line"><span class="keyword">reg</span>          rx_flag    ;  <span class="comment">//接收过程标志信号</span></span><br><span class="line"><span class="keyword">reg</span>  [<span class="number">3</span>:<span class="number">0</span> ]  rx_cnt     ;  <span class="comment">//接收数据计数器</span></span><br><span class="line"><span class="keyword">reg</span>  [<span class="number">15</span>:<span class="number">0</span>]  baud_cnt   ;  <span class="comment">//波特率计数器</span></span><br><span class="line"><span class="keyword">reg</span>  [<span class="number">7</span>:<span class="number">0</span> ]  rx_data_t  ;  <span class="comment">//接收数据寄存器</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//wire define</span></span><br><span class="line"><span class="keyword">wire</span>        start_en;</span><br><span class="line"></span><br><span class="line"><span class="comment">//*****************************************************</span></span><br><span class="line"><span class="comment">//**                    main code</span></span><br><span class="line"><span class="comment">//*****************************************************</span></span><br><span class="line"><span class="comment">//捕获接收端口下降沿(起始位)，得到一个时钟周期的脉冲信号</span></span><br><span class="line"><span class="keyword">assign</span> start_en = uart_rxd_d2 &amp; (~uart_rxd_d1) &amp; (~rx_flag);</span><br><span class="line"></span><br><span class="line"><span class="comment">//针对异步信号的同步处理</span></span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">negedge</span> rst_n) <span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">if</span>(!rst_n) <span class="keyword">begin</span></span><br><span class="line">        uart_rxd_d0 &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">        uart_rxd_d1 &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">        uart_rxd_d2 &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">        uart_rxd_d0 &lt;= uart_rxd;</span><br><span class="line">        uart_rxd_d1 &lt;= uart_rxd_d0;</span><br><span class="line">        uart_rxd_d2 &lt;= uart_rxd_d1;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//给接收标志赋值</span></span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">negedge</span> rst_n) <span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">if</span>(!rst_n) </span><br><span class="line">        rx_flag &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(start_en)    <span class="comment">//检测到起始位</span></span><br><span class="line">        rx_flag &lt;= <span class="number">1&#x27;b1</span>; <span class="comment">//接收过程中，标志信号rx_flag拉高</span></span><br><span class="line">    <span class="comment">//在停止位一半的时候，即接收过程结束，标志信号rx_flag拉低</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>((rx_cnt == <span class="number">4&#x27;d9</span>) &amp;&amp; (baud_cnt == BAUD_CNT_MAX/<span class="number">2</span> - <span class="number">1&#x27;b1</span>))</span><br><span class="line">        rx_flag &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        rx_flag &lt;= rx_flag;</span><br><span class="line"><span class="keyword">end</span>        </span><br><span class="line"></span><br><span class="line"><span class="comment">//波特率的计数器赋值</span></span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">negedge</span> rst_n) <span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">if</span>(!rst_n) </span><br><span class="line">        baud_cnt &lt;= <span class="number">16&#x27;d0</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(rx_flag) <span class="keyword">begin</span>     <span class="comment">//处于接收过程时，波特率计数器（baud_cnt）进行循环计数</span></span><br><span class="line">        <span class="keyword">if</span>(baud_cnt &lt; BAUD_CNT_MAX - <span class="number">1&#x27;b1</span>)</span><br><span class="line">            baud_cnt &lt;= baud_cnt + <span class="number">16&#x27;b1</span>;</span><br><span class="line">        <span class="keyword">else</span> </span><br><span class="line">            baud_cnt &lt;= <span class="number">16&#x27;d0</span>; <span class="comment">//计数达到一个波特率周期后清零</span></span><br><span class="line">    <span class="keyword">end</span>    </span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        baud_cnt &lt;= <span class="number">16&#x27;d0</span>;     <span class="comment">//接收过程结束时计数器清零</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//对接收数据计数器（rx_cnt）进行赋值</span></span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">negedge</span> rst_n) <span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">if</span>(!rst_n) </span><br><span class="line">        rx_cnt &lt;= <span class="number">4&#x27;d0</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(rx_flag) <span class="keyword">begin</span>                  <span class="comment">//处于接收过程时rx_cnt才进行计数</span></span><br><span class="line">        <span class="keyword">if</span>(baud_cnt == BAUD_CNT_MAX - <span class="number">1&#x27;b1</span>) <span class="comment">//当波特率计数器计数到一个波特率周期时</span></span><br><span class="line">            rx_cnt &lt;= rx_cnt + <span class="number">1&#x27;b1</span>;        <span class="comment">//接收数据计数器加1</span></span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            rx_cnt &lt;= rx_cnt;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        rx_cnt &lt;= <span class="number">4&#x27;d0</span>;                     <span class="comment">//接收过程结束时计数器清零</span></span><br><span class="line"><span class="keyword">end</span>        </span><br><span class="line"></span><br><span class="line"><span class="comment">//根据rx_cnt来寄存rxd端口的数据</span></span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">negedge</span> rst_n) <span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">if</span>(!rst_n) </span><br><span class="line">        rx_data_t &lt;= <span class="number">8&#x27;b0</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(rx_flag) <span class="keyword">begin</span>                           <span class="comment">//系统处于接收过程时</span></span><br><span class="line">        <span class="keyword">if</span>(baud_cnt == BAUD_CNT_MAX/<span class="number">2</span> - <span class="number">1&#x27;b1</span>) <span class="keyword">begin</span>  <span class="comment">//判断baud_cnt是否计数到数据位的中间</span></span><br><span class="line">           <span class="keyword">case</span>(rx_cnt)</span><br><span class="line">               <span class="number">4&#x27;d1</span> : rx_data_t[<span class="number">0</span>] &lt;= uart_rxd_d2;   <span class="comment">//寄存数据的最低位</span></span><br><span class="line">               <span class="number">4&#x27;d2</span> : rx_data_t[<span class="number">1</span>] &lt;= uart_rxd_d2;</span><br><span class="line">               <span class="number">4&#x27;d3</span> : rx_data_t[<span class="number">2</span>] &lt;= uart_rxd_d2;</span><br><span class="line">               <span class="number">4&#x27;d4</span> : rx_data_t[<span class="number">3</span>] &lt;= uart_rxd_d2;</span><br><span class="line">               <span class="number">4&#x27;d5</span> : rx_data_t[<span class="number">4</span>] &lt;= uart_rxd_d2;</span><br><span class="line">               <span class="number">4&#x27;d6</span> : rx_data_t[<span class="number">5</span>] &lt;= uart_rxd_d2;</span><br><span class="line">               <span class="number">4&#x27;d7</span> : rx_data_t[<span class="number">6</span>] &lt;= uart_rxd_d2;</span><br><span class="line">               <span class="number">4&#x27;d8</span> : rx_data_t[<span class="number">7</span>] &lt;= uart_rxd_d2;   <span class="comment">//寄存数据的高低位</span></span><br><span class="line">               <span class="keyword">default</span> : ;</span><br><span class="line">            <span class="keyword">endcase</span>  </span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            rx_data_t &lt;= rx_data_t;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        rx_data_t &lt;= <span class="number">8&#x27;b0</span>;</span><br><span class="line"><span class="keyword">end</span>        </span><br><span class="line"></span><br><span class="line"><span class="comment">//给接收完成信号和接收到的数据赋值</span></span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">negedge</span> rst_n) <span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">if</span>(!rst_n) <span class="keyword">begin</span></span><br><span class="line">        uart_rx_done &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">        uart_rx_data &lt;= <span class="number">8&#x27;b0</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="comment">//当接收数据计数器计数到停止位，且baud_cnt计数到停止位的中间时</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(rx_cnt == <span class="number">4&#x27;d9</span> &amp;&amp; baud_cnt == BAUD_CNT_MAX/<span class="number">2</span> - <span class="number">1&#x27;b1</span>) <span class="keyword">begin</span></span><br><span class="line">        uart_rx_done &lt;= <span class="number">1&#x27;b1</span>     ;  <span class="comment">//拉高接收完成信号</span></span><br><span class="line">        uart_rx_data &lt;= rx_data_t;  <span class="comment">//并对UART接收到的数据进行赋值</span></span><br><span class="line">    <span class="keyword">end</span>    </span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">        uart_rx_done &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">        uart_rx_data &lt;= uart_rx_data;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="4-uart串口发送代码设计"><a href="#4-uart串口发送代码设计" class="headerlink" title="4.uart串口发送代码设计"></a>4.uart串口发送代码设计</h2><ul>
+<li>结合上述时序图，还是很容易看懂下述代码的。发送部分是外部信号给一个发送使能标志</li>
+</ul>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> uart_tx(</span><br><span class="line">    <span class="keyword">input</span>               clk         , <span class="comment">//系统时钟</span></span><br><span class="line">    <span class="keyword">input</span>               rst_n       , <span class="comment">//系统复位，低有效</span></span><br><span class="line">    <span class="keyword">input</span>               uart_tx_en  , <span class="comment">//UART的发送使能</span></span><br><span class="line">    <span class="keyword">input</span>     [<span class="number">7</span>:<span class="number">0</span>]     uart_tx_data, <span class="comment">//UART要发送的数据</span></span><br><span class="line">    <span class="keyword">output</span>  <span class="keyword">reg</span>         uart_txd    , <span class="comment">//UART发送端口</span></span><br><span class="line">    <span class="keyword">output</span>  <span class="keyword">reg</span>         uart_tx_busy  <span class="comment">//发送忙状态信号</span></span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line"><span class="comment">//parameter define</span></span><br><span class="line"><span class="keyword">parameter</span> CLK_FREQ = <span class="number">50000000</span>;               <span class="comment">//系统时钟频率</span></span><br><span class="line"><span class="keyword">parameter</span> UART_BPS = <span class="number">115200</span>  ;               <span class="comment">//串口波特率</span></span><br><span class="line"><span class="keyword">localparam</span> BAUD_CNT_MAX = CLK_FREQ/UART_BPS; <span class="comment">//为得到指定波特率，对系统时钟计数BPS_CNT次</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//reg define</span></span><br><span class="line"><span class="keyword">reg</span>  [<span class="number">7</span>:<span class="number">0</span>]  tx_data_t;  <span class="comment">//发送数据寄存器</span></span><br><span class="line"><span class="keyword">reg</span>  [<span class="number">3</span>:<span class="number">0</span>]  tx_cnt   ;  <span class="comment">//发送数据计数器</span></span><br><span class="line"><span class="keyword">reg</span>  [<span class="number">15</span>:<span class="number">0</span>] baud_cnt ;  <span class="comment">//波特率计数器</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//*****************************************************</span></span><br><span class="line"><span class="comment">//**                    main code</span></span><br><span class="line"><span class="comment">//*****************************************************</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//当uart_tx_en为高时，寄存输入的并行数据，并拉高BUSY信号</span></span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">negedge</span> rst_n) <span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">if</span>(!rst_n) <span class="keyword">begin</span></span><br><span class="line">        tx_data_t &lt;= <span class="number">8&#x27;b0</span>;</span><br><span class="line">        uart_tx_busy &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="comment">//发送使能时，寄存要发送的数据，并拉高BUSY信号</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(uart_tx_en) <span class="keyword">begin</span></span><br><span class="line">        tx_data_t &lt;= uart_tx_data;</span><br><span class="line">        uart_tx_busy &lt;= <span class="number">1&#x27;b1</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="comment">//当计数到停止位结束时，停止发送过程</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(tx_cnt == <span class="number">4&#x27;d9</span> &amp;&amp; baud_cnt == BAUD_CNT_MAX - <span class="number">1</span>) <span class="keyword">begin</span></span><br><span class="line">        tx_data_t &lt;= <span class="number">8&#x27;b0</span>;     <span class="comment">//清空发送数据寄存器</span></span><br><span class="line">        uart_tx_busy &lt;= <span class="number">1&#x27;b0</span>;  <span class="comment">//并拉低BUSY信号</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">        tx_data_t &lt;= tx_data_t;</span><br><span class="line">        uart_tx_busy &lt;= uart_tx_busy;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//波特率的计数器赋值</span></span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">negedge</span> rst_n) <span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">if</span>(!rst_n) </span><br><span class="line">        baud_cnt &lt;= <span class="number">16&#x27;d0</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(uart_tx_en)  </span><br><span class="line">        baud_cnt &lt;= <span class="number">16&#x27;d0</span>;      </span><br><span class="line">    <span class="comment">//当处于发送过程时，波特率计数器（baud_cnt）进行循环计数</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(uart_tx_busy) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>(baud_cnt &lt; BAUD_CNT_MAX - <span class="number">1&#x27;b1</span>)</span><br><span class="line">            baud_cnt &lt;= baud_cnt + <span class="number">16&#x27;b1</span>;</span><br><span class="line">        <span class="keyword">else</span> </span><br><span class="line">            baud_cnt &lt;= <span class="number">16&#x27;d0</span>; <span class="comment">//计数达到一个波特率周期后清零</span></span><br><span class="line">    <span class="keyword">end</span>    </span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        baud_cnt &lt;= <span class="number">16&#x27;d0</span>;     <span class="comment">//发送过程结束时计数器清零</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//tx_cnt进行赋值</span></span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">negedge</span> rst_n) <span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">if</span>(!rst_n) </span><br><span class="line">        tx_cnt &lt;= <span class="number">4&#x27;d0</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(uart_tx_en)  </span><br><span class="line">        tx_cnt &lt;= <span class="number">16&#x27;d0</span>;         </span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(uart_tx_busy) <span class="keyword">begin</span>             <span class="comment">//处于发送过程时tx_cnt才进行计数</span></span><br><span class="line">        <span class="keyword">if</span>(baud_cnt == BAUD_CNT_MAX - <span class="number">1&#x27;b1</span>) <span class="comment">//当波特率计数器计数到一个波特率周期时</span></span><br><span class="line">            tx_cnt &lt;= tx_cnt + <span class="number">1&#x27;b1</span>;        <span class="comment">//发送数据计数器加1</span></span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            tx_cnt &lt;= tx_cnt;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        tx_cnt &lt;= <span class="number">4&#x27;d0</span>;                     <span class="comment">//发送过程结束时计数器清零</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//根据tx_cnt来给uart发送端口赋值</span></span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">negedge</span> rst_n) <span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">if</span>(!rst_n) </span><br><span class="line">        uart_txd &lt;= <span class="number">1&#x27;b1</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(uart_tx_busy) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">case</span>(tx_cnt) </span><br><span class="line">            <span class="number">4&#x27;d0</span> : uart_txd &lt;= <span class="number">1&#x27;b0</span>        ; <span class="comment">//起始位</span></span><br><span class="line">            <span class="number">4&#x27;d1</span> : uart_txd &lt;= tx_data_t[<span class="number">0</span>]; <span class="comment">//数据位最低位</span></span><br><span class="line">            <span class="number">4&#x27;d2</span> : uart_txd &lt;= tx_data_t[<span class="number">1</span>];</span><br><span class="line">            <span class="number">4&#x27;d3</span> : uart_txd &lt;= tx_data_t[<span class="number">2</span>];</span><br><span class="line">            <span class="number">4&#x27;d4</span> : uart_txd &lt;= tx_data_t[<span class="number">3</span>];</span><br><span class="line">            <span class="number">4&#x27;d5</span> : uart_txd &lt;= tx_data_t[<span class="number">4</span>];</span><br><span class="line">            <span class="number">4&#x27;d6</span> : uart_txd &lt;= tx_data_t[<span class="number">5</span>];</span><br><span class="line">            <span class="number">4&#x27;d7</span> : uart_txd &lt;= tx_data_t[<span class="number">6</span>];</span><br><span class="line">            <span class="number">4&#x27;d8</span> : uart_txd &lt;= tx_data_t[<span class="number">7</span>]; <span class="comment">//数据位最高位</span></span><br><span class="line">            <span class="number">4&#x27;d9</span> : uart_txd &lt;= <span class="number">1&#x27;b1</span>        ; <span class="comment">//停止位</span></span><br><span class="line">            <span class="keyword">default</span> : uart_txd &lt;= <span class="number">1&#x27;b1</span>;</span><br><span class="line">        <span class="keyword">endcase</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        uart_txd &lt;= <span class="number">1&#x27;b1</span>;                    <span class="comment">//空闲时发送端口为高电平</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="5-uart串口通信回环实验"><a href="#5-uart串口通信回环实验" class="headerlink" title="5.uart串口通信回环实验"></a>5.uart串口通信回环实验</h2><ul>
+<li><p>上位机通过串口调试助手发送数据给启明星开发板， 启明星开发板 PL 端通过USB_UART 串口接收数据并将接收到的数据发送给上位机，完成串口数据环回 </p>
+</li>
+<li><p>系统框图：</p>
+<img src="/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309163717252.png" alt="image-20250309163717252" style="zoom:67%;">
+</li>
+<li><p>顶层模块：</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> uart_loopback(</span><br><span class="line">    <span class="keyword">input</span>            sys_clk  ,   <span class="comment">//外部50MHz时钟</span></span><br><span class="line">    <span class="keyword">input</span>            sys_rst_n,   <span class="comment">//系外部复位信号，低有效</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">//UART端口    </span></span><br><span class="line">    <span class="keyword">input</span>            uart_rxd ,   <span class="comment">//UART接收端口</span></span><br><span class="line">    <span class="keyword">output</span>           uart_txd     <span class="comment">//UART发送端口</span></span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line"><span class="comment">//parameter define</span></span><br><span class="line"><span class="keyword">parameter</span> CLK_FREQ = <span class="number">50000000</span>;    <span class="comment">//定义系统时钟频率</span></span><br><span class="line"><span class="keyword">parameter</span> UART_BPS = <span class="number">115200</span>  ;    <span class="comment">//定义串口波特率</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//wire define</span></span><br><span class="line"><span class="keyword">wire</span>         uart_rx_done;    <span class="comment">//UART接收完成信号</span></span><br><span class="line"><span class="keyword">wire</span>  [<span class="number">7</span>:<span class="number">0</span>]  uart_rx_data;    <span class="comment">//UART接收数据</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//*****************************************************</span></span><br><span class="line"><span class="comment">//**                    main code</span></span><br><span class="line"><span class="comment">//*****************************************************</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//串口接收模块</span></span><br><span class="line">uart_rx #(</span><br><span class="line">    <span class="variable">.CLK_FREQ</span>  (CLK_FREQ),</span><br><span class="line">    <span class="variable">.UART_BPS</span>  (UART_BPS)</span><br><span class="line">    )    </span><br><span class="line">    u_uart_rx(</span><br><span class="line">    <span class="variable">.clk</span>           (sys_clk     ),</span><br><span class="line">    <span class="variable">.rst_n</span>         (sys_rst_n   ),</span><br><span class="line">    <span class="variable">.uart_rxd</span>      (uart_rxd    ),</span><br><span class="line">    <span class="variable">.uart_rx_done</span>  (uart_rx_done),</span><br><span class="line">    <span class="variable">.uart_rx_data</span>  (uart_rx_data)</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line"><span class="comment">//串口发送模块</span></span><br><span class="line">uart_tx #(</span><br><span class="line">    <span class="variable">.CLK_FREQ</span>  (CLK_FREQ),</span><br><span class="line">    <span class="variable">.UART_BPS</span>  (UART_BPS)</span><br><span class="line">    )    </span><br><span class="line">    u_uart_tx(</span><br><span class="line">    <span class="variable">.clk</span>          (sys_clk     ),</span><br><span class="line">    <span class="variable">.rst_n</span>        (sys_rst_n   ),</span><br><span class="line">    <span class="variable">.uart_tx_en</span>   (uart_rx_done),</span><br><span class="line">    <span class="variable">.uart_tx_data</span> (uart_rx_data),</span><br><span class="line">    <span class="variable">.uart_txd</span>     (uart_txd    ),</span><br><span class="line">    <span class="variable">.uart_tx_busy</span> (            )</span><br><span class="line">    );</span><br><span class="line">    </span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>上板验证结果：</p>
+<img src="/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309170521701.png" alt="image-20250309170521701" style="zoom: 50%;">
+
+</li>
+</ul>
+<hr>
+<h1 id="SPI"><a href="#SPI" class="headerlink" title="SPI"></a>SPI</h1><ul>
+<li>串行外围设备接口，是高速（相比于UART、IIC）、<strong>全双工、同步</strong>通信总线</li>
+<li>应用：EEPROM、FLASH、ADC、DSP、数字信号解码器</li>
+<li>优点：全双工、通讯简单，数据传输速率快，灵活的数据传输方式，不限于8位，可以是任意大小的字</li>
+<li>缺点：没有指定的流控制、无应答机制、数据可靠性上有一定的缺陷</li>
+</ul>
+<h2 id="1-时序格式-1"><a href="#1-时序格式-1" class="headerlink" title="1.时序格式"></a>1.时序格式</h2><ul>
+<li><p>通讯模式：主从通讯模式，通讯双方有主从之分，根据从机设备的数量，SPI通讯设备之间的连接方式可分为一主一从和一主多从</p>
+<img src="/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309174845480.png" alt="image-20250309174845480" style="zoom: 67%;">
+</li>
+<li><p><strong>四根数据线作用：</strong></p>
+<ul>
+<li>SCK：时钟信号线，由主机产生，决定通信速率</li>
+<li>MOSI（Master Output Slave Input）：主机发送数据 or 从机接收数据的线</li>
+<li>MISO（Master Input Slave Output）：主机接收数据 or 从机发送数据的线</li>
+<li>CS：片选信号，低电平表示选中</li>
+</ul>
+</li>
+<li><p><strong>工作模式：CPOL、CPHA决定有四种工作模式</strong></p>
+<ul>
+<li>时钟极性：<ul>
+<li>CPOL=0：SPI总线空闲时SCK=0</li>
+<li>CPOL=1：SPI总线空闲时SCK=1</li>
+</ul>
+</li>
+<li>时钟相位：<ul>
+<li>CPHA=0：SCK第一个跳变沿采样</li>
+<li>CPHA=1：SCK第二个跳变沿采样</li>
+</ul>
+</li>
+</ul>
+<img src="/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309180026123.png" alt="image-20250309180026123" style="zoom: 67%;">
+
+<ul>
+<li>模式0:CPOL=0，CPHA=0。SCK串行时钟线空闲是为低电平，数据在SCK时钟的上升沿被采样，数据在SCK时钟的下降沿切换</li>
+<li>模式1:CPOL=0，CPHA=1。SCK串行时钟线空闲是为低电平，数据在SCK时钟的下降沿被采样，数据在SCK时钟的上升沿切换</li>
+<li>模式2:CPOL=1，CPHA=0。SCK串行时钟线空闲是为高电平，数据在SCK时钟的下降沿被采样，数据在SCK时钟的上升沿切换</li>
+<li>模式3:CPOL=1，CPHA=1。SCK串行时钟线空闲是为高电平，数据在SCK时钟的上升沿被采样，数据在SCK时钟的下降沿切换</li>
+</ul>
+</li>
+<li><p>SPI基本的通讯过程，以模式0为例：</p>
+<img src="/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309180933950.png" alt="image-20250309180933950" style="zoom:80%;">
+
+</li>
+</ul>
+<h2 id="2-设计思路-1"><a href="#2-设计思路-1" class="headerlink" title="2.设计思路"></a>2.设计思路</h2><ul>
+<li>通过对主机的系统时钟分频，得到SCK，并通过计数器判断SCK的上升沿和下降沿</li>
+<li>设置一个发送计数器控制发送的bit位，同理，设置一个接收计数器控制接收的bit位</li>
+</ul>
+<h2 id="3-SPI-driver设计代码"><a href="#3-SPI-driver设计代码" class="headerlink" title="3.SPI driver设计代码"></a>3.SPI driver设计代码</h2><figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">`<span class="keyword">timescale</span> 1ns/1ns		</span><span class="comment">//时间单位/精度	</span></span><br><span class="line"><span class="comment">// 模式0</span></span><br><span class="line"><span class="keyword">module</span> spi_drive</span><br><span class="line">(</span><br><span class="line"><span class="comment">// 系统接口</span></span><br><span class="line">    <span class="keyword">input</span>               sys_clk		, 			<span class="comment">// 全局时钟50MHz</span></span><br><span class="line">    <span class="keyword">input</span>               sys_rst_n	, 			<span class="comment">// 复位信号，低电平有效</span></span><br><span class="line"><span class="comment">// 用户接口	</span></span><br><span class="line">    <span class="keyword">input</span>               spi_start	,			<span class="comment">// 发送传输开始信号，一个高电平</span></span><br><span class="line">    <span class="keyword">input</span>              	spi_end		,			<span class="comment">// 发送传输结束信号，一个高电平</span></span><br><span class="line">    <span class="keyword">input</span>        [<span class="number">7</span>:<span class="number">0</span>]  data_send   , 			<span class="comment">// 要发送的数据</span></span><br><span class="line">    <span class="keyword">output</span>  <span class="keyword">reg</span>  [<span class="number">7</span>:<span class="number">0</span>]  data_rec  	, 			<span class="comment">// 接收到的数据</span></span><br><span class="line">    <span class="keyword">output</span>  <span class="keyword">reg</span>         send_done	, 			<span class="comment">// 主机发送一个字节完毕标志位    </span></span><br><span class="line">    <span class="keyword">output</span>  <span class="keyword">reg</span>         rec_done	, 			<span class="comment">// 主机接收一个字节完毕标志位    </span></span><br><span class="line"><span class="comment">// SPI物理接口</span></span><br><span class="line">    <span class="keyword">input</span>               spi_miso	, 			<span class="comment">// SPI串行输入，用来接收从机的数据</span></span><br><span class="line">    <span class="keyword">output</span>  <span class="keyword">reg</span>         spi_sclk	, 			<span class="comment">// SPI时钟</span></span><br><span class="line">    <span class="keyword">output</span>  <span class="keyword">reg</span>         spi_cs    	, 			<span class="comment">// SPI片选信号,低电平有效</span></span><br><span class="line">    <span class="keyword">output</span>  <span class="keyword">reg</span>         spi_mosi				<span class="comment">// SPI输出，用来给从机发送数据          </span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">reg</span>	[<span class="number">1</span>:<span class="number">0</span>]	cnt;								<span class="comment">//4分频计数器</span></span><br><span class="line">    <span class="keyword">reg</span>	[<span class="number">3</span>:<span class="number">0</span>]	bit_cnt_send;						<span class="comment">//发送计数器</span></span><br><span class="line">    <span class="keyword">reg</span>	[<span class="number">3</span>:<span class="number">0</span>]	bit_cnt_rec;						<span class="comment">//接收计数器</span></span><br><span class="line">    <span class="keyword">reg</span>			spi_end_req;						<span class="comment">//结束请求</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//4分频计数器</span></span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> sys_clk <span class="keyword">or</span> <span class="keyword">negedge</span> sys_rst_n)<span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>(!sys_rst_n)</span><br><span class="line">            cnt &lt;= <span class="number">2&#x27;d0</span>;						</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(!spi_cs)<span class="keyword">begin</span></span><br><span class="line">            <span class="keyword">if</span>(cnt == <span class="number">2&#x27;d3</span>)</span><br><span class="line">                cnt &lt;= <span class="number">2&#x27;d0</span>;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            cnt &lt;= cnt + <span class="number">1&#x27;b1</span>;		</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">else</span> </span><br><span class="line">            cnt &lt;= <span class="number">2&#x27;d0</span>;	</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="comment">// 生成spi_sclk时钟</span></span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> sys_clk <span class="keyword">or</span> <span class="keyword">negedge</span> sys_rst_n)<span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>(!sys_rst_n)</span><br><span class="line">            spi_sclk &lt;= <span class="number">1&#x27;b0</span>;			<span class="comment">//模式0默认为低电平					</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(!spi_cs)<span class="keyword">begin</span>			<span class="comment">//在SPI传输过程中</span></span><br><span class="line">            <span class="keyword">if</span>(cnt == <span class="number">2&#x27;d0</span> )</span><br><span class="line">                spi_sclk &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (cnt == <span class="number">2&#x27;d2</span>)</span><br><span class="line">                spi_sclk &lt;= <span class="number">1&#x27;b1</span>;</span><br><span class="line">            <span class="keyword">else</span> </span><br><span class="line">                spi_sclk &lt;= spi_sclk;	</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">else</span> </span><br><span class="line">            spi_sclk &lt;= <span class="number">1&#x27;b0</span>;			<span class="comment">//模式0默认为低电平		</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="comment">// 生成片选信号spi_cs</span></span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> sys_clk <span class="keyword">or</span> <span class="keyword">negedge</span> sys_rst_n)<span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>(!sys_rst_n)</span><br><span class="line">            spi_cs &lt;= <span class="number">1&#x27;b1</span>;				<span class="comment">//默认为高电平						</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(spi_start)				<span class="comment">//开始SPI准备传输，拉低片选信号</span></span><br><span class="line">            spi_cs &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">        <span class="comment">//收到了SPI结束信号，且结束了最近的一个BYTE</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(spi_end_req &amp;&amp; (cnt == <span class="number">2&#x27;d1</span> &amp;&amp; bit_cnt_rec == <span class="number">4&#x27;d0</span>))</span><br><span class="line">            spi_cs &lt;= <span class="number">1&#x27;b1</span>;				<span class="comment">//拉高片选信号，结束SPI传输</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="comment">// 生成结束请求信号(捕捉spi_end信号)</span></span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> sys_clk <span class="keyword">or</span> <span class="keyword">negedge</span> sys_rst_n)<span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>(!sys_rst_n)</span><br><span class="line">            spi_end_req &lt;= <span class="number">1&#x27;b0</span>;		<span class="comment">//默认不使能					</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(spi_cs)					</span><br><span class="line">            spi_end_req &lt;= <span class="number">1&#x27;b0</span>;		<span class="comment">//结束SPI传输后拉低请求</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(spi_end)				</span><br><span class="line">            spi_end_req &lt;= <span class="number">1&#x27;b1</span>;		<span class="comment">//接收到SPI结束信号后就把结束请求拉高</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="comment">// 发送数据过程--------------------------------------------------------------------</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 发送数据</span></span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> sys_clk <span class="keyword">or</span> <span class="keyword">negedge</span> sys_rst_n)<span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>(!sys_rst_n)<span class="keyword">begin</span></span><br><span class="line">            spi_mosi &lt;= <span class="number">1&#x27;b0</span>;						<span class="comment">//模式0空闲</span></span><br><span class="line">            bit_cnt_send &lt;= <span class="number">4&#x27;d0</span>;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(cnt == <span class="number">2&#x27;d0</span> &amp;&amp; !spi_cs)<span class="keyword">begin</span>		<span class="comment">//模式0的上升沿</span></span><br><span class="line">            spi_mosi &lt;= data_send[<span class="number">7</span>-bit_cnt_send];	<span class="comment">//发送数据移位</span></span><br><span class="line">            <span class="keyword">if</span>(bit_cnt_send == <span class="number">4&#x27;d7</span>)				<span class="comment">//发送完8bit</span></span><br><span class="line">                bit_cnt_send &lt;= <span class="number">4&#x27;d0</span>;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                bit_cnt_send &lt;= bit_cnt_send + <span class="number">1&#x27;b1</span>;	</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(spi_cs)<span class="keyword">begin</span>						<span class="comment">//非传输时间段</span></span><br><span class="line">            spi_mosi &lt;= <span class="number">1&#x27;b0</span>;						<span class="comment">//模式0空闲</span></span><br><span class="line">            bit_cnt_send &lt;= <span class="number">4&#x27;d0</span>;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">            spi_mosi &lt;= spi_mosi;</span><br><span class="line">            bit_cnt_send &lt;= bit_cnt_send;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="comment">// 发送数据标志</span></span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> sys_clk <span class="keyword">or</span> <span class="keyword">negedge</span> sys_rst_n)<span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>(!sys_rst_n)</span><br><span class="line">            send_done &lt;= <span class="number">1&#x27;b0</span>;			</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(cnt == <span class="number">2&#x27;d0</span> &amp;&amp; bit_cnt_send == <span class="number">4&#x27;d7</span>)		<span class="comment">//发送完了8bit数据</span></span><br><span class="line">            send_done &lt;= <span class="number">1&#x27;b1</span>;								<span class="comment">//拉高一个周期，表示发送完成	</span></span><br><span class="line">        <span class="keyword">else</span> </span><br><span class="line">            send_done &lt;= <span class="number">1&#x27;b0</span>;			</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 接收数据过程--------------------------------------------------------------------</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 接收数据spi_miso</span></span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> sys_clk <span class="keyword">or</span> <span class="keyword">negedge</span> sys_rst_n)<span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>(!sys_rst_n)<span class="keyword">begin</span></span><br><span class="line">            data_rec &lt;= <span class="number">8&#x27;d0</span>;		</span><br><span class="line">            bit_cnt_rec &lt;= <span class="number">4&#x27;d0</span>;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(cnt == <span class="number">2&#x27;d2</span> &amp;&amp; !spi_cs)<span class="keyword">begin</span>				<span class="comment">//模式0的上升沿</span></span><br><span class="line">            data_rec[<span class="number">7</span>-bit_cnt_rec] &lt;= 	spi_miso;			<span class="comment">//移位接收</span></span><br><span class="line">            <span class="keyword">if</span>(bit_cnt_rec == <span class="number">4&#x27;d7</span>)							<span class="comment">//接收完了8bit</span></span><br><span class="line">                bit_cnt_rec &lt;= <span class="number">4&#x27;d0</span>;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                bit_cnt_rec &lt;= bit_cnt_rec + <span class="number">1&#x27;b1</span>;	</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(spi_cs)<span class="keyword">begin</span>								</span><br><span class="line">            bit_cnt_rec &lt;= <span class="number">4&#x27;d0</span>;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">            data_rec &lt;= data_rec;</span><br><span class="line">            bit_cnt_rec &lt;= bit_cnt_rec;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="comment">// 接收数据标志</span></span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> sys_clk <span class="keyword">or</span> <span class="keyword">negedge</span> sys_rst_n)<span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>(!sys_rst_n)</span><br><span class="line">            rec_done &lt;= <span class="number">1&#x27;b0</span>;									</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(cnt == <span class="number">2&#x27;d2</span> &amp;&amp; bit_cnt_rec == <span class="number">4&#x27;d7</span>)			<span class="comment">//接收完了8bit</span></span><br><span class="line">            rec_done &lt;= <span class="number">1&#x27;b1</span>;								<span class="comment">//拉高一个周期，表示接收完成			</span></span><br><span class="line">        <span class="keyword">else</span> </span><br><span class="line">            rec_done &lt;= <span class="number">1&#x27;b0</span>;					</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>仿真结果：</p>
+<p><img src="/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309211942611.png" alt="image-20250309211942611"></p>
+</li>
+</ul>
+<hr>
+<h1 id="IIC"><a href="#IIC" class="headerlink" title="IIC"></a>IIC</h1><ul>
+<li><p>两线式串行总线+<strong>半双工同步</strong>通讯方式</p>
+</li>
+<li><p>用于主机和从机在数据量不大，传输距离比较短的场合</p>
+</li>
+<li><p>物理层的基本描述：</p>
+<ul>
+<li>从机设备上的SDA都接到总线的SDA上</li>
+<li>从机设备上的SCL都接到总线的SCL上</li>
+<li>从机设备都有唯一的设备地址</li>
+<li>SCL和SDA都需要上拉电阻（3.3K~10K）</li>
+<li>两条总线：<ul>
+<li>SCL（Serial Clock Line）控制数据接收时序的时钟线</li>
+<li>SDA（Serial Data）传输数据的线</li>
+</ul>
+</li>
+</ul>
+<img src="/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309213526404.png" alt="image-20250309213526404" style="zoom:50%;">
+
+</li>
+</ul>
+<h2 id="1-时序格式-2"><a href="#1-时序格式-2" class="headerlink" title="1.时序格式"></a>1.时序格式</h2><ul>
+<li><p><strong>空闲状态</strong>：SCL、SDA皆为高电平（上拉电阻拉高）</p>
+</li>
+<li><p><strong>开始信号</strong>：对应SCL=1时，SDA从0变1</p>
+</li>
+<li><p><strong>停止信号</strong>：对应SCL=1时，SDA由1变0</p>
+<img src="/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309213645301.png" alt="image-20250309213645301" style="zoom: 80%;">
+</li>
+<li><p><strong>数据传输</strong>时：</p>
+<ul>
+<li>SCL=1时，SDA保持稳定</li>
+<li>SCL=0时，SDA可以变化</li>
+</ul>
+</li>
+<li><p><strong>应答信号</strong>：发送完8个bit后，主机释放SDA以使从机发送是否应答信号</p>
+<ul>
+<li>从机拉低SDA第9个bit，代表接收成功</li>
+<li>从机拉高SDA第9个bit，代表接收失败</li>
+</ul>
+<img src="/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309214255314.png" alt="image-20250309214255314" style="zoom:90%;">
+</li>
+<li><p><strong>IIC器件地址</strong>：</p>
+<ul>
+<li><p>每个 I2C 器件都有一个器件地址，有些 I2C 器件的器件地址是固定的，而<strong>有些 I2C 器件的器件地址由一个固定部分和一个可编程的部分构成</strong>，这是因为很可能在一个系统中有几个同样的器件，器件地址的可编程部分能最大数量的使这些器件连接到 I2C 总线上，例如 E2PROM 器件，为了增加系统的 E2PROM 容量，可能需要多个 E2PROM。</p>
+</li>
+<li><p>器件可编程地址位的数量由它可使用的管脚决定，比如 E2PROM 器件一般会留下 3 个管脚用于可编程地址位。</p>
+</li>
+<li><p>但有些 I2C 器件在出厂时器件地址就设置好了，用户不可以更改（如实时时钟 PCF8563 的器件地址为固定的 7’h51）。</p>
+</li>
+<li><p>所以当主机想给某个器件发送数据时，只需向总线上发送接收器件的器件地址即可 </p>
+</li>
+<li><p>进行数据传输时：</p>
+<ul>
+<li>主机首先向总线上发出开始信号，<strong>对应开始位 S（SDA从1到0拉低）</strong></li>
+<li>然后按照<strong>从高到低的位序</strong>发送器件地址，一般为 7bit</li>
+<li>第 8bit 位为读写控制位 R/W，<strong>该位为 0</strong> 时表示主机对从机进行<strong>写操作</strong>，当<strong>该位为 1</strong> 时表示主机对从机进行<strong>读操作</strong>，然后接收从机响应。</li>
+</ul>
+</li>
+<li><p>对于 AT24C64 来说，其传输器件地址格式如下图所示 ：</p>
+<img src="/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309222131604.png" alt="image-20250309222131604" style="zoom: 67%;">
+</li>
+</ul>
+</li>
+<li><p><strong>存储地址</strong>：</p>
+<ul>
+<li>一般而言，每个兼容 I2C 协议的器件，内部总会有可供读写的寄存器或存储器 </li>
+<li>当我们对一个器件中的存储单元（包括寄存器）<strong>进行读写时，首先要指定存储单元的地址即字地址，然后再向该地址写入或读出内容</strong>  </li>
+<li>该地址为一个或两个字节长度，具体长度由器件内部的存储单元的数量决定</li>
+</ul>
+<img src="/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309222831876.png" alt="image-20250309222831876" style="zoom:67%;">
+</li>
+<li><p><strong>写时序</strong>：（要注意的是， 所有 I2C 设备均支持单字节数据写入操作，但只有部分 I2C 设备支持页写操作，对于AT24C64 的页写，是不能发送超过一页的单元容量的数据的，而 AT24C64 的一页的单元容量为 32Byte，当写完一页的最后一个单元时，地址指针指向该页的开头，如果再写入数据，就会覆盖该页的起始数据 ）</p>
+<ul>
+<li><p><strong>单次写</strong>：</p>
+<img src="/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309223155209.png" alt="image-20250309223155209" style="zoom:80%;">
+</li>
+<li><p><strong>连续写</strong>：</p>
+<img src="/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309223222552.png" alt="image-20250309223222552" style="zoom:80%;">
+</li>
+</ul>
+</li>
+<li><p><strong>读时序</strong>：</p>
+<ul>
+<li><p><strong>当前地址读</strong>：</p>
+<img src="/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309223731605.png" alt="image-20250309223731605" style="zoom:80%;">
+</li>
+<li><p><strong>随机读</strong>：</p>
+<img src="/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309230656096.png" alt="image-20250309230656096" style="zoom:80%;">
+
+<ul>
+<li>随机地址读在发送完器件地址和字地址后，竟然又发送起始信号和器件地址，而且第一次发送器件地址时后面的读写控制位为“ 0”，也就是写命令，第二次发送器件地址时后面的读写控制位为“1”，也就是读。为什么会有这样奇怪的操作呢？</li>
+<li>这是因为我们需要使从机内的存储单元地址指针指向我们想要读取的存储单元地址处，<strong>所以首先发送了一次Dummy Write 也就是虚写操作，只所以称为虚写，是因为我们并不是真的要写数据，而是通过这种虚写操作使地址指针指向虚写操作中字地址的位置</strong></li>
+<li>等从机应答后，就可以以当前地址读的方式读数据了 </li>
+<li>随机地址读是没有发送数据的单次写操作和当前地址读操作的结合体。  </li>
+</ul>
+</li>
+<li><p><strong>连续读</strong>：当前地址读和随机读都是一次读取一个字节，连续读是<strong>将当前地址读或随机读的主机非应答改成应答，表示继续读取数据</strong>  </p>
+<ul>
+<li><strong>当前地址读下的连续读</strong></li>
+</ul>
+<img src="/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309232117019.png" alt="image-20250309232117019" style="zoom:80%;">
+
+<ul>
+<li><strong>随机读下的连续读</strong></li>
+</ul>
+<img src="/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309232429673.png" alt="image-20250309232429673" style="zoom:80%;">
+</li>
+</ul>
+</li>
+<li><p>IIC读写操作总结：</p>
+<img src="/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250309232918663.png" alt="image-20250309232918663" style="zoom: 80%;">
+
+</li>
+</ul>
+<h2 id="2-设计思路-2"><a href="#2-设计思路-2" class="headerlink" title="2.设计思路"></a>2.设计思路</h2><ul>
+<li><p>很明显，读写操作均有先后顺序，故采用状态机实现。大致为：写物理地址-&gt;写字地址-&gt;写操作/读操作，若为读操作，则在读数据之前，还需写一次物理地址+1（改为读命令）</p>
+<img src="/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250310111418790.png" alt="image-20250310111418790" style="zoom: 67%;">
+</li>
+<li><p><strong>状态机的驱动时钟dri_clk必须是scl的4倍以上的频率时，才能正确产生I2C起始信号和停止信号</strong>，dri_clk可由FPGA系统时钟分频而来</p>
+<p><img src="/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250310112128449.png" alt="image-20250310112128449"></p>
+</li>
+</ul>
+<h2 id="3-IIC-driver设计代码"><a href="#3-IIC-driver设计代码" class="headerlink" title="3.IIC driver设计代码"></a>3.IIC driver设计代码</h2><ul>
+<li>结合上述状态机，纯看代码还是比较容易看懂，如果要我自己从0开始写，那也是个大工程，得先把计数器（cnt）控制的时序一点点画出来，再对着写</li>
+</ul>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br><span class="line">384</span><br><span class="line">385</span><br><span class="line">386</span><br><span class="line">387</span><br><span class="line">388</span><br><span class="line">389</span><br><span class="line">390</span><br><span class="line">391</span><br><span class="line">392</span><br><span class="line">393</span><br><span class="line">394</span><br><span class="line">395</span><br><span class="line">396</span><br><span class="line">397</span><br><span class="line">398</span><br><span class="line">399</span><br><span class="line">400</span><br><span class="line">401</span><br><span class="line">402</span><br><span class="line">403</span><br><span class="line">404</span><br><span class="line">405</span><br><span class="line">406</span><br><span class="line">407</span><br><span class="line">408</span><br><span class="line">409</span><br><span class="line">410</span><br><span class="line">411</span><br><span class="line">412</span><br><span class="line">413</span><br><span class="line">414</span><br><span class="line">415</span><br><span class="line">416</span><br><span class="line">417</span><br><span class="line">418</span><br><span class="line">419</span><br><span class="line">420</span><br><span class="line">421</span><br><span class="line">422</span><br><span class="line">423</span><br><span class="line">424</span><br><span class="line">425</span><br><span class="line">426</span><br><span class="line">427</span><br><span class="line">428</span><br><span class="line">429</span><br><span class="line">430</span><br><span class="line">431</span><br><span class="line">432</span><br><span class="line">433</span><br><span class="line">434</span><br><span class="line">435</span><br><span class="line">436</span><br><span class="line">437</span><br><span class="line">438</span><br><span class="line">439</span><br><span class="line">440</span><br><span class="line">441</span><br><span class="line">442</span><br><span class="line">443</span><br><span class="line">444</span><br><span class="line">445</span><br><span class="line">446</span><br><span class="line">447</span><br><span class="line">448</span><br><span class="line">449</span><br><span class="line">450</span><br><span class="line">451</span><br><span class="line">452</span><br><span class="line">453</span><br><span class="line">454</span><br><span class="line">455</span><br><span class="line">456</span><br><span class="line">457</span><br><span class="line">458</span><br><span class="line">459</span><br><span class="line">460</span><br><span class="line">461</span><br><span class="line">462</span><br><span class="line">463</span><br><span class="line">464</span><br><span class="line">465</span><br><span class="line">466</span><br><span class="line">467</span><br><span class="line">468</span><br><span class="line">469</span><br><span class="line">470</span><br><span class="line">471</span><br><span class="line">472</span><br><span class="line">473</span><br><span class="line">474</span><br><span class="line">475</span><br><span class="line">476</span><br><span class="line">477</span><br><span class="line">478</span><br><span class="line">479</span><br><span class="line">480</span><br><span class="line">481</span><br><span class="line">482</span><br><span class="line">483</span><br><span class="line">484</span><br><span class="line">485</span><br><span class="line">486</span><br><span class="line">487</span><br><span class="line">488</span><br><span class="line">489</span><br><span class="line">490</span><br><span class="line">491</span><br><span class="line">492</span><br><span class="line">493</span><br><span class="line">494</span><br><span class="line">495</span><br><span class="line">496</span><br><span class="line">497</span><br><span class="line">498</span><br><span class="line">499</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> i2c_dri</span><br><span class="line">    #(</span><br><span class="line">      <span class="keyword">parameter</span>   SLAVE_ADDR = <span class="number">7&#x27;b1010000</span>   ,  <span class="comment">//EEPROM从机地址</span></span><br><span class="line">      <span class="keyword">parameter</span>   CLK_FREQ   = <span class="number">26&#x27;d50_000_000</span>, <span class="comment">//模块输入的时钟频率</span></span><br><span class="line">      <span class="keyword">parameter</span>   I2C_FREQ   = <span class="number">18&#x27;d250_000</span>     <span class="comment">//IIC_SCL的时钟频率</span></span><br><span class="line">    )</span><br><span class="line">   (                                                            </span><br><span class="line">    <span class="keyword">input</span>                clk        ,    </span><br><span class="line">    <span class="keyword">input</span>                rst_n      ,   </span><br><span class="line">                                         </span><br><span class="line">    <span class="comment">//i2c interface                      </span></span><br><span class="line">    <span class="keyword">input</span>                i2c_exec   ,  <span class="comment">//I2C触发执行信号</span></span><br><span class="line">    <span class="keyword">input</span>                bit_ctrl   ,  <span class="comment">//字地址位控制(16b/8b)</span></span><br><span class="line">    <span class="keyword">input</span>                i2c_rh_wl  ,  <span class="comment">//I2C读写控制信号</span></span><br><span class="line">    <span class="keyword">input</span>        [<span class="number">15</span>:<span class="number">0</span>]  i2c_addr   ,  <span class="comment">//I2C器件内地址</span></span><br><span class="line">    <span class="keyword">input</span>        [ <span class="number">7</span>:<span class="number">0</span>]  i2c_data_w ,  <span class="comment">//I2C要写的数据</span></span><br><span class="line">    <span class="keyword">output</span>  <span class="keyword">reg</span>  [ <span class="number">7</span>:<span class="number">0</span>]  i2c_data_r ,  <span class="comment">//I2C读出的数据</span></span><br><span class="line">    <span class="keyword">output</span>  <span class="keyword">reg</span>          i2c_done   ,  <span class="comment">//I2C一次操作完成</span></span><br><span class="line">    <span class="keyword">output</span>  <span class="keyword">reg</span>          i2c_ack    ,  <span class="comment">//I2C应答标志 0:应答 1:未应答</span></span><br><span class="line">    <span class="keyword">output</span>  <span class="keyword">reg</span>          scl        ,  <span class="comment">//I2C的SCL时钟信号</span></span><br><span class="line">    <span class="keyword">inout</span>                sda        ,  <span class="comment">//I2C的SDA信号</span></span><br><span class="line">                                       </span><br><span class="line">    <span class="comment">//user interface                   </span></span><br><span class="line">    <span class="keyword">output</span>  <span class="keyword">reg</span>          dri_clk       <span class="comment">//驱动I2C操作的驱动时钟</span></span><br><span class="line">     );</span><br><span class="line"></span><br><span class="line"><span class="comment">//localparam define</span></span><br><span class="line"><span class="keyword">localparam</span>  st_idle     = <span class="number">8&#x27;b0000_0001</span>; <span class="comment">//空闲状态</span></span><br><span class="line"><span class="keyword">localparam</span>  st_sladdr   = <span class="number">8&#x27;b0000_0010</span>; <span class="comment">//发送器件地址(slave address)</span></span><br><span class="line"><span class="keyword">localparam</span>  st_addr16   = <span class="number">8&#x27;b0000_0100</span>; <span class="comment">//发送16位字地址</span></span><br><span class="line"><span class="keyword">localparam</span>  st_addr8    = <span class="number">8&#x27;b0000_1000</span>; <span class="comment">//发送8位字地址</span></span><br><span class="line"><span class="keyword">localparam</span>  st_data_wr  = <span class="number">8&#x27;b0001_0000</span>; <span class="comment">//写数据(8 bit)</span></span><br><span class="line"><span class="keyword">localparam</span>  st_addr_rd  = <span class="number">8&#x27;b0010_0000</span>; <span class="comment">//发送器件地址读</span></span><br><span class="line"><span class="keyword">localparam</span>  st_data_rd  = <span class="number">8&#x27;b0100_0000</span>; <span class="comment">//读数据(8 bit)</span></span><br><span class="line"><span class="keyword">localparam</span>  st_stop     = <span class="number">8&#x27;b1000_0000</span>; <span class="comment">//结束I2C操作</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//reg define</span></span><br><span class="line"><span class="keyword">reg</span>            sda_dir   ; <span class="comment">//I2C数据(SDA)方向控制</span></span><br><span class="line"><span class="keyword">reg</span>            sda_out   ; <span class="comment">//SDA输出信号</span></span><br><span class="line"><span class="keyword">reg</span>            st_done   ; <span class="comment">//状态结束</span></span><br><span class="line"><span class="keyword">reg</span>            wr_flag   ; <span class="comment">//写标志</span></span><br><span class="line"><span class="keyword">reg</span>    [ <span class="number">6</span>:<span class="number">0</span>]  cnt       ; <span class="comment">//计数</span></span><br><span class="line"><span class="keyword">reg</span>    [ <span class="number">7</span>:<span class="number">0</span>]  cur_state ; <span class="comment">//状态机当前状态</span></span><br><span class="line"><span class="keyword">reg</span>    [ <span class="number">7</span>:<span class="number">0</span>]  next_state; <span class="comment">//状态机下一状态</span></span><br><span class="line"><span class="keyword">reg</span>    [<span class="number">15</span>:<span class="number">0</span>]  addr_t    ; <span class="comment">//地址</span></span><br><span class="line"><span class="keyword">reg</span>    [ <span class="number">7</span>:<span class="number">0</span>]  data_r    ; <span class="comment">//读取的数据</span></span><br><span class="line"><span class="keyword">reg</span>    [ <span class="number">7</span>:<span class="number">0</span>]  data_wr_t ; <span class="comment">//I2C需写的数据的临时寄存</span></span><br><span class="line"><span class="keyword">reg</span>    [ <span class="number">9</span>:<span class="number">0</span>]  clk_cnt   ; <span class="comment">//分频时钟计数</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//wire define</span></span><br><span class="line"><span class="keyword">wire</span>          sda_in     ; <span class="comment">//SDA输入信号</span></span><br><span class="line"><span class="keyword">wire</span>   [<span class="number">8</span>:<span class="number">0</span>]  clk_divide ; <span class="comment">//模块驱动时钟的分频系数</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//*****************************************************</span></span><br><span class="line"><span class="comment">//**                    main code</span></span><br><span class="line"><span class="comment">//*****************************************************</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//SDA控制</span></span><br><span class="line"><span class="keyword">assign</span>  sda        = sda_dir ?  sda_out : <span class="number">1&#x27;bz</span>   ;  <span class="comment">//SDA数据输出或高阻</span></span><br><span class="line"><span class="keyword">assign</span>  sda_in     = sda                         ;  <span class="comment">//SDA数据输入</span></span><br><span class="line"><span class="keyword">assign</span>  clk_divide = (CLK_FREQ/I2C_FREQ) &gt;&gt; <span class="number">2&#x27;d2</span> ;  <span class="comment">//模块驱动时钟的分频系数</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//生成I2C的SCL的四倍频率的驱动时钟用于驱动i2c的操作</span></span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> clk <span class="keyword">or</span> <span class="keyword">negedge</span> rst_n) <span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">if</span>(!rst_n) <span class="keyword">begin</span></span><br><span class="line">        dri_clk &lt;=  <span class="number">1&#x27;b0</span>;</span><br><span class="line">        clk_cnt &lt;= <span class="number">10&#x27;d0</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(clk_cnt == (clk_divide[<span class="number">8</span>:<span class="number">1</span>] - <span class="number">9&#x27;d1</span>)) <span class="keyword">begin</span></span><br><span class="line">        clk_cnt &lt;= <span class="number">10&#x27;d0</span>;</span><br><span class="line">        dri_clk &lt;= ~dri_clk;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        clk_cnt &lt;= clk_cnt + <span class="number">10&#x27;b1</span>;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//(三段式状态机)同步时序描述状态转移</span></span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> dri_clk <span class="keyword">or</span> <span class="keyword">negedge</span> rst_n) <span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">if</span>(!rst_n)</span><br><span class="line">        cur_state &lt;= st_idle;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        cur_state &lt;= next_state;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//组合逻辑判断状态转移条件</span></span><br><span class="line"><span class="keyword">always</span> @(*) <span class="keyword">begin</span></span><br><span class="line">    next_state = st_idle;</span><br><span class="line">    <span class="keyword">case</span>(cur_state)</span><br><span class="line">        st_idle: <span class="keyword">begin</span>                          <span class="comment">//空闲状态</span></span><br><span class="line">           <span class="keyword">if</span>(i2c_exec) <span class="keyword">begin</span></span><br><span class="line">               next_state = st_sladdr;</span><br><span class="line">           <span class="keyword">end</span></span><br><span class="line">           <span class="keyword">else</span></span><br><span class="line">               next_state = st_idle;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        st_sladdr: <span class="keyword">begin</span></span><br><span class="line">            <span class="keyword">if</span>(st_done) <span class="keyword">begin</span></span><br><span class="line">                <span class="keyword">if</span>(bit_ctrl)                    <span class="comment">//判断是16位还是8位字地址</span></span><br><span class="line">                   next_state = st_addr16;</span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                   next_state = st_addr8 ;</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                next_state = st_sladdr;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        st_addr16: <span class="keyword">begin</span>                        <span class="comment">//写16位字地址</span></span><br><span class="line">            <span class="keyword">if</span>(st_done) <span class="keyword">begin</span></span><br><span class="line">                next_state = st_addr8;</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">                next_state = st_addr16;</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        st_addr8: <span class="keyword">begin</span>                         <span class="comment">//8位字地址</span></span><br><span class="line">            <span class="keyword">if</span>(st_done) <span class="keyword">begin</span></span><br><span class="line">                <span class="keyword">if</span>(wr_flag==<span class="number">1&#x27;b0</span>)               <span class="comment">//读写判断</span></span><br><span class="line">                    next_state = st_data_wr;</span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                    next_state = st_addr_rd;</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">                next_state = st_addr8;</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        st_data_wr: <span class="keyword">begin</span>                       <span class="comment">//写数据(8 bit)</span></span><br><span class="line">            <span class="keyword">if</span>(st_done)</span><br><span class="line">                next_state = st_stop;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                next_state = st_data_wr;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        st_addr_rd: <span class="keyword">begin</span>                       <span class="comment">//写地址以进行读数据</span></span><br><span class="line">            <span class="keyword">if</span>(st_done) <span class="keyword">begin</span></span><br><span class="line">                next_state = st_data_rd;</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">                next_state = st_addr_rd;</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        st_data_rd: <span class="keyword">begin</span>                       <span class="comment">//读取数据(8 bit)</span></span><br><span class="line">            <span class="keyword">if</span>(st_done)</span><br><span class="line">                next_state = st_stop;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                next_state = st_data_rd;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        st_stop: <span class="keyword">begin</span>                          <span class="comment">//结束I2C操作</span></span><br><span class="line">            <span class="keyword">if</span>(st_done)</span><br><span class="line">                next_state = st_idle;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                next_state = st_stop ;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">default</span>: next_state= st_idle;</span><br><span class="line">    <span class="keyword">endcase</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//时序电路描述状态输出</span></span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> dri_clk <span class="keyword">or</span> <span class="keyword">negedge</span> rst_n) <span class="keyword">begin</span></span><br><span class="line">    <span class="comment">//复位初始化</span></span><br><span class="line">    <span class="keyword">if</span>(!rst_n) <span class="keyword">begin</span></span><br><span class="line">        scl       &lt;= <span class="number">1&#x27;b1</span>;</span><br><span class="line">        sda_out   &lt;= <span class="number">1&#x27;b1</span>;</span><br><span class="line">        sda_dir   &lt;= <span class="number">1&#x27;b1</span>;                          </span><br><span class="line">        i2c_done  &lt;= <span class="number">1&#x27;b0</span>;                          </span><br><span class="line">        i2c_ack   &lt;= <span class="number">1&#x27;b0</span>;                          </span><br><span class="line">        cnt       &lt;= <span class="number">7&#x27;b0</span>;                          </span><br><span class="line">        st_done   &lt;= <span class="number">1&#x27;b0</span>;                          </span><br><span class="line">        data_r    &lt;= <span class="number">8&#x27;b0</span>;                          </span><br><span class="line">        i2c_data_r&lt;= <span class="number">8&#x27;b0</span>;                          </span><br><span class="line">        wr_flag   &lt;= <span class="number">1&#x27;b0</span>;                          </span><br><span class="line">        addr_t    &lt;= <span class="number">16&#x27;b0</span>;                          </span><br><span class="line">        data_wr_t &lt;= <span class="number">8&#x27;b0</span>;                          </span><br><span class="line">    <span class="keyword">end</span>                                              </span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">begin</span>                                       </span><br><span class="line">        st_done &lt;= <span class="number">1&#x27;b0</span> ;                            </span><br><span class="line">        cnt     &lt;= cnt +<span class="number">7&#x27;b1</span> ;                       </span><br><span class="line">        <span class="keyword">case</span>(cur_state)                              </span><br><span class="line">             st_idle: <span class="keyword">begin</span>                          <span class="comment">//空闲状态</span></span><br><span class="line">                scl     &lt;= <span class="number">1&#x27;b1</span>;                     </span><br><span class="line">                sda_out &lt;= <span class="number">1&#x27;b1</span>;                     </span><br><span class="line">                sda_dir &lt;= <span class="number">1&#x27;b1</span>;                     </span><br><span class="line">                i2c_done&lt;= <span class="number">1&#x27;b0</span>;                     </span><br><span class="line">                cnt     &lt;= <span class="number">7&#x27;b0</span>;               </span><br><span class="line">                <span class="keyword">if</span>(i2c_exec) <span class="keyword">begin</span>                   </span><br><span class="line">                    wr_flag   &lt;= i2c_rh_wl ;         </span><br><span class="line">                    addr_t    &lt;= i2c_addr  ;         </span><br><span class="line">                    data_wr_t &lt;= i2c_data_w;  </span><br><span class="line">                    i2c_ack   &lt;= <span class="number">1&#x27;b0</span>;                      </span><br><span class="line">                <span class="keyword">end</span>                                  </span><br><span class="line">            <span class="keyword">end</span>                                      </span><br><span class="line">            st_sladdr: <span class="keyword">begin</span>                         <span class="comment">//写地址(器件地址和字地址)</span></span><br><span class="line">                <span class="keyword">case</span>(cnt)                            </span><br><span class="line">                    <span class="number">7&#x27;d1</span> : sda_out &lt;= <span class="number">1&#x27;b0</span>;          <span class="comment">//开始I2C</span></span><br><span class="line">                    <span class="number">7&#x27;d3</span> : scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d4</span> : sda_out &lt;= SLAVE_ADDR[<span class="number">6</span>]; <span class="comment">//传送器件地址</span></span><br><span class="line">                    <span class="number">7&#x27;d5</span> : scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d7</span> : scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d8</span> : sda_out &lt;= SLAVE_ADDR[<span class="number">5</span>]; </span><br><span class="line">                    <span class="number">7&#x27;d9</span> : scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d11</span>: scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d12</span>: sda_out &lt;= SLAVE_ADDR[<span class="number">4</span>]; </span><br><span class="line">                    <span class="number">7&#x27;d13</span>: scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d15</span>: scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d16</span>: sda_out &lt;= SLAVE_ADDR[<span class="number">3</span>]; </span><br><span class="line">                    <span class="number">7&#x27;d17</span>: scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d19</span>: scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d20</span>: sda_out &lt;= SLAVE_ADDR[<span class="number">2</span>]; </span><br><span class="line">                    <span class="number">7&#x27;d21</span>: scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d23</span>: scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d24</span>: sda_out &lt;= SLAVE_ADDR[<span class="number">1</span>]; </span><br><span class="line">                    <span class="number">7&#x27;d25</span>: scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d27</span>: scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d28</span>: sda_out &lt;= SLAVE_ADDR[<span class="number">0</span>]; </span><br><span class="line">                    <span class="number">7&#x27;d29</span>: scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d31</span>: scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d32</span>: sda_out &lt;= <span class="number">1&#x27;b0</span>;          <span class="comment">//0:写</span></span><br><span class="line">                    <span class="number">7&#x27;d33</span>: scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d35</span>: scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d36</span>: <span class="keyword">begin</span>                     </span><br><span class="line">                        sda_dir &lt;= <span class="number">1&#x27;b0</span>;             </span><br><span class="line">                        sda_out &lt;= <span class="number">1&#x27;b1</span>;                         </span><br><span class="line">                    <span class="keyword">end</span>                              </span><br><span class="line">                    <span class="number">7&#x27;d37</span>: scl     &lt;= <span class="number">1&#x27;b1</span>;            </span><br><span class="line">                    <span class="number">7&#x27;d38</span>: <span class="keyword">begin</span>                     <span class="comment">//从机应答 </span></span><br><span class="line">                        st_done &lt;= <span class="number">1&#x27;b1</span>;</span><br><span class="line">                        <span class="keyword">if</span>(sda_in == <span class="number">1&#x27;b1</span>)           <span class="comment">//高电平表示未应答</span></span><br><span class="line">                            i2c_ack &lt;= <span class="number">1&#x27;b1</span>;         <span class="comment">//拉高应答标志位     </span></span><br><span class="line">                    <span class="keyword">end</span>                                          </span><br><span class="line">                    <span class="number">7&#x27;d39</span>: <span class="keyword">begin</span>                     </span><br><span class="line">                        scl &lt;= <span class="number">1&#x27;b0</span>;                 </span><br><span class="line">                        cnt &lt;= <span class="number">7&#x27;b0</span>;                 </span><br><span class="line">                    <span class="keyword">end</span>                              </span><br><span class="line">                    <span class="keyword">default</span> :  ;                     </span><br><span class="line">                <span class="keyword">endcase</span>                              </span><br><span class="line">            <span class="keyword">end</span>                                      </span><br><span class="line">            st_addr16: <span class="keyword">begin</span>                         </span><br><span class="line">                <span class="keyword">case</span>(cnt)                            </span><br><span class="line">                    <span class="number">7&#x27;d0</span> : <span class="keyword">begin</span>                     </span><br><span class="line">                        sda_dir &lt;= <span class="number">1&#x27;b1</span> ;            </span><br><span class="line">                        sda_out &lt;= addr_t[<span class="number">15</span>];       <span class="comment">//传送字地址</span></span><br><span class="line">                    <span class="keyword">end</span>                              </span><br><span class="line">                    <span class="number">7&#x27;d1</span> : scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d3</span> : scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d4</span> : sda_out &lt;= addr_t[<span class="number">14</span>];    </span><br><span class="line">                    <span class="number">7&#x27;d5</span> : scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d7</span> : scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d8</span> : sda_out &lt;= addr_t[<span class="number">13</span>];    </span><br><span class="line">                    <span class="number">7&#x27;d9</span> : scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d11</span>: scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d12</span>: sda_out &lt;= addr_t[<span class="number">12</span>];    </span><br><span class="line">                    <span class="number">7&#x27;d13</span>: scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d15</span>: scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d16</span>: sda_out &lt;= addr_t[<span class="number">11</span>];    </span><br><span class="line">                    <span class="number">7&#x27;d17</span>: scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d19</span>: scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d20</span>: sda_out &lt;= addr_t[<span class="number">10</span>];    </span><br><span class="line">                    <span class="number">7&#x27;d21</span>: scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d23</span>: scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d24</span>: sda_out &lt;= addr_t[<span class="number">9</span>];     </span><br><span class="line">                    <span class="number">7&#x27;d25</span>: scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d27</span>: scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d28</span>: sda_out &lt;= addr_t[<span class="number">8</span>];     </span><br><span class="line">                    <span class="number">7&#x27;d29</span>: scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d31</span>: scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d32</span>: <span class="keyword">begin</span>                     </span><br><span class="line">                        sda_dir &lt;= <span class="number">1&#x27;b0</span>;             </span><br><span class="line">                        sda_out &lt;= <span class="number">1&#x27;b1</span>;   </span><br><span class="line">                    <span class="keyword">end</span>                              </span><br><span class="line">                    <span class="number">7&#x27;d33</span>: scl  &lt;= <span class="number">1&#x27;b1</span>;             </span><br><span class="line">                    <span class="number">7&#x27;d34</span>: <span class="keyword">begin</span>                     <span class="comment">//从机应答</span></span><br><span class="line">                        st_done &lt;= <span class="number">1&#x27;b1</span>;     </span><br><span class="line">                        <span class="keyword">if</span>(sda_in == <span class="number">1&#x27;b1</span>)           <span class="comment">//高电平表示未应答</span></span><br><span class="line">                            i2c_ack &lt;= <span class="number">1&#x27;b1</span>;         <span class="comment">//拉高应答标志位    </span></span><br><span class="line">                    <span class="keyword">end</span>        </span><br><span class="line">                    <span class="number">7&#x27;d35</span>: <span class="keyword">begin</span>                     </span><br><span class="line">                        scl &lt;= <span class="number">1&#x27;b0</span>;                 </span><br><span class="line">                        cnt &lt;= <span class="number">7&#x27;b0</span>;                 </span><br><span class="line">                    <span class="keyword">end</span>                              </span><br><span class="line">                    <span class="keyword">default</span> :  ;                     </span><br><span class="line">                <span class="keyword">endcase</span>                              </span><br><span class="line">            <span class="keyword">end</span>                                      </span><br><span class="line">            st_addr8: <span class="keyword">begin</span>                          </span><br><span class="line">                <span class="keyword">case</span>(cnt)                            </span><br><span class="line">                    <span class="number">7&#x27;d0</span>: <span class="keyword">begin</span>                      </span><br><span class="line">                       sda_dir &lt;= <span class="number">1&#x27;b1</span> ;             </span><br><span class="line">                       sda_out &lt;= addr_t[<span class="number">7</span>];         <span class="comment">//字地址</span></span><br><span class="line">                    <span class="keyword">end</span>                              </span><br><span class="line">                    <span class="number">7&#x27;d1</span> : scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d3</span> : scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d4</span> : sda_out &lt;= addr_t[<span class="number">6</span>];     </span><br><span class="line">                    <span class="number">7&#x27;d5</span> : scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d7</span> : scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d8</span> : sda_out &lt;= addr_t[<span class="number">5</span>];     </span><br><span class="line">                    <span class="number">7&#x27;d9</span> : scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d11</span>: scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d12</span>: sda_out &lt;= addr_t[<span class="number">4</span>];     </span><br><span class="line">                    <span class="number">7&#x27;d13</span>: scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d15</span>: scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d16</span>: sda_out &lt;= addr_t[<span class="number">3</span>];     </span><br><span class="line">                    <span class="number">7&#x27;d17</span>: scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d19</span>: scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d20</span>: sda_out &lt;= addr_t[<span class="number">2</span>];     </span><br><span class="line">                    <span class="number">7&#x27;d21</span>: scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d23</span>: scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d24</span>: sda_out &lt;= addr_t[<span class="number">1</span>];     </span><br><span class="line">                    <span class="number">7&#x27;d25</span>: scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d27</span>: scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d28</span>: sda_out &lt;= addr_t[<span class="number">0</span>];     </span><br><span class="line">                    <span class="number">7&#x27;d29</span>: scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d31</span>: scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d32</span>: <span class="keyword">begin</span>                     </span><br><span class="line">                        sda_dir &lt;= <span class="number">1&#x27;b0</span>;         </span><br><span class="line">                        sda_out &lt;= <span class="number">1&#x27;b1</span>;                    </span><br><span class="line">                    <span class="keyword">end</span>                              </span><br><span class="line">                    <span class="number">7&#x27;d33</span>: scl     &lt;= <span class="number">1&#x27;b1</span>;          </span><br><span class="line">                    <span class="number">7&#x27;d34</span>: <span class="keyword">begin</span>                     <span class="comment">//从机应答</span></span><br><span class="line">                        st_done &lt;= <span class="number">1&#x27;b1</span>;     </span><br><span class="line">                        <span class="keyword">if</span>(sda_in == <span class="number">1&#x27;b1</span>)           <span class="comment">//高电平表示未应答</span></span><br><span class="line">                            i2c_ack &lt;= <span class="number">1&#x27;b1</span>;         <span class="comment">//拉高应答标志位    </span></span><br><span class="line">                    <span class="keyword">end</span>   </span><br><span class="line">                    <span class="number">7&#x27;d35</span>: <span class="keyword">begin</span>                     </span><br><span class="line">                        scl &lt;= <span class="number">1&#x27;b0</span>;                 </span><br><span class="line">                        cnt &lt;= <span class="number">7&#x27;b0</span>;                 </span><br><span class="line">                    <span class="keyword">end</span>                              </span><br><span class="line">                    <span class="keyword">default</span> :  ;                     </span><br><span class="line">                <span class="keyword">endcase</span>                              </span><br><span class="line">            <span class="keyword">end</span>                                      </span><br><span class="line">            st_data_wr: <span class="keyword">begin</span>                        <span class="comment">//写数据(8 bit)</span></span><br><span class="line">                <span class="keyword">case</span>(cnt)                            </span><br><span class="line">                    <span class="number">7&#x27;d0</span>: <span class="keyword">begin</span>                      </span><br><span class="line">                        sda_dir &lt;= <span class="number">1&#x27;b1</span>;</span><br><span class="line">                        sda_out &lt;= data_wr_t[<span class="number">7</span>];     <span class="comment">//I2C写8位数据</span></span><br><span class="line">                    <span class="keyword">end</span>                              </span><br><span class="line">                    <span class="number">7&#x27;d1</span> : scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d3</span> : scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d4</span> : sda_out &lt;= data_wr_t[<span class="number">6</span>];  </span><br><span class="line">                    <span class="number">7&#x27;d5</span> : scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d7</span> : scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d8</span> : sda_out &lt;= data_wr_t[<span class="number">5</span>];  </span><br><span class="line">                    <span class="number">7&#x27;d9</span> : scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d11</span>: scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d12</span>: sda_out &lt;= data_wr_t[<span class="number">4</span>];  </span><br><span class="line">                    <span class="number">7&#x27;d13</span>: scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d15</span>: scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d16</span>: sda_out &lt;= data_wr_t[<span class="number">3</span>];  </span><br><span class="line">                    <span class="number">7&#x27;d17</span>: scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d19</span>: scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d20</span>: sda_out &lt;= data_wr_t[<span class="number">2</span>];  </span><br><span class="line">                    <span class="number">7&#x27;d21</span>: scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d23</span>: scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d24</span>: sda_out &lt;= data_wr_t[<span class="number">1</span>];  </span><br><span class="line">                    <span class="number">7&#x27;d25</span>: scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d27</span>: scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d28</span>: sda_out &lt;= data_wr_t[<span class="number">0</span>];  </span><br><span class="line">                    <span class="number">7&#x27;d29</span>: scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d31</span>: scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d32</span>: <span class="keyword">begin</span>                     </span><br><span class="line">                        sda_dir &lt;= <span class="number">1&#x27;b0</span>;           </span><br><span class="line">                        sda_out &lt;= <span class="number">1&#x27;b1</span>;                              </span><br><span class="line">                    <span class="keyword">end</span>                              </span><br><span class="line">                    <span class="number">7&#x27;d33</span>: scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d34</span>: <span class="keyword">begin</span>                     <span class="comment">//从机应答</span></span><br><span class="line">                        st_done &lt;= <span class="number">1&#x27;b1</span>;     </span><br><span class="line">                        <span class="keyword">if</span>(sda_in == <span class="number">1&#x27;b1</span>)           <span class="comment">//高电平表示未应答</span></span><br><span class="line">                            i2c_ack &lt;= <span class="number">1&#x27;b1</span>;         <span class="comment">//拉高应答标志位    </span></span><br><span class="line">                    <span class="keyword">end</span>          </span><br><span class="line">                    <span class="number">7&#x27;d35</span>: <span class="keyword">begin</span>                     </span><br><span class="line">                        scl  &lt;= <span class="number">1&#x27;b0</span>;                </span><br><span class="line">                        cnt  &lt;= <span class="number">7&#x27;b0</span>;                </span><br><span class="line">                    <span class="keyword">end</span>                              </span><br><span class="line">                    <span class="keyword">default</span>  :  ;                    </span><br><span class="line">                <span class="keyword">endcase</span>                              </span><br><span class="line">            <span class="keyword">end</span>                                      </span><br><span class="line">            st_addr_rd: <span class="keyword">begin</span>                        <span class="comment">//写地址以进行读数据</span></span><br><span class="line">                <span class="keyword">case</span>(cnt)                            </span><br><span class="line">                    <span class="number">7&#x27;d0</span> : <span class="keyword">begin</span>                     </span><br><span class="line">                        sda_dir &lt;= <span class="number">1&#x27;b1</span>;             </span><br><span class="line">                        sda_out &lt;= <span class="number">1&#x27;b1</span>;             </span><br><span class="line">                    <span class="keyword">end</span>                              </span><br><span class="line">                    <span class="number">7&#x27;d1</span> : scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d2</span> : sda_out &lt;= <span class="number">1&#x27;b0</span>;          <span class="comment">//重新开始</span></span><br><span class="line">                    <span class="number">7&#x27;d3</span> : scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d4</span> : sda_out &lt;= SLAVE_ADDR[<span class="number">6</span>]; <span class="comment">//传送器件地址</span></span><br><span class="line">                    <span class="number">7&#x27;d5</span> : scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d7</span> : scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d8</span> : sda_out &lt;= SLAVE_ADDR[<span class="number">5</span>]; </span><br><span class="line">                    <span class="number">7&#x27;d9</span> : scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d11</span>: scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d12</span>: sda_out &lt;= SLAVE_ADDR[<span class="number">4</span>]; </span><br><span class="line">                    <span class="number">7&#x27;d13</span>: scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d15</span>: scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d16</span>: sda_out &lt;= SLAVE_ADDR[<span class="number">3</span>]; </span><br><span class="line">                    <span class="number">7&#x27;d17</span>: scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d19</span>: scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d20</span>: sda_out &lt;= SLAVE_ADDR[<span class="number">2</span>]; </span><br><span class="line">                    <span class="number">7&#x27;d21</span>: scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d23</span>: scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d24</span>: sda_out &lt;= SLAVE_ADDR[<span class="number">1</span>]; </span><br><span class="line">                    <span class="number">7&#x27;d25</span>: scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d27</span>: scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d28</span>: sda_out &lt;= SLAVE_ADDR[<span class="number">0</span>]; </span><br><span class="line">                    <span class="number">7&#x27;d29</span>: scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d31</span>: scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d32</span>: sda_out &lt;= <span class="number">1&#x27;b1</span>;          <span class="comment">//1:读</span></span><br><span class="line">                    <span class="number">7&#x27;d33</span>: scl &lt;= <span class="number">1&#x27;b1</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d35</span>: scl &lt;= <span class="number">1&#x27;b0</span>;              </span><br><span class="line">                    <span class="number">7&#x27;d36</span>: <span class="keyword">begin</span>                     </span><br><span class="line">                        sda_dir &lt;= <span class="number">1&#x27;b0</span>;            </span><br><span class="line">                        sda_out &lt;= <span class="number">1&#x27;b1</span>;                    </span><br><span class="line">                    <span class="keyword">end</span></span><br><span class="line">                    <span class="number">7&#x27;d37</span>: scl     &lt;= <span class="number">1&#x27;b1</span>;</span><br><span class="line">                    <span class="number">7&#x27;d38</span>: <span class="keyword">begin</span>                     <span class="comment">//从机应答</span></span><br><span class="line">                        st_done &lt;= <span class="number">1&#x27;b1</span>;     </span><br><span class="line">                        <span class="keyword">if</span>(sda_in == <span class="number">1&#x27;b1</span>)           <span class="comment">//高电平表示未应答</span></span><br><span class="line">                            i2c_ack &lt;= <span class="number">1&#x27;b1</span>;         <span class="comment">//拉高应答标志位    </span></span><br><span class="line">                    <span class="keyword">end</span>   </span><br><span class="line">                    <span class="number">7&#x27;d39</span>: <span class="keyword">begin</span></span><br><span class="line">                        scl &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">                        cnt &lt;= <span class="number">7&#x27;b0</span>;</span><br><span class="line">                    <span class="keyword">end</span></span><br><span class="line">                    <span class="keyword">default</span> : ;</span><br><span class="line">                <span class="keyword">endcase</span></span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">            st_data_rd: <span class="keyword">begin</span>                        <span class="comment">//读取数据(8 bit)</span></span><br><span class="line">                <span class="keyword">case</span>(cnt)</span><br><span class="line">                    <span class="number">7&#x27;d0</span>: sda_dir &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">                    <span class="number">7&#x27;d1</span>: <span class="keyword">begin</span></span><br><span class="line">                        data_r[<span class="number">7</span>] &lt;= sda_in;</span><br><span class="line">                        scl       &lt;= <span class="number">1&#x27;b1</span>;</span><br><span class="line">                    <span class="keyword">end</span></span><br><span class="line">                    <span class="number">7&#x27;d3</span>: scl  &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">                    <span class="number">7&#x27;d5</span>: <span class="keyword">begin</span></span><br><span class="line">                        data_r[<span class="number">6</span>] &lt;= sda_in ;</span><br><span class="line">                        scl       &lt;= <span class="number">1&#x27;b1</span>   ;</span><br><span class="line">                    <span class="keyword">end</span></span><br><span class="line">                    <span class="number">7&#x27;d7</span>: scl  &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">                    <span class="number">7&#x27;d9</span>: <span class="keyword">begin</span></span><br><span class="line">                        data_r[<span class="number">5</span>] &lt;= sda_in;</span><br><span class="line">                        scl       &lt;= <span class="number">1&#x27;b1</span>  ;</span><br><span class="line">                    <span class="keyword">end</span></span><br><span class="line">                    <span class="number">7&#x27;d11</span>: scl  &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">                    <span class="number">7&#x27;d13</span>: <span class="keyword">begin</span></span><br><span class="line">                        data_r[<span class="number">4</span>] &lt;= sda_in;</span><br><span class="line">                        scl       &lt;= <span class="number">1&#x27;b1</span>  ;</span><br><span class="line">                    <span class="keyword">end</span></span><br><span class="line">                    <span class="number">7&#x27;d15</span>: scl  &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">                    <span class="number">7&#x27;d17</span>: <span class="keyword">begin</span></span><br><span class="line">                        data_r[<span class="number">3</span>] &lt;= sda_in;</span><br><span class="line">                        scl       &lt;= <span class="number">1&#x27;b1</span>  ;</span><br><span class="line">                    <span class="keyword">end</span></span><br><span class="line">                    <span class="number">7&#x27;d19</span>: scl  &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">                    <span class="number">7&#x27;d21</span>: <span class="keyword">begin</span></span><br><span class="line">                        data_r[<span class="number">2</span>] &lt;= sda_in;</span><br><span class="line">                        scl       &lt;= <span class="number">1&#x27;b1</span>  ;</span><br><span class="line">                    <span class="keyword">end</span></span><br><span class="line">                    <span class="number">7&#x27;d23</span>: scl  &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">                    <span class="number">7&#x27;d25</span>: <span class="keyword">begin</span></span><br><span class="line">                        data_r[<span class="number">1</span>] &lt;= sda_in;</span><br><span class="line">                        scl       &lt;= <span class="number">1&#x27;b1</span>  ;</span><br><span class="line">                    <span class="keyword">end</span></span><br><span class="line">                    <span class="number">7&#x27;d27</span>: scl  &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">                    <span class="number">7&#x27;d29</span>: <span class="keyword">begin</span></span><br><span class="line">                        data_r[<span class="number">0</span>] &lt;= sda_in;</span><br><span class="line">                        scl       &lt;= <span class="number">1&#x27;b1</span>  ;</span><br><span class="line">                    <span class="keyword">end</span></span><br><span class="line">                    <span class="number">7&#x27;d31</span>: scl  &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">                    <span class="number">7&#x27;d32</span>: <span class="keyword">begin</span></span><br><span class="line">                        sda_dir &lt;= <span class="number">1&#x27;b1</span>;             </span><br><span class="line">                        sda_out &lt;= <span class="number">1&#x27;b1</span>;</span><br><span class="line">                    <span class="keyword">end</span></span><br><span class="line">                    <span class="number">7&#x27;d33</span>: scl     &lt;= <span class="number">1&#x27;b1</span>;</span><br><span class="line">                    <span class="number">7&#x27;d34</span>: st_done &lt;= <span class="number">1&#x27;b1</span>;          <span class="comment">//非应答</span></span><br><span class="line">                    <span class="number">7&#x27;d35</span>: <span class="keyword">begin</span></span><br><span class="line">                        scl &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">                        cnt &lt;= <span class="number">7&#x27;b0</span>;</span><br><span class="line">                        i2c_data_r &lt;= data_r;</span><br><span class="line">                    <span class="keyword">end</span></span><br><span class="line">                    <span class="keyword">default</span>  :  ;</span><br><span class="line">                <span class="keyword">endcase</span></span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">            st_stop: <span class="keyword">begin</span>                           <span class="comment">//结束I2C操作</span></span><br><span class="line">                <span class="keyword">case</span>(cnt)</span><br><span class="line">                    <span class="number">7&#x27;d0</span>: <span class="keyword">begin</span></span><br><span class="line">                        sda_dir &lt;= <span class="number">1&#x27;b1</span>;             <span class="comment">//结束I2C</span></span><br><span class="line">                        sda_out &lt;= <span class="number">1&#x27;b0</span>;</span><br><span class="line">                    <span class="keyword">end</span></span><br><span class="line">                    <span class="number">7&#x27;d1</span> : scl     &lt;= <span class="number">1&#x27;b1</span>;</span><br><span class="line">                    <span class="number">7&#x27;d3</span> : sda_out &lt;= <span class="number">1&#x27;b1</span>;</span><br><span class="line">                    <span class="number">7&#x27;d15</span>: st_done &lt;= <span class="number">1&#x27;b1</span>;</span><br><span class="line">                    <span class="number">7&#x27;d16</span>: <span class="keyword">begin</span></span><br><span class="line">                        cnt      &lt;= <span class="number">7&#x27;b0</span>;</span><br><span class="line">                        i2c_done &lt;= <span class="number">1&#x27;b1</span>;            <span class="comment">//向上层模块传递I2C结束信号</span></span><br><span class="line">                    <span class="keyword">end</span></span><br><span class="line">                    <span class="keyword">default</span>  : ;</span><br><span class="line">                <span class="keyword">endcase</span></span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">endcase</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="4-基于IIC协议的EEPROM读写测试"><a href="#4-基于IIC协议的EEPROM读写测试" class="headerlink" title="4.基于IIC协议的EEPROM读写测试"></a>4.基于IIC协议的EEPROM读写测试</h2><ul>
+<li><p>本节的实验任务是先向 E2PROM（AT24C64）的存储器地址 0 至 255 分别写入数据 0<del>255；写完之后再读取存储器地址 0</del>255 中的数据，若读取的值全部正确则 LED 灯常亮，否则 LED 灯闪烁  </p>
+</li>
+<li><p>系统框图：</p>
+<img src="/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250310112831959.png" alt="image-20250310112831959" style="zoom:75%;">
+</li>
+<li><p>顶层模块：</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> top_e2prom(</span><br><span class="line">    <span class="keyword">input</span>               sys_clk    ,      <span class="comment">//系统时钟</span></span><br><span class="line">    <span class="keyword">input</span>               sys_rst_n  ,      <span class="comment">//系统复位</span></span><br><span class="line">    <span class="comment">//eeprom interface</span></span><br><span class="line">    <span class="keyword">output</span>              iic_scl    ,      <span class="comment">//eeprom的时钟线scl</span></span><br><span class="line">    <span class="keyword">inout</span>               iic_sda    ,      <span class="comment">//eeprom的数据线sda</span></span><br><span class="line">    <span class="comment">//user interface</span></span><br><span class="line">    <span class="keyword">output</span>              led               <span class="comment">//led显示eeprom读写测试结果</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">//parameter define</span></span><br><span class="line"><span class="keyword">parameter</span>    SLAVE_ADDR = <span class="number">7&#x27;b1010000</span>     ; <span class="comment">//器件地址(SLAVE_ADDR)</span></span><br><span class="line"><span class="keyword">parameter</span>    BIT_CTRL   = <span class="number">1&#x27;b1</span>           ; <span class="comment">//字地址位控制参数(16b/8b)</span></span><br><span class="line"><span class="keyword">parameter</span>    CLK_FREQ   = <span class="number">26&#x27;d50_000_000</span> ; <span class="comment">//i2c_dri模块的驱动时钟频率(CLK_FREQ)</span></span><br><span class="line"><span class="keyword">parameter</span>    I2C_FREQ   = <span class="number">18&#x27;d250_000</span>    ; <span class="comment">//I2C的SCL时钟频率</span></span><br><span class="line"><span class="keyword">parameter</span>    L_TIME     = <span class="number">17&#x27;d125_000</span>    ; <span class="comment">//led闪烁时间参数</span></span><br><span class="line"><span class="keyword">parameter</span>    MAX_BYTE   = <span class="number">16&#x27;d256</span>        ; <span class="comment">//读写测试的字节个数</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//wire define</span></span><br><span class="line"><span class="keyword">wire</span>           dri_clk   ; <span class="comment">//I2C操作时钟</span></span><br><span class="line"><span class="keyword">wire</span>           i2c_exec  ; <span class="comment">//I2C触发控制</span></span><br><span class="line"><span class="keyword">wire</span>   [<span class="number">15</span>:<span class="number">0</span>]  i2c_addr  ; <span class="comment">//I2C操作地址</span></span><br><span class="line"><span class="keyword">wire</span>   [ <span class="number">7</span>:<span class="number">0</span>]  i2c_data_w; <span class="comment">//I2C写入的数据</span></span><br><span class="line"><span class="keyword">wire</span>           i2c_done  ; <span class="comment">//I2C操作结束标志</span></span><br><span class="line"><span class="keyword">wire</span>           i2c_ack   ; <span class="comment">//I2C应答标志 0:应答 1:未应答</span></span><br><span class="line"><span class="keyword">wire</span>           i2c_rh_wl ; <span class="comment">//I2C读写控制</span></span><br><span class="line"><span class="keyword">wire</span>   [ <span class="number">7</span>:<span class="number">0</span>]  i2c_data_r; <span class="comment">//I2C读出的数据</span></span><br><span class="line"><span class="keyword">wire</span>           rw_done   ; <span class="comment">//E2PROM读写测试完成</span></span><br><span class="line"><span class="keyword">wire</span>           rw_result ; <span class="comment">//E2PROM读写测试结果 0:失败 1:成功 </span></span><br><span class="line"></span><br><span class="line"><span class="comment">//*****************************************************</span></span><br><span class="line"><span class="comment">//**                    main code</span></span><br><span class="line"><span class="comment">//*****************************************************</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//e2prom读写测试模块</span></span><br><span class="line">e2prom_rw #(</span><br><span class="line">    <span class="variable">.MAX_BYTE</span>    (MAX_BYTE  )   <span class="comment">//读写测试的字节个数</span></span><br><span class="line">) u_e2prom_rw(</span><br><span class="line">    <span class="variable">.clk</span>         (dri_clk   ),  <span class="comment">//时钟信号</span></span><br><span class="line">    <span class="variable">.rst_n</span>       (sys_rst_n ),  <span class="comment">//复位信号</span></span><br><span class="line">    <span class="comment">//i2c interface</span></span><br><span class="line">    <span class="variable">.i2c_exec</span>    (i2c_exec  ),  <span class="comment">//I2C触发执行信号</span></span><br><span class="line">    <span class="variable">.i2c_rh_wl</span>   (i2c_rh_wl ),  <span class="comment">//I2C读写控制信号</span></span><br><span class="line">    <span class="variable">.i2c_addr</span>    (i2c_addr  ),  <span class="comment">//I2C器件内地址</span></span><br><span class="line">    <span class="variable">.i2c_data_w</span>  (i2c_data_w),  <span class="comment">//I2C要写的数据</span></span><br><span class="line">    <span class="variable">.i2c_data_r</span>  (i2c_data_r),  <span class="comment">//I2C读出的数据</span></span><br><span class="line">    <span class="variable">.i2c_done</span>    (i2c_done  ),  <span class="comment">//I2C一次操作完成</span></span><br><span class="line">    <span class="variable">.i2c_ack</span>     (i2c_ack   ),  <span class="comment">//I2C应答标志 </span></span><br><span class="line">    <span class="comment">//user interface</span></span><br><span class="line">    <span class="variable">.rw_done</span>     (rw_done   ),  <span class="comment">//E2PROM读写测试完成</span></span><br><span class="line">    <span class="variable">.rw_result</span>   (rw_result )   <span class="comment">//E2PROM读写测试结果 0:失败 1:成功</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">//i2c驱动模块</span></span><br><span class="line">i2c_dri #(</span><br><span class="line">    <span class="variable">.SLAVE_ADDR</span>  (SLAVE_ADDR),  <span class="comment">//EEPROM从机地址</span></span><br><span class="line">    <span class="variable">.CLK_FREQ</span>    (CLK_FREQ  ),  <span class="comment">//模块输入的时钟频率</span></span><br><span class="line">    <span class="variable">.I2C_FREQ</span>    (I2C_FREQ  )   <span class="comment">//IIC_SCL的时钟频率</span></span><br><span class="line">) u_i2c_dri(</span><br><span class="line">    <span class="variable">.clk</span>         (sys_clk   ),  </span><br><span class="line">    <span class="variable">.rst_n</span>       (sys_rst_n ),  </span><br><span class="line">    <span class="comment">//i2c interface</span></span><br><span class="line">    <span class="variable">.i2c_exec</span>    (i2c_exec  ),  <span class="comment">//I2C触发执行信号</span></span><br><span class="line">    <span class="variable">.bit_ctrl</span>    (BIT_CTRL  ),  <span class="comment">//器件地址位控制(16b/8b)</span></span><br><span class="line">    <span class="variable">.i2c_rh_wl</span>   (i2c_rh_wl ),  <span class="comment">//I2C读写控制信号</span></span><br><span class="line">    <span class="variable">.i2c_addr</span>    (i2c_addr  ),  <span class="comment">//I2C器件内地址</span></span><br><span class="line">    <span class="variable">.i2c_data_w</span>  (i2c_data_w),  <span class="comment">//I2C要写的数据</span></span><br><span class="line">    <span class="variable">.i2c_data_r</span>  (i2c_data_r),  <span class="comment">//I2C读出的数据</span></span><br><span class="line">    <span class="variable">.i2c_done</span>    (i2c_done  ),  <span class="comment">//I2C一次操作完成</span></span><br><span class="line">    <span class="variable">.i2c_ack</span>     (i2c_ack   ),  <span class="comment">//I2C应答标志</span></span><br><span class="line">    <span class="variable">.scl</span>         (iic_scl   ),  <span class="comment">//I2C的SCL时钟信号</span></span><br><span class="line">    <span class="variable">.sda</span>         (iic_sda   ),  <span class="comment">//I2C的SDA信号</span></span><br><span class="line">    <span class="comment">//user interface</span></span><br><span class="line">    <span class="variable">.dri_clk</span>     (dri_clk   )   <span class="comment">//I2C操作时钟</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">//led指示模块</span></span><br><span class="line">rw_result_led <span class="variable">#(.L_TIME(L_TIME  )</span>   <span class="comment">//控制led闪烁时间</span></span><br><span class="line">) u_rw_result_led(</span><br><span class="line">    <span class="variable">.clk</span>         (dri_clk   ),  </span><br><span class="line">    <span class="variable">.rst_n</span>       (sys_rst_n ), </span><br><span class="line">    </span><br><span class="line">    <span class="variable">.rw_done</span>     (rw_done   ),  </span><br><span class="line">    <span class="variable">.rw_result</span>   (rw_result ),</span><br><span class="line">    <span class="variable">.led</span>         (led       )    </span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>上板验证结果：</p>
+<img src="/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/image-20250310113544931.png" alt="image-20250310113544931" style="zoom: 33%;">
+
+</li>
+</ul>
+<hr>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li>正点原子 启明星ZYNQ之FPGA开发指南V3.2 第二十七章 UART串口通信实验</li>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1he411F7UF?spm_id_from=333.788.videopod.sections&vd_source=221b76534ba13cfad544149d75ce9b6c">新新新手Icer练习（八）：uart的基本组成及其verilog实现_哔哩哔哩_bilibili</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/wuzhikaidetb/article/details/120984325?ops_request_misc=%7B%22request%5Fid%22%3A%221c571ee670b7e1d999ed4e5a4b0f9a1a%22%2C%22scm%22%3A%2220140713.130102334.pc%5Fblog.%22%7D&request_id=1c571ee670b7e1d999ed4e5a4b0f9a1a&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~blog~first_rank_ecpm_v1~rank_v31_ecpm-1-120984325-null-null.nonecase&utm_term=SPI&spm=1018.2226.3001.4450">FPGA实现SPI接口（1）–什么是SPI接口？_fpga spi-CSDN博客</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1jg411q7jL?spm_id_from=333.788.videopod.sections&vd_source=221b76534ba13cfad544149d75ce9b6c">新新新手Icer练习（九）：SPI基本原理及其Verilog仿真实现_哔哩哔哩_bilibili</a></li>
+<li>正点原子 启明星ZYNQ之FPGA开发指南V3.2 第三十二章 基于IIC协议的EEPROM读写测试</li>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV13V4y1F7Vw?spm_id_from=333.788.videopod.sections&vd_source=221b76534ba13cfad544149d75ce9b6c">新新新手Icer练习（十）：IIC基本原理 + Verilog仿真实现 + 上板信号采集 （EEPROM数据读写测试）_哔哩哔哩_bilibili</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>欢迎来到ssy的世界</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/WeChaPay.jpg" alt="ssy 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>ssy
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://ssy的小天地.com/2025/03/09/FPGA%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%B8%B8%E7%94%A8%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1%E6%8E%A5%E5%8F%A3/" title="FPGA系统设计之常用串行通信接口">http://ssy的小天地.com/2025/03/09/FPGA系统设计之常用串行通信接口/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/FPGA/" rel="tag"># FPGA</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/01/08/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8BOV5640-HDMI%E6%98%BE%E7%A4%BA/" rel="prev" title="FPGA图像处理之OV5640-HDMI显示">
+      <i class="fa fa-chevron-left"></i> FPGA图像处理之OV5640-HDMI显示
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#URAT"><span class="nav-number">1.</span> <span class="nav-text">URAT</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%97%B6%E5%BA%8F%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.1.</span> <span class="nav-text">1.时序格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E8%AE%BE%E8%AE%A1%E6%80%9D%E8%B7%AF"><span class="nav-number">1.2.</span> <span class="nav-text">2.设计思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-uart%E4%B8%B2%E5%8F%A3%E6%8E%A5%E6%94%B6%E4%BB%A3%E7%A0%81%E8%AE%BE%E8%AE%A1"><span class="nav-number">1.3.</span> <span class="nav-text">3.uart串口接收代码设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-uart%E4%B8%B2%E5%8F%A3%E5%8F%91%E9%80%81%E4%BB%A3%E7%A0%81%E8%AE%BE%E8%AE%A1"><span class="nav-number">1.4.</span> <span class="nav-text">4.uart串口发送代码设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-uart%E4%B8%B2%E5%8F%A3%E9%80%9A%E4%BF%A1%E5%9B%9E%E7%8E%AF%E5%AE%9E%E9%AA%8C"><span class="nav-number">1.5.</span> <span class="nav-text">5.uart串口通信回环实验</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SPI"><span class="nav-number">2.</span> <span class="nav-text">SPI</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%97%B6%E5%BA%8F%E6%A0%BC%E5%BC%8F-1"><span class="nav-number">2.1.</span> <span class="nav-text">1.时序格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E8%AE%BE%E8%AE%A1%E6%80%9D%E8%B7%AF-1"><span class="nav-number">2.2.</span> <span class="nav-text">2.设计思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-SPI-driver%E8%AE%BE%E8%AE%A1%E4%BB%A3%E7%A0%81"><span class="nav-number">2.3.</span> <span class="nav-text">3.SPI driver设计代码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#IIC"><span class="nav-number">3.</span> <span class="nav-text">IIC</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%97%B6%E5%BA%8F%E6%A0%BC%E5%BC%8F-2"><span class="nav-number">3.1.</span> <span class="nav-text">1.时序格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E8%AE%BE%E8%AE%A1%E6%80%9D%E8%B7%AF-2"><span class="nav-number">3.2.</span> <span class="nav-text">2.设计思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-IIC-driver%E8%AE%BE%E8%AE%A1%E4%BB%A3%E7%A0%81"><span class="nav-number">3.3.</span> <span class="nav-text">3.IIC driver设计代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%9F%BA%E4%BA%8EIIC%E5%8D%8F%E8%AE%AE%E7%9A%84EEPROM%E8%AF%BB%E5%86%99%E6%B5%8B%E8%AF%95"><span class="nav-number">3.4.</span> <span class="nav-text">4.基于IIC协议的EEPROM读写测试</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ssy"
+      src="/images/ssy.png">
+  <p class="site-author-name" itemprop="name">ssy</p>
+  <div class="site-description" itemprop="description">满怀希望 就会所向披靡</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">159</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ssy1938010014" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ssy1938010014" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://m.weibo.cn/u/5469432500?uid=5469432500&t=0&luicode=10000011&lfid=100103type=1&q=JIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" title="Weibo → https:&#x2F;&#x2F;m.weibo.cn&#x2F;u&#x2F;5469432500?uid&#x3D;5469432500&amp;t&#x3D;0&amp;luicode&#x3D;10000011&amp;lfid&#x3D;100103type%3D1%26q%3DJIE%E7%88%B1%E4%BA%86%E6%95%B4%E4%B8%AA%E9%9D%92%E6%98%A5%E7%9A%84%E4%BA%BA" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://ssy1938010014.github.io/" title="http:&#x2F;&#x2F;ssy1938010014.github.io" rel="noopener" target="_blank">ssy的小天地</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://y006.github.io/" title="http:&#x2F;&#x2F;y006.github.io" rel="noopener" target="_blank">邱院士的Blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://bengoooo.github.io/" title="http:&#x2F;&#x2F;BENgoooo.github.io" rel="noopener" target="_blank">赵总的Blog</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=1469041281&auto=1&height=66"></iframe>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ssy</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="300" alpha="0.6" zIndex="-1" src="//cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-ribbon@1/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/theme-next/theme-next-three@1/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+<script data-pjax>
+document.querySelectorAll('.pdfobject-container').forEach(element => {
+  let url = element.dataset.target;
+  let pdfOpenParams = {
+    navpanes : 0,
+    toolbar  : 0,
+    statusbar: 0,
+    pagemode : 'thumbs',
+    view     : 'FitH'
+  };
+  let pdfOpenFragment = '#' + Object.entries(pdfOpenParams).map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join('&');
+  let fullURL = `/lib/pdf/web/viewer.html?file=${encodeURIComponent(url)}${pdfOpenFragment}`;
+
+  if (NexT.utils.supportsPDFs()) {
+    element.innerHTML = `<embed class="pdfobject" src="${url + pdfOpenFragment}" type="application/pdf" style="height: ${element.dataset.height};">`;
+  } else {
+    element.innerHTML = `<iframe src="${fullURL}" style="height: ${element.dataset.height};" frameborder="0"></iframe>`;
+  }
+});
+</script>
+
+
+
+
+    <div id="pjax">
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+    </div>
+</body>
+</html>
