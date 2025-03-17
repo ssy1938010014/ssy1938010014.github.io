@@ -267,14 +267,17 @@
       
         <p>本节主要介绍了自动编码器的基本原理及其变体，以及生成对抗网络的基本原理。</p>
 <span id="more"></span>
+
 <h1 id="自动编码器"><a href="#自动编码器" class="headerlink" title="自动编码器"></a>自动编码器</h1><h2 id="1-基本概念"><a href="#1-基本概念" class="headerlink" title="1.基本概念"></a>1.基本概念</h2><ul>
-<li>自动编码器是一种<strong>无监督</strong>的神经网络模型，其目标是通过训练网络忽略信号“噪声”，从而学习数据的低纬度表示（编码）</li>
+<li><p>自动编码器是一种<strong>无监督</strong>的神经网络模型，其目标是通过训练网络忽略信号“噪声”，从而学习数据的低纬度表示（编码）</p>
+</li>
 <li><p>通常分为两步：</p>
 <ul>
 <li>学习到输入数据的隐含特征，即编码（encoder）：$x\rightarrow z$</li>
 <li>用隐含特征重构原始的输入数据，即解码（decoder）：$z\rightarrow x$</li>
 </ul>
-<p><img src="/2022/12/15/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E8%87%AA%E5%8A%A8%E7%BC%96%E7%A0%81%E5%99%A8%E4%B8%8E%E7%94%9F%E6%88%90%E5%AF%B9%E6%8A%97%E7%BD%91%E7%BB%9C/image-20221215160742594.png" alt="image-20221215160742594" style="zoom:50%;"></p>
+<img src="/2022/12/15/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E8%87%AA%E5%8A%A8%E7%BC%96%E7%A0%81%E5%99%A8%E4%B8%8E%E7%94%9F%E6%88%90%E5%AF%B9%E6%8A%97%E7%BD%91%E7%BB%9C/image-20221215160742594.png" alt="image-20221215160742594" style="zoom:50%;">
+
 </li>
 </ul>
 <h2 id="2-vanilla自编码器"><a href="#2-vanilla自编码器" class="headerlink" title="2.vanilla自编码器"></a>2.vanilla自编码器</h2><ul>
@@ -282,6 +285,7 @@
 </li>
 <li><p>在这里，如果隐含层维数（64）小于输入维数（784），则称这个编码器是有损的。通过这个约束，来迫使神经网络来学习数据的压缩表征</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">input_size = <span class="number">784</span></span><br><span class="line">hidden_size = <span class="number">64</span></span><br><span class="line">output_size = <span class="number">784</span></span><br><span class="line"> </span><br><span class="line">x = Input(shape=(input_size,))</span><br><span class="line"> </span><br><span class="line"><span class="comment"># Encoder</span></span><br><span class="line">h = Dense(hidden_size, activation=<span class="string">&#x27;relu&#x27;</span>)(x)</span><br><span class="line"> </span><br><span class="line"><span class="comment"># Decoder</span></span><br><span class="line">r = Dense(output_size, activation=<span class="string">&#x27;sigmoid&#x27;</span>)(h)</span><br><span class="line"> </span><br><span class="line">autoencoder = Model(<span class="built_in">input</span>=x, output=r)</span><br><span class="line">autoencoder.<span class="built_in">compile</span>(optimizer=<span class="string">&#x27;adam&#x27;</span>, loss=<span class="string">&#x27;mse&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
 </li>
 </ul>
 <h2 id="3-多层自编码器"><a href="#3-多层自编码器" class="headerlink" title="3.多层自编码器"></a>3.多层自编码器</h2><ul>
@@ -289,6 +293,7 @@
 </li>
 <li><p>在这里，实现中使用了3个隐含层，而不是只有一个。<strong>任意一个隐含层都可以作为特征表征</strong>，但是为了使网络对称，我们使用了最中间的网络层。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">input_size = <span class="number">784</span></span><br><span class="line">hidden_size = <span class="number">128</span></span><br><span class="line">code_size = <span class="number">64</span></span><br><span class="line"> </span><br><span class="line">x = Input(shape=(input_size,))</span><br><span class="line"> </span><br><span class="line"><span class="comment"># Encoder</span></span><br><span class="line">hidden_1 = Dense(hidden_size, activation=<span class="string">&#x27;relu&#x27;</span>)(x)</span><br><span class="line">h = Dense(code_size, activation=<span class="string">&#x27;relu&#x27;</span>)(hidden_1)</span><br><span class="line"> </span><br><span class="line"><span class="comment"># Decoder</span></span><br><span class="line">hidden_2 = Dense(hidden_size, activation=<span class="string">&#x27;relu&#x27;</span>)(h)</span><br><span class="line">r = Dense(input_size, activation=<span class="string">&#x27;sigmoid&#x27;</span>)(hidden_2)</span><br><span class="line"> </span><br><span class="line">autoencoder = Model(<span class="built_in">input</span>=x, output=r)</span><br><span class="line">autoencoder.<span class="built_in">compile</span>(optimizer=<span class="string">&#x27;adam&#x27;</span>, loss=<span class="string">&#x27;mse&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
 </li>
 </ul>
 <h2 id="4-卷积自编码器"><a href="#4-卷积自编码器" class="headerlink" title="4.卷积自编码器"></a>4.卷积自编码器</h2><ul>
@@ -296,6 +301,7 @@
 </li>
 <li><p>对输入图像进行<strong>下采样</strong>，以提供较小维度的潜在表征，来迫使自编码器从压缩后的数据进行学习。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">x = Input(shape=(<span class="number">28</span>, <span class="number">28</span>,<span class="number">1</span>)) </span><br><span class="line"> </span><br><span class="line"><span class="comment"># Encoder</span></span><br><span class="line">conv1_1 = Conv2D(<span class="number">16</span>, (<span class="number">3</span>, <span class="number">3</span>), activation=<span class="string">&#x27;relu&#x27;</span>, padding=<span class="string">&#x27;same&#x27;</span>)(x)</span><br><span class="line">pool1 = MaxPooling2D((<span class="number">2</span>, <span class="number">2</span>), padding=<span class="string">&#x27;same&#x27;</span>)(conv1_1)</span><br><span class="line">conv1_2 = Conv2D(<span class="number">8</span>, (<span class="number">3</span>, <span class="number">3</span>), activation=<span class="string">&#x27;relu&#x27;</span>, padding=<span class="string">&#x27;same&#x27;</span>)(pool1)</span><br><span class="line">pool2 = MaxPooling2D((<span class="number">2</span>, <span class="number">2</span>), padding=<span class="string">&#x27;same&#x27;</span>)(conv1_2)</span><br><span class="line">conv1_3 = Conv2D(<span class="number">8</span>, (<span class="number">3</span>, <span class="number">3</span>), activation=<span class="string">&#x27;relu&#x27;</span>, padding=<span class="string">&#x27;same&#x27;</span>)(pool2)</span><br><span class="line">h = MaxPooling2D((<span class="number">2</span>, <span class="number">2</span>), padding=<span class="string">&#x27;same&#x27;</span>)(conv1_3)</span><br><span class="line"> </span><br><span class="line"><span class="comment"># Decoder</span></span><br><span class="line">conv2_1 = Conv2D(<span class="number">8</span>, (<span class="number">3</span>, <span class="number">3</span>), activation=<span class="string">&#x27;relu&#x27;</span>, padding=<span class="string">&#x27;same&#x27;</span>)(h)</span><br><span class="line">up1 = UpSampling2D((<span class="number">2</span>, <span class="number">2</span>))(conv2_1)</span><br><span class="line">conv2_2 = Conv2D(<span class="number">8</span>, (<span class="number">3</span>, <span class="number">3</span>), activation=<span class="string">&#x27;relu&#x27;</span>, padding=<span class="string">&#x27;same&#x27;</span>)(up1)</span><br><span class="line">up2 = UpSampling2D((<span class="number">2</span>, <span class="number">2</span>))(conv2_2)</span><br><span class="line">conv2_3 = Conv2D(<span class="number">16</span>, (<span class="number">3</span>, <span class="number">3</span>), activation=<span class="string">&#x27;relu&#x27;</span>)(up2)</span><br><span class="line">up3 = UpSampling2D((<span class="number">2</span>, <span class="number">2</span>))(conv2_3)</span><br><span class="line">r = Conv2D(<span class="number">1</span>, (<span class="number">3</span>, <span class="number">3</span>), activation=<span class="string">&#x27;sigmoid&#x27;</span>, padding=<span class="string">&#x27;same&#x27;</span>)(up3)</span><br><span class="line"> </span><br><span class="line">autoencoder = Model(<span class="built_in">input</span>=x, output=r)</span><br><span class="line">autoencoder.<span class="built_in">compile</span>(optimizer=<span class="string">&#x27;adam&#x27;</span>, loss=<span class="string">&#x27;mse&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
 </li>
 </ul>
 <h2 id="5-正则自编码器"><a href="#5-正则自编码器" class="headerlink" title="5.正则自编码器"></a>5.正则自编码器</h2><ul>
@@ -311,6 +317,7 @@
 </li>
 <li><p>在这里，隐含层中，还加入了<strong>L1正则化，作为优化阶段中损失函数的惩罚项</strong>。与vanilla自编码器相比，这样操作后的数据表征更为稀疏。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">input_size = <span class="number">784</span></span><br><span class="line">hidden_size = <span class="number">64</span></span><br><span class="line">output_size = <span class="number">784</span></span><br><span class="line"> </span><br><span class="line">x = Input(shape=(input_size,))</span><br><span class="line"> </span><br><span class="line"><span class="comment"># Encoder</span></span><br><span class="line">h = Dense(hidden_size, activation=<span class="string">&#x27;relu&#x27;</span>, activity_regularizer=regularizers.l1(<span class="number">10e-5</span>))(x)<span class="comment">#施加在输出上的L1正则项</span></span><br><span class="line"> </span><br><span class="line"><span class="comment"># Decoder</span></span><br><span class="line">r = Dense(output_size, activation=<span class="string">&#x27;sigmoid&#x27;</span>)(h)</span><br><span class="line"> </span><br><span class="line">autoencoder = Model(<span class="built_in">input</span>=x, output=r)</span><br><span class="line">autoencoder.<span class="built_in">compile</span>(optimizer=<span class="string">&#x27;adam&#x27;</span>, loss=<span class="string">&#x27;mse&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
 </li>
 </ul>
 <h3 id="5-1降噪自编码器"><a href="#5-1降噪自编码器" class="headerlink" title="5.1降噪自编码器"></a>5.1降噪自编码器</h3><ul>
@@ -329,7 +336,7 @@
 <li><strong>生成器</strong>：从随机噪声中生成图像（随机噪声通常从均匀分布或高斯分布中获取）</li>
 <li><strong>判别器</strong>：其输入为生成器生成的图像和来自训练集中的真实图像，并对其进行判别</li>
 </ul>
-<p><img src="/2022/12/15/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E8%87%AA%E5%8A%A8%E7%BC%96%E7%A0%81%E5%99%A8%E4%B8%8E%E7%94%9F%E6%88%90%E5%AF%B9%E6%8A%97%E7%BD%91%E7%BB%9C/image-20221215171153268.png" alt="image-20221215171153268" style="zoom:50%;"></p>
+<img src="/2022/12/15/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8B%E8%87%AA%E5%8A%A8%E7%BC%96%E7%A0%81%E5%99%A8%E4%B8%8E%E7%94%9F%E6%88%90%E5%AF%B9%E6%8A%97%E7%BD%91%E7%BB%9C/image-20221215171153268.png" alt="image-20221215171153268" style="zoom:50%;">
 
     </div>
 
@@ -461,7 +468,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">160</span>
+          <span class="site-state-item-count">161</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

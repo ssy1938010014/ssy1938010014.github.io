@@ -268,6 +268,7 @@
       
         <p>本节主要介绍了SystemVerilog中比verilog更好用的相关特性以及在基础语言上扩展的接口。</p>
 <span id="more"></span>
+
 <h1 id="过程语句块新特性"><a href="#过程语句块新特性" class="headerlink" title="过程语句块新特性"></a>过程语句块新特性</h1><ul>
 <li>always语句块被细分为了：<ul>
 <li>组合逻辑语句块：<code>always_comb</code></li>
@@ -303,6 +304,7 @@
 </li>
 <li><p>EDA工具会检查always_latch过程块是否真正实现了锁存逻辑</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">always_latch</span><br><span class="line">if (enable) q &lt;= d;</span><br></pre></td></tr></table></figure>
+
 </li>
 </ul>
 <h2 id="3-过程语句块always-ff"><a href="#3-过程语句块always-ff" class="headerlink" title="3.过程语句块always_ff"></a>3.过程语句块always_ff</h2><ul>
@@ -312,6 +314,7 @@
 </li>
 <li><p>EDA工具也会检明always_ff过程块语句是否实现了时序逻辑</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">always_ff @(posedge clock, negedge resetN)</span><br><span class="line">	if (!resetN) q &lt;= 0;</span><br><span class="line">	else q &lt;= d;</span><br></pre></td></tr></table></figure>
+
 </li>
 </ul>
 <hr>
@@ -320,6 +323,7 @@
 </li>
 <li><p>SV添加了<code>inside</code>操作符，用来检查数值是否在一系列值的集合当中</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">logic [2: 0] a;</span><br><span class="line">if (a inside &#123;3&#x27;b001, 3&#x27;b010, 3&#x27;b100&#125;)</span><br></pre></td></tr></table></figure>
+
 </li>
 </ul>
 <hr>
@@ -479,7 +483,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">160</span>
+          <span class="site-state-item-count">161</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

@@ -283,19 +283,19 @@
       
         <p>本节是针对TI官方提供的波形配置的文档进行了阅读，并分析了文档中主要讲了哪些模块</p>
 <span id="more"></span>
-<h1 id="典型FMCW-chirp和Fram-Structure"><a href="#典型FMCW-chirp和Fram-Structure" class="headerlink" title="典型FMCW chirp和Fram Structure"></a>典型FMCW chirp和Fram Structure</h1><p><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BProgramming%20Chirp%20Parameters%20in%20TI%20Radar%20Devices/image-20231010230402242.png" alt="image-20231010230402242" style="zoom: 50%;"></p>
-<p><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BProgramming%20Chirp%20Parameters%20in%20TI%20Radar%20Devices/image-20231010230432804.png" alt="image-20231010230432804" style="zoom:50%;"></p>
+
+<h1 id="典型FMCW-chirp和Fram-Structure"><a href="#典型FMCW-chirp和Fram-Structure" class="headerlink" title="典型FMCW chirp和Fram Structure"></a>典型FMCW chirp和Fram Structure</h1><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BProgramming%20Chirp%20Parameters%20in%20TI%20Radar%20Devices/image-20231010230402242.png" alt="image-20231010230402242" style="zoom: 50%;">
+
+<img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BProgramming%20Chirp%20Parameters%20in%20TI%20Radar%20Devices/image-20231010230432804.png" alt="image-20231010230432804" style="zoom:50%;">
+
 <hr>
 <h1 id="FMCW测量目标信息"><a href="#FMCW测量目标信息" class="headerlink" title="FMCW测量目标信息"></a>FMCW测量目标信息</h1><h2 id="1-测距及距离分辨率"><a href="#1-测距及距离分辨率" class="headerlink" title="1.测距及距离分辨率"></a>1.测距及距离分辨率</h2><ul>
-<li><p>距离计算：</p>
-<script type="math/tex; mode=display">
-d=\frac{f\times c}{2\times S}</script></li>
-<li><p>距离分辨率：</p>
-<script type="math/tex; mode=display">
-d_{res}=\frac c{2B}</script></li>
-<li><p>因为雷达采集板提供的带宽有限（TI’sAWR2243 radar device provides a large 20-MHz bandwidth），所以最大距离收到了中频带宽的限制，有：</p>
-<script type="math/tex; mode=display">
-d_{max}=\frac{IF_{max}\times c}{2\times S}</script></li>
+<li><p>距离计算：<br>$$<br>d=\frac{f\times c}{2\times S}<br>$$</p>
+</li>
+<li><p>距离分辨率：<br>$$<br>d_{res}=\frac c{2B}<br>$$</p>
+</li>
+<li><p>因为雷达采集板提供的带宽有限（TI’sAWR2243 radar device provides a large 20-MHz bandwidth），所以最大距离收到了中频带宽的限制，有：<br>$$<br>d_{max}=\frac{IF_{max}\times c}{2\times S}<br>$$</p>
+</li>
 <li><p>在complex 1x采样模式，中频带宽限制为$0.9\times ADC_{采样频率}$；在complex 2x和real采样模式下，IF带宽限制为$0.9\times \frac{ADC_{采样频率}}{2}$（hemaximum ADC sampling frequency inthe TI’sradar devices is45MHz (AWR22xx)）</p>
 <ul>
 <li><p>但是并不能看懂，什么是complex 1x和complex 2x和real模式，于是就搜啊搜，搜到的也很少</p>
@@ -306,12 +306,15 @@ d_{max}=\frac{IF_{max}\times c}{2\times S}</script></li>
 <li><p>还有一个指路文档：Using a complex-baseband architecture in FMCW radar systems.pdf，说是在这个文档里面有更加详细的解释，但是，依然没有在这个文档里面把这三种采样模式看得很明白，只是能知道IQ通道复数采用和实数采样的中频信号，但实在不懂这怎么就跟中频带宽去对应上的</p>
 <ul>
 <li><p>接收信号与实数信号混频后的中频信号</p>
-<p><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BProgramming%20Chirp%20Parameters%20in%20TI%20Radar%20Devices/image-20231011000146144.png" alt="image-20231011000146144" style="zoom:50%;"></p>
-<p><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BProgramming%20Chirp%20Parameters%20in%20TI%20Radar%20Devices/image-20231011000111359.png" alt="image-20231011000111359" style="zoom: 33%;"></p>
+<img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BProgramming%20Chirp%20Parameters%20in%20TI%20Radar%20Devices/image-20231011000146144.png" alt="image-20231011000146144" style="zoom:50%;">
+
+<img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BProgramming%20Chirp%20Parameters%20in%20TI%20Radar%20Devices/image-20231011000111359.png" alt="image-20231011000111359" style="zoom: 33%;">
 </li>
 <li><p>接收信号与复数信号混频后的中频信号</p>
-<p><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BProgramming%20Chirp%20Parameters%20in%20TI%20Radar%20Devices/image-20231011000235276.png" alt="image-20231011000235276" style="zoom:50%;"></p>
-<p><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BProgramming%20Chirp%20Parameters%20in%20TI%20Radar%20Devices/image-20231011000331557.png" alt="image-20231011000331557" style="zoom: 33%;"></p>
+<img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BProgramming%20Chirp%20Parameters%20in%20TI%20Radar%20Devices/image-20231011000235276.png" alt="image-20231011000235276" style="zoom:50%;">
+
+<img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BProgramming%20Chirp%20Parameters%20in%20TI%20Radar%20Devices/image-20231011000331557.png" alt="image-20231011000331557" style="zoom: 33%;">
+
 </li>
 </ul>
 </li>
@@ -319,28 +322,23 @@ d_{max}=\frac{IF_{max}\times c}{2\times S}</script></li>
 </li>
 </ul>
 <h2 id="2-测速与速度分辨率"><a href="#2-测速与速度分辨率" class="headerlink" title="2.测速与速度分辨率"></a>2.测速与速度分辨率</h2><ul>
-<li><p>速度计算：</p>
-<script type="math/tex; mode=display">
-则:v=\frac{\lambda\Delta\Phi}{4\pi T_c}</script></li>
-<li><p>最大无模糊速度：</p>
-<script type="math/tex; mode=display">
-v_{max}=\frac{\lambda}{4T_c}\quad(\because \Delta \Phi_{max}=\pi)</script></li>
-<li><p>速度分辨率：</p>
-<script type="math/tex; mode=display">
-V_{res}=\frac\lambda{2NT_c}</script></li>
+<li><p>速度计算：<br>$$<br>则:v=\frac{\lambda\Delta\Phi}{4\pi T_c}<br>$$</p>
+</li>
+<li><p>最大无模糊速度：<br>$$<br>v_{max}=\frac{\lambda}{4T_c}\quad(\because \Delta \Phi_{max}=\pi)<br>$$</p>
+</li>
+<li><p>速度分辨率：<br>$$<br>V_{res}=\frac\lambda{2NT_c}<br>$$</p>
+</li>
 </ul>
 <h2 id="3-测角与角度分辨率"><a href="#3-测角与角度分辨率" class="headerlink" title="3.测角与角度分辨率"></a>3.测角与角度分辨率</h2><ul>
-<li><p>角度计算：</p>
-<script type="math/tex; mode=display">
-\theta=arcsin(\frac{\phi\lambda}{2\pi d})</script></li>
-<li><p>最大无模糊角度：</p>
-<script type="math/tex; mode=display">
-\theta_{max}=arcsin(\frac{\lambda}{2d})\quad(\because \phi_{max}=\pi)</script></li>
-<li><p>角度分辨率：</p>
-<script type="math/tex; mode=display">
-\theta_{res}=\frac{\lambda}{Ndcos(\theta)}</script></li>
+<li><p>角度计算：<br>$$<br>\theta=arcsin(\frac{\phi\lambda}{2\pi d})<br>$$</p>
+</li>
+<li><p>最大无模糊角度：<br>$$<br>\theta_{max}=arcsin(\frac{\lambda}{2d})\quad(\because \phi_{max}=\pi)<br>$$</p>
+</li>
+<li><p>角度分辨率：<br>$$<br>\theta_{res}=\frac{\lambda}{Ndcos(\theta)}<br>$$</p>
+</li>
 <li><p>MIMO雷达的有效接收通道：</p>
-<p><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BProgramming%20Chirp%20Parameters%20in%20TI%20Radar%20Devices/image-20231011001458283.png" alt="image-20231011001458283" style="zoom: 33%;"></p>
+<img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BProgramming%20Chirp%20Parameters%20in%20TI%20Radar%20Devices/image-20231011001458283.png" alt="image-20231011001458283" style="zoom: 33%;">
+
 </li>
 </ul>
 <hr>
@@ -348,18 +346,21 @@ V_{res}=\frac\lambda{2NT_c}</script></li>
 <li><p>Chirp Profiles是基本的 Chirp 配置模板，可用于定义在一个或多个定义参数（起始频率、斜率、空闲时间等）方面具有显着差异的 Chirp 变体</p>
 </li>
 <li><p>Chirp RAM：是在Chirp Profiles配置模板上的细小变化，最多可对 512 个独特的chirp进行预编程并存储在Chirp RAM 中（感觉这里文档中没有解释得很清楚，并没有整明白Chirp RAM中每一个chirp究竟在对应的配置模板上，多了哪些细微的配置）</p>
-<p><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BProgramming%20Chirp%20Parameters%20in%20TI%20Radar%20Devices/image-20231011005020297.png" alt="image-20231011005020297" style="zoom: 50%;"></p>
+<img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BProgramming%20Chirp%20Parameters%20in%20TI%20Radar%20Devices/image-20231011005020297.png" alt="image-20231011005020297" style="zoom: 50%;">
+
 </li>
 </ul>
 <hr>
-<h1 id="Chirp的时序参数"><a href="#Chirp的时序参数" class="headerlink" title="Chirp的时序参数"></a>Chirp的时序参数</h1><p><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BProgramming%20Chirp%20Parameters%20in%20TI%20Radar%20Devices/image-20231011011536392.png" alt="image-20231011011536392" style="zoom: 50%;"></p>
+<h1 id="Chirp的时序参数"><a href="#Chirp的时序参数" class="headerlink" title="Chirp的时序参数"></a>Chirp的时序参数</h1><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BProgramming%20Chirp%20Parameters%20in%20TI%20Radar%20Devices/image-20231011011536392.png" alt="image-20231011011536392" style="zoom: 50%;">
+
 <ul>
 <li><p>其实在mmwave中输入slope, ADC samples, sampling rate，就能自动配置这些时序参数</p>
 <p><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BProgramming%20Chirp%20Parameters%20in%20TI%20Radar%20Devices/image-20231011011714519.png" alt="image-20231011011714519"></p>
 </li>
 </ul>
 <hr>
-<h1 id="高级帧配置Advanced-Chirp-Configurations"><a href="#高级帧配置Advanced-Chirp-Configurations" class="headerlink" title="高级帧配置Advanced Chirp Configurations"></a>高级帧配置Advanced Chirp Configurations</h1><p><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BProgramming%20Chirp%20Parameters%20in%20TI%20Radar%20Devices/image-20231011015218374.png" alt="image-20231011015218374" style="zoom:50%;"></p>
+<h1 id="高级帧配置Advanced-Chirp-Configurations"><a href="#高级帧配置Advanced-Chirp-Configurations" class="headerlink" title="高级帧配置Advanced Chirp Configurations"></a>高级帧配置Advanced Chirp Configurations</h1><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BProgramming%20Chirp%20Parameters%20in%20TI%20Radar%20Devices/image-20231011015218374.png" alt="image-20231011015218374" style="zoom:50%;">
+
 <ul>
 <li><p>高级帧配置 API 提供了将帧分成不同子帧（最多 4 个，因为chirp profile模板的个数最多为4）的功能</p>
 </li>
@@ -368,7 +369,8 @@ V_{res}=\frac\lambda{2NT_c}</script></li>
 <li><p>每个脉冲串（bursts）可以最多可由 512 个独特的chirp（因为chirp RAM最多是512）组成</p>
 </li>
 <li><p>子帧中的一系列脉冲串可以在软件中循环最多 64 次，就是把几个不同的脉冲串捆在一起，然后循环最多64次</p>
-<p><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BProgramming%20Chirp%20Parameters%20in%20TI%20Radar%20Devices/image-20231011015159068.png" alt="image-20231011015159068" style="zoom:50%;"></p>
+<img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BProgramming%20Chirp%20Parameters%20in%20TI%20Radar%20Devices/image-20231011015159068.png" alt="image-20231011015159068" style="zoom:50%;">
+
 </li>
 </ul>
 <hr>
@@ -377,7 +379,8 @@ V_{res}=\frac\lambda{2NT_c}</script></li>
 <li>可以通过”rlSetBpmChirpConfig ”API进行相关配置</li>
 </ul>
 <hr>
-<h1 id="Chirp配置的顺序"><a href="#Chirp配置的顺序" class="headerlink" title="Chirp配置的顺序"></a>Chirp配置的顺序</h1><p><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BProgramming%20Chirp%20Parameters%20in%20TI%20Radar%20Devices/image-20231011020451036.png" alt="image-20231011020451036" style="zoom:50%;"></p>
+<h1 id="Chirp配置的顺序"><a href="#Chirp配置的顺序" class="headerlink" title="Chirp配置的顺序"></a>Chirp配置的顺序</h1><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BProgramming%20Chirp%20Parameters%20in%20TI%20Radar%20Devices/image-20231011020451036.png" alt="image-20231011020451036" style="zoom:50%;">
+
 <h2 id="1-Device-Manager-APIs"><a href="#1-Device-Manager-APIs" class="headerlink" title="1.Device Manager APIs"></a>1.Device Manager APIs</h2><ul>
 <li><strong>这些 API 用于启动和初始化传感器：</strong><ul>
 <li>rlDevicePowerOn：该函数初始化驱动程序并为驱动程序进行必要的资源分配。 它通过创建必要的操作系统服务（如信号量、互斥锁、队列等）来初始化主机协议驱动程序。 它还使雷达设备（级联时为多个设备）脱离重置，并打开与这些设备的通信通道（SPI、邮箱等）</li>
@@ -407,16 +410,15 @@ V_{res}=\frac\lambda{2NT_c}</script></li>
 <li>触发框架的软件API是rlSensorStart。</li>
 </ul>
 <hr>
-<h1 id="TI’s-mmwave-link-APIs的代码出处"><a href="#TI’s-mmwave-link-APIs的代码出处" class="headerlink" title="TI’s mmwave link APIs的代码出处"></a>TI’s mmwave link APIs的代码出处</h1><p><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BProgramming%20Chirp%20Parameters%20in%20TI%20Radar%20Devices/image-20231011105221504.png" alt="image-20231011105221504" style="zoom:50%;"></p>
+<h1 id="TI’s-mmwave-link-APIs的代码出处"><a href="#TI’s-mmwave-link-APIs的代码出处" class="headerlink" title="TI’s mmwave link APIs的代码出处"></a>TI’s mmwave link APIs的代码出处</h1><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BProgramming%20Chirp%20Parameters%20in%20TI%20Radar%20Devices/image-20231011105221504.png" alt="image-20231011105221504" style="zoom:50%;">
+
 <ul>
 <li>这个代码文件目前我还没有细看，只是先找到了这几个接口的出处</li>
 </ul>
-<p><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BProgramming%20Chirp%20Parameters%20in%20TI%20Radar%20Devices/image-20231011105932994.png" alt="image-20231011105932994" style="zoom:50%;"></p>
-<ul>
-<li><p>其实在这个里面有一些不错的文档解释</p>
-<p><img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BProgramming%20Chirp%20Parameters%20in%20TI%20Radar%20Devices/image-20231011111029505.png" alt="image-20231011111029505" style="zoom:50%;"></p>
-</li>
-</ul>
+<img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BProgramming%20Chirp%20Parameters%20in%20TI%20Radar%20Devices/image-20231011105932994.png" alt="image-20231011105932994" style="zoom:50%;">
+- 其实在这个里面有一些不错的文档解释
+
+  <img src="/2023/10/11/TI%20AWR2243%E6%96%87%E6%A1%A3%E9%98%85%E8%AF%BB%E4%B9%8BProgramming%20Chirp%20Parameters%20in%20TI%20Radar%20Devices/image-20231011111029505.png" alt="image-20231011111029505" style="zoom:50%;">
 
     </div>
 
@@ -549,7 +551,7 @@ V_{res}=\frac\lambda{2NT_c}</script></li>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">160</span>
+          <span class="site-state-item-count">161</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

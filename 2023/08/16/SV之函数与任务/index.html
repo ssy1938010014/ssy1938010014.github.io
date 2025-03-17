@@ -264,11 +264,13 @@
       
         <p>本节主要介绍了SystemVerilog中函数与任务的基础知识</p>
 <span id="more"></span>
+
 <h1 id="函数function"><a href="#函数function" class="headerlink" title="函数function"></a>函数function</h1><ul>
 <li><p>任务的首要目的在于为运算表达式提供返回值</p>
 </li>
 <li><p><strong>函数定义时会在内部隐式定义一个变量（默认logic类型），该寄存器变量和函数同名并且位宽也一致</strong></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">function logic [15: 0] myfunc2;</span><br><span class="line">    input [7: 0] x;</span><br><span class="line">	input [7: 0] y;</span><br><span class="line">    myfunc1 = x * y -1;</span><br><span class="line">endfunction</span><br></pre></td></tr></table></figure>
+
 </li>
 </ul>
 <hr>
@@ -277,12 +279,36 @@
 </li>
 <li><p><strong>若没有声明类型，那么默认是1bit的logic</strong></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">task mytask(input [7: 0] x, input [7: 0] y, output [15: 0] z);</span><br><span class="line">	z = x * y - 1;</span><br><span class="line">endtask</span><br></pre></td></tr></table></figure>
+
 </li>
 </ul>
 <hr>
 <h1 id="函数与任务的区别"><a href="#函数与任务的区别" class="headerlink" title="函数与任务的区别"></a>函数与任务的区别</h1><ul>
 <li><p>function不会消耗仿真时间，而task则可能会消耗仿真时间</p>
-<p>| 函数                                                   | 任务                                                         |<br>| ——————————————————————————— | —————————————————————————————— |<br>| function无法调用task                                   | task可以调用function                                         |<br>| <strong>函数一定不能包含任何延迟、事件或者时序控制声明语句</strong> | <strong>任务可以包含延迟、事件或者时序控制声明语句</strong>               |<br>| 函数至少有一个输入变量，函数可以有多个输入变量         | 任务可以没有或者有多个输入、输出和双向变量                   |<br>| <strong>函数只能返回一个值</strong>，函数不能输出或者双向变量       | <strong>任务或者<code>function void function_name</code>没有返回值</strong>，任务可以通过输出或者双向变量传递多个值 |</p>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>任务</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>function无法调用task</td>
+<td>task可以调用function</td>
+</tr>
+<tr>
+<td><strong>函数一定不能包含任何延迟、事件或者时序控制声明语句</strong></td>
+<td><strong>任务可以包含延迟、事件或者时序控制声明语句</strong></td>
+</tr>
+<tr>
+<td>函数至少有一个输入变量，函数可以有多个输入变量</td>
+<td>任务可以没有或者有多个输入、输出和双向变量</td>
+</tr>
+<tr>
+<td><strong>函数只能返回一个值</strong>，函数不能输出或者双向变量</td>
+<td><strong>任务或者<code>function void function_name</code>没有返回值</strong>，任务可以通过输出或者双向变量传递多个值</td>
+</tr>
+</tbody></table>
 </li>
 </ul>
 
@@ -416,7 +442,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">160</span>
+          <span class="site-state-item-count">161</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

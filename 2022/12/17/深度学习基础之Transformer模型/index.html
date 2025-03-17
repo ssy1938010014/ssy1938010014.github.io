@@ -281,33 +281,38 @@
       
         <p>本节主要介绍了Transformer模型的一些基本概念</p>
 <span id="more"></span>
+
 <h1 id="Transformer模型的基本概念"><a href="#Transformer模型的基本概念" class="headerlink" title="Transformer模型的基本概念"></a>Transformer模型的基本概念</h1><ul>
 <li><p>Transformer 本质上是一个 Encoder-Decoder 架构。因此中间部分的 Transformer 可以分为两个部分：编码组件和解码组件</p>
-<p><img src="/2022/12/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8BTransformer%E6%A8%A1%E5%9E%8B/image-20221217222055449.png" alt="image-20221217222055449" style="zoom:50%;"></p>
+<img src="/2022/12/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8BTransformer%E6%A8%A1%E5%9E%8B/image-20221217222055449.png" alt="image-20221217222055449" style="zoom:50%;">
 </li>
 <li><p>其中，编码组件由多层编码器（Encoder）组成（在论文中作者使用了 6 层编码器，在实际使用过程中你可以尝试其他层数），解码组件也是由相同层数的解码器（Decoder）组成（在论文也使用了 6 层）</p>
-<p>  <img src="/2022/12/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8BTransformer%E6%A8%A1%E5%9E%8B/image-20221217222210088.png" alt="image-20221217222210088" style="zoom:50%;"></p>
+  <img src="/2022/12/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8BTransformer%E6%A8%A1%E5%9E%8B/image-20221217222210088.png" alt="image-20221217222210088" style="zoom:50%;">
 </li>
 <li><p>每个编码器由两个子层组成：Self-Attention 层（自注意力层）和 Position-wise Feed Forward Network（前馈网络，缩写为 FFN），每个编码器的结构都是相同的，但是它们使用不同的权重参数</p>
-<p><img src="/2022/12/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8BTransformer%E6%A8%A1%E5%9E%8B/image-20221217222323365.png" alt="image-20221217222323365" style="zoom:50%;"></p>
+<img src="/2022/12/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8BTransformer%E6%A8%A1%E5%9E%8B/image-20221217222323365.png" alt="image-20221217222323365" style="zoom:50%;">
+
 <ul>
 <li>编码器的输入会先流入 Self-Attention 层。它可以让编码器在对特定词进行编码时使用输入句子中的其他词的信息（可以理解为：当我们翻译一个词时，不仅只关注当前的词，而且还会关注其他词的信息）</li>
 <li>然后，Self-Attention 层的输出会流入前馈网络</li>
 </ul>
 </li>
 <li><p>解码器也有编码器中这两层，但是它们之间还有一个注意力层（即 Encoder-Decoder Attention），其用来帮忙解码器关注输入句子的相关部分（类似于 seq2seq 模型中的注意力）</p>
-<p><img src="/2022/12/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8BTransformer%E6%A8%A1%E5%9E%8B/image-20221217222452064.png" alt="image-20221217222452064" style="zoom:50%;"></p>
+<img src="/2022/12/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8BTransformer%E6%A8%A1%E5%9E%8B/image-20221217222452064.png" alt="image-20221217222452064" style="zoom:50%;">
+
 </li>
 </ul>
 <hr>
 <h1 id="Self-attention（自注意力）"><a href="#Self-attention（自注意力）" class="headerlink" title="Self-attention（自注意力）"></a>Self-attention（自注意力）</h1><ul>
 <li><p>简单理解：使用self-attention取代RNN，使得$b^1,b^2,b^3,b^4$可以同时被计算出</p>
-<p><img src="/2022/12/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8BTransformer%E6%A8%A1%E5%9E%8B/image-20221217222907057.png" alt="image-20221217222907057" style="zoom:50%;"></p>
+<img src="/2022/12/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8BTransformer%E6%A8%A1%E5%9E%8B/image-20221217222907057.png" alt="image-20221217222907057" style="zoom:50%;">
+
 </li>
 </ul>
 <h2 id="1-计算步骤"><a href="#1-计算步骤" class="headerlink" title="1.计算步骤"></a>1.计算步骤</h2><ul>
 <li><p><strong>计算词嵌入与</strong>$q,k,v$</p>
-<p><img src="/2022/12/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8BTransformer%E6%A8%A1%E5%9E%8B/image-20221217223414298.png" alt="image-20221217223414298" style="zoom:50%;"></p>
+<img src="/2022/12/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8BTransformer%E6%A8%A1%E5%9E%8B/image-20221217223414298.png" alt="image-20221217223414298" style="zoom:50%;">
+
 <ul>
 <li>$a^i=Wx^i$</li>
 <li>$q^i=W^qa^i$：q代表去匹配别的</li>
@@ -316,16 +321,18 @@
 </ul>
 </li>
 <li><p><strong>拿每个q与每个k做attention</strong>：</p>
-<p><img src="/2022/12/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8BTransformer%E6%A8%A1%E5%9E%8B/image-20221217223947675.png" alt="image-20221217223947675" style="zoom:50%;"></p>
+<img src="/2022/12/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8BTransformer%E6%A8%A1%E5%9E%8B/image-20221217223947675.png" alt="image-20221217223947675" style="zoom:50%;">
+
 <ul>
 <li>$\alpha_{1,i}=\frac{q^1k^i}{\sqrt{d}}$，其中d为q，k的维度</li>
 </ul>
 </li>
 <li><p><strong>对每一个attention做softmax</strong></p>
-<p><img src="/2022/12/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8BTransformer%E6%A8%A1%E5%9E%8B/image-20221217224402526.png" alt="image-20221217224402526" style="zoom: 33%;"></p>
+<img src="/2022/12/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8BTransformer%E6%A8%A1%E5%9E%8B/image-20221217224402526.png" alt="image-20221217224402526" style="zoom: 33%;">
 </li>
 <li><p><strong>将每一个</strong>$\hat{\alpha}$<strong>与</strong>$v^1$<strong>计算相乘后求和</strong></p>
-<p><img src="/2022/12/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8BTransformer%E6%A8%A1%E5%9E%8B/image-20221217224754176.png" alt="image-20221217224754176" style="zoom: 33%;"></p>
+<img src="/2022/12/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8BTransformer%E6%A8%A1%E5%9E%8B/image-20221217224754176.png" alt="image-20221217224754176" style="zoom: 33%;">
+
 <ul>
 <li>$b^1=\sum \hat{\alpha}_{1,i}v^i$</li>
 </ul>
@@ -341,39 +348,44 @@
 </ul>
 </li>
 </ul>
-<p><img src="/2022/12/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8BTransformer%E6%A8%A1%E5%9E%8B/image-20221217225449896.png" alt="image-20221217225449896" style="zoom: 50%;"></p>
+<img src="/2022/12/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8BTransformer%E6%A8%A1%E5%9E%8B/image-20221217225449896.png" alt="image-20221217225449896" style="zoom: 50%;">
+
 <ul>
 <li><p><strong>求所有attention</strong>：</p>
 <ul>
 <li>将矩阵$K$转置后得到的$K^T$与Q进行矩阵相乘即可以得到每一个attention（这里计算忽略了除以$\sqrt{d}$</li>
 <li>之后再对得到的attention矩阵$A$按列求softmax，得到矩阵$\hat{A}$</li>
 </ul>
-<p><img src="/2022/12/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8BTransformer%E6%A8%A1%E5%9E%8B/image-20221217230056300.png" alt="image-20221217230056300" style="zoom:50%;"></p>
+<img src="/2022/12/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8BTransformer%E6%A8%A1%E5%9E%8B/image-20221217230056300.png" alt="image-20221217230056300" style="zoom:50%;">
 </li>
 <li><p><strong>求输出</strong>$b^1,b^2,b^3,b^4$：</p>
 <ul>
 <li>将矩阵$V$与$\hat{A}$相乘得到输出矩阵O</li>
 <li>其中输出矩阵O就是输出列向量$b^1,b^2,b^3,b^4$按列的堆叠</li>
 </ul>
-<p><img src="/2022/12/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8BTransformer%E6%A8%A1%E5%9E%8B/image-20221217230528431.png" alt="image-20221217230528431" style="zoom:50%;"></p>
+<img src="/2022/12/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8BTransformer%E6%A8%A1%E5%9E%8B/image-20221217230528431.png" alt="image-20221217230528431" style="zoom:50%;">
 </li>
 <li><p><strong>总结</strong>：</p>
-<p><img src="/2022/12/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8BTransformer%E6%A8%A1%E5%9E%8B/image-20221217231305242.png" alt="image-20221217231305242" style="zoom:50%;"></p>
+<img src="/2022/12/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8BTransformer%E6%A8%A1%E5%9E%8B/image-20221217231305242.png" alt="image-20221217231305242" style="zoom:50%;">
+
 </li>
 </ul>
 <h2 id="3-多头自注意力机制（Multi-head-Self-attention"><a href="#3-多头自注意力机制（Multi-head-Self-attention" class="headerlink" title="3.多头自注意力机制（Multi-head Self-attention)"></a>3.多头自注意力机制（Multi-head Self-attention)</h2><ul>
 <li>每一个头只与对应相同系数的k做attention，即$q^{i,1}$只与$k^{i,1},k^{j,1}$相乘</li>
 </ul>
-<p><img src="/2022/12/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8BTransformer%E6%A8%A1%E5%9E%8B/image-20221217231550232.png" alt="image-20221217231550232" style="zoom:50%;"></p>
-<p><img src="/2022/12/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8BTransformer%E6%A8%A1%E5%9E%8B/image-20221217231647494.png" alt="image-20221217231647494" style="zoom:50%;"></p>
+<img src="/2022/12/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8BTransformer%E6%A8%A1%E5%9E%8B/image-20221217231550232.png" alt="image-20221217231550232" style="zoom:50%;">
+
+<img src="/2022/12/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8BTransformer%E6%A8%A1%E5%9E%8B/image-20221217231647494.png" alt="image-20221217231647494" style="zoom:50%;">
+
 <ul>
 <li><p>计算出$b^{i,1},b^{i,2}$后，将其按行堆叠，与矩阵$W^O$相乘达到降维目的，从而得到$b^i$：</p>
-<p><img src="/2022/12/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8BTransformer%E6%A8%A1%E5%9E%8B/image-20221217232135260.png" alt="image-20221217232135260" style="zoom:50%;"></p>
+<img src="/2022/12/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E4%B9%8BTransformer%E6%A8%A1%E5%9E%8B/image-20221217232135260.png" alt="image-20221217232135260" style="zoom:50%;">
+
 </li>
 </ul>
 <hr>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
-<li><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=ugWDIIOHtPA&amp;list=PLJV_el3uVTsOK_ZK5L0Iv_EQoL1JefRL4&amp;index=61">(54) Transformer - YouTube</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=ugWDIIOHtPA&list=PLJV_el3uVTsOK_ZK5L0Iv_EQoL1JefRL4&index=61">(54) Transformer - YouTube</a></li>
 </ul>
 
     </div>
@@ -506,7 +518,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">160</span>
+          <span class="site-state-item-count">161</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

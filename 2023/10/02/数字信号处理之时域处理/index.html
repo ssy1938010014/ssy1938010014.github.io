@@ -276,6 +276,7 @@
       
         <p>本节主要介绍了数字信号处理中的一些时域上的处理，包括序列信号的线性时不变系统、线性卷积、Z变换等</p>
 <span id="more"></span>
+
 <h1 id="数字信号的理解"><a href="#数字信号的理解" class="headerlink" title="数字信号的理解"></a>数字信号的理解</h1><ul>
 <li>模拟信号：时域连续和幅度连续</li>
 <li>数字信号：时域和幅度均离散</li>
@@ -288,27 +289,22 @@
 <li>幅度离散并不要求幅度值一定是整数，只要是有限的状态值就可以了</li>
 </ul>
 <hr>
-<h1 id="序列的基本概念"><a href="#序列的基本概念" class="headerlink" title="序列的基本概念"></a>序列的基本概念</h1><h2 id="1-任何序列都可以用单位样本序列-delta-n-来表示"><a href="#1-任何序列都可以用单位样本序列-delta-n-来表示" class="headerlink" title="1.任何序列都可以用单位样本序列$\delta (n)$来表示"></a>1.任何序列都可以用单位样本序列$\delta (n)$来表示</h2><script type="math/tex; mode=display">
-x(n)=\sum_{m=-\infty}^{\infty}x(m)\delta(n-m)</script><h2 id="2-正弦序列的周期性"><a href="#2-正弦序列的周期性" class="headerlink" title="2.正弦序列的周期性"></a>2.正弦序列的周期性</h2><ul>
+<h1 id="序列的基本概念"><a href="#序列的基本概念" class="headerlink" title="序列的基本概念"></a>序列的基本概念</h1><h2 id="1-任何序列都可以用单位样本序列-delta-n-来表示"><a href="#1-任何序列都可以用单位样本序列-delta-n-来表示" class="headerlink" title="1.任何序列都可以用单位样本序列$\delta (n)$来表示"></a>1.任何序列都可以用单位样本序列$\delta (n)$来表示</h2><p>$$<br>x(n)=\sum_{m=-\infty}^{\infty}x(m)\delta(n-m)<br>$$</p>
+<h2 id="2-正弦序列的周期性"><a href="#2-正弦序列的周期性" class="headerlink" title="2.正弦序列的周期性"></a>2.正弦序列的周期性</h2><ul>
 <li><p>正弦序列$sin(mn)$不一定是周期信号</p>
 </li>
-<li><p>若想要$sin(mn)$为周期信号，那么需满足</p>
-<script type="math/tex; mode=display">
-sin(mn)=sin[m(n+N)](N只能是整数)</script></li>
-<li><p>则需满足：</p>
-<script type="math/tex; mode=display">
-mN = 2\pi k</script><script type="math/tex; mode=display">
-N=\frac{2\pi k}{m}</script></li>
+<li><p>若想要$sin(mn)$为周期信号，那么需满足<br>$$<br>sin(mn)=sin<a href="N只能是整数">m(n+N)</a><br>$$</p>
+</li>
+<li><p>则需满足：<br>$$<br>mN = 2\pi k<br>$$</p>
+<p>$$<br>N=\frac{2\pi k}{m}<br>$$</p>
+</li>
 <li><p>而$N$需满足为整数，$k$也是整数，那么只有当$m$为$\pi$的倍数时，N才是整数，此时正弦序列$sin(mn)$才是周期信号</p>
 </li>
 </ul>
 <h2 id="3-数字域频率"><a href="#3-数字域频率" class="headerlink" title="3.数字域频率"></a>3.数字域频率</h2><ul>
-<li><p>数字域频率为：</p>
-<script type="math/tex; mode=display">
-w_0=\Omega_0T_s=\frac{\Omega_0}{f_s}=2\pi\frac{f_0}{f_s}=\frac{2\pi}{N}</script><script type="math/tex; mode=display">
-其中:\Omega_0为模拟角频率(rad/s),\quad w_0为数字角频率(rad)\\
-T_s为采样间隔(s),\quad f_s为采样频率(Hz),\quad f_0为模拟频率(Hz)\\
-N=T_0\times f_s,其中T_0为原始模拟信号的周期</script></li>
+<li><p>数字域频率为：<br>$$<br>w_0=\Omega_0T_s=\frac{\Omega_0}{f_s}=2\pi\frac{f_0}{f_s}=\frac{2\pi}{N}<br>$$</p>
+<p>$$<br>其中:\Omega_0为模拟角频率(rad/s),\quad w_0为数字角频率(rad)\<br>T_s为采样间隔(s),\quad f_s为采样频率(Hz),\quad f_0为模拟频率(Hz)\<br>N=T_0\times f_s,其中T_0为原始模拟信号的周期<br>$$</p>
+</li>
 <li><p>推导过程：</p>
 <ul>
 <li>连续时间正弦信号：$x_a(t)=cos(\Omega_0t+\phi)$</li>
@@ -345,29 +341,21 @@ N=T_0\times f_s,其中T_0为原始模拟信号的周期</script></li>
 <li><strong>系统的作用不过是改变正弦信号的幅度和相位</strong></li>
 </ul>
 <hr>
-<h1 id="线性卷积"><a href="#线性卷积" class="headerlink" title="线性卷积"></a>线性卷积</h1><p><img src="/2023/10/02/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%97%B6%E5%9F%9F%E5%A4%84%E7%90%86/image-20231004202820105.png" alt="image-20231004202820105" style="zoom: 80%;"></p>
+<h1 id="线性卷积"><a href="#线性卷积" class="headerlink" title="线性卷积"></a>线性卷积</h1><img src="/2023/10/02/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%97%B6%E5%9F%9F%E5%A4%84%E7%90%86/image-20231004202820105.png" alt="image-20231004202820105" style="zoom: 80%;">
+
 <ul>
-<li><p>首先，定义系统对输入是单位脉冲序列的响应为单位脉冲响应，即：</p>
-<script type="math/tex; mode=display">
-输入\delta (n)\rightarrow 输出h(n)</script></li>
-<li><p>其次，我们知道，任何一个序列信号都可以由单位脉冲序列表示，即：</p>
-<script type="math/tex; mode=display">
-x(n)=\sum_{m=-\infty}^{\infty}x(m)\delta(n-m)</script></li>
-<li><p>此外，对于一个线性系统：</p>
-<script type="math/tex; mode=display">
-\because \delta(n)\rightarrow h(n)\\
-\therefore a\delta(n)\rightarrow ah(n)\\
-\therefore a\delta(n-n_0)\rightarrow ah(n-n_0)</script></li>
-<li><p>那么$y(n)$就是$x(n)$经过线性系统的结果：</p>
-<script type="math/tex; mode=display">
-\because x(n)=\cdots x(-1)\delta(n+1)+x(0)\delta(n)+x(1)\delta(n-1)+\cdots\\
-\therefore y(n)=\cdots x(-1)h(n+1)+x(0)h(n)+x(1)h(n-1)+\cdots</script></li>
-<li><p>所以最终$y(n)$的结果是：</p>
-<script type="math/tex; mode=display">
-y(n)=\sum_{m=-\infty}^{\infty}x(m)h(n-m)</script></li>
-<li><p>而我们称卷积为：</p>
-<script type="math/tex; mode=display">
-y(n)=x(n)*h(n)=\sum_{m=-\infty}^{\infty}x(m)h(n-m)</script><ul>
+<li><p>首先，定义系统对输入是单位脉冲序列的响应为单位脉冲响应，即：<br>$$<br>输入\delta (n)\rightarrow 输出h(n)<br>$$</p>
+</li>
+<li><p>其次，我们知道，任何一个序列信号都可以由单位脉冲序列表示，即：<br>$$<br>x(n)=\sum_{m=-\infty}^{\infty}x(m)\delta(n-m)<br>$$</p>
+</li>
+<li><p>此外，对于一个线性系统：<br>$$<br>\because \delta(n)\rightarrow h(n)\<br>\therefore a\delta(n)\rightarrow ah(n)\<br>\therefore a\delta(n-n_0)\rightarrow ah(n-n_0)<br>$$</p>
+</li>
+<li><p>那么$y(n)$就是$x(n)$经过线性系统的结果：<br>$$<br>\because x(n)=\cdots x(-1)\delta(n+1)+x(0)\delta(n)+x(1)\delta(n-1)+\cdots\<br>\therefore y(n)=\cdots x(-1)h(n+1)+x(0)h(n)+x(1)h(n-1)+\cdots<br>$$</p>
+</li>
+<li><p>所以最终$y(n)$的结果是：<br>$$<br>y(n)=\sum_{m=-\infty}^{\infty}x(m)h(n-m)<br>$$</p>
+</li>
+<li><p>而我们称卷积为：<br>$$<br>y(n)=x(n)*h(n)=\sum_{m=-\infty}^{\infty}x(m)h(n-m)<br>$$</p>
+<ul>
 <li>其中，$*$称为卷积运算</li>
 <li>卷积满足交换律：$x(n)<em>h(n)=h(n)</em>x(n)$</li>
 </ul>
@@ -384,14 +372,125 @@ y(n)=x(n)*h(n)=\sum_{m=-\infty}^{\infty}x(m)h(n-m)</script><ul>
 </li>
 <li><p>若$x(n)=[1,1,1,1]$</p>
 </li>
-<li><p>那么$y(n)=\sum_{m=-\infty}^{\infty}x(m)h(n-m)$，有：</p>
-<script type="math/tex; mode=display">
-y(0)=\sum_{m=-\infty}^{\infty}x(m)h(-m)\\
-y(1)=\sum_{m=-\infty}^{\infty}x(m)h(1-m)\\
-y(2)=\sum_{m=-\infty}^{\infty}x(m)h(2-m)\\
-......</script></li>
+<li><p>那么$y(n)=\sum_{m=-\infty}^{\infty}x(m)h(n-m)$，有：<br>$$<br>y(0)=\sum_{m=-\infty}^{\infty}x(m)h(-m)\<br>y(1)=\sum_{m=-\infty}^{\infty}x(m)h(1-m)\<br>y(2)=\sum_{m=-\infty}^{\infty}x(m)h(2-m)\<br>……<br>$$</p>
+</li>
 <li><p>则可视化的运算如下：</p>
-<p>|          |      |      | $x(n)$ | 1    | 1    | 1    | 1    |      |      |      |           |<br>| ———— | —— | —— | ——— | —— | —— | —— | —— | —— | —— | —— | ————- |<br>| $h(n)$   | 4    | 3    | 2      | 1    |      |      |      |      |      |      | $y(0)=1$  |<br>| $h(1-n)$ |      | 4    | 3      | 2    | 1    |      |      |      |      |      | $y(1)=3$  |<br>| $h(2-n)$ |      |      | 4      | 3    | 2    | 1    |      |      |      |      | $y(2)=6$  |<br>| $h(3-n)$ |      |      |        | 4    | 3    | 2    | 1    |      |      |      | $y(3)=10$ |<br>| $h(4-n)$ |      |      |        |      | 4    | 3    | 2    | 1    |      |      | $y(4)=9$  |<br>| $h(5-n)$ |      |      |        |      |      | 4    | 3    | 2    | 1    |      | $y(5)=7$  |<br>| $h(6-n)$ |      |      |        |      |      |      | 4    | 3    | 2    | 1    | $y(6)=4$  |</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th>$x(n)$</th>
+<th>1</th>
+<th>1</th>
+<th>1</th>
+<th>1</th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>$h(n)$</td>
+<td>4</td>
+<td>3</td>
+<td>2</td>
+<td>1</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>$y(0)=1$</td>
+</tr>
+<tr>
+<td>$h(1-n)$</td>
+<td></td>
+<td>4</td>
+<td>3</td>
+<td>2</td>
+<td>1</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>$y(1)=3$</td>
+</tr>
+<tr>
+<td>$h(2-n)$</td>
+<td></td>
+<td></td>
+<td>4</td>
+<td>3</td>
+<td>2</td>
+<td>1</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>$y(2)=6$</td>
+</tr>
+<tr>
+<td>$h(3-n)$</td>
+<td></td>
+<td></td>
+<td></td>
+<td>4</td>
+<td>3</td>
+<td>2</td>
+<td>1</td>
+<td></td>
+<td></td>
+<td></td>
+<td>$y(3)=10$</td>
+</tr>
+<tr>
+<td>$h(4-n)$</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>4</td>
+<td>3</td>
+<td>2</td>
+<td>1</td>
+<td></td>
+<td></td>
+<td>$y(4)=9$</td>
+</tr>
+<tr>
+<td>$h(5-n)$</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>4</td>
+<td>3</td>
+<td>2</td>
+<td>1</td>
+<td></td>
+<td>$y(5)=7$</td>
+</tr>
+<tr>
+<td>$h(6-n)$</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>4</td>
+<td>3</td>
+<td>2</td>
+<td>1</td>
+<td>$y(6)=4$</td>
+</tr>
+</tbody></table>
 </li>
 </ul>
 </li>
@@ -405,18 +504,20 @@ y(2)=\sum_{m=-\infty}^{\infty}x(m)h(2-m)\\
 <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">clc;                      <span class="comment">%清屏</span></span><br><span class="line">clear all;                <span class="comment">%清变量</span></span><br><span class="line"></span><br><span class="line">fs=<span class="number">200</span>;                   <span class="comment">%采样频率为200Hz</span></span><br><span class="line">hn=<span class="built_in">ones</span>(<span class="number">1</span>,<span class="number">4</span>);             <span class="comment">%系统hn</span></span><br><span class="line"></span><br><span class="line">t=<span class="number">0</span>:<span class="number">1</span>/fs:<span class="number">1</span>;               <span class="comment">%时间序列</span></span><br><span class="line">xn1=<span class="built_in">sin</span>(<span class="number">2</span>*<span class="built_in">pi</span>*<span class="number">50</span>*t);       <span class="comment">%50Hz正弦信号</span></span><br><span class="line">xn2=<span class="built_in">sin</span>(<span class="number">2</span>*<span class="built_in">pi</span>*<span class="number">5</span>*t);        <span class="comment">%5Hz正弦信号</span></span><br><span class="line">xn=xn1+xn2;               <span class="comment">%叠加信号</span></span><br><span class="line"></span><br><span class="line">yn=conv(xn,hn);           <span class="comment">%卷积运算获得系统输出</span></span><br><span class="line"></span><br><span class="line"><span class="comment">%绘图</span></span><br><span class="line">subplot(<span class="number">411</span>);</span><br><span class="line"><span class="built_in">plot</span>(t,xn1);title(<span class="string">&#x27;50Hz正弦信号&#x27;</span>);</span><br><span class="line">subplot(<span class="number">412</span>);</span><br><span class="line"><span class="built_in">plot</span>(t,xn2);title(<span class="string">&#x27;5Hz正弦信号&#x27;</span>);</span><br><span class="line">subplot(<span class="number">413</span>);</span><br><span class="line"><span class="built_in">plot</span>(t,xn);title(<span class="string">&#x27;输入信号&#x27;</span>);</span><br><span class="line">subplot(<span class="number">414</span>);</span><br><span class="line"><span class="built_in">plot</span>(t,yn(<span class="number">1</span>:<span class="built_in">length</span>(xn)));title(<span class="string">&#x27;输出信号&#x27;</span>);</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>结果如下：</p>
-<p><img src="/2023/10/02/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%97%B6%E5%9F%9F%E5%A4%84%E7%90%86/LinearConv.bmp" alt="LinearConv" style="zoom: 67%;"></p>
+<img src="/2023/10/02/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%97%B6%E5%9F%9F%E5%A4%84%E7%90%86/LinearConv.bmp" alt="LinearConv" style="zoom: 67%;">
+
 <ul>
 <li><p>观察到输出信号中50Hz的正弦信号被滤除了</p>
 </li>
 <li><p>其原因是采样频率200Hz是正弦信号50Hz的4倍，在一个周期内采样了4个点</p>
-<p><img src="/2023/10/02/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%97%B6%E5%9F%9F%E5%A4%84%E7%90%86/image-20231004212620824.png" alt="image-20231004212620824" style="zoom:50%;"></p>
+<img src="/2023/10/02/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%97%B6%E5%9F%9F%E5%A4%84%E7%90%86/image-20231004212620824.png" alt="image-20231004212620824" style="zoom:50%;">
 </li>
 <li><p>而这四个点正好对应这四个位置</p>
-<p><img src="/2023/10/02/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%97%B6%E5%9F%9F%E5%A4%84%E7%90%86/image-20231004213058396.png" alt="image-20231004213058396" style="zoom: 33%;"></p>
+<img src="/2023/10/02/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%97%B6%E5%9F%9F%E5%A4%84%E7%90%86/image-20231004213058396.png" alt="image-20231004213058396" style="zoom: 33%;">
 </li>
 <li><p><strong>相当于是$0,1,0,-1,0,1,0,-1,…$这一串数接受$1,1,1,1$的检阅</strong></p>
-<p><img src="/2023/10/02/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%97%B6%E5%9F%9F%E5%A4%84%E7%90%86/image-20231004214850605.png" alt="image-20231004214850605" style="zoom:50%;"></p>
+<img src="/2023/10/02/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%97%B6%E5%9F%9F%E5%A4%84%E7%90%86/image-20231004214850605.png" alt="image-20231004214850605" style="zoom:50%;">
+
 <ul>
 <li>只有在起始和末尾绿色部分才会有值</li>
 <li>在中间红色部分滑动时是将滑窗中的4个数相加，和均为0</li>
@@ -427,57 +528,44 @@ y(2)=\sum_{m=-\infty}^{\infty}x(m)h(2-m)\\
 </ul>
 <hr>
 <h1 id="Z变换"><a href="#Z变换" class="headerlink" title="Z变换"></a>Z变换</h1><h2 id="1-Z变换的定义"><a href="#1-Z变换的定义" class="headerlink" title="1.Z变换的定义"></a>1.Z变换的定义</h2><ul>
-<li><p>双边Z变换：</p>
-<script type="math/tex; mode=display">
-X(z)=\sum_{n=-\infty}^{\infty}x(n)Z^{-n}</script></li>
-<li><p>单边Z变换：</p>
-<script type="math/tex; mode=display">
-X(z)=\sum_{n=0}^{+\infty}x(n)Z^{-n}\quad or\quad \sum_{n=-\infty}^{0}x(n)Z^{-n}</script></li>
+<li><p>双边Z变换：<br>$$<br>X(z)=\sum_{n=-\infty}^{\infty}x(n)Z^{-n}<br>$$</p>
+</li>
+<li><p>单边Z变换：<br>$$<br>X(z)=\sum_{n=0}^{+\infty}x(n)Z^{-n}\quad or\quad \sum_{n=-\infty}^{0}x(n)Z^{-n}<br>$$</p>
+</li>
 <li><p>左边序列、右边序列、因果序列：</p>
 <ul>
-<li><p>左边序列：当$n<N$时有非零值，而在$n>N$时$x(n)$为0</N$时有非零值，而在$n></p>
+<li><p>左边序列：当$n&lt;N$时有非零值，而在$n&gt;N$时$x(n)$为0</p>
 </li>
 <li><p>右边序列：当$n\ge N$时有非零值，而在$n&lt;N$时$x(n)$为0</p>
 <ul>
 <li>若$N=0$，则称此序列为因果序列，即$x(n)=0,n&lt;0$</li>
 </ul>
 </li>
-<li><p>对于因果序列，有以下关系：</p>
-<script type="math/tex; mode=display">
-因果序列\rightarrow |Z|>a</script></li>
+<li><p>对于因果序列，有以下关系：<br>$$<br>因果序列\rightarrow |Z|&gt;a<br>$$</p>
+</li>
 </ul>
 </li>
 </ul>
 <h2 id="2-Z的收敛域"><a href="#2-Z的收敛域" class="headerlink" title="2.Z的收敛域"></a>2.Z的收敛域</h2><ul>
-<li><p>因为要求Z变换有解，所以需要满足：</p>
-<script type="math/tex; mode=display">
-|\sum_{n=-\infty}^{\infty}x(n)Z^{-n}|<+\infty</script></li>
-<li><p>等比数列求和公式：</p>
-<script type="math/tex; mode=display">
-\frac{a_0-a_nq}{1-q}</script><ul>
+<li><p>因为要求Z变换有解，所以需要满足：<br>$$<br>|\sum_{n=-\infty}^{\infty}x(n)Z^{-n}|&lt;+\infty<br>$$</p>
+</li>
+<li><p>等比数列求和公式：<br>$$<br>\frac{a_0-a_nq}{1-q}<br>$$</p>
+<ul>
 <li>若想要其有界，需满足等比因子$|q|&lt;1$</li>
 </ul>
 </li>
-<li><p>而Z的表达式其实是：</p>
-<script type="math/tex; mode=display">
-Z=re^{jw}</script></li>
-<li><p>那么：</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-X(z) &=\sum_{n=-\infty}^{\infty}x(n)Z^{-n}\\
-&=\sum_{n=-\infty}^{\infty}x(n)r^{-n}e^{-jwn}
-\end{aligned}</script></li>
+<li><p>而Z的表达式其实是：<br>$$<br>Z=re^{jw}<br>$$</p>
+</li>
+<li><p>那么：<br>$$<br>\begin{aligned}<br>X(z) &amp;=\sum_{n=-\infty}^{\infty}x(n)Z^{-n}\<br>&amp;=\sum_{n=-\infty}^{\infty}x(n)r^{-n}e^{-jwn}<br>\end{aligned}<br>$$</p>
+</li>
 <li><p>所以，求Z的收敛域主要看$r$</p>
 </li>
 </ul>
 <h2 id="3-Z变换的常用性质"><a href="#3-Z变换的常用性质" class="headerlink" title="3.Z变换的常用性质"></a>3.Z变换的常用性质</h2><ul>
-<li><p>时移特性：</p>
-<script type="math/tex; mode=display">
-x(n)\leftrightarrow X(z)\\
-x(n-n_0)\leftrightarrow X(z)Z^{-n_0}</script></li>
-<li><p>卷积特性：</p>
-<script type="math/tex; mode=display">
-x_1(n)*x_2(n)\leftrightarrow X_1(z)\cdot X_2(z)</script></li>
+<li><p>时移特性：<br>$$<br>x(n)\leftrightarrow X(z)\<br>x(n-n_0)\leftrightarrow X(z)Z^{-n_0}<br>$$</p>
+</li>
+<li><p>卷积特性：<br>$$<br>x_1(n)*x_2(n)\leftrightarrow X_1(z)\cdot X_2(z)<br>$$</p>
+</li>
 <li><p>对于因果稳定的系统：</p>
 <ul>
 <li>$H(Z)$的收敛域一定包括单位圆（稳定性）</li>
@@ -487,7 +575,7 @@ x_1(n)*x_2(n)\leftrightarrow X_1(z)\cdot X_2(z)</script></li>
 </ul>
 <hr>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
-<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1W94y1R7J9/?spm_id_from=333.788&amp;vd_source=221b76534ba13cfad544149d75ce9b6c">数字信号处理基本概念（已完结）_哔哩哔哩_bilibili</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1W94y1R7J9/?spm_id_from=333.788&vd_source=221b76534ba13cfad544149d75ce9b6c">数字信号处理基本概念（已完结）_哔哩哔哩_bilibili</a></li>
 </ul>
 
     </div>
@@ -620,7 +708,7 @@ x_1(n)*x_2(n)\leftrightarrow X_1(z)\cdot X_2(z)</script></li>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">160</span>
+          <span class="site-state-item-count">161</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

@@ -273,6 +273,7 @@
       
         <p>本节主要介绍了流水线的相关基础知识</p>
 <span id="more"></span>
+
 <h1 id="流水线基本概念"><a href="#流水线基本概念" class="headerlink" title="流水线基本概念"></a>流水线基本概念</h1><h2 id="1-流水线的特点"><a href="#1-流水线的特点" class="headerlink" title="1.流水线的特点"></a>1.流水线的特点</h2><ul>
 <li>流水过程由多个相关的子过程组成，这些子过程称为流水线的“级”或“段”，“段”的数目称为流水线的“深度”</li>
 <li>每个子过程由专用的功能段实现</li>
@@ -286,7 +287,7 @@
 <li><p>单功能流水线，是指只能完成一种固定功能的流水线</p>
 </li>
 <li><p>多功能流水线，是指各段可以进行不同的连接，从而完成不同的功能</p>
-<p><img src="/2023/08/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8A%80%E6%9C%AF/image-20230804102006973.png" alt="image-20230804102006973" style="zoom:50%;"></p>
+<img src="/2023/08/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8A%80%E6%9C%AF/image-20230804102006973.png" alt="image-20230804102006973" style="zoom:50%;">
 </li>
 </ul>
 </li>
@@ -324,7 +325,8 @@
 </li>
 </ul>
 <hr>
-<h1 id="MIPS基本流水线"><a href="#MIPS基本流水线" class="headerlink" title="MIPS基本流水线"></a>MIPS基本流水线</h1><h2 id="1-实现MIPS指令的一种简单数据通路"><a href="#1-实现MIPS指令的一种简单数据通路" class="headerlink" title="1.实现MIPS指令的一种简单数据通路"></a>1.实现MIPS指令的一种简单数据通路</h2><p><img src="/2023/08/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8A%80%E6%9C%AF/image-20230804110313673.png" alt="image-20230804110313673" style="zoom:50%;"></p>
+<h1 id="MIPS基本流水线"><a href="#MIPS基本流水线" class="headerlink" title="MIPS基本流水线"></a>MIPS基本流水线</h1><h2 id="1-实现MIPS指令的一种简单数据通路"><a href="#1-实现MIPS指令的一种简单数据通路" class="headerlink" title="1.实现MIPS指令的一种简单数据通路"></a>1.实现MIPS指令的一种简单数据通路</h2><img src="/2023/08/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8A%80%E6%9C%AF/image-20230804110313673.png" alt="image-20230804110313673" style="zoom:50%;">
+
 <ul>
 <li><p>这是一种非流水方式</p>
 </li>
@@ -334,26 +336,24 @@
 <ul>
 <li><p>根据PC值从存储器中取出指令，并将指令送入指令寄存器IR，PC值增加4，指向顺序的下一条指令，</p>
 </li>
-<li><p>并将下一条指令的地址放入临时寄存器NPC中</p>
-<script type="math/tex; mode=display">
-IR\leftarrow Mem[PC]\\NPC\leftarrow PC+4</script></li>
+<li><p>并将下一条指令的地址放入临时寄存器NPC中<br>$$<br>IR\leftarrow Mem[PC]\\NPC\leftarrow PC+4<br>$$</p>
+</li>
 </ul>
 </li>
 <li><p>指令译码/读寄存器周期（ID）</p>
 <ul>
 <li><p>进行指令译码，读取IR寄存器（指令寄存器），按照相应寄存器号读寄存器文件，并将读出结果放入两个临时寄存器A和B中</p>
 </li>
-<li><p>同时对IR寄存器中内容的低16位进行符号扩展，然后将符号扩展后的32位立即值保存在临时寄存器Imm中</p>
-<script type="math/tex; mode=display">
-A\leftarrow Regs[IR_{6..10}]\\B\leftarrow Regs[IR_{11..15}]\\Imm\leftarrow ((IR_{16})^{16}\#\#IR_{16..31})</script></li>
+<li><p>同时对IR寄存器中内容的低16位进行符号扩展，然后将符号扩展后的32位立即值保存在临时寄存器Imm中<br>$$<br>A\leftarrow Regs[IR_{6..10}]\\B\leftarrow Regs[IR_{11..15}]\\Imm\leftarrow ((IR_{16})^{16}##IR_{16..31})<br>$$</p>
+</li>
 </ul>
 </li>
 <li><p>执行/有效地址计算周期（EX）</p>
 <ul>
 <li>存储器访问：$ALUoutput\leftarrow A+Imm$</li>
-<li>寄存器-寄存器ALU：$ALUoutput\leftarrow A\,op\,B$</li>
-<li>寄存器-立即数ALU：$ALUoutput\leftarrow A\, op\, Imm$</li>
-<li>分支操作：$ALUoutput\leftarrow NPC+Imm\quad Cond\leftarrow (A\,op\, 0)$</li>
+<li>寄存器-寄存器ALU：$ALUoutput\leftarrow A,op,B$</li>
+<li>寄存器-立即数ALU：$ALUoutput\leftarrow A, op, Imm$</li>
+<li>分支操作：$ALUoutput\leftarrow NPC+Imm\quad Cond\leftarrow (A,op, 0)$</li>
 </ul>
 </li>
 <li><p>存储器访问/分支完成周期（MEM）</p>
@@ -364,10 +364,8 @@ A\leftarrow Regs[IR_{6..10}]\\B\leftarrow Regs[IR_{11..15}]\\Imm\leftarrow ((IR_
 <li>$Store:\quad Mem[ALUoutput]\leftarrow B$</li>
 </ul>
 </li>
-<li><p>分支操作：</p>
-<script type="math/tex; mode=display">
-if\,(Cond)\,PC\leftarrow ALUouput\\
-else\, PC\leftarrow NPC</script></li>
+<li><p>分支操作：<br>$$<br>if,(Cond),PC\leftarrow ALUouput\<br>else, PC\leftarrow NPC<br>$$</p>
+</li>
 </ul>
 </li>
 <li><p>写回周期（WB）</p>
@@ -403,43 +401,34 @@ else\, PC\leftarrow NPC</script></li>
 </li>
 <li><p><strong>最大吞吐率</strong>$TP_{max}$：是指流水线在达到稳定状态后所得到的吞吐率</p>
 <ul>
-<li><p>假设流水线各段的时间相等，均为$\Delta t_0$，则：</p>
-<script type="math/tex; mode=display">
-TP_{max}=\frac 1{\Delta t_0}</script></li>
-<li><p>假设流水线各段的时间不相等，第i段的时间为$\Delta t_i$，则：</p>
-<script type="math/tex; mode=display">
-TP_{max}=\frac 1{max(\Delta t_i)}</script></li>
+<li><p>假设流水线各段的时间相等，均为$\Delta t_0$，则：<br>$$<br>TP_{max}=\frac 1{\Delta t_0}<br>$$</p>
+</li>
+<li><p>假设流水线各段的时间不相等，第i段的时间为$\Delta t_i$，则：<br>$$<br>TP_{max}=\frac 1{max(\Delta t_i)}<br>$$</p>
+</li>
 <li><p>最大吞吐率取决于流水线中最慢一段所需要的时间，该段为流水线的瓶颈</p>
 </li>
 </ul>
 </li>
 <li><p><strong>实际吞吐率</strong>$TP$：设流水线由m段组成，完成n个任务的吞吐率称为实际吞吐率</p>
 <ul>
-<li><p>若各段时间相等（假设均为$\Delta t_0$），则完成时间：</p>
-<script type="math/tex; mode=display">
-T_{流水}=m\Delta t_0+(n-1)\Delta t_0</script><p><img src="/2023/08/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8A%80%E6%9C%AF/image-20230804183304160.png" alt="image-20230804183304160"></p>
+<li><p>若各段时间相等（假设均为$\Delta t_0$），则完成时间：<br>$$<br>T_{流水}=m\Delta t_0+(n-1)\Delta t_0<br>$$<br><img src="/2023/08/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8A%80%E6%9C%AF/image-20230804183304160.png" alt="image-20230804183304160"></p>
 </li>
-<li><p>则实际吞吐率为：</p>
-<script type="math/tex; mode=display">
-TP=\frac{n}{T_{流水}}=\frac{n}{m\Delta t_0+(n-1)\Delta t_0}=\frac{TP_{max}}{1+\frac{m-1}{n}}</script></li>
-<li><p>若各段时间不等（假设第i段为$\Delta t_i$），且假设$\Delta t_j=max{\Delta t_i}$，则完成时间：</p>
-<script type="math/tex; mode=display">
-T=\sum_{i=1}^m\Delta t_i+(n-1)\Delta t_j</script></li>
-<li><p>则实际吞吐率为：</p>
-<script type="math/tex; mode=display">
-TP=\frac{n}{\sum_{i=1}^m\Delta t_i+(n-1)\Delta t_j}</script></li>
+<li><p>则实际吞吐率为：<br>$$<br>TP=\frac{n}{T_{流水}}=\frac{n}{m\Delta t_0+(n-1)\Delta t_0}=\frac{TP_{max}}{1+\frac{m-1}{n}}<br>$$</p>
+</li>
+<li><p>若各段时间不等（假设第i段为$\Delta t_i$），且假设$\Delta t_j=max{\Delta t_i}$，则完成时间：<br>$$<br>T=\sum_{i=1}^m\Delta t_i+(n-1)\Delta t_j<br>$$</p>
+</li>
+<li><p>则实际吞吐率为：<br>$$<br>TP=\frac{n}{\sum_{i=1}^m\Delta t_i+(n-1)\Delta t_j}<br>$$</p>
+</li>
 </ul>
 </li>
 </ul>
 <h2 id="2-加速比"><a href="#2-加速比" class="headerlink" title="2.加速比"></a>2.加速比</h2><ul>
-<li><p>加速比S是指流水线速度与等功能的非流水线速度之比</p>
-<script type="math/tex; mode=display">
-S=\frac{T_{非流水}}{T_{流水}}</script></li>
-<li><p>若流水线为m段，每段时间均为$\Delta t_0$，则：</p>
-<script type="math/tex; mode=display">
-T_{非流水}=nm\Delta t_0</script><script type="math/tex; mode=display">
-T_{流水}=m\Delta t_0+(n-1)\Delta t_0</script><script type="math/tex; mode=display">
-S=\frac{mn}{m+n-1}=\frac{m}{1+\frac{m-1}{n}}</script></li>
+<li><p>加速比S是指流水线速度与等功能的非流水线速度之比<br>$$<br>S=\frac{T_{非流水}}{T_{流水}}<br>$$</p>
+</li>
+<li><p>若流水线为m段，每段时间均为$\Delta t_0$，则：<br>$$<br>T_{非流水}=nm\Delta t_0<br>$$</p>
+<p>$$<br>T_{流水}=m\Delta t_0+(n-1)\Delta t_0<br>$$</p>
+<p>$$<br>S=\frac{mn}{m+n-1}=\frac{m}{1+\frac{m-1}{n}}<br>$$</p>
+</li>
 </ul>
 <p><img src="/2023/08/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8A%80%E6%9C%AF/image-20230804183540421.png" alt="image-20230804183540421"></p>
 <h2 id="3-效率"><a href="#3-效率" class="headerlink" title="3.效率"></a>3.效率</h2><ul>
@@ -450,20 +439,16 @@ S=\frac{mn}{m+n-1}=\frac{m}{1+\frac{m-1}{n}}</script></li>
 </li>
 <li><p>若各段时间相等，则各段效率也相等，即e1=e2=e3……=$n\Delta t_0/T_{流水}$</p>
 </li>
-<li><p>整个流水线效率：</p>
-<script type="math/tex; mode=display">
-E=\frac{n\Delta t_0}{T_{流水}}=\frac{n}{m+n-1}=\frac{1}{1+\frac{m-1}{n}}</script><p><img src="/2023/08/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8A%80%E6%9C%AF/image-20230804183419046.png" alt="image-20230804183419046"></p>
+<li><p>整个流水线效率：<br>$$<br>E=\frac{n\Delta t_0}{T_{流水}}=\frac{n}{m+n-1}=\frac{1}{1+\frac{m-1}{n}}<br>$$<br><img src="/2023/08/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B9%8B%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%8A%80%E6%9C%AF/image-20230804183419046.png" alt="image-20230804183419046"></p>
 </li>
 <li><p>当$n&gt;&gt;m$时，$E\approx1$</p>
 </li>
 </ul>
 <h2 id="4-吞吐率、加速比和效率的关系"><a href="#4-吞吐率、加速比和效率的关系" class="headerlink" title="4.吞吐率、加速比和效率的关系"></a>4.吞吐率、加速比和效率的关系</h2><ul>
-<li><p>效率是实际加速比S与最大加速比m之比</p>
-<script type="math/tex; mode=display">
-E=\frac{n\Delta t_0}{T_{流水}}=\frac{mn\Delta t_0}{T_{流水}m}=\frac Sm</script></li>
-<li><p>当$\Delta t_0$不变时，流水线的效率与吞吐率呈正比，为了提高效率而采取的措施，也有助于提高吞吐率</p>
-<script type="math/tex; mode=display">
-E=\frac{n\Delta t_0}{T_{流水}}=\frac{n}{T_{流水}}.\Delta t_0=TP\Delta t_0</script></li>
+<li><p>效率是实际加速比S与最大加速比m之比<br>$$<br>E=\frac{n\Delta t_0}{T_{流水}}=\frac{mn\Delta t_0}{T_{流水}m}=\frac Sm<br>$$</p>
+</li>
+<li><p>当$\Delta t_0$不变时，流水线的效率与吞吐率呈正比，为了提高效率而采取的措施，也有助于提高吞吐率<br>$$<br>E=\frac{n\Delta t_0}{T_{流水}}=\frac{n}{T_{流水}}.\Delta t_0=TP\Delta t_0<br>$$</p>
+</li>
 </ul>
 <hr>
 <h1 id="向量处理机"><a href="#向量处理机" class="headerlink" title="向量处理机"></a>向量处理机</h1><ul>
@@ -600,7 +585,7 @@ E=\frac{n\Delta t_0}{T_{流水}}=\frac{n}{T_{流水}}.\Delta t_0=TP\Delta t_0</s
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">160</span>
+          <span class="site-state-item-count">161</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

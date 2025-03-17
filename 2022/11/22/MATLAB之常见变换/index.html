@@ -273,57 +273,66 @@
       
         <p>本节主要介绍了MATLAB中常见的变换，包括Laplace变化、Fourier变换、Z变换。此外还介绍了双线性变换映射与部分分式展开。</p>
 <span id="more"></span>
+
 <h1 id="Laplace变换"><a href="#Laplace变换" class="headerlink" title="Laplace变换"></a>Laplace变换</h1><h2 id="1-正变换"><a href="#1-正变换" class="headerlink" title="1.正变换"></a>1.正变换</h2><ul>
 <li><code>laplace(f)</code> </li>
 <li><code>laplace(f,u)</code> %u为频域变量（默认为s）</li>
 <li><code>laplace(f,v,u)</code> %v为时域变量（默认为t），u为s域变量（默认为s）</li>
 </ul>
-<p><img src="/2022/11/22/MATLAB%E4%B9%8B%E5%B8%B8%E8%A7%81%E5%8F%98%E6%8D%A2/image-20221122164008424.png" alt="image-20221122164008424" style="zoom:50%;"></p>
+<img src="/2022/11/22/MATLAB%E4%B9%8B%E5%B8%B8%E8%A7%81%E5%8F%98%E6%8D%A2/image-20221122164008424.png" alt="image-20221122164008424" style="zoom:50%;">
+
 <h2 id="2-逆变换"><a href="#2-逆变换" class="headerlink" title="2.逆变换"></a>2.逆变换</h2><ul>
 <li><code>ilaplace(f)</code> </li>
 <li><code>ilaplace(f,u)</code> %u为时域变量（默认为t）</li>
 <li><code>ilaplace(f,v,u)</code> %v为s域变量（默认为s），u为时域变量（默认为t）</li>
 </ul>
-<p><img src="/2022/11/22/MATLAB%E4%B9%8B%E5%B8%B8%E8%A7%81%E5%8F%98%E6%8D%A2/image-20221122164654944.png" alt="image-20221122164654944" style="zoom:50%;"></p>
+<img src="/2022/11/22/MATLAB%E4%B9%8B%E5%B8%B8%E8%A7%81%E5%8F%98%E6%8D%A2/image-20221122164654944.png" alt="image-20221122164654944" style="zoom:50%;">
+
 <hr>
 <h1 id="Fourier变换"><a href="#Fourier变换" class="headerlink" title="Fourier变换"></a>Fourier变换</h1><h2 id="1-正变换-1"><a href="#1-正变换-1" class="headerlink" title="1.正变换"></a>1.正变换</h2><ul>
 <li><code>fourier(f)</code> </li>
 <li><code>fourier(f,u)</code> %u为频域变量（默认为w）</li>
 <li><code>fourier(f,v,u)</code> %v为时域变量（默认为x），u为频域变量（默认为w）</li>
 </ul>
-<p><img src="/2022/11/22/MATLAB%E4%B9%8B%E5%B8%B8%E8%A7%81%E5%8F%98%E6%8D%A2/image-20221122170731312.png" alt="image-20221122170731312" style="zoom:50%;"></p>
+<img src="/2022/11/22/MATLAB%E4%B9%8B%E5%B8%B8%E8%A7%81%E5%8F%98%E6%8D%A2/image-20221122170731312.png" alt="image-20221122170731312" style="zoom:50%;">
+
 <h2 id="2-逆变换-1"><a href="#2-逆变换-1" class="headerlink" title="2.逆变换"></a>2.逆变换</h2><ul>
 <li><code>ifourier(f)</code> </li>
 <li><code>ifourier(f,u)</code> %u为时域变量（默认为x）</li>
 <li><code>ifourier(f,v,u)</code> %v为频域变量（默认为w），u为时域变量（默认为x）</li>
 </ul>
-<p><img src="/2022/11/22/MATLAB%E4%B9%8B%E5%B8%B8%E8%A7%81%E5%8F%98%E6%8D%A2/image-20221122171206600.png" alt="image-20221122171206600" style="zoom:50%;"></p>
+<img src="/2022/11/22/MATLAB%E4%B9%8B%E5%B8%B8%E8%A7%81%E5%8F%98%E6%8D%A2/image-20221122171206600.png" alt="image-20221122171206600" style="zoom:50%;">
+
 <hr>
 <h1 id="Z变换"><a href="#Z变换" class="headerlink" title="Z变换"></a>Z变换</h1><h2 id="1-正变换-2"><a href="#1-正变换-2" class="headerlink" title="1.正变换"></a>1.正变换</h2><ul>
 <li><code>ztrans(f)</code> %n从零到无穷大</li>
 <li><code>ztrans(f,u)</code> %u为z域变量（默认为z）</li>
 <li><code>ztrans(f,v,u)</code> %v为时域变量（默认为n），u为z域变量（默认为z）</li>
 </ul>
-<p><img src="/2022/11/22/MATLAB%E4%B9%8B%E5%B8%B8%E8%A7%81%E5%8F%98%E6%8D%A2/image-20221122173617246.png" alt="image-20221122173617246" style="zoom:50%;"></p>
+<img src="/2022/11/22/MATLAB%E4%B9%8B%E5%B8%B8%E8%A7%81%E5%8F%98%E6%8D%A2/image-20221122173617246.png" alt="image-20221122173617246" style="zoom:50%;">
+
 <h2 id="2-逆变换-2"><a href="#2-逆变换-2" class="headerlink" title="2.逆变换"></a>2.逆变换</h2><ul>
 <li><code>iztrans(f)</code> </li>
 <li><code>iztrans(f,u)</code> %u为时域变量（默认为n）</li>
 <li><code>iztrans(f,v,u)</code> %v为z域变量（默认为z），u为时域变量（默认为n）</li>
 </ul>
-<p><img src="/2022/11/22/MATLAB%E4%B9%8B%E5%B8%B8%E8%A7%81%E5%8F%98%E6%8D%A2/image-20221122173927328.png" alt="image-20221122173927328" style="zoom:50%;"></p>
+<img src="/2022/11/22/MATLAB%E4%B9%8B%E5%B8%B8%E8%A7%81%E5%8F%98%E6%8D%A2/image-20221122173927328.png" alt="image-20221122173927328" style="zoom:50%;">
+
 <hr>
 <h1 id="复数映射"><a href="#复数映射" class="headerlink" title="复数映射"></a>复数映射</h1><ul>
 <li><p><code>subs(f,old,new)</code></p>
 </li>
 <li><p>双线性变换映射</p>
-<p><img src="/2022/11/22/MATLAB%E4%B9%8B%E5%B8%B8%E8%A7%81%E5%8F%98%E6%8D%A2/image-20221122203518642.png" alt="image-20221122203518642" style="zoom:50%;"></p>
+<img src="/2022/11/22/MATLAB%E4%B9%8B%E5%B8%B8%E8%A7%81%E5%8F%98%E6%8D%A2/image-20221122203518642.png" alt="image-20221122203518642" style="zoom:50%;">
+
 </li>
 </ul>
 <hr>
 <h1 id="部分分式展开"><a href="#部分分式展开" class="headerlink" title="部分分式展开"></a>部分分式展开</h1><ul>
 <li><code>partfrac(f,var)</code> %var代表变量，对哪一个变量部分分式展开</li>
 </ul>
-<p><img src="/2022/11/22/MATLAB%E4%B9%8B%E5%B8%B8%E8%A7%81%E5%8F%98%E6%8D%A2/image-20221122204914502.png" alt="image-20221122204914502" style="zoom:50%;"></p>
+<img src="/2022/11/22/MATLAB%E4%B9%8B%E5%B8%B8%E8%A7%81%E5%8F%98%E6%8D%A2/image-20221122204914502.png" alt="image-20221122204914502" style="zoom:50%;">
+
 <hr>
 
     </div>
@@ -456,7 +465,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">160</span>
+          <span class="site-state-item-count">161</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

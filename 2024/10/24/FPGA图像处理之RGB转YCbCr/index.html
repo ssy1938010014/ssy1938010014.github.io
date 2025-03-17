@@ -275,40 +275,18 @@
       
         <p>本节主要介绍了FPGA图像处理中RGB转YCbCr算法，以及它的MATLAB与FPGA实现。</p>
 <span id="more"></span>
+
 <h1 id="RGB与YCbCr色域介绍"><a href="#RGB与YCbCr色域介绍" class="headerlink" title="RGB与YCbCr色域介绍"></a>RGB与YCbCr色域介绍</h1><ul>
-<li><p><strong>RGB介绍</strong>：计算机处理的BMP图片为24Bit的位图，即每一通道的颜色可以细分为$2^8 = 256$级别（RGB888），每一通道的色彩分辨率能达到256级，总共能综合出的颜色种类为：</p>
-<script type="math/tex; mode=display">
-R的种类\times G的种类\times B的种类 = 2^8 \times 2^8\times 2^8 = 16777216\approx1600万</script></li>
+<li><p><strong>RGB介绍</strong>：计算机处理的BMP图片为24Bit的位图，即每一通道的颜色可以细分为$2^8 = 256$级别（RGB888），每一通道的色彩分辨率能达到256级，总共能综合出的颜色种类为：<br>$$<br>R的种类\times G的种类\times B的种类 = 2^8 \times 2^8\times 2^8 = 16777216\approx1600万<br>$$</p>
+</li>
 <li><p><strong>YCbCr介绍</strong>：Y表示颜色的明亮度和浓度，Cb和Cr则分别表示颜色的蓝色浓度偏移量和红色浓度偏移量。YCbCr是一种数字信号，其色彩模型源于YUV颜色模型。在数字视频领域应用广泛是计算机中应用最多的格式，JPEG、MPEG、H.264/5、AVS等都采用YCbCr格式。YCbCr格式可以继续分为两种格式：tv range格式与full range格式</p>
 <ul>
 <li>tv range格式：$Y\in [16, 235], Cb\in[16,240], Cr\in[16, 240]$，主要是广播电视采用的数字标准。</li>
 <li>full range格式：$Y、Cb、Cr\in [0, 255]$，主要是PC端采用的标准，所以也称为pc range格式</li>
 </ul>
 </li>
-<li><p>对full range或者pc range的YCbCr格式，其<strong>RGB与YCbCr的相互转换公式</strong>为：</p>
-<script type="math/tex; mode=display">
-\begin{bmatrix}
-Y \\ 
-Cb  \\ 
-Cr  \\ 
-\end{bmatrix} = \begin{bmatrix}
-0 \\ 
-128  \\ 
-128  \\ 
-\end{bmatrix}+\begin{bmatrix}
-0.299 & 0.587 & 0.114 \\ 
--0.169 & -0.331 & 0.500  \\ 
-0.500 & -0.419 & -0.081  \\ 
-\end{bmatrix}\times \begin{bmatrix}
-R \\ 
-G  \\ 
-B  \\ 
-\end{bmatrix}, 其中\begin{cases}
-\begin{aligned}
-R/G/B \in [0,255]\\
-Y/Cb/Cr \in [0,255]
-\end{aligned}
-\end{cases}</script></li>
+<li><p>对full range或者pc range的YCbCr格式，其<strong>RGB与YCbCr的相互转换公式</strong>为：<br>$$<br>\begin{bmatrix}<br>Y \\<br>Cb  \\<br>Cr  \\<br>\end{bmatrix} = \begin{bmatrix}<br>0 \\<br>128  \\<br>128  \\<br>\end{bmatrix}+\begin{bmatrix}<br>0.299 &amp; 0.587 &amp; 0.114 \\<br>-0.169 &amp; -0.331 &amp; 0.500  \\<br>0.500 &amp; -0.419 &amp; -0.081  \\<br>\end{bmatrix}\times \begin{bmatrix}<br>R \\<br>G  \\<br>B  \\<br>\end{bmatrix}, 其中\begin{cases}<br>\begin{aligned}<br>R/G/B \in [0,255]\<br>Y/Cb/Cr \in [0,255]<br>\end{aligned}<br>\end{cases}<br>$$</p>
+</li>
 </ul>
 <hr>
 <h1 id="RGB转YCbCr硬件实现推导"><a href="#RGB转YCbCr硬件实现推导" class="headerlink" title="RGB转YCbCr硬件实现推导"></a>RGB转YCbCr硬件实现推导</h1><ul>
@@ -325,11 +303,8 @@ Y/Cb/Cr \in [0,255]
 </li>
 <li><p>那么以Y通道为例，量化后的Y1计算为：$Y1 = R\times76.544+G\times150.272+B\times 29.184\approx R\times 76 +G \times 150+B\times 29$</p>
 </li>
-<li><p>由于数值扩大了256倍，即2的8次方，因此对上述结果再右移8bit（实际可取高8bit，不用移位），得到的结果如下（其中76+150+29=255 &lt;256）</p>
-<script type="math/tex; mode=display">
-Y2 = (R\times 76 + G \times 150 +B\times 29) >> 8\\
-Cb = (-R\times 43 - G\times 84 + B\times 128+32768) >>8\\
-Cr = (R\times128 -G\times107 -B\times20+32768)>>8</script></li>
+<li><p>由于数值扩大了256倍，即2的8次方，因此对上述结果再右移8bit（实际可取高8bit，不用移位），得到的结果如下（其中76+150+29=255 &lt;256）<br>$$<br>Y2 = (R\times 76 + G \times 150 +B\times 29) &gt;&gt; 8\<br>Cb = (-R\times 43 - G\times 84 + B\times 128+32768) &gt;&gt;8\<br>Cr = (R\times128 -G\times107 -B\times20+32768)&gt;&gt;8<br>$$</p>
+</li>
 </ul>
 </li>
 </ul>
@@ -337,9 +312,11 @@ Cr = (R\times128 -G\times107 -B\times20+32768)>>8</script></li>
 <h1 id="RGB转YCbCr的MATLAB实现"><a href="#RGB转YCbCr的MATLAB实现" class="headerlink" title="RGB转YCbCr的MATLAB实现"></a>RGB转YCbCr的MATLAB实现</h1><ul>
 <li><p>MATLAB代码：</p>
 <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">clear all; close all; clc;</span><br><span class="line"></span><br><span class="line"><span class="comment">% -------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment">% Read PC image to Matlab</span></span><br><span class="line">IMG1 = imread(<span class="string">&#x27;../../0_images/Scart.jpg&#x27;</span>);    <span class="comment">% 读取jpg图像</span></span><br><span class="line">h = <span class="built_in">size</span>(IMG1,<span class="number">1</span>);         <span class="comment">% 读取图像高度</span></span><br><span class="line">w = <span class="built_in">size</span>(IMG1,<span class="number">2</span>);         <span class="comment">% 读取图像宽度</span></span><br><span class="line">subplot(<span class="number">221</span>);imshow(IMG1);title(<span class="string">&#x27;RGB Image&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">% -------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment">% Relized by user logic</span></span><br><span class="line"><span class="comment">% Y = ( R*76 + G*150 + B*29) &gt;&gt;8</span></span><br><span class="line"><span class="comment">% Cb = (-R*43 - G*84 + B*128 + 32768) &gt;&gt;8</span></span><br><span class="line"><span class="comment">% Cr = ( R*128 - G*107 - B*20  + 32768) &gt;&gt;8</span></span><br><span class="line">IMG1 = double(IMG1);    </span><br><span class="line">IMG_YCbCr = <span class="built_in">zeros</span>(h,w,<span class="number">3</span>);  </span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span> : h</span><br><span class="line">    <span class="keyword">for</span> <span class="built_in">j</span> = <span class="number">1</span> : w</span><br><span class="line">        IMG_YCbCr(<span class="built_in">i</span>,<span class="built_in">j</span>, <span class="number">1</span>) = bitshift(( IMG1(<span class="built_in">i</span>,<span class="built_in">j</span>,<span class="number">1</span>)*<span class="number">76</span> + IMG1(<span class="built_in">i</span>,<span class="built_in">j</span>,<span class="number">2</span>)*<span class="number">150</span> + IMG1(<span class="built_in">i</span>,<span class="built_in">j</span>,<span class="number">3</span>)*<span class="number">29</span>),<span class="number">-8</span>);</span><br><span class="line">        IMG_YCbCr(<span class="built_in">i</span>,<span class="built_in">j</span>,<span class="number">2</span>) = bitshift((-IMG1(<span class="built_in">i</span>,<span class="built_in">j</span>,<span class="number">1</span>)*<span class="number">43</span> - IMG1(<span class="built_in">i</span>,<span class="built_in">j</span>,<span class="number">2</span>)*<span class="number">84</span> + IMG1(<span class="built_in">i</span>,<span class="built_in">j</span>,<span class="number">3</span>)*<span class="number">128</span> + <span class="number">32768</span>),<span class="number">-8</span>);</span><br><span class="line">        IMG_YCbCr(<span class="built_in">i</span>,<span class="built_in">j</span>,<span class="number">3</span>) = bitshift(( IMG1(<span class="built_in">i</span>,<span class="built_in">j</span>,<span class="number">1</span>)*<span class="number">128</span> - IMG1(<span class="built_in">i</span>,<span class="built_in">j</span>,<span class="number">2</span>)*<span class="number">107</span> - IMG1(<span class="built_in">i</span>,<span class="built_in">j</span>,<span class="number">3</span>)*<span class="number">20</span> + <span class="number">32768</span>),<span class="number">-8</span>);</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">% -------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment">% Display Y Cb Cr Channel</span></span><br><span class="line">IMG_YCbCr = uint8(IMG_YCbCr); </span><br><span class="line">subplot(<span class="number">222</span>); imshow(IMG_YCbCr(:,:,<span class="number">1</span>));  title(<span class="string">&#x27;Y Channel&#x27;</span>);</span><br><span class="line">subplot(<span class="number">223</span>); imshow(IMG_YCbCr(:,:,<span class="number">2</span>));  title(<span class="string">&#x27;Cb Channel&#x27;</span>);</span><br><span class="line">subplot(<span class="number">224</span>); imshow(IMG_YCbCr(:,:,<span class="number">3</span>));  title(<span class="string">&#x27;Cr Channel&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li><p>仿真结果：</p>
-<p><img src="/2024/10/24/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8BRGB%E8%BD%ACYCbCr/RGB%E8%BD%ACYCbCr.jpg" alt="RGB转YCbCr" style="zoom:67%;"></p>
+<img src="/2024/10/24/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8BRGB%E8%BD%ACYCbCr/RGB%E8%BD%ACYCbCr.jpg" alt="RGB转YCbCr" style="zoom:67%;">
+
 </li>
 </ul>
 </li>
@@ -356,10 +333,11 @@ Cr = (R\times128 -G\times107 -B\times20+32768)>>8</script></li>
 <p><img src="/2024/10/24/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8BRGB%E8%BD%ACYCbCr/image-20241024213005958.png" alt="image-20241024213005958"></p>
 </li>
 <li><p><strong>仿真平台的架构和代码写法要重点学习：</strong></p>
-<p><img src="/2024/10/24/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8BRGB%E8%BD%ACYCbCr/image-20241024213116660.png" alt="image-20241024213116660" style="zoom: 67%;"></p>
+<img src="/2024/10/24/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8BRGB%E8%BD%ACYCbCr/image-20241024213116660.png" alt="image-20241024213116660" style="zoom: 67%;">
 </li>
 <li><p><strong>在该设计文件中，是直接对数据进行流水计算的，没有在数据计算前先判断数据是否有效再计算（我直接一直都是这么写得），但该设计中是在数据输出的时候，增加了一个assign组合逻辑的选择判断输出的，感觉这个写法更好，简洁明了，在数据计算的时候不要总担心数据是否有效，最后算完再来把关就行。</strong></p>
 <figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">assign</span>  post_img_Y     = post_img_href ? img_Y_r1 : <span class="number">8&#x27;d0</span>;</span><br><span class="line"><span class="keyword">assign</span>  post_img_Cb    = post_img_href ? img_Cb_r1: <span class="number">8&#x27;d0</span>;</span><br><span class="line"><span class="keyword">assign</span>  post_img_Cr    = post_img_href ? img_Cr_r1: <span class="number">8&#x27;d0</span>;</span><br></pre></td></tr></table></figure>
+
 </li>
 </ul>
 <hr>
@@ -498,7 +476,7 @@ Cr = (R\times128 -G\times107 -B\times20+32768)>>8</script></li>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">160</span>
+          <span class="site-state-item-count">161</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
