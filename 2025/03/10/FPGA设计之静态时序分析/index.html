@@ -275,14 +275,12 @@
       
         <p>本节以静态时序分析为切入口，重点理解建立时间、保持时间以及裕量分析。</p>
 <span id="more"></span>
-
 <h1 id="寄存器延迟"><a href="#寄存器延迟" class="headerlink" title="寄存器延迟"></a>寄存器延迟</h1><ul>
 <li>建立时间$t_{setup}$：数据D需要提前clk上升沿多长时间到来，数据的采集才不会出错</li>
 <li>保持时间$t_{hold}$：时钟上升沿到来后，数据D还需要维持多长时间不变，才不会影响输出Q</li>
 <li>传输延时$t_{cq}$：时钟上升沿到来后多久，数据才能传输到Q端</li>
 </ul>
-<img src="/2025/03/10/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8B%E9%9D%99%E6%80%81%E6%97%B6%E5%BA%8F%E5%88%86%E6%9E%90/image-20250310200317813.png" alt="image-20250310200317813" style="zoom: 80%;">
-
+<p><img src="/2025/03/10/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8B%E9%9D%99%E6%80%81%E6%97%B6%E5%BA%8F%E5%88%86%E6%9E%90/image-20250310200317813.png" alt="image-20250310200317813" style="zoom: 80%;"></p>
 <hr>
 <h1 id="建立、保持时间裕量分析"><a href="#建立、保持时间裕量分析" class="headerlink" title="建立、保持时间裕量分析"></a>建立、保持时间裕量分析</h1><ul>
 <li><p><strong>时钟无延迟的情况下</strong>：</p>
@@ -305,8 +303,7 @@
 <ul>
 <li><p><strong>时钟正向延迟的情况下</strong>：</p>
 <p><img src="/2025/03/10/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8B%E9%9D%99%E6%80%81%E6%97%B6%E5%BA%8F%E5%88%86%E6%9E%90/image-20250310201305890.png" alt="image-20250310201305890"></p>
-<img src="/2025/03/10/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8B%E9%9D%99%E6%80%81%E6%97%B6%E5%BA%8F%E5%88%86%E6%9E%90/image-20250310202332660.png" alt="image-20250310202332660" style="zoom:67%;">
-
+<p><img src="/2025/03/10/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8B%E9%9D%99%E6%80%81%E6%97%B6%E5%BA%8F%E5%88%86%E6%9E%90/image-20250310202332660.png" alt="image-20250310202332660" style="zoom:67%;"></p>
 <ul>
 <li><strong>建立时间</strong>：<ul>
 <li>建立时间最大值=$t_{cycle}-(t_{cq}+t_{logic})+t_{clk_delay}$</li>
@@ -352,8 +349,7 @@
 </li>
 </ul>
 <hr>
-<h1 id="基本同步时钟约束路径"><a href="#基本同步时钟约束路径" class="headerlink" title="基本同步时钟约束路径"></a>基本同步时钟约束路径</h1><img src="/2025/03/10/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8B%E9%9D%99%E6%80%81%E6%97%B6%E5%BA%8F%E5%88%86%E6%9E%90/image-20250310202657798.png" alt="image-20250310202657798" style="zoom:80%;">
-
+<h1 id="基本同步时钟约束路径"><a href="#基本同步时钟约束路径" class="headerlink" title="基本同步时钟约束路径"></a>基本同步时钟约束路径</h1><p><img src="/2025/03/10/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8B%E9%9D%99%E6%80%81%E6%97%B6%E5%BA%8F%E5%88%86%E6%9E%90/image-20250310202657798.png" alt="image-20250310202657798" style="zoom:80%;"></p>
 <ul>
 <li><strong>建立时间裕量</strong>：$t_{setup_slack}=t_{cycle}-(t_{cq}+t_{logic})-t_{setup}+t_{clk_delay}-t_{jitter}&gt;0$</li>
 <li><strong>保持时间裕量</strong>：$t_{hold_slack}=t_{cq}+t_{logic}-t_{hold}-t_{clk_delay}-t_{jitter}&gt;0$</li>
@@ -384,7 +380,7 @@
 <h1 id="时序违例的优化方法概述"><a href="#时序违例的优化方法概述" class="headerlink" title="时序违例的优化方法概述"></a>时序违例的优化方法概述</h1><ul>
 <li><strong>建立时间违例</strong>：<ul>
 <li>前端设计方案：<ul>
-<li>关键路径上的逻辑并行：串行–&gt;并行</li>
+<li>关键路径上的逻辑并行：串行—&gt;并行</li>
 <li>卡诺图化简</li>
 <li>插入寄存器，形成流水线设计</li>
 </ul>
@@ -411,7 +407,7 @@
 </ul>
 <hr>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
-<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1re4y1n7hA/?spm_id_from=333.1007.top_right_bar_window_history.content.click&vd_source=221b76534ba13cfad544149d75ce9b6c">新新新手Icer练习（六）：静态时序分析，深入了解建立时间、保持时间及其裕量分析_哔哩哔哩_bilibili</a>（可以说，我这篇笔记全文抄袭该视频的，只是自己打了一遍公式，加深了一下印象，记录一下。不得不感叹一句，这位博主讲得东西简单明了，优秀）</li>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1re4y1n7hA/?spm_id_from=333.1007.top_right_bar_window_history.content.click&amp;vd_source=221b76534ba13cfad544149d75ce9b6c">新新新手Icer练习（六）：静态时序分析，深入了解建立时间、保持时间及其裕量分析_哔哩哔哩_bilibili</a>（可以说，我这篇笔记全文抄袭该视频的，只是自己打了一遍公式，加深了一下印象，记录一下。不得不感叹一句，这位博主讲得东西简单明了，优秀）</li>
 </ul>
 
     </div>

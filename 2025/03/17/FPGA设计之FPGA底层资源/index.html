@@ -280,11 +280,9 @@
       
         <p>本节主要介绍了FPGA底层资源，包括IOB、PLL、MMCM、CLB、LUT等</p>
 <span id="more"></span>
-
 <h1 id="IOB"><a href="#IOB" class="headerlink" title="IOB"></a>IOB</h1><ul>
 <li><p><strong>IO口的管理单元，可编程输入输出单元</strong></p>
-<img src="/2025/03/17/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8BFPGA%E5%BA%95%E5%B1%82%E8%B5%84%E6%BA%90/image-20250317200010871.png" alt="image-20250317200010871" style="zoom:50%;">
-
+<p><img src="/2025/03/17/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8BFPGA%E5%BA%95%E5%B1%82%E8%B5%84%E6%BA%90/image-20250317200010871.png" alt="image-20250317200010871" style="zoom:50%;"></p>
 </li>
 </ul>
 <hr>
@@ -292,8 +290,7 @@
 <li><p>Clock Manage Tile，时钟管理模块</p>
 </li>
 <li><p>一个CMT主要由一个MMCM（调频范围比较大，调频也比较准）和一个PLL（调相位比较准）组成</p>
-<img src="/2025/03/17/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8BFPGA%E5%BA%95%E5%B1%82%E8%B5%84%E6%BA%90/image-20250317201714421.png" alt="image-20250317201714421" style="zoom:50%;">
-
+<p><img src="/2025/03/17/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8BFPGA%E5%BA%95%E5%B1%82%E8%B5%84%E6%BA%90/image-20250317201714421.png" alt="image-20250317201714421" style="zoom:50%;"></p>
 </li>
 </ul>
 <hr>
@@ -308,8 +305,7 @@
 <p><img src="/2025/03/17/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8BFPGA%E5%BA%95%E5%B1%82%E8%B5%84%E6%BA%90/image-20250317203637764.png" alt="image-20250317203637764"></p>
 </li>
 <li><p><strong>与7系列（以上）的一个CLB包含两个Slice不同的是Ultrascale中一个CLB只有一个Slice</strong></p>
-<img src="/2025/03/17/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8BFPGA%E5%BA%95%E5%B1%82%E8%B5%84%E6%BA%90/image-20250317214341112.png" alt="image-20250317214341112" style="zoom: 67%;">
-
+<p><img src="/2025/03/17/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8BFPGA%E5%BA%95%E5%B1%82%E8%B5%84%E6%BA%90/image-20250317214341112.png" alt="image-20250317214341112" style="zoom: 67%;"></p>
 </li>
 </ul>
 <h2 id="1-LUT6"><a href="#1-LUT6" class="headerlink" title="1.LUT6"></a>1.LUT6</h2><ul>
@@ -326,8 +322,7 @@
 </ul>
 <h2 id="2-MUX"><a href="#2-MUX" class="headerlink" title="2.MUX"></a>2.MUX</h2><ul>
 <li><p>SLICE中的三个MUX（Multiplexer：F7AMUX，F7BMUX和F8MUX）可以和LUT6联合共同实现更大的MUX。事实上，<strong>一个LUT6可实现4选1的MUX</strong>。</p>
-<img src="/2025/03/17/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8BFPGA%E5%BA%95%E5%B1%82%E8%B5%84%E6%BA%90/image-20250317211757025.png" alt="image-20250317211757025" style="zoom: 67%;">
-
+<p><img src="/2025/03/17/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8BFPGA%E5%BA%95%E5%B1%82%E8%B5%84%E6%BA%90/image-20250317211757025.png" alt="image-20250317211757025" style="zoom: 67%;"></p>
 <ul>
 <li><strong>MUX4的实现使用一个LUT6，其中LUT6的4个输入作为MUX4的4个输入，而另外2个输入则作为MUX4的地址线</strong>。</li>
 </ul>
@@ -335,21 +330,18 @@
 <li><p><strong>每个SLICE中都有2个MUXF7+1个MUXF8。MUXF7 的输入只能为LUT6的输出，而输出只能接到MUXF8; MUXF8的输入只能为MUXF7的输出</strong></p>
 </li>
 <li><p><strong>SLICE中的F7MUX（F7AMUX和F7BMUX）的输入数据来自于相邻的两个LUT6的O6端口</strong></p>
-<img src="/2025/03/17/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8BFPGA%E5%BA%95%E5%B1%82%E8%B5%84%E6%BA%90/image-20250317212440337.png" alt="image-20250317212440337" style="zoom:50%;">
+<p><img src="/2025/03/17/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8BFPGA%E5%BA%95%E5%B1%82%E8%B5%84%E6%BA%90/image-20250317212440337.png" alt="image-20250317212440337" style="zoom:50%;"></p>
 </li>
 <li><p><strong>MUX4可以由LUT6来实现，每个SLICE可以实现4个独立的MUX4</strong></p>
-<img src="/2025/03/17/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8BFPGA%E5%BA%95%E5%B1%82%E8%B5%84%E6%BA%90/image-20250317212118835.png" alt="image-20250317212118835" style="zoom: 67%;">
+<p><img src="/2025/03/17/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8BFPGA%E5%BA%95%E5%B1%82%E8%B5%84%E6%BA%90/image-20250317212118835.png" alt="image-20250317212118835" style="zoom: 67%;"></p>
 </li>
 <li><p><strong>MUX8可以由2LUT6+1个MUXF7来实现，每个SLICE可以实现2个独立的MUX8</strong></p>
-<img src="/2025/03/17/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8BFPGA%E5%BA%95%E5%B1%82%E8%B5%84%E6%BA%90/image-20250317212627059.png" alt="image-20250317212627059" style="zoom: 67%;">
-
-<img src="/2025/03/17/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8BFPGA%E5%BA%95%E5%B1%82%E8%B5%84%E6%BA%90/image-20250317212810710.png" alt="image-20250317212810710" style="zoom:67%;">
+<p><img src="/2025/03/17/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8BFPGA%E5%BA%95%E5%B1%82%E8%B5%84%E6%BA%90/image-20250317212627059.png" alt="image-20250317212627059" style="zoom: 67%;"></p>
+<p><img src="/2025/03/17/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8BFPGA%E5%BA%95%E5%B1%82%E8%B5%84%E6%BA%90/image-20250317212810710.png" alt="image-20250317212810710" style="zoom:67%;"></p>
 </li>
 <li><p><strong>MUX16可以由4个LUT+2个MUXF7+1个MUXF8来实现，每个SLICE可以实现1个独立的MUX16</strong></p>
-<img src="/2025/03/17/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8BFPGA%E5%BA%95%E5%B1%82%E8%B5%84%E6%BA%90/image-20250317212939512.png" alt="image-20250317212939512" style="zoom: 75%;">
-
-<img src="/2025/03/17/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8BFPGA%E5%BA%95%E5%B1%82%E8%B5%84%E6%BA%90/image-20250317213051425.png" alt="image-20250317213051425" style="zoom:70%;">
-
+<p><img src="/2025/03/17/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8BFPGA%E5%BA%95%E5%B1%82%E8%B5%84%E6%BA%90/image-20250317212939512.png" alt="image-20250317212939512" style="zoom: 75%;"></p>
+<p><img src="/2025/03/17/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8BFPGA%E5%BA%95%E5%B1%82%E8%B5%84%E6%BA%90/image-20250317213051425.png" alt="image-20250317213051425" style="zoom:70%;"></p>
 </li>
 </ul>
 <h2 id="3-进位链（Carry-Chain）"><a href="#3-进位链（Carry-Chain）" class="headerlink" title="3.进位链（Carry Chain）"></a>3.进位链（Carry Chain）</h2><ul>
@@ -359,8 +351,7 @@
 <li><p>每个SLICE中有8个触发器。这个8个触发器可分为两大类：<strong>4个只能配置为边沿敏感的D触发器（Flip-Flop）和4个即可配置为边沿敏感的D触发器又可配置为电平敏感的锁存器（Flop&amp;Latch）</strong>。当后者被用作锁存器的时候，前者将无法使用。</p>
 </li>
 <li><p><strong>Xilinx的触发器是高电平复位，而Altera的触发器时低电平复位</strong></p>
-<img src="/2025/03/17/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8BFPGA%E5%BA%95%E5%B1%82%E8%B5%84%E6%BA%90/image-20250317213724261.png" alt="image-20250317213724261" style="zoom:80%;">
-
+<p><img src="/2025/03/17/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8BFPGA%E5%BA%95%E5%B1%82%E8%B5%84%E6%BA%90/image-20250317213724261.png" alt="image-20250317213724261" style="zoom:80%;"></p>
 </li>
 </ul>
 <hr>
@@ -374,16 +365,13 @@
 </ul>
 <hr>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
-<li><p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1q84y1x7KY?spm_id_from=333.788.videopod.sections&vd_source=221b76534ba13cfad544149d75ce9b6c">01:如何使用数电思维，科学的进行FPGA设计。_哔哩哔哩_bilibili</a></p>
-</li>
-<li><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/rouwawa/p/10031833.html">FPGA基础学习(7) – 内部结构之CLB - 肉娃娃 - 博客园</a></p>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1q84y1x7KY?spm_id_from=333.788.videopod.sections&amp;vd_source=221b76534ba13cfad544149d75ce9b6c">01:如何使用数电思维，科学的进行FPGA设计。_哔哩哔哩_bilibili</a></li>
+<li><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/rouwawa/p/10031833.html">FPGA基础学习(7) — 内部结构之CLB - 肉娃娃 - 博客园</a></p>
 </li>
 <li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/ZBigluck/article/details/129122723">转载：从底层结构开始学习FPGA（5）— 移位寄存器SRL_srlc32e-CSDN博客</a></p>
 </li>
-<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/wuzhikaidetb/article/details/124764526">从底层结构开始学习FPGA（4）—-MUX多路选择器（Multiplexer）-CSDN博客</a></p>
-</li>
-<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/zyp626/article/details/132638318">Xilinx UltraScale架构之可配置逻辑块CLB-CSDN博客</a></p>
-</li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/wuzhikaidetb/article/details/124764526">从底层结构开始学习FPGA（4）——MUX多路选择器（Multiplexer）-CSDN博客</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/zyp626/article/details/132638318">Xilinx UltraScale架构之可配置逻辑块CLB-CSDN博客</a></li>
 </ul>
 
     </div>
