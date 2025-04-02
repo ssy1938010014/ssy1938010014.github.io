@@ -68,7 +68,7 @@
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/01/10/Verilog%E4%B9%8B%E8%BF%9B%E9%98%B6%E7%BA%A7%E5%88%B7%E9%A2%98/image-20241029153857911.png">
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2024/01/10/Verilog%E4%B9%8B%E8%BF%9B%E9%98%B6%E7%BA%A7%E5%88%B7%E9%A2%98/image-20241007161309562.png">
 <meta property="article:published_time" content="2024-01-10T02:07:12.000Z">
-<meta property="article:modified_time" content="2024-10-30T07:00:24.841Z">
+<meta property="article:modified_time" content="2025-03-24T14:40:30.655Z">
 <meta property="article:author" content="ssy">
 <meta property="article:tag" content="Verilog">
 <meta name="twitter:card" content="summary">
@@ -277,7 +277,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-10-30 15:00:24" itemprop="dateModified" datetime="2024-10-30T15:00:24+08:00">2024-10-30</time>
+                <time title="修改时间：2025-03-24 22:40:30" itemprop="dateModified" datetime="2025-03-24T22:40:30+08:00">2025-03-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -534,7 +534,7 @@
 <li><p>假设输出<code>clk_out</code>是输入<code>clk_in</code>的N<em>N</em>分频。首先要将分频系数<em>N</em>化为分数形式，比如4.75→$\frac{19}{4}$，3.4→$\frac{34}{10}$。本题中，8.7可以化为$\frac{87}{10}$。这意味着在87个<code>clk_in</code>周期内输出10个<code>clk_out</code>周期就可以实现分频。</p>
 <img src="/2024/01/10/Verilog%E4%B9%8B%E8%BF%9B%E9%98%B6%E7%BA%A7%E5%88%B7%E9%A2%98/image-20240925154025505.png" alt="image-20240925154025505" style="zoom: 67%;">
 </li>
-<li><p>然后采用若干种（一般是两种）整数分频在87个原周期<code>clk_in</code>内产生10个新时钟周期<code>clk_out</code>。整数分频的分频系数有很多种选择，但要尽可能接近，提高<code>clk_out</code>的均匀度。一般推荐在小数分频系数N<em>N</em>的附近选取。因为8&lt;N&lt;9，所以两个整数分频系数是8和9。接着要计算87个<code>clk_out</code>周期分别有多少个是8分频和9分频的。设每10个<code>clk_out</code>中有<em>x</em>个8分频输出和<em>y</em>个9分频输出，则可列出如下方程：<br>$$<br>x+y=10 \<br>8x+9y = 87<br>$$</p>
+<li><p>然后采用若干种（一般是两种）整数分频在87个原周期<code>clk_in</code>内产生10个新时钟周期<code>clk_out</code>。整数分频的分频系数有很多种选择，但要尽可能接近，提高<code>clk_out</code>的均匀度。一般推荐在小数分频系数N的附近选取。因为8&lt;N&lt;9，所以两个整数分频系数是8和9。接着要计算87个<code>clk_out</code>周期分别有多少个是8分频和9分频的。设每10个<code>clk_out</code>中有<em>x</em>个8分频输出和<em>y</em>个9分频输出，则可列出如下方程：<br>$$<br>x+y=10 \<br>8x+9y = 87<br>$$</p>
 </li>
 <li><p>可得x=3，y=7。也就是3个8分频和7个9分频一组，循环输出，就等效于8.7分频。 最后安排组内8分频和9分频的位置。这里的方法也不固定，不过本题要求3个8分频先输出，再输出7个9分频，如下图。</p>
 <p><img src="/2024/01/10/Verilog%E4%B9%8B%E8%BF%9B%E9%98%B6%E7%BA%A7%E5%88%B7%E9%A2%98/image-20240925154456206.png" alt="image-20240925154456206"></p>
@@ -925,7 +925,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">161</span>
+          <span class="site-state-item-count">162</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
