@@ -37,10 +37,13 @@
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2025/03/10/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8B%E9%9D%99%E6%80%81%E6%97%B6%E5%BA%8F%E5%88%86%E6%9E%90/image-20250310202545365.png">
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2025/03/10/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8B%E9%9D%99%E6%80%81%E6%97%B6%E5%BA%8F%E5%88%86%E6%9E%90/image-20250310202657798.png">
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2025/03/10/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8B%E9%9D%99%E6%80%81%E6%97%B6%E5%BA%8F%E5%88%86%E6%9E%90/image-20250310203602542.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2025/03/10/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8B%E9%9D%99%E6%80%81%E6%97%B6%E5%BA%8F%E5%88%86%E6%9E%90/image-20250403192828771.png">
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2025/03/10/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8B%E9%9D%99%E6%80%81%E6%97%B6%E5%BA%8F%E5%88%86%E6%9E%90/image-20250310204153115.png">
 <meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2025/03/10/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8B%E9%9D%99%E6%80%81%E6%97%B6%E5%BA%8F%E5%88%86%E6%9E%90/image-20250310204524092.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2025/03/10/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8B%E9%9D%99%E6%80%81%E6%97%B6%E5%BA%8F%E5%88%86%E6%9E%90/image-20250403201132170.png">
+<meta property="og:image" content="http://xn--ssy-lq6e63gg6fuu2d.com/2025/03/10/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8B%E9%9D%99%E6%80%81%E6%97%B6%E5%BA%8F%E5%88%86%E6%9E%90/image-20250403170942068.png">
 <meta property="article:published_time" content="2025-03-10T02:07:12.000Z">
-<meta property="article:modified_time" content="2025-03-10T12:55:29.845Z">
+<meta property="article:modified_time" content="2025-04-03T14:59:26.899Z">
 <meta property="article:author" content="ssy">
 <meta property="article:tag" content="FPGA">
 <meta name="twitter:card" content="summary">
@@ -241,10 +244,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2025-03-10 10:07:12 / 修改时间：20:55:29" itemprop="dateCreated datePublished" datetime="2025-03-10T10:07:12+08:00">2025-03-10</time>
+              <time title="创建时间：2025-03-10 10:07:12" itemprop="dateCreated datePublished" datetime="2025-03-10T10:07:12+08:00">2025-03-10</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-04-03 22:59:26" itemprop="dateModified" datetime="2025-04-03T22:59:26+08:00">2025-04-03</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -275,6 +284,45 @@
       
         <p>本节以静态时序分析为切入口，重点理解建立时间、保持时间以及裕量分析。</p>
 <span id="more"></span>
+<h1 id="静态时序分析"><a href="#静态时序分析" class="headerlink" title="静态时序分析"></a>静态时序分析</h1><ul>
+<li><p>静态时序分析（static timing analysis，STA）是遍历电路存在的所有时序路径，根据给定工作条件（PVT：制造工艺Process、工作电压Voltage、温度Temperature）下的时序库.lib文件计算信号在这些路径上的传播延时，检查信号的建立和保持时间是否满足约束要求，根据最大路径延时和最小路径延时找出违背时序约束的错误</p>
+</li>
+<li><p>静态时序分析的优点：</p>
+<ul>
+<li><p>不需要给输入激励；</p>
+</li>
+<li><p>几乎能找到所有的关键路径（critical path）；</p>
+</li>
+<li><p>运行速度快</p>
+</li>
+</ul>
+</li>
+<li><p>静态时序分析的缺点：</p>
+<ul>
+<li><p>只适用同步电路；</p>
+</li>
+<li><p>无法验证电路的功能；</p>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>需要比较贵的工具支持；</li>
+</ul>
+<ul>
+<li>对于新工艺可能还需要建立一套特征库，建库的代价可能要几百万。</li>
+</ul>
+<ul>
+<li><p>静态时序分析的工具：</p>
+<ul>
+<li>Synopsys的prime time，</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>Cadence的Encounter Timing System等</li>
+</ul>
+<hr>
 <h1 id="寄存器延迟"><a href="#寄存器延迟" class="headerlink" title="寄存器延迟"></a>寄存器延迟</h1><ul>
 <li>建立时间$t_{setup}$：数据D需要提前clk上升沿多长时间到来，数据的采集才不会出错</li>
 <li>保持时间$t_{hold}$：时钟上升沿到来后，数据D还需要维持多长时间不变，才不会影响输出Q</li>
@@ -349,32 +397,53 @@
 </li>
 </ul>
 <hr>
-<h1 id="基本同步时钟约束路径"><a href="#基本同步时钟约束路径" class="headerlink" title="基本同步时钟约束路径"></a>基本同步时钟约束路径</h1><p><img src="/2025/03/10/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8B%E9%9D%99%E6%80%81%E6%97%B6%E5%BA%8F%E5%88%86%E6%9E%90/image-20250310202657798.png" alt="image-20250310202657798" style="zoom:80%;"></p>
+<h1 id="基本同步时钟约束路径"><a href="#基本同步时钟约束路径" class="headerlink" title="基本同步时钟约束路径"></a>基本同步时钟约束路径</h1><h2 id="1-内部寄存器到内部寄存器"><a href="#1-内部寄存器到内部寄存器" class="headerlink" title="1.内部寄存器到内部寄存器"></a>1.内部寄存器到内部寄存器</h2><p><img src="/2025/03/10/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8B%E9%9D%99%E6%80%81%E6%97%B6%E5%BA%8F%E5%88%86%E6%9E%90/image-20250310202657798.png" alt="image-20250310202657798" style="zoom:80%;"></p>
 <ul>
 <li><strong>建立时间裕量</strong>：$t_{setup_slack}=t_{cycle}-(t_{cq}+t_{logic})-t_{setup}+t_{clk_delay}-t_{jitter}&gt;0$</li>
 <li><strong>保持时间裕量</strong>：$t_{hold_slack}=t_{cq}+t_{logic}-t_{hold}-t_{clk_delay}-t_{jitter}&gt;0$</li>
 <li>手动设置clk时钟周期，如：<code>create_clock-period 10 [get_ports clk]</code></li>
-<li>EDA会根据我们给出的$t_{cycle}$，去计算建立保持时间裕量</li>
+<li><strong>EDA会根据我们给出的$t_{cycle}$，去计算建立保持时间裕量</strong></li>
 <li>EDA会优化寄存器到寄存器之间的组合逻辑2的延时$t_{logic}$和$t_{clk_delay}$，以满足建立保持时间裕量要求</li>
 </ul>
-<p><img src="/2025/03/10/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8B%E9%9D%99%E6%80%81%E6%97%B6%E5%BA%8F%E5%88%86%E6%9E%90/image-20250310203602542.png" alt="image-20250310203602542"></p>
+<h2 id="2-输入端口到内部寄存器"><a href="#2-输入端口到内部寄存器" class="headerlink" title="2.输入端口到内部寄存器"></a>2.输入端口到内部寄存器</h2><p><img src="/2025/03/10/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8B%E9%9D%99%E6%80%81%E6%97%B6%E5%BA%8F%E5%88%86%E6%9E%90/image-20250310203602542.png" alt="image-20250310203602542"></p>
 <ul>
-<li><strong>建立时间裕量</strong>：$t_{setup_slack}=t_{cycle}-t_{logic1}-t_{in_delay}-t_{setup}+t_{clk_delay}-t_{jitter}&gt;0$</li>
-<li><strong>保持时间裕量</strong>：$t_{hold_slack}=t_{logic1} + t_{in_delay}-t_{hold}-t_{clk_delay}-t_{jitter}&gt;0$</li>
-<li>需输入$t_{cycle},t_{in_delay}$</li>
-<li>EDA会优化组合逻辑1的延时$t_{logic1}$和$t_{clk_delay}$</li>
+<li><p><strong>建立时间裕量</strong>：$t_{setup_slack}=t_{cycle}-t_{logic1}-t_{in_delay}-t_{setup}+t_{clk_delay}-t_{jitter}&gt;0$</p>
+</li>
+<li><p><strong>保持时间裕量</strong>：$t_{hold_slack}=t_{logic1} + t_{in_delay}-t_{hold}-t_{clk_delay}-t_{jitter}&gt;0$</p>
+</li>
+<li><p><strong>需输入$t_{cycle},t_{in_delay}$（其中$t_{in_delay}$等于上一级电路寄存器的输出延迟（$t_{cq}$）加上一级组合逻辑的延时）</strong></p>
+</li>
+<li><p>EDA会优化组合逻辑1的延时$t_{logic1}$和$t_{clk_delay}$</p>
+<p><img src="/2025/03/10/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8B%E9%9D%99%E6%80%81%E6%97%B6%E5%BA%8F%E5%88%86%E6%9E%90/image-20250403192828771.png" alt="image-20250403192828771"></p>
+</li>
 </ul>
-<p><img src="/2025/03/10/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8B%E9%9D%99%E6%80%81%E6%97%B6%E5%BA%8F%E5%88%86%E6%9E%90/image-20250310204153115.png" alt="image-20250310204153115"></p>
+<h2 id="3-内部寄存器到输出端口"><a href="#3-内部寄存器到输出端口" class="headerlink" title="3.内部寄存器到输出端口"></a>3.内部寄存器到输出端口</h2><p><img src="/2025/03/10/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8B%E9%9D%99%E6%80%81%E6%97%B6%E5%BA%8F%E5%88%86%E6%9E%90/image-20250310204153115.png" alt="image-20250310204153115"></p>
 <ul>
 <li><strong>建立时间裕量</strong>：$t_{setup_slack}=t_{cycle}-t_{logic3}-t_{out_delay}-t_{setup}+t_{clk_delay}-t_{jitter}&gt;0$</li>
 <li><strong>保持时间裕量</strong>：$t_{hold_slack}=t_{logic3} + t_{out_delay}-t_{hold}-t_{clk_delay}-t_{jitter}&gt;0$</li>
-<li>需输入$t_{cycle},t_{out_delay}$</li>
+<li><strong>需输入$t_{cycle},t_{out_delay}$</strong></li>
 </ul>
-<p><img src="/2025/03/10/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8B%E9%9D%99%E6%80%81%E6%97%B6%E5%BA%8F%E5%88%86%E6%9E%90/image-20250310204524092.png" alt="image-20250310204524092"></p>
+<h2 id="4-输入端口到输出端口"><a href="#4-输入端口到输出端口" class="headerlink" title="4.输入端口到输出端口"></a>4.输入端口到输出端口</h2><p><img src="/2025/03/10/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8B%E9%9D%99%E6%80%81%E6%97%B6%E5%BA%8F%E5%88%86%E6%9E%90/image-20250310204524092.png" alt="image-20250310204524092"></p>
 <ul>
-<li><strong>建立时间裕量</strong>：$t_{setup_slack}=t_{cycle}-t_{logic4}-t_{in_delay}-t_{out_delay}-t_{setup}+t_{clk_delay}-t_{jitter}&gt;0$</li>
-<li><strong>保持时间裕量</strong>：$t_{hold_slack}=t_{logic4} + t_{out_delay}+t_{in_delay}-t_{hold}-t_{clk_delay}-t_{jitter}&gt;0$</li>
-<li>需输入$t_{cycle},t_{in_delay},t_{out_delay}$</li>
+<li><p><strong>建立时间裕量</strong>：$t_{setup_slack}=t_{cycle}-t_{logic4}-t_{in_delay}-t_{out_delay}-t_{setup}+t_{clk_delay}-t_{jitter}&gt;0$</p>
+</li>
+<li><p><strong>保持时间裕量</strong>：$t_{hold_slack}=t_{logic4} + t_{out_delay}+t_{in_delay}-t_{hold}-t_{clk_delay}-t_{jitter}&gt;0$</p>
+</li>
+<li><p><strong>需输入$t_{cycle},t_{in_delay},t_{out_delay}$</strong>（其中$t_{out_delay}$的含义是输出信号在后级模块中需要在时钟沿之前提前多长时间准备好）</p>
+<p><img src="/2025/03/10/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8B%E9%9D%99%E6%80%81%E6%97%B6%E5%BA%8F%E5%88%86%E6%9E%90/image-20250403201132170.png" alt="image-20250403201132170" style="zoom:50%;"></p>
+</li>
+</ul>
+<hr>
+<h1 id="最高时钟频率计算"><a href="#最高时钟频率计算" class="headerlink" title="最高时钟频率计算"></a>最高时钟频率计算</h1><ul>
+<li><p>只有建立时间裕量与系统工作时钟周期有关，当建立时间裕量为0，系统时钟周期会最小，对应频率最高，即：</p>
+<script type="math/tex; mode=display">
+t_{cycle}-(t_{cq}+t_{logic})-t_{setup}+t_{clk\_delay}  =0</script></li>
+<li><p>那么，时钟周期的最小值为：</p>
+<script type="math/tex; mode=display">
+t_{cyclemin}=t_{cq}+t_{logic}+t_{setup}-t_{clk\_delay}</script></li>
+<li><p>因此，系统工作时钟频率最大为：</p>
+<script type="math/tex; mode=display">
+F_{max} = \frac1{t_{cyclemin}} = \frac1{t_{cq}+t_{logic}+t_{setup}-t_{clk\_delay}}</script></li>
 </ul>
 <hr>
 <h1 id="时序违例的优化方法概述"><a href="#时序违例的优化方法概述" class="headerlink" title="时序违例的优化方法概述"></a>时序违例的优化方法概述</h1><ul>
@@ -382,7 +451,7 @@
 <li>前端设计方案：<ul>
 <li>关键路径上的逻辑并行：串行—&gt;并行</li>
 <li>卡诺图化简</li>
-<li>插入寄存器，形成流水线设计</li>
+<li><strong>插入寄存器，形成流水线设计</strong></li>
 </ul>
 </li>
 <li>后端设计方案：<ul>
@@ -392,9 +461,9 @@
 </ul>
 </li>
 <li>其他方案：<ul>
-<li>降低时钟频率，增大时钟周期（但频率不能变动太大）</li>
+<li><strong>降低时钟频率，增大时钟周期（但频率不能变动太大）</strong></li>
 <li>替换先进的工艺</li>
-<li>提高工作电压</li>
+<li><strong>提高工作电压，减小信号延迟</strong></li>
 </ul>
 </li>
 </ul>
@@ -402,12 +471,26 @@
 <li><strong>保持时间违例：</strong><ul>
 <li>在组合逻辑中插入延时buffer，使得$t_{logic}$变大</li>
 <li>调小正向时钟延时$t_{clk_delay}$</li>
+<li>提高温度，降低电压，增大信号延迟</li>
 </ul>
 </li>
+<li><strong>降低时钟频率无法解决保持时间为例的问题，毕竟保持时间公式里没有$t_{cycle}$，与$t_{cycle}$无关</strong></li>
+</ul>
+<hr>
+<h1 id="恢复与去除时间"><a href="#恢复与去除时间" class="headerlink" title="恢复与去除时间"></a>恢复与去除时间</h1><ul>
+<li><p>恢复时间（Recovery time）：异步信号在时钟来临之前shu’ru有效稳定不变的时间</p>
+</li>
+<li><p>去除时间（Removal time）：异步信号在时钟边沿之后输入信号有效且稳定不变的时间</p>
+<p><img src="/2025/03/10/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8B%E9%9D%99%E6%80%81%E6%97%B6%E5%BA%8F%E5%88%86%E6%9E%90/image-20250403170942068.png" alt="image-20250403170942068"></p>
+</li>
+</ul>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/gtkknd/article/details/52792141">恢复和去除时间（Recovery and Removal Time）_恢复时间和移除时间-CSDN博客</a></li>
 </ul>
 <hr>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
 <li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1re4y1n7hA/?spm_id_from=333.1007.top_right_bar_window_history.content.click&amp;vd_source=221b76534ba13cfad544149d75ce9b6c">新新新手Icer练习（六）：静态时序分析，深入了解建立时间、保持时间及其裕量分析_哔哩哔哩_bilibili</a>（可以说，我这篇笔记全文抄袭该视频的，只是自己打了一遍公式，加深了一下印象，记录一下。不得不感叹一句，这位博主讲得东西简单明了，优秀）</li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_39507748/article/details/114746186">输入延时（Input Delay）与输出延时（Output Delay）-CSDN博客</a></li>
 </ul>
 
     </div>
@@ -524,7 +607,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%84%E5%AD%98%E5%99%A8%E5%BB%B6%E8%BF%9F"><span class="nav-number">1.</span> <span class="nav-text">寄存器延迟</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B%E3%80%81%E4%BF%9D%E6%8C%81%E6%97%B6%E9%97%B4%E8%A3%95%E9%87%8F%E5%88%86%E6%9E%90"><span class="nav-number">2.</span> <span class="nav-text">建立、保持时间裕量分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E5%90%8C%E6%AD%A5%E6%97%B6%E9%92%9F%E7%BA%A6%E6%9D%9F%E8%B7%AF%E5%BE%84"><span class="nav-number">3.</span> <span class="nav-text">基本同步时钟约束路径</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%97%B6%E5%BA%8F%E8%BF%9D%E4%BE%8B%E7%9A%84%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95%E6%A6%82%E8%BF%B0"><span class="nav-number">4.</span> <span class="nav-text">时序违例的优化方法概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E6%97%B6%E5%BA%8F%E5%88%86%E6%9E%90"><span class="nav-number">1.</span> <span class="nav-text">静态时序分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%84%E5%AD%98%E5%99%A8%E5%BB%B6%E8%BF%9F"><span class="nav-number">2.</span> <span class="nav-text">寄存器延迟</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B%E3%80%81%E4%BF%9D%E6%8C%81%E6%97%B6%E9%97%B4%E8%A3%95%E9%87%8F%E5%88%86%E6%9E%90"><span class="nav-number">3.</span> <span class="nav-text">建立、保持时间裕量分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E5%90%8C%E6%AD%A5%E6%97%B6%E9%92%9F%E7%BA%A6%E6%9D%9F%E8%B7%AF%E5%BE%84"><span class="nav-number">4.</span> <span class="nav-text">基本同步时钟约束路径</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%86%85%E9%83%A8%E5%AF%84%E5%AD%98%E5%99%A8%E5%88%B0%E5%86%85%E9%83%A8%E5%AF%84%E5%AD%98%E5%99%A8"><span class="nav-number">4.1.</span> <span class="nav-text">1.内部寄存器到内部寄存器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E8%BE%93%E5%85%A5%E7%AB%AF%E5%8F%A3%E5%88%B0%E5%86%85%E9%83%A8%E5%AF%84%E5%AD%98%E5%99%A8"><span class="nav-number">4.2.</span> <span class="nav-text">2.输入端口到内部寄存器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%86%85%E9%83%A8%E5%AF%84%E5%AD%98%E5%99%A8%E5%88%B0%E8%BE%93%E5%87%BA%E7%AB%AF%E5%8F%A3"><span class="nav-number">4.3.</span> <span class="nav-text">3.内部寄存器到输出端口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E8%BE%93%E5%85%A5%E7%AB%AF%E5%8F%A3%E5%88%B0%E8%BE%93%E5%87%BA%E7%AB%AF%E5%8F%A3"><span class="nav-number">4.4.</span> <span class="nav-text">4.输入端口到输出端口</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%80%E9%AB%98%E6%97%B6%E9%92%9F%E9%A2%91%E7%8E%87%E8%AE%A1%E7%AE%97"><span class="nav-number">5.</span> <span class="nav-text">最高时钟频率计算</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%97%B6%E5%BA%8F%E8%BF%9D%E4%BE%8B%E7%9A%84%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95%E6%A6%82%E8%BF%B0"><span class="nav-number">6.</span> <span class="nav-text">时序违例的优化方法概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%81%A2%E5%A4%8D%E4%B8%8E%E5%8E%BB%E9%99%A4%E6%97%B6%E9%97%B4"><span class="nav-number">7.</span> <span class="nav-text">恢复与去除时间</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">8.</span> <span class="nav-text">Reference</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -540,7 +623,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">162</span>
+          <span class="site-state-item-count">163</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
