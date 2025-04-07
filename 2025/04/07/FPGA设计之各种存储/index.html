@@ -266,6 +266,7 @@
       
         <p>最近在为找工作提前做准备了，在系统的看一些基础知识，本节主要复习了常考的各类存储。</p>
 <span id="more"></span>
+
 <h1 id="易失性存储器-RAM-Random-Access-Memory"><a href="#易失性存储器-RAM-Random-Access-Memory" class="headerlink" title="易失性存储器-RAM(Random Access Memory)"></a>易失性存储器-RAM(Random Access Memory)</h1><ul>
 <li>易失性存储器是值存储器断电后，它保存的数据内容会丢失</li>
 <li>存储单元的内容可按需随意取出或存入，且存取的速度与存储单元的位置无关</li>
@@ -350,7 +351,8 @@
 <li><p>ROW/COLUMN：一整行Cell构成了：Row（行），一整列Cell构成了：Column（列）</p>
 </li>
 <li><p>CELL：一个最小存储单位为：Cell（细胞）</p>
-<p><img src="/2025/04/07/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%90%84%E7%A7%8D%E5%AD%98%E5%82%A8/image-20250407205523228.png" alt="image-20250407205523228" style="zoom:67%;"></p>
+<img src="/2025/04/07/FPGA%E8%AE%BE%E8%AE%A1%E4%B9%8B%E5%90%84%E7%A7%8D%E5%AD%98%E5%82%A8/image-20250407205523228.png" alt="image-20250407205523228" style="zoom:67%;">
+
 </li>
 </ul>
 <hr>
@@ -375,13 +377,17 @@
 </ul>
 <hr>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_50932296/article/details/126340229">RAM、 ROM 、SRAM 、DRAM 、SDRAM 、DDR （2、3、4）SDRAM辨析_ddr2是非易失性存储器吗-CSDN博客</a></li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/Vista7Malone/article/details/144636528">RAM、SRAM、DRAM、SDRAM、DDR、ROM、PROM、EPROM、EEPROM、NAND FLASH、NOR FLASH傻傻分不清楚？一文讲清它们的区别_dram和sram-CSDN博客</a></li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_41383847/article/details/113307952">ROM，RAM，Cache，Mask ROM，PROM，EPROM，EEPROM，Flash Memory有什么区别和联系【笔记】_ram,rom,prom,epromeeprom,flashmemory 的区别-CSDN博客</a></li>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_46022434/article/details/122753673">（一）DDR 基础介绍——（演进、构成、存储原理）-CSDN博客</a></li>
-<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/lpwsw/article/details/119252986#:~:text=一个soc或者PC上的ddr都是有很多颗ddr single chip组成的。 这么多颗ddr又组成了不同的层级。,这些层级从大到小分为： channel-&gt;rank-&gt;chip-&gt;bank-&gt;row-&gt;col-&gt;cell 其中channel-&gt;rank-&gt;chip是ddr颗粒 (就是单颗ddr，对应上图中黑色方块">DDR存储结构详解与内存层次分析-CSDN博客</a>之外的层级，bank-&gt;row-&gt;col-&gt;cell是ddr颗粒内部的层级。)</p>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_50932296/article/details/126340229">RAM、 ROM 、SRAM 、DRAM 、SDRAM 、DDR （2、3、4）SDRAM辨析_ddr2是非易失性存储器吗-CSDN博客</a></p>
 </li>
-<li><p><a target="_blank" rel="noopener" href="https://developer.aliyun.com/article/1594903#:~:text=1 内存保护：MMU 防止程序访问它们不应该访问的内存区域。 2 虚拟内存：MMU 允许计算机使用比实际物理内存更多的虚拟内存。,3 多任务：MMU 允许多个程序同时运行，每个程序都有自己的虚拟地址空间。 4 提高性能：通过将不经常使用的页面换出到磁盘，MMU 可以提高对经常使用的页面的访问速度。">什么是内存管理单元（MMU）？-阿里云开发者社区</a></p>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Vista7Malone/article/details/144636528">RAM、SRAM、DRAM、SDRAM、DDR、ROM、PROM、EPROM、EEPROM、NAND FLASH、NOR FLASH傻傻分不清楚？一文讲清它们的区别_dram和sram-CSDN博客</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_41383847/article/details/113307952">ROM，RAM，Cache，Mask ROM，PROM，EPROM，EEPROM，Flash Memory有什么区别和联系【笔记】_ram,rom,prom,epromeeprom,flashmemory 的区别-CSDN博客</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_46022434/article/details/122753673">（一）DDR 基础介绍——（演进、构成、存储原理）-CSDN博客</a></p>
+</li>
+<li><p>[DDR存储结构详解与内存层次分析-CSDN博客](<a target="_blank" rel="noopener" href="https://blog.csdn.net/lpwsw/article/details/119252986#:~:text=一个soc或者PC上的ddr都是有很多颗ddr">https://blog.csdn.net/lpwsw/article/details/119252986#:~:text=一个soc或者PC上的ddr都是有很多颗ddr</a> single chip组成的。 这么多颗ddr又组成了不同的层级。,这些层级从大到小分为： channel-&gt;rank-&gt;chip-&gt;bank-&gt;row-&gt;col-&gt;cell 其中channel-&gt;rank-&gt;chip是ddr颗粒 (就是单颗ddr，对应上图中黑色方块)之外的层级，bank-&gt;row-&gt;col-&gt;cell是ddr颗粒内部的层级。)</p>
+</li>
+<li><p>[什么是内存管理单元（MMU）？-阿里云开发者社区](<a target="_blank" rel="noopener" href="https://developer.aliyun.com/article/1594903#:~:text=1">https://developer.aliyun.com/article/1594903#:~:text=1</a> 内存保护：MMU 防止程序访问它们不应该访问的内存区域。 2 虚拟内存：MMU 允许计算机使用比实际物理内存更多的虚拟内存。,3 多任务：MMU 允许多个程序同时运行，每个程序都有自己的虚拟地址空间。 4 提高性能：通过将不经常使用的页面换出到磁盘，MMU 可以提高对经常使用的页面的访问速度。)</p>
 </li>
 </ul>
 

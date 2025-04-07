@@ -279,11 +279,14 @@
       
         <p>本节主要介绍了简单的TMDS连接，并以一个基础的彩条实验测试了RGB2DVI的使用。</p>
 <span id="more"></span>
-<h1 id="HDMI传输框架"><a href="#HDMI传输框架" class="headerlink" title="HDMI传输框架"></a>HDMI传输框架</h1><p><img src="/2025/01/03/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8BHDMI%E8%BE%93%E5%87%BA%E6%98%BE%E7%A4%BA/image-20250103194422602.png" alt="image-20250103194422602" style="zoom: 45%;"></p>
+
+<h1 id="HDMI传输框架"><a href="#HDMI传输框架" class="headerlink" title="HDMI传输框架"></a>HDMI传输框架</h1><img src="/2025/01/03/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8BHDMI%E8%BE%93%E5%87%BA%E6%98%BE%E7%A4%BA/image-20250103194422602.png" alt="image-20250103194422602" style="zoom: 45%;">
+
 <hr>
 <h1 id="TMDS连接"><a href="#TMDS连接" class="headerlink" title="TMDS连接"></a>TMDS连接</h1><ul>
 <li><p><strong>TMDS连接从逻辑功能上可以划分成两个阶段：编码和并串转换</strong>。在编码阶段，编码器将视频源中的像素数据、HDMI的音频/附加数据，以及行同步和场同步信号分别编码成10位的字符流。然后在并串转换阶段将上述的字符流转换成串行数据流，并将其从三个差分输出通道发送出去。</p>
-<p><img src="/2025/01/03/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8BHDMI%E8%BE%93%E5%87%BA%E6%98%BE%E7%A4%BA/image-20250103200332297.png" alt="image-20250103200332297" style="zoom:50%;"></p>
+<img src="/2025/01/03/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8BHDMI%E8%BE%93%E5%87%BA%E6%98%BE%E7%A4%BA/image-20250103200332297.png" alt="image-20250103200332297" style="zoom:50%;">
+
 </li>
 </ul>
 <h2 id="1-TMDS编码"><a href="#1-TMDS编码" class="headerlink" title="1.TMDS编码"></a>1.TMDS编码</h2><ul>
@@ -297,28 +300,30 @@
 </ul>
 </li>
 <li><p>TMDS的编码框图有B、G、R三个通道，这三个通道对应24bit的像素数据，分别为8比特蓝色像素、8比特绿色像素、8比特红色像素（除了要对B、G、R这三个通道的8比特像素数据进行编码，还需要对行、场同步信号进行编码，<strong>行、场同步是接到蓝色数据通道的D[1:0]的</strong>，行、场同步信号的编码不会经过一系列的异或、同或等逻辑运算)，而是<strong>直接采用查找表的形式</strong>去实现。）</p>
-<p><img src="/2025/01/03/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8BHDMI%E8%BE%93%E5%87%BA%E6%98%BE%E7%A4%BA/image-20250103193324646.png" alt="image-20250103193324646" style="zoom: 40%;"></p>
+<img src="/2025/01/03/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8BHDMI%E8%BE%93%E5%87%BA%E6%98%BE%E7%A4%BA/image-20250103193324646.png" alt="image-20250103193324646" style="zoom: 40%;">
 </li>
 <li><p>每个数据传输通道还接了一个DE信号，<strong>DE信号就是像素数据使能信号。当DE信号拉高时，对每个通道的8比特像素数据进行编码，当DE信号拉低时，在蓝色通道中去对行、场同步信号进行编码</strong>，而绿色通道和红色通道一般接控制信号，但在本文没有使用到控制信号，所以绿色通道和红色通道的D[1:0]都给0</p>
 </li>
 <li><p><strong>TMDS编码流程</strong></p>
-<p><img src="/2025/01/03/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8BHDMI%E8%BE%93%E5%87%BA%E6%98%BE%E7%A4%BA/image-20250103193920688.png" alt="image-20250103193920688" style="zoom:50%;"></p>
+<img src="/2025/01/03/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8BHDMI%E8%BE%93%E5%87%BA%E6%98%BE%E7%A4%BA/image-20250103193920688.png" alt="image-20250103193920688" style="zoom:50%;">
+
 </li>
 </ul>
 <h2 id="2-TMDS并转串"><a href="#2-TMDS并转串" class="headerlink" title="2.TMDS并转串"></a>2.TMDS并转串</h2><ul>
 <li><p>整个系统需要两个输入时钟，一个是视频的像素时钟 div_clk，另外一个时钟 ser_clk 的频率是像素时钟的五倍。并串转换过程的实现的是 10:1 的转换率，理论上转换器需要一个 10 倍像素频率的时钟。这里我们只需要一个 5 倍的时钟频率，这是<strong>因为 OSERDESE2 模块可以实现 DDR 的功能，即它在五倍时钟频率的基础上又实现了双倍数据速率</strong>。</p>
 </li>
 <li><p><strong>DDR（双倍数据速率）概念</strong>： DDR技术的核心是利用时钟的上升沿和下降沿来传输数据。换句话说，数据在每个时钟周期的两个边缘（上升沿和下降沿）上都会被采样和传输，从而实现每个时钟周期传输两倍的数据量。</p>
-<p><img src="/2025/01/03/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8BHDMI%E8%BE%93%E5%87%BA%E6%98%BE%E7%A4%BA/image-20250103201059505.png" alt="image-20250103201059505" style="zoom:50%;"></p>
+<img src="/2025/01/03/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8BHDMI%E8%BE%93%E5%87%BA%E6%98%BE%E7%A4%BA/image-20250103201059505.png" alt="image-20250103201059505" style="zoom:50%;">
+
 </li>
 </ul>
 <hr>
 <h1 id="基于RGB2DVI-IP核的HDMI彩条实验"><a href="#基于RGB2DVI-IP核的HDMI彩条实验" class="headerlink" title="基于RGB2DVI IP核的HDMI彩条实验"></a>基于RGB2DVI IP核的HDMI彩条实验</h1><ul>
 <li><p>RGB2DVI IP核是将RGB数据转化为TMDS信号，这个IP核实际上就是实现了上述TMDS连接对应的功能</p>
-<p><img src="/2025/01/03/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8BHDMI%E8%BE%93%E5%87%BA%E6%98%BE%E7%A4%BA/image-20250103195615717.png" alt="image-20250103195615717" style="zoom:50%;"></p>
+<img src="/2025/01/03/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8BHDMI%E8%BE%93%E5%87%BA%E6%98%BE%E7%A4%BA/image-20250103195615717.png" alt="image-20250103195615717" style="zoom:50%;">
 </li>
 <li><p>参考Reference1，这里就不列举了，直接粘贴结果</p>
-<p><img src="/2025/01/03/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8BHDMI%E8%BE%93%E5%87%BA%E6%98%BE%E7%A4%BA/493c59788fbf037a99075ff4175d82d.jpg" alt="493c59788fbf037a99075ff4175d82d" style="zoom: 15%;"></p>
+<img src="/2025/01/03/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8BHDMI%E8%BE%93%E5%87%BA%E6%98%BE%E7%A4%BA/493c59788fbf037a99075ff4175d82d.jpg" alt="493c59788fbf037a99075ff4175d82d" style="zoom: 15%;">
 </li>
 <li><p>PS：不知道是板子原因还是什么原因，得接网线才能会不闪屏，不然会闪屏</p>
 </li>

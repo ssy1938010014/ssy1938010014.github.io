@@ -285,6 +285,7 @@
       
         <p>本节主要介绍了FPGA图像处理中常用的图像锐化算法，包括Robert锐化算法、Sobel锐化算法、Laplacian锐化算法，以及它们的MATLAB与FPGA实现。</p>
 <span id="more"></span>
+
 <h1 id="图像锐化的基本概念"><a href="#图像锐化的基本概念" class="headerlink" title="图像锐化的基本概念"></a>图像锐化的基本概念</h1><ul>
 <li>在增强图像之前一般会先对图像进行平滑处理以减少或消除噪声， 图像的能量主要集中在低频部分， 而噪声和图像边缘信息的能量主要集中在高频部分。 </li>
 <li>因此， 平滑处理会使原始图像的边缘和轮廓变得模糊。 </li>
@@ -299,25 +300,10 @@
 </ul>
 <hr>
 <h1 id="Robert锐化算法"><a href="#Robert锐化算法" class="headerlink" title="Robert锐化算法"></a>Robert锐化算法</h1><ul>
-<li><p>Robert算子是一种<strong>利用局部差分寻找边缘算子</strong>的方法， 即计算对角方向相邻的两个像素之差。 利用Robert算子可以计算两个对角方向的梯度 $G_x$和$G_y$</p>
-<script type="math/tex; mode=display">
-G_x = \begin{bmatrix}
-1 & 0 \\
-0 & -1 \\
-\end{bmatrix}\times \begin{bmatrix}
-I_{11} & I_{12} \\
-I_{21} & I_{22} \\
-\end{bmatrix}\quad 
-G_x = \begin{bmatrix}
-0 & 1 \\
--1 & 0 \\
-\end{bmatrix}\times \begin{bmatrix}
-I_{11} & I_{12} \\
-I_{21} & I_{22} \\
-\end{bmatrix}\quad</script></li>
-<li><p>将两个对角方向的梯度$G_x$和$G_y$合并后取模得到最终的梯度$G$</p>
-<script type="math/tex; mode=display">
-G = \sqrt{G_x^2 + G_y^2}=\sqrt{(I_{11}-I_{22})^2+(I_{12}-I_{21})^2}</script></li>
+<li><p>Robert算子是一种<strong>利用局部差分寻找边缘算子</strong>的方法， 即计算对角方向相邻的两个像素之差。 利用Robert算子可以计算两个对角方向的梯度 $G_x$和$G_y$<br>$$<br>G_x = \begin{bmatrix}<br>1 &amp; 0 \<br>0 &amp; -1 \<br>\end{bmatrix}\times \begin{bmatrix}<br>I_{11} &amp; I_{12} \<br>I_{21} &amp; I_{22} \<br>\end{bmatrix}\quad<br>G_x = \begin{bmatrix}<br>0 &amp; 1 \<br>-1 &amp; 0 \<br>\end{bmatrix}\times \begin{bmatrix}<br>I_{11} &amp; I_{12} \<br>I_{21} &amp; I_{22} \<br>\end{bmatrix}\quad<br>$$</p>
+</li>
+<li><p>将两个对角方向的梯度$G_x$和$G_y$合并后取模得到最终的梯度$G$<br>$$<br>G = \sqrt{G_x^2 + G_y^2}=\sqrt{(I_{11}-I_{22})^2+(I_{12}-I_{21})^2}<br>$$</p>
+</li>
 <li><p><strong>$G$表示处理后的梯度，作为边缘检测的结果，该结果加上原图，即为锐化结果</strong></p>
 </li>
 </ul>
@@ -331,34 +317,20 @@ G = \sqrt{G_x^2 + G_y^2}=\sqrt{(I_{11}-I_{22})^2+(I_{12}-I_{21})^2}</script></li
 <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">clear all; close all; clc;</span><br><span class="line"></span><br><span class="line"><span class="comment">% -------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment">% Read PC image to Matlab</span></span><br><span class="line">IMG1 = imread(<span class="string">&#x27;../../0_images/Lenna.jpg&#x27;</span>);    <span class="comment">% 读取jpg图像</span></span><br><span class="line">IMG1 = rgb2gray(IMG1);</span><br><span class="line">h = <span class="built_in">size</span>(IMG1,<span class="number">1</span>);                             <span class="comment">% 读取图像高度</span></span><br><span class="line">w = <span class="built_in">size</span>(IMG1,<span class="number">2</span>);                             <span class="comment">% 读取图像宽度</span></span><br><span class="line">subplot(<span class="number">131</span>);imshow(IMG1);title(<span class="string">&#x27;【1】原图&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">% -------------------------------------------------------------------------</span></span><br><span class="line">IMG2 = Robert_Edge_Detector(IMG1);</span><br><span class="line">subplot(<span class="number">132</span>);imshow(IMG2);title(<span class="string">&#x27;【2】Robert边缘检测结果&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">% -------------------------------------------------------------------------</span></span><br><span class="line">IMG3 = IMG1 + IMG2;</span><br><span class="line">subplot(<span class="number">133</span>);imshow(IMG3);title(<span class="string">&#x27;【3】Robert锐化图像&#x27;</span>);</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>将Robert边缘检测结果与原始图像叠加得到Robert锐化的图像</strong></p>
-<p><img src="/2024/11/27/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E5%B8%B8%E7%94%A8%E5%9B%BE%E5%83%8F%E9%94%90%E5%8C%96%E7%AE%97%E6%B3%95/image-20241128103145651.png" alt="image-20241128103145651" style="zoom:33%;"></p>
+<img src="/2024/11/27/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E5%B8%B8%E7%94%A8%E5%9B%BE%E5%83%8F%E9%94%90%E5%8C%96%E7%AE%97%E6%B3%95/image-20241128103145651.png" alt="image-20241128103145651" style="zoom:33%;">
+
 </li>
 </ul>
 <h2 id="2-Robert锐化的FPGA实现"><a href="#2-Robert锐化的FPGA实现" class="headerlink" title="2.Robert锐化的FPGA实现"></a>2.Robert锐化的FPGA实现</h2><ul>
 <li><p>为了能够复用之前的$3\times 3$窗口生成模块，需从$3\times 3$窗口中获取$2\times 2$窗口</p>
-<p><img src="/2024/11/27/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E5%B8%B8%E7%94%A8%E5%9B%BE%E5%83%8F%E9%94%90%E5%8C%96%E7%AE%97%E6%B3%95/image-20241128150722906.png" alt="image-20241128150722906" style="zoom:67%;"></p>
+<img src="/2024/11/27/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E5%B8%B8%E7%94%A8%E5%9B%BE%E5%83%8F%E9%94%90%E5%8C%96%E7%AE%97%E6%B3%95/image-20241128150722906.png" alt="image-20241128150722906" style="zoom:67%;">
 </li>
 <li><p>获取$2\times 2$窗口后，就可以开始进行Robert锐化处理了。Robert锐化处理分为以下几步</p>
 <ol>
-<li><p>分别计算两个对角方向的梯度$Gx_data$和$Gy_data$</p>
-<script type="math/tex; mode=display">
-Gx\_data = \begin{bmatrix}
-matrix\_p22 & matrix\_p23 \\
-matrix\_p32 & matrix\_p33 \\
-\end{bmatrix}\times \begin{bmatrix}
-0 & 1 \\
--1 & 0 \\
-\end{bmatrix} = matrix\_p23 - matrix\_p32\\
-Gy\_data = \begin{bmatrix}
-matrix\_p22 & matrix\_p23 \\
-matrix\_p32 & matrix\_p33 \\
-\end{bmatrix}\times \begin{bmatrix}
-1 & 0 \\
-0 & -1 \\
-\end{bmatrix} = matrix\_p22 - matrix\_p33</script></li>
-<li><p>将两个对角方向的梯度$Gx_data$和$Gy_data$合并取模得到最终的梯度$G_data$，即Robert边缘检测结果</p>
-<script type="math/tex; mode=display">
-G\_data = \sqrt{(Gx\_data)^2+(Gy\_data)^2}</script></li>
+<li><p>分别计算两个对角方向的梯度$Gx_data$和$Gy_data$<br>$$<br>Gx_data = \begin{bmatrix}<br>matrix_p22 &amp; matrix_p23 \<br>matrix_p32 &amp; matrix_p33 \<br>\end{bmatrix}\times \begin{bmatrix}<br>0 &amp; 1 \<br>-1 &amp; 0 \<br>\end{bmatrix} = matrix_p23 - matrix_p32\<br>Gy_data = \begin{bmatrix}<br>matrix_p22 &amp; matrix_p23 \<br>matrix_p32 &amp; matrix_p33 \<br>\end{bmatrix}\times \begin{bmatrix}<br>1 &amp; 0 \<br>0 &amp; -1 \<br>\end{bmatrix} = matrix_p22 - matrix_p33<br>$$</p>
+</li>
+<li><p>将两个对角方向的梯度$Gx_data$和$Gy_data$合并取模得到最终的梯度$G_data$，即Robert边缘检测结果<br>$$<br>G_data = \sqrt{(Gx_data)^2+(Gy_data)^2}<br>$$</p>
+</li>
 <li><p>将梯度$G_data$与原始图像相加得到Robert锐化图像</p>
 </li>
 <li><p>还需判断$2\times 2$窗口左上角像素是否位于图像边界，如果位于图像边界，则用$2\times 2$窗口左上角的像素作为Robert锐化结果</p>
@@ -366,7 +338,7 @@ G\_data = \sqrt{(Gx\_data)^2+(Gy\_data)^2}</script></li>
 <li><p><strong>Robert锐化图像的灰度值可能大于255，为了防止数据溢出，如果灰度值大于255，则令其等于255</strong></p>
 </li>
 </ol>
-<p><img src="/2024/11/27/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E5%B8%B8%E7%94%A8%E5%9B%BE%E5%83%8F%E9%94%90%E5%8C%96%E7%AE%97%E6%B3%95/image-20241128152142268.png" alt="image-20241128152142268" style="zoom: 80%;"></p>
+<img src="/2024/11/27/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E5%B8%B8%E7%94%A8%E5%9B%BE%E5%83%8F%E9%94%90%E5%8C%96%E7%AE%97%E6%B3%95/image-20241128152142268.png" alt="image-20241128152142268" style="zoom: 80%;">
 </li>
 <li><p>仿真结果：</p>
 <p><img src="/2024/11/27/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E5%B8%B8%E7%94%A8%E5%9B%BE%E5%83%8F%E9%94%90%E5%8C%96%E7%AE%97%E6%B3%95/image-20241128154441688.png" alt="image-20241128154441688"></p>
@@ -378,20 +350,8 @@ G\_data = \sqrt{(Gx\_data)^2+(Gy\_data)^2}</script></li>
 </li>
 <li><p><strong>像素平均相当于对图像进行低通滤波，对噪声相对不敏感，具有抑制噪声的作用。 但Sobel算子对边缘的定位不如Robert算子。</strong> </p>
 </li>
-<li><p><strong>3×3窗口的Sobel边缘检测2个方向的算子（ I 为原图）  :</strong></p>
-<script type="math/tex; mode=display">
-G_x = \begin{bmatrix}
--1 & 0 & 1\\
--2 & 0 & 2\\
--1 & 0 & 1\\
-\end{bmatrix}\times I\quad 
-G_y = \begin{bmatrix}
--1 & -2 & -1\\
-0 & 0 &0\\
-1 & 2 & 1\\
-\end{bmatrix}\times I\
-\\
-G = \sqrt{G_x^2 + G_y^2}</script><ul>
+<li><p><strong>3×3窗口的Sobel边缘检测2个方向的算子（ I 为原图）  :</strong><br>$$<br>G_x = \begin{bmatrix}<br>-1 &amp; 0 &amp; 1\<br>-2 &amp; 0 &amp; 2\<br>-1 &amp; 0 &amp; 1\<br>\end{bmatrix}\times I\quad<br>G_y = \begin{bmatrix}<br>-1 &amp; -2 &amp; -1\<br>0 &amp; 0 &amp;0\<br>1 &amp; 2 &amp; 1\<br>\end{bmatrix}\times I<br>\<br>G = \sqrt{G_x^2 + G_y^2}<br>$$</p>
+<ul>
 <li>其中的$\times$代表点乘后再相加</li>
 </ul>
 </li>
@@ -415,11 +375,10 @@ G = \sqrt{G_x^2 + G_y^2}</script><ul>
 <li><p>Sobel锐化处理分为以下几步：</p>
 <ol>
 <li><p>分别计算水平方向梯度$Gx_data$和垂直方向梯度$Gy_data$</p>
-<p><img src="/2024/11/27/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E5%B8%B8%E7%94%A8%E5%9B%BE%E5%83%8F%E9%94%90%E5%8C%96%E7%AE%97%E6%B3%95/image-20241128174706327.png" alt="image-20241128174706327" style="zoom: 67%;"></p>
+<img src="/2024/11/27/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E5%B8%B8%E7%94%A8%E5%9B%BE%E5%83%8F%E9%94%90%E5%8C%96%E7%AE%97%E6%B3%95/image-20241128174706327.png" alt="image-20241128174706327" style="zoom: 67%;">
 </li>
-<li><p>将水平方向梯度$Gx_data$和垂直方向梯度$Gy_data$合并取模得到最终的梯度$G_data$，即Sobel边缘检测的结果</p>
-<script type="math/tex; mode=display">
-G\_data = \sqrt{Gx\_data^2 + Gy\_data^2}</script></li>
+<li><p>将水平方向梯度$Gx_data$和垂直方向梯度$Gy_data$合并取模得到最终的梯度$G_data$，即Sobel边缘检测的结果<br>$$<br>G_data = \sqrt{Gx_data^2 + Gy_data^2}<br>$$</p>
+</li>
 <li><p>将梯度$G_data$与原始图像叠加得到Sobel锐化的图像</p>
 </li>
 <li><p>还需判断$3\times 3$窗口的中心像素是否位于图像边界，如果位于图像边界，则用$3\times 3$窗口的中心像素作为Sobel锐化的结果</p>
@@ -427,7 +386,7 @@ G\_data = \sqrt{Gx\_data^2 + Gy\_data^2}</script></li>
 <li><p>Sobel锐化图像的灰度值可能大于255，为了防止数据溢出，如果灰度值大于255，则令其等于255</p>
 </li>
 </ol>
-<p><img src="/2024/11/27/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E5%B8%B8%E7%94%A8%E5%9B%BE%E5%83%8F%E9%94%90%E5%8C%96%E7%AE%97%E6%B3%95/image-20241128175137606.png" alt="image-20241128175137606" style="zoom:80%;"></p>
+<img src="/2024/11/27/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E5%B8%B8%E7%94%A8%E5%9B%BE%E5%83%8F%E9%94%90%E5%8C%96%E7%AE%97%E6%B3%95/image-20241128175137606.png" alt="image-20241128175137606" style="zoom:80%;">
 </li>
 <li><p>仿真结果：</p>
 <p><img src="/2024/11/27/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E5%B8%B8%E7%94%A8%E5%9B%BE%E5%83%8F%E9%94%90%E5%8C%96%E7%AE%97%E6%B3%95/image-20241128175844001.png" alt="image-20241128175844001"></p>
@@ -438,7 +397,8 @@ G\_data = \sqrt{Gx\_data^2 + Gy\_data^2}</script></li>
 <li><p>Laplacian算子是各向同性、 具有旋转不变性的微分算子， 满足不同走向的图像边缘的锐化要求。  </p>
 </li>
 <li><p>如果将Laplacian算子写成模板形式，通过将图像与模板进行卷积运算可获得图像边缘的检测结果。  </p>
-<p><img src="/2024/11/27/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E5%B8%B8%E7%94%A8%E5%9B%BE%E5%83%8F%E9%94%90%E5%8C%96%E7%AE%97%E6%B3%95/image-20241128193523457.png" alt="image-20241128193523457" style="zoom:50%;"></p>
+<img src="/2024/11/27/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E5%B8%B8%E7%94%A8%E5%9B%BE%E5%83%8F%E9%94%90%E5%8C%96%E7%AE%97%E6%B3%95/image-20241128193523457.png" alt="image-20241128193523457" style="zoom:50%;">
+
 </li>
 </ul>
 <h2 id="1-Laplacian锐化的MATLAB实现"><a href="#1-Laplacian锐化的MATLAB实现" class="headerlink" title="1.Laplacian锐化的MATLAB实现"></a>1.Laplacian锐化的MATLAB实现</h2><ul>
@@ -449,7 +409,7 @@ G\_data = \sqrt{Gx\_data^2 + Gy\_data^2}</script></li>
 <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">clear all; close all; clc;</span><br><span class="line"></span><br><span class="line"><span class="comment">% -------------------------------------------------------------------------</span></span><br><span class="line"><span class="comment">% Read PC image to Matlab</span></span><br><span class="line">IMG1 = imread(<span class="string">&#x27;../../0_images/Lenna.jpg&#x27;</span>);    <span class="comment">% 读取jpg图像</span></span><br><span class="line">IMG1 = rgb2gray(IMG1);</span><br><span class="line">h = <span class="built_in">size</span>(IMG1,<span class="number">1</span>);                             <span class="comment">% 读取图像高度</span></span><br><span class="line">w = <span class="built_in">size</span>(IMG1,<span class="number">2</span>);                             <span class="comment">% 读取图像宽度</span></span><br><span class="line">subplot(<span class="number">131</span>);imshow(IMG1);title(<span class="string">&#x27;【1】原图&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">% -------------------------------------------------------------------------</span></span><br><span class="line">IMG2 = Laplacian_Edge_Detector(IMG1);</span><br><span class="line">subplot(<span class="number">132</span>);imshow(uint8(<span class="built_in">abs</span>(IMG2)));title(<span class="string">&#x27;【2】Laplacian边缘检测结果&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">% -------------------------------------------------------------------------</span></span><br><span class="line">IMG3 = uint8(double(IMG1) + IMG2);</span><br><span class="line">subplot(<span class="number">133</span>);imshow(IMG3);title(<span class="string">&#x27;【3】Laplacian锐化图像&#x27;</span>);</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>调用Laplacian边缘检测函数，将边缘检测结果与原始图像叠加得到Laplacian锐化图像</strong></p>
-<p><img src="/2024/11/27/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E5%B8%B8%E7%94%A8%E5%9B%BE%E5%83%8F%E9%94%90%E5%8C%96%E7%AE%97%E6%B3%95/image-20241128193808677.png" alt="image-20241128193808677" style="zoom:33%;"></p>
+<img src="/2024/11/27/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E5%B8%B8%E7%94%A8%E5%9B%BE%E5%83%8F%E9%94%90%E5%8C%96%E7%AE%97%E6%B3%95/image-20241128193808677.png" alt="image-20241128193808677" style="zoom:33%;">
 </li>
 <li><p><strong>利用Laplacian算子可以获得比较细致的边界，反映了边界的许多细节信息，但反映的边界信息不是很清晰，有时会丢失一部分边缘的方向信息，造成不连续的检测边缘</strong>  </p>
 </li>
@@ -459,7 +419,8 @@ G\_data = \sqrt{Gx\_data^2 + Gy\_data^2}</script></li>
 <ol>
 <li><p>将$3\times 3$窗口的像素与Laplacian算子进行卷积运算得到边缘检测结果，再与原始图像叠加得到Laplacian锐化的图像（<strong>叠加后公式可以化简为直接对滑窗进行加减运算</strong>）</p>
 <figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//----------------------------------------------------------------------</span></span><br><span class="line"><span class="keyword">reg</span>             [<span class="number">10</span>:<span class="number">0</span>]          minute_data;</span><br><span class="line"><span class="keyword">reg</span>             [ <span class="number">9</span>:<span class="number">0</span>]          minus_data;</span><br><span class="line"></span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> clk)</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">    minute_data &lt;= &#123;matrix_p22,<span class="number">2&#x27;b0</span>&#125; + matrix_p22;</span><br><span class="line">    minus_data  &lt;= matrix_p12 + matrix_p21 + matrix_p23 + matrix_p32;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//----------------------------------------------------------------------</span></span><br><span class="line"><span class="keyword">reg</span> <span class="keyword">signed</span>      [<span class="number">11</span>:<span class="number">0</span>]          pixel_data1;</span><br><span class="line"></span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> clk)</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">    pixel_data1 &lt;= <span class="built_in">$signed</span>(&#123;<span class="number">1&#x27;b0</span>,minute_data&#125;) - <span class="built_in">$signed</span>(&#123;<span class="number">1&#x27;b0</span>,minus_data&#125;);</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-<p><img src="/2024/11/27/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E5%B8%B8%E7%94%A8%E5%9B%BE%E5%83%8F%E9%94%90%E5%8C%96%E7%AE%97%E6%B3%95/image-20241128194255275.png" alt="image-20241128194255275" style="zoom:80%;"></p>
+
+<img src="/2024/11/27/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E5%B8%B8%E7%94%A8%E5%9B%BE%E5%83%8F%E9%94%90%E5%8C%96%E7%AE%97%E6%B3%95/image-20241128194255275.png" alt="image-20241128194255275" style="zoom:80%;">
 </li>
 <li><p><strong>Lapalcian锐化图像的灰度值可能小于0或大于255，为了防止数据溢出，如果灰度值小于0，则令其等于0；如果灰度值大于255，则令其等于255</strong>（这里判断方法的写法值得一学）</p>
 <figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">reg</span>             [<span class="number">7</span>:<span class="number">0</span>]           pixel_data2;</span><br><span class="line"></span><br><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> clk)</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">if</span>(pixel_data1[<span class="number">11</span>] == <span class="number">1&#x27;b1</span>)</span><br><span class="line">        pixel_data2 &lt;= <span class="number">8&#x27;b0</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(pixel_data1[<span class="number">10</span>:<span class="number">8</span>] != <span class="number">3&#x27;b0</span>)</span><br><span class="line">        pixel_data2 &lt;= <span class="number">8&#x27;d255</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        pixel_data2 &lt;= pixel_data1[<span class="number">7</span>:<span class="number">0</span>];</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
@@ -467,7 +428,7 @@ G\_data = \sqrt{Gx\_data^2 + Gy\_data^2}</script></li>
 <li><p>判断3×3窗口的中心像素是否位于图像边界， 如果位于图像边界， 则用3×3窗口的中心像素作为Laplacian锐化处理的结果</p>
 </li>
 </ol>
-<p><img src="/2024/11/27/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E5%B8%B8%E7%94%A8%E5%9B%BE%E5%83%8F%E9%94%90%E5%8C%96%E7%AE%97%E6%B3%95/image-20241128194856424.png" alt="image-20241128194856424" style="zoom:80%;"></p>
+<img src="/2024/11/27/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E5%B8%B8%E7%94%A8%E5%9B%BE%E5%83%8F%E9%94%90%E5%8C%96%E7%AE%97%E6%B3%95/image-20241128194856424.png" alt="image-20241128194856424" style="zoom:80%;">
 </li>
 <li><p>仿真结果：</p>
 <p><img src="/2024/11/27/FPGA%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E4%B9%8B%E5%B8%B8%E7%94%A8%E5%9B%BE%E5%83%8F%E9%94%90%E5%8C%96%E7%AE%97%E6%B3%95/image-20241128195508801.png" alt="image-20241128195508801"></p>

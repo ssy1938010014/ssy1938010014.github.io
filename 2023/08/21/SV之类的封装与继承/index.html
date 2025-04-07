@@ -272,6 +272,7 @@
       
         <p>本节主要介绍了SystemVerilog中类的封装与继承的基本内容、虚方法以及包的使用。</p>
 <span id="more"></span>
+
 <h1 id="类的概述"><a href="#类的概述" class="headerlink" title="类的概述"></a>类的概述</h1><ul>
 <li><strong>类的三要素：封装、继承、多态（虚方法）</strong></li>
 <li>类是一种可以包含数据和方法的类型</li>
@@ -290,6 +291,7 @@
 </li>
 <li><p>如果<strong>没有句柄指向个对象，</strong> Systemverilog将释放该对象的内存空间（<strong>对象的销毁</strong>）</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Transaction t1, t2; //声明两个句柄</span><br><span class="line">t1 = new();//创建一个对象，并将t1指向该对象</span><br><span class="line">t2 = new();//创建一个对象，并将t2指向该对象</span><br><span class="line">t1 = t2;   //将t2的值赋予t1,这时t1和t2指向同一对象，t1之前指向的对象被释放</span><br><span class="line">t1.display();//调用对象的成员方法</span><br><span class="line">t1.addr = 32&#x27;h42;//给对象成员赋值</span><br></pre></td></tr></table></figure>
+
 </li>
 </ul>
 <h2 id="2-静态变量和静态方法"><a href="#2-静态变量和静态方法" class="headerlink" title="2.静态变量和静态方法"></a>2.静态变量和静态方法</h2><ul>
@@ -308,6 +310,7 @@
 </li>
 <li><p>如果访问类型为<code>local</code>，那么只有该类可以访问成员，<strong>子类和外部均不可访问</strong></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">class clock;</span><br><span class="line">  local bit is_summer = 0;</span><br><span class="line">  local bit nclock = 6;</span><br><span class="line">  function int get_clock();</span><br><span class="line">  ...</span><br><span class="line">  endfunction</span><br><span class="line">endclass</span><br><span class="line"> </span><br><span class="line">clock ck;</span><br><span class="line">initial begin</span><br><span class="line">  ck = new();</span><br><span class="line">  $display(&quot;now time is %0d&quot;,ck.get_clock);//成功访问</span><br><span class="line">  ck.set_summer(1);</span><br><span class="line">  $display(&quot;now time is %0d&quot;,ck.nclock); //报错，外部句柄不能访问local变量</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
 </li>
 </ul>
 <h2 id="4-this"><a href="#4-this" class="headerlink" title="4.this"></a>4.this</h2><ul>
@@ -317,6 +320,7 @@
 </li>
 <li><p>this可以明确所指向变量的作用域</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">class Demo;</span><br><span class="line">	integer x;</span><br><span class="line">	function new (integer x);</span><br><span class="line">		this.x = x; //说明这时this.x代表成员变量integer x</span><br><span class="line">	endfunction</span><br><span class="line">endclass</span><br></pre></td></tr></table></figure>
+
 </li>
 </ul>
 <h2 id="5-浅拷贝与深拷贝"><a href="#5-浅拷贝与深拷贝" class="headerlink" title="5.浅拷贝与深拷贝"></a>5.浅拷贝与深拷贝</h2><ul>
@@ -325,6 +329,7 @@
 </li>
 <li><p>深拷贝：<strong>当使用深复制时，所有的变量都会被复制，包括下层的对象</strong></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">b2.copy(b1);       //深复制，其中一个改变，不会影响另外一个</span><br></pre></td></tr></table></figure>
+
 </li>
 </ul>
 <hr>
@@ -362,8 +367,8 @@
 </ul>
 <hr>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_59670134/article/details/119190972">SV基础知识3—-Class类和Package_sv中类和包的区别_持续学习_ing的博客-CSDN博客</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1k7411H7Jo?p=21&amp;vd_source=221b76534ba13cfad544149d75ce9b6c">SV系统验证 第七周 类的继承-2_哔哩哔哩_bilibili</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_59670134/article/details/119190972">SV基础知识3—Class类和Package_sv中类和包的区别_持续学习_ing的博客-CSDN博客</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1k7411H7Jo?p=21&vd_source=221b76534ba13cfad544149d75ce9b6c">SV系统验证 第七周 类的继承-2_哔哩哔哩_bilibili</a></li>
 <li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_41467882/article/details/121704198">System Verilog——虚方法的使用_虚方法systemverilog_ty_xiumud的博客-CSDN博客</a></li>
 </ul>
 
@@ -416,12 +421,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2023/08/21/SV%E4%B9%8B%E6%95%B0%E7%BB%84/" rel="prev" title="SV之数组">
-      <i class="fa fa-chevron-left"></i> SV之数组
+    <a href="/2023/08/17/Pytorch%E4%B9%8B%E6%96%87%E6%9C%AC%E6%83%85%E6%84%9F%E5%88%86%E7%B1%BB/" rel="prev" title="Pytorch之文本情感分类">
+      <i class="fa fa-chevron-left"></i> Pytorch之文本情感分类
     </a></div>
       <div class="post-nav-item">
-    <a href="/2023/08/22/SV%E4%B9%8B%E9%9A%8F%E6%9C%BA%E7%BA%A6%E6%9D%9F/" rel="next" title="SV之随机约束">
-      SV之随机约束 <i class="fa fa-chevron-right"></i>
+    <a href="/2023/08/21/SV%E4%B9%8B%E6%95%B0%E7%BB%84/" rel="next" title="SV之数组">
+      SV之数组 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
