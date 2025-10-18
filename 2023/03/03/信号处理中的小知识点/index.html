@@ -294,7 +294,6 @@
       
         <p>本文将分享一些信号处理中常见却难懂的小知识点，并推荐一些好的小文章</p>
 <span id="more"></span>
-
 <h1 id="FS、FT、DTFT、DFS、DFT"><a href="#FS、FT、DTFT、DFS、DFT" class="headerlink" title="FS、FT、DTFT、DFS、DFT"></a>FS、FT、DTFT、DFS、DFT</h1><ul>
 <li>$连续\Longleftrightarrow非周期$</li>
 <li>$离散\Longleftrightarrow周期$</li>
@@ -303,55 +302,56 @@
 <h2 id="1-FS"><a href="#1-FS" class="headerlink" title="1.FS"></a>1.FS</h2><ul>
 <li><p><strong>时域连续周期、频域离散非周期</strong></p>
 </li>
-<li><p>傅里叶级数的指数形式：<br>$$<br>f(t)=\sum_{n=\infty}^\infty C_ne^{jnw_1t}<br>$$</p>
-<p>$$<br>C_n=\frac{1}{T}\int_0^Tf(t)e^{-jnw_1t}dt<br>$$</p>
-</li>
+<li><p>傅里叶级数的指数形式：</p>
+<script type="math/tex; mode=display">
+f(t)=\sum_{n=\infty}^\infty C_ne^{jnw_1t}</script><script type="math/tex; mode=display">
+C_n=\frac{1}{T}\int_0^Tf(t)e^{-jnw_1t}dt</script></li>
 </ul>
 <h2 id="2-FT"><a href="#2-FT" class="headerlink" title="2.FT"></a>2.FT</h2><ul>
 <li><p><strong>傅里叶变换的本质，即将一个信号拆分成不同频率的cos和sin分量的叠加。得到的是这些不同频率分量的幅值</strong></p>
 </li>
 <li><p><strong>时域连续非周期，频域连续非周期</strong></p>
 </li>
-<li><p>傅里叶变换的公式：<br>$$<br>x(w)=\int_{-\infty}^{+\infty}x(t)e^{-jwt}dt<br>$$</p>
-<p>$$<br>逆变换:x(t)=\frac1{2\pi}\int_{-\infty}^{+\infty}x(w)e^{jwt}dw<br>$$</p>
-</li>
+<li><p>傅里叶变换的公式：</p>
+<script type="math/tex; mode=display">
+x(w)=\int_{-\infty}^{+\infty}x(t)e^{-jwt}dt</script><script type="math/tex; mode=display">
+逆变换:x(t)=\frac1{2\pi}\int_{-\infty}^{+\infty}x(w)e^{jwt}dw</script></li>
 </ul>
 <h2 id="3-DTFT"><a href="#3-DTFT" class="headerlink" title="3.DTFT"></a>3.DTFT</h2><ul>
 <li><p>一个<strong>N点离散时间序列的傅里叶变换（DTFT）的频谱是以（$2\pi$）为周期进行延拓的连续函数</strong></p>
 </li>
 <li><p><strong>时域离散非周期，频域连续周期</strong></p>
 </li>
-<li><p>离散时间傅里叶变换的公式：<br>$$<br>x(e^{jw})=\sum_{n=-\infty}^{+\infty}x(n)e^{-jwn}<br>$$</p>
-<p>$$<br>逆变换:x(n)=\frac1{2\pi}\int_{2\pi}x(e^{jw})e^{jwn}dw<br>$$</p>
-</li>
+<li><p>离散时间傅里叶变换的公式：</p>
+<script type="math/tex; mode=display">
+x(e^{jw})=\sum_{n=-\infty}^{+\infty}x(n)e^{-jwn}</script><script type="math/tex; mode=display">
+逆变换:x(n)=\frac1{2\pi}\int_{2\pi}x(e^{jw})e^{jwn}dw</script></li>
 </ul>
 <h2 id="4-DFS"><a href="#4-DFS" class="headerlink" title="4.DFS"></a>4.DFS</h2><ul>
 <li><p><strong>当离散的信号为周期序列时，严格的讲，离散时间傅里叶变换是不存在的，因为它不满足信号序列绝对级数和收敛（绝对可和）这一傅里叶变换的充要条件</strong>，但是采用DFS这一分析工具仍然可以对其进行傅里叶分析</p>
 </li>
 <li><p><strong>时域离散周期，频域离散周期</strong></p>
 </li>
-<li><p>离散傅里叶级数的公式：<br>$$<br>x(n)=\sum_{k=0}^{N-1}x(k)e^{j\frac{2\pi}{N}kn}<br>$$</p>
-<p>$$<br>x(k)=\frac1N\sum_{n=0}^{N-1}x(n)e^{-j\frac{2\pi}Nkn}\quad k=0\sim N-1<br>$$</p>
-</li>
+<li><p>离散傅里叶级数的公式：</p>
+<script type="math/tex; mode=display">
+x(n)=\sum_{k=0}^{N-1}x(k)e^{j\frac{2\pi}{N}kn}</script><script type="math/tex; mode=display">
+x(k)=\frac1N\sum_{n=0}^{N-1}x(n)e^{-j\frac{2\pi}Nkn}\quad k=0\sim N-1</script></li>
 </ul>
 <h2 id="5-DFT"><a href="#5-DFT" class="headerlink" title="5.DFT"></a>5.DFT</h2><ul>
-<li><p><strong>DFT只是对一周期内的有限个离散频率的表示，所以它在频率上是离散的，就相当于DTFT变换成连续频谱后再对其采样</strong></p>
-</li>
-<li><p><strong>DFT只是为了计算机处理方便，在频率域对DTFT进行的采样并截取主值而已</strong></p>
-</li>
+<li><strong>DFT只是对一周期内的有限个离散频率的表示，所以它在频率上是离散的，就相当于DTFT变换成连续频谱后再对其采样</strong></li>
+<li><strong>DFT只是为了计算机处理方便，在频率域对DTFT进行的采样并截取主值而已</strong></li>
 <li><p><strong>一个N点离散时间信号可以用频域内一个N点序列来唯一确定，这就是DFT表达式所揭示的内容</strong></p>
 </li>
 <li><p><strong>DFT的本质是将离散的时域序列用有限个余弦波和正弦波合成。比如一个32点的时域序列，可以用17个余弦波和17个正弦波合成。17个余弦波的幅值就是频谱的实部，17个正弦波的幅值就是频谱的虚部</strong></p>
 </li>
-<li><p>离散傅里叶变换的公式：<br>$$<br>x(k)=\sum_{n=0}^{N-1}x(n)e^{-j\frac{2\pi k}Nn} \quad k=0\sim N-1<br>$$</p>
-<p>$$<br>逆变换:x(n)=\frac1N\sum_{k=0}^{N-1}x(k)e^{j\frac{2\pi k}Nn}<br>$$</p>
-</li>
+<li><p>离散傅里叶变换的公式：</p>
+<script type="math/tex; mode=display">
+x(k)=\sum_{n=0}^{N-1}x(n)e^{-j\frac{2\pi k}Nn} \quad k=0\sim N-1</script><script type="math/tex; mode=display">
+逆变换:x(n)=\frac1N\sum_{k=0}^{N-1}x(k)e^{j\frac{2\pi k}Nn}</script></li>
 </ul>
-<h2 id="6-不同变换之间的示意图"><a href="#6-不同变换之间的示意图" class="headerlink" title="6.不同变换之间的示意图"></a>6.不同变换之间的示意图</h2><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230304010731421.png" alt="image-20230304010731421" style="zoom: 50%;">
-
+<h2 id="6-不同变换之间的示意图"><a href="#6-不同变换之间的示意图" class="headerlink" title="6.不同变换之间的示意图"></a>6.不同变换之间的示意图</h2><p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230304010731421.png" alt="image-20230304010731421" style="zoom: 50%;"></p>
 <h2 id="7-Reference"><a href="#7-Reference" class="headerlink" title="7.Reference"></a>7.Reference</h2><ul>
-<li><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/guojun-junguo/p/10099489.html">FS，FT，DFS，DTFT，DFT，FFT的联系和区别 - 骏骏 - 博客园 (cnblogs.com)</a></p>
-</li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/guojun-junguo/p/10099489.html">FS，FT，DFS，DTFT，DFT，FFT的联系和区别 - 骏骏 - 博客园 (cnblogs.com)</a></li>
 <li><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/BitArt/archive/2012/11/24/2786390.html">一幅图弄清DFT与DTFT,DFS的关系 - BitArt - 博客园 (cnblogs.com)</a></p>
 </li>
 <li><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44618906/article/details/116379127">(深入理解DSP中的重要概念（FT、DTFT、DFT、DFS、ZT、FFT）_ft与dft的区别_IT说的博客-CSDN博客</a></p>
@@ -361,10 +361,12 @@
 </ul>
 <hr>
 <h1 id="FFT"><a href="#FFT" class="headerlink" title="FFT"></a>FFT</h1><h2 id="1-频率分辨率"><a href="#1-频率分辨率" class="headerlink" title="1.频率分辨率"></a>1.频率分辨率</h2><ul>
-<li><p><strong>波形分辨率</strong>：由原始数据的时间长度决定<br>$$<br>\Delta R_w=\frac1T<br>$$</p>
-</li>
-<li><p><strong>FFT分辨率</strong>：由采样频率和参与FFT的数据点数决定<br>$$<br>\Delta R_{fft}=\frac{F_s}{N_{fft}}<br>$$</p>
-</li>
+<li><p><strong>波形分辨率</strong>：由原始数据的时间长度决定</p>
+<script type="math/tex; mode=display">
+\Delta R_w=\frac1T</script></li>
+<li><p><strong>FFT分辨率</strong>：由采样频率和参与FFT的数据点数决定</p>
+<script type="math/tex; mode=display">
+\Delta R_{fft}=\frac{F_s}{N_{fft}}</script></li>
 </ul>
 <h2 id="2-FFT中的补零操作"><a href="#2-FFT中的补零操作" class="headerlink" title="2.FFT中的补零操作"></a>2.FFT中的补零操作</h2><ul>
 <li><p>补零相当于提高了FFT分辨率，但并不能提高波形分辨率，若不补零，那么波形分辨率与FFT分辨率是相等的</p>
@@ -373,35 +375,33 @@
 <p>本来信号是一个周期的余弦信号，如果补了9个周期长度的0，那么信号并不是10个周期的余弦信号，而是一个周期的余弦加一串0，补的0并没有带来新的信息。zero padding等价于频域的sinc函数内插，<strong>而这个sinc函数的形状（主瓣宽度）是由补0前的信号长度决定的</strong>，<strong>补0的作用只是细化了这个sinc函数，并没有改变其主瓣宽度</strong>。而频率分辨率的含义是两个频率不同的信号在频率上可分，也就要求它们不能落到一个sinc函数的主瓣上。所以，如果待分析的两个信号频率接近，而时域长度又较短，那么在频域上它们就落在一个sinc主瓣内了，补再多的0也是无济于事的。</p>
 </li>
 <li><p>补零前：</p>
-<img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230304205220920.png" alt="image-20230304205220920" style="zoom:50%;">
+<p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230304205220920.png" alt="image-20230304205220920" style="zoom:50%;"></p>
 </li>
 <li><p>补零后：</p>
-<img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230304205201292.png" alt="image-20230304205201292" style="zoom:50%;">
-
+<p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230304205201292.png" alt="image-20230304205201292" style="zoom:50%;"></p>
 </li>
 </ul>
 <h2 id="3-加窗与窗函数"><a href="#3-加窗与窗函数" class="headerlink" title="3.加窗与窗函数"></a>3.加窗与窗函数</h2><ul>
 <li><p>信号截断分为周期截断和非周期截断。<strong>周期截断</strong>是指截断后的信号为周期信号，而<strong>非周期截断</strong>是指截断后的信号不再是周期信号，哪怕原始信号本身是周期信号，周期信号最明显的特征是信号的起始和结束时刻的幅值相等，哪怕是一个周期</p>
 <ul>
 <li><p>周期截断：</p>
-<img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230304211946376.png" alt="image-20230304211946376" style="zoom:50%;">
+<p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230304211946376.png" alt="image-20230304211946376" style="zoom:50%;"></p>
 </li>
 <li><p>非周期截断：</p>
-<img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230304212112985.png" alt="image-20230304212112985" style="zoom:50%;">
+<p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230304212112985.png" alt="image-20230304212112985" style="zoom:50%;"></p>
 </li>
 </ul>
 </li>
 <li><p>由于信号的非周期截断，导致频谱在整个频带内发生了拖尾现象。这是非常严重的误差，称为<strong>泄漏</strong></p>
 </li>
 <li><p><strong>窗函数只能减少泄漏，不能消除泄漏</strong></p>
-<img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230304212232648.png" alt="image-20230304212232648" style="zoom: 50%;">
+<p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230304212232648.png" alt="image-20230304212232648" style="zoom: 50%;"></p>
 </li>
 <li><p><strong>窗函数的时域特征</strong>：加窗实质是用一个所谓的窗函数与原始的时域信号作乘积的过程（当然加窗也可以在频域进行，但时域更为普遍），使得相乘后的信号似乎更好地满足傅立叶变换的周期性要求。为了减少泄漏，用一个窗函数与原始周期信号相乘，得到加窗后的信号为周期信号，从而满足FFT变换的周期性要求</p>
-<img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230305000537489.png" alt="image-20230305000537489" style="zoom:50%;">
+<p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230305000537489.png" alt="image-20230305000537489" style="zoom:50%;"></p>
 </li>
 <li><p><strong>窗函数的典型频谱特征</strong>：</p>
-<img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230305000725975.png" alt="image-20230305000725975" style="zoom:50%;">
-
+<p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230305000725975.png" alt="image-20230305000725975" style="zoom:50%;"></p>
 <ul>
 <li><strong>主瓣宽度主要影响信号能量分布和频率分辨能力</strong>。频率的实际分辨能力为有效噪声带宽乘以频率分辨率，因此，主瓣越宽，有效噪声带宽越宽，在频率分辨率相同的情况下，频率的分辨能力越差</li>
 <li><strong>旁瓣高低及其衰减率影响能量泄漏程度（频谱拖尾效应）</strong>。旁瓣越高，说明能量泄漏越严重，衰减越慢，频谱拖尾越严重</li>
@@ -426,15 +426,18 @@
 </li>
 <li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/24318554">什么是窗函数? - 知乎 (zhihu.com)</a></p>
 </li>
-<li><p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzI5NTM0MTQwNA==&mid=2247484164&idx=1&sn=fdaf2164306a9ca4166c2aa8713cacc5&scene=21#wechat_redirect">什么是泄漏？ (qq.com)</a></p>
-</li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzI5NTM0MTQwNA==&amp;mid=2247484164&amp;idx=1&amp;sn=fdaf2164306a9ca4166c2aa8713cacc5&amp;scene=21#wechat_redirect">什么是泄漏？ (qq.com)</a></li>
 </ul>
 <hr>
 <h1 id="2D-FFT"><a href="#2D-FFT" class="headerlink" title="2D-FFT"></a>2D-FFT</h1><ul>
 <li><p><strong>二维傅里叶变换的意义在于：一个满足一定条件的二维信号可以表示为无数个x向正余弦函数与y向正余弦函数乘积（即二维正交基）的线性组合</strong></p>
 </li>
-<li><p>二维正交基：<br>$$<br>cos(2\pi ux)cos(2\pi vy)\<br>cos(2\pi ux)sin(2\pi vy)\<br>sin(2\pi ux)cos(2\pi vy)\<br>sin(2\pi ux)sin(2\pi vy)<br>$$</p>
-</li>
+<li><p>二维正交基：</p>
+<script type="math/tex; mode=display">
+cos(2\pi ux)cos(2\pi vy)\\
+cos(2\pi ux)sin(2\pi vy)\\
+sin(2\pi ux)cos(2\pi vy)\\
+sin(2\pi ux)sin(2\pi vy)</script></li>
 <li><p><strong>二维傅里叶变换具可分离性，即它可分离成两次一维傅里叶变换</strong></p>
 </li>
 </ul>
@@ -447,23 +450,30 @@
 </li>
 <li><p>通俗理解：range-FFT就是很正常的FFT求频率，而doppler-FFT可以理解为在频率确定的情况下，将相位（range-FFT结果中复数的角度）当成是变量，对其求FFT则可得到所求频率，这里的频率实际上就是想得到的相位角</p>
 </li>
-<li><p><strong>对于雷达信号处理而言：速度维上所求的频率即为多普勒频率$f_d$</strong>，多普勒频率是由于速度$v$而导致的固定频率<br>$$<br>\because \Delta\Phi=\frac{4\pi vT_c}{\lambda}<br>$$</p>
-<p>而$\Delta\Phi$其实又可以理解为：$\Delta\Phi$是由$f_d$造成的，因为多了$f_d$，导致在一个chirp周期$T_c$内，波形会多走$2\pi f_d T_c$弧度，即：<br>$$<br>\Delta\Phi=2\pi f_dT_c<br>$$<br>综合上述两式可以得到：<br>$$<br>v=\frac{\lambda f_d}{2}<br>$$<br><strong>而由速度维FFT计算得到的频率正是$f_d$，故知道$f_d$后则乘以系数$\frac{\lambda}{2}$即可得到对应速度，速度维FFT结果的频率间隔为：$\frac{1}{T_cN_{chirp}}$</strong></p>
+<li><p><strong>对于雷达信号处理而言：速度维上所求的频率即为多普勒频率$f_d$</strong>，多普勒频率是由于速度$v$而导致的固定频率</p>
+<script type="math/tex; mode=display">
+\because \Delta\Phi=\frac{4\pi vT_c}{\lambda}</script><p>而$\Delta\Phi$其实又可以理解为：$\Delta\Phi$是由$f_d$造成的，因为多了$f_d$，导致在一个chirp周期$T_c$内，波形会多走$2\pi f_d T_c$弧度，即：</p>
+<script type="math/tex; mode=display">
+\Delta\Phi=2\pi f_dT_c</script><p>综合上述两式可以得到：</p>
+<script type="math/tex; mode=display">
+v=\frac{\lambda f_d}{2}</script><p><strong>而由速度维FFT计算得到的频率正是$f_d$，故知道$f_d$后则乘以系数$\frac{\lambda}{2}$即可得到对应速度，速度维FFT结果的频率间隔为：$\frac{1}{T_cN_{chirp}}$</strong></p>
 </li>
 <li><p><strong>只有一个frame中的全部chirp做了range-fft之后才可以执行doppler-fft，因此系统中必须有足够的存储器来存储执行range-fft之后的数据</strong></p>
 </li>
 </ul>
-<h2 id="2-快时间与慢时间"><a href="#2-快时间与慢时间" class="headerlink" title="2.快时间与慢时间"></a>2.快时间与慢时间</h2><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/%E5%BF%AB%E6%97%B6%E9%97%B4%E4%B8%8E%E6%85%A2%E6%97%B6%E9%97%B4.png" alt="快时间与慢时间" style="zoom:50%;">
-
+<h2 id="2-快时间与慢时间"><a href="#2-快时间与慢时间" class="headerlink" title="2.快时间与慢时间"></a>2.快时间与慢时间</h2><p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/%E5%BF%AB%E6%97%B6%E9%97%B4%E4%B8%8E%E6%85%A2%E6%97%B6%E9%97%B4.png" alt="快时间与慢时间" style="zoom:50%;"></p>
 <h2 id="3-Reference"><a href="#3-Reference" class="headerlink" title="3.Reference"></a>3.Reference</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/Xiao_Jie123/article/details/113071519"> Xiaojie雷达之路—毫米波雷达基础知识—一些系统设计的话题_doppler fft_XXXXiaojie的博客-CSDN博客</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/Xiao_Jie123/article/details/113071519"> Xiaojie雷达之路—-毫米波雷达基础知识—-一些系统设计的话题_doppler fft_XXXXiaojie的博客-CSDN博客</a></li>
 <li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/580489895">雷达信号处理之3D-FFT原理（附带MATLAB仿真程序） - 知乎 (zhihu.com)</a></li>
 </ul>
 <hr>
 <h1 id="数字域频率"><a href="#数字域频率" class="headerlink" title="数字域频率"></a>数字域频率</h1><ul>
-<li><p>数字域频率为：<br>$$<br>w_0=\Omega_0T_s=\frac{\Omega_0}{f_s}=2\pi\frac{f_0}{f_s}=\frac{2\pi}{N}<br>$$</p>
-<p>$$<br>其中:\Omega_0为模拟角频率(rad/s),\quad w_0为数字角频率(rad)\<br>T_s为采样间隔(s),\quad f_s为采样频率(Hz),\quad f_0为模拟频率(Hz)\<br>N=T_0\times f_s,其中T_0为原始模拟信号的周期<br>$$</p>
-</li>
+<li><p>数字域频率为：</p>
+<script type="math/tex; mode=display">
+w_0=\Omega_0T_s=\frac{\Omega_0}{f_s}=2\pi\frac{f_0}{f_s}=\frac{2\pi}{N}</script><script type="math/tex; mode=display">
+其中:\Omega_0为模拟角频率(rad/s),\quad w_0为数字角频率(rad)\\
+T_s为采样间隔(s),\quad f_s为采样频率(Hz),\quad f_0为模拟频率(Hz)\\
+N=T_0\times f_s,其中T_0为原始模拟信号的周期</script></li>
 <li><p>推导过程：</p>
 <ul>
 <li>连续时间正弦信号：$x_a(t)=cos(\Omega_0t+\phi)$</li>
@@ -478,35 +488,33 @@
 </li>
 </ul>
 <hr>
-<h1 id="深入理解复数"><a href="#深入理解复数" class="headerlink" title="深入理解复数"></a>深入理解复数</h1><h2 id="1-复数的基本概念"><a href="#1-复数的基本概念" class="headerlink" title="1.复数的基本概念"></a>1.复数的基本概念</h2><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230307155947019.png" alt="image-20230307155947019" style="zoom:50%;">
-$$
-c=a+jb=Me^{j\phi}=M(cos\phi+jsin\phi)
-$$
-
-<ul>
+<h1 id="深入理解复数"><a href="#深入理解复数" class="headerlink" title="深入理解复数"></a>深入理解复数</h1><h2 id="1-复数的基本概念"><a href="#1-复数的基本概念" class="headerlink" title="1.复数的基本概念"></a>1.复数的基本概念</h2><p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230307155947019.png" alt="image-20230307155947019" style="zoom:50%;"></p>
+<script type="math/tex; mode=display">
+c=a+jb=Me^{j\phi}=M(cos\phi+jsin\phi)</script><ul>
 <li><p>将j看做是一个旋转因子：<strong>在复平面上任意数字乘以j，结果都是90度的逆时针旋转。乘以-j，就引起复平面上的90度顺时针旋转。</strong></p>
 </li>
 <li><p>将这个复平面扩展成一个三维图像：<strong>$e^{j2πf_0t}$的实部和虚部就是正弦和余弦投影</strong></p>
-<img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230307160204467.png" alt="image-20230307160204467" style="zoom:50%;">
+<p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230307160204467.png" alt="image-20230307160204467" style="zoom:50%;"></p>
 </li>
-<li><p>欧拉等式：<br>$$<br>cos(2\pi f_0 t)=\frac{e^{j2\pi f_0t}+e^{-j2\pi f_0 t}}{2}=\frac{e^{j2\pi f_0t}}{2}+\frac{e^{-j2\pi f_0t}}{2}<br>$$</p>
-<p>$$<br>sin(2\pi f_0 t)=\frac{e^{j2\pi f_0t}-e^{-j2\pi f_0 t}}{2j}=\frac{je^{-j2\pi f_0t}}{2}-\frac{je^{j2\pi f_0t}}{2}<br>$$</p>
-</li>
+<li><p>欧拉等式：</p>
+<script type="math/tex; mode=display">
+cos(2\pi f_0 t)=\frac{e^{j2\pi f_0t}+e^{-j2\pi f_0 t}}{2}=\frac{e^{j2\pi f_0t}}{2}+\frac{e^{-j2\pi f_0t}}{2}</script><script type="math/tex; mode=display">
+sin(2\pi f_0 t)=\frac{e^{j2\pi f_0t}-e^{-j2\pi f_0 t}}{2j}=\frac{je^{-j2\pi f_0t}}{2}-\frac{je^{j2\pi f_0t}}{2}</script></li>
 </ul>
 <h2 id="2-复数的频域特性"><a href="#2-复数的频域特性" class="headerlink" title="2.复数的频域特性"></a>2.复数的频域特性</h2><ul>
 <li><p>在复平面与频率轴构成的三维图像中：$cos(2\pi f_0t)$与$sin(2\pi f_0t)$的频域特性</p>
-<img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230307161446375.png" alt="image-20230307161446375" style="zoom: 50%;">
+<p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230307161446375.png" alt="image-20230307161446375" style="zoom: 50%;"></p>
 </li>
 <li><p>$e^{j2\pi f_0t}=cos{(2\pi f_0t)+jsin(2\pi f_0t)}$的频域特性：</p>
-<img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230307163016808.png" alt="image-20230307163016808" style="zoom:50%;">
+<p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230307163016808.png" alt="image-20230307163016808" style="zoom:50%;"></p>
 </li>
 <li><p>可以将正余弦波理解为从两个正交的通道中输入，即水平通道（实数方向）为输入的cos波，垂直通道（虚数方向）为输入的sin波，分别对这两个通道进行傅里叶变换，当对一个水平通道上的数乘以j时，则表示将数值逆时针旋转90°到垂直通道上</p>
 </li>
 <li><p><strong>一个时域信号乘以复指数$e^{j2πf_0t}$，该信号的频谱将被向上搬移$f_0$Hz，这个过程我们叫做正交混频（quadrature mixing）（也叫做复调制complex mixing）。同样，一个时域信号乘以$e^{-j2πf_0t}$，将把信号频谱向下搬移$f_0$Hz</strong>。</p>
-<img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230307165135281.png" alt="image-20230307165135281" style="zoom:50%;">
+<p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230307165135281.png" alt="image-20230307165135281" style="zoom:50%;"></p>
 </li>
 <li><p><strong>实数的信号总是有正的和负的频谱分量，任何一个实数的信号，其同相（cos）频谱的正和负的频率分量总是以零频点为中心对称，同相（sin）分量的正和负的频率分量互为镜像</strong></p>
-<img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230307164052191.png" alt="image-20230307164052191" style="zoom:50%;">
+<p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230307164052191.png" alt="image-20230307164052191" style="zoom:50%;"></p>
 </li>
 <li><p><strong>复数带宽是实数带宽的一半，其只保留正频部分</strong></p>
 </li>
@@ -517,18 +525,17 @@ $$
 <hr>
 <h1 id="数字信号中的上采样和下采样"><a href="#数字信号中的上采样和下采样" class="headerlink" title="数字信号中的上采样和下采样"></a>数字信号中的上采样和下采样</h1><h2 id="1-插值"><a href="#1-插值" class="headerlink" title="1.插值"></a>1.插值</h2><ul>
 <li><p>长度为N的序列，在每两个点之间插入L个0后，其频域（带宽）相当于压缩为原来的$\frac1L$，并产生$\frac{f_s}{L}$（或者说是$\frac{2\pi}{L}$，因为对于DTFT，其$2\pi$位置对应$f_s$的位置）的周期延拓</p>
-<img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230310152736465.png" alt="image-20230310152736465" style="zoom:50%;">
-
+<p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230310152736465.png" alt="image-20230310152736465" style="zoom:50%;"></p>
 </li>
 </ul>
 <h2 id="2-上采样"><a href="#2-上采样" class="headerlink" title="2.上采样"></a>2.上采样</h2><ul>
 <li><p>上采样我们又通常称之为过采样或信号插值，<strong>在频域上是对频谱进行了压缩</strong></p>
 </li>
 <li><p>上采样流程是先通过采样模块（<strong>在原序列x(n)的两个点之间插入L-1个0</strong>），再通过低通滤波器，其中低通滤波器主要功能是抗周期延拓。</p>
-<img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/%E6%97%A0%E6%A0%87%E9%A2%98.png" alt="无标题" style="zoom: 50%;">
+<p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/%E6%97%A0%E6%A0%87%E9%A2%98.png" alt="无标题" style="zoom: 50%;"></p>
 </li>
 <li><p>上采样的具体过程：</p>
-<img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230310154416666.png" alt="image-20230310154416666" style="zoom:50%;">
+<p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230310154416666.png" alt="image-20230310154416666" style="zoom:50%;"></p>
 </li>
 <li><p><strong>上采样后，可以得到长度为LN的信号序列</strong></p>
 </li>
@@ -539,10 +546,10 @@ $$
 <li><p>下采样我们又通常称之为欠采样或信号抽取，<strong>在频域上是对频谱进行了拓展</strong>，会产生频谱混叠现象</p>
 </li>
 <li><p>下采样流程是先通过低通滤波器，再通过采样模块（<strong>即在原序列x(n)中每隔M-1个点抽取一个点</strong>），其中低通滤波器主要功能是抗频谱混叠</p>
-<img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/%E6%97%A0%E6%A0%87%E9%A2%98-1678435254317-2.png" alt="无标题" style="zoom:50%;">
+<p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/%E6%97%A0%E6%A0%87%E9%A2%98-1678435254317-2.png" alt="无标题" style="zoom:50%;"></p>
 </li>
 <li><p>下采样的具体流程：</p>
-<img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230310161741157.png" alt="image-20230310161741157" style="zoom: 50%;">
+<p><img src="/2023/03/03/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B8%AD%E7%9A%84%E5%B0%8F%E7%9F%A5%E8%AF%86%E7%82%B9/image-20230310161741157.png" alt="image-20230310161741157" style="zoom: 50%;"></p>
 </li>
 <li><p><strong>下采样后，可以得到长度为$\frac NM$的信号序列</strong></p>
 </li>

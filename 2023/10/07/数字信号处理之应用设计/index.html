@@ -280,7 +280,6 @@
       
         <p>本节主要介绍了利用FFT进行频谱分析以及滤波器结构</p>
 <span id="more"></span>
-
 <h1 id="应用FFT分析信号频谱"><a href="#应用FFT分析信号频谱" class="headerlink" title="应用FFT分析信号频谱"></a>应用FFT分析信号频谱</h1><h2 id="1-谱线与实际频率的关系"><a href="#1-谱线与实际频率的关系" class="headerlink" title="1.谱线与实际频率的关系"></a>1.谱线与实际频率的关系</h2><ul>
 <li><p>DTFT的幅频特性是以$w$数字角频率$2\pi$为周期的函数</p>
 </li>
@@ -293,14 +292,14 @@
 <li>这么分析看似没问题吧，但是，有个问题是DFT的横坐标$k$，只能取$0\sim N-1$，$k=0$的点占了一个零频，故即使点与点之间的频率间隔是$\frac{f_s}{N}$，那么最终能取到的最大频率只能是$\frac{(N-1)}{N}\cdot f_s$</li>
 </ul>
 </li>
-<li><p>故谱线与实际频率的对应关系为：<br>$$<br>f_0=(N_i-1)\cdot \frac{f_s}{N}<br>$$</p>
-<ul>
+<li><p>故谱线与实际频率的对应关系为：</p>
+<script type="math/tex; mode=display">
+f_0=(N_i-1)\cdot \frac{f_s}{N}</script><ul>
 <li>其中，$N_i$代表第$i$个点，而第$N_i$个点有$N_i-1$个频率间隔</li>
 </ul>
 </li>
 <li><p>借助MATLAB程序加深理解</p>
 <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">clc;clear all;</span><br><span class="line"></span><br><span class="line">fs=<span class="number">1000</span>;</span><br><span class="line">N=<span class="number">500</span>;</span><br><span class="line">xn=<span class="number">0</span>:(N<span class="number">-1</span>);</span><br><span class="line">t=xn/fs; <span class="comment">%这里的t代表信号长度，而1/t也决定了实际分辨率</span></span><br><span class="line"></span><br><span class="line">f0=<span class="number">0</span>;</span><br><span class="line">f1=<span class="number">2</span>;</span><br><span class="line">f2=<span class="number">680</span>;</span><br><span class="line">s=<span class="built_in">cos</span>(<span class="number">2</span>*<span class="built_in">pi</span>*f0*t)+<span class="built_in">cos</span>(<span class="number">2</span>*<span class="built_in">pi</span>*f1*t)+<span class="built_in">cos</span>(<span class="number">2</span>*<span class="built_in">pi</span>*f2*t);</span><br><span class="line">s_fft=<span class="built_in">abs</span>(fft(s,N));</span><br><span class="line">stem(xn,s_fft);</span><br></pre></td></tr></table></figure>
-
 <ul>
 <li><p>结果如下：</p>
 <p><img src="/2023/10/07/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%BA%94%E7%94%A8%E8%AE%BE%E8%AE%A1/fft_k_to_freq.bmp" alt="fft_k_to_freq"></p>
@@ -316,11 +315,11 @@
 <h2 id="2-栅栏效应与实际分辨率"><a href="#2-栅栏效应与实际分辨率" class="headerlink" title="2.栅栏效应与实际分辨率"></a>2.栅栏效应与实际分辨率</h2><ul>
 <li><p>栅栏效应：就是真实频率落在了点与点之间的缝隙里，补零操作可以缓解栅栏效应</p>
 </li>
-<li><p>实际分辨率：<br>$$<br>d_f=\frac{f_s}{N}<br>$$</p>
-</li>
+<li><p>实际分辨率：</p>
+<script type="math/tex; mode=display">
+d_f=\frac{f_s}{N}</script></li>
 <li><p>借助MATLAB程序加深理解</p>
 <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">clc;clear all;</span><br><span class="line"></span><br><span class="line">fs=<span class="number">100</span>;</span><br><span class="line">N=<span class="number">100</span>;</span><br><span class="line">xn=<span class="number">0</span>:(N<span class="number">-1</span>);</span><br><span class="line">t=xn/fs; <span class="comment">%这里的t代表信号长度，而1/t也决定了实际分辨率</span></span><br><span class="line"></span><br><span class="line">f0=<span class="number">10</span>;f1=<span class="number">11</span>;</span><br><span class="line">s=<span class="built_in">sin</span>(<span class="number">2</span>*<span class="built_in">pi</span>*f0*t)+<span class="built_in">sin</span>(<span class="number">2</span>*<span class="built_in">pi</span>*f1*t);</span><br><span class="line">xn=xn/N*fs;<span class="comment">%此时xn横坐标为实际频率</span></span><br><span class="line">s_fft=<span class="built_in">abs</span>(fft(s,N));</span><br><span class="line">s_zero_fft=<span class="built_in">abs</span>(fft(s,<span class="number">2</span>*N));</span><br><span class="line"></span><br><span class="line"><span class="built_in">figure</span>(<span class="number">1</span>);</span><br><span class="line">subplot(<span class="number">211</span>);</span><br><span class="line"><span class="built_in">plot</span>(xn,s_fft);</span><br><span class="line">title(<span class="string">&quot;N=500 FFT&quot;</span>)</span><br><span class="line">xlabel(<span class="string">&#x27;f/Hz&#x27;</span>)</span><br><span class="line">ylabel(<span class="string">&#x27;Amp&#x27;</span>)</span><br><span class="line">grid on;</span><br><span class="line">subplot(<span class="number">212</span>);</span><br><span class="line"><span class="built_in">plot</span>([<span class="number">0</span>:<span class="number">199</span>]/<span class="number">200</span>*fs,s_zero_fft);</span><br><span class="line">title(<span class="string">&quot;N=500 padding=500 FFT&quot;</span>);</span><br><span class="line">xlabel(<span class="string">&#x27;f/Hz&#x27;</span>)</span><br><span class="line">ylabel(<span class="string">&#x27;Amp&#x27;</span>)</span><br><span class="line">grid on;</span><br></pre></td></tr></table></figure>
-
 <ul>
 <li><p>结果如下：</p>
 <p><img src="/2023/10/07/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%BA%94%E7%94%A8%E8%AE%BE%E8%AE%A1/FFT_df.bmp" alt="FFT_df"></p>
@@ -337,42 +336,40 @@
 <hr>
 <h1 id="时域离散系统的网络结构"><a href="#时域离散系统的网络结构" class="headerlink" title="时域离散系统的网络结构"></a>时域离散系统的网络结构</h1><ul>
 <li><p>网络的基本组成结构：</p>
-<img src="/2023/10/07/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%BA%94%E7%94%A8%E8%AE%BE%E8%AE%A1/image-20231008181123070.png" alt="image-20231008181123070" style="zoom:50%;">
-
+<p><img src="/2023/10/07/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%BA%94%E7%94%A8%E8%AE%BE%E8%AE%A1/image-20231008181123070.png" alt="image-20231008181123070" style="zoom:50%;"></p>
 </li>
 </ul>
 <h2 id="1-IIR的网络结构"><a href="#1-IIR的网络结构" class="headerlink" title="1.IIR的网络结构"></a>1.IIR的网络结构</h2><ul>
-<li><p>IIR的差分方程：<br>$$<br>y(n)=\sum_{k=1}^Na_ky(n-k)+\sum_{r=0}^Mb_rx(n-r)<br>$$</p>
-</li>
+<li><p>IIR的差分方程：</p>
+<script type="math/tex; mode=display">
+y(n)=\sum_{k=1}^Na_ky(n-k)+\sum_{r=0}^Mb_rx(n-r)</script></li>
 <li><p>直接Ⅰ型结构：</p>
-<img src="/2023/10/07/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%BA%94%E7%94%A8%E8%AE%BE%E8%AE%A1/image-20231008183456136.png" alt="image-20231008183456136" style="zoom: 80%;">
+<p><img src="/2023/10/07/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%BA%94%E7%94%A8%E8%AE%BE%E8%AE%A1/image-20231008183456136.png" alt="image-20231008183456136" style="zoom: 80%;"></p>
 </li>
 <li><p>直接Ⅱ型结构：</p>
 </li>
 </ul>
-<img src="/2023/10/07/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%BA%94%E7%94%A8%E8%AE%BE%E8%AE%A1/image-20231008183544678.png" alt="image-20231008183544678" style="zoom:80%;">
-
+<p><img src="/2023/10/07/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%BA%94%E7%94%A8%E8%AE%BE%E8%AE%A1/image-20231008183544678.png" alt="image-20231008183544678" style="zoom:80%;"></p>
 <ul>
 <li><p>级联型结构：</p>
-<img src="/2023/10/07/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%BA%94%E7%94%A8%E8%AE%BE%E8%AE%A1/image-20231008183634723.png" alt="image-20231008183634723" style="zoom:80%;">
-
+<p><img src="/2023/10/07/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%BA%94%E7%94%A8%E8%AE%BE%E8%AE%A1/image-20231008183634723.png" alt="image-20231008183634723" style="zoom:80%;"></p>
 </li>
 </ul>
 <h2 id="2-FIR的网络结构"><a href="#2-FIR的网络结构" class="headerlink" title="2.FIR的网络结构"></a>2.FIR的网络结构</h2><ul>
-<li>FIR的差分方程：<br>$$<br>y(n)=\sum_{k=0}^{N-1}h(k)x(n-k)<br>$$</li>
+<li>FIR的差分方程：<script type="math/tex; mode=display">
+y(n)=\sum_{k=0}^{N-1}h(k)x(n-k)</script></li>
 </ul>
 <ul>
 <li><p>直接型结构：</p>
-<img src="/2023/10/07/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%BA%94%E7%94%A8%E8%AE%BE%E8%AE%A1/image-20231008183936210.png" alt="image-20231008183936210" style="zoom:80%;">
+<p><img src="/2023/10/07/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%BA%94%E7%94%A8%E8%AE%BE%E8%AE%A1/image-20231008183936210.png" alt="image-20231008183936210" style="zoom:80%;"></p>
 </li>
 <li><p>级联型结构：</p>
-<img src="/2023/10/07/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%BA%94%E7%94%A8%E8%AE%BE%E8%AE%A1/image-20231008184103088.png" alt="image-20231008184103088" style="zoom:80%;">
-
+<p><img src="/2023/10/07/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%BA%94%E7%94%A8%E8%AE%BE%E8%AE%A1/image-20231008184103088.png" alt="image-20231008184103088" style="zoom:80%;"></p>
 </li>
 </ul>
 <hr>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42580947/article/details/106231299">数字滤波器(一)–IIR与FIR的基本结构与MATLAB实现_iir结构-CSDN博客</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42580947/article/details/106231299">数字滤波器(一)—IIR与FIR的基本结构与MATLAB实现_iir结构-CSDN博客</a></li>
 </ul>
 
     </div>

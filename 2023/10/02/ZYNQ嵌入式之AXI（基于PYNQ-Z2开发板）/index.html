@@ -273,7 +273,6 @@
       
         <p>本节对AXI接口的进行了基本介绍</p>
 <span id="more"></span> 
-
 <h1 id="AXI接口简介"><a href="#AXI接口简介" class="headerlink" title="AXI接口简介"></a>AXI接口简介</h1><ul>
 <li><p><strong>AXI 的英文全称是 Advanced eXtensible Interface，即高级可扩展接口</strong>。它是 ARM 公司所提出的 AMBA （Advanced Microcontroller Bus Architecture）协议的一部分。通信协议就是指双方进行信息传递所遵循的规则和约定</p>
 <ul>
@@ -300,16 +299,12 @@
 </li>
 <li><p>AXI4：由于读写地址通道是分离的，所以支持双向同时传输；突发长度最大256</p>
 </li>
-<li><p>AXI—Lite：和AXI4比较类似，但是不支持突发传输（一致连续的传输，若突发8次传输，即连续传输8个数据）</p>
-</li>
-<li><p>AXI4—Stream：只有一个单一数据通道，和AXI4的写数据通道比较类似，突发长度不受限制。</p>
-</li>
-<li><p>AXI InterConnect 和AXI SmartConnect：这两个IP核都用于连接单/多个存储器映射的AXI Master和单/多个存储器映射的AXI Slave</p>
-</li>
+<li>AXI—Lite：和AXI4比较类似，但是不支持突发传输（一致连续的传输，若突发8次传输，即连续传输8个数据）</li>
+<li>AXI4—Stream：只有一个单一数据通道，和AXI4的写数据通道比较类似，突发长度不受限制。</li>
+<li>AXI InterConnect 和AXI SmartConnect：这两个IP核都用于连接单/多个存储器映射的AXI Master和单/多个存储器映射的AXI Slave</li>
 </ul>
-<img src="/2023/10/02/ZYNQ%E5%B5%8C%E5%85%A5%E5%BC%8F%E4%B9%8BAXI%EF%BC%88%E5%9F%BA%E4%BA%8EPYNQ-Z2%E5%BC%80%E5%8F%91%E6%9D%BF%EF%BC%89/image-20231002022912018.png" alt="image-20231002022912018" style="zoom:50%;">
-
-<img src="/2023/10/02/ZYNQ%E5%B5%8C%E5%85%A5%E5%BC%8F%E4%B9%8BAXI%EF%BC%88%E5%9F%BA%E4%BA%8EPYNQ-Z2%E5%BC%80%E5%8F%91%E6%9D%BF%EF%BC%89/image-20231002022934168.png" alt="image-20231002022934168" style="zoom:50%;">
+<p><img src="/2023/10/02/ZYNQ%E5%B5%8C%E5%85%A5%E5%BC%8F%E4%B9%8BAXI%EF%BC%88%E5%9F%BA%E4%BA%8EPYNQ-Z2%E5%BC%80%E5%8F%91%E6%9D%BF%EF%BC%89/image-20231002022912018.png" alt="image-20231002022912018" style="zoom:50%;"></p>
+<p><img src="/2023/10/02/ZYNQ%E5%B5%8C%E5%85%A5%E5%BC%8F%E4%B9%8BAXI%EF%BC%88%E5%9F%BA%E4%BA%8EPYNQ-Z2%E5%BC%80%E5%8F%91%E6%9D%BF%EF%BC%89/image-20231002022934168.png" alt="image-20231002022934168" style="zoom:50%;"></p>
 </li>
 <li><p><strong>握手机制</strong>：</p>
 <ul>
